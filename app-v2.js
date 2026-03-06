@@ -1,10 +1,7 @@
 // ==========================
-// KONFIG
+// KONFIG (Apps Script)
 // ==========================
-
-// Hvis du vil prøve Power Automate webhook også, så indsæt den her.
-// Hvis den fejler pga. CORS/403 osv, falder app'en automatisk tilbage til Netlify Forms.
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec"; 
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 // Lokationer
@@ -16,7 +13,8 @@ const LOCATIONS = [
   "Café Kaiser Vanløse"
 ];
 
-// Retter (med kategori)
+const MEALS = ["Morgenmad", "Frokost", "Aften"];
+
 const DISHES = [
   { name: "Byg selv brunch", meals: ["Morgenmad"] },
   { name: "Ostemad", meals: ["Morgenmad", "Frokost"] },
@@ -59,8 +57,6 @@ const DISHES = [
   { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
 ];
 
-const MEALS = ["Morgenmad", "Frokost", "Aften"];
-
 // ==========================
 // STATE
 // ==========================
@@ -70,11 +66,7 @@ const state = {
   meal: "",
   dish: "",
 
-  // Til Power Automate (valgfrit) – base64/komprimeret
   imageBase64: "",
-
-  // Til Netlify Forms (VIGTIGT) – rigtig fil upload
-  imageFile: null,
 
   ratings: {
     taste: 0,
@@ -102,23 +94,41 @@ const screens = {
 function showScreen(name) {
   state.screen = name;
   Object.entries(screens).forEach(([k, el]) => {
+    if (!el) return;
     el.classList.toggle("hidden", k !== name);
   });
 }
 
 function setText(id, text) {
-  $(id).textContent = text;
+  const el = $(id);
+  if (el) el.textContent = text;
 }
 
 function setHidden(el, hidden) {
+  if (!el) return;
   el.classList.toggle("hidden", hidden);
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[c]));
+}
+
 // ==========================
-// INIT UI
+// SCREEN 1
 // ==========================
 function initLocationSelect() {
   const select = $("locationSelect");
+  if (!select) return;
+
+  // ryd og tilføj placeholder
+  select.innerHTML = `<option value="">Vælg lokation...</option>`;
+
   LOCATIONS.forEach((loc) => {
     const opt = document.createElement("option");
     opt.value = loc;
@@ -134,6 +144,8 @@ function initLocationSelect() {
 
 function initMealRadios() {
   const wrap = $("mealRadios");
+  if (!wrap) return;
+
   wrap.innerHTML = "";
 
   MEALS.forEach((meal) => {
@@ -145,14 +157,14 @@ function initMealRadios() {
     input.type = "radio";
     input.name = "meal";
     input.value = meal;
-    input.className = "w-6 h-6 accent-indigo-600";
+    input.className = "w-6 h-6";
     input.addEventListener("change", () => {
       state.meal = meal;
       updateNextEnabled();
     });
 
     const span = document.createElement("span");
-    span.className = "text-2xl font-semibold text-slate-800";
+    span.className = "text-xl font-semibold";
     span.textContent = meal;
 
     label.appendChild(input);
@@ -163,35 +175,18 @@ function initMealRadios() {
 
 function updateNextEnabled() {
   const btn = $("btnNextToDish");
+  if (!btn) return;
+
   const ok = !!state.location && !!state.meal;
   btn.disabled = !ok;
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-function initNavButtons() {
-  $("btnNextToDish").addEventListener("click", () => {
-    renderDishList();
-    showScreen("dish");
-    $("dishSearch").value = "";
-    $("dishSearch").focus();
-  });
-
-  $("btnBackToLocation").addEventListener("click", () => showScreen("location"));
-  $("btnBackToDish").addEventListener("click", () => showScreen("dish"));
-
-  $("btnReset").addEventListener("click", () => {
-    resetAll();
-    showScreen("location");
-  });
-
-  $("btnClose").addEventListener("click", () => window.location.reload());
-}
-
 // ==========================
-// DISH LIST
+// SCREEN 2
 // ==========================
 function matchesDish(dish, search, meal) {
-  const s = search.trim().toLowerCase();
+  const s = (search || "").trim().toLowerCase();
   const matchesSearch = !s || dish.name.toLowerCase().includes(s);
   const matchesMeal = !meal || dish.meals.includes(meal);
   return matchesSearch && matchesMeal;
@@ -199,14 +194,17 @@ function matchesDish(dish, search, meal) {
 
 function renderDishList() {
   const list = $("dishList");
-  const search = $("dishSearch")?.value || "";
+  const searchEl = $("dishSearch");
+  if (!list) return;
 
+  const search = searchEl ? searchEl.value : "";
   const filtered = DISHES.filter((d) => matchesDish(d, search, state.meal));
+
   list.innerHTML = "";
 
   if (filtered.length === 0) {
     const empty = document.createElement("div");
-    empty.className = "p-8 text-center text-slate-500 font-semibold";
+    empty.className = "p-6 text-sm";
     empty.textContent = "Ingen retter fundet. Prøv en anden søgning.";
     list.appendChild(empty);
     return;
@@ -215,17 +213,15 @@ function renderDishList() {
   filtered.forEach((d) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className =
-      "w-full text-left px-5 py-5 flex items-center justify-between hover:bg-indigo-50 transition";
     btn.innerHTML = `
-      <span class="text-2xl font-semibold text-slate-800">${escapeHtml(d.name)}</span>
-      <span class="text-slate-400 text-2xl">→</span>
+      <span class="font-semibold">${escapeHtml(d.name)}</span>
+      <span style="opacity:.6;">→</span>
     `;
     btn.addEventListener("click", () => {
       state.dish = d.name;
       setText("chosenDishName", d.name);
-      updateSubmitEnabled();
       renderRatingBlocks();
+      updateSubmitEnabled();
       showScreen("rating");
     });
     list.appendChild(btn);
@@ -233,11 +229,13 @@ function renderDishList() {
 }
 
 function initDishSearch() {
-  $("dishSearch").addEventListener("input", () => renderDishList());
+  const el = $("dishSearch");
+  if (!el) return;
+  el.addEventListener("input", () => renderDishList());
 }
 
 // ==========================
-// RATING UI
+// SCREEN 3 (rating)
 // ==========================
 const ratingLabels = {
   taste: "SMAG",
@@ -250,10 +248,11 @@ function renderRatingBlocks() {
   document.querySelectorAll(".ratingBlock").forEach((block) => {
     const field = block.getAttribute("data-field");
     const label = ratingLabels[field];
+    if (!label) return;
 
     block.innerHTML = `
       <div class="space-y-2">
-        <div class="text-sm font-extrabold text-slate-800 uppercase tracking-wide">${label}</div>
+        <div class="text-sm font-bold uppercase tracking-wide">${label}</div>
         <div class="flex gap-3" data-stars="${field}"></div>
       </div>
     `;
@@ -262,7 +261,7 @@ function renderRatingBlocks() {
     for (let i = 1; i <= 5; i++) {
       const b = document.createElement("button");
       b.type = "button";
-      b.className = "text-4xl leading-none transition active:scale-95";
+      b.className = "text-4xl leading-none";
       b.setAttribute("aria-label", `${label} ${i} stjerner`);
       b.addEventListener("click", () => {
         state.ratings[field] = i;
@@ -286,15 +285,18 @@ function paintStars() {
       const starNum = idx + 1;
       const active = starNum <= value;
       b.textContent = active ? "★" : "☆";
+      // tailwind-ish classes som din CSS overrides håndterer
       b.className = active
-        ? "text-4xl leading-none text-yellow-400 transition active:scale-95"
-        : "text-4xl leading-none text-slate-300 transition active:scale-95";
+        ? "text-4xl leading-none text-yellow-400"
+        : "text-4xl leading-none text-slate-300";
     });
   });
 }
 
 function updateSubmitEnabled() {
   const btn = $("btnSubmit");
+  if (!btn) return;
+
   const allRated =
     state.ratings.taste > 0 &&
     state.ratings.presentation > 0 &&
@@ -308,13 +310,12 @@ function updateSubmitEnabled() {
 }
 
 // ==========================
-// IMAGE
-// - Gemmer file i state.imageFile (til Netlify)
-// - Laver også komprimeret base64 i state.imageBase64 (kun til webhook)
+// IMAGE -> base64 (komprimeret)
 // ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
   const input = $("imageInput");
+  if (!imageBox || !input) return;
 
   imageBox.addEventListener("click", () => input.click());
 
@@ -322,21 +323,21 @@ function initImageUpload() {
     const file = input.files && input.files[0];
     if (!file) return;
 
-    // VIGTIGT: gem filen til Netlify Forms (rigtig fil-upload)
-    state.imageFile = file;
-
-    // Preview i app (hurtigt)
-    const previewUrl = URL.createObjectURL(file);
-    $("imagePreview").src = previewUrl;
-    setHidden($("imagePreview"), false);
-    setHidden($("imagePlaceholder"), true);
-
-    // Valgfrit: lav komprimeret base64 til Power Automate webhook
     try {
-      state.imageBase64 = await fileToCompressedDataUrl(file, 1100, 0.75);
+      // Preview
+      const previewUrl = URL.createObjectURL(file);
+      const img = $("imagePreview");
+      const placeholder = $("imagePlaceholder");
+      if (img) img.src = previewUrl;
+      setHidden(img, false);
+      setHidden(placeholder, true);
+
+      // Komprimer (justér hvis nødvendigt)
+      state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
     } catch (e) {
-      console.error("Kunne ikke lave base64 (ok hvis du ikke bruger webhook):", e);
+      console.error(e);
       state.imageBase64 = "";
+      alert("Kunne ikke læse billedet. Prøv igen.");
     }
   });
 }
@@ -360,8 +361,7 @@ function fileToCompressedDataUrl(file, maxW, quality) {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, w, h);
 
-        const dataUrl = canvas.toDataURL("image/jpeg", quality);
-        resolve(dataUrl);
+        resolve(canvas.toDataURL("image/jpeg", quality));
       };
       img.src = reader.result;
     };
@@ -370,14 +370,51 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 }
 
 // ==========================
-// SUBMIT
+// SUBMIT -> Apps Script
 // ==========================
 function initCommentAndSubmit() {
- async function submit() {
+  const comment = $("commentInput");
+  if (comment) {
+    comment.addEventListener("input", (e) => {
+      state.comment = e.target.value;
+    });
+  }
+
+  const btn = $("btnSubmit");
+  if (btn) btn.addEventListener("click", submit);
+}
+
+function setSubmitting(submitting) {
+  state.isSubmitting = submitting;
+  const label = $("submitLabel");
+  if (label) label.textContent = submitting ? "SENDER..." : "INDSEND";
+  updateSubmitEnabled();
+}
+
+function setError(msg) {
+  const el = $("submitError");
+  if (!el) return;
+  if (!msg) {
+    setHidden(el, true);
+    el.textContent = "";
+    return;
+  }
+  el.textContent = msg;
+  setHidden(el, false);
+}
+
+async function submit() {
   setError("");
   setSubmitting(true);
 
   try {
+    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) {
+      throw new Error("WEBHOOK_URL er ikke sat i app-v2.js");
+    }
+    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) {
+      throw new Error("WEBHOOK_SECRET er ikke sat i app-v2.js");
+    }
+
     const payload = {
       secret: WEBHOOK_SECRET,
       lokation: state.location,
@@ -392,10 +429,10 @@ function initCommentAndSubmit() {
       billedeBase64: state.imageBase64 || ""
     };
 
+    // no-cors for at undgå CORS-problemer fra GitHub Pages -> Apps Script
     await fetch(WEBHOOK_URL, {
       method: "POST",
       mode: "no-cors",
-      // ingen headers = færre CORS-problemer
       body: JSON.stringify(payload)
     });
 
@@ -409,29 +446,62 @@ function initCommentAndSubmit() {
 }
 
 // ==========================
-// RESET
+// NAV + RESET
 // ==========================
+function initNavButtons() {
+  const next = $("btnNextToDish");
+  if (next) {
+    next.addEventListener("click", () => {
+      renderDishList();
+      showScreen("dish");
+      const s = $("dishSearch");
+      if (s) {
+        s.value = "";
+        s.focus();
+      }
+    });
+  }
+
+  const back1 = $("btnBackToLocation");
+  if (back1) back1.addEventListener("click", () => showScreen("location"));
+
+  const back2 = $("btnBackToDish");
+  if (back2) back2.addEventListener("click", () => showScreen("dish"));
+
+  const reset = $("btnReset");
+  if (reset) reset.addEventListener("click", () => { resetAll(); showScreen("location"); });
+
+  const close = $("btnClose");
+  if (close) close.addEventListener("click", () => window.location.reload());
+}
+
 function resetAll() {
   state.location = "";
   state.meal = "";
   state.dish = "";
-
   state.imageBase64 = "";
-  state.imageFile = null;
-
   state.ratings = { taste: 0, presentation: 0, temperature: 0, portion: 0 };
   state.comment = "";
   state.isSubmitting = false;
 
-  // reset UI
-  $("locationSelect").value = "";
-  document.querySelectorAll('input[name="meal"]').forEach((i) => (i.checked = false));
-  $("dishSearch").value = "";
-  $("commentInput").value = "";
+  const locationSelect = $("locationSelect");
+  if (locationSelect) locationSelect.value = "";
 
-  setHidden($("imagePreview"), true);
-  setHidden($("imagePlaceholder"), false);
-  $("imageInput").value = "";
+  document.querySelectorAll('input[name="meal"]').forEach((i) => (i.checked = false));
+
+  const dishSearch = $("dishSearch");
+  if (dishSearch) dishSearch.value = "";
+
+  const comment = $("commentInput");
+  if (comment) comment.value = "";
+
+  const img = $("imagePreview");
+  const placeholder = $("imagePlaceholder");
+  setHidden(img, true);
+  setHidden(placeholder, false);
+
+  const file = $("imageInput");
+  if (file) file.value = "";
 
   updateNextEnabled();
   updateSubmitEnabled();
@@ -441,22 +511,9 @@ function resetAll() {
 }
 
 // ==========================
-// UTIL
-// ==========================
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[c]));
-}
-
-// ==========================
 // BOOT
 // ==========================
-(function boot() {
+function boot() {
   initLocationSelect();
   initMealRadios();
   initNavButtons();
@@ -469,4 +526,6 @@ function escapeHtml(s) {
   updateNextEnabled();
   updateSubmitEnabled();
   showScreen("location");
-})();
+}
+
+document.addEventListener("DOMContentLoaded", boot);
