@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Kaiser – Standardkontrol</title>
 
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -62,6 +60,7 @@
         padding: 18px 18px;
         backdrop-filter: blur(10px);
         box-shadow: 0 28px 70px rgba(0,0,0,0.55);
+        text-align: center;
       }
 
       .brand-kicker{
@@ -104,42 +103,7 @@
         backdrop-filter: blur(12px);
       }
 
-      .panelHeader{
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap: 12px;
-      }
-
-      .step{
-        font-size: 12px;
-        letter-spacing: .18em;
-        text-transform: uppercase;
-        color: var(--muted2);
-        font-weight: 900;
-      }
-
-      .h2{
-        font-size: 19px;
-        font-weight: 900;
-        letter-spacing: -0.01em;
-      }
-
-      .badge{
-        border: 1px solid rgba(214,178,74,0.28);
-        background: rgba(214,178,74,0.08);
-        color: rgba(255,255,255,0.90);
-        font-size: 12px;
-        font-weight: 900;
-        padding: 8px 10px;
-        border-radius: 999px;
-        white-space: nowrap;
-      }
-
-      .divider{
-        height:1px;
-        background: rgba(255,255,255,0.08);
-      }
+      .divider{ height:1px; background: rgba(255,255,255,0.08); }
 
       .label{
         font-size: 12px;
@@ -216,21 +180,28 @@
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.20);
       }
 
-      /* Dish list buttons injected by JS */
-      #dishList > button{
-        width: 100%;
-        text-align: left;
-        padding: 16px 16px;
+      /* Stepper (mere “tjekket” end Trin 1/3 tekst) */
+      .stepRow{
         display:flex;
         align-items:center;
         justify-content:space-between;
-        background: transparent;
+        gap: 14px;
       }
-      #dishList > button:hover{
-        background: rgba(214,178,74,0.06);
+      .stepTitle{
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: -0.01em;
       }
-      #dishList > button:not(:last-child){
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+      .stepDots{ display:flex; align-items:center; gap:8px; }
+      .dot{
+        width: 9px; height: 9px; border-radius: 999px;
+        border: 1px solid rgba(214,178,74,0.35);
+        background: rgba(214,178,74,0.10);
+      }
+      .dot.on{
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        border-color: rgba(214,178,74,0.75);
+        box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
       }
 
       /* Radio group injected by JS */
@@ -246,50 +217,37 @@
       }
       #mealRadios input[type="radio"]{ accent-color: var(--gold); }
 
-      /* Override Tailwind light-theme classes used by app-v2.js */
-      .text-slate-800, .text-slate-700, .text-gray-700 { color: var(--text) !important; }
-      .text-slate-600, .text-slate-500, .text-gray-500 { color: var(--muted) !important; }
-      .text-slate-400 { color: var(--muted2) !important; }
-      .border-slate-200, .border-gray-200 { border-color: rgba(255,255,255,0.10) !important; }
-      .hover\:bg-slate-50:hover, .hover\:bg-indigo-50:hover { background: rgba(214,178,74,0.06) !important; }
-
-      .text-indigo-600, .text-indigo-700, .text-indigo-400,
-      .group-hover\:text-indigo-700, .group-hover\:text-indigo-400{
-        color: var(--gold) !important;
-      }
-
+      /* Stars injected by JS */
       .text-yellow-400 { color: var(--gold) !important; }
       .text-slate-300  { color: rgba(255,255,255,0.26) !important; }
 
       #submitError{ color: var(--danger); }
+      .muted { color: var(--muted); font-weight: 600; font-size: 13px; }
+      .muted2 { color: var(--muted2); font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
     </style>
   </head>
 
   <body class="min-h-screen flex justify-center p-4">
     <div class="shell w-full">
 
-      <!-- Header -->
-      <header class="topbar mt-6 mb-5">
-        <div class="panelHeader">
-          <div>
-            <div class="brand-kicker">KAISER</div>
-            <div class="brand-title">Standardkontrol</div>
-            <div class="brand-meta">Intern vurdering af retter på tværs af lokationer</div>
-          </div>
-          <div class="badge">INTERN</div>
-        </div>
+      <!-- Header (kun side 1) -->
+      <header id="topHeader" class="topbar mt-6 mb-5">
+        <div class="brand-kicker">KAISER</div>
+        <div class="brand-title">Standardkontrol</div>
+        <div class="brand-meta">Intern vurdering af retter på tværs af lokationer</div>
         <div class="goldline"></div>
       </header>
 
       <!-- SCREEN 1 -->
       <section id="screen-location" class="space-y-4">
         <div class="panel p-5 space-y-4">
-          <div class="panelHeader">
-            <div>
-              <div class="step">Trin 1</div>
-              <div class="h2">Opret vurdering</div>
+          <div class="stepRow">
+            <div class="stepTitle">Opret vurdering</div>
+            <div class="stepDots" aria-label="Trin 1 af 3">
+              <span class="dot on"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
             </div>
-            <div class="badge">1 / 3</div>
           </div>
 
           <div class="divider"></div>
@@ -317,23 +275,25 @@
         <div class="panel p-5 space-y-4">
           <div class="flex items-center gap-3">
             <button id="btnBackToLocation" class="backbtn" aria-label="Tilbage">←</button>
-            <div class="flex-1">
-              <div class="step">Trin 2</div>
-              <div class="h2">Vælg ret</div>
+            <div class="stepRow flex-1">
+              <div class="stepTitle">Vælg ret</div>
+              <div class="stepDots" aria-label="Trin 2 af 3">
+                <span class="dot on"></span>
+                <span class="dot on"></span>
+                <span class="dot"></span>
+              </div>
             </div>
-            <div class="badge">2 / 3</div>
           </div>
 
           <div class="divider"></div>
 
           <div class="space-y-2">
-            <div class="label">Søg</div>
-            <input id="dishSearch" type="text" class="input" placeholder="Søg ret..." />
+            <div class="label">Ret</div>
+            <select id="dishSelect">
+              <option value="">Vælg ret...</option>
+            </select>
+            <div class="muted2">Listen filtreres automatisk efter måltid</div>
           </div>
-        </div>
-
-        <div class="panel overflow-hidden">
-          <div id="dishList" class="max-h-[520px] overflow-auto"></div>
         </div>
       </section>
 
@@ -342,28 +302,29 @@
         <div class="panel p-5 space-y-4">
           <div class="flex items-center gap-3">
             <button id="btnBackToDish" class="backbtn" aria-label="Tilbage">←</button>
-            <div class="flex-1">
-              <div class="step">Trin 3</div>
-              <div class="h2">Vurdering</div>
+            <div class="stepRow flex-1">
+              <div class="stepTitle">Vurdering</div>
+              <div class="stepDots" aria-label="Trin 3 af 3">
+                <span class="dot on"></span>
+                <span class="dot on"></span>
+                <span class="dot on"></span>
+              </div>
             </div>
-            <div class="badge">3 / 3</div>
           </div>
 
           <div class="divider"></div>
 
-          <div class="brand-meta" style="margin-top:0;">
+          <div class="muted" style="margin-top:0;">
             Valgt ret: <span id="chosenDishName" style="color: var(--text); font-weight: 900;">—</span>
           </div>
 
-          <!-- Billede -->
+          <!-- Billede (KRAV) -->
           <div class="space-y-2">
-            <div class="label">Billede</div>
+            <div class="label">Billede (krav)</div>
             <div id="imageBox" class="imageBox aspect-video flex items-center justify-center cursor-pointer">
               <div id="imagePlaceholder" class="text-center px-6">
-                <div class="brand-meta" style="margin-top:0;">Tryk for at tage billede</div>
-                <div class="brand-kicker" style="margin-top:8px; color: var(--muted2);">
-                  Vedhæftes til rapporten
-                </div>
+                <div class="muted" style="margin-top:0;">Tag billede før du spiser</div>
+                <div class="muted2" style="margin-top:8px; color: var(--muted2);">Vedhæftes til rapporten</div>
               </div>
               <img id="imagePreview" class="hidden w-full h-full object-cover" alt="Billede preview">
             </div>
@@ -372,12 +333,27 @@
 
           <div class="divider"></div>
 
-          <!-- Ratings -->
+          <!-- Før du spiser -->
           <div class="space-y-4">
-            <div class="ratingBlock" data-field="taste"></div>
+            <div class="muted2">Før du spiser</div>
             <div class="ratingBlock" data-field="presentation"></div>
-            <div class="ratingBlock" data-field="temperature"></div>
             <div class="ratingBlock" data-field="portion"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Efter du har smagt -->
+          <div class="space-y-3">
+            <label class="flex items-center gap-3 select-none">
+              <input id="tastedCheck" type="checkbox" class="w-5 h-5" />
+              <span class="muted">Jeg har smagt maden</span>
+            </label>
+
+            <div id="afterTasteWrap" class="space-y-4 hidden">
+              <div class="muted2">Efter du har smagt</div>
+              <div class="ratingBlock" data-field="taste"></div>
+              <div class="ratingBlock" data-field="temperature"></div>
+            </div>
           </div>
 
           <div class="divider"></div>
@@ -399,9 +375,10 @@
       <!-- SCREEN 4 -->
       <section id="screen-confirmation" class="hidden space-y-4">
         <div class="panel p-6 text-center space-y-4">
-          <div class="step">Indsendt</div>
-          <div class="h2">Tak. Vurderingen er gemt.</div>
-          <div class="brand-meta">Du kan lukke eller oprette en ny vurdering.</div>
+          <div class="muted2">Indsendt</div>
+          <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Tak. Vurderingen er gemt.</div>
+
+          <div id="quoteText" class="muted" style="margin-top:6px;"></div>
 
           <div class="pt-2 space-y-3">
             <button id="btnReset" class="btn btn-primary">Ny vurdering</button>
@@ -410,24 +387,8 @@
         </div>
       </section>
 
-      <!-- Netlify form (har ingen effekt på GitHub Pages, men kan blive liggende) -->
-      <form name="madrating" method="POST" data-netlify="true" enctype="multipart/form-data" hidden>
-        <input type="hidden" name="form-name" value="madrating" />
-        <input type="hidden" name="lokation" />
-        <input type="hidden" name="maaltid" />
-        <input type="hidden" name="ret" />
-        <input type="hidden" name="scoreSmag" />
-        <input type="hidden" name="scoreAnretning" />
-        <input type="hidden" name="scoreTemperatur" />
-        <input type="hidden" name="scorePortion" />
-        <input type="hidden" name="kommentar" />
-        <input type="hidden" name="dato" />
-        <input type="file" name="billede" />
-      </form>
-
     </div>
 
-    <!-- Script nederst = sikkert -->
-    <script src="./app-v2.js"></script>
+    <script src="./app-v3.js"></script>
   </body>
 </html>
