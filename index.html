@@ -224,6 +224,35 @@
       #submitError{ color: var(--danger); }
       .muted { color: var(--muted); font-weight: 600; font-size: 13px; }
       .muted2 { color: var(--muted2); font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+      /* Måltid: 3 "pills" i grid (ingen overlap) */
+.mealGrid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* label kommer fra JS, så vi tvinger layout */
+.mealGrid label{
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 14px 12px !important;
+}
+
+/* gør teksten lidt mere stabil i pill'en */
+.mealGrid label span{
+  font-size: 16px !important;
+  line-height: 1.05;
+}
+
+/* små skærme: 2 kolonner */
+@media (max-width: 390px){
+  .mealGrid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
     </style>
   </head>
 
@@ -261,7 +290,7 @@
 
           <div class="space-y-2">
             <div class="label">Måltid</div>
-            <div id="mealRadios" class="space-y-2"></div>
+            <div id="mealRadios" class="mealGrid"></div>
           </div>
         </div>
 
