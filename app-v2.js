@@ -4,7 +4,8 @@
 
 // Hvis du vil prøve Power Automate webhook også, så indsæt den her.
 // Hvis den fejler pga. CORS/403 osv, falder app'en automatisk tilbage til Netlify Forms.
-const WEBHOOK_URL = ""; // fx "https://...."
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
+const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 // Lokationer
 const LOCATIONS = [
@@ -372,114 +373,38 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 // SUBMIT
 // ==========================
 function initCommentAndSubmit() {
-  $("commentInput").addEventListener("input", (e) => {
-    state.comment = e.target.value;
-  });
-
-  $("btnSubmit").addEventListener("click", async () => {
-    await submit();
-  });
-}
-
-function setSubmitting(submitting) {
-  state.isSubmitting = submitting;
-  const label = $("submitLabel");
-  label.textContent = submitting ? "SENDER..." : "INDSEND";
-  updateSubmitEnabled();
-}
-
-function setError(msg) {
-  const el = $("submitError");
-  if (!msg) {
-    setHidden(el, true);
-    el.textContent = "";
-    return;
-  }
-  el.textContent = msg;
-  setHidden(el, false);
-}
-
-async function submit() {
+ async function submit() {
   setError("");
   setSubmitting(true);
 
-  const payloadCommon = {
-    lokation: state.location,
-    maaltid: state.meal,
-    ret: state.dish,
-    scoreSmag: state.ratings.taste,
-    scoreAnretning: state.ratings.presentation,
-    scoreTemperatur: state.ratings.temperature,
-    scorePortion: state.ratings.portion,
-    kommentar: state.comment || "",
-    dato: new Date().toLocaleString("da-DK")
-  };
-
-  // Kun til webhook (hvis du bruger det)
-  const payloadForWebhook = {
-    ...payloadCommon,
-    billedeBase64: state.imageBase64 || ""
-  };
-
   try {
-    if (WEBHOOK_URL) {
-      const res = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payloadForWebhook)
-      });
+    const payload = {
+      secret: WEBHOOK_SECRET,
+      lokation: state.location,
+      maaltid: state.meal,
+      ret: state.dish,
+      scoreSmag: state.ratings.taste,
+      scoreAnretning: state.ratings.presentation,
+      scoreTemperatur: state.ratings.temperature,
+      scorePortion: state.ratings.portion,
+      kommentar: state.comment || "",
+      dato: new Date().toLocaleString("da-DK"),
+      billedeBase64: state.imageBase64 || ""
+    };
 
-      if (!res.ok) {
-        const t = await res.text().catch(() => "");
-        throw new Error(`Webhook fejlede (${res.status}). ${t}`);
-      }
-    } else {
-      await sendToNetlifyForms(payloadCommon); // <-- her gemmes billedet som fil
-    }
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      // ingen headers = færre CORS-problemer
+      body: JSON.stringify(payload)
+    });
 
     showScreen("confirmation");
   } catch (err) {
     console.error(err);
-
-    // Hvis webhook fejler, så prøv Netlify Forms som fallback:
-    if (WEBHOOK_URL) {
-      try {
-        await sendToNetlifyForms(payloadCommon);
-        showScreen("confirmation");
-        return;
-      } catch (e2) {
-        console.error(e2);
-      }
-    }
-
-    setError(err?.message || "Der skete en fejl ved indsendelse. Tjek netværk og prøv igen.");
+    setError(err?.message || "Kunne ikke sende. Prøv igen.");
   } finally {
     setSubmitting(false);
-  }
-}
-
-async function sendToNetlifyForms(payload) {
-  // VIGTIGT: FormData + fil vedhæftning
-  const fd = new FormData();
-  fd.append("form-name", "madrating");
-
-  for (const [k, v] of Object.entries(payload)) {
-    fd.append(k, String(v ?? ""));
-  }
-
-  // Vedhæft billedfilen (skal hedde "billede" ligesom i index.html-formen)
-  if (state.imageFile) {
-    fd.append("billede", state.imageFile, state.imageFile.name);
-  }
-
-  const res = await fetch("/", {
-    method: "POST",
-    body: fd
-  });
-
-  if (!res.ok) {
-    const t = await res.text().catch(() => "");
-    throw new Error(`Netlify Forms fejlede (${res.status}). ${t}`);
   }
 }
 
