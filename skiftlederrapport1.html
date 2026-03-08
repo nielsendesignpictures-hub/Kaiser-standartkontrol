@@ -69,7 +69,7 @@
 
     .btn{width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;transition:transform .08s ease,filter .18s ease;user-select:none;}
     .btn:active{transform:translateY(1px);}
-    .btn-primary{background:linear-gradient(135deg, var(--gold), #b9921f);color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
     .btn-primary:hover{filter:brightness(1.04);}
     .btn-secondary{background: rgba(255,255,255,0.04);border: 1px solid rgba(255,255,255,0.12);color: rgba(255,255,255,0.88);}
     .btn-secondary:hover{ background: rgba(255,255,255,0.06); }
@@ -90,8 +90,14 @@
       <div class="goldline"></div>
     </header>
 
+    <!-- FORM -->
     <section id="formWrap" class="space-y-4">
-      <form id="reportForm" class="space-y-4" method="POST">
+      <form
+        id="reportForm"
+        class="space-y-4"
+        method="POST"
+        action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b"
+      >
         <!-- FormSubmit settings -->
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="box">
@@ -99,7 +105,7 @@
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="text" name="_honey" style="display:none">
 
-        <!-- Vi sender kun ét felt "Rapport" => mailen ens hver gang -->
+        <!-- Kun dette felt sendes => mailen er ens hver gang -->
         <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
         <!-- Stamdata -->
@@ -138,7 +144,7 @@
 
             <div class="space-y-2">
               <div class="label">Info</div>
-              <div class="muted">Sendes til: stefan@cafekaiser.dk</div>
+              <div class="muted">Emne viser afdeling + dato.</div>
             </div>
           </div>
         </section>
@@ -192,173 +198,4 @@
 
         <section class="panel p-5 space-y-4">
           <div class="blockTitle">☐ Dagens drift (travlhed, flow, udfordringer)</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="opsDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="opsEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Eventuelle klager eller særlige hændelser</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="incDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="incEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Teamets præstation (ros eller udfordringer i det samlet team)</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="teamDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="teamEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Mangler/afvigelser og behov for bestilling</div>
-          <div class="divider"></div>
-          <div class="space-y-2">
-            <div class="label">Noter</div>
-            <textarea id="needs" rows="5"></textarea>
-          </div>
-        </section>
-
-        <button class="btn btn-primary" type="submit">Send rapport</button>
-      </form>
-    </section>
-
-    <section id="thanksWrap" class="hidden space-y-4">
-      <div class="panel p-6 text-center space-y-4">
-        <div class="hint">Indsendt</div>
-        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Tak for rapporten.</div>
-        <div id="quoteText" class="muted" style="margin-top:6px;"></div>
-
-        <div class="pt-2 space-y-3">
-          <a class="btn btn-primary inline-block text-center" href="./skiftlederrapport1.html">Ny rapport</a>
-          <button id="btnClose" class="btn btn-secondary" type="button">Luk</button>
-        </div>
-      </div>
-    </section>
-
-  </div>
-
-  <script>
-    var TO_EMAIL = "Skiftlederrapport1@gmail.com";
-
-    var QUOTES = [
-      "Konsekvens skaber kvalitet.",
-      "Godt overblik giver ro i driften.",
-      "Små forbedringer hver dag giver store resultater.",
-      "Standarder gør det nemt at levere godt – hver gang.",
-      "Tak. Det er detaljen der løfter helheden.",
-      "Det du måler, kan du forbedre."
-    ];
-
-    function val(id){
-      var el = document.getElementById(id);
-      return (el && el.value ? el.value : "").trim();
-    }
-    function line(label, value){
-      return label + ": " + (value ? value : "-");
-    }
-
-    function localISODate(){
-      var d = new Date();
-      var off = d.getTimezoneOffset();
-      var local = new Date(d.getTime() - off * 60000);
-      return local.toISOString().slice(0,10);
-    }
-
-    var form = document.getElementById("reportForm");
-    form.action = "https://formsubmit.co/" + encodeURIComponent(TO_EMAIL);
-
-    document.getElementById("dateField").value = new Date().toLocaleString("da-DK");
-
-    document.getElementById("nextField").value =
-      window.location.origin + window.location.pathname + "?sent=1";
-
-    var subjectField = document.getElementById("subjectField");
-    function updateSubject(){
-      var afd = val("department") || "Afdeling";
-      var dato = localISODate();
-      subjectField.value = "Skiftleder rapport – " + afd + " – " + dato;
-    }
-    document.getElementById("department").addEventListener("change", updateSubject);
-    updateSubject();
-
-    form.addEventListener("submit", function(){
-      updateSubject();
-
-      var navn = val("name");
-      var afdeling = val("department");
-      var dato = document.getElementById("dateField").value;
-
-      var report =
-        "Skiftleder rapport – " + (afdeling || "Afdeling") + "\n\n" +
-        "Navn: " + (navn || "-") + "\n" +
-        "Afdeling: " + (afdeling || "-") + "\n" +
-        "Dato: " + (dato || "-") + "\n\n" +
-
-        "☐ En rating af dagen fra 1 – 5\n" +
-        line("Brunch/frokost", val("rateDay")) + "\n" +
-        line("Aften", val("rateEve")) + "\n\n" +
-
-        "☐ Kommentarer til service, stemning og gæsteoplevelse\n" +
-        line("Brunch/frokost", val("expDay")) + "\n" +
-        line("Aften", val("expEve")) + "\n\n" +
-
-        "☐ Dagens drift (travlhed, flow, udfordringer)\n" +
-        line("Brunch/frokost", val("opsDay")) + "\n" +
-        line("Aften", val("opsEve")) + "\n\n" +
-
-        "☐ Eventuelle klager eller særlige hændelser\n" +
-        line("Brunch/frokost", val("incDay")) + "\n" +
-        line("Aften", val("incEve")) + "\n\n" +
-
-        "☐ Teamets præstation (ros eller udfordringer i det samlet team)\n" +
-        line("Brunch/frokost", val("teamDay")) + "\n" +
-        line("Aften", val("teamEve")) + "\n\n" +
-
-        "☐ Mangler/afvigelser og behov for bestilling\n" +
-        (val("needs") || "-") + "\n";
-
-      document.getElementById("reportPayload").value = report;
-    });
-
-    var params = new URLSearchParams(window.location.search);
-    if (params.get("sent") === "1") {
-      document.getElementById("formWrap").classList.add("hidden");
-      document.getElementById("thanksWrap").classList.remove("hidden");
-      document.getElementById("quoteText").textContent =
-        "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
-    }
-
-    document.getElementById("btnClose").addEventListener("click", function(){
-  try { window.close(); } catch(e) {}
-  window.location.href = "./skiftlederrapport1.html";
-});
-    });
-  </script>
-</body>
 </html>
