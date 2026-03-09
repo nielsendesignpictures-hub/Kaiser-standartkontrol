@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Cleaning list kitchen</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#17181c;
+      --panel:rgba(28, 30, 36, 0.90);
+      --border:rgba(255,255,255,0.10);
+      --text:rgba(255,255,255,0.93);
+      --muted:rgba(255,255,255,0.70);
+      --muted2:rgba(255,255,255,0.50);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --goldGlow:rgba(214,178,74,.22);
+      --danger:#ff6b6b;
+    }
+
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    body{
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
+        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
+        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+    }
+
+    .shell{max-width:860px}
+    .topbar{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+      border-radius:22px;padding:22px 18px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 28px 70px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
+    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
+    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
+    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
+    .divider{height:1px;background:rgba(255,255,255,.10);}
+
+    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .input, select, textarea{
+      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
+    }
+    select option{color:#0b0c0f;}
+    .input:focus, select:focus, textarea:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px var(--goldGlow);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn{
+      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+    .btn-primary:hover{filter:brightness(1.04);}
+    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+
+    .muted{color:var(--muted);font-weight:600;font-size:13px;}
+    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+
+    .tabs7{display:grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap:8px;}
+    .tabBtn{
+      border-radius:14px;
+      padding:10px 8px;
+      font-weight:900;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.90);
+      cursor:pointer;
+      font-size:12px;
+    }
+    .tabBtn.on{
+      border-color: rgba(214,178,74,0.38);
+      background: rgba(214,178,74,0.10);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+    }
+
+    .task{
+      display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
+      cursor:pointer;transition: background .18s ease, border-color .18s ease;user-select:none;
+    }
+    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
+    .task.locked{opacity:.55; cursor:not-allowed;}
+    .taskNum{
+      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
+      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
+    }
+    .taskTitle{font-weight:900; letter-spacing:-0.01em;}
+    .check{
+      margin-left:auto;width:24px;height:24px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
+    }
+    .check.on{border-color: rgba(98, 210, 111, 0.55);background: rgba(98, 210, 111, 0.18);color: rgba(255,255,255,0.92);}
+
+    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
+    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+  </style>
+</head>
+
+<body class="min-h-screen flex justify-center p-4">
+  <div class="shell w-full">
+
+    <header class="topbar mt-6 mb-5">
+      <div class="kicker">KAISER</div>
+      <div class="title">Cleaning list kitchen</div>
+      <div class="subtitle">Ugeplan (man–søn) • pr. lokation • sender kun mangler</div>
+      <div class="goldline"></div>
+    </header>
+
+    <section id="formWrap" class="space-y-4">
+      <form id="kitchenForm" class="space-y-4" method="POST"
+        action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b">
+
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_subject" id="subjectField" value="Kitchen cleaning – Lokation – Uge – Dag – Mangler: X">
+        <input type="hidden" name="_next" id="nextField" value="">
+        <input type="text" name="_honey" style="display:none">
+        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
+
+        <section class="panel p-5 space-y-4">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="text-lg font-extrabold">Ugeplan</div>
+            <div class="hint" id="weekKeyText">—</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <div class="label">Lokation</div>
+              <select id="locationSelect" required>
+                <option value="">Vælg lokation...</option>
+                <option>Café Kaiser Helsingør</option>
+                <option>Café Kaiser Hillerød</option>
+                <option>Café Kaiser Farum</option>
+                <option>Café Kaiser Hørsholm</option>
+                <option>Café Kaiser Vanløse</option>
+              </select>
+              <div class="hint" id="gpsStatus">GPS: ikke tjekket</div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="label">Udført af</div>
+              <input id="doneBy" class="input" placeholder="Navn (krav)" />
+              <div class="hint">Gemmes pr. dag</div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <div class="label">Dato / tid</div>
+              <input class="input" id="timeField" readonly>
+              <div class="hint" id="dayKeyText">—</div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="label">Dag</div>
+              <div class="tabs7" id="dayTabs"></div>
+              <div class="hint">Skifter automatisk til i dag</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="label">Status</div>
+            <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
+            <div class="muted" id="progressText">0/0</div>
+          </div>
+        </section>
+
+        <section class="panel p-5 space-y-4">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="text-lg font-extrabold" id="listTitle">—</div>
+            <div class="hint" id="missingHint">—</div>
+          </div>
+          <div class="divider"></div>
+
+          <div id="taskList" class="space-y-3"></div>
+
+          <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
+            <div style="font-weight:900;">Fuldført for dagen.</div>
+            <div class="muted" id="doneText" style="margin-top:4px;"></div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <button id="submitBtn" class="btn btn-primary" type="submit">Send mangler</button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Nulstil (kun denne enhed)</button>
+          <div class="muted">Mail sendes kun hvis der mangler noget.</div>
+          <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
+        </section>
+      </form>
+    </section>
+
+    <section id="thanksWrap" class="hidden space-y-4">
+      <div class="panel p-6 text-center space-y-4">
+        <div class="hint">Indsendt</div>
+        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Mangler sendt.</div>
+        <div id="quoteText" class="muted" style="margin-top:6px;"></div>
+        <div class="pt-2 space-y-3">
+          <a class="btn btn-primary inline-block text-center" href="./cleaning-kitchen.html">Tilbage</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // === KONFIG ===
+    const GPS_MAX_DISTANCE_M = 600;
+    const GPS_AUTOSELECT_M = 900;
+
+    const LOCATION_COORDS = {
+      "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
+      "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
+      "Café Kaiser Farum": { lat: 55.814500, lng: 12.379595 },
+      "Café Kaiser Hørsholm": { lat: 55.881489, lng: 12.497737 },
+      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
+    };
+
+    const QUOTES = [
+      "Standarder gør hverdagen lettere.",
+      "Rent køkken = ro i service.",
+      "Små rutiner skaber stor driftssikkerhed."
+    ];
+
+    // Ugedage
+    const DAYS = [
+      { key:"mon", label:"Man", full:"Mandag" },
+      { key:"tue", label:"Tir", full:"Tirsdag" },
+      { key:"wed", label:"Ons", full:"Onsdag" },
+      { key:"thu", label:"Tor", full:"Torsdag" },
+      { key:"fri", label:"Fre", full:"Fredag" },
+      { key:"sat", label:"Lør", full:"Lørdag" },
+      { key:"sun", label:"Søn", full:"Søndag" }
+    ];
+
+    // EDIT HER: pr. lokation pr. ugedag
+    // Lige nu er det demo-tekster – du sender mig de rigtige, så fylder vi dem ind.
+    const KITCHEN_TASKS = {
+      "Café Kaiser Helsingør": {
+        mon: [
+          { id: 1, text: "Demo: Rengør station A" },
+          { id: 2, text: "Demo: Tøm affald" }
+        ],
+        tue: [
+          { id: 1, text: "Demo: Aftør flader + håndtag" }
+        ],
+        wed: [
+          { id: 1, text: "Demo: Rengør køl/greb" }
+        ],
+        thu: [
+          { id: 1, text: "Demo: Rengør gulv (grundigt)" }
+        ],
+        fri: [
+          { id: 1, text: "Demo: Rengør udsugning ydre" }
+        ],
+        sat: [
+          { id: 1, text: "Demo: Rengør ovn-front" }
+        ],
+        sun: [
+          { id: 1, text: "Demo: Uge-afslut (tjek datoer)" }
+        ]
+      },
+
+      // De andre lokationer kan have HELT andre tasks:
+      "Café Kaiser Hillerød": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
+      "Café Kaiser Farum": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
+      "Café Kaiser Hørsholm": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
+      "Café Kaiser Vanløse": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }
+    };
+
+    // === Helpers ===
+    function $(id){ return document.getElementById(id); }
+    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function dayKeyISO(){
+      // YYYY-MM-DD local
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function getDayKeyToday(){
+      // 0=Sun..6=Sat -> match DAYS order mon..sun
+      const js = new Date().getDay();
+      if (js === 0) return "sun";
+      if (js === 1) return "mon";
+      if (js === 2) return "tue";
+      if (js === 3) return "wed";
+      if (js === 4) return "thu";
+      if (js === 5) return "fri";
+      return "sat";
+    }
+
+    function isoWeekKey(date){
+      // ISO week "YYYY-Www"
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+      const year = d.getUTCFullYear();
+      const ww = String(weekNo).padStart(2,"0");
+      return year + "-W" + ww;
+    }
+
+    function distanceM(lat1, lon1, lat2, lon2){
+      const R = 6371000;
+      const toRad = (x) => x * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function getGPS(){
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({
+            ok:true,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            acc: Math.round(pos.coords.accuracy || 0)
+          }),
+          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS afvist" }),
+          { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
+        );
+      });
+    }
+
+    // Storage
+    const keyBase = "kaiser_kitchen_clean_v1";
+    function kProgress(loc, week, day){ return `${keyBase}_progress_${loc}_${week}_${day}`; }
+    function kDone(loc, week, day){ return `${keyBase}_done_${loc}_${week}_${day}`; }
+    function kDoneBy(loc, week, day){ return `${keyBase}_doneby_${loc}_${week}_${day}`; }
+
+    // === DOM ===
+    const weekKeyText = $("weekKeyText");
+    const dayKeyText = $("dayKeyText");
+    const timeField = $("timeField");
+    const locationSelect = $("locationSelect");
+    const doneBy = $("doneBy");
+    const gpsStatus = $("gpsStatus");
+    const dayTabs = $("dayTabs");
+
+    const listTitle = $("listTitle");
+    const missingHint = $("missingHint");
+    const taskList = $("taskList");
+    const doneBox = $("doneBox");
+    const doneText = $("doneText");
+
+    const progressBar = $("progressBar");
+    const progressText = $("progressText");
+    const submitBtn = $("submitBtn");
+    const resetBtn = $("resetBtn");
+    const errorText = $("errorText");
+    const form = $("kitchenForm");
+
+    $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
+
+    const state = {
+      loc: "",
+      weekKey: isoWeekKey(new Date()),
+      day: getDayKeyToday(),
+      progress: {},
+      locked: false,
+      gps: null
+    };
+
+    function setError(msg){
+      if (!msg){
+        errorText.classList.add("hidden");
+        errorText.textContent = "";
+        return;
+      }
+      errorText.textContent = msg;
+      errorText.classList.remove("hidden");
+    }
+
+    function getTasks(){
+      const loc = state.loc;
+      const day = state.day;
+      const base = (KITCHEN_TASKS[loc] && KITCHEN_TASKS[loc][day]) ? KITCHEN_TASKS[loc][day] : [];
+      return base;
+    }
+
+    function loadProgress(){
+      if (!state.loc) { state.progress = {}; return; }
+      const raw = localStorage.getItem(kProgress(state.loc, state.weekKey, state.day));
+      if (!raw) { state.progress = {}; return; }
+      try {
+        const obj = JSON.parse(raw);
+        state.progress = (obj && typeof obj === "object") ? obj : {};
+      } catch(e){
+        state.progress = {};
+      }
+    }
+
+    function saveProgress(){
+      if (!state.loc) return;
+      localStorage.setItem(kProgress(state.loc, state.weekKey, state.day), JSON.stringify(state.progress));
+    }
+
+    function isTaskDone(id){ return !!state.progress[String(id)]; }
+    function setTaskDone(id, val){
+      state.progress[String(id)] = !!val;
+      saveProgress();
+    }
+
+    function getDoneMeta(){
+      if (!state.loc) return null;
+      const raw = localStorage.getItem(kDone(state.loc, state.weekKey, state.day));
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch(e){ return null; }
+    }
+
+    function markDone(meta){
+      localStorage.setItem(kDone(state.loc, state.weekKey, state.day), JSON.stringify(meta));
+    }
+
+    function loadDoneBy(){
+      if (!state.loc) { doneBy.value = ""; return; }
+      doneBy.value = localStorage.getItem(kDoneBy(state.loc, state.weekKey, state.day)) || "";
+    }
+
+    function saveDoneBy(){
+      if (!state.loc) return;
+      localStorage.setItem(kDoneBy(state.loc, state.weekKey, state.day), (doneBy.value || "").trim());
+    }
+
+    function missingTasks(){
+      const tasks = getTasks();
+      return tasks.filter(t => !isTaskDone(t.id));
+    }
+
+    function renderDayTabs(){
+      dayTabs.innerHTML = "";
+      DAYS.forEach(d => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tabBtn" + (state.day === d.key ? " on" : "");
+        b.textContent = d.label;
+        b.addEventListener("click", () => {
+          state.day = d.key;
+          loadProgress();
+          loadDoneBy();
+          updateUI();
+          renderDayTabs();
+        });
+        dayTabs.appendChild(b);
+      });
+    }
+
+    function renderTasks(){
+      taskList.innerHTML = "";
+      const tasks = getTasks();
+
+      if (!tasks.length) {
+        const el = document.createElement("div");
+        el.className = "muted";
+        el.textContent = "Ingen opgaver defineret for denne dag/lokation endnu.";
+        taskList.appendChild(el);
+        return;
+      }
+
+      tasks.forEach(t => {
+        const on = isTaskDone(t.id);
+        const row = document.createElement("div");
+        row.className = "task" + (state.locked ? " locked" : "");
+        row.innerHTML = `
+          <div class="taskNum">${t.id}</div>
+          <div style="flex:1;">
+            <div class="taskTitle">${escapeHtml(t.text)}</div>
+          </div>
+          <div class="check ${on ? "on" : ""}">${on ? "✓" : ""}</div>
+        `;
+        row.addEventListener("click", () => {
+          if (state.locked) return;
+          setTaskDone(t.id, !isTaskDone(t.id));
+          updateUI();
+        });
+        taskList.appendChild(row);
+      });
+    }
+
+    function updateSubject(loc, missCount){
+      const wk = state.weekKey;
+      const dayFull = (DAYS.find(x => x.key === state.day) || {}).full || state.day;
+      $("subjectField").value = "Kitchen cleaning – " + (loc || "Lokation") + " – " + wk + " – " + dayFull + " – Mangler: " + missCount;
+    }
+
+    async function tryAutoSelectLocation(){
+      gpsStatus.textContent = "GPS: tjekker…";
+      const gps = await getGPS();
+      state.gps = gps;
+
+      if (!gps.ok) {
+        gpsStatus.textContent = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+        return;
+      }
+
+      let bestName = null;
+      let bestDist = Infinity;
+      for (const name in LOCATION_COORDS) {
+        const c = LOCATION_COORDS[name];
+        const dist = distanceM(gps.lat, gps.lng, c.lat, c.lng);
+        if (dist < bestDist) { bestDist = dist; bestName = name; }
+      }
+
+      const distM = Math.round(bestDist);
+      if (bestName && distM <= GPS_AUTOSELECT_M) {
+        gpsStatus.textContent = "GPS: nær " + bestName + " (" + distM + "m) → valgt";
+        locationSelect.value = bestName;
+        state.loc = bestName;
+        loadProgress();
+        loadDoneBy();
+        updateUI();
+        renderDayTabs();
+      } else {
+        gpsStatus.textContent = "GPS: vælg lokation manuelt";
+      }
+    }
+
+    function updateUI(){
+      state.loc = locationSelect.value || "";
+      state.weekKey = isoWeekKey(new Date());
+
+      weekKeyText.textContent = state.weekKey;
+      dayKeyText.textContent = dayKeyISO();
+      timeField.value = nowDK();
+
+      const done = getDoneMeta();
+      state.locked = !!done;
+
+      const tasks = getTasks();
+      const total = tasks.length;
+      const doneCount = tasks.filter(t => isTaskDone(t.id)).length;
+      const missCount = total - doneCount;
+
+      listTitle.textContent = "Køkken • " + (DAYS.find(x => x.key === state.day)?.full || state.day);
+      missingHint.textContent = state.locked ? "Fuldført" : ("Mangler: " + missCount);
+
+      progressText.textContent = doneCount + "/" + total;
+      progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
+
+      // auto mark done hvis alt er fuldført
+      if (!done && state.loc && total > 0 && missCount === 0) {
+        const who = (doneBy.value || "").trim();
+        if (!who) {
+          setError("Udført af er påkrævet før dagen kan afsluttes.");
+        } else {
+          saveDoneBy();
+          markDone({ doneAt: nowDK(), doneBy: who });
+          state.locked = true;
+        }
+      }
+
+      if (state.locked) {
+        taskList.classList.add("hidden");
+        doneBox.classList.remove("hidden");
+
+        const meta = getDoneMeta() || {};
+        doneText.textContent = "Fuldført: " + (meta.doneAt || "") + " • Udført af: " + (meta.doneBy || "-");
+
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.55";
+        resetBtn.disabled = true;
+        resetBtn.style.opacity = "0.55";
+      } else {
+        taskList.classList.remove("hidden");
+        doneBox.classList.add("hidden");
+        doneText.textContent = "";
+
+        const canSend = !!state.loc && missCount > 0;
+        submitBtn.disabled = !canSend;
+        submitBtn.style.opacity = canSend ? "1" : "0.55";
+
+        resetBtn.disabled = false;
+        resetBtn.style.opacity = "1";
+      }
+
+      renderTasks();
+    }
+
+    // Events
+    locationSelect.addEventListener("change", () => {
+      state.loc = locationSelect.value || "";
+      loadProgress();
+      loadDoneBy();
+      updateUI();
+      renderDayTabs();
+    });
+
+    doneBy.addEventListener("input", () => saveDoneBy());
+
+    resetBtn.addEventListener("click", () => {
+      if (getDoneMeta()) return setError("Dagen er fuldført og kan ikke nulstilles.");
+      if (!state.loc) return setError("Vælg lokation før nulstil.");
+
+      localStorage.removeItem(kProgress(state.loc, state.weekKey, state.day));
+      localStorage.removeItem(kDone(state.loc, state.weekKey, state.day));
+      localStorage.removeItem(kDoneBy(state.loc, state.weekKey, state.day));
+      state.progress = {};
+      doneBy.value = "";
+      updateUI();
+    });
+
+    // Submit: send kun mangler + GPS validation
+    form.addEventListener("submit", async function(ev){
+      ev.preventDefault();
+      setError("");
+
+      state.loc = locationSelect.value || "";
+      if (!state.loc) return setError("Vælg lokation.");
+
+      const who = (doneBy.value || "").trim();
+      if (!who) return setError("Udført af er påkrævet.");
+
+      const done = getDoneMeta();
+      if (done) return setError("Dagen er allerede fuldført.");
+
+      const miss = missingTasks();
+      if (miss.length === 0) {
+        saveDoneBy();
+        markDone({ doneAt: nowDK(), doneBy: who });
+        updateUI();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "GPS…";
+
+      const gps = await getGPS();
+      state.gps = gps;
+
+      const coords = LOCATION_COORDS[state.loc];
+      if (coords && gps.ok) {
+        const dist = Math.round(distanceM(gps.lat, gps.lng, coords.lat, coords.lng));
+        if (dist > GPS_MAX_DISTANCE_M) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send mangler (" + miss.length + ")";
+          setError("GPS matcher ikke valgt lokation (afstand ca. " + dist + " m). Vælg korrekt lokation.");
+          return;
+        }
+      }
+
+      submitBtn.textContent = "Sender…";
+
+      updateSubject(state.loc, miss.length);
+
+      const dayFull = (DAYS.find(x => x.key === state.day) || {}).full || state.day;
+
+      let gpsBlock = "GPS: -";
+      if (gps.ok) {
+        gpsBlock =
+          "GPS: " + gps.lat + ", " + gps.lng + " (±" + gps.acc + "m)\n" +
+          "Kort: https://maps.google.com/?q=" + gps.lat + "," + gps.lng;
+      } else {
+        gpsBlock = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+      }
+
+      const lines = [];
+      lines.push("Kitchen cleaning – MANGLER");
+      lines.push("");
+      lines.push("Lokation: " + state.loc);
+      lines.push("Uge: " + state.weekKey);
+      lines.push("Dag: " + dayFull);
+      lines.push("Dato: " + dayKeyISO());
+      lines.push("Tid: " + nowDK());
+      lines.push("Udført af: " + who);
+      lines.push(gpsBlock);
+      lines.push("");
+      lines.push("Mangler (" + miss.length + "):");
+      miss.forEach(t => lines.push("— " + t.id + ": " + t.text));
+
+      $("reportPayload").value = lines.join("\n");
+      form.submit();
+    });
+
+    // Thanks view
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") {
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("quoteText").textContent = "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
+    }
+
+    // Init
+    weekKeyText.textContent = state.weekKey;
+    dayKeyText.textContent = dayKeyISO();
+    timeField.value = nowDK();
+    renderDayTabs();
+    tryAutoSelectLocation();
+    updateUI();
+  </script>
+</body>
+</html>
