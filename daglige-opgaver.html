@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Daglige opgaver</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#17181c;
+      --panel:rgba(28, 30, 36, 0.90);
+      --border:rgba(255,255,255,0.10);
+      --text:rgba(255,255,255,0.93);
+      --muted:rgba(255,255,255,0.70);
+      --muted2:rgba(255,255,255,0.50);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --goldGlow:rgba(214,178,74,.22);
+      --danger:#ff6b6b;
+      --ok:#62d26f;
+    }
+
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    body{
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
+        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
+        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+    }
+
+    .shell{max-width:820px}
+    .topbar{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+      border-radius:22px;padding:22px 18px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 28px 70px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
+    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
+    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
+    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
+    .divider{height:1px;background:rgba(255,255,255,.10);}
+
+    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .input, select, textarea{
+      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
+    }
+    select option{color:#0b0c0f;}
+    .input:focus, select:focus, textarea:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px var(--goldGlow);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn{
+      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+    .btn-primary:hover{filter:brightness(1.04);}
+    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+
+    .muted{color:var(--muted);font-weight:600;font-size:13px;}
+    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+
+    .task{
+      display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
+      cursor:pointer;transition: background .18s ease, border-color .18s ease;user-select:none;
+    }
+    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
+    .task.locked{opacity:.55; cursor:not-allowed;}
+    .taskNum{
+      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
+      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
+    }
+    .taskTitle{font-weight:900; letter-spacing:-0.01em;}
+    .check{
+      margin-left:auto;width:24px;height:24px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
+    }
+    .check.on{border-color: rgba(98, 210, 111, 0.55);background: rgba(98, 210, 111, 0.18);color: rgba(255,255,255,0.92);}
+
+    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
+    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+  </style>
+</head>
+
+<body class="min-h-screen flex justify-center p-4">
+  <div class="shell w-full">
+
+    <header class="topbar mt-6 mb-5">
+      <div class="kicker">KAISER</div>
+      <div class="title">Daglige opgaver</div>
+      <div class="subtitle">Morgenliste – sender kun mangler</div>
+      <div class="goldline"></div>
+    </header>
+
+    <section id="formWrap" class="space-y-4">
+      <form id="morningForm" class="space-y-4" method="POST"
+        action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_subject" id="subjectField" value="Morgenliste – Lokation – YYYY-MM-DD – Mangler: X">
+        <input type="hidden" name="_next" id="nextField" value="">
+        <input type="text" name="_honey" style="display:none">
+        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
+
+        <section class="panel p-5 space-y-4">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="text-lg font-extrabold">Morgenliste</div>
+            <div class="hint" id="dayKeyText">—</div>
+          </div>
+          <div class="divider"></div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <div class="label">Lokation</div>
+              <select id="locationSelect" required>
+                <option value="">Vælg lokation...</option>
+                <option>Café Kaiser Helsingør</option>
+                <option>Café Kaiser Hillerød</option>
+                <option>Café Kaiser Farum</option>
+                <option>Café Kaiser Hørsholm</option>
+                <option>Café Kaiser Vanløse</option>
+              </select>
+              <div class="hint">Gemmes pr. lokation pr. dag</div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="label">Tidspunkt</div>
+              <input class="input" id="timeField" readonly>
+              <div class="hint">Udfyldes automatisk</div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="label">Status</div>
+            <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
+            <div class="muted" id="progressText">0/0</div>
+          </div>
+        </section>
+
+        <section class="panel p-5 space-y-4">
+          <div class="text-lg font-extrabold">Tjekliste</div>
+          <div class="divider"></div>
+          <div id="taskList" class="space-y-3"></div>
+
+          <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
+            <div style="font-weight:900;">Alt er gennemført – ingen mail sendes.</div>
+            <div class="muted" id="doneText" style="margin-top:4px;"></div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <button id="submitBtn" class="btn btn-primary" type="submit">Send mangler</button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Nulstil (kun denne enhed)</button>
+          <div class="muted">Når alt er afkrydset, låses listen til næste dag.</div>
+          <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
+        </section>
+      </form>
+    </section>
+
+    <section id="thanksWrap" class="hidden space-y-4">
+      <div class="panel p-6 text-center space-y-4">
+        <div class="hint">Indsendt</div>
+        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Mangler sendt.</div>
+        <div id="quoteText" class="muted" style="margin-top:6px;"></div>
+        <div class="pt-2 space-y-3">
+          <a class="btn btn-primary inline-block text-center" href="./daglige-opgaver.html">Tilbage</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const ROLLOVER_HOUR = 4;
+
+    const QUOTES = [
+      "Det du tjekker, bliver gjort.",
+      "Standarder gør hverdagen lettere.",
+      "Små rutiner skaber stor driftssikkerhed."
+    ];
+
+    const TASKS = [
+      { id: 1, text: "Åbne kassen" },
+      { id: 2, text: "Åbne sodavands anlæg" },
+      { id: 3, text: "Sætte filterkaffe over" },
+      { id: 4, text: "Tjek om der er dækket op til reservationer" },
+      { id: 5, text: "Sæt lys på borde" },
+      { id: 7, text: "Tag stole ned" },
+      { id: 8, text: "Tænde for aircon" },
+      { id: 9, text: "Sæt BC varer på plads" },
+      { id: 10, text: "Lav klude til bar" }
+    ];
+
+    function $(id){ return document.getElementById(id); }
+    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+
+    function dayKey(){
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      if (local.getHours() < ROLLOVER_HOUR) local.setDate(local.getDate() - 1);
+      return local.toISOString().slice(0,10);
+    }
+
+    const keyBase = "kaiser_morgenliste";
+    function keyProgress(loc, dk){ return `${keyBase}_progress_${loc}_${dk}`; }
+    function keyDone(loc, dk){ return `${keyBase}_done_${loc}_${dk}`; }
+
+    const locationSelect = $("locationSelect");
+    const taskList = $("taskList");
+    const progressBar = $("progressBar");
+    const progressText = $("progressText");
+    const dayKeyText = $("dayKeyText");
+    const timeField = $("timeField");
+    const submitBtn = $("submitBtn");
+    const resetBtn = $("resetBtn");
+    const errorText = $("errorText");
+    const doneBox = $("doneBox");
+    const doneText = $("doneText");
+
+    const form = $("morningForm");
+    $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
+
+    function setError(msg){
+      if (!msg){
+        errorText.classList.add("hidden");
+        errorText.textContent = "";
+        return;
+      }
+      errorText.textContent = msg;
+      errorText.classList.remove("hidden");
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function getCheckedArr(){
+      const loc = locationSelect.value || "";
+      const dk = dayKey();
+      if (!loc) return new Array(TASKS.length).fill(false);
+      const raw = localStorage.getItem(keyProgress(loc, dk));
+      if (!raw) return new Array(TASKS.length).fill(false);
+      try {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length === TASKS.length) return arr.map(Boolean);
+      } catch(e){}
+      return new Array(TASKS.length).fill(false);
+    }
+
+    function getDoneMeta(){
+      const loc = locationSelect.value || "";
+      const dk = dayKey();
+      if (!loc) return null;
+      const raw = localStorage.getItem(keyDone(loc, dk));
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch(e){ return null; }
+    }
+
+    function saveProgress(){
+      const loc = locationSelect.value || "";
+      if (!loc) return;
+      const dk = dayKey();
+      localStorage.setItem(keyProgress(loc, dk), JSON.stringify(state.checked));
+    }
+
+    function markDone(meta){
+      const loc = locationSelect.value || "";
+      const dk = dayKey();
+      localStorage.setItem(keyDone(loc, dk), JSON.stringify(meta));
+    }
+
+    const state = {
+      checked: new Array(TASKS.length).fill(false),
+      locked: false
+    };
+
+    function renderTasks(){
+      taskList.innerHTML = "";
+      TASKS.forEach((t, idx) => {
+        const isOn = !!state.checked[idx];
+        const row = document.createElement("div");
+        row.className = "task" + (state.locked ? " locked" : "");
+        row.innerHTML = `
+          <div class="taskNum">${t.id}</div>
+          <div style="flex:1;">
+            <div class="taskTitle">${escapeHtml(t.text)}</div>
+          </div>
+          <div class="check ${isOn ? "on" : ""}">${isOn ? "✓" : ""}</div>
+        `;
+        row.addEventListener("click", () => {
+          if (state.locked) return;
+          state.checked[idx] = !state.checked[idx];
+          saveProgress();
+          updateUI();
+        });
+        taskList.appendChild(row);
+      });
+    }
+
+    function missingTasks(){
+      const miss = [];
+      for (let i=0; i<TASKS.length; i++){
+        if (!state.checked[i]) miss.push(TASKS[i]);
+      }
+      return miss;
+    }
+
+    function updateUI(){
+      const done = getDoneMeta();
+      state.locked = !!done;
+
+      renderTasks();
+
+      const total = TASKS.length;
+      const checkedCount = state.checked.filter(Boolean).length;
+      progressText.textContent = checkedCount + "/" + total;
+      progressBar.style.width = Math.round((checkedCount/total)*100) + "%";
+
+      dayKeyText.textContent = dayKey();
+      timeField.value = nowDK();
+
+      // done box
+      if (done){
+        doneBox.classList.remove("hidden");
+        doneText.textContent = "Fuldført: " + (done.doneAt || "");
+      } else {
+        doneBox.classList.add("hidden");
+        doneText.textContent = "";
+      }
+
+      // submit: kun hvis der mangler noget, og lokation valgt, og ikke locked
+      const missCount = missingTasks().length;
+      const canSend = !state.locked && !!locationSelect.value && missCount > 0;
+
+      submitBtn.disabled = !canSend;
+      submitBtn.style.opacity = canSend ? "1" : "0.55";
+      submitBtn.style.cursor = canSend ? "pointer" : "not-allowed";
+      submitBtn.textContent = canSend ? ("Send mangler (" + missCount + ")") : "Send mangler";
+
+      setError("");
+    }
+
+    function loadForLocation(){
+      state.checked = getCheckedArr();
+      // hvis alt er checked -> markér done + lock
+      if (state.checked.every(Boolean) && !getDoneMeta()){
+        markDone({ doneAt: nowDK() });
+      }
+      updateUI();
+    }
+
+    locationSelect.addEventListener("change", loadForLocation);
+
+    resetBtn.addEventListener("click", () => {
+      const loc = locationSelect.value || "";
+      if (!loc) return setError("Vælg lokation før du nulstiller.");
+      const dk = dayKey();
+      localStorage.removeItem(keyProgress(loc, dk));
+      localStorage.removeItem(keyDone(loc, dk));
+      state.checked = new Array(TASKS.length).fill(false);
+      updateUI();
+    });
+
+    // GPS
+    function getGPS(){
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({
+            ok:true,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            acc: Math.round(pos.coords.accuracy || 0)
+          }),
+          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS afvist" }),
+          { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
+        );
+      });
+    }
+
+    function localISODate(){
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function updateSubject(loc, missCount){
+      const dk = localISODate();
+      $("subjectField").value = "Morgenliste – " + (loc || "Lokation") + " – " + dk + " – Mangler: " + missCount;
+    }
+
+    // Submit: send KUN mangler
+    form.addEventListener("submit", async function(ev){
+      ev.preventDefault();
+      setError("");
+
+      const loc = locationSelect.value || "";
+      if (!loc) return setError("Vælg lokation.");
+
+      const done = getDoneMeta();
+      if (done) return setError("Listen er allerede afsluttet for i dag.");
+
+      const miss = missingTasks();
+      if (miss.length === 0) {
+        // alt ok => lås og ingen mail
+        markDone({ doneAt: nowDK() });
+        updateUI();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sender...";
+
+      const gps = await getGPS();
+      const doneAt = nowDK();
+
+      updateSubject(loc, miss.length);
+
+      let gpsBlock = "GPS: -";
+      if (gps.ok){
+        gpsBlock =
+          "GPS: " + gps.lat + ", " + gps.lng + " (±" + gps.acc + "m)\n" +
+          "Kort: https://maps.google.com/?q=" + gps.lat + "," + gps.lng;
+      } else {
+        gpsBlock = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+      }
+
+      const lines = [];
+      lines.push("Morgenliste – MANGLER");
+      lines.push("");
+      lines.push("Lokation: " + loc);
+      lines.push("Dato: " + dayKey());
+      lines.push("Tid: " + doneAt);
+      lines.push(gpsBlock);
+      lines.push("");
+      lines.push("Mangler (" + miss.length + "):");
+      for (let i=0; i<miss.length; i++){
+        lines.push("— " + miss[i].id + ": " + miss[i].text);
+      }
+
+      $("reportPayload").value = lines.join("\n");
+
+      // send via FormSubmit
+      form.submit();
+    });
+
+    // Thanks
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") {
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("quoteText").textContent = "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
+    }
+
+    // init
+    dayKeyText.textContent = dayKey();
+    timeField.value = nowDK();
+    state.checked = getCheckedArr();
+    updateUI();
+  </script>
+</body>
+</html>
