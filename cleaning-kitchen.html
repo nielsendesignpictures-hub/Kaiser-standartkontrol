@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -33,7 +33,7 @@
         linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
     }
 
-    .shell{max-width:860px}
+    .shell{max-width:900px}
     .topbar{
       border:1px solid var(--border);
       background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
@@ -93,6 +93,19 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
     }
 
+    .sectionHeader{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.85);
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
     .task{
       display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
       border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
@@ -122,8 +135,8 @@
 
     <header class="topbar mt-6 mb-5">
       <div class="kicker">KAISER</div>
-      <div class="title">Cleaning list kitchen</div>
-      <div class="subtitle">Ugeplan (man–søn) • pr. lokation • sender kun mangler</div>
+      <div class="title">Cleaning list – kitchen</div>
+      <div class="subtitle">Weekly (Mon–Sun) • Per location • Only sends email if items are missing</div>
       <div class="goldline"></div>
     </header>
 
@@ -133,14 +146,14 @@
 
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_subject" id="subjectField" value="Kitchen cleaning – Lokation – Uge – Dag – Mangler: X">
+        <input type="hidden" name="_subject" id="subjectField" value="Kitchen cleaning – Location – Week – Day – Missing: X">
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="text" name="_honey" style="display:none">
-        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
+        <textarea name="Report" id="reportPayload" style="display:none"></textarea>
 
         <section class="panel p-5 space-y-4">
           <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="text-lg font-extrabold">Ugeplan</div>
+            <div class="text-lg font-extrabold">Setup</div>
             <div class="hint" id="weekKeyText">—</div>
           </div>
 
@@ -148,41 +161,41 @@
 
           <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
-              <div class="label">Lokation</div>
+              <div class="label">Location</div>
               <select id="locationSelect" required>
-                <option value="">Vælg lokation...</option>
+                <option value="">Select location…</option>
                 <option>Café Kaiser Helsingør</option>
                 <option>Café Kaiser Hillerød</option>
                 <option>Café Kaiser Farum</option>
                 <option>Café Kaiser Hørsholm</option>
                 <option>Café Kaiser Vanløse</option>
               </select>
-              <div class="hint" id="gpsStatus">GPS: ikke tjekket</div>
+              <div class="hint" id="gpsStatus">GPS: not checked</div>
             </div>
 
             <div class="space-y-2">
-              <div class="label">Udført af</div>
-              <input id="doneBy" class="input" placeholder="Navn (krav)" />
-              <div class="hint">Gemmes pr. dag</div>
+              <div class="label">Performed by</div>
+              <input id="doneBy" class="input" placeholder="Name (required)" />
+              <div class="hint">Stored per day</div>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div class="space-y-2">
-              <div class="label">Dato / tid</div>
+              <div class="label">Date / time</div>
               <input class="input" id="timeField" readonly>
-              <div class="hint" id="dayKeyText">—</div>
+              <div class="hint" id="dateText">—</div>
             </div>
 
             <div class="space-y-2">
-              <div class="label">Dag</div>
+              <div class="label">Day</div>
               <div class="tabs7" id="dayTabs"></div>
-              <div class="hint">Skifter automatisk til i dag</div>
+              <div class="hint">Auto-selects today</div>
             </div>
           </div>
 
           <div class="space-y-2">
-            <div class="label">Status</div>
+            <div class="label">Progress</div>
             <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
             <div class="muted" id="progressText">0/0</div>
           </div>
@@ -190,7 +203,7 @@
 
         <section class="panel p-5 space-y-4">
           <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="text-lg font-extrabold" id="listTitle">—</div>
+            <div class="text-lg font-extrabold" id="listTitle">Checklist</div>
             <div class="hint" id="missingHint">—</div>
           </div>
           <div class="divider"></div>
@@ -198,15 +211,15 @@
           <div id="taskList" class="space-y-3"></div>
 
           <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-            <div style="font-weight:900;">Fuldført for dagen.</div>
+            <div style="font-weight:900;">Completed for the day.</div>
             <div class="muted" id="doneText" style="margin-top:4px;"></div>
           </div>
         </section>
 
         <section class="space-y-3">
-          <button id="submitBtn" class="btn btn-primary" type="submit">Send mangler</button>
-          <button id="resetBtn" class="btn btn-secondary" type="button">Nulstil (kun denne enhed)</button>
-          <div class="muted">Mail sendes kun hvis der mangler noget.</div>
+          <button id="submitBtn" class="btn btn-primary" type="submit">Send missing items</button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Reset (this device only)</button>
+          <div class="muted">No email is sent when everything is completed.</div>
           <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
         </section>
       </form>
@@ -214,11 +227,11 @@
 
     <section id="thanksWrap" class="hidden space-y-4">
       <div class="panel p-6 text-center space-y-4">
-        <div class="hint">Indsendt</div>
-        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Mangler sendt.</div>
+        <div class="hint">Sent</div>
+        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Missing items were sent.</div>
         <div id="quoteText" class="muted" style="margin-top:6px;"></div>
         <div class="pt-2 space-y-3">
-          <a class="btn btn-primary inline-block text-center" href="./cleaning-kitchen.html">Tilbage</a>
+          <a class="btn btn-primary inline-block text-center" href="./cleaning-kitchen.html">Back</a>
         </div>
       </div>
     </section>
@@ -226,7 +239,7 @@
   </div>
 
   <script>
-    // === KONFIG ===
+    // ===== Config =====
     const GPS_MAX_DISTANCE_M = 600;
     const GPS_AUTOSELECT_M = 900;
 
@@ -239,58 +252,60 @@
     };
 
     const QUOTES = [
-      "Standarder gør hverdagen lettere.",
-      "Rent køkken = ro i service.",
-      "Små rutiner skaber stor driftssikkerhed."
+      "Consistency creates quality.",
+      "Clean kitchen = calm service.",
+      "Small routines create stable operations."
     ];
 
-    // Ugedage
-    const DAYS = [
-      { key:"mon", label:"Man", full:"Mandag" },
-      { key:"tue", label:"Tir", full:"Tirsdag" },
-      { key:"wed", label:"Ons", full:"Onsdag" },
-      { key:"thu", label:"Tor", full:"Torsdag" },
-      { key:"fri", label:"Fre", full:"Fredag" },
-      { key:"sat", label:"Lør", full:"Lørdag" },
-      { key:"sun", label:"Søn", full:"Søndag" }
+    // OCR -> cleaned English lists:
+    const MORNING_TASKS = [
+      "Check if cleaning was done the night before (floor, fridge handles, dishwasher machine, paper, soap)",
+      "Unpack BC ASAP (always first priority)",
+      "Trash out + cardboard boxes",
+      "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
     ];
 
-    // EDIT HER: pr. lokation pr. ugedag
-    // Lige nu er det demo-tekster – du sender mig de rigtige, så fylder vi dem ind.
-    const KITCHEN_TASKS = {
-      "Café Kaiser Helsingør": {
-        mon: [
-          { id: 1, text: "Demo: Rengør station A" },
-          { id: 2, text: "Demo: Tøm affald" }
-        ],
-        tue: [
-          { id: 1, text: "Demo: Aftør flader + håndtag" }
-        ],
-        wed: [
-          { id: 1, text: "Demo: Rengør køl/greb" }
-        ],
-        thu: [
-          { id: 1, text: "Demo: Rengør gulv (grundigt)" }
-        ],
-        fri: [
-          { id: 1, text: "Demo: Rengør udsugning ydre" }
-        ],
-        sat: [
-          { id: 1, text: "Demo: Rengør ovn-front" }
-        ],
-        sun: [
-          { id: 1, text: "Demo: Uge-afslut (tjek datoer)" }
-        ]
-      },
+    const EVERY_DAY_TASKS = [
+      "Sweep and wash floor",
+      "Clean all tables with soap and spray with disinfectant",
+      "Clean fridge handles (big and small)",
+      "Trash out",
+      "Clean stove and under the stove",
+      "Grill cleaning",
+      "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
+    ];
 
-      // De andre lokationer kan have HELT andre tasks:
-      "Café Kaiser Hillerød": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
-      "Café Kaiser Farum": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
-      "Café Kaiser Hørsholm": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] },
-      "Café Kaiser Vanløse": { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }
+    const EVERY_NIGHT_TASKS = [
+      "Floor – also under fridges",
+      "All tables",
+      "Fridge handles (big and small)",
+      "Trash out",
+      "Stove and under the stove",
+      "Grill cleaning"
+    ];
+
+    const WEEKLY_EXTRA = {
+      mon: ["All shelves in the kitchen – clean and organize"],
+      tue: ["Small fridge – inside"],
+      wed: ["Dishwasher machine – inside & outside deep cleaning + ice cube machine"],
+      thu: ["Stove & oven – outside & inside deep + hallway (dishwasher area)"],
+      fri: ["Green section"],
+      sat: ["Big fridges + ice cube machine"],
+      sun: ["Big fridges + ice cube machine"]
     };
 
-    // === Helpers ===
+    // Days
+    const DAYS = [
+      { key:"mon", label:"Mon", full:"Monday" },
+      { key:"tue", label:"Tue", full:"Tuesday" },
+      { key:"wed", label:"Wed", full:"Wednesday" },
+      { key:"thu", label:"Thu", full:"Thursday" },
+      { key:"fri", label:"Fri", full:"Friday" },
+      { key:"sat", label:"Sat", full:"Saturday" },
+      { key:"sun", label:"Sun", full:"Sunday" }
+    ];
+
+    // ===== Helpers =====
     function $(id){ return document.getElementById(id); }
     function nowDK(){ return new Date().toLocaleString("da-DK"); }
 
@@ -299,7 +314,6 @@
     }
 
     function dayKeyISO(){
-      // YYYY-MM-DD local
       const d = new Date();
       const off = d.getTimezoneOffset();
       const local = new Date(d.getTime() - off * 60000);
@@ -307,8 +321,7 @@
     }
 
     function getDayKeyToday(){
-      // 0=Sun..6=Sat -> match DAYS order mon..sun
-      const js = new Date().getDay();
+      const js = new Date().getDay(); // 0 Sun..6 Sat
       if (js === 0) return "sun";
       if (js === 1) return "mon";
       if (js === 2) return "tue";
@@ -319,7 +332,6 @@
     }
 
     function isoWeekKey(date){
-      // ISO week "YYYY-Www"
       const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
       const dayNum = d.getUTCDay() || 7;
       d.setUTCDate(d.getUTCDate() + 4 - dayNum);
@@ -345,7 +357,7 @@
 
     function getGPS(){
       return new Promise((resolve) => {
-        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
+        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS not supported" });
         navigator.geolocation.getCurrentPosition(
           (pos) => resolve({
             ok:true,
@@ -353,21 +365,21 @@
             lng: pos.coords.longitude,
             acc: Math.round(pos.coords.accuracy || 0)
           }),
-          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS afvist" }),
+          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS denied" }),
           { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
         );
       });
     }
 
-    // Storage
-    const keyBase = "kaiser_kitchen_clean_v1";
+    // ===== Storage =====
+    const keyBase = "kaiser_kitchen_clean_2024_v2";
     function kProgress(loc, week, day){ return `${keyBase}_progress_${loc}_${week}_${day}`; }
     function kDone(loc, week, day){ return `${keyBase}_done_${loc}_${week}_${day}`; }
     function kDoneBy(loc, week, day){ return `${keyBase}_doneby_${loc}_${week}_${day}`; }
 
-    // === DOM ===
+    // ===== DOM =====
     const weekKeyText = $("weekKeyText");
-    const dayKeyText = $("dayKeyText");
+    const dateText = $("dateText");
     const timeField = $("timeField");
     const locationSelect = $("locationSelect");
     const doneBy = $("doneBy");
@@ -408,11 +420,24 @@
       errorText.classList.remove("hidden");
     }
 
-    function getTasks(){
-      const loc = state.loc;
-      const day = state.day;
-      const base = (KITCHEN_TASKS[loc] && KITCHEN_TASKS[loc][day]) ? KITCHEN_TASKS[loc][day] : [];
-      return base;
+    function buildTasksForDay(dayKey){
+      const items = [];
+
+      // Section headers as "header" items
+      items.push({ type:"header", text:"MORNING" });
+      MORNING_TASKS.forEach((t, i) => items.push({ type:"task", id:`M${i+1}`, text:t }));
+
+      items.push({ type:"header", text:"EVERY DAY CLEANING" });
+      EVERY_DAY_TASKS.forEach((t, i) => items.push({ type:"task", id:`D${i+1}`, text:t }));
+
+      items.push({ type:"header", text:"EVERY NIGHT CLEANING" });
+      EVERY_NIGHT_TASKS.forEach((t, i) => items.push({ type:"task", id:`N${i+1}`, text:t }));
+
+      items.push({ type:"header", text:"WEEKLY DEEP CLEAN" });
+      const extra = WEEKLY_EXTRA[dayKey] || [];
+      extra.forEach((t, i) => items.push({ type:"task", id:`W${i+1}`, text:t }));
+
+      return items;
     }
 
     function loadProgress(){
@@ -459,8 +484,12 @@
       localStorage.setItem(kDoneBy(state.loc, state.weekKey, state.day), (doneBy.value || "").trim());
     }
 
+    function getAllTasks(){
+      return buildTasksForDay(state.day).filter(x => x.type === "task");
+    }
+
     function missingTasks(){
-      const tasks = getTasks();
+      const tasks = getAllTasks();
       return tasks.filter(t => !isTaskDone(t.id));
     }
 
@@ -484,32 +513,34 @@
 
     function renderTasks(){
       taskList.innerHTML = "";
-      const tasks = getTasks();
+      const items = buildTasksForDay(state.day);
 
-      if (!tasks.length) {
-        const el = document.createElement("div");
-        el.className = "muted";
-        el.textContent = "Ingen opgaver defineret for denne dag/lokation endnu.";
-        taskList.appendChild(el);
-        return;
-      }
+      items.forEach(item => {
+        if (item.type === "header") {
+          const h = document.createElement("div");
+          h.className = "sectionHeader";
+          h.textContent = item.text;
+          taskList.appendChild(h);
+          return;
+        }
 
-      tasks.forEach(t => {
-        const on = isTaskDone(t.id);
+        const on = isTaskDone(item.id);
         const row = document.createElement("div");
         row.className = "task" + (state.locked ? " locked" : "");
         row.innerHTML = `
-          <div class="taskNum">${t.id}</div>
+          <div class="taskNum">${escapeHtml(item.id)}</div>
           <div style="flex:1;">
-            <div class="taskTitle">${escapeHtml(t.text)}</div>
+            <div class="taskTitle">${escapeHtml(item.text)}</div>
           </div>
           <div class="check ${on ? "on" : ""}">${on ? "✓" : ""}</div>
         `;
+
         row.addEventListener("click", () => {
           if (state.locked) return;
-          setTaskDone(t.id, !isTaskDone(t.id));
+          setTaskDone(item.id, !isTaskDone(item.id));
           updateUI();
         });
+
         taskList.appendChild(row);
       });
     }
@@ -517,16 +548,16 @@
     function updateSubject(loc, missCount){
       const wk = state.weekKey;
       const dayFull = (DAYS.find(x => x.key === state.day) || {}).full || state.day;
-      $("subjectField").value = "Kitchen cleaning – " + (loc || "Lokation") + " – " + wk + " – " + dayFull + " – Mangler: " + missCount;
+      $("subjectField").value = "Kitchen cleaning – " + (loc || "Location") + " – " + wk + " – " + dayFull + " – Missing: " + missCount;
     }
 
     async function tryAutoSelectLocation(){
-      gpsStatus.textContent = "GPS: tjekker…";
+      gpsStatus.textContent = "GPS: checking…";
       const gps = await getGPS();
       state.gps = gps;
 
       if (!gps.ok) {
-        gpsStatus.textContent = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+        gpsStatus.textContent = "GPS: not available (" + (gps.msg || "") + ")";
         return;
       }
 
@@ -540,7 +571,7 @@
 
       const distM = Math.round(bestDist);
       if (bestName && distM <= GPS_AUTOSELECT_M) {
-        gpsStatus.textContent = "GPS: nær " + bestName + " (" + distM + "m) → valgt";
+        gpsStatus.textContent = "GPS: near " + bestName + " (" + distM + "m) → selected";
         locationSelect.value = bestName;
         state.loc = bestName;
         loadProgress();
@@ -548,7 +579,7 @@
         updateUI();
         renderDayTabs();
       } else {
-        gpsStatus.textContent = "GPS: vælg lokation manuelt";
+        gpsStatus.textContent = "GPS: select location manually";
       }
     }
 
@@ -556,29 +587,30 @@
       state.loc = locationSelect.value || "";
       state.weekKey = isoWeekKey(new Date());
 
-      weekKeyText.textContent = state.weekKey;
-      dayKeyText.textContent = dayKeyISO();
+      weekKeyText.textContent = "Week: " + state.weekKey;
+      dateText.textContent = dayKeyISO();
       timeField.value = nowDK();
 
       const done = getDoneMeta();
       state.locked = !!done;
 
-      const tasks = getTasks();
+      const tasks = getAllTasks();
       const total = tasks.length;
       const doneCount = tasks.filter(t => isTaskDone(t.id)).length;
       const missCount = total - doneCount;
 
-      listTitle.textContent = "Køkken • " + (DAYS.find(x => x.key === state.day)?.full || state.day);
-      missingHint.textContent = state.locked ? "Fuldført" : ("Mangler: " + missCount);
+      const dayFull = (DAYS.find(x => x.key === state.day) || {}).full || state.day;
+      listTitle.textContent = "Checklist • " + dayFull;
+      missingHint.textContent = state.locked ? "Completed" : ("Missing: " + missCount);
 
       progressText.textContent = doneCount + "/" + total;
       progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
 
-      // auto mark done hvis alt er fuldført
+      // Auto-complete if everything done
       if (!done && state.loc && total > 0 && missCount === 0) {
         const who = (doneBy.value || "").trim();
         if (!who) {
-          setError("Udført af er påkrævet før dagen kan afsluttes.");
+          setError("Performed by is required before marking completed.");
         } else {
           saveDoneBy();
           markDone({ doneAt: nowDK(), doneBy: who });
@@ -591,7 +623,7 @@
         doneBox.classList.remove("hidden");
 
         const meta = getDoneMeta() || {};
-        doneText.textContent = "Fuldført: " + (meta.doneAt || "") + " • Udført af: " + (meta.doneBy || "-");
+        doneText.textContent = "Completed: " + (meta.doneAt || "") + " • Performed by: " + (meta.doneBy || "-");
 
         submitBtn.disabled = true;
         submitBtn.style.opacity = "0.55";
@@ -625,8 +657,8 @@
     doneBy.addEventListener("input", () => saveDoneBy());
 
     resetBtn.addEventListener("click", () => {
-      if (getDoneMeta()) return setError("Dagen er fuldført og kan ikke nulstilles.");
-      if (!state.loc) return setError("Vælg lokation før nulstil.");
+      if (getDoneMeta()) return setError("This day is completed and cannot be reset.");
+      if (!state.loc) return setError("Select a location before reset.");
 
       localStorage.removeItem(kProgress(state.loc, state.weekKey, state.day));
       localStorage.removeItem(kDone(state.loc, state.weekKey, state.day));
@@ -636,19 +668,19 @@
       updateUI();
     });
 
-    // Submit: send kun mangler + GPS validation
+    // Submit: send missing only + GPS validate
     form.addEventListener("submit", async function(ev){
       ev.preventDefault();
       setError("");
 
       state.loc = locationSelect.value || "";
-      if (!state.loc) return setError("Vælg lokation.");
+      if (!state.loc) return setError("Select a location.");
 
       const who = (doneBy.value || "").trim();
-      if (!who) return setError("Udført af er påkrævet.");
+      if (!who) return setError("Performed by is required.");
 
       const done = getDoneMeta();
-      if (done) return setError("Dagen er allerede fuldført.");
+      if (done) return setError("This day is already completed.");
 
       const miss = missingTasks();
       if (miss.length === 0) {
@@ -669,13 +701,13 @@
         const dist = Math.round(distanceM(gps.lat, gps.lng, coords.lat, coords.lng));
         if (dist > GPS_MAX_DISTANCE_M) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Send mangler (" + miss.length + ")";
-          setError("GPS matcher ikke valgt lokation (afstand ca. " + dist + " m). Vælg korrekt lokation.");
+          submitBtn.textContent = "Send missing items (" + miss.length + ")";
+          setError("GPS does not match selected location (distance ~" + dist + " m). Select correct location.");
           return;
         }
       }
 
-      submitBtn.textContent = "Sender…";
+      submitBtn.textContent = "Sending…";
 
       updateSubject(state.loc, miss.length);
 
@@ -685,23 +717,23 @@
       if (gps.ok) {
         gpsBlock =
           "GPS: " + gps.lat + ", " + gps.lng + " (±" + gps.acc + "m)\n" +
-          "Kort: https://maps.google.com/?q=" + gps.lat + "," + gps.lng;
+          "Map: https://maps.google.com/?q=" + gps.lat + "," + gps.lng;
       } else {
-        gpsBlock = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+        gpsBlock = "GPS: (not available) " + (gps.msg || "");
       }
 
       const lines = [];
-      lines.push("Kitchen cleaning – MANGLER");
+      lines.push("Kitchen cleaning – MISSING");
       lines.push("");
-      lines.push("Lokation: " + state.loc);
-      lines.push("Uge: " + state.weekKey);
-      lines.push("Dag: " + dayFull);
-      lines.push("Dato: " + dayKeyISO());
-      lines.push("Tid: " + nowDK());
-      lines.push("Udført af: " + who);
+      lines.push("Location: " + state.loc);
+      lines.push("Week: " + state.weekKey);
+      lines.push("Day: " + dayFull);
+      lines.push("Date: " + dayKeyISO());
+      lines.push("Time: " + nowDK());
+      lines.push("Performed by: " + who);
       lines.push(gpsBlock);
       lines.push("");
-      lines.push("Mangler (" + miss.length + "):");
+      lines.push("Missing (" + miss.length + "):");
       miss.forEach(t => lines.push("— " + t.id + ": " + t.text));
 
       $("reportPayload").value = lines.join("\n");
@@ -717,8 +749,8 @@
     }
 
     // Init
-    weekKeyText.textContent = state.weekKey;
-    dayKeyText.textContent = dayKeyISO();
+    weekKeyText.textContent = "Week: " + state.weekKey;
+    dateText.textContent = dayKeyISO();
     timeField.value = nowDK();
     renderDayTabs();
     tryAutoSelectLocation();
