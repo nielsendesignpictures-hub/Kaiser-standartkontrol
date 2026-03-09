@@ -91,6 +91,10 @@
       background: rgba(214,178,74,0.10);
       box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
     }
+    .tabBtn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
 
     .task{
       display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
@@ -113,6 +117,21 @@
 
     .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
     .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+
+    .miniBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:900;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.90);
+      cursor:pointer;
+      width:100%;
+    }
   </style>
 </head>
 
@@ -138,9 +157,14 @@
 
         <section class="panel p-5 space-y-4">
           <div class="tabs">
-            <button type="button" id="tabMorning" class="tabBtn on">Morgen</button>
+            <button type="button" id="tabMorning" class="tabBtn">Morgen</button>
             <button type="button" id="tabLunch" class="tabBtn">Frokost</button>
             <button type="button" id="tabEvening" class="tabBtn">Aften</button>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-3">
+            <div class="hint" id="activeWindowText">Aktiv liste: —</div>
+            <button type="button" id="overrideBtn" class="miniBtn">Skift liste (leder)</button>
           </div>
 
           <div class="divider"></div>
@@ -156,7 +180,7 @@
                 <option>Café Kaiser Hørsholm</option>
                 <option>Café Kaiser Vanløse</option>
               </select>
-              <div class="hint">GPS validerer korrekt lokation før der sendes</div>
+              <div class="hint" id="gpsStatus">GPS: ikke tjekket endnu</div>
             </div>
 
             <div class="space-y-2">
@@ -175,14 +199,14 @@
 
         <section class="panel p-5 space-y-4">
           <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="text-lg font-extrabold" id="listTitle">Morgenliste</div>
+            <div class="text-lg font-extrabold" id="listTitle">—</div>
             <div class="hint" id="missingHint">—</div>
           </div>
           <div class="divider"></div>
           <div id="taskList" class="space-y-3"></div>
 
           <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-            <div style="font-weight:900;">Alt er gennemført – ingen mail sendes.</div>
+            <div style="font-weight:900;">Fuldført for i dag.</div>
             <div class="muted" id="doneText" style="margin-top:4px;"></div>
           </div>
         </section>
@@ -209,13 +233,29 @@
   </div>
 
   <script>
+    // --------- DINE TIDSREGLER ----------
+    // Morgen: før 11:00
+    // Frokost: 11:00-17:00
+    // Aften: 17:00-23:59
+    // -----------------------------------
+    const TIME_WINDOWS = {
+      morning: { start: 0, end: 10 },   // 00-10
+      lunch:   { start: 11, end: 16 },  // 11-16
+      evening: { start: 17, end: 23 }   // 17-23
+    };
+
+    // Leder override kode (mit forslag)
+    const OVERRIDE_CODE = "KAISER2026";
+    const OVERRIDE_HOURS = 8;
+
     // Reset dag ruller kl. 04:00
     const ROLLOVER_HOUR = 4;
 
     // GPS tolerance (meter)
     const GPS_MAX_DISTANCE_M = 600;
+    // Auto-vælg lokation via GPS hvis inden for:
+    const GPS_AUTOSELECT_M = 900;
 
-    // Koordinater pr. lokation
     const LOCATION_COORDS = {
       "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
       "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
@@ -246,7 +286,6 @@
           { id: 10, text: "Lav klude til bar" }
         ]
       },
-
       lunch: {
         id: "lunch",
         name: "Frokostliste",
@@ -259,7 +298,6 @@
           { id: 6, text: "Evt. opdatering af kælderliste" }
         ]
       },
-
       evening: {
         id: "evening",
         name: "Aftenliste",
@@ -289,7 +327,21 @@
       return local.toISOString().slice(0,10);
     }
 
-    // Haversine afstand (meter)
+    function currentListByTime(){
+      const h = new Date().getHours();
+      if (h <= TIME_WINDOWS.morning.end) return "morning";
+      if (h >= TIME_WINDOWS.lunch.start && h <= TIME_WINDOWS.lunch.end) return "lunch";
+      return "evening";
+    }
+
+    function formatActiveWindow(){
+      const h = new Date().getHours();
+      if (h <= 10) return "Morgen (00:00–10:59)";
+      if (h <= 16) return "Frokost (11:00–16:59)";
+      return "Aften (17:00–23:59)";
+    }
+
+    // Haversine distance (m)
     function distanceM(lat1, lon1, lat2, lon2){
       const R = 6371000;
       const toRad = (x) => x * Math.PI / 180;
@@ -304,18 +356,33 @@
     }
 
     // localStorage keys
-    const keyBase = "kaiser_daily_tasks_v2";
-    function keyProgress(listId, loc, dk){ return `${keyBase}_progress_${listId}_${loc}_${dk}`; }
-    function keyDone(listId, loc, dk){ return `${keyBase}_done_${listId}_${loc}_${dk}`; }
+    const keyBase = "kaiser_daily_tasks_v3";
+    function keyProgress(listId, loc, dk){ return keyBase + "_progress_" + listId + "_" + loc + "_" + dk; }
+    function keyDone(listId, loc, dk){ return keyBase + "_done_" + listId + "_" + loc + "_" + dk; }
+
+    // Override session
+    function overrideKey(){ return "kaiser_daily_override_until"; }
+    function isOverrideOn(){
+      const until = Number(localStorage.getItem(overrideKey()) || "0");
+      return Date.now() < until;
+    }
+    function setOverrideOn(){
+      const until = Date.now() + OVERRIDE_HOURS * 60 * 60 * 1000;
+      localStorage.setItem(overrideKey(), String(until));
+    }
 
     // DOM
     const tabMorning = $("tabMorning");
     const tabLunch = $("tabLunch");
     const tabEvening = $("tabEvening");
+    const activeWindowText = $("activeWindowText");
+    const overrideBtn = $("overrideBtn");
 
     const listTitle = $("listTitle");
     const subTitle = $("subTitle");
     const locationSelect = $("locationSelect");
+    const gpsStatus = $("gpsStatus");
+
     const taskList = $("taskList");
     const progressBar = $("progressBar");
     const progressText = $("progressText");
@@ -332,7 +399,7 @@
     $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
 
     const state = {
-      listId: "morning",
+      listId: currentListByTime(),
       loc: "",
       locked: false,
       progress: {}
@@ -389,10 +456,7 @@
       localStorage.setItem(keyDone(state.listId, state.loc, dk), JSON.stringify(meta));
     }
 
-    function isTaskDone(taskId){
-      return !!state.progress[String(taskId)];
-    }
-
+    function isTaskDone(taskId){ return !!state.progress[String(taskId)]; }
     function setTaskDone(taskId, val){
       state.progress[String(taskId)] = !!val;
       saveProgress();
@@ -439,16 +503,43 @@
       $("subjectField").value = listName + " – " + (loc || "Lokation") + " – " + dateIso + " – Mangler: " + missCount;
     }
 
+    function setTabsByPolicy(){
+      const active = currentListByTime();
+      activeWindowText.textContent = "Aktiv liste: " + formatActiveWindow();
+
+      const override = isOverrideOn();
+      // Hvis override: alt er muligt
+      if (override) {
+        tabMorning.disabled = false;
+        tabLunch.disabled = false;
+        tabEvening.disabled = false;
+        return;
+      }
+
+      // Hvis ikke override: kun den aktive fane kan vælges
+      tabMorning.disabled = active !== "morning";
+      tabLunch.disabled = active !== "lunch";
+      tabEvening.disabled = active !== "evening";
+
+      // Auto-sæt listId til aktiv
+      state.listId = active;
+    }
+
+    function updateTabUI(){
+      tabMorning.classList.toggle("on", state.listId === "morning");
+      tabLunch.classList.toggle("on", state.listId === "lunch");
+      tabEvening.classList.toggle("on", state.listId === "evening");
+    }
+
     function updateUI(){
       state.loc = locationSelect.value || "";
+
+      setTabsByPolicy();
+      updateTabUI();
 
       const listName = LISTS[state.listId].name;
       listTitle.textContent = listName;
       subTitle.textContent = listName + " – sender kun mangler";
-
-      tabMorning.classList.toggle("on", state.listId === "morning");
-      tabLunch.classList.toggle("on", state.listId === "lunch");
-      tabEvening.classList.toggle("on", state.listId === "evening");
 
       const done = getDoneMeta();
       state.locked = !!done;
@@ -462,33 +553,53 @@
 
       progressText.textContent = doneCount + "/" + total;
       progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
-      missingHint.textContent = "Mangler: " + missCount;
+      missingHint.textContent = state.locked ? "Låst" : ("Mangler: " + missCount);
 
       dayKeyText.textContent = dayKey();
       timeField.value = nowDK();
 
-      if (done) {
-        doneBox.classList.remove("hidden");
-        doneText.textContent = "Fuldført: " + (done.doneAt || "");
-      } else {
-        doneBox.classList.add("hidden");
-        doneText.textContent = "";
-      }
-
-      // Når alt er ok => lås (ingen mail)
+      // Hvis alt er ok => lås og SKJUL listen
       if (!done && state.loc && total > 0 && missCount === 0) {
         markDone({ doneAt: nowDK() });
         state.locked = true;
-        doneBox.classList.remove("hidden");
-        doneText.textContent = "Fuldført: " + nowDK();
       }
 
+      if (state.locked) {
+        taskList.classList.add("hidden");
+        doneBox.classList.remove("hidden");
+
+        const meta = getDoneMeta();
+        const doneAt = meta && meta.doneAt ? meta.doneAt : nowDK();
+        doneText.textContent = "Fuldført: " + doneAt + " • Åbner igen i morgen";
+
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.55";
+        submitBtn.style.cursor = "not-allowed";
+        submitBtn.textContent = "Send mangler";
+
+        resetBtn.disabled = true;
+        resetBtn.style.opacity = "0.55";
+        resetBtn.style.cursor = "not-allowed";
+
+        setError("");
+        return;
+      }
+
+      // Ikke låst => vis listen
+      taskList.classList.remove("hidden");
+      doneBox.classList.add("hidden");
+      doneText.textContent = "";
+
       // Send kun hvis der mangler noget
-      const canSend = !state.locked && !!state.loc && missCount > 0;
+      const canSend = !!state.loc && missCount > 0;
       submitBtn.disabled = !canSend;
       submitBtn.style.opacity = canSend ? "1" : "0.55";
       submitBtn.style.cursor = canSend ? "pointer" : "not-allowed";
       submitBtn.textContent = canSend ? ("Send mangler (" + missCount + ")") : "Send mangler";
+
+      resetBtn.disabled = false;
+      resetBtn.style.opacity = "1";
+      resetBtn.style.cursor = "pointer";
 
       setError("");
     }
@@ -509,21 +620,64 @@
       });
     }
 
-    // Tabs
+    async function tryAutoSelectLocation(){
+      gpsStatus.textContent = "GPS: tjekker…";
+      const gps = await getGPS();
+      if (!gps.ok) {
+        gpsStatus.textContent = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+        return;
+      }
+
+      // Find nærmeste lokation
+      let best = { name:null, dist: Infinity };
+      for (const name in LOCATION_COORDS) {
+        const c = LOCATION_COORDS[name];
+        const dist = distanceM(gps.lat, gps.lng, c.lat, c.lng);
+        if (dist < best.dist) best = { name, dist };
+      }
+
+      const distM = Math.round(best.dist);
+      if (best.name && distM <= GPS_AUTOSELECT_M) {
+        gpsStatus.textContent = "GPS: nær " + best.name + " (" + distM + "m) → valgt";
+        locationSelect.value = best.name;
+        state.loc = best.name;
+        loadProgress();
+        updateUI();
+      } else {
+        gpsStatus.textContent = "GPS: fundet (" + distM + "m) – vælg lokation manuelt";
+      }
+    }
+
+    // TAB events (kun hvis override tillader det)
     tabMorning.addEventListener("click", () => {
+      if (!isOverrideOn() && currentListByTime() !== "morning") return;
       state.listId = "morning";
       loadProgress();
       updateUI();
     });
     tabLunch.addEventListener("click", () => {
+      if (!isOverrideOn() && currentListByTime() !== "lunch") return;
       state.listId = "lunch";
       loadProgress();
       updateUI();
     });
     tabEvening.addEventListener("click", () => {
+      if (!isOverrideOn() && currentListByTime() !== "evening") return;
       state.listId = "evening";
       loadProgress();
       updateUI();
+    });
+
+    overrideBtn.addEventListener("click", () => {
+      const code = prompt("Lederkode:");
+      if (!code) return;
+      if (code.trim() === OVERRIDE_CODE) {
+        setOverrideOn();
+        alert("Override aktiv i " + OVERRIDE_HOURS + " timer.");
+        updateUI();
+      } else {
+        alert("Forkert kode.");
+      }
     });
 
     locationSelect.addEventListener("change", () => {
@@ -533,7 +687,9 @@
     });
 
     resetBtn.addEventListener("click", () => {
+      if (getDoneMeta()) return setError("Listen er låst for i dag og kan ikke nulstilles.");
       if (!state.loc) return setError("Vælg lokation før du nulstiller.");
+
       const dk = dayKey();
       localStorage.removeItem(keyProgress(state.listId, state.loc, dk));
       localStorage.removeItem(keyDone(state.listId, state.loc, dk));
@@ -550,7 +706,7 @@
       if (!state.loc) return setError("Vælg lokation.");
 
       const done = getDoneMeta();
-      if (done) return setError("Listen er allerede afsluttet for i dag.");
+      if (done) return setError("Listen er allerede fuldført for i dag.");
 
       const miss = missingTasks();
       if (miss.length === 0) {
@@ -564,6 +720,7 @@
 
       const gps = await getGPS();
 
+      // GPS validering mod valgt lokation
       const coords = LOCATION_COORDS[state.loc];
       if (coords && gps.ok) {
         const dist = Math.round(distanceM(gps.lat, gps.lng, coords.lat, coords.lng));
@@ -615,9 +772,26 @@
     // Init
     $("dayKeyText").textContent = dayKey();
     $("timeField").value = nowDK();
-    state.loc = "";
-    loadProgress();
+
+    // Auto-tab (baseret på tid) + auto GPS-lokation
+    setTabsByPolicy();
+    updateTabUI();
+    tryAutoSelectLocation();
+
+    // Når lokation vælges senere, bliver progress loaded
     updateUI();
+
+    // Opdater “aktiv liste” tekst hvert minut
+    setInterval(() => {
+      if (!isOverrideOn()) {
+        const newList = currentListByTime();
+        if (newList !== state.listId) {
+          state.listId = newList;
+          loadProgress();
+        }
+      }
+      updateUI();
+    }, 60000);
   </script>
 </body>
 </html>
