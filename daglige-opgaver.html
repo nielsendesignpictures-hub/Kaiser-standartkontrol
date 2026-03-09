@@ -254,4 +254,370 @@
           { id: 1, text: "Dæk op til reservationer til aften" },
           { id: 2, text: "Bestil vare (BC)" },
           { id: 3, text: "Opfylding af bar" },
-          { 
+          { id: 4, text: "Tjekke toiletter", onlyLocations: ["Café Kaiser Helsingør","Café Kaiser Farum","Café Kaiser Hørsholm"] },
+          { id: 5, text: "Tag en fejerunde" },
+          { id: 6, text: "Evt. opdatering af kælderliste" }
+        ]
+      },
+
+      evening: {
+        id: "evening",
+        name: "Aftenliste",
+        tasks: [
+          { id: 1, text: "Dæk op til reservationer ( til & med frokost )" },
+          { id: 2, text: "Gøre toiletter rent", onlyLocations: ["Café Kaiser Helsingør","Café Kaiser Farum","Café Kaiser Hørsholm"] },
+          { id: 3, text: "Lukke udenfor" },
+          { id: 4, text: "Samle skrald & glas flasker" },
+          { id: 5, text: "Slukke for aircon", onlyLocations: ["Café Kaiser Hørsholm","Café Kaiser Farum"] },
+          { id: 6, text: "Tælle kassen" },
+          { id: 7, text: "Fejerunde" },
+          { id: 8, text: "Opfylding af bar" },
+          { id: 9, text: "Sæt lys til opladning" },
+          { id: 10, text: "Lukke baren" }
+        ]
+      }
+    };
+
+    function $(id){ return document.getElementById(id); }
+    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+
+    function dayKey(){
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      if (local.getHours() < ROLLOVER_HOUR) local.setDate(local.getDate() - 1);
+      return local.toISOString().slice(0,10);
+    }
+
+    // Haversine afstand (meter)
+    function distanceM(lat1, lon1, lat2, lon2){
+      const R = 6371000;
+      const toRad = (x) => x * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // localStorage keys
+    const keyBase = "kaiser_daily_tasks_v2";
+    function keyProgress(listId, loc, dk){ return `${keyBase}_progress_${listId}_${loc}_${dk}`; }
+    function keyDone(listId, loc, dk){ return `${keyBase}_done_${listId}_${loc}_${dk}`; }
+
+    // DOM
+    const tabMorning = $("tabMorning");
+    const tabLunch = $("tabLunch");
+    const tabEvening = $("tabEvening");
+
+    const listTitle = $("listTitle");
+    const subTitle = $("subTitle");
+    const locationSelect = $("locationSelect");
+    const taskList = $("taskList");
+    const progressBar = $("progressBar");
+    const progressText = $("progressText");
+    const missingHint = $("missingHint");
+    const dayKeyText = $("dayKeyText");
+    const timeField = $("timeField");
+    const submitBtn = $("submitBtn");
+    const resetBtn = $("resetBtn");
+    const errorText = $("errorText");
+    const doneBox = $("doneBox");
+    const doneText = $("doneText");
+    const form = $("taskForm");
+
+    $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
+
+    const state = {
+      listId: "morning",
+      loc: "",
+      locked: false,
+      progress: {}
+    };
+
+    function setError(msg){
+      if (!msg){
+        errorText.classList.add("hidden");
+        errorText.textContent = "";
+        return;
+      }
+      errorText.textContent = msg;
+      errorText.classList.remove("hidden");
+    }
+
+    function visibleTasks(){
+      const list = LISTS[state.listId];
+      const loc = state.loc;
+      return list.tasks.filter(t => {
+        if (!t.onlyLocations) return true;
+        return t.onlyLocations.indexOf(loc) >= 0;
+      });
+    }
+
+    function loadProgress(){
+      if (!state.loc) { state.progress = {}; return; }
+      const dk = dayKey();
+      const raw = localStorage.getItem(keyProgress(state.listId, state.loc, dk));
+      if (!raw) { state.progress = {}; return; }
+      try {
+        const obj = JSON.parse(raw);
+        state.progress = (obj && typeof obj === "object") ? obj : {};
+      } catch(e){
+        state.progress = {};
+      }
+    }
+
+    function saveProgress(){
+      if (!state.loc) return;
+      const dk = dayKey();
+      localStorage.setItem(keyProgress(state.listId, state.loc, dk), JSON.stringify(state.progress));
+    }
+
+    function getDoneMeta(){
+      if (!state.loc) return null;
+      const dk = dayKey();
+      const raw = localStorage.getItem(keyDone(state.listId, state.loc, dk));
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch(e){ return null; }
+    }
+
+    function markDone(meta){
+      const dk = dayKey();
+      localStorage.setItem(keyDone(state.listId, state.loc, dk), JSON.stringify(meta));
+    }
+
+    function isTaskDone(taskId){
+      return !!state.progress[String(taskId)];
+    }
+
+    function setTaskDone(taskId, val){
+      state.progress[String(taskId)] = !!val;
+      saveProgress();
+    }
+
+    function missingTasks(){
+      const tasks = visibleTasks();
+      return tasks.filter(t => !isTaskDone(t.id));
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function renderTasks(){
+      taskList.innerHTML = "";
+      const tasks = visibleTasks();
+
+      tasks.forEach((t) => {
+        const isOn = isTaskDone(t.id);
+        const row = document.createElement("div");
+        row.className = "task" + (state.locked ? " locked" : "");
+        row.innerHTML = `
+          <div class="taskNum">${t.id}</div>
+          <div style="flex:1;">
+            <div class="taskTitle">${escapeHtml(t.text)}</div>
+          </div>
+          <div class="check ${isOn ? "on" : ""}">${isOn ? "✓" : ""}</div>
+        `;
+
+        row.addEventListener("click", () => {
+          if (state.locked) return;
+          setTaskDone(t.id, !isTaskDone(t.id));
+          updateUI();
+        });
+
+        taskList.appendChild(row);
+      });
+    }
+
+    function updateSubject(loc, missCount){
+      const dateIso = dayKey();
+      const listName = LISTS[state.listId].name;
+      $("subjectField").value = listName + " – " + (loc || "Lokation") + " – " + dateIso + " – Mangler: " + missCount;
+    }
+
+    function updateUI(){
+      state.loc = locationSelect.value || "";
+
+      const listName = LISTS[state.listId].name;
+      listTitle.textContent = listName;
+      subTitle.textContent = listName + " – sender kun mangler";
+
+      tabMorning.classList.toggle("on", state.listId === "morning");
+      tabLunch.classList.toggle("on", state.listId === "lunch");
+      tabEvening.classList.toggle("on", state.listId === "evening");
+
+      const done = getDoneMeta();
+      state.locked = !!done;
+
+      renderTasks();
+
+      const tasks = visibleTasks();
+      const total = tasks.length;
+      const doneCount = tasks.filter(t => isTaskDone(t.id)).length;
+      const missCount = total - doneCount;
+
+      progressText.textContent = doneCount + "/" + total;
+      progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
+      missingHint.textContent = "Mangler: " + missCount;
+
+      dayKeyText.textContent = dayKey();
+      timeField.value = nowDK();
+
+      if (done) {
+        doneBox.classList.remove("hidden");
+        doneText.textContent = "Fuldført: " + (done.doneAt || "");
+      } else {
+        doneBox.classList.add("hidden");
+        doneText.textContent = "";
+      }
+
+      // Når alt er ok => lås (ingen mail)
+      if (!done && state.loc && total > 0 && missCount === 0) {
+        markDone({ doneAt: nowDK() });
+        state.locked = true;
+        doneBox.classList.remove("hidden");
+        doneText.textContent = "Fuldført: " + nowDK();
+      }
+
+      // Send kun hvis der mangler noget
+      const canSend = !state.locked && !!state.loc && missCount > 0;
+      submitBtn.disabled = !canSend;
+      submitBtn.style.opacity = canSend ? "1" : "0.55";
+      submitBtn.style.cursor = canSend ? "pointer" : "not-allowed";
+      submitBtn.textContent = canSend ? ("Send mangler (" + missCount + ")") : "Send mangler";
+
+      setError("");
+    }
+
+    function getGPS(){
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({
+            ok:true,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            acc: Math.round(pos.coords.accuracy || 0)
+          }),
+          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS afvist" }),
+          { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
+        );
+      });
+    }
+
+    // Tabs
+    tabMorning.addEventListener("click", () => {
+      state.listId = "morning";
+      loadProgress();
+      updateUI();
+    });
+    tabLunch.addEventListener("click", () => {
+      state.listId = "lunch";
+      loadProgress();
+      updateUI();
+    });
+    tabEvening.addEventListener("click", () => {
+      state.listId = "evening";
+      loadProgress();
+      updateUI();
+    });
+
+    locationSelect.addEventListener("change", () => {
+      state.loc = locationSelect.value || "";
+      loadProgress();
+      updateUI();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      if (!state.loc) return setError("Vælg lokation før du nulstiller.");
+      const dk = dayKey();
+      localStorage.removeItem(keyProgress(state.listId, state.loc, dk));
+      localStorage.removeItem(keyDone(state.listId, state.loc, dk));
+      state.progress = {};
+      updateUI();
+    });
+
+    // Submit: send kun mangler + GPS validation
+    form.addEventListener("submit", async function(ev){
+      ev.preventDefault();
+      setError("");
+
+      state.loc = locationSelect.value || "";
+      if (!state.loc) return setError("Vælg lokation.");
+
+      const done = getDoneMeta();
+      if (done) return setError("Listen er allerede afsluttet for i dag.");
+
+      const miss = missingTasks();
+      if (miss.length === 0) {
+        markDone({ doneAt: nowDK() });
+        updateUI();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "GPS…";
+
+      const gps = await getGPS();
+
+      const coords = LOCATION_COORDS[state.loc];
+      if (coords && gps.ok) {
+        const dist = Math.round(distanceM(gps.lat, gps.lng, coords.lat, coords.lng));
+        if (dist > GPS_MAX_DISTANCE_M) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send mangler (" + miss.length + ")";
+          setError("GPS matcher ikke valgt lokation (afstand ca. " + dist + " m). Vælg korrekt lokation.");
+          return;
+        }
+      }
+
+      submitBtn.textContent = "Sender…";
+
+      updateSubject(state.loc, miss.length);
+
+      let gpsBlock = "GPS: -";
+      if (gps.ok) {
+        gpsBlock =
+          "GPS: " + gps.lat + ", " + gps.lng + " (±" + gps.acc + "m)\n" +
+          "Kort: https://maps.google.com/?q=" + gps.lat + "," + gps.lng;
+      } else {
+        gpsBlock = "GPS: (ikke tilgængelig) " + (gps.msg || "");
+      }
+
+      const lines = [];
+      lines.push(LISTS[state.listId].name + " – MANGLER");
+      lines.push("");
+      lines.push("Lokation: " + state.loc);
+      lines.push("Dato: " + dayKey());
+      lines.push("Tid: " + nowDK());
+      lines.push(gpsBlock);
+      lines.push("");
+      lines.push("Mangler (" + miss.length + "):");
+      miss.forEach(t => lines.push("— " + t.id + ": " + t.text));
+
+      $("reportPayload").value = lines.join("\n");
+
+      form.submit();
+    });
+
+    // Thanks view
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") {
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("quoteText").textContent = "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
+    }
+
+    // Init
+    $("dayKeyText").textContent = dayKey();
+    $("timeField").value = nowDK();
+    state.loc = "";
+    loadProgress();
+    updateUI();
+  </script>
+</body>
+</html>
