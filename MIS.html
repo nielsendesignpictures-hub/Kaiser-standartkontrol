@@ -25,10 +25,7 @@
       --ok:#62d26f;
     }
 
-    html,body{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);background:var(--bg);
-    }
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
     body{
       background:
         radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
@@ -38,7 +35,6 @@
     }
 
     .shell{max-width:900px}
-
     .topbar{
       border:1px solid var(--border);
       background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
@@ -52,54 +48,30 @@
     .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
     .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
 
-    .panel{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:20px;
-      box-shadow:0 26px 72px rgba(0,0,0,.55);
-      backdrop-filter: blur(12px);
-    }
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
     .divider{height:1px;background:rgba(255,255,255,.10);}
 
     .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select, textarea{
-      width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
+    .input, select{
+      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.06);
-      padding:14px 14px;
-      outline:none;
-      color:rgba(255,255,255,0.92);
+      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
     }
     select option{color:#0b0c0f;}
-    .input:focus, select:focus, textarea:focus{
+    .input:focus, select:focus{
       border-color: rgba(214,178,74,0.55);
       box-shadow: 0 0 0 4px var(--goldGlow);
       background: rgba(255,255,255,0.08);
     }
 
     .btn{
-      width:100%;
-      border-radius:16px;
-      font-weight:900;
-      letter-spacing:.02em;
-      padding:14px 16px;
-      transition:transform .08s ease,filter .18s ease;
-      user-select:none;
-      border:none;
+      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
     }
     .btn:active{transform:translateY(1px);}
-    .btn-primary{
-      background:linear-gradient(135deg, var(--gold), var(--gold2));
-      color:#0b0c0f;
-      box-shadow:0 18px 40px rgba(214,178,74,0.18);
-    }
+    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
     .btn-primary:hover{filter:brightness(1.04);}
-    .btn-secondary{
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.14);
-      color:rgba(255,255,255,0.90);
-    }
+    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
 
     .muted{color:var(--muted);font-weight:600;font-size:13px;}
     .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
@@ -122,20 +94,10 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
     }
 
-    .progressWrap{
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      border-radius: 999px;
-      overflow:hidden;
-      height: 10px;
-    }
-    .progressBar{
-      height: 10px;
-      width: 0%;
-      background: linear-gradient(90deg, var(--gold), var(--gold2));
-    }
+    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
+    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
 
-    /* Accordion (category dropdown) */
+    /* Accordion categories */
     .acc{
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.03);
@@ -143,36 +105,16 @@
       overflow:hidden;
     }
     .acc summary{
-      list-style:none;
-      cursor:pointer;
-      user-select:none;
+      list-style:none; cursor:pointer; user-select:none;
       padding:14px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:12px;
-      color: rgba(255,255,255,0.85);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-weight:900; letter-spacing:.10em; text-transform:uppercase;
+      font-size:12px; color: rgba(255,255,255,0.85);
       background: rgba(255,255,255,0.02);
     }
     .acc summary::-webkit-details-marker{ display:none; }
-    .acc .accMeta{
-      letter-spacing:0;
-      text-transform:none;
-      font-size:12px;
-      font-weight:800;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-    .accBody{
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    .accMeta{letter-spacing:0;text-transform:none;font-size:12px;font-weight:800;color: var(--muted);white-space:nowrap;}
+    .accBody{padding: 12px; display:flex; flex-direction:column; gap:10px;}
 
     /* Task row */
     .task{
@@ -180,36 +122,39 @@
       padding:14px 14px;border-radius:16px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.03);
-      cursor:pointer;
-      transition: background .18s ease, border-color .18s ease;
-      user-select:none;
-      touch-action: manipulation;
+      cursor:pointer;transition: background .18s ease, border-color .18s ease;
+      user-select:none; touch-action: manipulation;
     }
     .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
-    .taskBadge{
-      width:34px;height:34px;border-radius:14px;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(214,178,74,0.22);
-      background:rgba(214,178,74,0.08);
+    .badge{
+      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
       font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
     }
     .taskTitle{font-weight:900; letter-spacing:-0.01em;}
     .taskSub{margin-top:2px;font-size:12px;color:rgba(255,255,255,0.65);font-weight:700;}
 
     .pill{
-      margin-left:auto;
-      padding:6px 10px;
-      border-radius:999px;
+      margin-left:auto; padding:6px 10px; border-radius:999px;
       border:1px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.06);
-      font-weight:900;
-      font-size:12px;
-      flex:0 0 auto;
-      white-space:nowrap;
+      font-weight:900; font-size:12px; flex:0 0 auto; white-space:nowrap;
     }
-    .pill.todo{border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.10); color: rgba(255,255,255,0.92);}
-    .pill.done{border-color: rgba(98,210,111,0.45); background: rgba(98,210,111,0.14); color: rgba(255,255,255,0.92);}
     .pill.na{border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.70);}
+    .pill.in{border-color: rgba(214,178,74,0.35); background: rgba(214,178,74,0.12); color: rgba(255,255,255,0.92);}
+    .pill.done{border-color: rgba(98,210,111,0.50); background: rgba(98,210,111,0.15); color: rgba(255,255,255,0.95);}
+
+    .rowDone{
+      opacity:.72;
+      border-color: rgba(98,210,111,0.28);
+      background: rgba(98,210,111,0.07);
+    }
+    .strike{text-decoration:line-through; text-decoration-thickness:2px; text-decoration-color: rgba(255,255,255,0.28);}
+
+    /* Hold-to-reset */
+    .holdWrap{ position:relative; overflow:hidden; }
+    .holdBar{ position:absolute; left:0; top:0; height:100%; width:0%; background: rgba(255,255,255,0.14); pointer-events:none; transition: width .08s linear; }
+    .btnText{ position:relative; z-index:1; }
 
     .chip{
       display:inline-flex;align-items:center;gap:8px;
@@ -218,37 +163,6 @@
       background:rgba(255,255,255,0.04);
       font-weight:800;font-size:12px;color:rgba(255,255,255,0.85);
     }
-
-    .seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
-    .segBtn{
-      border-radius:14px;
-      padding:10px 10px;
-      font-weight:900;
-      letter-spacing:.02em;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.90);
-      cursor:pointer;
-      font-size:12px;
-    }
-    .segBtn.on{
-      border-color: rgba(214,178,74,0.38);
-      background: rgba(214,178,74,0.10);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
-    }
-
-    .holdWrap{
-      position:relative;
-      overflow:hidden;
-    }
-    .holdBar{
-      position:absolute;left:0;top:0;height:100%;
-      width:0%;
-      background: rgba(255,255,255,0.14);
-      pointer-events:none;
-      transition: width .08s linear;
-    }
-    .btnText{position:relative;z-index:1;}
   </style>
 </head>
 
@@ -258,12 +172,15 @@
     <header class="topbar mt-6 mb-5">
       <div class="kicker">KAISER</div>
       <div class="title">Mise en place</div>
-      <div class="subtitle">Daily prep • Per location • Saved on this device</div>
+      <div class="subtitle">Create MIS for a day → then use the generated to‑do list</div>
       <div class="goldline"></div>
     </header>
 
-    <!-- ===== Screen 1: Setup ===== -->
-    <section id="setupWrap" class="space-y-4">
+    <!-- =========================
+         PAGE A: CREATE MIS
+         ========================= -->
+    <section id="createWrap" class="space-y-4">
+
       <section class="panel p-5 space-y-4">
         <div class="flex items-center justify-between gap-3 flex-wrap">
           <div class="text-lg font-extrabold">Setup</div>
@@ -301,74 +218,85 @@
           </div>
 
           <div class="space-y-2">
-            <div class="label">Day</div>
+            <div class="label">Day (select the day you create MIS for)</div>
             <div class="tabs7" id="dayTabs"></div>
-            <div class="hint">Uses current ISO week</div>
+            <div class="hint">Selects the next occurrence of that weekday</div>
           </div>
         </div>
 
         <div class="space-y-2">
-          <div class="label">Progress (active items)</div>
-          <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
-          <div class="muted" id="progressText">0/0</div>
-          <div class="hint" id="progressHint">Items start as N/A → add what you need</div>
+          <div class="label">Selected items (will become your MIS to‑do list)</div>
+          <div class="progressWrap"><div id="progressBarCreate" class="progressBar"></div></div>
+          <div class="muted" id="progressTextCreate">0 selected</div>
+          <div class="hint">All items start as N/A — tap items to include them</div>
         </div>
       </section>
 
+      <section class="panel p-5 space-y-4">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="text-lg font-extrabold">Select items (N/A → MIS)</div>
+          <div class="hint" id="selectedHint">—</div>
+        </div>
+        <div class="divider"></div>
+
+        <div id="createTaskList" class="space-y-3"></div>
+      </section>
+
       <section class="space-y-3">
-        <button id="startBtn" class="btn btn-primary" type="button">Open list</button>
+        <button id="makeMisBtn" class="btn btn-primary" type="button">Make MIS</button>
         <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
       </section>
     </section>
 
-    <!-- ===== Screen 2: List ===== -->
-    <section id="listWrap" class="hidden space-y-4">
+
+    <!-- =========================
+         PAGE B: MIS TO-DO
+         ========================= -->
+    <section id="misWrap" class="hidden space-y-4">
+
       <section class="panel p-5 space-y-3">
         <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-lg font-extrabold" id="listTitle">Mise en place</div>
-          <div class="hint" id="remainingHint">—</div>
+          <div class="text-lg font-extrabold" id="misTitle">MIS to‑do</div>
+          <div class="hint" id="misRemainingHint">—</div>
         </div>
         <div class="divider"></div>
 
         <div class="flex flex-wrap gap-2">
           <div class="chip" id="chipLoc">Location: —</div>
           <div class="chip" id="chipDay">Day: —</div>
-          <div class="chip" id="chipWho">By: —</div>
           <div class="chip" id="chipDate">Date: —</div>
-        </div>
-
-        <div class="mt-3 seg3">
-          <button id="viewTodo" class="segBtn" type="button">To do</button>
-          <button id="viewDone" class="segBtn" type="button">Done</button>
-          <button id="viewAdd" class="segBtn" type="button">Add items (N/A)</button>
+          <div class="chip" id="chipWho">By: —</div>
         </div>
       </section>
 
       <section class="panel p-5 space-y-4">
         <div class="space-y-2">
           <div class="label">Progress</div>
-          <div class="progressWrap"><div id="progressBar2" class="progressBar"></div></div>
-          <div class="muted" id="progressText2">0/0</div>
-          <div class="hint" id="tipText">Tip: Hold an item to set it back to N/A</div>
+          <div class="progressWrap"><div id="progressBarMis" class="progressBar"></div></div>
+          <div class="muted" id="progressTextMis">0/0</div>
         </div>
 
         <div class="divider"></div>
 
-        <div id="taskList" class="space-y-3"></div>
+        <div id="misTaskList" class="space-y-3"></div>
 
-        <div id="allDoneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-          <div style="font-weight:900;">All active prep completed.</div>
+        <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
+          <div style="font-weight:900;">MIS completed.</div>
           <div class="muted" style="margin-top:4px;">Your prep makes the difference.</div>
+        </div>
+
+        <div id="emptyMisBox" class="hidden" style="border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); border-radius:16px; padding:14px;">
+          <div style="font-weight:900;">No items in this MIS.</div>
+          <div class="muted" style="margin-top:4px;">Go back and select items first.</div>
         </div>
       </section>
 
       <section class="space-y-3">
-        <button id="backBtn" class="btn btn-secondary" type="button">Back to setup</button>
+        <button id="editBtn" class="btn btn-secondary" type="button">Edit MIS selection</button>
 
-        <!-- Hold-to-reset -->
-        <button id="resetBtn" class="btn btn-primary holdWrap" type="button" aria-label="Hold to reset">
+        <button id="resetBtn" class="btn btn-primary holdWrap" type="button">
           <div id="resetHoldBar" class="holdBar"></div>
-          <div class="btnText" id="resetBtnText">Hold 5s to reset (new mise en place)</div>
+          <div class="btnText" id="resetBtnText">Hold 5s to reset (new MIS)</div>
         </button>
 
         <div class="muted" style="text-align:center;">Reset clears this location + date on this device.</div>
@@ -378,10 +306,11 @@
   </div>
 
   <script>
-    // ===== Config =====
+    // =========================
+    // DATA
+    // =========================
     const GPS_AUTOSELECT_M = 900;
     const RESET_HOLD_MS = 5000;
-    const TASK_HOLD_NA_MS = 900;
 
     const LOCATION_COORDS = {
       "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
@@ -391,120 +320,105 @@
       "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
     };
 
-    // ===== Mise en place sections (base) =====
     const MEP_SECTIONS = [
-      {
-        secId: "veg",
-        title: "Vegetables & Fruit",
-        tasks: [
-          "Cut lettuce for burger",
-          "Cut lettuce for salad",
-          "Cut lettuce for Julie plate",
-          "Cut tomatoes (burger & salad)",
-          "Cut radishes",
-          "Cut red onions",
-          "Cut cucumbers",
-          "Cut lemon",
-          "Cut spring onions",
-          "Cut chives",
-          "Cut cress",
-          "Cut mix cress",
-          "Cut fruits (mix & buffet)"
-        ]
-      },
-      {
-        secId: "meat",
-        title: "Meat & Potatoes",
-        tasks: [
-          "Cut and marinate chicken",
-          "Cut Tenderloin",
-          "Cut Black Angus",
-          "Cut potatoes for Wienerschnitzel",
-          "Cut potatoes for smørrebrød",
-          "Fry bacon",
-          'Fry "stegt flæsk"',
-          "Fry sausages"
-        ]
-      },
-      {
-        secId: "dairy",
-        title: "Cheese & Dairy",
-        tasks: [
-          "Cut cheese for sandwiches",
-          "Cut Vesterhavsost",
-          "Cut Chili cheese",
-          "Cut Blue cheese",
-          "Prepare Chiagrød",
-          "Prepare Blueberry Yogurt",
-          "Fill up yogurt"
-        ]
-      },
-      {
-        secId: "sauces",
-        title: "Sauces & Dressings",
-        tasks: [
-          "Refill Thousand Island dressing",
-          "Refill Tatar sauce",
-          "Refill Remoulade",
-          "Refill Chili Mayo",
-          "Refill Garlic Mayo",
-          "Refill Truffle Mayo",
-          "Refill Curry Mayo",
-          "Refill BBQ Mayo",
-          "Refill Signature dressing",
-          "Refill Caesar dressing",
-          "Refill Rævesovs",
-          "Refill Mayo & Ketchup"
-        ]
-      },
-      {
-        secId: "prep",
-        title: "Prep & Baking",
-        tasks: [
-          "Boil eggs",
-          "Cook rice",
-          "Cook Mango Jam",
-          "Cook Mix Berries Jam",
-          "Cook Apple Jam",
-          "Make garlic paste",
-          "Make caramelized onions",
-          "Make Øland toast",
-          "Bake tomatoes",
-          "Bake Apple tart",
-          "Prepare Chocolate Mousse",
-          "Prepare Crème brûlée"
-        ]
-      },
-      {
-        secId: "setup",
-        title: "Setup & Storage",
-        tasks: [
-          "Setup Brunch",
-          "Setup Julie plate",
-          "Defrost Mango & Edamame",
-          "Defrost Chocolate cake",
-          "Refill Freezer"
-        ]
-      }
+      { secId:"veg", title:"Vegetables & Fruit", tasks:[
+        "Cut lettuce for burger",
+        "Cut lettuce for salad",
+        "Cut lettuce for Julie plate",
+        "Cut tomatoes (burger & salad)",
+        "Cut radishes",
+        "Cut red onions",
+        "Cut cucumbers",
+        "Cut lemon",
+        "Cut spring onions",
+        "Cut chives",
+        "Cut cress",
+        "Cut mix cress",
+        "Cut fruits (mix & buffet)"
+      ]},
+      { secId:"meat", title:"Meat & Potatoes", tasks:[
+        "Cut and marinate chicken",
+        "Cut Tenderloin",
+        "Cut Black Angus",
+        "Cut potatoes for Wienerschnitzel",
+        "Cut potatoes for smørrebrød",
+        "Fry bacon",
+        'Fry "stegt flæsk"',
+        "Fry sausages"
+      ]},
+      { secId:"dairy", title:"Cheese & Dairy", tasks:[
+        "Cut cheese for sandwiches",
+        "Cut Vesterhavsost",
+        "Cut Chili cheese",
+        "Cut Blue cheese",
+        "Prepare Chiagrød",
+        "Prepare Blueberry Yogurt",
+        "Fill up yogurt"
+      ]},
+      { secId:"sauces", title:"Sauces & Dressings", tasks:[
+        "Refill Thousand Island dressing",
+        "Refill Tatar sauce",
+        "Refill Remoulade",
+        "Refill Chili Mayo",
+        "Refill Garlic Mayo",
+        "Refill Truffle Mayo",
+        "Refill Curry Mayo",
+        "Refill BBQ Mayo",
+        "Refill Signature dressing",
+        "Refill Caesar dressing",
+        "Refill Rævesovs",
+        "Refill Mayo & Ketchup"
+      ]},
+      { secId:"prep", title:"Prep & Baking", tasks:[
+        "Boil eggs",
+        "Cook rice",
+        "Cook Mango Jam",
+        "Cook Mix Berries Jam",
+        "Cook Apple Jam",
+        "Make garlic paste",
+        "Make caramelized onions",
+        "Make Øland toast",
+        "Bake tomatoes",
+        "Bake Apple tart",
+        "Prepare Chocolate Mousse",
+        "Prepare Crème brûlée"
+      ]},
+      { secId:"setup", title:"Setup & Storage", tasks:[
+        "Setup Brunch",
+        "Setup Julie plate",
+        "Defrost Mango & Edamame",
+        "Defrost Chocolate cake",
+        "Refill Freezer"
+      ]}
     ];
 
-    // Days
     const DAYS = [
-      { key:"mon", label:"Mon", full:"Monday" },
-      { key:"tue", label:"Tue", full:"Tuesday" },
-      { key:"wed", label:"Wed", full:"Wednesday" },
-      { key:"thu", label:"Thu", full:"Thursday" },
-      { key:"fri", label:"Fri", full:"Friday" },
-      { key:"sat", label:"Sat", full:"Saturday" },
-      { key:"sun", label:"Sun", full:"Sunday" }
+      { key:"mon", label:"Mon", full:"Monday", js:1 },
+      { key:"tue", label:"Tue", full:"Tuesday", js:2 },
+      { key:"wed", label:"Wed", full:"Wednesday", js:3 },
+      { key:"thu", label:"Thu", full:"Thursday", js:4 },
+      { key:"fri", label:"Fri", full:"Friday", js:5 },
+      { key:"sat", label:"Sat", full:"Saturday", js:6 },
+      { key:"sun", label:"Sun", full:"Sunday", js:0 }
     ];
 
-    // ===== Helpers =====
+    // =========================
+    // HELPERS
+    // =========================
     function $(id){ return document.getElementById(id); }
-    function nowDK(){ return new Date().toLocaleString("da-DK"); }
-
     function escapeHtml(s){
       return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+
+    // Safer local ISO date
+    function dateISOFromLocal(d){
+      const x = new Date(d);
+      x.setHours(12,0,0,0);
+      const off = x.getTimezoneOffset();
+      const local = new Date(x.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
     }
 
     function isoWeekKey(date){
@@ -518,37 +432,31 @@
       return year + "-W" + ww;
     }
 
-    function startOfISOWeekLocal(date){
-      const d = new Date(date);
-      d.setHours(0,0,0,0);
-      const day = d.getDay() || 7; // 1..7 (Mon..Sun)
-      d.setDate(d.getDate() - (day - 1));
-      return d; // Monday (local)
-    }
-
-    function dateISOFromDateLocal(d){
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      return local.toISOString().slice(0,10);
-    }
-
     function getDayKeyToday(){
-      const js = new Date().getDay(); // 0 Sun..6 Sat
-      if (js === 0) return "sun";
-      if (js === 1) return "mon";
-      if (js === 2) return "tue";
-      if (js === 3) return "wed";
-      if (js === 4) return "thu";
-      if (js === 5) return "fri";
-      return "sat";
+      const js = new Date().getDay();
+      return (DAYS.find(d => d.js === js) || DAYS[0]).key;
     }
 
-    function dateISOForSelectedDay(dayKey){
-      const monday = startOfISOWeekLocal(new Date());
-      const idx = Math.max(0, DAYS.findIndex(d => d.key === dayKey)); // 0..6
-      const target = new Date(monday);
-      target.setDate(monday.getDate() + idx);
-      return dateISOFromDateLocal(target);
+    // Next occurrence of weekday (including today)
+    function nextDateForDayKey(dayKey){
+      const target = DAYS.find(d => d.key === dayKey);
+      const targetJs = target ? target.js : 1;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      for (let i=0; i<7; i++){
+        const cand = new Date(today);
+        cand.setDate(today.getDate() + i);
+        if (cand.getDay() === targetJs) return cand;
+      }
+      return today;
+    }
+
+    function dayKeyFromDateISO(dateISO){
+      const d = new Date(dateISO + "T12:00:00");
+      const js = d.getDay();
+      return (DAYS.find(x => x.js === js) || DAYS[0]).key;
     }
 
     function distanceM(lat1, lon1, lat2, lon2){
@@ -580,63 +488,70 @@
       });
     }
 
-    // ===== Storage =====
-    const keyBase = "kaiser_mep_2026_v2";
-    function kStatus(loc, dateISO){ return `${keyBase}_status_${loc}_${dateISO}`; }
-    function kDoneBy(loc, dateISO){ return `${keyBase}_doneby_${loc}_${dateISO}`; }
-    function kStarted(loc, dateISO){ return `${keyBase}_started_${loc}_${dateISO}`; }
+    function buildSections(){
+      return MEP_SECTIONS.map(sec => ({
+        secId: sec.secId,
+        title: sec.title,
+        tasks: sec.tasks.map((text, i) => ({
+          id: `${sec.secId.toUpperCase()}-${String(i+1).padStart(2,"0")}`,
+          text
+        }))
+      }));
+    }
 
-    // ===== DOM =====
-    const setupWrap = $("setupWrap");
-    const listWrap = $("listWrap");
+    // =========================
+    // STORAGE
+    // =========================
+    const keyBase = "kaiser_mis_2026_v1";
+    const kSel  = (loc, dateISO) => `${keyBase}_sel_${loc}_${dateISO}`;   // { createdAt, createdBy, selected: {id:true} }
+    const kDone = (loc, dateISO) => `${keyBase}_done_${loc}_${dateISO}`;  // { id:true }
+    const kWho  = (loc, dateISO) => `${keyBase}_who_${loc}_${dateISO}`;   // string
 
+    function loadJSON(key, fallback){
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      try { return JSON.parse(raw); } catch(e){ return fallback; }
+    }
+
+    // =========================
+    // DOM
+    // =========================
+    const createWrap = $("createWrap");
+    const misWrap = $("misWrap");
+
+    // Setup fields
     const weekKeyText = $("weekKeyText");
     const dateText = $("dateText");
     const timeField = $("timeField");
-
     const locationSelect = $("locationSelect");
     const doneBy = $("doneBy");
     const gpsStatus = $("gpsStatus");
     const dayTabs = $("dayTabs");
-    const startBtn = $("startBtn");
+
+    // Create view
+    const createTaskList = $("createTaskList");
+    const progressBarCreate = $("progressBarCreate");
+    const progressTextCreate = $("progressTextCreate");
+    const selectedHint = $("selectedHint");
+    const makeMisBtn = $("makeMisBtn");
     const errorText = $("errorText");
 
-    const listTitle = $("listTitle");
-    const remainingHint = $("remainingHint");
-    const taskList = $("taskList");
-
+    // MIS view
+    const misTitle = $("misTitle");
+    const misRemainingHint = $("misRemainingHint");
+    const misTaskList = $("misTaskList");
+    const progressBarMis = $("progressBarMis");
+    const progressTextMis = $("progressTextMis");
+    const doneBox = $("doneBox");
+    const emptyMisBox = $("emptyMisBox");
     const chipLoc = $("chipLoc");
     const chipDay = $("chipDay");
-    const chipWho = $("chipWho");
     const chipDate = $("chipDate");
-
-    const progressBar = $("progressBar");
-    const progressText = $("progressText");
-    const progressHint = $("progressHint");
-
-    const progressBar2 = $("progressBar2");
-    const progressText2 = $("progressText2");
-
-    const viewTodoBtn = $("viewTodo");
-    const viewDoneBtn = $("viewDone");
-    const viewAddBtn  = $("viewAdd");
-
-    const allDoneBox = $("allDoneBox");
-
-    const backBtn = $("backBtn");
+    const chipWho = $("chipWho");
+    const editBtn = $("editBtn");
     const resetBtn = $("resetBtn");
     const resetBtnText = $("resetBtnText");
     const resetHoldBar = $("resetHoldBar");
-
-    // ===== State =====
-    const state = {
-      loc: "",
-      dayKey: getDayKeyToday(),
-      dateISO: dateISOForSelectedDay(getDayKeyToday()),
-      weekKey: isoWeekKey(new Date()),
-      statuses: {},  // id -> "na" | "todo" | "done"
-      view: "todo"   // todo | done | add
-    };
 
     function setError(msg){
       if (!msg){
@@ -648,79 +563,64 @@
       errorText.classList.remove("hidden");
     }
 
-    function buildSections(){
-      // stable IDs per section/item
-      return MEP_SECTIONS.map(sec => ({
-        secId: sec.secId,
-        title: sec.title,
-        tasks: sec.tasks.map((text, i) => ({
-          id: `${sec.secId.toUpperCase()}-${String(i+1).padStart(2,"0")}`,
-          text
-        }))
-      }));
+    // =========================
+    // STATE
+    // =========================
+    const state = {
+      view: "create",                 // create | mis
+      loc: "",
+      who: "",
+      dayKey: getDayKeyToday(),
+      targetDate: nextDateForDayKey(getDayKeyToday()),
+      dateISO: "",                    // computed
+      weekKey: "",
+      selected: {},                   // {id:true}
+      done: {}                        // {id:true}
+    };
+
+    function syncDerived(){
+      state.dateISO = dateISOFromLocal(state.targetDate);
+      state.weekKey = isoWeekKey(state.targetDate);
     }
 
-    function getStatus(id){
-      return state.statuses[String(id)] || "na";
-    }
-    function setStatus(id, val){
-      state.statuses[String(id)] = val;
-      saveStatuses();
-    }
-
-    function loadStatuses(){
-      if (!state.loc) { state.statuses = {}; return; }
-      const raw = localStorage.getItem(kStatus(state.loc, state.dateISO));
-      if (!raw) { state.statuses = {}; return; }
-      try {
-        const obj = JSON.parse(raw);
-        state.statuses = (obj && typeof obj === "object") ? obj : {};
-      } catch(e){
-        state.statuses = {};
-      }
+    function loadForCurrentContext(){
+      if (!state.loc || !state.dateISO) { state.selected = {}; state.done = {}; return; }
+      const selObj = loadJSON(kSel(state.loc, state.dateISO), null);
+      state.selected = (selObj && selObj.selected && typeof selObj.selected === "object") ? selObj.selected : {};
+      state.done = loadJSON(kDone(state.loc, state.dateISO), {}) || {};
+      const savedWho = localStorage.getItem(kWho(state.loc, state.dateISO)) || "";
+      if (savedWho && !doneBy.value) doneBy.value = savedWho;
     }
 
-    function saveStatuses(){
-      if (!state.loc) return;
-      localStorage.setItem(kStatus(state.loc, state.dateISO), JSON.stringify(state.statuses));
+    function saveSelectionMeta(){
+      if (!state.loc || !state.dateISO) return;
+      const who = (doneBy.value || "").trim();
+      localStorage.setItem(kWho(state.loc, state.dateISO), who);
+      const existing = loadJSON(kSel(state.loc, state.dateISO), {});
+      const obj = {
+        createdAt: existing.createdAt || nowDK(),
+        createdBy: who || existing.createdBy || "",
+        selected: state.selected
+      };
+      localStorage.setItem(kSel(state.loc, state.dateISO), JSON.stringify(obj));
     }
 
-    function loadDoneBy(){
-      if (!state.loc) { doneBy.value = ""; return; }
-      doneBy.value = localStorage.getItem(kDoneBy(state.loc, state.dateISO)) || "";
-    }
-    function saveDoneBy(){
-      if (!state.loc) return;
-      localStorage.setItem(kDoneBy(state.loc, state.dateISO), (doneBy.value || "").trim());
+    function saveDone(){
+      if (!state.loc || !state.dateISO) return;
+      localStorage.setItem(kDone(state.loc, state.dateISO), JSON.stringify(state.done));
     }
 
-    function counts(){
-      const all = buildSections().flatMap(s => s.tasks);
-      let na = 0, todo = 0, done = 0;
-      for (const t of all){
-        const st = getStatus(t.id);
-        if (st === "done") done++;
-        else if (st === "todo") todo++;
-        else na++;
-      }
-      const activeTotal = todo + done; // N/A excluded
-      return { na, todo, done, activeTotal, total: all.length };
+    function selectedCount(){
+      return Object.keys(state.selected).length;
     }
 
-    function remainingActive(){
-      // remaining = todo count
-      return counts().todo;
+    function totalCount(){
+      return buildSections().reduce((sum, s) => sum + s.tasks.length, 0);
     }
 
-    function setView(v){
-      state.view = v;
-      viewTodoBtn.classList.toggle("on", v === "todo");
-      viewDoneBtn.classList.toggle("on", v === "done");
-      viewAddBtn.classList.toggle("on", v === "add");
-      renderTasks();
-      updateProgressUI();
-    }
-
+    // =========================
+    // RENDER: DAY TABS
+    // =========================
     function renderDayTabs(){
       dayTabs.innerHTML = "";
       DAYS.forEach(d => {
@@ -728,237 +628,394 @@
         b.type = "button";
         b.className = "tabBtn" + (state.dayKey === d.key ? " on" : "");
         b.textContent = d.label;
+
         b.addEventListener("click", () => {
           state.dayKey = d.key;
-          state.dateISO = dateISOForSelectedDay(state.dayKey);
+          state.targetDate = nextDateForDayKey(state.dayKey);
+          syncDerived();
 
-          // weekKey should follow selected date
-          const monday = startOfISOWeekLocal(new Date());
-          const idx = Math.max(0, DAYS.findIndex(x => x.key === state.dayKey));
-          const target = new Date(monday); target.setDate(monday.getDate() + idx);
-          state.weekKey = isoWeekKey(target);
-
-          loadStatuses();
-          loadDoneBy();
-          updateUI();
+          // Reload saved selection for that day (tomorrow etc.)
+          loadForCurrentContext();
+          updateAllUI();
           renderDayTabs();
         });
+
         dayTabs.appendChild(b);
       });
     }
 
-    function updateChips(){
-      const dayFull = (DAYS.find(x => x.key === state.dayKey) || {}).full || state.dayKey;
-      chipLoc.textContent = "Location: " + (state.loc || "—");
-      chipDay.textContent = "Day: " + dayFull;
-      chipWho.textContent = "By: " + ((doneBy.value || "").trim() || "—");
-      chipDate.textContent = "Date: " + (state.dateISO || "—");
-      listTitle.textContent = "Mise en place • " + dayFull;
-      remainingHint.textContent = state.view === "add"
-        ? "Tap items to create today's MIS"
-        : ("Remaining: " + remainingActive());
-    }
-
-    function updateProgressUI(){
-      const c = counts();
-
-      // progress for active items only
-      const total = c.activeTotal;
-      const done = c.done;
-      const pct = total ? Math.round((done/total)*100) : 0;
-
-      progressText.textContent = done + "/" + total;
-      progressBar.style.width = pct + "%";
-
-      progressText2.textContent = done + "/" + total;
-      progressBar2.style.width = pct + "%";
-
-      allDoneBox.classList.toggle("hidden", !(total > 0 && c.todo === 0));
-
-      if (total === 0){
-        progressHint.textContent = "All items start as N/A — add what you need.";
-      } else {
-        progressHint.textContent = "Active items: " + total + " • N/A: " + c.na;
-      }
-    }
-
-    function showSetup(){
-      setupWrap.classList.remove("hidden");
-      listWrap.classList.add("hidden");
-      setError("");
-    }
-    function showList(){
-      setupWrap.classList.add("hidden");
-      listWrap.classList.remove("hidden");
-      setError("");
-    }
-
-    function sectionCounts(sec){
-      let na=0,todo=0,done=0;
-      for (const t of sec.tasks){
-        const st = getStatus(t.id);
-        if (st === "done") done++;
-        else if (st === "todo") todo++;
-        else na++;
-      }
-      return {na,todo,done,total:sec.tasks.length};
-    }
-
-    function tasksForView(sec){
-      // What to show in each view
-      if (state.view === "todo") return sec.tasks.filter(t => getStatus(t.id) === "todo");
-      if (state.view === "done") return sec.tasks.filter(t => getStatus(t.id) === "done");
-      return sec.tasks.filter(t => getStatus(t.id) === "na"); // add view
-    }
-
-    function actionTextForView(){
-      if (state.view === "todo") return { pill:"Done ✓", pillClass:"done", sub:"Tap to mark done • Hold to set N/A" };
-      if (state.view === "done") return { pill:"Undo ↩", pillClass:"todo", sub:"Tap to move back to To do • Hold to set N/A" };
-      return { pill:"+ Add", pillClass:"todo", sub:"Tap to add to To do" };
-    }
-
-    function renderTasks(){
-      const openMap = {};
-      document.querySelectorAll('details[data-sec]').forEach(d => openMap[d.dataset.sec] = d.open);
-
-      taskList.innerHTML = "";
+    // =========================
+    // RENDER: CREATE LIST
+    // =========================
+    function renderCreateList(){
       const sections = buildSections();
 
-      const meta = actionTextForView();
+      // remember open state
+      const openMap = {};
+      createTaskList.querySelectorAll("details[data-sec]").forEach(d => openMap[d.dataset.sec] = d.open);
+
+      createTaskList.innerHTML = "";
 
       sections.forEach((sec, idx) => {
-        const sc = sectionCounts(sec);
-        const list = tasksForView(sec);
+        const selInSection = sec.tasks.filter(t => !!state.selected[t.id]).length;
+        const total = sec.tasks.length;
 
-        // Auto-open first relevant section
         const details = document.createElement("details");
         details.className = "acc";
         details.dataset.sec = sec.secId;
-
-        const wasOpen = openMap[sec.secId];
-        const shouldOpen =
-          typeof wasOpen === "boolean" ? wasOpen :
-          (idx === 0); // default first open
-
-        details.open = shouldOpen;
+        details.open = (openMap[sec.secId] !== undefined) ? openMap[sec.secId] : (idx === 0);
 
         const summary = document.createElement("summary");
         summary.innerHTML = `
           <span>${escapeHtml(sec.title)}</span>
-          <span class="accMeta">To do: ${sc.todo} • Done: ${sc.done} • N/A: ${sc.na}</span>
+          <span class="accMeta">${selInSection}/${total} selected</span>
         `;
         details.appendChild(summary);
 
         const body = document.createElement("div");
         body.className = "accBody";
 
-        if (list.length === 0) {
-          const empty = document.createElement("div");
-          empty.className = "muted";
-          empty.textContent =
-            state.view === "todo" ? "No to-do items in this category." :
-            state.view === "done" ? "No completed items in this category." :
-            "No N/A items left to add in this category.";
-          body.appendChild(empty);
-        } else {
-          list.forEach((item, i) => {
-            const row = document.createElement("div");
-            row.className = "task";
+        sec.tasks.forEach((t, i) => {
+          const isSel = !!state.selected[t.id];
+          const row = document.createElement("div");
+          row.className = "task";
+          row.innerHTML = `
+            <div class="badge">${String(i+1)}</div>
+            <div style="flex:1;">
+              <div class="taskTitle">${escapeHtml(t.text)}</div>
+              <div class="taskSub">Tap to include / remove from MIS</div>
+            </div>
+            <div class="pill ${isSel ? "in" : "na"}">${isSel ? "IN MIS" : "N/A"}</div>
+          `;
 
-            // badge number within the filtered list
-            row.innerHTML = `
-              <div class="taskBadge">${String(i+1)}</div>
-              <div style="flex:1;">
-                <div class="taskTitle">${escapeHtml(item.text)}</div>
-                <div class="taskSub">${escapeHtml(meta.sub)}</div>
-              </div>
-              <div class="pill ${meta.pillClass}">${escapeHtml(meta.pill)}</div>
-            `;
-
-            // Tap action
-            row.addEventListener("click", () => {
-              const st = getStatus(item.id);
-
-              if (state.view === "add") {
-                // N/A -> TODO
-                if (st === "na") setStatus(item.id, "todo");
-                // If you want: tapping again won’t do anything here
-              } else if (state.view === "todo") {
-                // TODO -> DONE
-                if (st === "todo") setStatus(item.id, "done");
-              } else {
-                // DONE -> TODO (undo)
-                if (st === "done") setStatus(item.id, "todo");
-              }
-
-              updateUI();
-
-              // If user just created first active item, jump to To do
-              const c = counts();
-              if (state.view === "add" && c.activeTotal > 0) setView("todo");
-            });
-
-            // Hold action: set back to N/A (from TODO or DONE)
-            attachHoldToSetNA(row, item.id);
-
-            body.appendChild(row);
+          row.addEventListener("click", () => {
+            if (state.selected[t.id]) {
+              delete state.selected[t.id];
+              // also remove any done state if it was previously done
+              if (state.done[t.id]) delete state.done[t.id];
+              saveDone();
+            } else {
+              state.selected[t.id] = true;
+            }
+            saveSelectionMeta();
+            updateAllUI();
           });
-        }
+
+          body.appendChild(row);
+        });
 
         details.appendChild(body);
-        taskList.appendChild(details);
+        createTaskList.appendChild(details);
       });
+
+      selectedHint.textContent = "Selected: " + selectedCount();
     }
 
-    function attachHoldToSetNA(el, taskId){
-      let t = null;
-      let holding = false;
-
-      const clear = () => {
-        if (t) clearTimeout(t);
-        t = null;
-        holding = false;
-      };
-
-      const start = () => {
-        clear();
-        holding = true;
-        t = setTimeout(() => {
-          const st = getStatus(taskId);
-          if (st !== "na") {
-            setStatus(taskId, "na");
-            updateUI();
-            // if we removed last active tasks, go to Add view
-            if (counts().activeTotal === 0) setView("add");
-          }
-        }, TASK_HOLD_NA_MS);
-      };
-
-      el.addEventListener("pointerdown", (e) => { start(); });
-      el.addEventListener("pointerup", clear);
-      el.addEventListener("pointercancel", clear);
-      el.addEventListener("pointerleave", clear);
-      window.addEventListener("blur", clear);
+    function renderCreateProgress(){
+      const sel = selectedCount();
+      const total = totalCount();
+      progressTextCreate.textContent = sel + " selected";
+      const pct = total ? Math.round((sel/total)*100) : 0;
+      progressBarCreate.style.width = pct + "%";
+      makeMisBtn.disabled = sel === 0;
+      makeMisBtn.style.opacity = sel === 0 ? "0.55" : "1";
+      makeMisBtn.textContent = sel === 0 ? "Make MIS" : ("Make MIS (" + sel + ")");
     }
 
-    function updateUI(){
-      // update setup fields
+    // =========================
+    // RENDER: MIS LIST
+    // =========================
+    function renderMisHeader(){
+      const dayFull = (DAYS.find(x => x.key === state.dayKey) || {}).full || state.dayKey;
+      misTitle.textContent = "MIS to‑do • " + dayFull;
+
+      chipLoc.textContent = "Location: " + (state.loc || "—");
+      chipDay.textContent = "Day: " + dayFull;
+      chipDate.textContent = "Date: " + (state.dateISO || "—");
+      chipWho.textContent = "By: " + ((doneBy.value || "").trim() || "—");
+    }
+
+    function renderMisList(){
+      const sections = buildSections();
+
+      // selected tasks only
+      const selectedIds = new Set(Object.keys(state.selected));
+      const selectedTotal = selectedIds.size;
+
+      emptyMisBox.classList.toggle("hidden", selectedTotal !== 0);
+
+      // remember open state
+      const openMap = {};
+      misTaskList.querySelectorAll("details[data-sec]").forEach(d => openMap[d.dataset.sec] = d.open);
+
+      misTaskList.innerHTML = "";
+
+      if (selectedTotal === 0) {
+        renderMisProgress();
+        return;
+      }
+
+      sections.forEach((sec, idx) => {
+        const selectedTasks = sec.tasks.filter(t => selectedIds.has(t.id));
+        if (selectedTasks.length === 0) return; // hide empty categories
+
+        const doneInSection = selectedTasks.filter(t => !!state.done[t.id]).length;
+
+        const details = document.createElement("details");
+        details.className = "acc";
+        details.dataset.sec = sec.secId;
+        details.open = (openMap[sec.secId] !== undefined) ? openMap[sec.secId] : (idx === 0);
+
+        const summary = document.createElement("summary");
+        summary.innerHTML = `
+          <span>${escapeHtml(sec.title)}</span>
+          <span class="accMeta">${doneInSection}/${selectedTasks.length} done</span>
+        `;
+        details.appendChild(summary);
+
+        const body = document.createElement("div");
+        body.className = "accBody";
+
+        selectedTasks.forEach((t, i) => {
+          const isDone = !!state.done[t.id];
+          const row = document.createElement("div");
+          row.className = "task" + (isDone ? " rowDone" : "");
+          row.innerHTML = `
+            <div class="badge">${String(i+1)}</div>
+            <div style="flex:1;">
+              <div class="taskTitle ${isDone ? "strike" : ""}">${escapeHtml(t.text)}</div>
+              <div class="taskSub">Tap to mark ${isDone ? "not done" : "done"}</div>
+            </div>
+            <div class="pill ${isDone ? "done" : "na"}">${isDone ? "DONE ✓" : "TO DO"}</div>
+          `;
+
+          row.addEventListener("click", () => {
+            if (state.done[t.id]) delete state.done[t.id];
+            else state.done[t.id] = true;
+            saveDone();
+            updateAllUI();
+          });
+
+          body.appendChild(row);
+        });
+
+        details.appendChild(body);
+        misTaskList.appendChild(details);
+      });
+
+      renderMisProgress();
+    }
+
+    function renderMisProgress(){
+      const selectedIds = Object.keys(state.selected);
+      const total = selectedIds.length;
+      const done = selectedIds.filter(id => !!state.done[id]).length;
+      const remaining = total - done;
+
+      progressTextMis.textContent = done + "/" + total;
+      progressBarMis.style.width = total ? Math.round((done/total)*100) + "%" : "0%";
+
+      misRemainingHint.textContent = total ? ("Remaining: " + remaining) : "—";
+
+      const completed = (total > 0 && remaining === 0);
+      doneBox.classList.toggle("hidden", !completed);
+    }
+
+    // =========================
+    // VIEW SWITCH
+    // =========================
+    function showCreate(){
+      state.view = "create";
+      createWrap.classList.remove("hidden");
+      misWrap.classList.add("hidden");
+      setError("");
+    }
+
+    function showMis(){
+      state.view = "mis";
+      createWrap.classList.add("hidden");
+      misWrap.classList.remove("hidden");
+      setError("");
+    }
+
+    // =========================
+    // UPDATE UI (global)
+    // =========================
+    function updateSetupUI(){
       weekKeyText.textContent = "Week: " + state.weekKey;
       dateText.textContent = state.dateISO;
       timeField.value = nowDK();
-
-      state.loc = locationSelect.value || "";
-
-      updateChips();
-      updateProgressUI();
-      renderTasks();
-
-      // Seg buttons on initial
-      viewTodoBtn.classList.toggle("on", state.view === "todo");
-      viewDoneBtn.classList.toggle("on", state.view === "done");
-      viewAddBtn.classList.toggle("on", state.view === "add");
     }
 
+    function updateAllUI(){
+      state.loc = locationSelect.value || "";
+      state.who = (doneBy.value || "").trim();
+
+      updateSetupUI();
+
+      // create view UI
+      renderCreateList();
+      renderCreateProgress();
+
+      // mis view UI
+      renderMisHeader();
+      renderMisList();
+    }
+
+    // =========================
+    // NAVIGATION (new "page")
+    // We use URL param ?view=mis to behave like a new page.
+    // =========================
+    function baseUrl(){
+      // keeps current file path; works on https and local servers
+      return window.location.origin + window.location.pathname;
+    }
+
+    function goToMis(){
+      const url = new URL(baseUrl());
+      url.searchParams.set("view", "mis");
+      url.searchParams.set("loc", state.loc);
+      url.searchParams.set("date", state.dateISO);
+      window.location.href = url.toString();
+    }
+
+    function goToCreate(){
+      const url = new URL(baseUrl());
+      // keep context so you land back on same date/location
+      if (state.loc) url.searchParams.set("loc", state.loc);
+      if (state.dateISO) url.searchParams.set("date", state.dateISO);
+      window.location.href = url.toString();
+    }
+
+    // =========================
+    // RESET (hold 5s)
+    // =========================
+    let resetTimer = null;
+    let resetStart = 0;
+
+    function resetHoldClear(){
+      if (resetTimer) clearInterval(resetTimer);
+      resetTimer = null;
+      resetStart = 0;
+      resetHoldBar.style.width = "0%";
+      resetBtnText.textContent = "Hold 5s to reset (new MIS)";
+    }
+
+    function doReset(){
+      if (!state.loc || !state.dateISO) return;
+
+      localStorage.removeItem(kSel(state.loc, state.dateISO));
+      localStorage.removeItem(kDone(state.loc, state.dateISO));
+      localStorage.removeItem(kWho(state.loc, state.dateISO));
+
+      state.selected = {};
+      state.done = {};
+
+      resetHoldClear();
+      goToCreate();
+    }
+
+    function resetHoldStart(){
+      if (!state.loc || !state.dateISO) return;
+      resetHoldClear();
+
+      resetStart = Date.now();
+      resetBtnText.textContent = "Keep holding…";
+
+      resetTimer = setInterval(() => {
+        const elapsed = Date.now() - resetStart;
+        const pct = Math.min(100, Math.round((elapsed / RESET_HOLD_MS) * 100));
+        resetHoldBar.style.width = pct + "%";
+        resetBtnText.textContent = "Hold to reset… " + pct + "%";
+        if (elapsed >= RESET_HOLD_MS) {
+          clearInterval(resetTimer);
+          resetTimer = null;
+          resetBtnText.textContent = "Resetting…";
+          doReset();
+        }
+      }, 50);
+    }
+
+    // =========================
+    // INIT from URL params
+    // =========================
+    function initFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get("view");
+      const loc = params.get("loc");
+      const date = params.get("date");
+
+      if (loc) {
+        locationSelect.value = loc;
+        state.loc = loc;
+      }
+
+      if (date) {
+        state.dateISO = date;
+        state.targetDate = new Date(date + "T12:00:00");
+        state.dayKey = dayKeyFromDateISO(date);
+      } else {
+        state.dayKey = getDayKeyToday();
+        state.targetDate = nextDateForDayKey(state.dayKey);
+      }
+
+      syncDerived();
+
+      // set active dayKey based on chosen date
+      if (!date) state.dayKey = getDayKeyToday(); // already
+      if (date) state.dayKey = dayKeyFromDateISO(date);
+
+      // load saved data for context
+      loadForCurrentContext();
+
+      // show view
+      if (view === "mis") showMis();
+      else showCreate();
+    }
+
+    // =========================
+    // EVENTS
+    // =========================
+    locationSelect.addEventListener("change", () => {
+      state.loc = locationSelect.value || "";
+      syncDerived();
+      loadForCurrentContext();
+      updateAllUI();
+    });
+
+    doneBy.addEventListener("input", () => {
+      saveSelectionMeta(); // keeps createdBy updated
+      updateAllUI();
+    });
+
+    makeMisBtn.addEventListener("click", () => {
+      setError("");
+
+      state.loc = locationSelect.value || "";
+      const who = (doneBy.value || "").trim();
+
+      if (!state.loc) return setError("Select a location.");
+      if (!who) return setError("Performed by is required.");
+      if (selectedCount() === 0) return setError("Select at least 1 item before making MIS.");
+
+      // Save selection snapshot
+      saveSelectionMeta();
+      goToMis();
+    });
+
+    editBtn.addEventListener("click", () => {
+      goToCreate();
+    });
+
+    resetBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); resetHoldStart(); });
+    resetBtn.addEventListener("pointerup", resetHoldClear);
+    resetBtn.addEventListener("pointercancel", resetHoldClear);
+    resetBtn.addEventListener("pointerleave", resetHoldClear);
+    window.addEventListener("blur", resetHoldClear);
+
+    // =========================
+    // GPS autoselect (optional)
+    // =========================
     async function tryAutoSelectLocation(){
       gpsStatus.textContent = "GPS: checking…";
       const gps = await getGPS();
@@ -976,148 +1033,24 @@
       }
 
       const distM = Math.round(bestDist);
-      if (bestName && distM <= GPS_AUTOSELECT_M) {
+      if (bestName && distM <= GPS_AUTOSELECT_M && !locationSelect.value) {
         gpsStatus.textContent = "GPS: near " + bestName + " (" + distM + "m) → selected";
         locationSelect.value = bestName;
         state.loc = bestName;
-        loadStatuses();
-        loadDoneBy();
-        updateUI();
+        loadForCurrentContext();
+        updateAllUI();
       } else {
         gpsStatus.textContent = "GPS: select location manually";
       }
     }
 
-    // ===== Reset hold-to-confirm =====
-    let resetTimer = null;
-    let resetStart = 0;
-
-    function resetHoldClear(){
-      if (resetTimer) clearInterval(resetTimer);
-      resetTimer = null;
-      resetStart = 0;
-      resetHoldBar.style.width = "0%";
-      resetBtnText.textContent = "Hold 5s to reset (new mise en place)";
-    }
-
-    function doReset(){
-      // Clear only this location + date
-      if (!state.loc) return;
-
-      localStorage.removeItem(kStatus(state.loc, state.dateISO));
-      localStorage.removeItem(kDoneBy(state.loc, state.dateISO));
-      localStorage.removeItem(kStarted(state.loc, state.dateISO));
-
-      state.statuses = {};
-      doneBy.value = "";
-
-      resetHoldClear();
-      showSetup();
-      updateUI();
-    }
-
-    function resetHoldStart(){
-      if (!state.loc) return;
-      resetHoldClear();
-
-      resetStart = Date.now();
-      resetBtnText.textContent = "Keep holding…";
-
-      resetTimer = setInterval(() => {
-        const elapsed = Date.now() - resetStart;
-        const pct = Math.min(100, Math.round((elapsed / RESET_HOLD_MS) * 100));
-        resetHoldBar.style.width = pct + "%";
-        resetBtnText.textContent = "Hold to reset… " + pct + "%";
-
-        if (elapsed >= RESET_HOLD_MS) {
-          clearInterval(resetTimer);
-          resetTimer = null;
-          resetBtnText.textContent = "Resetting…";
-          doReset();
-        }
-      }, 50);
-    }
-
-    // ===== Events =====
-    locationSelect.addEventListener("change", () => {
-      state.loc = locationSelect.value || "";
-      loadStatuses();
-      loadDoneBy();
-      updateUI();
-    });
-
-    doneBy.addEventListener("input", () => {
-      saveDoneBy();
-      updateChips();
-    });
-
-    startBtn.addEventListener("click", () => {
-      setError("");
-
-      state.loc = locationSelect.value || "";
-      if (!state.loc) return setError("Select a location.");
-      const who = (doneBy.value || "").trim();
-      if (!who) return setError("Performed by is required.");
-
-      saveDoneBy();
-      localStorage.setItem(kStarted(state.loc, state.dateISO), "1");
-
-      showList();
-
-      // If no active items yet, go directly to Add view (N/A list)
-      if (counts().activeTotal === 0) setView("add");
-      else setView(state.view || "todo");
-
-      updateUI();
-    });
-
-    backBtn.addEventListener("click", () => {
-      showSetup();
-      updateUI();
-    });
-
-    viewTodoBtn.addEventListener("click", () => setView("todo"));
-    viewDoneBtn.addEventListener("click", () => setView("done"));
-    viewAddBtn.addEventListener("click", () => setView("add"));
-
-    // Hold-to-reset interactions (pointer works on mobile + desktop)
-    resetBtn.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      resetHoldStart();
-    });
-    resetBtn.addEventListener("pointerup", resetHoldClear);
-    resetBtn.addEventListener("pointercancel", resetHoldClear);
-    resetBtn.addEventListener("pointerleave", resetHoldClear);
-    window.addEventListener("blur", resetHoldClear);
-
-    // ===== Init =====
+    // =========================
+    // START
+    // =========================
+    initFromUrl();
     renderDayTabs();
+    updateAllUI();
     tryAutoSelectLocation();
-
-    // initial time/date
-    state.dateISO = dateISOForSelectedDay(state.dayKey);
-    dateText.textContent = state.dateISO;
-    timeField.value = nowDK();
-    weekKeyText.textContent = "Week: " + state.weekKey;
-
-    // load if already selected
-    state.loc = locationSelect.value || "";
-    loadStatuses();
-    loadDoneBy();
-    updateUI();
-
-    // auto-resume if started today (on this device)
-    setTimeout(() => {
-      state.loc = locationSelect.value || "";
-      if (!state.loc) return;
-      const started = localStorage.getItem(kStarted(state.loc, state.dateISO)) === "1";
-      if (started) {
-        showList();
-        if (counts().activeTotal === 0) setView("add");
-        else setView("todo");
-        updateUI();
-      }
-    }, 250);
   </script>
 </body>
 </html>
