@@ -22,6 +22,7 @@
       --gold2:#b9921f;
       --goldGlow:rgba(214,178,74,.22);
       --danger:#ff6b6b;
+      --ok: rgba(98, 210, 111, 1);
     }
 
     html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
@@ -33,7 +34,7 @@
         linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
     }
 
-    .shell{max-width:820px}
+    .shell{max-width:980px}
     .topbar{
       border:1px solid var(--border);
       background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
@@ -75,7 +76,9 @@
     .muted{color:var(--muted);font-weight:600;font-size:13px;}
     .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
 
-    .tabs{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
+    /* top view tabs */
+    .tabs2{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+    .tabs3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
     .tabBtn{
       border-radius:16px;
       padding:12px 12px;
@@ -92,19 +95,53 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
     }
 
+    /* weekday scroller */
+    .weekRow{
+      display:flex; gap:10px; overflow:auto; padding-bottom:2px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .weekRow::-webkit-scrollbar{height:8px}
+    .weekRow::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.10);border-radius:999px}
+    .chip{
+      flex:0 0 auto;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:900;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.90);
+      cursor:pointer;
+      font-size:13px;
+    }
+    .chip.on{
+      border-color: rgba(214,178,74,0.38);
+      background: rgba(214,178,74,0.10);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+    }
+
     .task{
       display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
       border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
       cursor:pointer;transition: background .18s ease, border-color .18s ease;user-select:none;
     }
     .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
-    .task.locked{opacity:.55; cursor:not-allowed;}
-    .taskNum{
-      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
-      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
-    }
+    .task.disabled{opacity:.55; cursor:not-allowed;}
     .taskTitle{font-weight:900; letter-spacing:-0.01em;}
+    .tag{
+      display:inline-block;
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+      color:rgba(255,255,255,0.86);
+      font-weight:900;
+      letter-spacing:.02em;
+      margin-top:6px;
+    }
+    .tag.overdue{border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.10); color: rgba(255,255,255,0.92);}
+    .tag.due{border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.08);}
     .check{
       margin-left:auto;width:24px;height:24px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);
       background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
@@ -113,6 +150,10 @@
 
     .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
     .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+
+    .sectionHead{
+      display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    }
   </style>
 </head>
 
@@ -122,7 +163,7 @@
     <header class="topbar mt-6 mb-5">
       <div class="kicker">KAISER</div>
       <div class="title">Daglige opgaver</div>
-      <div class="subtitle" id="subTitle">Udfyld én liste ad gangen • går videre automatisk</div>
+      <div class="subtitle" id="subTitle">Drift + rengøring • mangler rykkes automatisk til næste dag</div>
       <div class="goldline"></div>
     </header>
 
@@ -131,22 +172,23 @@
         action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_subject" id="subjectField" value="Liste – Lokation – YYYY-MM-DD – Mangler: X">
+        <input type="hidden" name="_subject" id="subjectField" value="Kaiser – Lokation – YYYY-MM-DD – Mangler: X">
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="text" name="_honey" style="display:none">
         <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
+        <!-- Controls -->
         <section class="panel p-5 space-y-4">
-          <div class="tabs">
-            <button type="button" id="tabMorning" class="tabBtn">Morgen</button>
-            <button type="button" id="tabLunch" class="tabBtn">Frokost</button>
-            <button type="button" id="tabEvening" class="tabBtn">Aften</button>
+
+          <div class="tabs2">
+            <button type="button" id="tabDrift" class="tabBtn">Drift</button>
+            <button type="button" id="tabClean" class="tabBtn">Rengøring</button>
           </div>
 
           <div class="divider"></div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="space-y-2 md:col-span-1">
               <div class="label">Lokation</div>
               <select id="locationSelect" required>
                 <option value="">Vælg lokation...</option>
@@ -159,53 +201,115 @@
               <div class="hint" id="gpsStatus">GPS: ikke tjekket</div>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-2 md:col-span-1" id="deptWrap">
+              <div class="label">Afdeling (rengøring)</div>
+              <select id="deptSelect">
+                <option value="Bar">Bar</option>
+                <option value="Køkken">Køkken</option>
+                <option value="Toilet">Toilet</option>
+                <option value="Service/Gulv">Service/Gulv</option>
+                <option value="Lager/Udendørs">Lager/Udendørs</option>
+              </select>
+              <div class="hint">Viser kun opgaver for valgt afdeling</div>
+            </div>
+
+            <div class="space-y-2 md:col-span-1">
               <div class="label">Udført af</div>
               <input id="doneBy" class="input" placeholder="Navn (krav)" />
-              <div class="hint">Gemmes pr. liste pr. dag</div>
+              <div class="hint">Kræves for at krydse af + for at sende mail</div>
             </div>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-4">
+          <div class="grid md:grid-cols-3 gap-4">
             <div class="space-y-2">
               <div class="label">Dato / tid</div>
               <input class="input" id="timeField" readonly>
               <div class="hint"><span id="dayKeyText">—</span></div>
             </div>
 
-            <div class="space-y-2">
-              <div class="label">Aktivt tidsrum</div>
+            <div class="space-y-2 md:col-span-2">
+              <div class="label">Aktivt tidsrum (drift)</div>
               <div class="muted" id="activeWindowText">—</div>
-              <button type="button" id="overrideBtn" class="btn btn-secondary">Skift liste udenfor tidsrum (leder)</button>
+              <button type="button" id="overrideBtn" class="btn btn-secondary">Skift skiftliste udenfor tidsrum (leder)</button>
             </div>
           </div>
+
+          <!-- Drift: shift tabs -->
+          <div id="driftShiftWrap" class="space-y-3">
+            <div class="divider"></div>
+            <div class="tabs3">
+              <button type="button" id="tabMorning" class="tabBtn">Morgen</button>
+              <button type="button" id="tabLunch" class="tabBtn">Frokost</button>
+              <button type="button" id="tabEvening" class="tabBtn">Aften</button>
+            </div>
+          </div>
+
+          <!-- Clean: weekday tabs -->
+          <div id="cleanWeekWrap" class="space-y-3">
+            <div class="divider"></div>
+            <div class="label">Ugedag (rengøring)</div>
+            <div class="weekRow" id="weekRow">
+              <button type="button" class="chip" data-day="daily">Daglig</button>
+              <button type="button" class="chip" data-day="mon">Mandag</button>
+              <button type="button" class="chip" data-day="tue">Tirsdag</button>
+              <button type="button" class="chip" data-day="wed">Onsdag</button>
+              <button type="button" class="chip" data-day="thu">Torsdag</button>
+              <button type="button" class="chip" data-day="fri">Fredag</button>
+              <button type="button" class="chip" data-day="sat">Lørdag</button>
+              <button type="button" class="chip" data-day="sun">Søndag</button>
+            </div>
+            <div class="hint" id="cleanDayHint">—</div>
+          </div>
+
+          <div class="divider"></div>
 
           <div class="space-y-2">
             <div class="label">Status</div>
             <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
-            <div class="muted" id="progressText">0/0</div>
+            <div class="muted" id="progressText">—</div>
+            <div class="hint" id="missingHint">—</div>
           </div>
+
         </section>
 
+        <!-- Tasks -->
         <section class="panel p-5 space-y-4">
-          <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="sectionHead">
             <div class="text-lg font-extrabold" id="listTitle">—</div>
-            <div class="hint" id="missingHint">—</div>
+            <div class="hint" id="scopeHint">—</div>
           </div>
           <div class="divider"></div>
 
+          <div id="emptyState" class="hidden" style="border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); border-radius:16px; padding:14px;">
+            <div style="font-weight:900;">Ingen opgaver fundet.</div>
+            <div class="muted" id="emptyText" style="margin-top:4px;">—</div>
+          </div>
+
+          <div id="overdueWrap" class="space-y-3 hidden">
+            <div class="sectionHead">
+              <div style="font-weight:900;">Overførte mangler</div>
+              <div class="hint" id="overdueCountHint">—</div>
+            </div>
+            <div id="overdueList" class="space-y-3"></div>
+            <div class="divider"></div>
+          </div>
+
+          <div class="sectionHead">
+            <div style="font-weight:900;" id="dueTitle">—</div>
+            <div class="hint" id="dueCountHint">—</div>
+          </div>
           <div id="taskList" class="space-y-3"></div>
 
           <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-            <div style="font-weight:900;">Fuldført for i dag.</div>
+            <div style="font-weight:900;">Alt er udført i denne visning.</div>
             <div class="muted" id="doneText" style="margin-top:4px;"></div>
           </div>
         </section>
 
         <section class="space-y-3">
           <button id="submitBtn" class="btn btn-primary" type="submit">Send mangler</button>
-          <button id="resetBtn" class="btn btn-secondary" type="button">Nulstil (kun denne enhed)</button>
-          <div class="muted">Mail sendes kun hvis der mangler noget.</div>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Nulstil historik (leder)</button>
+          <div class="muted">Mail sendes kun hvis der mangler noget (inkl. overførte mangler).</div>
           <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
         </section>
       </form>
@@ -224,17 +328,16 @@
   </div>
 
   <script>
-    // --------- TIDSRUM (DIN REGEL) ----------
-    // Morgen: før 11:00
-    // Frokost: 11:00-17:00
-    // Aften: 17:00-23:59
-    // ----------------------------------------
-    const OVERRIDE_CODE = "KAISER2026";     // <-- skift hvis du vil
+    // ------------------ SETTINGS ------------------
+    const APP_KEY = "kaiser_daily_tasks_v6";
+    const OVERRIDE_CODE = "KAISER2026";     // lederkode
     const OVERRIDE_HOURS = 8;
 
-    const ROLLOVER_HOUR = 4;
+    const ROLLOVER_HOUR = 4;                // dag skifter kl. 04:00
     const GPS_MAX_DISTANCE_M = 600;
     const GPS_AUTOSELECT_M = 900;
+
+    // ------------------------------------------------
 
     const LOCATION_COORDS = {
       "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
@@ -244,47 +347,22 @@
       "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
     };
 
-    const LISTS = {
-      morning: { name:"Morgenliste", next:"lunch", tasks:[
-        { id: 1, text: "Åbne kassen" },
-        { id: 2, text: "Åbne sodavands anlæg" },
-        { id: 3, text: "Sætte filterkaffe over" },
-        { id: 4, text: "Tjek om der er dækket op til reservationer" },
-        { id: 5, text: "Sæt lys på borde" },
-        { id: 7, text: "Tag stole ned" },
-        { id: 8, text: "Tænde for aircon" },
-        { id: 9, text: "Sæt BC varer på plads" },
-        { id: 10, text: "Lav klude til bar" }
-      ]},
-      lunch: { name:"Frokostliste", next:"evening", tasks:[
-        { id: 1, text: "Dæk op til reservationer til aften" },
-        { id: 2, text: "Bestil vare (BC)" },
-        { id: 3, text: "Opfylding af bar" },
-        { id: 4, text: "Tjekke toiletter", onlyLocations: ["Café Kaiser Helsingør","Café Kaiser Farum","Café Kaiser Hørsholm"] },
-        { id: 5, text: "Tag en fejerunde" },
-        { id: 6, text: "Evt. opdatering af kælderliste" }
-      ]},
-      evening: { name:"Aftenliste", next:"portal", tasks:[
-        { id: 1, text: "Dæk op til reservationer ( til & med frokost )" },
-        { id: 2, text: "Gøre toiletter rent", onlyLocations: ["Café Kaiser Helsingør","Café Kaiser Farum","Café Kaiser Hørsholm"] },
-        { id: 3, text: "Lukke udenfor" },
-        { id: 4, text: "Samle skrald & glas flasker" },
-        { id: 5, text: "Slukke for aircon", onlyLocations: ["Café Kaiser Hørsholm","Café Kaiser Farum"] },
-        { id: 6, text: "Tælle kassen" },
-        { id: 7, text: "Fejerunde" },
-        { id: 8, text: "Opfylding af bar" },
-        { id: 9, text: "Sæt lys til opladning" },
-        { id: 10, text: "Lukke baren" }
-      ]}
-    };
-
     const QUOTES = [
       "Det du tjekker, bliver gjort.",
       "Standarder gør hverdagen lettere.",
       "Små rutiner skaber stor driftssikkerhed."
     ];
 
+    // ------------------ HELPERS ------------------
     function $(id){ return document.getElementById(id); }
+
+    function setError(msg){
+      const el = $("errorText");
+      if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
+      el.textContent = msg;
+      el.classList.remove("hidden");
+    }
+
     function nowDK(){ return new Date().toLocaleString("da-DK"); }
 
     function dayKey(){
@@ -295,18 +373,31 @@
       return local.toISOString().slice(0,10);
     }
 
-    function recommendedListId(){
-      const h = new Date().getHours();
-      if (h <= 10) return "morning";
-      if (h <= 16) return "lunch";
-      return "evening";
+    function isoToDateLocal(iso){ return new Date(iso + "T12:00:00"); }
+    function dateToIsoLocal(date){
+      const y = date.getFullYear();
+      const m = String(date.getMonth()+1).padStart(2,"0");
+      const d = String(date.getDate()).padStart(2,"0");
+      return `${y}-${m}-${d}`;
     }
+    function addDaysIso(iso, n){
+      const dt = isoToDateLocal(iso);
+      dt.setDate(dt.getDate() + n);
+      return dateToIsoLocal(dt);
+    }
+    function isoCompare(a,b){ return a < b ? -1 : (a > b ? 1 : 0); }
 
-    function windowText(){
-      const h = new Date().getHours();
-      if (h <= 10) return "Morgen (00:00–10:59)";
-      if (h <= 16) return "Frokost (11:00–16:59)";
-      return "Aften (17:00–23:59)";
+    // Monday=1 ... Sunday=7
+    function isoDow(iso){
+      const dt = isoToDateLocal(iso);
+      const js = dt.getDay(); // 0..6, 0=Sun
+      return js === 0 ? 7 : js;
+    }
+    function weekStartMondayIso(iso){
+      const dt = isoToDateLocal(iso);
+      const dow = isoDow(iso); // 1..7
+      dt.setDate(dt.getDate() - (dow - 1));
+      return dateToIsoLocal(dt);
     }
 
     function distanceM(lat1, lon1, lat2, lon2){
@@ -322,14 +413,105 @@
       return R * c;
     }
 
-    // localStorage keys
-    const keyBase = "kaiser_daily_tasks_v4";
-    function keyProgress(listId, loc, dk){ return `${keyBase}_progress_${listId}_${loc}_${dk}`; }
-    function keyDone(listId, loc, dk){ return `${keyBase}_done_${listId}_${loc}_${dk}`; }
-    function keyDoneBy(listId, loc, dk){ return `${keyBase}_doneby_${listId}_${loc}_${dk}`; }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
 
-    // override session
-    function overrideKey(){ return keyBase + "_override_until"; }
+    function slug(s){
+      return String(s || "")
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z0-9]+/g,"_")
+        .replace(/^_+|_+$/g,"");
+    }
+
+    // ------------------ SCHEDULE RULES ------------------
+    // rule = { kind:'daily' }
+    //      | { kind:'weekly', days:[1..7] }
+    //      | { kind:'interval', everyDays:14, anchor:'YYYY-MM-DD' }
+    //      | { kind:'monthlyNthWeekday', weekday:1..7, nth:1..5 }
+    function isDueOn(rule, dateIso){
+      if (!rule || rule.kind === "daily") return true;
+
+      if (rule.kind === "weekly") {
+        const d = isoDow(dateIso);
+        return (rule.days || []).includes(d);
+      }
+
+      if (rule.kind === "interval") {
+        const anchor = rule.anchor;
+        if (!anchor) return false;
+        const a = isoToDateLocal(anchor).getTime();
+        const t = isoToDateLocal(dateIso).getTime();
+        const diffDays = Math.floor((t - a) / (24*3600*1000));
+        if (diffDays < 0) return false;
+        return diffDays % rule.everyDays === 0;
+      }
+
+      if (rule.kind === "monthlyNthWeekday") {
+        const dt = isoToDateLocal(dateIso);
+        const y = dt.getFullYear();
+        const m = dt.getMonth(); // 0..11
+        const due = nthWeekdayOfMonthIso(y, m, rule.weekday, rule.nth);
+        return due === dateIso;
+      }
+
+      return false;
+    }
+
+    function nthWeekdayOfMonthIso(year, monthIndex, weekday1to7, nth){
+      // finder dato for fx 1. mandag i måneden
+      const first = new Date(year, monthIndex, 1, 12,0,0);
+      const firstIso = dateToIsoLocal(first);
+      const firstDow = isoDow(firstIso);
+      let offset = weekday1to7 - firstDow;
+      if (offset < 0) offset += 7;
+      const day = 1 + offset + (nth - 1) * 7;
+      const dt = new Date(year, monthIndex, day, 12,0,0);
+      // hvis måneden ikke har den nth, så bliver det i næste måned -> vi returnerer iso alligevel (men den vil ikke matche normalt)
+      return dateToIsoLocal(dt);
+    }
+
+    function lastDueOnOrBefore(rule, dateIso){
+      if (!rule || rule.kind === "daily") return dateIso;
+
+      if (rule.kind === "weekly") {
+        // kig max 6 dage tilbage
+        for (let i=0;i<7;i++){
+          const cand = addDaysIso(dateIso, -i);
+          if (isDueOn(rule, cand)) return cand;
+        }
+        return null;
+      }
+
+      if (rule.kind === "interval") {
+        const anchor = rule.anchor;
+        if (!anchor) return null;
+        const a = isoToDateLocal(anchor).getTime();
+        const t = isoToDateLocal(dateIso).getTime();
+        const diffDays = Math.floor((t - a) / (24*3600*1000));
+        if (diffDays < 0) return null;
+        const n = Math.floor(diffDays / rule.everyDays);
+        return addDaysIso(anchor, n * rule.everyDays);
+      }
+
+      if (rule.kind === "monthlyNthWeekday") {
+        const dt = isoToDateLocal(dateIso);
+        let y = dt.getFullYear();
+        let m = dt.getMonth();
+        const dueThis = nthWeekdayOfMonthIso(y, m, rule.weekday, rule.nth);
+        if (isoCompare(dueThis, dateIso) <= 0) return dueThis;
+        // ellers forrige måned
+        m -= 1;
+        if (m < 0) { m = 11; y -= 1; }
+        return nthWeekdayOfMonthIso(y, m, rule.weekday, rule.nth);
+      }
+
+      return null;
+    }
+
+    // ------------------ OVERRIDE ------------------
+    function overrideKey(){ return APP_KEY + "_override_until"; }
     function isOverrideOn(){
       const until = Number(localStorage.getItem(overrideKey()) || "0");
       return Date.now() < until;
@@ -339,266 +521,662 @@
       localStorage.setItem(overrideKey(), String(until));
     }
 
-    // DOM
-    const tabMorning = $("tabMorning");
-    const tabLunch = $("tabLunch");
-    const tabEvening = $("tabEvening");
-    const activeWindowText = $("activeWindowText");
-    const overrideBtn = $("overrideBtn");
+    // ------------------ TIME WINDOWS (DRIFT) ------------------
+    function recommendedShift(){
+      const h = new Date().getHours();
+      if (h <= 10) return "morning";
+      if (h <= 16) return "lunch";
+      return "evening";
+    }
+    function windowText(){
+      const h = new Date().getHours();
+      if (h <= 10) return "Morgen (00:00–10:59)";
+      if (h <= 16) return "Frokost (11:00–16:59)";
+      return "Aften (17:00–23:59)";
+    }
+
+    // ------------------ TASK DATABASE ------------------
+    // type: 'drift' (skift) eller 'clean' (rengøring)
+    // drift: { loc, type:'drift', shift:'morning|lunch|evening', text, rule, note? }
+    // clean: { loc, type:'clean', dept:'Bar|Køkken|Toilet|Service/Gulv|Lager/Udendørs', bucket:'daily|weekly', text, rule, note? }
+
+    const TASKS = [];
+    function addDrift(loc, shift, text, rule=null, note=""){
+      TASKS.push({ loc, type:"drift", shift, text, rule: rule || { kind:"daily" }, note });
+    }
+    function addClean(loc, dept, bucket, text, rule, note=""){
+      TASKS.push({ loc, type:"clean", dept, bucket, text, rule, note });
+    }
+
+    const D = { mon:1, tue:2, wed:3, thu:4, fri:5, sat:6, sun:7 };
+
+    // -------- Helsingør --------
+    const L_HEL = "Café Kaiser Helsingør";
+
+    // Drift (Morgen/Frokost/Aften)
+    addDrift(L_HEL, "morning", "Åben kassen");
+    addDrift(L_HEL, "morning", "Få varer på køl og frost");
+    addDrift(L_HEL, "morning", "Sørge for gangen er tom for varer");
+    addDrift(L_HEL, "morning", "Tænde varmelamper");
+
+    addDrift(L_HEL, "lunch", "Rydde op i baren inden man går kl. 16");
+    addDrift(L_HEL, "lunch", "Tjek toiletter inden man går kl. 16");
+    addDrift(L_HEL, "lunch", "Give en melding til aftenholdet og mangler på dagen");
+
+    addDrift(L_HEL, "evening", "Støvsugning");
+    addDrift(L_HEL, "evening", "Ordne toiletter");
+    addDrift(L_HEL, "evening", "Opfyldning bar");
+    addDrift(L_HEL, "evening", "Tage pant i kælderen");
+    addDrift(L_HEL, "evening", "Tælle kasse, lukke dankort, lukke gavekort");
+    addDrift(L_HEL, "evening", "Slukke varmelamper og køre markise ind.");
+    addDrift(L_HEL, "evening", "Opfyldning af bar inkl. kaffe, sukker og chokolade");
+
+    // Rengøring – ugentlig (default dept=Bar hvis ikke angivet)
+    addClean(L_HEL, "Bar", "weekly", "Pudse glashylder i baren", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre isknuseren", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre blenderen", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Glasflaske spanden til vask", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Skifte klud til espresso maskinen", { kind:"weekly", days:[D.mon, D.thu] }, "Mandag/Torsdag");
+
+    addClean(L_HEL, "Service/Gulv", "weekly", "Rengøre sofaen", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Pudse glasvæggen", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Køkken", "weekly", "Rengøre vasken til isterninger", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bestille Royal", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre sorte hylder/overflader", { kind:"weekly", days:[D.tue] });
+
+    addClean(L_HEL, "Bar", "weekly", "Rengøre køleskabene og pudse dørene", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Datotjek i køleskabene", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Gå ud med tomme fustager", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Fylde salt og peber op", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre lister og kanter i baren", { kind:"weekly", days:[D.wed] });
+
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære royal i kælderen", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Fjerne støv fra lamper og hjørner om aftenen", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Fjerne spindelvæv om aftenen (kom rundt øverst i alle hjørner!)", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Tørre skærme, telefoner og terminaler af", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre glasrack i baren", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Hente klude og viskestykker fra gangen", { kind:"weekly", days:[D.thu] });
+
+    addClean(L_HEL, "Bar", "weekly", "Gøre rent under begge kaffemaskiner", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre og pudse kagemontren", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære brunch op", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Bar", "weekly", "Tjekke om alle reservationer er OK til weekenden", { kind:"weekly", days:[D.fri] });
+
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære brunch ned", { kind:"weekly", days:[D.sun] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Stumtjener på plads ved personalerum", { kind:"weekly", days:[D.sun] });
+    addClean(L_HEL, "Toilet", "weekly", "Opfyldning af papir i toiletskabet", { kind:"weekly", days:[D.sun] });
+
+    // Rengøring – daglig (Køkken) (du kan flytte disse til ugedage senere, hvis du vil)
+    addClean(L_HEL, "Køkken", "daily", "Rengøre ismaskine", { kind:"daily" });
+    addClean(L_HEL, "Køkken", "daily", "Clean the drains dishwashing area", { kind:"daily" });
+    addClean(L_HEL, "Køkken", "daily", "Make sure dishwasher is filled with soap, afspændingsmiddel", { kind:"daily" });
+
+    // -------- Hørsholm --------
+    const L_HOR = "Café Kaiser Hørsholm";
+
+    // Drift Morgen
+    addDrift(L_HOR, "morning", "Tælle kassen");
+    addDrift(L_HOR, "morning", "Åbne sodavandsanlæg");
+    addDrift(L_HOR, "morning", "Sæt fliterkaffe over");
+    addDrift(L_HOR, "morning", "Åbne udenfor");
+    addDrift(L_HOR, "morning", "Tjekke om der er dækket op til reservationer");
+    addDrift(L_HOR, "morning", "Sæt lys på border");
+    addDrift(L_HOR, "morning", "Tag stole ned");
+    addDrift(L_HOR, "morning", "Tænde for Aircon");
+    addDrift(L_HOR, "morning", "Sæt BC-vare på plads");
+    addDrift(L_HOR, "morning", "Lav klude til gulv og bar");
+
+    // Weekend (morgen)
+    addDrift(L_HOR, "morning", "Gøre klar til buffet (mad)", { kind:"weekly", days:[D.sat, D.sun] }, "Weekend");
+    addDrift(L_HOR, "morning", "Gøre klar til buffet (drikkevare)", { kind:"weekly", days:[D.sat, D.sun] }, "Weekend");
+
+    // Drift Frokost (Middag)
+    addDrift(L_HOR, "lunch", "Dæk op til reservationer til aften");
+    addDrift(L_HOR, "lunch", "Bestil vare (BC)");
+    addDrift(L_HOR, "lunch", "Opfyldning (bar)");
+    addDrift(L_HOR, "lunch", "Tjekke toiletter");
+    addDrift(L_HOR, "lunch", "Tag en fejerunde");
+    addDrift(L_HOR, "lunch", "Evt opdatering af kælderliste");
+
+    // Drift Aften
+    addDrift(L_HOR, "evening", "Sæt buffeten op", { kind:"weekly", days:[D.sat, D.sun] }, "Weekend");
+    addDrift(L_HOR, "evening", "Dæk op til reservationer (til og med frokost)");
+    addDrift(L_HOR, "evening", "Gøre toiletter rent");
+    addDrift(L_HOR, "evening", "Lukke udenfor");
+    addDrift(L_HOR, "evening", "Samle skrald og glas samt flasker");
+    addDrift(L_HOR, "evening", "Slukke for Aircon");
+    addDrift(L_HOR, "evening", "Tælle kassen");
+    addDrift(L_HOR, "evening", "Fejerunde når Robert skal køre");
+    addDrift(L_HOR, "evening", "Opfyldning (bar)");
+    addDrift(L_HOR, "evening", "Samle lys");
+    addDrift(L_HOR, "evening", "Lukke bar");
+
+    // Støvsugning/Gulvask (Mandag/Torsdag) Aften
+    addDrift(L_HOR, "evening", "Støvsugning/Gulvask", { kind:"weekly", days:[D.mon, D.thu] }, "Mandag/Torsdag");
+
+    // Rengøring (Daglig rengøring) – ugedage (afdeling sat efter bedste bud; kan justeres)
+    addClean(L_HOR, "Bar", "weekly", "Ryd op og gør rent i begge pulte", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tør A-skilte af med en våd klud", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør alle sorte hylder i baren (både oppe og nede)", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør ovenpå og under kaffemaskinen samt ved filterkaffen", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør Robert (tjek videoen på messenger gruppen)", { kind:"weekly", days:[D.mon] });
+
+    // hver 14. dag (anchor kan ændres hvis I vil styre præcis rytme)
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Rengør øl-køleskabet på lageret + begge filtre (hver 14. dag)", { kind:"interval", everyDays:14, anchor:"2026-01-05" }, "14. dag");
+
+    // 1. mandag i måneden
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengøring af Aircon (1. mandag i måneden)", { kind:"monthlyNthWeekday", weekday:D.mon, nth:1 }, "1. mandag");
+
+    addClean(L_HOR, "Køkken", "weekly", "Rengør den lille fryser i køkkenet", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Bar", "weekly", "Tag en våd klud over fadølsanlæg og sodavandsanlæg", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tæpper skal bankes og foldes pænt", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tør alle sofaer og stole af med en våd klud (husk revner)", { kind:"weekly", days:[D.tue] });
+
+    addClean(L_HOR, "Service/Gulv", "weekly", "Støv hylder af i caféen og på toilettet", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Støv pærer af og udskift defekte", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek datoer på alle kølevarer i baren + fustager og postmix", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør is-knuser (indvendigt og udvendigt)", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør de indendørs plantekasser", { kind:"weekly", days:[D.wed] });
+
+    addClean(L_HOR, "Service/Gulv", "weekly", "Puds små vinduer på skillevægge + de sorte kanter", { kind:"weekly", days:[D.thu] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør alle rumdelerne", { kind:"weekly", days:[D.thu] });
+    addClean(L_HOR, "Bar", "weekly", "Oprydning i bar (smid alt ud vi ikke bruger)", { kind:"weekly", days:[D.thu] });
+
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Gennemgå om terassen spiller (stole + borde på plads, fejer, spindelvæv, klud over sorte skilte)", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek om der er nok brunch-the til weekenden", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Køkken", "weekly", "Rengøring af alle beholdere (til bestik, teskeer, sukker, osv.)", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Fej gulvet ude ved alle centerborde", { kind:"weekly", days:[D.fri] });
+
+    addClean(L_HOR, "Bar", "weekly", "Rengør kagemontre", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Bar", "weekly", "Fyld salt- og peberkværne op", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Køkken", "weekly", "Fyr alle bakker i opvaskeren", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør siruppumper med kogende vand", { kind:"weekly", days:[D.sat] });
+
+    addClean(L_HOR, "Køkken", "weekly", "Rengøring af isterningmaskinen (Noter på E-smiley)", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør køleskabe (puds glas indvendig og udvendig samt tør hylder af)", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek datoer på alle kølevarer i baren + fustager og postmix", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør barnestole - evt. en tur i opvaskemaskinen", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Rengøring af hele blenderen", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Ryd op på lageret", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Ryd op i rummet ude ved toilet- og rengøringsartikler", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Fej gulvet ude ved alle centerborde", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Toilet", "weekly", "GRUNDIG toiletrengøring (nede bag toiletterne, ved listerne, under vasken, panelerne, m.m.)", { kind:"weekly", days:[D.sun] });
+
+    // -------- Hillerød --------
+    const L_HIL = "Café Kaiser Hillerød";
+
+    // Drift Morgen åbning (daglig)
+    addDrift(L_HIL, "morning", "Tænd varme blæserende");
+    addDrift(L_HIL, "morning", "Fej caféen");
+    addDrift(L_HIL, "morning", "Åbne gulvet");
+    addDrift(L_HIL, "morning", "Tæl kassen");
+    addDrift(L_HIL, "morning", "Åben espresso maskinen");
+    addDrift(L_HIL, "morning", "Lav filterkaffe");
+    addDrift(L_HIL, "morning", "Tænd Køleskabene");
+    addDrift(L_HIL, "morning", "Tjek FIFO");
+    addDrift(L_HIL, "morning", "Åben sodavanden");
+    addDrift(L_HIL, "morning", "Åben Øllen");
+    addDrift(L_HIL, "morning", "Lav smoothie og shake");
+    addDrift(L_HIL, "morning", "Tjek servicelovers er tændt");
+    addDrift(L_HIL, "morning", "Sæt varer på plads");
+    addDrift(L_HIL, "morning", "Fyld kagemontren op og skriv datoer");
+    addDrift(L_HIL, "morning", "Åben udenfor");
+
+    // Tirsdag & Fredag (Morgen) - vask gulvet
+    addDrift(L_HIL, "morning", "Vask gulvet", { kind:"weekly", days:[D.tue, D.fri] }, "Tirsdag/Fredag");
+
+    // Onsdag - fustager
+    addDrift(L_HIL, "morning", "Sæt tomme fustager og kulsyre ud til royal", { kind:"weekly", days:[D.wed] }, "Onsdag");
+
+    // Drift Lukning (Aften) (daglig)
+    addDrift(L_HIL, "evening", "Fyld baren op - Køleskabe, vin, servietter, kaffe osv.");
+    addDrift(L_HIL, "evening", "Send kolber, kander, drypbakker, kander og alt tilbehør til vask");
+    addDrift(L_HIL, "evening", "Rengør espressomaskinen, 3x rensepulver, vand indtil klar væske");
+    addDrift(L_HIL, "evening", "Sæt streamerne i kogende vand med rensepulver");
+    addDrift(L_HIL, "evening", "Filterkaffe maskinen tørres af og bagved den");
+    addDrift(L_HIL, "evening", "Luk sodavanden. duetterne af og i kogende vand, tør maskinen af og film anlægget");
+    addDrift(L_HIL, "evening", "Luk fadølshanerne, tapperne i kogende vand indtil der kommer store bobler");
+    addDrift(L_HIL, "evening", "Sæt de sorte dutter på fadølsanlægget efter");
+    addDrift(L_HIL, "evening", "Rengør vasken!");
+    addDrift(L_HIL, "evening", "Sluk lyset i kagemontren");
+    addDrift(L_HIL, "evening", "Sæt rent service på plads, og puds bestik");
+    addDrift(L_HIL, "evening", "Tør borde af");
+    addDrift(L_HIL, "evening", "Dæk op til reservationer dagen efter");
+    addDrift(L_HIL, "evening", "Saml lys ind");
+    addDrift(L_HIL, "evening", "Stol op");
+    addDrift(L_HIL, "evening", "Rens Roberta");
+    addDrift(L_HIL, "evening", "Fej Caféen grundigt");
+    addDrift(L_HIL, "evening", "Luk udenfor");
+    addDrift(L_HIL, "evening", "Tæl kassen, send kasserapporten til Mathilde og Christian");
+
+    // Mandag & Torsdag - støvsuge gulvet (aften)
+    addDrift(L_HIL, "evening", "Støvsuge gulvet", { kind:"weekly", days:[D.mon, D.thu] }, "Mandag/Torsdag");
+
+    // -------- Farum --------
+    const L_FAR = "Café Kaiser Farum";
+
+    addDrift(L_FAR, "morning", "Sætte BC vare på plads");
+    addDrift(L_FAR, "morning", "Tænde Flatpay og tælle kassen");
+    addDrift(L_FAR, "morning", "Klar gøre klude - 2 grå (våde) + 1 blå (tør)");
+    addDrift(L_FAR, "morning", "Klar gøre espresso maskinen + gør klar til sort kaffe");
+    addDrift(L_FAR, "morning", "Fyld is op");
+    addDrift(L_FAR, "morning", "Gøre øl anlægget klar");
+    addDrift(L_FAR, "morning", "Sætte plastik dutterne på sodavands anlægget");
+    addDrift(L_FAR, "morning", "Tag Stole ned");
+    addDrift(L_FAR, "morning", "Sætte lys på bordene");
+    addDrift(L_FAR, "morning", "Tøm Bertha futte for beskidt vand og fyld op med rent vand");
+    addDrift(L_FAR, "morning", "Tag Center borde ud + planter og skilt");
+    addDrift(L_FAR, "morning", "Fyld op med tandstikker, visitkort, slikkepinde, sugerør, sukker og chokolade");
+    addDrift(L_FAR, "morning", "Tænd serviceloveren - kode 123456");
+    addDrift(L_FAR, "morning", "Åbne udenfor - Parasoller, tage kæder af, planter på bordene & sofa puder ud");
+    addDrift(L_FAR, "morning", "Tag lige et kig på caféen - er den klar til service?");
+
+    // ------------------ STORAGE ------------------
+    function doneKey(loc){ return `${APP_KEY}_done_${loc}`; }
+    function whoKey(loc){ return `${APP_KEY}_who_${loc}`; }
+    function cleanPrefKey(loc){ return `${APP_KEY}_cleanpref_${loc}`; }
+
+    function loadDoneMap(loc){
+      const raw = localStorage.getItem(doneKey(loc));
+      if (!raw) return {};
+      try {
+        const obj = JSON.parse(raw);
+        return (obj && typeof obj === "object") ? obj : {};
+      } catch(e){ return {}; }
+    }
+    function saveDoneMap(loc, map){
+      localStorage.setItem(doneKey(loc), JSON.stringify(map || {}));
+    }
+
+    function taskKey(t){
+      // stabil key baseret på lokation + type + shift/dept + tekst
+      const scope = t.type === "drift" ? ("shift_" + t.shift) : ("dept_" + t.dept + "_bucket_" + t.bucket);
+      return slug(t.loc) + "__" + t.type + "__" + slug(scope) + "__" + slug(t.text);
+    }
+
+    // ------------------ DOM ------------------
+    const tabDrift = $("tabDrift");
+    const tabClean = $("tabClean");
 
     const locationSelect = $("locationSelect");
+    const deptSelect = $("deptSelect");
+    const deptWrap = $("deptWrap");
+
     const doneByInput = $("doneBy");
     const gpsStatus = $("gpsStatus");
 
+    const tabMorning = $("tabMorning");
+    const tabLunch = $("tabLunch");
+    const tabEvening = $("tabEvening");
+
+    const driftShiftWrap = $("driftShiftWrap");
+    const cleanWeekWrap = $("cleanWeekWrap");
+    const weekRow = $("weekRow");
+
+    const activeWindowText = $("activeWindowText");
+    const overrideBtn = $("overrideBtn");
+
     const listTitle = $("listTitle");
+    const scopeHint = $("scopeHint");
+
+    const overdueWrap = $("overdueWrap");
+    const overdueList = $("overdueList");
+    const overdueCountHint = $("overdueCountHint");
+
     const taskList = $("taskList");
-    const doneBox = $("doneBox");
-    const doneText = $("doneText");
+    const dueTitle = $("dueTitle");
+    const dueCountHint = $("dueCountHint");
+
+    const emptyState = $("emptyState");
+    const emptyText = $("emptyText");
 
     const progressBar = $("progressBar");
     const progressText = $("progressText");
     const missingHint = $("missingHint");
+
     const dayKeyText = $("dayKeyText");
     const timeField = $("timeField");
 
     const submitBtn = $("submitBtn");
     const resetBtn = $("resetBtn");
-    const errorText = $("errorText");
+
+    const doneBox = $("doneBox");
+    const doneText = $("doneText");
+
+    const cleanDayHint = $("cleanDayHint");
 
     const form = $("taskForm");
 
     $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
 
+    // ------------------ STATE ------------------
     const state = {
-      listId: recommendedListId(),
+      view: "drift",                 // 'drift' | 'clean'
+      shift: recommendedShift(),     // drift shift
       loc: "",
-      progress: {},
-      locked: false
+      dept: "Bar",                   // clean dept
+      cleanDay: "mon",               // 'daily' | 'mon'..'sun'
+      doneMap: {}                    // per loc
     };
 
-    function setError(msg){
-      if (!msg){
-        errorText.classList.add("hidden");
-        errorText.textContent = "";
-        return;
+    function windowShiftIdToLabel(shift){
+      if (shift === "morning") return "Morgen";
+      if (shift === "lunch") return "Frokost";
+      return "Aften";
+    }
+    function cleanDayToDow(day){
+      return ({ mon:1, tue:2, wed:3, thu:4, fri:5, sat:6, sun:7 }[day] || null);
+    }
+    function cleanDayLabel(day){
+      if (day === "daily") return "Daglig";
+      return ({
+        mon:"Mandag", tue:"Tirsdag", wed:"Onsdag", thu:"Torsdag",
+        fri:"Fredag", sat:"Lørdag", sun:"Søndag"
+      }[day] || day);
+    }
+
+    function selectedCleanDateIso(todayIso){
+      if (state.cleanDay === "daily") return todayIso;
+      const ws = weekStartMondayIso(todayIso);
+      const dow = cleanDayToDow(state.cleanDay);
+      return addDaysIso(ws, dow - 1);
+    }
+
+    // ------------------ DONE META ------------------
+    function getMeta(taskKeyStr){
+      return state.doneMap[taskKeyStr] || null;
+    }
+    function isDoneForDue(task, dueIso){
+      const meta = getMeta(taskKey(task));
+      if (!meta || !meta.lastDoneDate) return false;
+      return meta.lastDoneDate >= dueIso;
+    }
+    function setDone(task, val){
+      const key = taskKey(task);
+      if (!val) {
+        delete state.doneMap[key];
+      } else {
+        const who = (doneByInput.value || "").trim();
+        if (!who) {
+          setError("Udført af er påkrævet for at krydse af.");
+          return false;
+        }
+        const todayIso = dayKey();
+        state.doneMap[key] = {
+          lastDoneDate: todayIso,
+          doneAt: nowDK(),
+          doneBy: who
+        };
       }
-      errorText.textContent = msg;
-      errorText.classList.remove("hidden");
+      saveDoneMap(state.loc, state.doneMap);
+      return true;
     }
 
-    function visibleTasks(){
-      const list = LISTS[state.listId];
-      const loc = state.loc;
-      return list.tasks.filter(t => !t.onlyLocations || t.onlyLocations.includes(loc));
+    // ------------------ FILTERS ------------------
+    function allForLoc(){
+      return TASKS.filter(t => t.loc === state.loc);
+    }
+    function driftTasksForScope(){
+      return allForLoc().filter(t => t.type === "drift" && t.shift === state.shift);
+    }
+    function cleanTasksForScope(){
+      return allForLoc().filter(t => t.type === "clean" && t.dept === state.dept);
     }
 
-    function loadProgress(){
-      if (!state.loc) { state.progress = {}; return; }
-      const dk = dayKey();
-      const raw = localStorage.getItem(keyProgress(state.listId, state.loc, dk));
-      if (!raw) { state.progress = {}; return; }
-      try {
-        const obj = JSON.parse(raw);
-        state.progress = (obj && typeof obj === "object") ? obj : {};
-      } catch(e){
-        state.progress = {};
+    // ------------------ COMPUTE ------------------
+    function overdueForTasks(tasks, todayIso){
+      const yesterdayIso = addDaysIso(todayIso, -1);
+      const out = [];
+      for (const t of tasks){
+        const lastDue = lastDueOnOrBefore(t.rule, yesterdayIso);
+        if (!lastDue) continue;
+        if (!isDoneForDue(t, lastDue)) out.push({ task:t, due:lastDue });
       }
+      // sort oldest first
+      out.sort((a,b) => isoCompare(a.due, b.due));
+      return out;
     }
 
-    function saveProgress(){
-      if (!state.loc) return;
-      const dk = dayKey();
-      localStorage.setItem(keyProgress(state.listId, state.loc, dk), JSON.stringify(state.progress));
+    function dueTodayMissingForTasks(tasks, todayIso){
+      const out = [];
+      for (const t of tasks){
+        if (!isDueOn(t.rule, todayIso)) continue;
+        if (!isDoneForDue(t, todayIso)) out.push({ task:t, due: todayIso });
+      }
+      return out;
     }
 
-    function getDoneMeta(){
-      if (!state.loc) return null;
-      const dk = dayKey();
-      const raw = localStorage.getItem(keyDone(state.listId, state.loc, dk));
-      if (!raw) return null;
-      try { return JSON.parse(raw); } catch(e){ return null; }
+    function cleanDisplayTasks(tasks, todayIso){
+      const selIso = selectedCleanDateIso(todayIso);
+
+      if (state.cleanDay === "daily") {
+        // kun bucket=daily
+        return tasks
+          .filter(t => (t.bucket === "daily"))
+          .map(t => ({ task:t, due: todayIso })); // daglige vises med "i dag" dato
+      }
+
+      // ugedag-visning: kun bucket=weekly + due den valgte dato
+      return tasks
+        .filter(t => (t.bucket === "weekly"))
+        .filter(t => isDueOn(t.rule, selIso))
+        .map(t => ({ task:t, due: selIso }));
     }
 
-    function markDone(meta){
-      const dk = dayKey();
-      localStorage.setItem(keyDone(state.listId, state.loc, dk), JSON.stringify(meta));
-    }
+    // ------------------ RENDER ------------------
+    function renderTaskRow(container, item, mode){
+      const t = item.task;
+      const dueIso = item.due;
+      const done = isDoneForDue(t, dueIso);
 
-    function loadDoneBy(){
-      if (!state.loc) { doneByInput.value = ""; return; }
-      const dk = dayKey();
-      const raw = localStorage.getItem(keyDoneBy(state.listId, state.loc, dk));
-      doneByInput.value = raw || "";
-    }
+      const todayIso = dayKey();
+      const future = dueIso > todayIso;
 
-    function saveDoneBy(){
-      if (!state.loc) return;
-      const dk = dayKey();
-      localStorage.setItem(keyDoneBy(state.listId, state.loc, dk), (doneByInput.value || "").trim());
-    }
+      const row = document.createElement("div");
+      row.className = "task" + (future && !isOverrideOn() ? " disabled" : "");
+      const note = t.note ? `<div class="tag due">${escapeHtml(t.note)}</div>` : "";
+      const dueTag = `<div class="tag ${mode === "overdue" ? "overdue" : "due"}">${mode === "overdue" ? ("Overført: " + dueIso) : ("Dato: " + dueIso)}</div>`;
+      const extra = (t.type === "drift")
+        ? `<div class="tag">${escapeHtml(windowShiftIdToLabel(t.shift))}</div>`
+        : `<div class="tag">${escapeHtml(t.dept)}</div>`;
 
-    function isTaskDone(taskId){ return !!state.progress[String(taskId)]; }
-    function setTaskDone(taskId, val){
-      state.progress[String(taskId)] = !!val;
-      saveProgress();
-    }
-
-    function missingTasks(){
-      const tasks = visibleTasks();
-      return tasks.filter(t => !isTaskDone(t.id));
-    }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
-    }
-
-    function renderTasks(){
-      taskList.innerHTML = "";
-      const tasks = visibleTasks();
-
-      tasks.forEach((t) => {
-        const isOn = isTaskDone(t.id);
-        const row = document.createElement("div");
-        row.className = "task" + (state.locked ? " locked" : "");
-        row.innerHTML = `
-          <div class="taskNum">${t.id}</div>
-          <div style="flex:1;">
-            <div class="taskTitle">${escapeHtml(t.text)}</div>
+      row.innerHTML = `
+        <div style="flex:1;">
+          <div class="taskTitle">${escapeHtml(t.text)}</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            ${extra}
+            ${dueTag}
+            ${note}
+            ${future ? `<div class="tag">Planlagt</div>` : ``}
           </div>
-          <div class="check ${isOn ? "on" : ""}">${isOn ? "✓" : ""}</div>
-        `;
+        </div>
+        <div class="check ${done ? "on" : ""}">${done ? "✓" : ""}</div>
+      `;
 
-        row.addEventListener("click", () => {
-          if (state.locked) return;
-          setTaskDone(t.id, !isTaskDone(t.id));
-          updateUI(true);
-        });
+      row.addEventListener("click", () => {
+        setError("");
 
-        taskList.appendChild(row);
+        if (!state.loc) return setError("Vælg lokation.");
+        if (future && !isOverrideOn()) return setError("Denne opgave ligger i fremtiden. (Leder kan override.)");
+
+        // toggle
+        const ok = setDone(t, !done);
+        if (!ok) return;
+
+        updateUI();
       });
-    }
 
-    function updateSubject(loc, missCount){
-      const dateIso = dayKey();
-      const listName = LISTS[state.listId].name;
-      $("subjectField").value = listName + " – " + (loc || "Lokation") + " – " + dateIso + " – Mangler: " + missCount;
+      container.appendChild(row);
     }
 
     function updateTabs(){
-      tabMorning.classList.toggle("on", state.listId === "morning");
-      tabLunch.classList.toggle("on", state.listId === "lunch");
-      tabEvening.classList.toggle("on", state.listId === "evening");
+      tabDrift.classList.toggle("on", state.view === "drift");
+      tabClean.classList.toggle("on", state.view === "clean");
+
+      tabMorning.classList.toggle("on", state.shift === "morning");
+      tabLunch.classList.toggle("on", state.shift === "lunch");
+      tabEvening.classList.toggle("on", state.shift === "evening");
+
+      // show/hide view-specific controls
+      driftShiftWrap.style.display = (state.view === "drift") ? "" : "none";
+      cleanWeekWrap.style.display = (state.view === "clean") ? "" : "none";
+      deptWrap.style.display = (state.view === "clean") ? "" : "none";
+
+      // weekday chips
+      if (state.view === "clean") {
+        [...weekRow.querySelectorAll(".chip")].forEach(btn => {
+          btn.classList.toggle("on", btn.dataset.day === state.cleanDay);
+        });
+      }
+
       activeWindowText.textContent = windowText() + (isOverrideOn() ? " • override" : "");
     }
 
-    function setList(listId, allowOutOfWindow){
-      const rec = recommendedListId();
-      if (!allowOutOfWindow && !isOverrideOn() && listId !== rec) {
-        const code = prompt("Lederkode (skift udenfor tidsrum):");
-        if (!code) return;
-        if (code.trim() !== OVERRIDE_CODE) {
-          alert("Forkert kode.");
-          return;
-        }
-        setOverrideOn();
+    function updateSubject(loc, missCount, scopeTitle){
+      const dateIso = dayKey();
+      $("subjectField").value = (scopeTitle || "Kaiser") + " – " + (loc || "Lokation") + " – " + dateIso + " – Mangler: " + missCount;
+    }
+
+    function setListTitle(){
+      if (state.view === "drift") {
+        listTitle.textContent = "Drift – " + windowShiftIdToLabel(state.shift);
+        scopeHint.textContent = "Lokation: " + (state.loc || "—");
+      } else {
+        listTitle.textContent = "Rengøring – " + state.dept;
+        scopeHint.textContent = "Ugedag: " + cleanDayLabel(state.cleanDay);
       }
-
-      state.listId = listId;
-      loadProgress();
-      loadDoneBy();
-      updateUI(false);
     }
 
-    function nextListId(){
-      const next = LISTS[state.listId].next;
-      if (next === "portal") return "portal";
-      return next; // morning->lunch->evening
-    }
-
-    function goNext(){
-      const nxt = nextListId();
-      if (nxt === "portal") {
-        window.location.href = "./portal.html";
-        return;
-      }
-      setList(nxt, true);
-    }
-
-    function updateUI(triggerAdvance){
-      state.loc = locationSelect.value || "";
+    function updateUI(){
       updateTabs();
+      setListTitle();
 
-      const listName = LISTS[state.listId].name;
-      listTitle.textContent = listName;
-
-      const done = getDoneMeta();
-      state.locked = !!done;
-
-      renderTasks();
-
-      const tasks = visibleTasks();
-      const total = tasks.length;
-      const doneCount = tasks.filter(t => isTaskDone(t.id)).length;
-      const missCount = total - doneCount;
-
-      progressText.textContent = doneCount + "/" + total;
-      progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
-      missingHint.textContent = state.locked ? "Fuldført" : ("Mangler: " + missCount);
-
-      dayKeyText.textContent = dayKey();
+      const todayIso = dayKey();
+      dayKeyText.textContent = todayIso;
       timeField.value = nowDK();
 
-      // Hvis alt er ok => markér done og GÅ VIDERE
-      if (!done && state.loc && total > 0 && missCount === 0) {
-        const who = (doneByInput.value || "").trim();
-        if (!who) {
-          // kræv navn før færdiggørelse
-          setError("Udført af er påkrævet før listen kan afsluttes.");
-          return;
-        }
+      // no loc -> empty
+      if (!state.loc){
+        overdueWrap.classList.add("hidden");
+        taskList.innerHTML = "";
+        overdueList.innerHTML = "";
+        emptyState.classList.remove("hidden");
+        emptyText.textContent = "Vælg en lokation for at se opgaver.";
+        doneBox.classList.add("hidden");
 
-        saveDoneBy();
-        markDone({ doneAt: nowDK(), doneBy: who });
-        state.locked = true;
-      }
+        progressText.textContent = "—";
+        progressBar.style.width = "0%";
+        missingHint.textContent = "—";
 
-      if (state.locked) {
-        // skjul tjeklisten og vis done-box
-        taskList.classList.add("hidden");
-        doneBox.classList.remove("hidden");
-        const meta = getDoneMeta() || {};
-        doneText.textContent = "Fuldført: " + (meta.doneAt || "") + " • Udført af: " + (meta.doneBy || "-");
-
-        // disable knapper
         submitBtn.disabled = true;
         submitBtn.style.opacity = "0.55";
         submitBtn.style.cursor = "not-allowed";
-        resetBtn.disabled = true;
-        resetBtn.style.opacity = "0.55";
-        resetBtn.style.cursor = "not-allowed";
-
-        setError("");
-
-        // auto videre til næste liste (kun når vi lige har fuldført)
-        if (triggerAdvance) {
-          setTimeout(goNext, 700);
-        }
+        submitBtn.textContent = "Send mangler";
 
         return;
       }
 
-      // ikke locked => vis liste
-      taskList.classList.remove("hidden");
-      doneBox.classList.add("hidden");
-      doneText.textContent = "";
+      // load map (if not already loaded for this loc)
+      // (state.doneMap is loaded on loc-change; nothing here)
 
-      // send kun hvis der mangler noget
-      const canSend = !!state.loc && missCount > 0;
+      emptyState.classList.add("hidden");
+
+      let scopeTasks = [];
+      let displayItems = [];
+      let overdueItems = [];
+      let dueNowMissing = [];
+
+      if (state.view === "drift") {
+        scopeTasks = driftTasksForScope();
+        overdueItems = overdueForTasks(scopeTasks, todayIso);
+        dueNowMissing = dueTodayMissingForTasks(scopeTasks, todayIso);
+
+        displayItems = scopeTasks
+          .filter(t => isDueOn(t.rule, todayIso))
+          .map(t => ({ task:t, due: todayIso }));
+
+        dueTitle.textContent = "I dag (" + todayIso + ")";
+      } else {
+        scopeTasks = cleanTasksForScope();
+        // Overførte (alt før i dag, uanset valgt ugedag)
+        overdueItems = overdueForTasks(scopeTasks, todayIso);
+
+        // Visning afhænger af valgt ugedag
+        displayItems = cleanDisplayTasks(scopeTasks, todayIso);
+
+        const selIso = selectedCleanDateIso(todayIso);
+        dueTitle.textContent = cleanDayLabel(state.cleanDay) + (state.cleanDay === "daily" ? " (" + todayIso + ")" : (" (" + selIso + ")"));
+
+        // "Mangler i dag" til mail: det som forfalder i dag (ikke valgt ugedag) + overførte
+        dueNowMissing = dueTodayMissingForTasks(scopeTasks, todayIso);
+      }
+
+      // Render overdue
+      overdueList.innerHTML = "";
+      if (overdueItems.length){
+        overdueWrap.classList.remove("hidden");
+        overdueCountHint.textContent = "Antal: " + overdueItems.length;
+        overdueItems.forEach(item => renderTaskRow(overdueList, item, "overdue"));
+      } else {
+        overdueWrap.classList.add("hidden");
+        overdueCountHint.textContent = "Antal: 0";
+      }
+
+      // Render due/display list
+      taskList.innerHTML = "";
+      if (!displayItems.length){
+        emptyState.classList.remove("hidden");
+        emptyText.textContent = (state.view === "drift")
+          ? "Ingen drift-opgaver i denne liste (tjek lokation eller skift)."
+          : "Ingen rengøringsopgaver fundet for denne afdeling/ugedag.";
+      } else {
+        emptyState.classList.add("hidden");
+        displayItems.forEach(item => renderTaskRow(taskList, item, "due"));
+      }
+
+      // Counts + progress (for det der vises i hovedlisten)
+      const total = displayItems.length;
+      const doneCount = displayItems.filter(it => isDoneForDue(it.task, it.due)).length;
+      const missDisplayed = total - doneCount;
+
+      const missMail = (new Set([
+        ...overdueItems.map(it => taskKey(it.task) + "@" + it.due),
+        ...dueNowMissing.map(it => taskKey(it.task) + "@" + it.due)
+      ])).size;
+
+      progressText.textContent = doneCount + "/" + total + " udført i visningen";
+      progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
+      missingHint.textContent = "Overførte: " + overdueItems.length + " • Mangler i dag: " + missMail;
+
+      // Done box
+      const allOk = (overdueItems.length === 0 && missDisplayed === 0);
+      if (allOk) {
+        doneBox.classList.remove("hidden");
+        doneText.textContent = "Opdateret: " + nowDK();
+      } else {
+        doneBox.classList.add("hidden");
+        doneText.textContent = "";
+      }
+
+      // Clean day hint
+      if (state.view === "clean") {
+        const selIso = selectedCleanDateIso(todayIso);
+        const future = selIso > todayIso && state.cleanDay !== "daily";
+        cleanDayHint.textContent = future
+          ? ("Planlagt dato: " + selIso + " (fremtid) • Overførte vises stadig øverst")
+          : ("Dato: " + (state.cleanDay === "daily" ? todayIso : selIso) + " • Overførte vises øverst");
+      }
+
+      // Submit button (mail) – send kun hvis der mangler (overført + i dag)
+      const who = (doneByInput.value || "").trim();
+      const canSend = !!state.loc && !!who && missMail > 0;
+
       submitBtn.disabled = !canSend;
       submitBtn.style.opacity = canSend ? "1" : "0.55";
       submitBtn.style.cursor = canSend ? "pointer" : "not-allowed";
-      submitBtn.textContent = canSend ? ("Send mangler (" + missCount + ")") : "Send mangler";
+      submitBtn.textContent = missMail > 0 ? ("Send mangler (" + missMail + ")") : "Send mangler";
 
+      // Reset always enabled (lederkode ved klik)
       resetBtn.disabled = false;
       resetBtn.style.opacity = "1";
       resetBtn.style.cursor = "pointer";
@@ -606,6 +1184,7 @@
       setError("");
     }
 
+    // ------------------ GPS ------------------
     function getGPS(){
       return new Promise((resolve) => {
         if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
@@ -644,18 +1223,45 @@
         gpsStatus.textContent = "GPS: nær " + bestName + " (" + distM + "m) → valgt";
         locationSelect.value = bestName;
         state.loc = bestName;
-        loadProgress();
-        loadDoneBy();
-        updateUI(false);
+
+        // load local done map + prefs
+        state.doneMap = loadDoneMap(state.loc);
+        doneByInput.value = localStorage.getItem(whoKey(state.loc)) || "";
+        const pref = localStorage.getItem(cleanPrefKey(state.loc));
+        if (pref) {
+          try {
+            const o = JSON.parse(pref);
+            if (o && o.dept) state.dept = o.dept;
+            if (o && o.cleanDay) state.cleanDay = o.cleanDay;
+          } catch(e){}
+        }
+        deptSelect.value = state.dept;
+
+        updateUI();
       } else {
         gpsStatus.textContent = "GPS: fundet (" + distM + "m) – vælg lokation manuelt";
       }
     }
 
-    // Events
-    tabMorning.addEventListener("click", () => setList("morning", false));
-    tabLunch.addEventListener("click", () => setList("lunch", false));
-    tabEvening.addEventListener("click", () => setList("evening", false));
+    // ------------------ EVENTS ------------------
+    tabDrift.addEventListener("click", () => { state.view = "drift"; updateUI(); });
+    tabClean.addEventListener("click", () => { state.view = "clean"; updateUI(); });
+
+    tabMorning.addEventListener("click", () => setShift("morning"));
+    tabLunch.addEventListener("click", () => setShift("lunch"));
+    tabEvening.addEventListener("click", () => setShift("evening"));
+
+    function setShift(shiftId){
+      const rec = recommendedShift();
+      if (!isOverrideOn() && shiftId !== rec) {
+        const code = prompt("Lederkode (skift udenfor tidsrum):");
+        if (!code) return;
+        if (code.trim() !== OVERRIDE_CODE) return alert("Forkert kode.");
+        setOverrideOn();
+      }
+      state.shift = shiftId;
+      updateUI();
+    }
 
     overrideBtn.addEventListener("click", () => {
       const code = prompt("Lederkode:");
@@ -663,7 +1269,7 @@
       if (code.trim() === OVERRIDE_CODE) {
         setOverrideOn();
         alert("Override aktiv i " + OVERRIDE_HOURS + " timer.");
-        updateUI(false);
+        updateUI();
       } else {
         alert("Forkert kode.");
       }
@@ -671,48 +1277,103 @@
 
     locationSelect.addEventListener("change", () => {
       state.loc = locationSelect.value || "";
-      loadProgress();
-      loadDoneBy();
-      updateUI(false);
+      if (!state.loc) {
+        state.doneMap = {};
+        updateUI();
+        return;
+      }
+      state.doneMap = loadDoneMap(state.loc);
+
+      // prefs
+      doneByInput.value = localStorage.getItem(whoKey(state.loc)) || "";
+      const pref = localStorage.getItem(cleanPrefKey(state.loc));
+      if (pref) {
+        try {
+          const o = JSON.parse(pref);
+          if (o && o.dept) state.dept = o.dept;
+          if (o && o.cleanDay) state.cleanDay = o.cleanDay;
+        } catch(e){}
+      }
+      deptSelect.value = state.dept;
+
+      updateUI();
+    });
+
+    deptSelect.addEventListener("change", () => {
+      state.dept = deptSelect.value;
+      if (state.loc) localStorage.setItem(cleanPrefKey(state.loc), JSON.stringify({ dept: state.dept, cleanDay: state.cleanDay }));
+      updateUI();
     });
 
     doneByInput.addEventListener("input", () => {
-      saveDoneBy();
+      if (!state.loc) return;
+      localStorage.setItem(whoKey(state.loc), (doneByInput.value || "").trim());
+      updateUI();
     });
 
+    // Weekday chips
+    [...weekRow.querySelectorAll(".chip")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.cleanDay = btn.dataset.day;
+        if (state.loc) localStorage.setItem(cleanPrefKey(state.loc), JSON.stringify({ dept: state.dept, cleanDay: state.cleanDay }));
+        updateUI();
+      });
+    });
+
+    // Reset (leder)
     resetBtn.addEventListener("click", () => {
-      if (getDoneMeta()) return setError("Listen er fuldført for i dag og kan ikke nulstilles.");
-      if (!state.loc) return setError("Vælg lokation før du nulstiller.");
+      setError("");
+      if (!state.loc) return setError("Vælg lokation før nulstilling.");
 
-      const dk = dayKey();
-      localStorage.removeItem(keyProgress(state.listId, state.loc, dk));
-      localStorage.removeItem(keyDone(state.listId, state.loc, dk));
-      localStorage.removeItem(keyDoneBy(state.listId, state.loc, dk));
-      state.progress = {};
-      doneByInput.value = "";
-      updateUI(false);
+      const code = prompt("Lederkode (nulstil historik for denne lokation på denne enhed):");
+      if (!code) return;
+      if (code.trim() !== OVERRIDE_CODE) return alert("Forkert kode.");
+
+      if (!confirm("Er du sikker? Dette sletter alle afkrydsninger for " + state.loc + " på denne enhed.")) return;
+
+      localStorage.removeItem(doneKey(state.loc));
+      state.doneMap = {};
+      updateUI();
     });
 
-    // Submit: send kun mangler + GPS validation
+    // ------------------ SUBMIT (MAIL) ------------------
     form.addEventListener("submit", async function(ev){
       ev.preventDefault();
       setError("");
 
-      state.loc = locationSelect.value || "";
       if (!state.loc) return setError("Vælg lokation.");
-
       const who = (doneByInput.value || "").trim();
       if (!who) return setError("Udført af er påkrævet.");
 
-      saveDoneBy();
+      // beregn mangler til mail: (overført + forfalder i dag) i den aktuelle scope
+      const todayIso = dayKey();
+      let scopeTitle = "";
+      let scopeTasks = [];
 
-      const done = getDoneMeta();
-      if (done) return setError("Listen er allerede fuldført for i dag.");
+      if (state.view === "drift") {
+        scopeTitle = "Drift – " + windowShiftIdToLabel(state.shift);
+        scopeTasks = driftTasksForScope();
+      } else {
+        scopeTitle = "Rengøring – " + state.dept;
+        scopeTasks = cleanTasksForScope();
+      }
 
-      const miss = missingTasks();
-      if (miss.length === 0) {
-        markDone({ doneAt: nowDK(), doneBy: who });
-        updateUI(true);
+      const overdueItems = overdueForTasks(scopeTasks, todayIso);
+      const dueTodayMissing = dueTodayMissingForTasks(scopeTasks, todayIso);
+
+      // samlet (unik pr task+due)
+      const combined = [];
+      const seen = new Set();
+      [...overdueItems, ...dueTodayMissing].forEach(it => {
+        const k = taskKey(it.task) + "@" + it.due;
+        if (seen.has(k)) return;
+        seen.add(k);
+        combined.push(it);
+      });
+
+      if (combined.length === 0) {
+        setError("Der mangler ikke noget at sende.");
+        updateUI();
         return;
       }
 
@@ -720,13 +1381,13 @@
       submitBtn.textContent = "GPS…";
 
       const gps = await getGPS();
-
       const coords = LOCATION_COORDS[state.loc];
+
       if (coords && gps.ok) {
         const dist = Math.round(distanceM(gps.lat, gps.lng, coords.lat, coords.lng));
         if (dist > GPS_MAX_DISTANCE_M) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Send mangler (" + miss.length + ")";
+          submitBtn.textContent = "Send mangler (" + combined.length + ")";
           setError("GPS matcher ikke valgt lokation (afstand ca. " + dist + " m). Vælg korrekt lokation.");
           return;
         }
@@ -734,7 +1395,7 @@
 
       submitBtn.textContent = "Sender…";
 
-      updateSubject(state.loc, miss.length);
+      updateSubject(state.loc, combined.length, scopeTitle);
 
       let gpsBlock = "GPS: -";
       if (gps.ok) {
@@ -746,23 +1407,30 @@
       }
 
       const lines = [];
-      lines.push(LISTS[state.listId].name + " – MANGLER");
+      lines.push("KAISER – MANGLER");
       lines.push("");
+      lines.push("Scope: " + scopeTitle);
       lines.push("Lokation: " + state.loc);
-      lines.push("Dato: " + dayKey());
+      lines.push("Dato: " + todayIso);
       lines.push("Tid: " + nowDK());
       lines.push("Udført af: " + who);
       lines.push(gpsBlock);
       lines.push("");
-      lines.push("Mangler (" + miss.length + "):");
-      miss.forEach(t => lines.push("— " + t.id + ": " + t.text));
+      lines.push("Overførte + i dag (" + combined.length + "):");
+
+      combined.forEach(it => {
+        const t = it.task;
+        const extra = (t.type === "drift")
+          ? ("Drift/" + windowShiftIdToLabel(t.shift))
+          : ("Rengøring/" + t.dept);
+        lines.push("— [" + extra + "] (" + it.due + ") " + t.text + (t.note ? (" • " + t.note) : ""));
+      });
 
       $("reportPayload").value = lines.join("\n");
-
       form.submit();
     });
 
-    // Thanks
+    // ------------------ THANKS ------------------
     const params = new URLSearchParams(window.location.search);
     if (params.get("sent") === "1") {
       $("formWrap").classList.add("hidden");
@@ -770,27 +1438,31 @@
       $("quoteText").textContent = "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
     }
 
-    // Init
-    $("dayKeyText").textContent = dayKey();
+    // ------------------ INIT ------------------
+    // default view
+    state.view = "drift";
+    state.shift = recommendedShift();
+
     $("timeField").value = nowDK();
+    $("dayKeyText").textContent = dayKey();
     $("activeWindowText").textContent = windowText();
 
-    // Default: anbefalet liste
-    state.listId = recommendedListId();
-    updateTabs();
+    // default clean day = dagens ugedag
+    const todayIso = dayKey();
+    const todayDow = isoDow(todayIso);
+    state.cleanDay = ({1:"mon",2:"tue",3:"wed",4:"thu",5:"fri",6:"sat",7:"sun"}[todayDow] || "mon");
 
-    // Auto-select lokation via GPS
+    updateTabs();
+    updateUI();
+
+    // auto-select lokation via GPS
     tryAutoSelectLocation();
 
-    // Load when loc chosen
-    updateUI(false);
-
-    // Opdater hvert minut (hvis ikke override) så tidsrum følger med
+    // tick clock + window text
     setInterval(() => {
       $("timeField").value = nowDK();
       $("dayKeyText").textContent = dayKey();
       $("activeWindowText").textContent = windowText() + (isOverrideOn() ? " • override" : "");
-      // vi skifter ikke automatisk liste hvis de allerede er i gang
     }, 60000);
   </script>
 </body>
