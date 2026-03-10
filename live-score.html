@@ -174,7 +174,7 @@
         </div>
 
         <div class="stat">
-          <div class="statTitle">Mersalgs-mål</div>
+          <div class="statTitle">Mersalgs-mål (Dessert)</div>
           <div class="statValue" id="upsellTitle">—</div>
           <div class="mt-3 barWrap"><div id="upsellBar" class="barFill"></div></div>
           <div class="statSub" id="upsellSub">—</div>
@@ -190,12 +190,41 @@
       </div>
     </section>
 
+    <!-- Annual budget progress -->
+    <section class="panel p-5 space-y-4">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <div class="hint">Årsbudget (YTD)</div>
+          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Hvor langt er vi?</div>
+        </div>
+        <div class="muted" id="annualHint">—</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="stat">
+          <div class="statTitle">Total YTD / Årsbudget</div>
+          <div class="statValue" id="annualTotalValue">—</div>
+          <div class="mt-3 barWrap"><div id="annualTotalBar" class="barFill"></div></div>
+          <div class="statSub" id="annualTotalSub">—</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTitle">Pace vs årsdato</div>
+          <div class="statValue" id="paceValue">—</div>
+          <div class="statSub" id="paceSub">—</div>
+          <div class="mt-3 muted" id="paceNote"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- Location battle -->
     <section class="panel p-5 space-y-4">
       <div class="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <div class="hint">Lokations battle</div>
-          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Dagens omsætning + År til dato</div>
+          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Dagens omsætning + YTD vs årsbudget</div>
         </div>
         <div class="muted" id="battleHint">—</div>
       </div>
@@ -243,7 +272,7 @@
 
   <script>
     // ================== SETTINGS ==================
-    const APP_KEY = "kaiser_live_score_v1";
+    const APP_KEY = "kaiser_live_score_v1_1";
     const LEADER_CODE = "KAISER2026"; // samme som jeres override-kode
 
     function $(id){ return document.getElementById(id); }
@@ -253,17 +282,29 @@
       el.textContent = msg;
       el.classList.remove("hidden");
     }
+
     function nowDK(){
       return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
+
     function formatDKK(n){
       const val = Number(n || 0);
       return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
     }
+
     function clamp01(x){ return Math.max(0, Math.min(1, x)); }
 
-    // ================== DEFAULT DATA (EDIT HERE OR VIA MODAL) ==================
-    // Du kan starte med at bruge modal "Rediger data" i stedet for at ændre filen.
+    function dayOfYear(d){
+      const start = new Date(d.getFullYear(), 0, 1);
+      const diff = (d - start);
+      return Math.floor(diff / (24*3600*1000)) + 1;
+    }
+    function daysInYear(y){
+      return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 366 : 365;
+    }
+
+    // ================== DEFAULT DATA ==================
+    // ytdTarget = ÅRSBUDGET pr. lokation (fuld år)
     const DEFAULT_DATA = {
       meta: {
         date: new Date().toISOString().slice(0,10),
@@ -299,16 +340,16 @@
 
       // 5) Mersalgs-målet
       upsell: {
-        title: "Gavekort solgt",
-        current: 6,
-        target: 12,
-        note: "Spørg ved betaling: “Skal du have et gavekort med?”"
+        title: "Dessert solgt",
+        current: 14,
+        target: 30,
+        note: "Spørg altid: “Skal I dele en dessert?”"
       },
 
       // 6) Dagens fokus
       focus: {
-        text: "Husk at foreslå dessert + kaffe til alle bordene.",
-        sub: "Fokus skifter dagligt – hold det kort og konkret."
+        text: "Husk dessert + kaffe ved alle bordene.",
+        sub: "Hold fokus kort og konkret."
       }
     };
 
@@ -324,6 +365,7 @@
         return structuredClone(DEFAULT_DATA);
       }
     }
+
     function saveData(data){
       data.meta = data.meta || {};
       data.meta.lastSavedAt = nowDK();
@@ -345,12 +387,15 @@
       return entries;
     }
 
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
     // ================== RENDER ==================
     function render(){
       setError("");
       const data = loadData();
 
-      // clock + last saved
       $("clockText").textContent = "Nu: " + nowDK();
       $("updatedText").textContent = "Sidst gemt: " + (data.meta && data.meta.lastSavedAt ? data.meta.lastSavedAt : "—");
 
@@ -369,8 +414,9 @@
       $("upsellTitle").textContent = ups.title || "—";
       const cur = Number(ups.current || 0);
       const tar = Math.max(1, Number(ups.target || 0));
-      const pct = clamp01(cur / tar);
-      $("upsellBar").style.width = Math.round(pct*100) + "%";
+      const pct = cur / tar;
+      $("upsellBar").style.width = Math.round(clamp01(pct)*100) + "%";
+      $("upsellBar").classList.toggle("ok", pct >= 1);
       $("upsellSub").textContent = `${cur}/${tar} • ${Math.round(pct*100)}%` + (ups.note ? (" • " + ups.note) : "");
 
       // 6) focus
@@ -378,15 +424,37 @@
       $("focusText").textContent = f.text || "—";
       $("focusSub").textContent = f.sub || "";
 
-      // 3) location battle
+      // Locations
       const locs = Array.isArray(data.locations) ? data.locations : [];
-      $("battleHint").textContent = locs.length ? ("Lokationer: " + locs.length) : "Ingen lokationsdata";
+      const todayTotal = locs.reduce((s,l) => s + Number(l.todayRevenue||0), 0);
+      const todayTargetTotal = locs.reduce((s,l) => s + Number(l.todayTarget||0), 0);
+      const ytdTotal = locs.reduce((s,l) => s + Number(l.ytdRevenue||0), 0);
+      const budgetTotal = locs.reduce((s,l) => s + Number(l.ytdTarget||0), 0);
 
+      // Annual panel
+      const ytdPct = budgetTotal > 0 ? (ytdTotal / budgetTotal) : 0;
+      $("annualHint").textContent = "Total (alle lokationer)";
+      $("annualTotalValue").textContent = `${formatDKK(ytdTotal)} / ${formatDKK(budgetTotal)}`;
+      $("annualTotalBar").style.width = Math.round(clamp01(ytdPct)*100) + "%";
+      $("annualTotalBar").classList.toggle("ok", ytdPct >= 1);
+      $("annualTotalSub").textContent = `${Math.round(ytdPct*100)}% • Mangler: ${formatDKK(Math.max(0, budgetTotal - ytdTotal))}`;
+
+      const now = new Date();
+      const fracYear = dayOfYear(now) / daysInYear(now.getFullYear());
+      const paceExpected = budgetTotal * fracYear;
+      const paceDelta = ytdTotal - paceExpected;
+
+      $("paceValue").textContent = (paceDelta >= 0 ? "Foran pace" : "Bag pace");
+      $("paceSub").textContent = `Årsdato: ${Math.round(fracYear*100)}% • Forventet: ${formatDKK(paceExpected)} • Faktisk: ${formatDKK(ytdTotal)}`;
+      $("paceNote").textContent = `Difference: ${formatDKK(paceDelta)} (vs. hvor langt vi er i året)`;
+
+      // 3) battle header hint
+      const todayPctTotal = todayTargetTotal > 0 ? (todayTotal / todayTargetTotal) : null;
+      $("battleHint").textContent = `I dag: ${formatDKK(todayTotal)}${todayTargetTotal ? (" / mål " + formatDKK(todayTargetTotal) + " (" + Math.round(todayPctTotal*100) + "%)") : ""}`;
+
+      // Render battle list
       const battle = $("battleList");
       battle.innerHTML = "";
-
-      const maxToday = Math.max(1, ...locs.map(l => Number(l.todayRevenue || 0)));
-      const maxYTD = Math.max(1, ...locs.map(l => Number(l.ytdRevenue || 0)));
 
       locs
         .slice()
@@ -395,13 +463,13 @@
           const todayRev = Number(l.todayRevenue || 0);
           const todayTarget = Math.max(0, Number(l.todayTarget || 0));
           const ytdRev = Number(l.ytdRevenue || 0);
-          const ytdTarget = Math.max(0, Number(l.ytdTarget || 0));
+          const budget = Math.max(0, Number(l.ytdTarget || 0)); // årsbudget
 
-          const todayPctOfMax = clamp01(todayRev / maxToday);
-          const ytdPctOfMax = clamp01(ytdRev / maxYTD);
+          const todayGoalPct = todayTarget > 0 ? (todayRev / todayTarget) : null;
+          const ytdGoalPct = budget > 0 ? (ytdRev / budget) : null;
 
-          const todayPctOfTarget = todayTarget > 0 ? clamp01(todayRev / todayTarget) : null;
-          const ytdPctOfTarget = ytdTarget > 0 ? clamp01(ytdRev / ytdTarget) : null;
+          const todayBarW = todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct) * 100);
+          const ytdBarW = ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct) * 100);
 
           const div = document.createElement("div");
           div.className = "row";
@@ -413,20 +481,22 @@
 
             <div class="mt-3 grid md:grid-cols-2 gap-3">
               <div>
-                <div class="hint">Dagens omsætning ${todayTarget ? ("(mål " + formatDKK(todayTarget) + ")") : ""}</div>
-                <div class="barWrap mt-2"><div class="barFill ${todayPctOfTarget !== null && todayPctOfTarget >= 1 ? "ok":""}" style="width:${Math.round(todayPctOfMax*100)}%"></div></div>
+                <div class="hint">Dagens omsætning ${todayTarget ? ("(mål " + formatDKK(todayTarget) + ")") : "(intet mål sat)"}</div>
+                <div class="barWrap mt-2">
+                  <div class="barFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}" style="width:${todayBarW}%"></div>
+                </div>
                 <div class="muted mt-2">
-                  Rang-bar: ${Math.round(todayPctOfMax*100)}%
-                  ${todayPctOfTarget !== null ? (" • Mål: " + Math.round(todayPctOfTarget*100) + "%") : ""}
+                  ${todayGoalPct === null ? "Sæt todayTarget for at få progress." : (Math.round(todayGoalPct*100) + "% af mål")}
                 </div>
               </div>
 
               <div>
-                <div class="hint">År til dato ${ytdTarget ? ("(basic " + formatDKK(ytdTarget) + ")") : ""}</div>
-                <div class="barWrap mt-2"><div class="barFill ${ytdPctOfTarget !== null && ytdPctOfTarget >= 1 ? "ok":""}" style="width:${Math.round(ytdPctOfMax*100)}%"></div></div>
+                <div class="hint">Årsbudget (YTD) ${budget ? ("(" + formatDKK(budget) + ")") : "(intet budget sat)"}</div>
+                <div class="barWrap mt-2">
+                  <div class="barFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}" style="width:${ytdBarW}%"></div>
+                </div>
                 <div class="muted mt-2">
-                  Rang-bar: ${Math.round(ytdPctOfMax*100)}%
-                  ${ytdPctOfTarget !== null ? (" • Basic: " + Math.round(ytdPctOfTarget*100) + "%") : ""}
+                  ${ytdGoalPct === null ? "Sæt ytdTarget (årsbudget) for at få progress." : (Math.round(ytdGoalPct*100) + "% af årsbudget")}
                 </div>
               </div>
             </div>
@@ -435,14 +505,14 @@
         });
 
       // 4) today products list
-      const prod = $("productList");
-      prod.innerHTML = "";
       const entries = sortedEntries(data.productsToday);
       $("productHint").textContent = entries.length ? ("Varer: " + entries.length) : "Ingen produktdata for i dag";
 
+      const prod = $("productList");
+      prod.innerHTML = "";
       const maxProd = Math.max(1, ...entries.map(e => e.value));
       entries.forEach(e => {
-        const pct = clamp01(e.value / maxProd);
+        const pct2 = clamp01(e.value / maxProd);
         const div = document.createElement("div");
         div.className = "row";
         div.innerHTML = `
@@ -450,14 +520,10 @@
             <div style="font-weight:900;">${escapeHtml(e.name)}</div>
             <div class="hint">Antal: ${e.value.toLocaleString("da-DK")}</div>
           </div>
-          <div class="barWrap mt-3"><div class="barFill" style="width:${Math.round(pct*100)}%"></div></div>
+          <div class="barWrap mt-3"><div class="barFill" style="width:${Math.round(pct2*100)}%"></div></div>
         `;
         prod.appendChild(div);
       });
-    }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
     }
 
     // ================== EDIT MODAL ==================
@@ -518,7 +584,6 @@
     });
 
     // ================== INIT ==================
-    // Første load: hvis ingen data er gemt, gem standard én gang (så "sidst gemt" virker)
     (function init(){
       if (!localStorage.getItem(APP_KEY)) saveData(structuredClone(DEFAULT_DATA));
       render();
