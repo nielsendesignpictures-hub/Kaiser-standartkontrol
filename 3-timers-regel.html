@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – 3-timers regel</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --border:rgba(255,255,255,0.10);
+
+      --text:rgba(255,255,255,0.94);
+      --muted:rgba(255,255,255,0.74);
+      --muted2:rgba(255,255,255,0.52);
+
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+
+      --ok:#62d26f;
+      --warn:#f59e0b;
+      --danger:#ff6b6b;
+
+      --shadow: 0 26px 75px rgba(0,0,0,.55);
+      --shadow2: 0 18px 55px rgba(0,0,0,.35);
+    }
+
+    html,body{height:100%;}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      overflow-x:hidden;
+      margin:0;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity:0.06;
+      pointer-events:none;
+      mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
+    }
+
+    .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
+
+    .hero{
+      position:relative;
+      border-radius: 28px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      padding: 26px 20px 18px;
+    }
+    .hero:after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 240px at 20% 0%, rgba(214,178,74,0.22), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(214,178,74,0.14), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .kicker{
+      position:relative;
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+      text-align:center;
+    }
+    .title{
+      position:relative;
+      font-family:"Playfair Display", serif;
+      font-size:44px;
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      text-align:center;
+      margin-top:10px;
+    }
+    .subtitle{
+      position:relative;
+      text-align:center;
+      margin-top:10px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+    }
+    .goldline{
+      position:relative;
+      height:2px;
+      margin:18px auto 0;
+      max-width: 720px;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
+      opacity:.95;
+    }
+
+    .controls{
+      position:relative;
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .pill, .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      font-weight:1000;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.90);
+      white-space:nowrap;
+      user-select:none;
+      cursor:pointer;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .btn:active, .pill:active{ transform: translateY(1px); }
+    .btn.primary{
+      border:none;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .section{
+      margin-top:18px;
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .sectionHead{
+      padding:16px 16px 12px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      background:
+        radial-gradient(900px 200px at 50% 0%, rgba(255,255,255,0.06), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+    }
+    .sectionTitle{
+      font-weight:1000;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.72);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .sectionTitle .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(214,178,74,0.85);
+      box-shadow: 0 0 0 5px rgba(214,178,74,0.10);
+      opacity:.95;
+    }
+    .sectionSub{
+      color: rgba(255,255,255,0.55);
+      font-weight:900;
+      font-size:12px;
+    }
+    .divider{height:1px;background:rgba(255,255,255,0.10);}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      padding:14px;
+    }
+    @media (min-width: 820px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
+    }
+    @media (min-width: 1200px){
+      .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .card{
+      border-radius:24px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: 0 20px 60px rgba(0,0,0,.40);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 180px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .nameRow{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .itemName{
+      font-weight:1000;
+      letter-spacing:-0.01em;
+      font-size:16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 100%;
+    }
+    .stateTag{
+      font-weight:1000;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:11px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.80);
+      white-space:nowrap;
+    }
+    .state-ok{ border-color: rgba(98,210,111,0.30); background: rgba(98,210,111,0.10); }
+    .state-warn{ border-color: rgba(245,158,11,0.30); background: rgba(245,158,11,0.10); }
+    .state-exp{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
+
+    .timerBig{
+      font-family:"Playfair Display", serif;
+      font-size:44px;
+      line-height:1;
+      letter-spacing:-0.02em;
+      font-weight:700;
+    }
+    .meta{
+      color: rgba(255,255,255,0.68);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .barWrap{
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+    }
+    .barFill{
+      height:10px;
+      width:0%;
+      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
+    }
+    .barFill.warn{ background: linear-gradient(90deg, rgba(245,158,11,1), rgba(214,178,74,0.95)); }
+    .barFill.exp{ background: linear-gradient(90deg, rgba(255,107,107,1), rgba(245,158,11,1)); }
+
+    .cardBtns{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .smallBtn{
+      flex:1 1 auto;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.92);
+      font-weight:1000;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:11px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .smallBtn:active{ transform: translateY(1px); }
+    .smallBtn.danger{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
+    .smallBtn.gold{ border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.10); }
+
+    /* Add form */
+    .addWrap{
+      padding:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .input{
+      flex: 1 1 260px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      padding: 12px 12px;
+      outline: none;
+      color: rgba(255,255,255,0.92);
+      font-weight:900;
+    }
+    .input:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* Modal alarm */
+    .alarmBack{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background: rgba(0,0,0,0.66);
+      backdrop-filter: blur(8px);
+      z-index:200;
+    }
+    .alarmPanel{
+      width:min(640px, 100%);
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(18,20,28,0.92);
+      box-shadow: var(--shadow);
+      padding:18px;
+      text-align:center;
+    }
+    .alarmTitle{
+      font-family:"Playfair Display", serif;
+      font-size:34px;
+      letter-spacing:-0.02em;
+      font-weight:700;
+    }
+    .alarmSub{
+      margin-top:10px;
+      color: rgba(255,255,255,0.72);
+      font-weight:900;
+      font-size:13px;
+      line-height:1.35;
+    }
+    .alarmBtns{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+
+    <header class="hero mt-6">
+      <div class="kicker">KAISER</div>
+      <div class="title">3-timers regel</div>
+      <div class="subtitle">Start timer når noget sættes ud • advarsler + alarm ved udløb</div>
+      <div class="goldline"></div>
+
+      <div class="controls">
+        <div class="pill" id="clockPill">—</div>
+        <button class="btn ghost" id="fsBtn" type="button">Fuld skærm</button>
+        <button class="btn ghost" id="wakeBtn" type="button">Hold skærm vågen</button>
+        <button class="btn primary" id="notifyBtn" type="button">Tillad notifikationer</button>
+      </div>
+
+      <div class="subtitle" style="margin-top:10px;">
+        Tip: Første gang du starter en timer, er lyd aktiveret (browser-krav). Følg altid jeres HACCP.
+      </div>
+    </header>
+
+    <section class="section" aria-label="Opret timer">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> Start timer</div>
+        <div class="sectionSub">Standard: 3:00:00</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="addWrap">
+        <input id="itemName" class="input" placeholder="Navn (fx Bearnaise / Brunchbuffet / Sauce)" />
+        <button class="btn primary" id="addBtn" type="button">Start 3 timer</button>
+        <button class="btn ghost" id="add30Btn" type="button">Start 30 min</button>
+        <button class="btn ghost" id="clearBtn" type="button">Nulstil alle</button>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Aktive timere">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> Aktive timere</div>
+        <div class="sectionSub" id="countText">0</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="grid" id="grid"></div>
+    </section>
+
+  </div>
+
+  <!-- Alarm modal -->
+  <div class="alarmBack" id="alarmBack">
+    <div class="alarmPanel">
+      <div class="alarmTitle" id="alarmTitle">TID UDLØBET</div>
+      <div class="alarmSub" id="alarmSub">—</div>
+      <div class="alarmBtns">
+        <button class="btn primary" id="alarmOkBtn" type="button">OK</button>
+        <button class="btn ghost" id="alarmPlus30Btn" type="button">+30 min</button>
+        <button class="btn ghost" id="alarmStopBtn" type="button">Stop timer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= CONFIG =================
+    const APP_KEY = "kaiser_3timer_v1";
+    const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000; // 3 hours
+    const SHORT_DURATION_MS = 30 * 60 * 1000;       // 30 min
+    const WARN_30_MS = 30 * 60 * 1000;
+    const WARN_10_MS = 10 * 60 * 1000;
+
+    // ================= STATE =================
+    let state = loadState();
+    let audioUnlocked = false;
+    let wakeLock = null;
+    let lastAlarmId = null;
+
+    // ================= HELPERS =================
+    function $(id){ return document.getElementById(id); }
+    function now(){ return Date.now(); }
+
+    function fmtHHMMSS(ms){
+      const s = Math.max(0, Math.floor(ms/1000));
+      const hh = String(Math.floor(s/3600)).padStart(2,"0");
+      const mm = String(Math.floor((s%3600)/60)).padStart(2,"0");
+      const ss = String(s%60).padStart(2,"0");
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function saveState(){
+      localStorage.setItem(APP_KEY, JSON.stringify(state));
+    }
+    function loadState(){
+      const raw = localStorage.getItem(APP_KEY);
+      if (!raw) return { timers: [] };
+      try{
+        const obj = JSON.parse(raw);
+        if (!obj || typeof obj !== "object") return { timers: [] };
+        if (!Array.isArray(obj.timers)) obj.timers = [];
+        return obj;
+      } catch(e){
+        return { timers: [] };
+      }
+    }
+
+    function uid(){
+      return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
+
+    // ================= SOUND =================
+    function beep(times=1){
+      if (!audioUnlocked) return;
+      try{
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "sine";
+        o.frequency.value = 880;
+        g.gain.value = 0.0001;
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start();
+
+        let t = ctx.currentTime;
+        for (let i=0;i<times;i++){
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(0.20, t + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+          t += 0.25;
+        }
+        o.stop(t + 0.05);
+        setTimeout(() => ctx.close(), 900);
+      } catch(e){}
+    }
+
+    async function unlockAudio(){
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      beep(1);
+    }
+
+    // ================= NOTIFICATIONS =================
+    async function ensureNotificationPermission(){
+      if (!("Notification" in window)) {
+        alert("Notifikationer understøttes ikke i denne browser.");
+        return;
+      }
+      if (Notification.permission === "granted") return;
+      const res = await Notification.requestPermission();
+      if (res !== "granted") alert("Notifikationer ikke tilladt.");
+    }
+    function notify(title, body){
+      if (!("Notification" in window)) return;
+      if (Notification.permission !== "granted") return;
+      try { new Notification(title, { body }); } catch(e){}
+    }
+
+    // ================= WAKE LOCK =================
+    async function toggleWakeLock(){
+      try{
+        if (!("wakeLock" in navigator)) {
+          alert("Wake Lock understøttes ikke her. Skru evt. op for skærm-timeout.");
+          return;
+        }
+        if (wakeLock){
+          await wakeLock.release();
+          wakeLock = null;
+          $("wakeBtn").textContent = "Hold skærm vågen";
+          return;
+        }
+        wakeLock = await navigator.wakeLock.request("screen");
+        $("wakeBtn").textContent = "Skærm vågen: ON";
+        wakeLock.addEventListener("release", () => {
+          wakeLock = null;
+          $("wakeBtn").textContent = "Hold skærm vågen";
+        });
+      } catch(e){
+        alert("Kunne ikke aktivere wake lock.");
+      }
+    }
+
+    // ================= FULLSCREEN =================
+    async function toggleFullscreen(){
+      try{
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch(e){}
+    }
+
+    // ================= TIMER LOGIC =================
+    function addTimer(name, durationMs){
+      const trimmed = (name || "").trim();
+      const label = trimmed || "Uden navn";
+      const id = uid();
+      const startedAt = now();
+      const expiresAt = startedAt + durationMs;
+
+      state.timers.push({
+        id, name: label,
+        startedAt,
+        durationMs,
+        expiresAt,
+        warned30: false,
+        warned10: false,
+        alarmed: false
+      });
+
+      saveState();
+      unlockAudio(); // ensure sound becomes available after user action
+      render();
+    }
+
+    function stopTimer(id){
+      state.timers = state.timers.filter(t => t.id !== id);
+      saveState();
+      render();
+    }
+
+    function extendTimer(id, addMs){
+      const t = state.timers.find(x => x.id === id);
+      if (!t) return;
+      t.expiresAt += addMs;
+      // allow new warnings again if we extended back over thresholds
+      t.warned30 = false;
+      t.warned10 = false;
+      t.alarmed = false;
+      saveState();
+      render();
+    }
+
+    function resetTimer3h(id){
+      const t = state.timers.find(x => x.id === id);
+      if (!t) return;
+      t.startedAt = now();
+      t.durationMs = DEFAULT_DURATION_MS;
+      t.expiresAt = t.startedAt + DEFAULT_DURATION_MS;
+      t.warned30 = false;
+      t.warned10 = false;
+      t.alarmed = false;
+      saveState();
+      render();
+    }
+
+    function clearAll(){
+      if (!confirm("Nulstil alle timere?")) return;
+      state.timers = [];
+      saveState();
+      render();
+    }
+
+    function tick(){
+      const tNow = now();
+      let changed = false;
+
+      // sort by soonest expiry
+      state.timers.sort((a,b) => a.expiresAt - b.expiresAt);
+
+      for (const t of state.timers){
+        const left = t.expiresAt - tNow;
+
+        // 30 min warning
+        if (!t.warned30 && left <= WARN_30_MS && left > WARN_10_MS){
+          t.warned30 = true;
+          changed = true;
+          beep(2);
+          notify("3-timers regel – 30 min", `${t.name} • ${fmtHHMMSS(left)}`);
+        }
+
+        // 10 min warning
+        if (!t.warned10 && left <= WARN_10_MS && left > 0){
+          t.warned10 = true;
+          changed = true;
+          beep(3);
+          notify("3-timers regel – 10 min", `${t.name} • ${fmtHHMMSS(left)}`);
+        }
+
+        // expired alarm
+        if (!t.alarmed && left <= 0){
+          t.alarmed = true;
+          changed = true;
+          triggerAlarm(t.id);
+        }
+      }
+
+      if (changed) saveState();
+      renderClock();
+      renderTimersOnly();
+    }
+
+    function triggerAlarm(timerId){
+      const t = state.timers.find(x => x.id === timerId);
+      if (!t) return;
+
+      lastAlarmId = timerId;
+
+      $("alarmTitle").textContent = "TID UDLØBET";
+      $("alarmSub").textContent = `${t.name} • Startet: ${new Date(t.startedAt).toLocaleTimeString("da-DK", {hour:"2-digit", minute:"2-digit"})}`;
+      $("alarmBack").style.display = "flex";
+
+      beep(5);
+      notify("3-timers regel – UDLØBET", t.name);
+      if (navigator.vibrate) { try { navigator.vibrate([250,120,250,120,250]); } catch(e){} }
+    }
+
+    // ================= RENDER =================
+    function renderClock(){
+      const d = new Date();
+      $("clockPill").textContent = "Nu: " + d.toLocaleString("da-DK", { hour:"2-digit", minute:"2-digit", day:"2-digit", month:"2-digit", year:"numeric" });
+    }
+
+    function stateForTimer(t){
+      const left = t.expiresAt - now();
+      if (left <= 0) return "exp";
+      if (left <= WARN_10_MS) return "warn";
+      if (left <= WARN_30_MS) return "warn";
+      return "ok";
+    }
+
+    function renderTimersOnly(){
+      const grid = $("grid");
+      const timers = state.timers || [];
+      $("countText").textContent = timers.length + " aktiv(e)";
+
+      // rebuild full list each time (small scale)
+      grid.innerHTML = "";
+
+      timers.forEach((t) => {
+        const left = t.expiresAt - now();
+        const st = stateForTimer(t);
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const tagText =
+          st === "exp" ? "UDLØBET" :
+          (left <= WARN_10_MS ? "10 MIN" :
+          (left <= WARN_30_MS ? "30 MIN" : "OK"));
+
+        const tagClass =
+          st === "exp" ? "stateTag state-exp" :
+          (st === "warn" ? "stateTag state-warn" : "stateTag state-ok");
+
+        const pct = clamp01((t.expiresAt - now()) / t.durationMs);
+        const barW = Math.round(pct * 100);
+
+        card.innerHTML = `
+          <div class="nameRow">
+            <div class="itemName" title="${t.name}">${t.name}</div>
+            <div class="${tagClass}">${tagText}</div>
+          </div>
+
+          <div class="timerBig">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
+          <div class="meta">
+            Start: ${new Date(t.startedAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
+            • Slut: ${new Date(t.expiresAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
+          </div>
+
+          <div class="barWrap">
+            <div class="barFill ${st === "exp" ? "exp" : (st === "warn" ? "warn" : "")}" style="width:${st === "exp" ? 100 : barW}%"></div>
+          </div>
+
+          <div class="cardBtns">
+            <button class="smallBtn gold" data-act="plus30" data-id="${t.id}">+30 min</button>
+            <button class="smallBtn" data-act="reset3" data-id="${t.id}">Reset 3t</button>
+            <button class="smallBtn danger" data-act="stop" data-id="${t.id}">Stop</button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // bind actions
+      grid.querySelectorAll("button[data-act]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          unlockAudio();
+          const id = btn.getAttribute("data-id");
+          const act = btn.getAttribute("data-act");
+          if (act === "plus30") extendTimer(id, 30*60*1000);
+          if (act === "reset3") resetTimer3h(id);
+          if (act === "stop") stopTimer(id);
+        });
+      });
+    }
+
+    function render(){
+      renderClock();
+      renderTimersOnly();
+    }
+
+    // ================= EVENTS =================
+    $("addBtn").addEventListener("click", () => addTimer($("itemName").value, DEFAULT_DURATION_MS));
+    $("add30Btn").addEventListener("click", () => addTimer($("itemName").value, SHORT_DURATION_MS));
+    $("clearBtn").addEventListener("click", clearAll);
+
+    $("fsBtn").addEventListener("click", toggleFullscreen);
+    $("wakeBtn").addEventListener("click", toggleWakeLock);
+    $("notifyBtn").addEventListener("click", ensureNotificationPermission);
+
+    // Alarm modal actions
+    $("alarmOkBtn").addEventListener("click", () => {
+      $("alarmBack").style.display = "none";
+      lastAlarmId = null;
+    });
+    $("alarmPlus30Btn").addEventListener("click", () => {
+      if (lastAlarmId) extendTimer(lastAlarmId, 30*60*1000);
+      $("alarmBack").style.display = "none";
+      lastAlarmId = null;
+    });
+    $("alarmStopBtn").addEventListener("click", () => {
+      if (lastAlarmId) stopTimer(lastAlarmId);
+      $("alarmBack").style.display = "none";
+      lastAlarmId = null;
+    });
+
+    // allow enter to start
+    $("itemName").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addTimer($("itemName").value, DEFAULT_DURATION_MS);
+      }
+    });
+
+    // keep time ticking
+    render();
+    setInterval(tick, 1000);
+
+    // resume wakeLock after visibility change (best effort)
+    document.addEventListener("visibilitychange", async () => {
+      if (document.visibilityState === "visible" && wakeLock === null) {
+        // don't auto-reacquire; user chooses
+      }
+    });
+  </script>
+</body>
+</html>
