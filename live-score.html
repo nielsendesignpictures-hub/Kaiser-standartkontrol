@@ -184,4 +184,346 @@
       <div class="divider"></div>
 
       <div class="stat">
-        <div class="statTitle">Dagens 
+        <div class="statTitle">Dagens fokus</div>
+        <div class="statValue" id="focusText" style="font-size:20px;">—</div>
+        <div class="statSub" id="focusSub">—</div>
+      </div>
+    </section>
+
+    <!-- Location battle -->
+    <section class="panel p-5 space-y-4">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <div class="hint">Lokations battle</div>
+          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Dagens omsætning + År til dato</div>
+        </div>
+        <div class="muted" id="battleHint">—</div>
+      </div>
+
+      <div class="divider"></div>
+      <div id="battleList" class="space-y-3"></div>
+    </section>
+
+    <!-- Products -->
+    <section class="panel p-5 space-y-4">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <div class="hint">Dagens solgte produkter</div>
+          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Topliste</div>
+        </div>
+        <div class="muted" id="productHint">—</div>
+      </div>
+
+      <div class="divider"></div>
+      <div id="productList" class="space-y-3"></div>
+    </section>
+
+    <div class="pb-8"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalBack" class="modalBack">
+    <div class="modal space-y-3">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <div style="font-weight:900;font-size:18px;letter-spacing:-0.01em;">Rediger data (JSON)</div>
+          <div class="muted">Tip: Lim ind, gem. Skærmen opdaterer med det samme.</div>
+        </div>
+        <div class="flex gap-2">
+          <button id="resetBtn" class="btn btn-secondary" type="button">Reset til standard</button>
+          <button id="closeBtn" class="btn btn-secondary" type="button">Luk</button>
+          <button id="saveBtn" class="btn btn-primary" type="button">Gem</button>
+        </div>
+      </div>
+
+      <textarea id="jsonArea" spellcheck="false"></textarea>
+      <div class="hint">Lederkode kræves for at åbne. Gemmes kun på denne enhed/skærm.</div>
+    </div>
+  </div>
+
+  <script>
+    // ================== SETTINGS ==================
+    const APP_KEY = "kaiser_live_score_v1";
+    const LEADER_CODE = "KAISER2026"; // samme som jeres override-kode
+
+    function $(id){ return document.getElementById(id); }
+    function setError(msg){
+      const el = $("errorText");
+      if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
+      el.textContent = msg;
+      el.classList.remove("hidden");
+    }
+    function nowDK(){
+      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+    function formatDKK(n){
+      const val = Number(n || 0);
+      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
+    }
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    // ================== DEFAULT DATA (EDIT HERE OR VIA MODAL) ==================
+    // Du kan starte med at bruge modal "Rediger data" i stedet for at ændre filen.
+    const DEFAULT_DATA = {
+      meta: {
+        date: new Date().toISOString().slice(0,10),
+        lastSavedAt: ""
+      },
+
+      // 1) Mest solgte produkt til dato
+      productsAllTime: {
+        "Kaiserburger": 1240,
+        "Cappuccino": 3980,
+        "Filterkaffe": 6210,
+        "Fadøl": 2870,
+        "Brunch": 1540
+      },
+
+      // 2) Dagens mest solgte + 4) dagens solgte produkter
+      productsToday: {
+        "Cappuccino": 62,
+        "Filterkaffe": 88,
+        "Fadøl": 41,
+        "Kaiserburger": 27,
+        "Brunch": 19
+      },
+
+      // 3) Lokations battle (dag + YTD)
+      locations: [
+        { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 4120000, ytdTarget: 7600000 },
+        { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 3560000, ytdTarget: 7000000 },
+        { name:"Café Kaiser Farum",     todayRevenue: 12150, todayTarget: 20000, ytdRevenue: 2980000, ytdTarget: 6100000 },
+        { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 3890000, ytdTarget: 7400000 },
+        { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
+      ],
+
+      // 5) Mersalgs-målet
+      upsell: {
+        title: "Gavekort solgt",
+        current: 6,
+        target: 12,
+        note: "Spørg ved betaling: “Skal du have et gavekort med?”"
+      },
+
+      // 6) Dagens fokus
+      focus: {
+        text: "Husk at foreslå dessert + kaffe til alle bordene.",
+        sub: "Fokus skifter dagligt – hold det kort og konkret."
+      }
+    };
+
+    // ================== STORAGE ==================
+    function loadData(){
+      const raw = localStorage.getItem(APP_KEY);
+      if (!raw) return structuredClone(DEFAULT_DATA);
+      try {
+        const obj = JSON.parse(raw);
+        if (!obj || typeof obj !== "object") return structuredClone(DEFAULT_DATA);
+        return obj;
+      } catch(e){
+        return structuredClone(DEFAULT_DATA);
+      }
+    }
+    function saveData(data){
+      data.meta = data.meta || {};
+      data.meta.lastSavedAt = nowDK();
+      localStorage.setItem(APP_KEY, JSON.stringify(data));
+      return data;
+    }
+
+    // ================== COMPUTE ==================
+    function topEntry(map){
+      const entries = Object.entries(map || {});
+      if (!entries.length) return null;
+      entries.sort((a,b) => (b[1]||0) - (a[1]||0));
+      return { name: entries[0][0], value: Number(entries[0][1]||0) };
+    }
+
+    function sortedEntries(map){
+      const entries = Object.entries(map || {}).map(([k,v]) => ({ name:k, value:Number(v||0) }));
+      entries.sort((a,b) => b.value - a.value);
+      return entries;
+    }
+
+    // ================== RENDER ==================
+    function render(){
+      setError("");
+      const data = loadData();
+
+      // clock + last saved
+      $("clockText").textContent = "Nu: " + nowDK();
+      $("updatedText").textContent = "Sidst gemt: " + (data.meta && data.meta.lastSavedAt ? data.meta.lastSavedAt : "—");
+
+      // 1) all-time top
+      const allTop = topEntry(data.productsAllTime);
+      $("allTimeTop").textContent = allTop ? allTop.name : "—";
+      $("allTimeTopSub").textContent = allTop ? ("Antal: " + allTop.value.toLocaleString("da-DK")) : "Ingen data endnu";
+
+      // 2) today top
+      const todayTop = topEntry(data.productsToday);
+      $("todayTop").textContent = todayTop ? todayTop.name : "—";
+      $("todayTopSub").textContent = todayTop ? ("Antal i dag: " + todayTop.value.toLocaleString("da-DK")) : "Ingen data for i dag";
+
+      // 5) upsell
+      const ups = data.upsell || {};
+      $("upsellTitle").textContent = ups.title || "—";
+      const cur = Number(ups.current || 0);
+      const tar = Math.max(1, Number(ups.target || 0));
+      const pct = clamp01(cur / tar);
+      $("upsellBar").style.width = Math.round(pct*100) + "%";
+      $("upsellSub").textContent = `${cur}/${tar} • ${Math.round(pct*100)}%` + (ups.note ? (" • " + ups.note) : "");
+
+      // 6) focus
+      const f = data.focus || {};
+      $("focusText").textContent = f.text || "—";
+      $("focusSub").textContent = f.sub || "";
+
+      // 3) location battle
+      const locs = Array.isArray(data.locations) ? data.locations : [];
+      $("battleHint").textContent = locs.length ? ("Lokationer: " + locs.length) : "Ingen lokationsdata";
+
+      const battle = $("battleList");
+      battle.innerHTML = "";
+
+      const maxToday = Math.max(1, ...locs.map(l => Number(l.todayRevenue || 0)));
+      const maxYTD = Math.max(1, ...locs.map(l => Number(l.ytdRevenue || 0)));
+
+      locs
+        .slice()
+        .sort((a,b) => (Number(b.todayRevenue||0) - Number(a.todayRevenue||0)))
+        .forEach(l => {
+          const todayRev = Number(l.todayRevenue || 0);
+          const todayTarget = Math.max(0, Number(l.todayTarget || 0));
+          const ytdRev = Number(l.ytdRevenue || 0);
+          const ytdTarget = Math.max(0, Number(l.ytdTarget || 0));
+
+          const todayPctOfMax = clamp01(todayRev / maxToday);
+          const ytdPctOfMax = clamp01(ytdRev / maxYTD);
+
+          const todayPctOfTarget = todayTarget > 0 ? clamp01(todayRev / todayTarget) : null;
+          const ytdPctOfTarget = ytdTarget > 0 ? clamp01(ytdRev / ytdTarget) : null;
+
+          const div = document.createElement("div");
+          div.className = "row";
+          div.innerHTML = `
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+              <div style="font-weight:900;">${escapeHtml(l.name || "Lokation")}</div>
+              <div class="hint">I dag: ${formatDKK(todayRev)} • YTD: ${formatDKK(ytdRev)}</div>
+            </div>
+
+            <div class="mt-3 grid md:grid-cols-2 gap-3">
+              <div>
+                <div class="hint">Dagens omsætning ${todayTarget ? ("(mål " + formatDKK(todayTarget) + ")") : ""}</div>
+                <div class="barWrap mt-2"><div class="barFill ${todayPctOfTarget !== null && todayPctOfTarget >= 1 ? "ok":""}" style="width:${Math.round(todayPctOfMax*100)}%"></div></div>
+                <div class="muted mt-2">
+                  Rang-bar: ${Math.round(todayPctOfMax*100)}%
+                  ${todayPctOfTarget !== null ? (" • Mål: " + Math.round(todayPctOfTarget*100) + "%") : ""}
+                </div>
+              </div>
+
+              <div>
+                <div class="hint">År til dato ${ytdTarget ? ("(basic " + formatDKK(ytdTarget) + ")") : ""}</div>
+                <div class="barWrap mt-2"><div class="barFill ${ytdPctOfTarget !== null && ytdPctOfTarget >= 1 ? "ok":""}" style="width:${Math.round(ytdPctOfMax*100)}%"></div></div>
+                <div class="muted mt-2">
+                  Rang-bar: ${Math.round(ytdPctOfMax*100)}%
+                  ${ytdPctOfTarget !== null ? (" • Basic: " + Math.round(ytdPctOfTarget*100) + "%") : ""}
+                </div>
+              </div>
+            </div>
+          `;
+          battle.appendChild(div);
+        });
+
+      // 4) today products list
+      const prod = $("productList");
+      prod.innerHTML = "";
+      const entries = sortedEntries(data.productsToday);
+      $("productHint").textContent = entries.length ? ("Varer: " + entries.length) : "Ingen produktdata for i dag";
+
+      const maxProd = Math.max(1, ...entries.map(e => e.value));
+      entries.forEach(e => {
+        const pct = clamp01(e.value / maxProd);
+        const div = document.createElement("div");
+        div.className = "row";
+        div.innerHTML = `
+          <div class="flex items-start justify-between gap-3 flex-wrap">
+            <div style="font-weight:900;">${escapeHtml(e.name)}</div>
+            <div class="hint">Antal: ${e.value.toLocaleString("da-DK")}</div>
+          </div>
+          <div class="barWrap mt-3"><div class="barFill" style="width:${Math.round(pct*100)}%"></div></div>
+        `;
+        prod.appendChild(div);
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    // ================== EDIT MODAL ==================
+    const modalBack = $("modalBack");
+    const jsonArea = $("jsonArea");
+
+    function openModal(){
+      const code = prompt("Lederkode:");
+      if (!code) return;
+      if (code.trim() !== LEADER_CODE) {
+        setError("Forkert lederkode.");
+        return;
+      }
+      const data = loadData();
+      jsonArea.value = JSON.stringify(data, null, 2);
+      modalBack.style.display = "flex";
+    }
+    function closeModal(){
+      modalBack.style.display = "none";
+    }
+
+    $("editBtn").addEventListener("click", openModal);
+    $("closeBtn").addEventListener("click", closeModal);
+
+    $("saveBtn").addEventListener("click", () => {
+      setError("");
+      try{
+        const obj = JSON.parse(jsonArea.value);
+        saveData(obj);
+        closeModal();
+        render();
+      } catch(e){
+        setError("JSON fejl: " + (e && e.message ? e.message : "ukendt"));
+      }
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("Reset til standard-data?")) return;
+      saveData(structuredClone(DEFAULT_DATA));
+      jsonArea.value = JSON.stringify(loadData(), null, 2);
+      render();
+    });
+
+    $("exportBtn").addEventListener("click", async () => {
+      try{
+        const data = loadData();
+        const text = JSON.stringify(data, null, 2);
+        await navigator.clipboard.writeText(text);
+        setError("");
+        alert("JSON kopieret til clipboard.");
+      } catch(e){
+        setError("Kunne ikke kopiere. (Browser tillader det ikke.)");
+      }
+    });
+
+    modalBack.addEventListener("click", (e) => {
+      if (e.target === modalBack) closeModal();
+    });
+
+    // ================== INIT ==================
+    // Første load: hvis ingen data er gemt, gem standard én gang (så "sidst gemt" virker)
+    (function init(){
+      if (!localStorage.getItem(APP_KEY)) saveData(structuredClone(DEFAULT_DATA));
+      render();
+      setInterval(render, 60 * 1000);
+    })();
+  </script>
+</body>
+</html>
