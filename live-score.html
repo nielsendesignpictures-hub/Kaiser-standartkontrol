@@ -14,9 +14,6 @@
     :root{
       --bg0:#070A12;
       --bg1:#0B1020;
-      --panel:rgba(255,255,255,0.055);
-      --panel2:rgba(255,255,255,0.035);
-      --border:rgba(255,255,255,0.10);
 
       --text:rgba(255,255,255,0.94);
       --muted:rgba(255,255,255,0.74);
@@ -85,7 +82,6 @@
       font-weight:900;
       text-align:center;
       user-select:none;
-      cursor: default;
     }
     .title{
       position:relative;
@@ -149,29 +145,6 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
     }
 
-    .btnPrimary{
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #0b0c0f;
-      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
-      border: none;
-      user-select:none;
-    }
-    .btnSecondary{
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.90);
-      user-select:none;
-    }
-    .btnPrimary:active, .btnSecondary:active{ transform: translateY(1px); }
-
     .section{
       margin-top:18px;
       border-radius:26px;
@@ -226,6 +199,17 @@
     }
     @media (min-width: 1200px){
       .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    /* Two-card grid (Products page) - ALWAYS max 2 columns */
+    .gridTwo{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      padding: 14px;
+    }
+    @media (min-width: 820px){
+      .gridTwo{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
     }
 
     .card{
@@ -325,75 +309,62 @@
       font-size:13px;
     }
 
-    .board{
-      padding:14px;
+    /* Compact Top10 list inside cards */
+    .miniList{
+      margin-top:8px;
       display:flex;
       flex-direction:column;
-      gap:10px;
-    }
-    .line{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      padding:12px;
-    }
-    .lineTop{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      align-items:baseline;
-    }
-    .lineName{ font-weight:1000; letter-spacing:-0.01em; }
-    .lineVal{ font-weight:1000; color: rgba(255,255,255,0.88); }
-    .lineBar{
-      margin-top:10px;
-      height:10px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-    }
-    .lineFill{
-      height:10px; width:0%;
-      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
-    }
-    .lineMeta{
-      margin-top:10px;
-      display:flex;
       gap:8px;
-      flex-wrap:wrap;
+      max-height: 430px;
+      overflow:auto;
+      padding-right: 2px;
+    }
+    @media (max-height: 820px){
+      .miniList{ max-height: 360px; }
     }
 
-    .plist{
-      padding:14px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
+    .miniList::-webkit-scrollbar{ width: 10px; }
+    .miniList::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,0.10);
+      border-radius: 999px;
     }
-    @media (min-width: 900px){
-      .plist{ grid-template-columns: 1fr 1fr; }
-    }
-    .pitem{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      padding:12px;
-    }
-    .pTop{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      align-items:baseline;
-    }
-    .pName{ font-weight:1000; }
-    .pVal{ font-weight:1000; color: rgba(255,255,255,0.88); }
-    .pBar{
-      margin-top:10px;
-      height:10px;
-      border-radius:999px;
-      overflow:hidden;
+
+    .miniLine{
+      position:relative;
+      border-radius:16px;
       border:1px solid rgba(255,255,255,0.10);
       background: rgba(255,255,255,0.03);
+      overflow:hidden;
     }
-    .pFill{
-      height:10px; width:0%;
-      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
+    .miniFill{
+      position:absolute; inset:0;
+      width:0%;
+      background: rgba(214,178,74,0.14);
+    }
+    .miniContent{
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+    }
+    .miniLeft{
+      font-weight:1000;
+      letter-spacing:-0.01em;
+      font-size:13px;
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .miniRight{
+      font-weight:1000;
+      color: rgba(255,255,255,0.88);
+      font-size:12px;
+      letter-spacing:.02em;
+      flex:0 0 auto;
     }
 
     .hidden{ display:none !important; }
@@ -449,14 +420,12 @@
       <div class="subtitle">Hurtigt overblik • auto-rotation • manuel data nu (Friendly senere)</div>
       <div class="goldline"></div>
 
-      <!-- ONLY centered nav -->
       <div class="controls" aria-label="Navigation">
         <div class="pill on" id="navOverview">Overblik</div>
         <div class="pill" id="navLocations">Lokationer</div>
         <div class="pill" id="navProducts">Produkter</div>
       </div>
 
-      <!-- Minimal status line -->
       <div class="subtitle" id="statusLine" style="margin-top:12px;">—</div>
 
       <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
@@ -519,24 +488,44 @@
       </div>
     </section>
 
-    <!-- SCREEN 2: LOCATIONS -->
+    <!-- SCREEN 2: LOCATIONS (built like overview: cards/grid) -->
     <section class="section hidden" id="screenLocations" aria-label="Lokationer">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Lokations battle</div>
-        <div class="sectionSub">Dagens omsætning • YTD% som tag</div>
+        <div class="sectionTitle"><span class="dot"></span> Lokationer</div>
+        <div class="sectionSub">Kort pr. lokation • i dag + ÅTD</div>
       </div>
       <div class="divider"></div>
-      <div class="board" id="locBoard"></div>
+
+      <div class="grid" id="locCards"></div>
     </section>
 
-    <!-- SCREEN 3: PRODUCTS -->
+    <!-- SCREEN 3: PRODUCTS (built like overview: 2 cards) -->
     <section class="section hidden" id="screenProducts" aria-label="Produkter">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Produkter (i dag)</div>
-        <div class="sectionSub">Top 10</div>
+        <div class="sectionTitle"><span class="dot"></span> Produkter</div>
+        <div class="sectionSub">Top 10 i dag + Top 10 ÅTD</div>
       </div>
       <div class="divider"></div>
-      <div class="plist" id="prodList"></div>
+
+      <div class="gridTwo">
+        <div class="card">
+          <div class="cardLabel">Top 10 – i dag</div>
+          <div class="cardSub" id="prodTodayHint">—</div>
+          <div class="miniList" id="prodTodayList"></div>
+          <div class="cardMeta">
+            <div class="tag" id="prodTodayTag"><span class="miniDot"></span> —</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardLabel">Top 10 – ÅTD</div>
+          <div class="cardSub" id="prodYtdHint">—</div>
+          <div class="miniList" id="prodYtdList"></div>
+          <div class="cardMeta">
+            <div class="tag" id="prodYtdTag"><span class="miniDot"></span> —</div>
+          </div>
+        </div>
+      </div>
     </section>
 
   </div>
@@ -567,9 +556,9 @@
   </div>
 
   <script>
-    const APP_KEY = "kaiser_live_score_v3_clean";
+    const APP_KEY = "kaiser_live_score_v3_cards";
     const LEADER_CODE = "KAISER2026";
-    const ROTATE_SECONDS = 12;
+    const ROTATE_SECONDS = 14;
 
     function $(id){ return document.getElementById(id); }
     function clamp01(x){ return Math.max(0, Math.min(1, x)); }
@@ -587,6 +576,7 @@
       el.textContent = msg;
       el.classList.remove("hidden");
     }
+
     function dayOfYear(d){
       const start = new Date(d.getFullYear(), 0, 1);
       return Math.floor((d - start) / (24*3600*1000)) + 1;
@@ -597,6 +587,8 @@
 
     const DEFAULT_DATA = {
       meta: { lastSavedAt: "" },
+
+      // All-time (til KPI/til dato)
       productsAllTime: {
         "Filterkaffe": 6210,
         "Cappuccino": 3980,
@@ -604,6 +596,8 @@
         "Kaiserburger": 1240,
         "Brunch": 1540
       },
+
+      // Dagens salg (til Top10 i dag + KPI)
       productsToday: {
         "Filterkaffe": 88,
         "Cappuccino": 62,
@@ -612,6 +606,19 @@
         "Brunch": 19,
         "Dessert": 14
       },
+
+      // ÅTD (år til dato) – til Top10 ÅTD
+      // (Indtast manuelt nu. Senere kommer det fra Friendly.)
+      productsYTD: {
+        "Filterkaffe": 12400,
+        "Cappuccino": 8600,
+        "Fadøl": 6400,
+        "Kaiserburger": 3100,
+        "Brunch": 2700,
+        "Dessert": 1900
+      },
+
+      // Lokationer: kun omsætning + mål/budget
       locations: [
         { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 4120000, ytdTarget: 7600000 },
         { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 3560000, ytdTarget: 7000000 },
@@ -619,7 +626,9 @@
         { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 3890000, ytdTarget: 7400000 },
         { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
       ],
+
       upsell: { title:"Dessert solgt", current: 14, target: 30 },
+
       focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"" }
     };
 
@@ -647,15 +656,35 @@
       entries.sort((a,b) => Number(b[1]||0) - Number(a[1]||0));
       return { name: entries[0][0], value: Number(entries[0][1]||0) };
     }
+
     function sortedEntries(map){
       return Object.entries(map || {})
         .map(([k,v]) => ({ name:k, value:Number(v||0) }))
         .sort((a,b) => b.value - a.value);
     }
+
     function setMeter(elFill, pct){
       const w = Math.round(clamp01(pct) * 100);
       elFill.style.width = w + "%";
       elFill.classList.toggle("ok", pct >= 1);
+    }
+
+    function renderTopList(container, entries){
+      container.innerHTML = "";
+      const maxV = Math.max(1, ...entries.map(e => e.value));
+      entries.forEach((e, idx) => {
+        const line = document.createElement("div");
+        line.className = "miniLine";
+        const w = Math.round(clamp01(e.value / maxV) * 100);
+        line.innerHTML = `
+          <div class="miniFill" style="width:${w}%"></div>
+          <div class="miniContent">
+            <div class="miniLeft">${idx+1}. ${e.name}</div>
+            <div class="miniRight">${e.value.toLocaleString("da-DK")}</div>
+          </div>
+        `;
+        container.appendChild(line);
+      });
     }
 
     // Screens
@@ -668,6 +697,7 @@
       $("navLocations").classList.toggle("on", activeScreen === "locations");
       $("navProducts").classList.toggle("on", activeScreen === "products");
     }
+
     function setScreen(id){
       activeScreen = id;
       $("screenOverview").classList.toggle("hidden", id !== "overview");
@@ -675,6 +705,7 @@
       $("screenProducts").classList.toggle("hidden", id !== "products");
       setNav();
     }
+
     function startRotation(){
       stopRotation();
       rotateTimer = setInterval(() => {
@@ -683,6 +714,7 @@
         setScreen(screens[(idx + 1) % screens.length]);
       }, ROTATE_SECONDS * 1000);
     }
+
     function stopRotation(){
       if (rotateTimer) clearInterval(rotateTimer);
       rotateTimer = null;
@@ -750,50 +782,58 @@
       $("focusSub").textContent = sub;
       $("focusSub").style.display = sub ? "" : "none";
 
-      // Locations screen
-      const board = $("locBoard");
-      board.innerHTML = "";
-      const sortedLocs = locs.slice().sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0));
-      const maxToday = Math.max(1, ...sortedLocs.map(l => Number(l.todayRevenue||0)));
+      // LOCATIONS screen as cards
+      const locWrap = $("locCards");
+      locWrap.innerHTML = "";
 
+      const sortedLocs = locs.slice().sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0));
       sortedLocs.forEach((l, i) => {
         const todayRev = Number(l.todayRevenue||0);
+        const todayTarget = Number(l.todayTarget||0);
         const ytdRev = Number(l.ytdRevenue||0);
         const budget = Number(l.ytdTarget||0);
-        const ytdP = budget > 0 ? (ytdRev / budget) : null;
 
-        const div = document.createElement("div");
-        div.className = "line";
-        div.innerHTML = `
-          <div class="lineTop">
-            <div class="lineName">${l.name} <span style="opacity:.55;font-weight:1000;">#${i+1}</span></div>
-            <div class="lineVal">${formatDKK(todayRev)}</div>
+        const todayGoalPct = todayTarget > 0 ? (todayRev / todayTarget) : null;
+        const ytdGoalPct = budget > 0 ? (ytdRev / budget) : null;
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="cardLabel">${l.name} <span style="opacity:.55;">#${i+1}</span></div>
+          <div class="cardValue">${formatDKK(todayRev)}</div>
+          <div class="cardSub">Dagens omsætning</div>
+
+          <div class="meterWrap" title="Dagsmål">
+            <div class="meterFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}"
+                 style="width:${todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct)*100)}%"></div>
           </div>
-          <div class="lineBar"><div class="lineFill" style="width:${Math.round(clamp01(todayRev/maxToday)*100)}%"></div></div>
-          <div class="lineMeta">
-            <div class="tag"><span class="miniDot"></span> YTD ${ytdP===null ? "—" : (Math.round(ytdP*100)+"%")}</div>
+
+          <div class="meterWrap" title="Årsbudget (YTD)">
+            <div class="meterFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}"
+                 style="width:${ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct)*100)}%"></div>
+          </div>
+
+          <div class="cardMeta">
+            <div class="tag"><span class="miniDot"></span> Mål: ${todayTarget ? Math.round(todayGoalPct*100) + "%" : "—"}</div>
+            <div class="tag"><span class="miniDot"></span> ÅTD: ${budget ? Math.round(ytdGoalPct*100) + "%" : "—"}</div>
           </div>
         `;
-        board.appendChild(div);
+        locWrap.appendChild(card);
       });
 
-      // Products screen
-      const prodList = $("prodList");
-      prodList.innerHTML = "";
-      const entries = sortedEntries(data.productsToday).slice(0, 10);
-      const maxP = Math.max(1, ...entries.map(e => e.value));
-      entries.forEach(e => {
-        const div = document.createElement("div");
-        div.className = "pitem";
-        div.innerHTML = `
-          <div class="pTop">
-            <div class="pName">${e.name}</div>
-            <div class="pVal">${e.value.toLocaleString("da-DK")}</div>
-          </div>
-          <div class="pBar"><div class="pFill" style="width:${Math.round(clamp01(e.value/maxP)*100)}%"></div></div>
-        `;
-        prodList.appendChild(div);
-      });
+      // PRODUCTS screen (two cards)
+      const todayEntries = sortedEntries(data.productsToday).slice(0,10);
+      const ytdMap = data.productsYTD && typeof data.productsYTD === "object" ? data.productsYTD : {};
+      const ytdEntries = sortedEntries(ytdMap).slice(0,10);
+
+      $("prodTodayHint").textContent = todayEntries.length ? "Top 10 i dag" : "Ingen data";
+      $("prodYtdHint").textContent = ytdEntries.length ? "Top 10 år til dato" : "Udfyld productsYTD i data";
+
+      renderTopList($("prodTodayList"), todayEntries);
+      renderTopList($("prodYtdList"), ytdEntries);
+
+      $("prodTodayTag").innerHTML = `<span class="miniDot"></span> Varer: ${Object.keys(data.productsToday||{}).length}`;
+      $("prodYtdTag").innerHTML = `<span class="miniDot"></span> Varer: ${Object.keys(ytdMap||{}).length}`;
     }
 
     // Modal (hidden access)
@@ -853,6 +893,36 @@
         openModal();
       }
     });
+
+    // Screen control
+    const screens = ["overview","locations","products"];
+    let activeScreen = "overview";
+    let rotateTimer = null;
+
+    function setNav(){
+      $("navOverview").classList.toggle("on", activeScreen === "overview");
+      $("navLocations").classList.toggle("on", activeScreen === "locations");
+      $("navProducts").classList.toggle("on", activeScreen === "products");
+    }
+    function setScreen(id){
+      activeScreen = id;
+      $("screenOverview").classList.toggle("hidden", id !== "overview");
+      $("screenLocations").classList.toggle("hidden", id !== "locations");
+      $("screenProducts").classList.toggle("hidden", id !== "products");
+      setNav();
+    }
+    function startRotation(){
+      stopRotation();
+      rotateTimer = setInterval(() => {
+        if ($("modal").style.display === "flex") return;
+        const idx = screens.indexOf(activeScreen);
+        setScreen(screens[(idx + 1) % screens.length]);
+      }, ROTATE_SECONDS * 1000);
+    }
+    function stopRotation(){
+      if (rotateTimer) clearInterval(rotateTimer);
+      rotateTimer = null;
+    }
 
     // Init
     (function init(){
