@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Live Score</title>
+  <title>Kaiser – Portal</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -123,7 +123,7 @@
       opacity:.95;
     }
 
-    /* Controls (simple pills + actions) */
+    /* Controls */
     .controls{
       position:relative;
       margin-top:16px;
@@ -134,50 +134,65 @@
       justify-content:center;
     }
 
-    .pill{
-      display:inline-flex;
+    .search{
+      flex: 1 1 420px;
+      max-width: 760px;
+      display:flex;
       align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+    }
+    .searchIcon{
+      width:28px;height:28px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.88);
+      font-weight:900;
+      user-select:none;
+    }
+    .search input{
+      width:100%;
+      background:transparent;
+      outline:none;
+      border:none;
+      color: var(--text);
+      font-weight:800;
+      font-size:14px;
+    }
+    .search input::placeholder{ color: rgba(255,255,255,0.45); }
+
+    .seg{
+      display:flex;
+      flex-wrap:wrap;
       gap:8px;
+      justify-content:center;
+    }
+    .segBtn{
       padding:10px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.04);
-      font-weight:1000;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:11px;
       color: rgba(255,255,255,0.86);
-      white-space:nowrap;
-      user-select:none;
-    }
-    .pill.open{ border-color: rgba(214,178,74,0.22); background: rgba(214,178,74,0.10); }
-
-    .btnPrimary{
-      border-radius: 999px;
-      font-weight: 1000;
-      letter-spacing: .10em;
-      text-transform:uppercase;
+      font-weight:900;
       font-size:11px;
-      padding: 10px 12px;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #0b0c0f;
-      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
-      border: none;
-      user-select:none;
-    }
-    .btnSecondary{
-      border-radius: 999px;
-      font-weight: 1000;
-      letter-spacing: .10em;
+      letter-spacing:.12em;
       text-transform:uppercase;
-      font-size:11px;
-      padding: 10px 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.90);
+      cursor:pointer;
       user-select:none;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .btnPrimary:active, .btnSecondary:active{ transform: translateY(1px); }
+    .segBtn:active{ transform: translateY(1px); }
+    .segBtn.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    }
 
     /* Section blocks */
     .section{
@@ -231,10 +246,11 @@
     }
     @media (min-width: 820px){
       .gridTools{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
-      .gridTools > .tile:last-child:nth-child(odd){ grid-column: 1 / -1; }
+      /* Last tile spans full width if odd count inside its section */
+      .gridTools > a.tile:last-child:nth-child(odd){ grid-column: 1 / -1; }
     }
 
-    /* Tiles (portal look) */
+    /* Tiles */
     .tile{
       position:relative;
       display:flex;
@@ -247,8 +263,11 @@
         radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,.40);
+      text-decoration:none;
+      color:inherit;
       overflow:hidden;
-      min-height: 168px;
+      transition: transform .12s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      min-height: 178px;
     }
     .tile:before{
       content:"";
@@ -258,6 +277,11 @@
       pointer-events:none;
       background: radial-gradient(520px 220px at 16% 10%, rgba(214,178,74,0.16), transparent 60%);
     }
+    .tile:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 30px 85px rgba(0,0,0,.58);
+    }
     .tile:hover:before{ opacity:1; }
 
     .tileTop{
@@ -266,6 +290,7 @@
       align-items:flex-start;
       gap:12px;
     }
+
     .icon{
       width:42px;height:42px;border-radius:16px;
       display:flex;align-items:center;justify-content:center;
@@ -274,38 +299,54 @@
       font-weight:1000;
       letter-spacing:.08em;
       user-select:none;
-      flex:0 0 auto;
     }
+    .arrow{
+      width:36px;height:36px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.90);
+      font-weight:1000;
+      flex:0 0 auto;
+      transition: transform .12s ease, border-color .18s ease;
+    }
+    .tile:hover .arrow{
+      transform: translateX(2px);
+      border-color: rgba(214,178,74,0.26);
+    }
+
     .tileKicker{
       font-size:12px;
       letter-spacing:.22em;
       text-transform:uppercase;
-      color: rgba(255,255,255,0.55);
+      color: var(--muted2);
       font-weight:1000;
       margin-top: 4px;
     }
     .tileTitle{
       font-family:"Playfair Display", serif;
-      font-size:34px;
+      font-size:32px;
       line-height:1.06;
       letter-spacing:-0.02em;
       font-weight:700;
       margin-top: 2px;
     }
     .tileSub{
-      color: rgba(255,255,255,0.74);
+      color: var(--muted);
       font-weight:700;
       font-size:13px;
       line-height:1.3;
-      max-width: 60ch;
+      max-width: 56ch;
     }
+
     .tileGoldline{
       height:2px;
       border-radius:999px;
       background: linear-gradient(90deg, transparent, rgba(214,178,74,0.65), transparent);
       opacity:.85;
-      margin-top:4px;
+      margin-top:6px;
     }
+
     .tileMeta{
       margin-top:auto;
       display:flex;
@@ -315,6 +356,25 @@
       flex-wrap:wrap;
       padding-top: 8px;
     }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.86);
+      white-space:nowrap;
+    }
+    .pill.open{ border-color: rgba(214,178,74,0.22); background: rgba(214,178,74,0.10); }
+    .pill.lock{ border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
+
     .tag{
       display:inline-flex;
       align-items:center;
@@ -335,84 +395,47 @@
       background: rgba(214,178,74,0.85);
     }
 
-    /* Meters */
-    .meterWrap{
-      height:10px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-    }
-    .meterFill{
-      height:10px;
-      width:0%;
-      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
-    }
-    .meterFill.ok{
-      background: linear-gradient(90deg, rgba(98,210,111,1), rgba(44,160,83,1));
-    }
-
-    /* Battle rows */
-    .battleRow{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      padding:14px;
-    }
-    .battleName{ font-weight:1000; letter-spacing:-0.01em; }
-    .battleNums{ color: rgba(255,255,255,0.65); font-weight:900; font-size:12px; }
-    .battleGrid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin-top:10px;
-    }
-    @media (min-width: 820px){
-      .battleGrid{ grid-template-columns: 1fr 1fr; }
-    }
-    .miniLabel{
-      color: rgba(255,255,255,0.55);
-      font-weight:1000;
-      letter-spacing:.16em;
-      text-transform:uppercase;
+    .recent{
+      color: rgba(255,255,255,0.48);
+      font-weight:900;
       font-size:11px;
-      margin-bottom:6px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      margin-left:auto;
+      white-space:nowrap;
     }
 
-    /* Product list */
-    .listItem{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-    }
-    .listName{ font-weight:900; }
-    .listVal{ font-weight:1000; color: rgba(255,255,255,0.86); letter-spacing:.02em; }
+    /* Category color accents on icon */
+    .g-kitchen .icon{ box-shadow: 0 0 0 5px rgba(245,158,11,0.10); border-color: rgba(245,158,11,0.25); }
+    .g-drift   .icon{ box-shadow: 0 0 0 5px rgba(56,189,248,0.10);  border-color: rgba(56,189,248,0.25); }
+    .g-quality .icon{ box-shadow: 0 0 0 5px rgba(167,139,250,0.10); border-color: rgba(167,139,250,0.25); }
 
-    /* Modal (portal-ish) */
+    .g-kitchen .icon{ background: linear-gradient(180deg, rgba(245,158,11,0.18), rgba(255,255,255,0.04)); }
+    .g-drift   .icon{ background: linear-gradient(180deg, rgba(56,189,248,0.18), rgba(255,255,255,0.04)); }
+    .g-quality .icon{ background: linear-gradient(180deg, rgba(167,139,250,0.18), rgba(255,255,255,0.04)); }
+
+    .footer{
+      margin-top:18px;
+      text-align:center;
+      color: rgba(255,255,255,0.48);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.02em;
+    }
+
+    /* PIN modal */
     .modalBackdrop{
-      position:fixed; inset:0;
-      display:none;
-      align-items:center; justify-content:center;
-      padding:16px;
       background: rgba(0,0,0,.62);
       backdrop-filter: blur(6px);
-      z-index:100;
     }
-    .panelModal{
-      width: min(980px, 100%);
-      max-height: 88vh;
-      overflow:auto;
-      background: rgba(18,20,28,0.92);
+    .panel{
+      background: rgba(18,20,28,0.90);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 22px;
       box-shadow: var(--shadow);
-      padding: 14px;
     }
-    textarea{
-      width:100%;
-      min-height: 360px;
+    .input{
+      width: 100%;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
@@ -420,14 +443,33 @@
       outline: none;
       color: rgba(255,255,255,0.92);
       font-weight:800;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:12px;
-      line-height:1.35;
     }
-    textarea:focus{
+    .input:focus{
       border-color: rgba(214,178,74,0.55);
       box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
       background: rgba(255,255,255,0.08);
+    }
+    .btnPrimary{
+      width: 100%;
+      text-align: center;
+      border-radius: 16px;
+      font-weight: 1000;
+      letter-spacing: .02em;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+      border: none;
+    }
+    .btnSecondary{
+      width: 100%;
+      border-radius: 16px;
+      font-weight: 1000;
+      letter-spacing: .02em;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.90);
     }
 
     @media (max-width:520px){
@@ -442,506 +484,387 @@
 
     <header class="hero mt-6">
       <div class="kicker">KAISER</div>
-      <div class="title">Live Score</div>
-      <div class="subtitle">Salg og fokus • manuel nu (auto via Friendly senere)</div>
+      <div class="title">Portal</div>
+      <div class="subtitle">Interne værktøjer til drift og kvalitet</div>
       <div class="goldline"></div>
 
-      <div class="controls" aria-label="Status og handlinger">
-        <div class="pill"><span style="opacity:.7;">Nu</span> <span id="clockText">—</span></div>
-        <div class="pill"><span style="opacity:.7;">Sidst gemt</span> <span id="savedText">—</span></div>
-        <button id="editBtn" class="btnSecondary" type="button">Rediger data (leder)</button>
-        <button id="copyBtn" class="btnSecondary" type="button">Kopiér JSON</button>
-        <a class="btnPrimary" href="./portal.html">Til portal</a>
-      </div>
+      <div class="controls" aria-label="Søg og filter">
+        <div class="search" role="search">
+          <div class="searchIcon">⌕</div>
+          <input id="searchInput" type="text" placeholder="Søg… (fx MIS, rengøring, rapport)" />
+        </div>
 
-      <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
+        <div class="seg" aria-label="Filter">
+          <button class="segBtn on" type="button" data-filter="all">Alle</button>
+          <button class="segBtn" type="button" data-filter="kitchen">Køkken</button>
+          <button class="segBtn" type="button" data-filter="drift">Drift</button>
+          <button class="segBtn" type="button" data-filter="quality">Kvalitet</button>
+        </div>
+      </div>
     </header>
 
-    <!-- OVERBLIK -->
-    <section class="section" aria-label="Overblik">
+    <!-- =======================
+         KØKKEN
+         ======================= -->
+    <section class="section" id="sec-kitchen" aria-label="Køkken">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Overblik</div>
-        <div class="sectionSub">Få store tal • ingen støj</div>
+        <div class="sectionTitle"><span class="dot"></span> Køkken</div>
+        <div class="sectionSub">Mise en place, rengøring og rutiner</div>
       </div>
       <div class="divider"></div>
 
       <div class="gridTools">
-        <!-- Tile: Dagens omsætning -->
-        <div class="tile">
+        <!-- MIS -->
+        <a class="tile tool g-kitchen"
+           href="./MIS.html"
+           data-tool="mis"
+           data-group="kitchen"
+           data-tags="mis mise en place prep forberedelse to-do køkken"
+        >
           <div class="tileTop">
-            <div class="icon" title="Omsætning">DKK</div>
-            <div class="tag"><span class="miniDot"></span> I dag</div>
+            <div class="icon">MIS</div>
+            <div class="arrow">→</div>
           </div>
-          <div class="tileKicker">Dagens omsætning</div>
-          <div class="tileTitle" id="kpiTodayRevenue">—</div>
+
+          <div class="tileKicker">KAISER</div>
+          <div class="tileTitle">Mise en place</div>
+          <div class="tileSub">Vælg opgaver (N/A) → Make MIS → få dagens færdige to‑do liste</div>
           <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiTodayRevenueSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiTodayProgressTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiTodayTargetTag"><span class="miniDot"></span> Mål: —</div>
-          </div>
-        </div>
 
-        <!-- Tile: YTD / Årsbudget -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Årsbudget">YTD</div>
-            <div class="tag"><span class="miniDot"></span> År</div>
-          </div>
-          <div class="tileKicker">YTD / Årsbudget</div>
-          <div class="tileTitle" id="kpiYtdPct">—</div>
-          <div class="meterWrap"><div id="kpiYtdBar" class="meterFill"></div></div>
-          <div class="tileSub" id="kpiYtdSub">—</div>
           <div class="tileMeta">
-            <div class="tag" id="kpiYtdNumbersTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiPaceTag"><span class="miniDot"></span> Pace: —</div>
+            <span class="pill open">ÅBEN</span>
+            <span class="tag"><span class="miniDot"></span> Køkken</span>
+            <span class="recent" data-recent-for="mis"></span>
           </div>
-        </div>
+        </a>
 
-        <!-- Tile: All-time top product -->
-        <div class="tile">
+        <!-- Cleaning list kitchen (PIN) -->
+        <a class="tile tool g-kitchen"
+           href="./cleaning-kitchen.html"
+           data-tool="kitchen"
+           data-pin="1"
+           data-group="kitchen"
+           data-tags="cleaning rengøring kitchen hygiejne open close kontrol"
+        >
           <div class="tileTop">
-            <div class="icon" title="All-time">TOP</div>
-            <div class="tag"><span class="miniDot"></span> All-time</div>
+            <div class="icon">CLN</div>
+            <div class="arrow">→</div>
           </div>
-          <div class="tileKicker">Mest solgte produkt</div>
-          <div class="tileTitle" id="kpiAllTimeProd">—</div>
+
+          <div class="tileKicker">KAISER</div>
+          <div class="tileTitle">Cleaning list kitchen</div>
+          <div class="tileSub">Rengøring pr. lokation • checklist • kun mail ved mangler</div>
           <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiAllTimeProdSub">—</div>
-          <div class="tileMeta">
-            <div class="tag"><span class="miniDot"></span> Til dato</div>
-          </div>
-        </div>
 
-        <!-- Tile: Today top product -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Dagens topsælger">★</div>
-            <div class="tag"><span class="miniDot"></span> I dag</div>
-          </div>
-          <div class="tileKicker">Dagens mest solgte</div>
-          <div class="tileTitle" id="kpiTodayProd">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiTodayProdSub">—</div>
           <div class="tileMeta">
-            <div class="tag" id="kpiTodayProdTag"><span class="miniDot"></span> —</div>
+            <span class="pill lock">KODE</span>
+            <span class="tag"><span class="miniDot"></span> Køkken</span>
+            <span class="recent" data-recent-for="kitchen"></span>
           </div>
-        </div>
-
-        <!-- Tile: Dessert upsell (spans full width when odd) -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Mersalg">+</div>
-            <div class="tag"><span class="miniDot"></span> Dessert</div>
-          </div>
-          <div class="tileKicker">Mersalgs-mål</div>
-          <div class="tileTitle" id="kpiUpsellTitle">—</div>
-          <div class="meterWrap"><div id="kpiUpsellBar" class="meterFill"></div></div>
-          <div class="tileSub" id="kpiUpsellSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiUpsellTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiUpsellHint"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
+        </a>
       </div>
     </section>
 
-    <!-- LOKATIONS BATTLE -->
-    <section class="section" aria-label="Lokations battle">
+    <!-- =======================
+         DRIFT
+         ======================= -->
+    <section class="section" id="sec-drift" aria-label="Drift">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Lokations battle</div>
-        <div class="sectionSub" id="battleSub">Dagens omsætning • YTD vs årsbudget</div>
-      </div>
-      <div class="divider"></div>
-
-      <div style="padding:14px;" class="space-y-3" id="battleList"></div>
-    </section>
-
-    <!-- FOKUS + PRODUKTER -->
-    <section class="section" aria-label="Fokus og produkter">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Dagens fokus</div>
-        <div class="sectionSub">1 linje alle skal kunne huske</div>
+        <div class="sectionTitle"><span class="dot" style="background:rgba(56,189,248,0.95); box-shadow:0 0 0 5px rgba(56,189,248,0.10);"></span> Drift</div>
+        <div class="sectionSub">Ledelse, rapportering og daglig kontrol</div>
       </div>
       <div class="divider"></div>
 
       <div class="gridTools">
-        <div class="tile">
+        <!-- Skiftlederrapport (PIN) -->
+        <a class="tile tool g-drift"
+           href="./skiftlederrapport1.html"
+           data-tool="skiftleder"
+           data-pin="1"
+           data-group="drift"
+           data-tags="skiftleder rapport drift kvalitet afdeling"
+        >
           <div class="tileTop">
-            <div class="icon" title="Fokus">!</div>
-            <div class="tag"><span class="miniDot"></span> Fokus</div>
+            <div class="icon">SR</div>
+            <div class="arrow">→</div>
           </div>
-          <div class="tileKicker">I dag</div>
-          <div class="tileTitle" id="focusText">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="focusSub">—</div>
-          <div class="tileMeta">
-            <div class="tag"><span class="miniDot"></span> Hold det simpelt</div>
-          </div>
-        </div>
 
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Produkter">PR</div>
-            <div class="tag"><span class="miniDot"></span> Top 5</div>
-          </div>
-          <div class="tileKicker">Dagens solgte produkter</div>
-          <div class="tileSub">Viser top 5 for overblik. (Alle kan ses i data.)</div>
-
+          <div class="tileKicker">KAISER</div>
+          <div class="tileTitle">Skiftlederrapport</div>
+          <div class="tileSub">Daglig drift og kvalitet – pr. afdeling</div>
           <div class="tileGoldline"></div>
 
-          <div class="space-y-2" id="topProducts"></div>
+          <div class="tileMeta">
+            <span class="pill lock">KODE</span>
+            <span class="tag"><span class="miniDot"></span> Drift</span>
+            <span class="recent" data-recent-for="skiftleder"></span>
+          </div>
+        </a>
+
+        <!-- Daglige opgaver (flyttet til Drift) -->
+        <a class="tile tool g-drift"
+           href="./daglige-opgaver.html"
+           data-tool="opgaver"
+           data-group="drift"
+           data-tags="daglige opgaver åbne lukke rengøring checklister drift"
+        >
+          <div class="tileTop">
+            <div class="icon">DO</div>
+            <div class="arrow">→</div>
+          </div>
+
+          <div class="tileKicker">KAISER</div>
+          <div class="tileTitle">Daglige opgaver</div>
+          <div class="tileSub">Åbne, lukke, rengøring • faste rutiner</div>
+          <div class="tileGoldline"></div>
 
           <div class="tileMeta">
-            <div class="tag" id="prodCountTag"><span class="miniDot"></span> —</div>
+            <span class="pill open">ÅBEN</span>
+            <span class="tag"><span class="miniDot"></span> Drift</span>
+            <span class="recent" data-recent-for="opgaver"></span>
           </div>
-        </div>
+        </a>
       </div>
     </section>
 
-    <div class="mt-6" style="text-align:center;color:rgba(255,255,255,0.45);font-weight:900;font-size:12px;letter-spacing:.04em;">
-      Tip: Brug “Rediger data (leder)” på den skærm der hænger i caféen – så er den altid opdateret lokalt.
-    </div>
+    <!-- =======================
+         KVALITET
+         ======================= -->
+    <section class="section" id="sec-quality" aria-label="Kvalitet">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot" style="background:rgba(167,139,250,0.95); box-shadow:0 0 0 5px rgba(167,139,250,0.10);"></span> Kvalitet</div>
+        <div class="sectionSub">Standarder og intern vurdering</div>
+      </div>
+      <div class="divider"></div>
 
-  </div>
+      <div class="gridTools">
+        <!-- Madscore -->
+        <a class="tile tool g-quality"
+           href="./"
+           data-tool="madscore"
+           data-group="quality"
+           data-tags="gastronomisk eftersyn foto rating kvalitet retter"
+        >
+          <div class="tileTop">
+            <div class="icon">GE</div>
+            <div class="arrow">→</div>
+          </div>
 
-  <!-- EDIT MODAL -->
-  <div id="modal" class="modalBackdrop">
-    <div class="panelModal space-y-3">
-      <div class="flex items-start justify-between gap-3 flex-wrap">
-        <div>
-          <div style="font-weight:1000;letter-spacing:-0.01em;font-size:18px;">Rediger data (JSON)</div>
-          <div style="color:rgba(255,255,255,0.60);font-weight:900;font-size:12px;">
-            Gemmes kun på denne enhed/skærm. Lim ind og klik “Gem”.
+          <div class="tileKicker">KAISER</div>
+          <div class="tileTitle">Gastronomisk Eftersyn</div>
+          <div class="tileSub">Intern vurdering af retter på tværs af lokationer</div>
+          <div class="tileGoldline"></div>
+
+          <div class="tileMeta">
+            <span class="pill open">ÅBEN</span>
+            <span class="tag"><span class="miniDot"></span> Kvalitet</span>
+            <span class="recent" data-recent-for="madscore"></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- PIN MODAL -->
+    <div id="pinModal" class="fixed inset-0 hidden items-center justify-center p-4 modalBackdrop" style="z-index:9999;">
+      <div class="panel p-5 w-full" style="max-width:480px;">
+        <div class="text-lg font-extrabold">Adgangskode</div>
+        <div class="divider" style="margin:14px 0;"></div>
+
+        <div style="color:rgba(255,255,255,.72); font-weight:800;" id="pinModalText">
+          Indtast koden for at åbne.
+        </div>
+
+        <div class="mt-3 space-y-2">
+          <div class="pill open" style="justify-content:center; width:max-content;">Kode</div>
+          <input id="pinInput" class="input" type="password" placeholder="••••" />
+          <div id="pinError" class="hidden" style="color:var(--danger);font-weight:1000;margin-top:8px;">
+            Forkert kode
           </div>
         </div>
-        <div class="flex gap-2 flex-wrap">
-          <button id="resetBtn" class="btnSecondary" type="button">Reset</button>
-          <button id="closeBtn" class="btnSecondary" type="button">Luk</button>
-          <button id="saveBtn" class="btnPrimary" type="button">Gem</button>
+
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <button id="pinCancel" class="btnSecondary" type="button">Annuller</button>
+          <button id="pinOk" class="btnPrimary" type="button">Fortsæt</button>
         </div>
       </div>
-
-      <textarea id="jsonArea" spellcheck="false"></textarea>
-
-      <div class="pill open" style="justify-content:center;">
-        Lederkode kræves • Kode: KAISER2026
-      </div>
     </div>
+
+    <footer class="footer">Kaiser • interne værktøjer</footer>
   </div>
 
   <script>
-    // ================= SETTINGS =================
-    const APP_KEY = "kaiser_live_score_portal_v2";
-    const LEADER_CODE = "KAISER2026";
+    // ========= PIN SETTINGS =========
+    const PIN_SKIFTLEDER = "1234";     // <-- SKIFT HER
+    const PIN_SESSION_HOURS = 8;
 
-    function $(id){ return document.getElementById(id); }
-    function setError(msg){
-      const el = $("errorText");
-      if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
-      el.textContent = msg;
-      el.classList.remove("hidden");
+    // ========= DOM =========
+    const pinModal = document.getElementById("pinModal");
+    const pinInput = document.getElementById("pinInput");
+    const pinOk = document.getElementById("pinOk");
+    const pinCancel = document.getElementById("pinCancel");
+    const pinError = document.getElementById("pinError");
+    const pinModalText = document.getElementById("pinModalText");
+
+    const tools = Array.from(document.querySelectorAll("a.tile.tool"));
+    const searchInput = document.getElementById("searchInput");
+    const filterBtns = Array.from(document.querySelectorAll(".segBtn[data-filter]"));
+
+    const secKitchen = document.getElementById("sec-kitchen");
+    const secDrift = document.getElementById("sec-drift");
+    const secQuality = document.getElementById("sec-quality");
+
+    // ========= STATE =========
+    let pendingUrl = null;
+    let pendingKey = null;
+    let activeFilter = "all";
+
+    // ========= RECENT =========
+    const recentBase = "kaiser_portal_recent_v1";
+    function setRecent(tool){
+      localStorage.setItem(`${recentBase}_${tool}`, String(Date.now()));
+    }
+    function getRecent(tool){
+      const v = localStorage.getItem(`${recentBase}_${tool}`);
+      return v ? Number(v) : 0;
+    }
+    function formatAgo(ts){
+      if (!ts) return "";
+      const min = Math.round((Date.now() - ts) / 60000);
+      if (min < 1) return "senest: nu";
+      if (min < 60) return `senest: ${min}m`;
+      const h = Math.round(min/60);
+      if (h < 24) return `senest: ${h}t`;
+      const d = Math.round(h/24);
+      return `senest: ${d}d`;
+    }
+    function renderRecent(){
+      document.querySelectorAll("[data-recent-for]").forEach(el => {
+        const tool = el.getAttribute("data-recent-for");
+        const ts = getRecent(tool);
+        el.textContent = ts ? formatAgo(ts) : "";
+      });
     }
 
-    function nowDK(){
-      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    // ========= PIN SESSION =========
+    function sessionKey(key){ return "kaiser_pin_ok_" + key; }
+    function hasValidSession(key){
+      const until = Number(localStorage.getItem(sessionKey(key)) || "0");
+      return Date.now() < until;
+    }
+    function setSession(key){
+      const until = Date.now() + PIN_SESSION_HOURS * 60 * 60 * 1000;
+      localStorage.setItem(sessionKey(key), String(until));
     }
 
-    function formatDKK(n){
-      const val = Number(n || 0);
-      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
+    function openPin(url, key, title){
+      pendingUrl = url;
+      pendingKey = key;
+      pinError.classList.add("hidden");
+      pinInput.value = "";
+      pinModalText.textContent = "Indtast koden for at åbne: " + title;
+      pinModal.classList.remove("hidden");
+      pinModal.classList.add("flex");
+      setTimeout(() => pinInput.focus(), 50);
     }
 
-    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
-
-    function dayOfYear(d){
-      const start = new Date(d.getFullYear(), 0, 1);
-      const diff = (d - start);
-      return Math.floor(diff / (24*3600*1000)) + 1;
-    }
-    function daysInYear(y){
-      return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 366 : 365;
+    function closePin(){
+      pendingUrl = null;
+      pendingKey = null;
+      pinModal.classList.add("hidden");
+      pinModal.classList.remove("flex");
     }
 
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    // ========= FILTER + SEARCH =========
+    function toolVisibleByFilters(a){
+      const group = (a.getAttribute("data-group") || "").toLowerCase();
+      const tags = (a.getAttribute("data-tags") || "").toLowerCase();
+      const text = (a.innerText || "").toLowerCase();
+      const q = (searchInput.value || "").trim().toLowerCase();
+
+      const okGroup = (activeFilter === "all") || (group === activeFilter);
+      const okSearch = !q || text.includes(q) || tags.includes(q);
+      return okGroup && okSearch;
     }
 
-    // ================= DATA =================
-    const DEFAULT_DATA = {
-      meta: { lastSavedAt: "" },
-
-      // 1) Mest solgte produkt til dato
-      productsAllTime: {
-        "Filterkaffe": 6210,
-        "Cappuccino": 3980,
-        "Fadøl": 2870,
-        "Kaiserburger": 1240,
-        "Brunch": 1540
-      },
-
-      // 2+4) Dagens produkter
-      productsToday: {
-        "Filterkaffe": 88,
-        "Cappuccino": 62,
-        "Fadøl": 41,
-        "Kaiserburger": 27,
-        "Brunch": 19,
-        "Dessert": 14
-      },
-
-      // 3) Lokations battle (kun omsætning)
-      // todayTarget = dagsmål (valgfri)
-      // ytdTarget = årsbudget (skal bruges)
-      locations: [
-        { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 4120000, ytdTarget: 7600000 },
-        { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 3560000, ytdTarget: 7000000 },
-        { name:"Café Kaiser Farum",     todayRevenue: 12150, todayTarget: 20000, ytdRevenue: 2980000, ytdTarget: 6100000 },
-        { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 3890000, ytdTarget: 7400000 },
-        { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
-      ],
-
-      // 5) Mersalg: Dessert
-      upsell: {
-        title: "Dessert solgt",
-        current: 14,
-        target: 30,
-        hint: "Spørg altid: “Skal I dele en dessert?”"
-      },
-
-      // 6) Fokus
-      focus: {
-        text: "Husk dessert + kaffe ved alle bordene.",
-        sub: "Hold fokus kort. Én sætning."
-      }
-    };
-
-    function loadData(){
-      const raw = localStorage.getItem(APP_KEY);
-      if (!raw) return structuredClone(DEFAULT_DATA);
-      try {
-        const obj = JSON.parse(raw);
-        if (!obj || typeof obj !== "object") return structuredClone(DEFAULT_DATA);
-        return obj;
-      } catch(e){
-        return structuredClone(DEFAULT_DATA);
-      }
-    }
-
-    function saveData(data){
-      data.meta = data.meta || {};
-      data.meta.lastSavedAt = nowDK();
-      localStorage.setItem(APP_KEY, JSON.stringify(data));
-      return data;
-    }
-
-    function topEntry(map){
-      const entries = Object.entries(map || {});
-      if (!entries.length) return null;
-      entries.sort((a,b) => Number(b[1]||0) - Number(a[1]||0));
-      return { name: entries[0][0], value: Number(entries[0][1]||0) };
-    }
-
-    function sortedEntries(map){
-      return Object.entries(map || {})
-        .map(([k,v]) => ({ name:k, value:Number(v||0) }))
-        .sort((a,b) => b.value - a.value);
-    }
-
-    function setMeter(elFill, pct){
-      const p = pct || 0;
-      const w = Math.round(clamp01(p) * 100);
-      elFill.style.width = w + "%";
-      elFill.classList.toggle("ok", p >= 1);
-      return w;
-    }
-
-    // ================= RENDER =================
-    function render(){
-      setError("");
-      const data = loadData();
-
-      $("clockText").textContent = nowDK();
-      $("savedText").textContent = data.meta && data.meta.lastSavedAt ? data.meta.lastSavedAt : "—";
-
-      const locs = Array.isArray(data.locations) ? data.locations : [];
-      const todayTotal = locs.reduce((s,l) => s + Number(l.todayRevenue||0), 0);
-      const todayTargetTotal = locs.reduce((s,l) => s + Number(l.todayTarget||0), 0);
-      const ytdTotal = locs.reduce((s,l) => s + Number(l.ytdRevenue||0), 0);
-      const budgetTotal = locs.reduce((s,l) => s + Number(l.ytdTarget||0), 0);
-
-      // KPI: today revenue
-      $("kpiTodayRevenue").textContent = formatDKK(todayTotal);
-      const todayPct = (todayTargetTotal > 0) ? (todayTotal / todayTargetTotal) : null;
-      $("kpiTodayTargetTag").textContent = "Mål: " + (todayTargetTotal ? formatDKK(todayTargetTotal) : "—");
-      $("kpiTodayProgressTag").textContent = todayPct === null ? "—" : (Math.round(todayPct*100) + "% af mål");
-      $("kpiTodayRevenueSub").textContent =
-        todayTargetTotal
-          ? ("Mangler: " + formatDKK(Math.max(0, todayTargetTotal - todayTotal)))
-          : "Tip: Sæt todayTarget pr. lokation for %.";
-
-      // KPI: YTD / budget
-      const ytdPct = budgetTotal > 0 ? (ytdTotal / budgetTotal) : 0;
-      $("kpiYtdPct").textContent = Math.round(ytdPct * 100) + "%";
-      setMeter($("kpiYtdBar"), ytdPct);
-      $("kpiYtdNumbersTag").textContent = formatDKK(ytdTotal) + " / " + formatDKK(budgetTotal);
-      $("kpiYtdSub").textContent = "Mangler: " + formatDKK(Math.max(0, budgetTotal - ytdTotal));
-
-      // pace vs year-to-date
-      const now = new Date();
-      const fracYear = dayOfYear(now) / daysInYear(now.getFullYear());
-      const expected = budgetTotal * fracYear;
-      const delta = ytdTotal - expected;
-      $("kpiPaceTag").textContent = "Pace: " + (delta >= 0 ? ("+" + formatDKK(delta)) : formatDKK(delta));
-
-      // KPI: all-time top product
-      const allTop = topEntry(data.productsAllTime);
-      $("kpiAllTimeProd").textContent = allTop ? allTop.name : "—";
-      $("kpiAllTimeProdSub").textContent = allTop ? ("Antal: " + allTop.value.toLocaleString("da-DK")) : "Ingen data";
-
-      // KPI: today top product
-      const todayTop = topEntry(data.productsToday);
-      $("kpiTodayProd").textContent = todayTop ? todayTop.name : "—";
-      $("kpiTodayProdSub").textContent = todayTop ? ("Antal i dag: " + todayTop.value.toLocaleString("da-DK")) : "Ingen data";
-      $("kpiTodayProdTag").textContent = todayTop ? ("#" + 1 + " i dag") : "—";
-
-      // KPI: dessert upsell
-      const ups = data.upsell || {};
-      $("kpiUpsellTitle").textContent = ups.title || "Dessert solgt";
-      const cur = Number(ups.current || 0);
-      const tar = Math.max(1, Number(ups.target || 0));
-      const upsPct = cur / tar;
-      setMeter($("kpiUpsellBar"), upsPct);
-      $("kpiUpsellSub").textContent = `${cur}/${tar} • ${Math.round(upsPct*100)}%`;
-      $("kpiUpsellTag").textContent = Math.max(0, tar - cur) ? ("Mangler: " + Math.max(0, tar - cur)) : "Mål nået";
-      $("kpiUpsellHint").textContent = ups.hint ? ups.hint : "—";
-
-      // Focus
-      const f = data.focus || {};
-      $("focusText").textContent = f.text || "—";
-      $("focusSub").textContent = f.sub || "";
-
-      // Battle
-      const battle = $("battleList");
-      battle.innerHTML = "";
-
-      locs
-        .slice()
-        .sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0))
-        .forEach((l, idx) => {
-          const todayRev = Number(l.todayRevenue||0);
-          const todayTarget = Number(l.todayTarget||0);
-          const ytdRev = Number(l.ytdRevenue||0);
-          const budget = Number(l.ytdTarget||0);
-
-          const todayGoalPct = todayTarget > 0 ? (todayRev / todayTarget) : null;
-          const ytdGoalPct = budget > 0 ? (ytdRev / budget) : null;
-
-          const row = document.createElement("div");
-          row.className = "battleRow";
-          row.innerHTML = `
-            <div class="flex items-start justify-between gap-3 flex-wrap">
-              <div class="battleName">${escapeHtml(l.name || "Lokation")} <span style="opacity:.55;font-weight:1000;">#${idx+1}</span></div>
-              <div class="battleNums">I dag: ${formatDKK(todayRev)} • YTD: ${formatDKK(ytdRev)}</div>
-            </div>
-
-            <div class="battleGrid">
-              <div>
-                <div class="miniLabel">I dag ${todayTarget ? ("(mål " + formatDKK(todayTarget) + ")") : ""}</div>
-                <div class="meterWrap"><div class="meterFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}" style="width:${todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct)*100)}%"></div></div>
-                <div class="battleNums" style="margin-top:6px;">
-                  ${todayGoalPct === null ? "Sæt todayTarget for progress." : (Math.round(todayGoalPct*100) + "% af mål")}
-                </div>
-              </div>
-
-              <div>
-                <div class="miniLabel">YTD vs årsbudget ${budget ? ("(" + formatDKK(budget) + ")") : ""}</div>
-                <div class="meterWrap"><div class="meterFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}" style="width:${ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct)*100)}%"></div></div>
-                <div class="battleNums" style="margin-top:6px;">
-                  ${ytdGoalPct === null ? "Sæt ytdTarget (årsbudget) for progress." : (Math.round(ytdGoalPct*100) + "% af årsbudget")}
-                </div>
-              </div>
-            </div>
-          `;
-          battle.appendChild(row);
-        });
-
-      // Top products (top 5)
-      const entries = sortedEntries(data.productsToday);
-      const top5 = entries.slice(0,5);
-
-      const list = $("topProducts");
-      list.innerHTML = "";
-      top5.forEach(e => {
-        const li = document.createElement("div");
-        li.className = "listItem";
-        li.innerHTML = `
-          <div class="listName">${escapeHtml(e.name)}</div>
-          <div class="listVal">${e.value.toLocaleString("da-DK")}</div>
-        `;
-        list.appendChild(li);
+    function applyFilters(){
+      tools.forEach(a => {
+        a.style.display = toolVisibleByFilters(a) ? "" : "none";
       });
 
-      $("prodCountTag").textContent = "Varer i dag: " + entries.length;
+      // hide sections if empty
+      const sectionHasVisible = (secEl) => {
+        const links = Array.from(secEl.querySelectorAll("a.tile.tool"));
+        return links.some(a => a.style.display !== "none");
+      };
+
+      secKitchen.style.display = sectionHasVisible(secKitchen) ? "" : "none";
+      secDrift.style.display = sectionHasVisible(secDrift) ? "" : "none";
+      secQuality.style.display = sectionHasVisible(secQuality) ? "" : "none";
     }
 
-    // ================= MODAL =================
-    const modal = $("modal");
-    const jsonArea = $("jsonArea");
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("on"));
+        btn.classList.add("on");
+        activeFilter = btn.getAttribute("data-filter");
+        applyFilters();
+      });
+    });
 
-    function openModal(){
-      const code = prompt("Lederkode:");
-      if (!code) return;
-      if (code.trim() !== LEADER_CODE) return setError("Forkert lederkode.");
-      const data = loadData();
-      jsonArea.value = JSON.stringify(data, null, 2);
-      modal.style.display = "flex";
-    }
-    function closeModal(){ modal.style.display = "none"; }
+    searchInput.addEventListener("input", applyFilters);
 
-    $("editBtn").addEventListener("click", openModal);
-    $("closeBtn").addEventListener("click", closeModal);
+    // ========= CLICK HANDLING (PIN + RECENT) =========
+    tools.forEach(a => {
+      a.addEventListener("click", (e) => {
+        const requiresPin = a.getAttribute("data-pin") === "1";
+        const url = a.getAttribute("href");
+        const key = a.getAttribute("data-tool") || "tool";
+        const titleEl = a.querySelector(".tileTitle");
+        const title = titleEl ? titleEl.textContent : "Værktøj";
 
-    $("saveBtn").addEventListener("click", () => {
-      setError("");
-      try{
-        const obj = JSON.parse(jsonArea.value);
-        saveData(obj);
-        closeModal();
-        render();
-      } catch(e){
-        setError("JSON fejl: " + (e && e.message ? e.message : "ukendt"));
+        // no pin
+        if (!requiresPin){
+          setRecent(key);
+          return; // default navigation
+        }
+
+        // pin required
+        if (hasValidSession(key)){
+          setRecent(key);
+          return; // default navigation
+        }
+
+        e.preventDefault();
+        openPin(url, key, title);
+      });
+    });
+
+    pinCancel.addEventListener("click", closePin);
+    pinModal.addEventListener("click", (e) => {
+      if (e.target === pinModal) closePin();
+    });
+
+    pinOk.addEventListener("click", () => {
+      const code = (pinInput.value || "").trim();
+      if (code === PIN_SKIFTLEDER) {
+        setSession(pendingKey);
+        setRecent(pendingKey);
+        window.location.href = pendingUrl;
+      } else {
+        pinError.classList.remove("hidden");
+        pinInput.focus();
+        pinInput.select();
       }
     });
 
-    $("resetBtn").addEventListener("click", () => {
-      if (!confirm("Reset til standard-data?")) return;
-      saveData(structuredClone(DEFAULT_DATA));
-      jsonArea.value = JSON.stringify(loadData(), null, 2);
-      render();
+    pinInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") pinOk.click();
+      if (e.key === "Escape") closePin();
     });
 
-    $("copyBtn").addEventListener("click", async () => {
-      try{
-        const text = JSON.stringify(loadData(), null, 2);
-        await navigator.clipboard.writeText(text);
-        setError("");
-        alert("JSON kopieret.");
-      } catch(e){
-        setError("Kunne ikke kopiere (browser).");
-      }
-    });
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    // ================= INIT =================
-    (function init(){
-      if (!localStorage.getItem(APP_KEY)) saveData(structuredClone(DEFAULT_DATA));
-      render();
-      setInterval(render, 60 * 1000);
-    })();
+    // ========= INIT =========
+    renderRecent();
+    applyFilters();
   </script>
 </body>
 </html>
