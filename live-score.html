@@ -84,6 +84,8 @@
       color:var(--muted2);
       font-weight:900;
       text-align:center;
+      user-select:none;
+      cursor: default;
     }
     .title{
       position:relative;
@@ -138,7 +140,9 @@
       white-space:nowrap;
       user-select:none;
       cursor:pointer;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
+    .pill:active{ transform: translateY(1px); }
     .pill.on{
       border-color: rgba(214,178,74,0.35);
       background: rgba(214,178,74,0.12);
@@ -146,12 +150,10 @@
     }
 
     .btnPrimary{
-      border-radius: 999px;
+      border-radius: 16px;
       font-weight: 1000;
-      letter-spacing: .10em;
-      text-transform:uppercase;
-      font-size:11px;
-      padding: 10px 12px;
+      letter-spacing: .02em;
+      padding: 12px 14px;
       background: linear-gradient(135deg, var(--gold), var(--gold2));
       color: #0b0c0f;
       box-shadow: 0 18px 40px rgba(214,178,74,0.18);
@@ -159,12 +161,10 @@
       user-select:none;
     }
     .btnSecondary{
-      border-radius: 999px;
+      border-radius: 16px;
       font-weight: 1000;
-      letter-spacing: .10em;
-      text-transform:uppercase;
-      font-size:11px;
-      padding: 10px 12px;
+      letter-spacing: .02em;
+      padding: 12px 14px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.14);
       color: rgba(255,255,255,0.90);
@@ -214,24 +214,20 @@
     }
     .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:14px;
-  padding: 14px;
-}
+    /* KPI grid: 1 col mobile, 2 col 15", 4 col large */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      padding: 14px;
+    }
+    @media (min-width: 820px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
+    }
+    @media (min-width: 1200px){
+      .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
 
-/* 15" laptop/monitor: 2x2 giver store tal og ro */
-@media (min-width: 820px){
-  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
-}
-
-/* Kun på rigtig store skærme: 4 kolonner */
-@media (min-width: 1200px){
-  .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-    /* SCORE CARDS (cleaner than portal tiles) */
     .card{
       border-radius:26px;
       padding:18px 18px 16px;
@@ -240,7 +236,7 @@
         radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,.40);
-      min-height: 170px;
+      min-height: 160px;
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -252,14 +248,14 @@
       color: rgba(255,255,255,0.55);
       font-weight:1000;
     }
-.cardValue{
-  font-family:"Playfair Display", serif;
-  font-size: clamp(36px, 4.2vw, 56px);
-  line-height:1.02;
-  letter-spacing:-0.02em;
-  font-weight:700;
-}
-.cardValue.small{ font-size: clamp(30px, 3.4vw, 44px); }
+    .cardValue{
+      font-family:"Playfair Display", serif;
+      font-size: clamp(36px, 4.2vw, 56px);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight:700;
+    }
+    .cardValue.small{ font-size: clamp(30px, 3.4vw, 44px); }
     .cardSub{
       color: rgba(255,255,255,0.74);
       font-weight:800;
@@ -305,7 +301,6 @@
       background: linear-gradient(90deg, rgba(98,210,111,1), rgba(44,160,83,1));
     }
 
-    /* Focus banner */
     .focusBanner{
       margin: 14px;
       border-radius:26px;
@@ -316,13 +311,12 @@
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,.40);
     }
- .focusText{
-  font-family:"Playfair Display", serif;
-  font-size: clamp(26px, 3.2vw, 44px);
-  line-height:1.06;
-  letter-spacing:-0.02em;
-  font-weight:700;
-
+    .focusText{
+      font-family:"Playfair Display", serif;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.06;
+      letter-spacing:-0.02em;
+      font-weight:700;
     }
     .focusSub{
       margin-top:8px;
@@ -331,7 +325,6 @@
       font-size:13px;
     }
 
-    /* Leaderboard (screen 2) */
     .board{
       padding:14px;
       display:flex;
@@ -369,7 +362,6 @@
       flex-wrap:wrap;
     }
 
-    /* Products screen */
     .plist{
       padding:14px;
       display:grid;
@@ -445,35 +437,27 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
       background: rgba(255,255,255,0.08);
     }
-
-    @media (max-width:520px){
-      .title{font-size:40px;}
-      .cardValue{font-size:40px;}
-      .focusText{font-size:30px;}
-    }
   </style>
 </head>
 
-<body class="min-h-screen p-4">
+<body class="min-h-screen flex justify-center p-4">
   <div class="shell w-full">
 
     <header class="hero mt-6">
-      <div class="controls" aria-label="Navigation">
-  <div class="pill on" id="navOverview">Overblik</div>
-  <div class="pill" id="navLocations">Lokationer</div>
-  <div class="pill" id="navProducts">Produkter</div>
-</div>
+      <div class="kicker" id="kickerTap">KAISER</div>
+      <div class="title">Live Score</div>
+      <div class="subtitle">Hurtigt overblik • auto-rotation • manuel data nu (Friendly senere)</div>
+      <div class="goldline"></div>
 
-<div class="subtitle" id="statusLine" style="margin-top:12px;">
-  —
-</div>
-     .focusText{
-  font-family:"Playfair Display", serif;
-  font-size: clamp(26px, 3.2vw, 44px);
-  line-height:1.06;
-  letter-spacing:-0.02em;
-  font-weight:700;
-}
+      <!-- ONLY centered nav -->
+      <div class="controls" aria-label="Navigation">
+        <div class="pill on" id="navOverview">Overblik</div>
+        <div class="pill" id="navLocations">Lokationer</div>
+        <div class="pill" id="navProducts">Produkter</div>
+      </div>
+
+      <!-- Minimal status line -->
+      <div class="subtitle" id="statusLine" style="margin-top:12px;">—</div>
 
       <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
     </header>
@@ -482,7 +466,7 @@
     <section class="section" id="screenOverview" aria-label="Overblik">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Overblik</div>
-        <div class="sectionSub">4 tal der kan aflæses på 3 sekunder</div>
+        <div class="sectionSub">4 tal • fokus • færdig</div>
       </div>
       <div class="divider"></div>
 
@@ -531,7 +515,7 @@
       <div class="focusBanner">
         <div class="cardLabel">Dagens fokus</div>
         <div class="focusText" id="focusText">—</div>
-        <div class="focusSub" id="focusSub">—</div>
+        <div class="focusSub" id="focusSub"></div>
       </div>
     </section>
 
@@ -539,7 +523,7 @@
     <section class="section hidden" id="screenLocations" aria-label="Lokationer">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Lokations battle</div>
-        <div class="sectionSub">Kun dagens omsætning • YTD% som tag</div>
+        <div class="sectionSub">Dagens omsætning • YTD% som tag</div>
       </div>
       <div class="divider"></div>
       <div class="board" id="locBoard"></div>
@@ -549,7 +533,7 @@
     <section class="section hidden" id="screenProducts" aria-label="Produkter">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Produkter (i dag)</div>
-        <div class="sectionSub">Topliste • resten er støj</div>
+        <div class="sectionSub">Top 10</div>
       </div>
       <div class="divider"></div>
       <div class="plist" id="prodList"></div>
@@ -557,7 +541,7 @@
 
   </div>
 
-  <!-- EDIT MODAL -->
+  <!-- EDIT MODAL (hidden access via KAISER x5) -->
   <div id="modal" class="modalBackdrop">
     <div class="panelModal space-y-3">
       <div class="flex items-start justify-between gap-3 flex-wrap">
@@ -576,19 +560,20 @@
 
       <textarea id="jsonArea" spellcheck="false"></textarea>
 
-      <div class="pill on" style="justify-content:center;">
-        Lederkode kræves • Kode: KAISER2026
+      <div class="tag" style="justify-content:center; display:flex;">
+        <span class="miniDot"></span> Lederkode kræves • KAISER2026
       </div>
     </div>
   </div>
 
   <script>
-    const APP_KEY = "kaiser_live_score_v3";
+    const APP_KEY = "kaiser_live_score_v3_clean";
     const LEADER_CODE = "KAISER2026";
-    const ROTATE_SECONDS = 12; // auto-rotation interval
+    const ROTATE_SECONDS = 12;
 
     function $(id){ return document.getElementById(id); }
     function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
     function nowDK(){
       return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
@@ -602,7 +587,6 @@
       el.textContent = msg;
       el.classList.remove("hidden");
     }
-
     function dayOfYear(d){
       const start = new Date(d.getFullYear(), 0, 1);
       return Math.floor((d - start) / (24*3600*1000)) + 1;
@@ -636,7 +620,7 @@
         { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
       ],
       upsell: { title:"Dessert solgt", current: 14, target: 30 },
-      focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"Én sætning. Ingen støj." }
+      focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"" }
     };
 
     function loadData(){
@@ -684,7 +668,6 @@
       $("navLocations").classList.toggle("on", activeScreen === "locations");
       $("navProducts").classList.toggle("on", activeScreen === "products");
     }
-
     function setScreen(id){
       activeScreen = id;
       $("screenOverview").classList.toggle("hidden", id !== "overview");
@@ -692,14 +675,12 @@
       $("screenProducts").classList.toggle("hidden", id !== "products");
       setNav();
     }
-
     function startRotation(){
       stopRotation();
       rotateTimer = setInterval(() => {
-        if ($("modal").style.display === "flex") return; // pause while editing
+        if ($("modal").style.display === "flex") return;
         const idx = screens.indexOf(activeScreen);
-        const nxt = screens[(idx + 1) % screens.length];
-        setScreen(nxt);
+        setScreen(screens[(idx + 1) % screens.length]);
       }, ROTATE_SECONDS * 1000);
     }
     function stopRotation(){
@@ -711,8 +692,8 @@
       setError("");
       const data = loadData();
 
-const saved = (data.meta && data.meta.lastSavedAt) ? data.meta.lastSavedAt : "—";
-$("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
+      const saved = (data.meta && data.meta.lastSavedAt) ? data.meta.lastSavedAt : "—";
+      $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
 
       const locs = Array.isArray(data.locations) ? data.locations : [];
       const todayTotal = locs.reduce((s,l) => s + Number(l.todayRevenue||0), 0);
@@ -740,7 +721,6 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
       $("kpiYtdNums").innerHTML = `<span class="miniDot"></span> ${formatDKK(ytdTotal)} / ${formatDKK(budgetTotal)}`;
       $("kpiYtdSub").textContent = "Mangler: " + formatDKK(Math.max(0, budgetTotal - ytdTotal));
 
-      // pace
       const now = new Date();
       const fracYear = dayOfYear(now) / daysInYear(now.getFullYear());
       const expected = budgetTotal * fracYear;
@@ -763,10 +743,12 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
       const remain = Math.max(0, tar - cur);
       $("kpiDessertRemain").innerHTML = `<span class="miniDot"></span> ${remain ? ("Mangler " + remain) : "Mål nået"}`;
 
-      // Focus
+      // Focus (hide sub if empty)
       const f = data.focus || {};
       $("focusText").textContent = f.text || "—";
-      $("focusSub").textContent = f.sub || "";
+      const sub = (f.sub || "").trim();
+      $("focusSub").textContent = sub;
+      $("focusSub").style.display = sub ? "" : "none";
 
       // Locations screen
       const board = $("locBoard");
@@ -798,7 +780,7 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
       // Products screen
       const prodList = $("prodList");
       prodList.innerHTML = "";
-      const entries = sortedEntries(data.productsToday).slice(0, 10); // top 10 max
+      const entries = sortedEntries(data.productsToday).slice(0, 10);
       const maxP = Math.max(1, ...entries.map(e => e.value));
       entries.forEach(e => {
         const div = document.createElement("div");
@@ -814,7 +796,7 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
       });
     }
 
-    // Modal
+    // Modal (hidden access)
     const modal = $("modal");
     const jsonArea = $("jsonArea");
 
@@ -831,7 +813,6 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
       startRotation();
     }
 
-    // Skjult leder-adgang: klik "KAISER" 5 gange hurtigt for at redigere let tapCount = 0; let tapTimer = null;  $("kickerTap").addEventListener("click", () => {   tapCount++;   clearTimeout(tapTimer);   tapTimer = setTimeout(() => { tapCount = 0; }, 900);    if (tapCount >= 5) {     tapCount = 0;     openModal();   } });
     $("closeBtn").addEventListener("click", closeModal);
 
     $("saveBtn").addEventListener("click", () => {
@@ -859,6 +840,19 @@ $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
     $("navOverview").addEventListener("click", () => { setScreen("overview"); startRotation(); });
     $("navLocations").addEventListener("click", () => { setScreen("locations"); startRotation(); });
     $("navProducts").addEventListener("click", () => { setScreen("products"); startRotation(); });
+
+    // Hidden leader access: click KAISER 5 times quickly
+    let tapCount = 0;
+    let tapTimer = null;
+    $("kickerTap").addEventListener("click", () => {
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { tapCount = 0; }, 900);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        openModal();
+      }
+    });
 
     // Init
     (function init(){
