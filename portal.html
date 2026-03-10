@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Portal</title>
+  <title>Kaiser – Live Score</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -123,7 +123,7 @@
       opacity:.95;
     }
 
-    /* Controls */
+    /* Controls (simple pills + actions) */
     .controls{
       position:relative;
       margin-top:16px;
@@ -134,65 +134,50 @@
       justify-content:center;
     }
 
-    .search{
-      flex: 1 1 420px;
-      max-width: 760px;
-      display:flex;
+    .pill{
+      display:inline-flex;
       align-items:center;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
-    }
-    .searchIcon{
-      width:28px;height:28px;border-radius:12px;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.88);
-      font-weight:900;
-      user-select:none;
-    }
-    .search input{
-      width:100%;
-      background:transparent;
-      outline:none;
-      border:none;
-      color: var(--text);
-      font-weight:800;
-      font-size:14px;
-    }
-    .search input::placeholder{ color: rgba(255,255,255,0.45); }
-
-    .seg{
-      display:flex;
-      flex-wrap:wrap;
       gap:8px;
-      justify-content:center;
-    }
-    .segBtn{
       padding:10px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.86);
-      font-weight:900;
-      font-size:11px;
-      letter-spacing:.12em;
+      font-weight:1000;
+      letter-spacing:.10em;
       text-transform:uppercase;
-      cursor:pointer;
+      font-size:11px;
+      color: rgba(255,255,255,0.86);
+      white-space:nowrap;
       user-select:none;
-      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .segBtn:active{ transform: translateY(1px); }
-    .segBtn.on{
-      border-color: rgba(214,178,74,0.35);
-      background: rgba(214,178,74,0.12);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    .pill.open{ border-color: rgba(214,178,74,0.22); background: rgba(214,178,74,0.10); }
+
+    .btnPrimary{
+      border-radius: 999px;
+      font-weight: 1000;
+      letter-spacing: .10em;
+      text-transform:uppercase;
+      font-size:11px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+      border: none;
+      user-select:none;
     }
+    .btnSecondary{
+      border-radius: 999px;
+      font-weight: 1000;
+      letter-spacing: .10em;
+      text-transform:uppercase;
+      font-size:11px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.90);
+      user-select:none;
+    }
+    .btnPrimary:active, .btnSecondary:active{ transform: translateY(1px); }
 
     /* Section blocks */
     .section{
@@ -246,11 +231,10 @@
     }
     @media (min-width: 820px){
       .gridTools{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
-      /* Last tile spans full width if odd count inside its section */
-      .gridTools > a.tile:last-child:nth-child(odd){ grid-column: 1 / -1; }
+      .gridTools > .tile:last-child:nth-child(odd){ grid-column: 1 / -1; }
     }
 
-    /* Tiles */
+    /* Tiles (portal look) */
     .tile{
       position:relative;
       display:flex;
@@ -263,11 +247,8 @@
         radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,.40);
-      text-decoration:none;
-      color:inherit;
       overflow:hidden;
-      transition: transform .12s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
-      min-height: 178px;
+      min-height: 168px;
     }
     .tile:before{
       content:"";
@@ -277,11 +258,6 @@
       pointer-events:none;
       background: radial-gradient(520px 220px at 16% 10%, rgba(214,178,74,0.16), transparent 60%);
     }
-    .tile:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 30px 85px rgba(0,0,0,.58);
-    }
     .tile:hover:before{ opacity:1; }
 
     .tileTop{
@@ -290,7 +266,6 @@
       align-items:flex-start;
       gap:12px;
     }
-
     .icon{
       width:42px;height:42px;border-radius:16px;
       display:flex;align-items:center;justify-content:center;
@@ -299,54 +274,38 @@
       font-weight:1000;
       letter-spacing:.08em;
       user-select:none;
-    }
-    .arrow{
-      width:36px;height:36px;border-radius:14px;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.90);
-      font-weight:1000;
       flex:0 0 auto;
-      transition: transform .12s ease, border-color .18s ease;
     }
-    .tile:hover .arrow{
-      transform: translateX(2px);
-      border-color: rgba(214,178,74,0.26);
-    }
-
     .tileKicker{
       font-size:12px;
       letter-spacing:.22em;
       text-transform:uppercase;
-      color: var(--muted2);
+      color: rgba(255,255,255,0.55);
       font-weight:1000;
       margin-top: 4px;
     }
     .tileTitle{
       font-family:"Playfair Display", serif;
-      font-size:32px;
+      font-size:34px;
       line-height:1.06;
       letter-spacing:-0.02em;
       font-weight:700;
       margin-top: 2px;
     }
     .tileSub{
-      color: var(--muted);
+      color: rgba(255,255,255,0.74);
       font-weight:700;
       font-size:13px;
       line-height:1.3;
-      max-width: 56ch;
+      max-width: 60ch;
     }
-
     .tileGoldline{
       height:2px;
       border-radius:999px;
       background: linear-gradient(90deg, transparent, rgba(214,178,74,0.65), transparent);
       opacity:.85;
-      margin-top:6px;
+      margin-top:4px;
     }
-
     .tileMeta{
       margin-top:auto;
       display:flex;
@@ -356,515 +315,5 @@
       flex-wrap:wrap;
       padding-top: 8px;
     }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.04);
-      font-weight:1000;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      font-size:11px;
-      color: rgba(255,255,255,0.86);
-      white-space:nowrap;
-    }
-    .pill.open{ border-color: rgba(214,178,74,0.22); background: rgba(214,178,74,0.10); }
-    .pill.lock{ border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
-
     .tag{
       display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      font-weight:1000;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      font-size:11px;
-      color: rgba(255,255,255,0.76);
-      white-space:nowrap;
-    }
-    .tag .miniDot{
-      width:7px;height:7px;border-radius:999px;
-      background: rgba(214,178,74,0.85);
-    }
-
-    .recent{
-      color: rgba(255,255,255,0.48);
-      font-weight:900;
-      font-size:11px;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      margin-left:auto;
-      white-space:nowrap;
-    }
-
-    /* Category color accents on icon */
-    .g-kitchen .icon{ box-shadow: 0 0 0 5px rgba(245,158,11,0.10); border-color: rgba(245,158,11,0.25); }
-    .g-drift   .icon{ box-shadow: 0 0 0 5px rgba(56,189,248,0.10);  border-color: rgba(56,189,248,0.25); }
-    .g-quality .icon{ box-shadow: 0 0 0 5px rgba(167,139,250,0.10); border-color: rgba(167,139,250,0.25); }
-
-    .g-kitchen .icon{ background: linear-gradient(180deg, rgba(245,158,11,0.18), rgba(255,255,255,0.04)); }
-    .g-drift   .icon{ background: linear-gradient(180deg, rgba(56,189,248,0.18), rgba(255,255,255,0.04)); }
-    .g-quality .icon{ background: linear-gradient(180deg, rgba(167,139,250,0.18), rgba(255,255,255,0.04)); }
-
-    .footer{
-      margin-top:18px;
-      text-align:center;
-      color: rgba(255,255,255,0.48);
-      font-weight:800;
-      font-size:12px;
-      letter-spacing:.02em;
-    }
-
-    /* PIN modal */
-    .modalBackdrop{
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(6px);
-    }
-    .panel{
-      background: rgba(18,20,28,0.90);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-    }
-    .input{
-      width: 100%;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      padding: 14px 14px;
-      outline: none;
-      color: rgba(255,255,255,0.92);
-      font-weight:800;
-    }
-    .input:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
-      background: rgba(255,255,255,0.08);
-    }
-    .btnPrimary{
-      width: 100%;
-      text-align: center;
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #0b0c0f;
-      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
-      border: none;
-    }
-    .btnSecondary{
-      width: 100%;
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.90);
-    }
-
-    @media (max-width:520px){
-      .title{font-size:40px;}
-      .tileTitle{font-size:30px;}
-    }
-  </style>
-</head>
-
-<body class="min-h-screen flex justify-center p-4">
-  <div class="shell w-full">
-
-    <header class="hero mt-6">
-      <div class="kicker">KAISER</div>
-      <div class="title">Portal</div>
-      <div class="subtitle">Interne værktøjer til drift og kvalitet</div>
-      <div class="goldline"></div>
-
-      <div class="controls" aria-label="Søg og filter">
-        <div class="search" role="search">
-          <div class="searchIcon">⌕</div>
-          <input id="searchInput" type="text" placeholder="Søg… (fx MIS, rengøring, rapport)" />
-        </div>
-
-        <div class="seg" aria-label="Filter">
-          <button class="segBtn on" type="button" data-filter="all">Alle</button>
-          <button class="segBtn" type="button" data-filter="kitchen">Køkken</button>
-          <button class="segBtn" type="button" data-filter="drift">Drift</button>
-          <button class="segBtn" type="button" data-filter="quality">Kvalitet</button>
-        </div>
-      </div>
-    </header>
-
-    <!-- =======================
-         KØKKEN
-         ======================= -->
-    <section class="section" id="sec-kitchen" aria-label="Køkken">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Køkken</div>
-        <div class="sectionSub">Mise en place, rengøring og rutiner</div>
-      </div>
-      <div class="divider"></div>
-
-      <div class="gridTools">
-        <!-- MIS -->
-        <a class="tile tool g-kitchen"
-           href="./MIS.html"
-           data-tool="mis"
-           data-group="kitchen"
-           data-tags="mis mise en place prep forberedelse to-do køkken"
-        >
-          <div class="tileTop">
-            <div class="icon">MIS</div>
-            <div class="arrow">→</div>
-          </div>
-
-          <div class="tileKicker">KAISER</div>
-          <div class="tileTitle">Mise en place</div>
-          <div class="tileSub">Vælg opgaver (N/A) → Make MIS → få dagens færdige to‑do liste</div>
-          <div class="tileGoldline"></div>
-
-          <div class="tileMeta">
-            <span class="pill open">ÅBEN</span>
-            <span class="tag"><span class="miniDot"></span> Køkken</span>
-            <span class="recent" data-recent-for="mis"></span>
-          </div>
-        </a>
-
-        <!-- Cleaning list kitchen (PIN) -->
-        <a class="tile tool g-kitchen"
-           href="./cleaning-kitchen.html"
-           data-tool="kitchen"
-           data-pin="1"
-           data-group="kitchen"
-           data-tags="cleaning rengøring kitchen hygiejne open close kontrol"
-        >
-          <div class="tileTop">
-            <div class="icon">CLN</div>
-            <div class="arrow">→</div>
-          </div>
-
-          <div class="tileKicker">KAISER</div>
-          <div class="tileTitle">Cleaning list kitchen</div>
-          <div class="tileSub">Rengøring pr. lokation • checklist • kun mail ved mangler</div>
-          <div class="tileGoldline"></div>
-
-          <div class="tileMeta">
-            <span class="pill lock">KODE</span>
-            <span class="tag"><span class="miniDot"></span> Køkken</span>
-            <span class="recent" data-recent-for="kitchen"></span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- =======================
-         DRIFT
-         ======================= -->
-    <section class="section" id="sec-drift" aria-label="Drift">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot" style="background:rgba(56,189,248,0.95); box-shadow:0 0 0 5px rgba(56,189,248,0.10);"></span> Drift</div>
-        <div class="sectionSub">Ledelse, rapportering og daglig kontrol</div>
-      </div>
-      <div class="divider"></div>
-
-      <div class="gridTools">
-        <!-- Skiftlederrapport (PIN) -->
-        <a class="tile tool g-drift"
-           href="./skiftlederrapport1.html"
-           data-tool="skiftleder"
-           data-pin="1"
-           data-group="drift"
-           data-tags="skiftleder rapport drift kvalitet afdeling"
-        >
-          <div class="tileTop">
-            <div class="icon">SR</div>
-            <div class="arrow">→</div>
-          </div>
-
-          <div class="tileKicker">KAISER</div>
-          <div class="tileTitle">Skiftlederrapport</div>
-          <div class="tileSub">Daglig drift og kvalitet – pr. afdeling</div>
-          <div class="tileGoldline"></div>
-
-          <div class="tileMeta">
-            <span class="pill lock">KODE</span>
-            <span class="tag"><span class="miniDot"></span> Drift</span>
-            <span class="recent" data-recent-for="skiftleder"></span>
-          </div>
-        </a>
-
-        <!-- Daglige opgaver (flyttet til Drift) -->
-        <a class="tile tool g-drift"
-           href="./daglige-opgaver.html"
-           data-tool="opgaver"
-           data-group="drift"
-           data-tags="daglige opgaver åbne lukke rengøring checklister drift"
-        >
-          <div class="tileTop">
-            <div class="icon">DO</div>
-            <div class="arrow">→</div>
-          </div>
-
-          <div class="tileKicker">KAISER</div>
-          <div class="tileTitle">Daglige opgaver</div>
-          <div class="tileSub">Åbne, lukke, rengøring • faste rutiner</div>
-          <div class="tileGoldline"></div>
-
-          <div class="tileMeta">
-            <span class="pill open">ÅBEN</span>
-            <span class="tag"><span class="miniDot"></span> Drift</span>
-            <span class="recent" data-recent-for="opgaver"></span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- =======================
-         KVALITET
-         ======================= -->
-    <section class="section" id="sec-quality" aria-label="Kvalitet">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot" style="background:rgba(167,139,250,0.95); box-shadow:0 0 0 5px rgba(167,139,250,0.10);"></span> Kvalitet</div>
-        <div class="sectionSub">Standarder og intern vurdering</div>
-      </div>
-      <div class="divider"></div>
-
-      <div class="gridTools">
-        <!-- Madscore -->
-        <a class="tile tool g-quality"
-           href="./"
-           data-tool="madscore"
-           data-group="quality"
-           data-tags="gastronomisk eftersyn foto rating kvalitet retter"
-        >
-          <div class="tileTop">
-            <div class="icon">GE</div>
-            <div class="arrow">→</div>
-          </div>
-
-          <div class="tileKicker">KAISER</div>
-          <div class="tileTitle">Gastronomisk Eftersyn</div>
-          <div class="tileSub">Intern vurdering af retter på tværs af lokationer</div>
-          <div class="tileGoldline"></div>
-
-          <div class="tileMeta">
-            <span class="pill open">ÅBEN</span>
-            <span class="tag"><span class="miniDot"></span> Kvalitet</span>
-            <span class="recent" data-recent-for="madscore"></span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- PIN MODAL -->
-    <div id="pinModal" class="fixed inset-0 hidden items-center justify-center p-4 modalBackdrop" style="z-index:9999;">
-      <div class="panel p-5 w-full" style="max-width:480px;">
-        <div class="text-lg font-extrabold">Adgangskode</div>
-        <div class="divider" style="margin:14px 0;"></div>
-
-        <div style="color:rgba(255,255,255,.72); font-weight:800;" id="pinModalText">
-          Indtast koden for at åbne.
-        </div>
-
-        <div class="mt-3 space-y-2">
-          <div class="pill open" style="justify-content:center; width:max-content;">Kode</div>
-          <input id="pinInput" class="input" type="password" placeholder="••••" />
-          <div id="pinError" class="hidden" style="color:var(--danger);font-weight:1000;margin-top:8px;">
-            Forkert kode
-          </div>
-        </div>
-
-        <div class="mt-4 grid grid-cols-2 gap-3">
-          <button id="pinCancel" class="btnSecondary" type="button">Annuller</button>
-          <button id="pinOk" class="btnPrimary" type="button">Fortsæt</button>
-        </div>
-      </div>
-    </div>
-
-    <footer class="footer">Kaiser • interne værktøjer</footer>
-  </div>
-
-  <script>
-    // ========= PIN SETTINGS =========
-    const PIN_SKIFTLEDER = "1234";     // <-- SKIFT HER
-    const PIN_SESSION_HOURS = 8;
-
-    // ========= DOM =========
-    const pinModal = document.getElementById("pinModal");
-    const pinInput = document.getElementById("pinInput");
-    const pinOk = document.getElementById("pinOk");
-    const pinCancel = document.getElementById("pinCancel");
-    const pinError = document.getElementById("pinError");
-    const pinModalText = document.getElementById("pinModalText");
-
-    const tools = Array.from(document.querySelectorAll("a.tile.tool"));
-    const searchInput = document.getElementById("searchInput");
-    const filterBtns = Array.from(document.querySelectorAll(".segBtn[data-filter]"));
-
-    const secKitchen = document.getElementById("sec-kitchen");
-    const secDrift = document.getElementById("sec-drift");
-    const secQuality = document.getElementById("sec-quality");
-
-    // ========= STATE =========
-    let pendingUrl = null;
-    let pendingKey = null;
-    let activeFilter = "all";
-
-    // ========= RECENT =========
-    const recentBase = "kaiser_portal_recent_v1";
-    function setRecent(tool){
-      localStorage.setItem(`${recentBase}_${tool}`, String(Date.now()));
-    }
-    function getRecent(tool){
-      const v = localStorage.getItem(`${recentBase}_${tool}`);
-      return v ? Number(v) : 0;
-    }
-    function formatAgo(ts){
-      if (!ts) return "";
-      const min = Math.round((Date.now() - ts) / 60000);
-      if (min < 1) return "senest: nu";
-      if (min < 60) return `senest: ${min}m`;
-      const h = Math.round(min/60);
-      if (h < 24) return `senest: ${h}t`;
-      const d = Math.round(h/24);
-      return `senest: ${d}d`;
-    }
-    function renderRecent(){
-      document.querySelectorAll("[data-recent-for]").forEach(el => {
-        const tool = el.getAttribute("data-recent-for");
-        const ts = getRecent(tool);
-        el.textContent = ts ? formatAgo(ts) : "";
-      });
-    }
-
-    // ========= PIN SESSION =========
-    function sessionKey(key){ return "kaiser_pin_ok_" + key; }
-    function hasValidSession(key){
-      const until = Number(localStorage.getItem(sessionKey(key)) || "0");
-      return Date.now() < until;
-    }
-    function setSession(key){
-      const until = Date.now() + PIN_SESSION_HOURS * 60 * 60 * 1000;
-      localStorage.setItem(sessionKey(key), String(until));
-    }
-
-    function openPin(url, key, title){
-      pendingUrl = url;
-      pendingKey = key;
-      pinError.classList.add("hidden");
-      pinInput.value = "";
-      pinModalText.textContent = "Indtast koden for at åbne: " + title;
-      pinModal.classList.remove("hidden");
-      pinModal.classList.add("flex");
-      setTimeout(() => pinInput.focus(), 50);
-    }
-
-    function closePin(){
-      pendingUrl = null;
-      pendingKey = null;
-      pinModal.classList.add("hidden");
-      pinModal.classList.remove("flex");
-    }
-
-    // ========= FILTER + SEARCH =========
-    function toolVisibleByFilters(a){
-      const group = (a.getAttribute("data-group") || "").toLowerCase();
-      const tags = (a.getAttribute("data-tags") || "").toLowerCase();
-      const text = (a.innerText || "").toLowerCase();
-      const q = (searchInput.value || "").trim().toLowerCase();
-
-      const okGroup = (activeFilter === "all") || (group === activeFilter);
-      const okSearch = !q || text.includes(q) || tags.includes(q);
-      return okGroup && okSearch;
-    }
-
-    function applyFilters(){
-      tools.forEach(a => {
-        a.style.display = toolVisibleByFilters(a) ? "" : "none";
-      });
-
-      // hide sections if empty
-      const sectionHasVisible = (secEl) => {
-        const links = Array.from(secEl.querySelectorAll("a.tile.tool"));
-        return links.some(a => a.style.display !== "none");
-      };
-
-      secKitchen.style.display = sectionHasVisible(secKitchen) ? "" : "none";
-      secDrift.style.display = sectionHasVisible(secDrift) ? "" : "none";
-      secQuality.style.display = sectionHasVisible(secQuality) ? "" : "none";
-    }
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterBtns.forEach(b => b.classList.remove("on"));
-        btn.classList.add("on");
-        activeFilter = btn.getAttribute("data-filter");
-        applyFilters();
-      });
-    });
-
-    searchInput.addEventListener("input", applyFilters);
-
-    // ========= CLICK HANDLING (PIN + RECENT) =========
-    tools.forEach(a => {
-      a.addEventListener("click", (e) => {
-        const requiresPin = a.getAttribute("data-pin") === "1";
-        const url = a.getAttribute("href");
-        const key = a.getAttribute("data-tool") || "tool";
-        const titleEl = a.querySelector(".tileTitle");
-        const title = titleEl ? titleEl.textContent : "Værktøj";
-
-        // no pin
-        if (!requiresPin){
-          setRecent(key);
-          return; // default navigation
-        }
-
-        // pin required
-        if (hasValidSession(key)){
-          setRecent(key);
-          return; // default navigation
-        }
-
-        e.preventDefault();
-        openPin(url, key, title);
-      });
-    });
-
-    pinCancel.addEventListener("click", closePin);
-    pinModal.addEventListener("click", (e) => {
-      if (e.target === pinModal) closePin();
-    });
-
-    pinOk.addEventListener("click", () => {
-      const code = (pinInput.value || "").trim();
-      if (code === PIN_SKIFTLEDER) {
-        setSession(pendingKey);
-        setRecent(pendingKey);
-        window.location.href = pendingUrl;
-      } else {
-        pinError.classList.remove("hidden");
-        pinInput.focus();
-        pinInput.select();
-      }
-    });
-
-    pinInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") pinOk.click();
-      if (e.key === "Escape") closePin();
-    });
-
-    // ========= INIT =========
-    renderRecent();
-    applyFilters();
-  </script>
-</body>
-</html>
