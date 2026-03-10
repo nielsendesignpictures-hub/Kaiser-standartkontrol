@@ -93,19 +93,6 @@
       box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
     }
 
-    .sectionHeader{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.85);
-      font-weight: 900;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-
     .task{
       display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
       border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
@@ -127,6 +114,44 @@
 
     .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
     .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+
+    /* Accordion (dropdown sections) */
+    .acc{
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.03);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .acc summary{
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.02);
+    }
+    .acc summary::-webkit-details-marker{ display:none; }
+    .acc .accMeta{
+      letter-spacing:0;
+      text-transform:none;
+      font-size:12px;
+      font-weight:800;
+      color: var(--muted);
+    }
+    .accBody{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
   </style>
 </head>
 
@@ -219,7 +244,6 @@
         <section class="space-y-3">
           <button id="submitBtn" class="btn btn-primary" type="submit">Send missing items</button>
           <button id="resetBtn" class="btn btn-secondary" type="button">Reset (this device only)</button>
-          <div class="muted">No email is sent when everything is completed.</div>
           <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
         </section>
       </form>
@@ -252,47 +276,178 @@
     };
 
     const QUOTES = [
-      "Consistency creates quality.",
-      "Clean kitchen = calm service.",
-      "Small routines create stable operations."
+      "Your effort makes the difference.",
+      "Details create excellence.",
+      "Clean kitchen, calm service.",
+      "Standards don’t keep themselves—thank you.",
+      "Consistency builds reputation.",
+      "A clean station is a fast station."
     ];
 
-    // OCR -> cleaned English lists:
-    const MORNING_TASKS = [
-      "Check if cleaning was done the night before (floor, fridge handles, dishwasher machine, paper, soap)",
-      "Unpack BC ASAP (always first priority)",
-      "Trash out + cardboard boxes",
-      "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
-    ];
-
-    const EVERY_DAY_TASKS = [
-      "Sweep and wash floor",
-      "Clean all tables with soap and spray with disinfectant",
-      "Clean fridge handles (big and small)",
-      "Trash out",
-      "Clean stove and under the stove",
-      "Grill cleaning",
-      "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
-    ];
-
-    const EVERY_NIGHT_TASKS = [
-      "Floor – also under fridges",
-      "All tables",
-      "Fridge handles (big and small)",
-      "Trash out",
-      "Stove and under the stove",
-      "Grill cleaning"
-    ];
-
-    const WEEKLY_EXTRA = {
-      mon: ["All shelves in the kitchen – clean and organize"],
-      tue: ["Small fridge – inside"],
-      wed: ["Dishwasher machine – inside & outside deep cleaning + ice cube machine"],
-      thu: ["Stove & oven – outside & inside deep + hallway (dishwasher area)"],
-      fri: ["Green section"],
-      sat: ["Big fridges + ice cube machine"],
-      sun: ["Big fridges + ice cube machine"]
+    // ===== Base list (Vanløse list) =====
+    const BASE_LIST = {
+      morning: [
+        "Check if cleaning was done the night before (floor, fridge handles, dishwasher machine, paper, soap)",
+        "Unpack BC ASAP (always first priority)",
+        "Trash out + cardboard boxes",
+        "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
+      ],
+      everyday: [
+        "Sweep and wash floor",
+        "Clean all tables with soap and spray with disinfectant",
+        "Clean fridge handles (big and small)",
+        "Trash out",
+        "Clean stove and under the stove",
+        "Grill cleaning",
+        "Refill soap and paper whenever it runs out (one backup at Royal fridge)"
+      ],
+      everynight: [
+        "Floor – also under fridges",
+        "All tables",
+        "Fridge handles (big and small)",
+        "Trash out",
+        "Stove and under the stove",
+        "Grill cleaning"
+      ],
+      weekly: {
+        mon: ["All shelves in the kitchen – clean and organize"],
+        tue: ["Small fridge – inside"],
+        wed: ["Dishwasher machine – inside & outside deep cleaning + ice cube machine"],
+        thu: ["Stove & oven – outside & inside deep + hallway (dishwasher area)"],
+        fri: ["Green section"],
+        sat: ["Big fridges + ice cube machine"],
+        sun: ["Big fridges + ice cube machine"]
+      }
     };
+
+    // ===== Lists per location =====
+    const LISTS = {
+      // Vanløse = current list
+      list1: BASE_LIST,
+
+      // Hørsholm: same base, custom weekly
+      list_horsholm: {
+        ...BASE_LIST,
+        weekly: {
+          mon: [
+            "Check all cleaning is done from the weekend",
+            "All shelves (hot, cold and backup sections)",
+            "Deep fryer",
+            "Green fridge"
+          ],
+          tue: [
+            "Normal cleaning (as usual)",
+            "Big fridges"
+          ],
+          wed: [
+            "Ventilation cleaning",
+            "Oven",
+            "Below grill and stove"
+          ],
+          thu: [
+            "Deep fryer",
+            "Dishwashing area"
+          ],
+          fri: [
+            "Depot (basic)",
+            "Basic cleaning"
+          ],
+          sat: [
+            "Everything",
+            "Shelves",
+            "Fridges (small + big) + deep clean",
+            "Dishwashing area (deep)",
+            "Ventilation (deep)",
+            "Oven (deep)",
+            "Under the fridge, oven and grill",
+            "Depot",
+            "Depot floor",
+            "Wash all pots/pans hanging in the hot section",
+            "Wash all fryer baskets + souch baskets",
+            "Change all dirty boxes",
+            "Green section",
+            "All sinks",
+            "Basement",
+            "Stegt flæsk stand",
+            "Outside oil area"
+          ],
+          sun: [
+            "Everything",
+            "Shelves",
+            "Fridges (small + big) + deep clean",
+            "Dishwashing area (deep)",
+            "Ventilation (deep)",
+            "Oven (deep)",
+            "Under the fridge, oven and grill",
+            "Depot",
+            "Depot floor",
+            "Wash all pots/pans hanging in the hot section",
+            "Wash all fryer baskets + souch baskets",
+            "Change all dirty boxes",
+            "Green section",
+            "All sinks",
+            "Basement",
+            "Stegt flæsk stand",
+            "Outside oil area"
+          ]
+        }
+      },
+
+      // Farum: same base, custom weekly
+      list_farum: {
+        ...BASE_LIST,
+        weekly: {
+          mon: [
+            "Hot/cold section shelves",
+            "Deep fryer",
+            "Organize depot"
+          ],
+          tue: [],
+          wed: [],
+          thu: [
+            "Deep fryer",
+            "Ventilation (not deep cleaning)",
+            "Dishwasher area"
+          ],
+          fri: [
+            "Dishwasher area",
+            "Shelves",
+            "Trash bins"
+          ],
+          sat: [
+            "Green section",
+            "Dishwasher area (DEEP)",
+            "Trash bins",
+            "Sinks"
+          ],
+          sun: [
+            "Big fridges",
+            "Ventilation (DEEP)",
+            "Shelves",
+            "Small fridges and oven",
+            "Trash bins",
+            "Door and tray stand",
+            "Kitchen door"
+          ]
+        }
+      }
+    };
+
+    // Vanløse keeps list1, Hillerød same list1, Hørsholm/Farum custom
+    const LOCATION_TO_LIST = {
+      "Café Kaiser Vanløse": "list1",
+      "Café Kaiser Hillerød": "list1",
+
+      "Café Kaiser Hørsholm": "list_horsholm",
+      "Café Kaiser Farum": "list_farum",
+
+      "Café Kaiser Helsingør": "list1"
+    };
+
+    function getListForLocation(loc){
+      const key = LOCATION_TO_LIST[loc] || "list1";
+      return LISTS[key] || LISTS.list1;
+    }
 
     // Days
     const DAYS = [
@@ -420,24 +575,37 @@
       errorText.classList.remove("hidden");
     }
 
-    function buildTasksForDay(dayKey){
-      const items = [];
+    // Build accordion sections (dropdowns) for chosen location/day
+    function buildSectionsForDay(loc, dayKey){
+      const L = getListForLocation(loc);
 
-      // Section headers as "header" items
-      items.push({ type:"header", text:"MORNING" });
-      MORNING_TASKS.forEach((t, i) => items.push({ type:"task", id:`M${i+1}`, text:t }));
+      const sections = [];
+      sections.push({
+        secId: "morning",
+        title: "Morning",
+        tasks: (L.morning || []).map((text, i) => ({ id:`M${i+1}`, text }))
+      });
 
-      items.push({ type:"header", text:"EVERY DAY CLEANING" });
-      EVERY_DAY_TASKS.forEach((t, i) => items.push({ type:"task", id:`D${i+1}`, text:t }));
+      sections.push({
+        secId: "everyday",
+        title: "Every day cleaning",
+        tasks: (L.everyday || []).map((text, i) => ({ id:`D${i+1}`, text }))
+      });
 
-      items.push({ type:"header", text:"EVERY NIGHT CLEANING" });
-      EVERY_NIGHT_TASKS.forEach((t, i) => items.push({ type:"task", id:`N${i+1}`, text:t }));
+      sections.push({
+        secId: "everynight",
+        title: "Every night cleaning",
+        tasks: (L.everynight || []).map((text, i) => ({ id:`N${i+1}`, text }))
+      });
 
-      items.push({ type:"header", text:"WEEKLY DEEP CLEAN" });
-      const extra = WEEKLY_EXTRA[dayKey] || [];
-      extra.forEach((t, i) => items.push({ type:"task", id:`W${i+1}`, text:t }));
+      const weeklyExtra = (L.weekly && L.weekly[dayKey]) ? L.weekly[dayKey] : [];
+      sections.push({
+        secId: "weekly",
+        title: "Weekly deep clean",
+        tasks: (weeklyExtra || []).map((text, i) => ({ id:`W${i+1}`, text }))
+      });
 
-      return items;
+      return sections;
     }
 
     function loadProgress(){
@@ -485,7 +653,8 @@
     }
 
     function getAllTasks(){
-      return buildTasksForDay(state.day).filter(x => x.type === "task");
+      const secs = buildSectionsForDay(state.loc, state.day);
+      return secs.flatMap(s => s.tasks);
     }
 
     function missingTasks(){
@@ -512,43 +681,76 @@
     }
 
     function renderTasks(){
-      taskList.innerHTML = "";
-      const items = buildTasksForDay(state.day);
+      // Remember which sections are open, so it doesn’t jump around on re-render
+      const openMap = {};
+      document.querySelectorAll('details[data-sec]').forEach(d => {
+        openMap[d.dataset.sec] = d.open;
+      });
 
-      items.forEach(item => {
-        if (item.type === "header") {
-          const h = document.createElement("div");
-          h.className = "sectionHeader";
-          h.textContent = item.text;
-          taskList.appendChild(h);
-          return;
+      taskList.innerHTML = "";
+
+      const sections = buildSectionsForDay(state.loc, state.day);
+
+      sections.forEach((sec, secIndex) => {
+        const total = sec.tasks.length;
+        const doneCount = sec.tasks.filter(t => isTaskDone(t.id)).length;
+        const complete = total > 0 && doneCount === total;
+
+        const details = document.createElement("details");
+        details.className = "acc";
+        details.dataset.sec = sec.secId;
+
+        const wasOpen = openMap[sec.secId];
+        details.open = complete ? false : (typeof wasOpen === "boolean" ? wasOpen : (secIndex === 0));
+
+        const summary = document.createElement("summary");
+        summary.innerHTML = `
+          <span>${escapeHtml(sec.title)}</span>
+          <span class="accMeta">${doneCount}/${total}</span>
+        `;
+        details.appendChild(summary);
+
+        const body = document.createElement("div");
+        body.className = "accBody";
+
+        if (total === 0) {
+          const empty = document.createElement("div");
+          empty.className = "muted";
+          empty.textContent = "No tasks today.";
+          body.appendChild(empty);
+        } else {
+          sec.tasks.forEach(item => {
+            const on = isTaskDone(item.id);
+            const row = document.createElement("div");
+            row.className = "task" + (state.locked ? " locked" : "");
+            row.innerHTML = `
+              <div class="taskNum">${escapeHtml(item.id)}</div>
+              <div style="flex:1;">
+                <div class="taskTitle">${escapeHtml(item.text)}</div>
+              </div>
+              <div class="check ${on ? "on" : ""}">${on ? "✓" : ""}</div>
+            `;
+
+            row.addEventListener("click", () => {
+              if (state.locked) return;
+              setTaskDone(item.id, !isTaskDone(item.id));
+              updateUI(); // auto-close completed sections + update progress
+            });
+
+            body.appendChild(row);
+          });
         }
 
-        const on = isTaskDone(item.id);
-        const row = document.createElement("div");
-        row.className = "task" + (state.locked ? " locked" : "");
-        row.innerHTML = `
-          <div class="taskNum">${escapeHtml(item.id)}</div>
-          <div style="flex:1;">
-            <div class="taskTitle">${escapeHtml(item.text)}</div>
-          </div>
-          <div class="check ${on ? "on" : ""}">${on ? "✓" : ""}</div>
-        `;
-
-        row.addEventListener("click", () => {
-          if (state.locked) return;
-          setTaskDone(item.id, !isTaskDone(item.id));
-          updateUI();
-        });
-
-        taskList.appendChild(row);
+        details.appendChild(body);
+        taskList.appendChild(details);
       });
     }
 
     function updateSubject(loc, missCount){
       const wk = state.weekKey;
       const dayFull = (DAYS.find(x => x.key === state.day) || {}).full || state.day;
-      $("subjectField").value = "Kitchen cleaning – " + (loc || "Location") + " – " + wk + " – " + dayFull + " – Missing: " + missCount;
+      $("subjectField").value =
+        "Kitchen cleaning – " + (loc || "Location") + " – " + wk + " – " + dayFull + " – Missing: " + missCount;
     }
 
     async function tryAutoSelectLocation(){
@@ -605,6 +807,9 @@
 
       progressText.textContent = doneCount + "/" + total;
       progressBar.style.width = total ? Math.round((doneCount/total)*100) + "%" : "0%";
+
+      // Keep button text updated
+      submitBtn.textContent = missCount > 0 ? ("Send missing items (" + missCount + ")") : "Send missing items";
 
       // Auto-complete if everything done
       if (!done && state.loc && total > 0 && missCount === 0) {
