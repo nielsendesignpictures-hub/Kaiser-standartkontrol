@@ -12,7 +12,6 @@
 
   <style>
     :root{
-      /* Modern dark, but readable */
       --bg0:#070A12;
       --bg1:#0B1020;
       --panel:rgba(255,255,255,0.055);
@@ -23,14 +22,8 @@
       --muted:rgba(255,255,255,0.74);
       --muted2:rgba(255,255,255,0.52);
 
-      /* Kaiser gold accent */
       --gold:#d6b24a;
       --gold2:#b9921f;
-
-      /* Category colors */
-      --kitchen:#f59e0b; /* amber */
-      --drift:#38bdf8;   /* sky */
-      --quality:#a78bfa; /* violet */
 
       --danger:#ff6b6b;
       --shadow: 0 26px 75px rgba(0,0,0,.55);
@@ -48,8 +41,6 @@
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
       overflow-x:hidden;
     }
-
-    /* subtle grid texture */
     body:before{
       content:"";
       position:fixed; inset:0;
@@ -64,7 +55,6 @@
 
     .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
 
-    /* Header / hero */
     .hero{
       position:relative;
       border-radius: 28px;
@@ -80,8 +70,8 @@
       content:"";
       position:absolute; inset:-2px;
       background:
-        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
+        radial-gradient(700px 240px at 20% 0%, rgba(214,178,74,0.22), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(214,178,74,0.14), transparent 60%);
       opacity:.55;
       pointer-events:none;
     }
@@ -123,17 +113,15 @@
       opacity:.95;
     }
 
-    /* Controls (simple pills + actions) */
     .controls{
       position:relative;
       margin-top:16px;
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
       align-items:center;
       justify-content:center;
     }
-
     .pill{
       display:inline-flex;
       align-items:center;
@@ -149,8 +137,13 @@
       color: rgba(255,255,255,0.86);
       white-space:nowrap;
       user-select:none;
+      cursor:pointer;
     }
-    .pill.open{ border-color: rgba(214,178,74,0.22); background: rgba(214,178,74,0.10); }
+    .pill.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    }
 
     .btnPrimary{
       border-radius: 999px;
@@ -179,7 +172,6 @@
     }
     .btnPrimary:active, .btnSecondary:active{ transform: translateY(1px); }
 
-    /* Section blocks */
     .section{
       margin-top:18px;
       border-radius:26px;
@@ -222,24 +214,25 @@
     }
     .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-    /* Grid inside sections */
-    .gridTools{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      padding: 14px;
-    }
-    @media (min-width: 820px){
-      .gridTools{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
-      .gridTools > .tile:last-child:nth-child(odd){ grid-column: 1 / -1; }
-    }
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
+  padding: 14px;
+}
 
-    /* Tiles (portal look) */
-    .tile{
-      position:relative;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+/* 15" laptop/monitor: 2x2 giver store tal og ro */
+@media (min-width: 820px){
+  .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
+}
+
+/* Kun på rigtig store skærme: 4 kolonner */
+@media (min-width: 1200px){
+  .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+    /* SCORE CARDS (cleaner than portal tiles) */
+    .card{
       border-radius:26px;
       padding:18px 18px 16px;
       border:1px solid rgba(255,255,255,0.12);
@@ -247,73 +240,37 @@
         radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 20px 60px rgba(0,0,0,.40);
-      overflow:hidden;
-      min-height: 168px;
-    }
-    .tile:before{
-      content:"";
-      position:absolute; inset:-2px;
-      opacity:0;
-      transition: opacity .18s ease;
-      pointer-events:none;
-      background: radial-gradient(520px 220px at 16% 10%, rgba(214,178,74,0.16), transparent 60%);
-    }
-    .tile:hover:before{ opacity:1; }
-
-    .tileTop{
+      min-height: 170px;
       display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
+      flex-direction:column;
+      gap:10px;
     }
-    .icon{
-      width:42px;height:42px;border-radius:16px;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.05);
-      font-weight:1000;
-      letter-spacing:.08em;
-      user-select:none;
-      flex:0 0 auto;
-    }
-    .tileKicker{
+    .cardLabel{
       font-size:12px;
       letter-spacing:.22em;
       text-transform:uppercase;
       color: rgba(255,255,255,0.55);
       font-weight:1000;
-      margin-top: 4px;
     }
-    .tileTitle{
-      font-family:"Playfair Display", serif;
-      font-size:34px;
-      line-height:1.06;
-      letter-spacing:-0.02em;
-      font-weight:700;
-      margin-top: 2px;
-    }
-    .tileSub{
+.cardValue{
+  font-family:"Playfair Display", serif;
+  font-size: clamp(36px, 4.2vw, 56px);
+  line-height:1.02;
+  letter-spacing:-0.02em;
+  font-weight:700;
+}
+.cardValue.small{ font-size: clamp(30px, 3.4vw, 44px); }
+    .cardSub{
       color: rgba(255,255,255,0.74);
-      font-weight:700;
+      font-weight:800;
       font-size:13px;
-      line-height:1.3;
-      max-width: 60ch;
+      line-height:1.25;
     }
-    .tileGoldline{
-      height:2px;
-      border-radius:999px;
-      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.65), transparent);
-      opacity:.85;
-      margin-top:4px;
-    }
-    .tileMeta{
+    .cardMeta{
       margin-top:auto;
       display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
-      padding-top: 8px;
     }
     .tag{
       display:inline-flex;
@@ -330,12 +287,8 @@
       color: rgba(255,255,255,0.76);
       white-space:nowrap;
     }
-    .tag .miniDot{
-      width:7px;height:7px;border-radius:999px;
-      background: rgba(214,178,74,0.85);
-    }
+    .tag .miniDot{ width:7px;height:7px;border-radius:999px; background: rgba(214,178,74,0.85); }
 
-    /* Meters */
     .meterWrap{
       height:10px;
       border-radius:999px;
@@ -352,45 +305,108 @@
       background: linear-gradient(90deg, rgba(98,210,111,1), rgba(44,160,83,1));
     }
 
-    /* Battle rows */
-    .battleRow{
-      border-radius:22px;
+    /* Focus banner */
+    .focusBanner{
+      margin: 14px;
+      border-radius:26px;
+      padding:18px 18px 16px;
       border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      padding:14px;
+      background:
+        radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: 0 20px 60px rgba(0,0,0,.40);
     }
-    .battleName{ font-weight:1000; letter-spacing:-0.01em; }
-    .battleNums{ color: rgba(255,255,255,0.65); font-weight:900; font-size:12px; }
-    .battleGrid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin-top:10px;
+ .focusText{
+  font-family:"Playfair Display", serif;
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height:1.06;
+  letter-spacing:-0.02em;
+  font-weight:700;
+
     }
-    @media (min-width: 820px){
-      .battleGrid{ grid-template-columns: 1fr 1fr; }
-    }
-    .miniLabel{
-      color: rgba(255,255,255,0.55);
-      font-weight:1000;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      font-size:11px;
-      margin-bottom:6px;
+    .focusSub{
+      margin-top:8px;
+      color: rgba(255,255,255,0.70);
+      font-weight:800;
+      font-size:13px;
     }
 
-    /* Product list */
-    .listItem{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:10px 12px;
-      border-radius:16px;
+    /* Leaderboard (screen 2) */
+    .board{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .line{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      padding:12px;
+    }
+    .lineTop{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      align-items:baseline;
+    }
+    .lineName{ font-weight:1000; letter-spacing:-0.01em; }
+    .lineVal{ font-weight:1000; color: rgba(255,255,255,0.88); }
+    .lineBar{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
       border:1px solid rgba(255,255,255,0.10);
       background: rgba(255,255,255,0.03);
     }
-    .listName{ font-weight:900; }
-    .listVal{ font-weight:1000; color: rgba(255,255,255,0.86); letter-spacing:.02em; }
+    .lineFill{
+      height:10px; width:0%;
+      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
+    }
+    .lineMeta{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
 
-    /* Modal (portal-ish) */
+    /* Products screen */
+    .plist{
+      padding:14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    @media (min-width: 900px){
+      .plist{ grid-template-columns: 1fr 1fr; }
+    }
+    .pitem{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      padding:12px;
+    }
+    .pTop{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      align-items:baseline;
+    }
+    .pName{ font-weight:1000; }
+    .pVal{ font-weight:1000; color: rgba(255,255,255,0.88); }
+    .pBar{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+    }
+    .pFill{
+      height:10px; width:0%;
+      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
+    }
+
+    .hidden{ display:none !important; }
+
+    /* Modal */
     .modalBackdrop{
       position:fixed; inset:0;
       display:none;
@@ -432,176 +448,112 @@
 
     @media (max-width:520px){
       .title{font-size:40px;}
-      .tileTitle{font-size:30px;}
+      .cardValue{font-size:40px;}
+      .focusText{font-size:30px;}
     }
   </style>
 </head>
 
-<body class="min-h-screen flex justify-center p-4">
+<body class="min-h-screen p-4">
   <div class="shell w-full">
 
     <header class="hero mt-6">
-      <div class="kicker">KAISER</div>
+      <div class="kicker" id="kickerTap">KAISER</div>
       <div class="title">Live Score</div>
-      <div class="subtitle">Salg og fokus • manuel nu (auto via Friendly senere)</div>
+      <div class="subtitle">Hurtigt overblik • auto-rotation • manuel data nu (Friendly senere)</div>
       <div class="goldline"></div>
 
-      <div class="controls" aria-label="Status og handlinger">
+      <div class="controls" aria-label="Navigation">
+        <div class="pill on" id="navOverview">Overblik</div>
+        <div class="pill" id="navLocations">Lokationer</div>
+        <div class="pill" id="navProducts">Produkter</div>
+
         <div class="pill"><span style="opacity:.7;">Nu</span> <span id="clockText">—</span></div>
         <div class="pill"><span style="opacity:.7;">Sidst gemt</span> <span id="savedText">—</span></div>
-        <button id="editBtn" class="btnSecondary" type="button">Rediger data (leder)</button>
-        <button id="copyBtn" class="btnSecondary" type="button">Kopiér JSON</button>
+
+        <button id="editBtn" class="btnSecondary" type="button">Rediger (leder)</button>
         <a class="btnPrimary" href="./portal.html">Til portal</a>
       </div>
 
       <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
     </header>
 
-    <!-- OVERBLIK -->
-    <section class="section" aria-label="Overblik">
+    <!-- SCREEN 1: OVERVIEW -->
+    <section class="section" id="screenOverview" aria-label="Overblik">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Overblik</div>
-        <div class="sectionSub">Få store tal • ingen støj</div>
+        <div class="sectionSub">4 tal der kan aflæses på 3 sekunder</div>
       </div>
       <div class="divider"></div>
 
-      <div class="gridTools">
-        <!-- Tile: Dagens omsætning -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Omsætning">DKK</div>
-            <div class="tag"><span class="miniDot"></span> I dag</div>
-          </div>
-          <div class="tileKicker">Dagens omsætning</div>
-          <div class="tileTitle" id="kpiTodayRevenue">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiTodayRevenueSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiTodayProgressTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiTodayTargetTag"><span class="miniDot"></span> Mål: —</div>
+      <div class="grid">
+        <div class="card">
+          <div class="cardLabel">Dagens omsætning</div>
+          <div class="cardValue" id="kpiTodayRevenue">—</div>
+          <div class="cardSub" id="kpiTodaySub">—</div>
+          <div class="cardMeta">
+            <div class="tag" id="kpiTodayPct"><span class="miniDot"></span> —</div>
+            <div class="tag" id="kpiTodayTarget"><span class="miniDot"></span> Mål: —</div>
           </div>
         </div>
 
-        <!-- Tile: YTD / Årsbudget -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Årsbudget">YTD</div>
-            <div class="tag"><span class="miniDot"></span> År</div>
-          </div>
-          <div class="tileKicker">YTD / Årsbudget</div>
-          <div class="tileTitle" id="kpiYtdPct">—</div>
+        <div class="card">
+          <div class="cardLabel">YTD / Årsbudget</div>
+          <div class="cardValue" id="kpiYtdPct">—</div>
           <div class="meterWrap"><div id="kpiYtdBar" class="meterFill"></div></div>
-          <div class="tileSub" id="kpiYtdSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiYtdNumbersTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiPaceTag"><span class="miniDot"></span> Pace: —</div>
+          <div class="cardSub" id="kpiYtdSub">—</div>
+          <div class="cardMeta">
+            <div class="tag" id="kpiYtdNums"><span class="miniDot"></span> —</div>
+            <div class="tag" id="kpiPace"><span class="miniDot"></span> Pace: —</div>
           </div>
         </div>
 
-        <!-- Tile: All-time top product -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="All-time">TOP</div>
-            <div class="tag"><span class="miniDot"></span> All-time</div>
-          </div>
-          <div class="tileKicker">Mest solgte produkt</div>
-          <div class="tileTitle" id="kpiAllTimeProd">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiAllTimeProdSub">—</div>
-          <div class="tileMeta">
-            <div class="tag"><span class="miniDot"></span> Til dato</div>
+        <div class="card">
+          <div class="cardLabel">Dagens topsælger</div>
+          <div class="cardValue small" id="kpiTodayProd">—</div>
+          <div class="cardSub" id="kpiTodayProdSub">—</div>
+          <div class="cardMeta">
+            <div class="tag" id="kpiTodayProdCount"><span class="miniDot"></span> —</div>
           </div>
         </div>
 
-        <!-- Tile: Today top product -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Dagens topsælger">★</div>
-            <div class="tag"><span class="miniDot"></span> I dag</div>
-          </div>
-          <div class="tileKicker">Dagens mest solgte</div>
-          <div class="tileTitle" id="kpiTodayProd">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="kpiTodayProdSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiTodayProdTag"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
-
-        <!-- Tile: Dessert upsell (spans full width when odd) -->
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Mersalg">+</div>
-            <div class="tag"><span class="miniDot"></span> Dessert</div>
-          </div>
-          <div class="tileKicker">Mersalgs-mål</div>
-          <div class="tileTitle" id="kpiUpsellTitle">—</div>
-          <div class="meterWrap"><div id="kpiUpsellBar" class="meterFill"></div></div>
-          <div class="tileSub" id="kpiUpsellSub">—</div>
-          <div class="tileMeta">
-            <div class="tag" id="kpiUpsellTag"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiUpsellHint"><span class="miniDot"></span> —</div>
+        <div class="card">
+          <div class="cardLabel">Dessert (mersalg)</div>
+          <div class="cardValue" id="kpiDessert">—</div>
+          <div class="meterWrap"><div id="kpiDessertBar" class="meterFill"></div></div>
+          <div class="cardSub" id="kpiDessertSub">—</div>
+          <div class="cardMeta">
+            <div class="tag" id="kpiDessertRemain"><span class="miniDot"></span> —</div>
           </div>
         </div>
       </div>
+
+      <div class="focusBanner">
+        <div class="cardLabel">Dagens fokus</div>
+        <div class="focusText" id="focusText">—</div>
+        <div class="focusSub" id="focusSub">—</div>
+      </div>
     </section>
 
-    <!-- LOKATIONS BATTLE -->
-    <section class="section" aria-label="Lokations battle">
+    <!-- SCREEN 2: LOCATIONS -->
+    <section class="section hidden" id="screenLocations" aria-label="Lokationer">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Lokations battle</div>
-        <div class="sectionSub" id="battleSub">Dagens omsætning • YTD vs årsbudget</div>
+        <div class="sectionSub">Kun dagens omsætning • YTD% som tag</div>
       </div>
       <div class="divider"></div>
-
-      <div style="padding:14px;" class="space-y-3" id="battleList"></div>
+      <div class="board" id="locBoard"></div>
     </section>
 
-    <!-- FOKUS + PRODUKTER -->
-    <section class="section" aria-label="Fokus og produkter">
+    <!-- SCREEN 3: PRODUCTS -->
+    <section class="section hidden" id="screenProducts" aria-label="Produkter">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Dagens fokus</div>
-        <div class="sectionSub">1 linje alle skal kunne huske</div>
+        <div class="sectionTitle"><span class="dot"></span> Produkter (i dag)</div>
+        <div class="sectionSub">Topliste • resten er støj</div>
       </div>
       <div class="divider"></div>
-
-      <div class="gridTools">
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Fokus">!</div>
-            <div class="tag"><span class="miniDot"></span> Fokus</div>
-          </div>
-          <div class="tileKicker">I dag</div>
-          <div class="tileTitle" id="focusText">—</div>
-          <div class="tileGoldline"></div>
-          <div class="tileSub" id="focusSub">—</div>
-          <div class="tileMeta">
-            <div class="tag"><span class="miniDot"></span> Hold det simpelt</div>
-          </div>
-        </div>
-
-        <div class="tile">
-          <div class="tileTop">
-            <div class="icon" title="Produkter">PR</div>
-            <div class="tag"><span class="miniDot"></span> Top 5</div>
-          </div>
-          <div class="tileKicker">Dagens solgte produkter</div>
-          <div class="tileSub">Viser top 5 for overblik. (Alle kan ses i data.)</div>
-
-          <div class="tileGoldline"></div>
-
-          <div class="space-y-2" id="topProducts"></div>
-
-          <div class="tileMeta">
-            <div class="tag" id="prodCountTag"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
-      </div>
+      <div class="plist" id="prodList"></div>
     </section>
-
-    <div class="mt-6" style="text-align:center;color:rgba(255,255,255,0.45);font-weight:900;font-size:12px;letter-spacing:.04em;">
-      Tip: Brug “Rediger data (leder)” på den skærm der hænger i caféen – så er den altid opdateret lokalt.
-    </div>
 
   </div>
 
@@ -612,7 +564,7 @@
         <div>
           <div style="font-weight:1000;letter-spacing:-0.01em;font-size:18px;">Rediger data (JSON)</div>
           <div style="color:rgba(255,255,255,0.60);font-weight:900;font-size:12px;">
-            Gemmes kun på denne enhed/skærm. Lim ind og klik “Gem”.
+            Gemmes kun på denne enhed/skærm.
           </div>
         </div>
         <div class="flex gap-2 flex-wrap">
@@ -624,18 +576,26 @@
 
       <textarea id="jsonArea" spellcheck="false"></textarea>
 
-      <div class="pill open" style="justify-content:center;">
+      <div class="pill on" style="justify-content:center;">
         Lederkode kræves • Kode: KAISER2026
       </div>
     </div>
   </div>
 
   <script>
-    // ================= SETTINGS =================
-    const APP_KEY = "kaiser_live_score_portal_v2";
+    const APP_KEY = "kaiser_live_score_v3";
     const LEADER_CODE = "KAISER2026";
+    const ROTATE_SECONDS = 12; // auto-rotation interval
 
     function $(id){ return document.getElementById(id); }
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+    function nowDK(){
+      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+    function formatDKK(n){
+      const val = Number(n || 0);
+      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
+    }
     function setError(msg){
       const el = $("errorText");
       if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
@@ -643,35 +603,16 @@
       el.classList.remove("hidden");
     }
 
-    function nowDK(){
-      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-    }
-
-    function formatDKK(n){
-      const val = Number(n || 0);
-      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
-    }
-
-    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
-
     function dayOfYear(d){
       const start = new Date(d.getFullYear(), 0, 1);
-      const diff = (d - start);
-      return Math.floor(diff / (24*3600*1000)) + 1;
+      return Math.floor((d - start) / (24*3600*1000)) + 1;
     }
     function daysInYear(y){
       return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 366 : 365;
     }
 
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
-    }
-
-    // ================= DATA =================
     const DEFAULT_DATA = {
       meta: { lastSavedAt: "" },
-
-      // 1) Mest solgte produkt til dato
       productsAllTime: {
         "Filterkaffe": 6210,
         "Cappuccino": 3980,
@@ -679,8 +620,6 @@
         "Kaiserburger": 1240,
         "Brunch": 1540
       },
-
-      // 2+4) Dagens produkter
       productsToday: {
         "Filterkaffe": 88,
         "Cappuccino": 62,
@@ -689,10 +628,6 @@
         "Brunch": 19,
         "Dessert": 14
       },
-
-      // 3) Lokations battle (kun omsætning)
-      // todayTarget = dagsmål (valgfri)
-      // ytdTarget = årsbudget (skal bruges)
       locations: [
         { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 4120000, ytdTarget: 7600000 },
         { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 3560000, ytdTarget: 7000000 },
@@ -700,20 +635,8 @@
         { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 3890000, ytdTarget: 7400000 },
         { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
       ],
-
-      // 5) Mersalg: Dessert
-      upsell: {
-        title: "Dessert solgt",
-        current: 14,
-        target: 30,
-        hint: "Spørg altid: “Skal I dele en dessert?”"
-      },
-
-      // 6) Fokus
-      focus: {
-        text: "Husk dessert + kaffe ved alle bordene.",
-        sub: "Hold fokus kort. Én sætning."
-      }
+      upsell: { title:"Dessert solgt", current: 14, target: 30 },
+      focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"Én sætning. Ingen støj." }
     };
 
     function loadData(){
@@ -727,7 +650,6 @@
         return structuredClone(DEFAULT_DATA);
       }
     }
-
     function saveData(data){
       data.meta = data.meta || {};
       data.meta.lastSavedAt = nowDK();
@@ -741,22 +663,50 @@
       entries.sort((a,b) => Number(b[1]||0) - Number(a[1]||0));
       return { name: entries[0][0], value: Number(entries[0][1]||0) };
     }
-
     function sortedEntries(map){
       return Object.entries(map || {})
         .map(([k,v]) => ({ name:k, value:Number(v||0) }))
         .sort((a,b) => b.value - a.value);
     }
-
     function setMeter(elFill, pct){
-      const p = pct || 0;
-      const w = Math.round(clamp01(p) * 100);
+      const w = Math.round(clamp01(pct) * 100);
       elFill.style.width = w + "%";
-      elFill.classList.toggle("ok", p >= 1);
-      return w;
+      elFill.classList.toggle("ok", pct >= 1);
     }
 
-    // ================= RENDER =================
+    // Screens
+    const screens = ["overview","locations","products"];
+    let activeScreen = "overview";
+    let rotateTimer = null;
+
+    function setNav(){
+      $("navOverview").classList.toggle("on", activeScreen === "overview");
+      $("navLocations").classList.toggle("on", activeScreen === "locations");
+      $("navProducts").classList.toggle("on", activeScreen === "products");
+    }
+
+    function setScreen(id){
+      activeScreen = id;
+      $("screenOverview").classList.toggle("hidden", id !== "overview");
+      $("screenLocations").classList.toggle("hidden", id !== "locations");
+      $("screenProducts").classList.toggle("hidden", id !== "products");
+      setNav();
+    }
+
+    function startRotation(){
+      stopRotation();
+      rotateTimer = setInterval(() => {
+        if ($("modal").style.display === "flex") return; // pause while editing
+        const idx = screens.indexOf(activeScreen);
+        const nxt = screens[(idx + 1) % screens.length];
+        setScreen(nxt);
+      }, ROTATE_SECONDS * 1000);
+    }
+    function stopRotation(){
+      if (rotateTimer) clearInterval(rotateTimer);
+      rotateTimer = null;
+    }
+
     function render(){
       setError("");
       const data = loadData();
@@ -770,122 +720,101 @@
       const ytdTotal = locs.reduce((s,l) => s + Number(l.ytdRevenue||0), 0);
       const budgetTotal = locs.reduce((s,l) => s + Number(l.ytdTarget||0), 0);
 
-      // KPI: today revenue
+      // KPI 1: Today revenue
       $("kpiTodayRevenue").textContent = formatDKK(todayTotal);
-      const todayPct = (todayTargetTotal > 0) ? (todayTotal / todayTargetTotal) : null;
-      $("kpiTodayTargetTag").textContent = "Mål: " + (todayTargetTotal ? formatDKK(todayTargetTotal) : "—");
-      $("kpiTodayProgressTag").textContent = todayPct === null ? "—" : (Math.round(todayPct*100) + "% af mål");
-      $("kpiTodayRevenueSub").textContent =
-        todayTargetTotal
-          ? ("Mangler: " + formatDKK(Math.max(0, todayTargetTotal - todayTotal)))
-          : "Tip: Sæt todayTarget pr. lokation for %.";
+      if (todayTargetTotal > 0) {
+        const pct = todayTotal / todayTargetTotal;
+        $("kpiTodayPct").innerHTML = `<span class="miniDot"></span> ${Math.round(pct*100)}%`;
+        $("kpiTodayTarget").innerHTML = `<span class="miniDot"></span> Mål: ${formatDKK(todayTargetTotal)}`;
+        $("kpiTodaySub").textContent = "Mangler: " + formatDKK(Math.max(0, todayTargetTotal - todayTotal));
+      } else {
+        $("kpiTodayPct").innerHTML = `<span class="miniDot"></span> —`;
+        $("kpiTodayTarget").innerHTML = `<span class="miniDot"></span> Mål: —`;
+        $("kpiTodaySub").textContent = "Sæt todayTarget pr. lokation for målopfyldelse.";
+      }
 
-      // KPI: YTD / budget
+      // KPI 2: YTD / budget
       const ytdPct = budgetTotal > 0 ? (ytdTotal / budgetTotal) : 0;
-      $("kpiYtdPct").textContent = Math.round(ytdPct * 100) + "%";
+      $("kpiYtdPct").textContent = Math.round(ytdPct*100) + "%";
       setMeter($("kpiYtdBar"), ytdPct);
-      $("kpiYtdNumbersTag").textContent = formatDKK(ytdTotal) + " / " + formatDKK(budgetTotal);
+      $("kpiYtdNums").innerHTML = `<span class="miniDot"></span> ${formatDKK(ytdTotal)} / ${formatDKK(budgetTotal)}`;
       $("kpiYtdSub").textContent = "Mangler: " + formatDKK(Math.max(0, budgetTotal - ytdTotal));
 
-      // pace vs year-to-date
+      // pace
       const now = new Date();
       const fracYear = dayOfYear(now) / daysInYear(now.getFullYear());
       const expected = budgetTotal * fracYear;
       const delta = ytdTotal - expected;
-      $("kpiPaceTag").textContent = "Pace: " + (delta >= 0 ? ("+" + formatDKK(delta)) : formatDKK(delta));
+      $("kpiPace").innerHTML = `<span class="miniDot"></span> ${delta >= 0 ? ("+"+formatDKK(delta)) : formatDKK(delta)}`;
 
-      // KPI: all-time top product
-      const allTop = topEntry(data.productsAllTime);
-      $("kpiAllTimeProd").textContent = allTop ? allTop.name : "—";
-      $("kpiAllTimeProdSub").textContent = allTop ? ("Antal: " + allTop.value.toLocaleString("da-DK")) : "Ingen data";
-
-      // KPI: today top product
+      // KPI 3: Today top product
       const todayTop = topEntry(data.productsToday);
       $("kpiTodayProd").textContent = todayTop ? todayTop.name : "—";
-      $("kpiTodayProdSub").textContent = todayTop ? ("Antal i dag: " + todayTop.value.toLocaleString("da-DK")) : "Ingen data";
-      $("kpiTodayProdTag").textContent = todayTop ? ("#" + 1 + " i dag") : "—";
+      $("kpiTodayProdSub").textContent = todayTop ? "Antal i dag" : "Ingen data";
+      $("kpiTodayProdCount").innerHTML = `<span class="miniDot"></span> ${todayTop ? todayTop.value.toLocaleString("da-DK") : "—"}`;
 
-      // KPI: dessert upsell
+      // KPI 4: Dessert
       const ups = data.upsell || {};
-      $("kpiUpsellTitle").textContent = ups.title || "Dessert solgt";
       const cur = Number(ups.current || 0);
       const tar = Math.max(1, Number(ups.target || 0));
-      const upsPct = cur / tar;
-      setMeter($("kpiUpsellBar"), upsPct);
-      $("kpiUpsellSub").textContent = `${cur}/${tar} • ${Math.round(upsPct*100)}%`;
-      $("kpiUpsellTag").textContent = Math.max(0, tar - cur) ? ("Mangler: " + Math.max(0, tar - cur)) : "Mål nået";
-      $("kpiUpsellHint").textContent = ups.hint ? ups.hint : "—";
+      $("kpiDessert").textContent = `${cur}/${tar}`;
+      setMeter($("kpiDessertBar"), cur/tar);
+      $("kpiDessertSub").textContent = "Dessert solgt i dag";
+      const remain = Math.max(0, tar - cur);
+      $("kpiDessertRemain").innerHTML = `<span class="miniDot"></span> ${remain ? ("Mangler " + remain) : "Mål nået"}`;
 
       // Focus
       const f = data.focus || {};
       $("focusText").textContent = f.text || "—";
       $("focusSub").textContent = f.sub || "";
 
-      // Battle
-      const battle = $("battleList");
-      battle.innerHTML = "";
+      // Locations screen
+      const board = $("locBoard");
+      board.innerHTML = "";
+      const sortedLocs = locs.slice().sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0));
+      const maxToday = Math.max(1, ...sortedLocs.map(l => Number(l.todayRevenue||0)));
 
-      locs
-        .slice()
-        .sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0))
-        .forEach((l, idx) => {
-          const todayRev = Number(l.todayRevenue||0);
-          const todayTarget = Number(l.todayTarget||0);
-          const ytdRev = Number(l.ytdRevenue||0);
-          const budget = Number(l.ytdTarget||0);
+      sortedLocs.forEach((l, i) => {
+        const todayRev = Number(l.todayRevenue||0);
+        const ytdRev = Number(l.ytdRevenue||0);
+        const budget = Number(l.ytdTarget||0);
+        const ytdP = budget > 0 ? (ytdRev / budget) : null;
 
-          const todayGoalPct = todayTarget > 0 ? (todayRev / todayTarget) : null;
-          const ytdGoalPct = budget > 0 ? (ytdRev / budget) : null;
-
-          const row = document.createElement("div");
-          row.className = "battleRow";
-          row.innerHTML = `
-            <div class="flex items-start justify-between gap-3 flex-wrap">
-              <div class="battleName">${escapeHtml(l.name || "Lokation")} <span style="opacity:.55;font-weight:1000;">#${idx+1}</span></div>
-              <div class="battleNums">I dag: ${formatDKK(todayRev)} • YTD: ${formatDKK(ytdRev)}</div>
-            </div>
-
-            <div class="battleGrid">
-              <div>
-                <div class="miniLabel">I dag ${todayTarget ? ("(mål " + formatDKK(todayTarget) + ")") : ""}</div>
-                <div class="meterWrap"><div class="meterFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}" style="width:${todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct)*100)}%"></div></div>
-                <div class="battleNums" style="margin-top:6px;">
-                  ${todayGoalPct === null ? "Sæt todayTarget for progress." : (Math.round(todayGoalPct*100) + "% af mål")}
-                </div>
-              </div>
-
-              <div>
-                <div class="miniLabel">YTD vs årsbudget ${budget ? ("(" + formatDKK(budget) + ")") : ""}</div>
-                <div class="meterWrap"><div class="meterFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}" style="width:${ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct)*100)}%"></div></div>
-                <div class="battleNums" style="margin-top:6px;">
-                  ${ytdGoalPct === null ? "Sæt ytdTarget (årsbudget) for progress." : (Math.round(ytdGoalPct*100) + "% af årsbudget")}
-                </div>
-              </div>
-            </div>
-          `;
-          battle.appendChild(row);
-        });
-
-      // Top products (top 5)
-      const entries = sortedEntries(data.productsToday);
-      const top5 = entries.slice(0,5);
-
-      const list = $("topProducts");
-      list.innerHTML = "";
-      top5.forEach(e => {
-        const li = document.createElement("div");
-        li.className = "listItem";
-        li.innerHTML = `
-          <div class="listName">${escapeHtml(e.name)}</div>
-          <div class="listVal">${e.value.toLocaleString("da-DK")}</div>
+        const div = document.createElement("div");
+        div.className = "line";
+        div.innerHTML = `
+          <div class="lineTop">
+            <div class="lineName">${l.name} <span style="opacity:.55;font-weight:1000;">#${i+1}</span></div>
+            <div class="lineVal">${formatDKK(todayRev)}</div>
+          </div>
+          <div class="lineBar"><div class="lineFill" style="width:${Math.round(clamp01(todayRev/maxToday)*100)}%"></div></div>
+          <div class="lineMeta">
+            <div class="tag"><span class="miniDot"></span> YTD ${ytdP===null ? "—" : (Math.round(ytdP*100)+"%")}</div>
+          </div>
         `;
-        list.appendChild(li);
+        board.appendChild(div);
       });
 
-      $("prodCountTag").textContent = "Varer i dag: " + entries.length;
+      // Products screen
+      const prodList = $("prodList");
+      prodList.innerHTML = "";
+      const entries = sortedEntries(data.productsToday).slice(0, 10); // top 10 max
+      const maxP = Math.max(1, ...entries.map(e => e.value));
+      entries.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "pitem";
+        div.innerHTML = `
+          <div class="pTop">
+            <div class="pName">${e.name}</div>
+            <div class="pVal">${e.value.toLocaleString("da-DK")}</div>
+          </div>
+          <div class="pBar"><div class="pFill" style="width:${Math.round(clamp01(e.value/maxP)*100)}%"></div></div>
+        `;
+        prodList.appendChild(div);
+      });
     }
 
-    // ================= MODAL =================
+    // Modal
     const modal = $("modal");
     const jsonArea = $("jsonArea");
 
@@ -893,11 +822,14 @@
       const code = prompt("Lederkode:");
       if (!code) return;
       if (code.trim() !== LEADER_CODE) return setError("Forkert lederkode.");
-      const data = loadData();
-      jsonArea.value = JSON.stringify(data, null, 2);
+      jsonArea.value = JSON.stringify(loadData(), null, 2);
       modal.style.display = "flex";
+      stopRotation();
     }
-    function closeModal(){ modal.style.display = "none"; }
+    function closeModal(){
+      modal.style.display = "none";
+      startRotation();
+    }
 
     $("editBtn").addEventListener("click", openModal);
     $("closeBtn").addEventListener("click", closeModal);
@@ -921,25 +853,19 @@
       render();
     });
 
-    $("copyBtn").addEventListener("click", async () => {
-      try{
-        const text = JSON.stringify(loadData(), null, 2);
-        await navigator.clipboard.writeText(text);
-        setError("");
-        alert("JSON kopieret.");
-      } catch(e){
-        setError("Kunne ikke kopiere (browser).");
-      }
-    });
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
-    });
+    // Nav clicks
+    $("navOverview").addEventListener("click", () => { setScreen("overview"); startRotation(); });
+    $("navLocations").addEventListener("click", () => { setScreen("locations"); startRotation(); });
+    $("navProducts").addEventListener("click", () => { setScreen("products"); startRotation(); });
 
-    // ================= INIT =================
+    // Init
     (function init(){
       if (!localStorage.getItem(APP_KEY)) saveData(structuredClone(DEFAULT_DATA));
+      setScreen("overview");
       render();
+      startRotation();
       setInterval(render, 60 * 1000);
     })();
   </script>
