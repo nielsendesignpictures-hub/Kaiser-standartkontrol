@@ -15,17 +15,23 @@
       --bg:#17181c;
       --panel:rgba(28, 30, 36, 0.90);
       --border:rgba(255,255,255,0.10);
+
       --text:rgba(255,255,255,0.93);
       --muted:rgba(255,255,255,0.70);
       --muted2:rgba(255,255,255,0.50);
+
       --gold:#d6b24a;
       --gold2:#b9921f;
-      --goldGlow:rgba(214,178,74,.22);
+      --goldGlow:rgba(214,178,74,0.22);
+
       --danger:#ff6b6b;
       --ok:#62d26f;
     }
 
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    html,body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);background:var(--bg);
+    }
     body{
       background:
         radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
@@ -52,13 +58,13 @@
     .divider{height:1px;background:rgba(255,255,255,.10);}
 
     .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select{
+    .input, select, textarea{
       width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.06);
       padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
     }
     select option{color:#0b0c0f;}
-    .input:focus, select:focus{
+    .input:focus, select:focus, textarea:focus{
       border-color: rgba(214,178,74,0.55);
       box-shadow: 0 0 0 4px var(--goldGlow);
       background: rgba(255,255,255,0.08);
@@ -105,16 +111,36 @@
       overflow:hidden;
     }
     .acc summary{
-      list-style:none; cursor:pointer; user-select:none;
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
       padding:14px 14px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      font-weight:900; letter-spacing:.10em; text-transform:uppercase;
-      font-size:12px; color: rgba(255,255,255,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.85);
       background: rgba(255,255,255,0.02);
     }
     .acc summary::-webkit-details-marker{ display:none; }
-    .accMeta{letter-spacing:0;text-transform:none;font-size:12px;font-weight:800;color: var(--muted);white-space:nowrap;}
-    .accBody{padding: 12px; display:flex; flex-direction:column; gap:10px;}
+    .acc .accMeta{
+      letter-spacing:0;
+      text-transform:none;
+      font-size:12px;
+      font-weight:800;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .accBody{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
 
     /* Task row */
     .task{
@@ -162,138 +188,6 @@
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       font-weight:800;font-size:12px;color:rgba(255,255,255,0.85);
-      /* =========================
-   LIGHT THEME OVERRIDE
-   Paste at the very bottom of <style>
-   ========================= */
-
-:root{
-  --bg:#f4f5f7;
-  --panel:rgba(255,255,255,0.92);
-  --border:rgba(17,24,39,0.12);
-  --text:rgba(17,24,39,0.92);
-  --muted:rgba(17,24,39,0.70);
-  --muted2:rgba(17,24,39,0.55);
-
-  --gold:#d6b24a;
-  --gold2:#b9921f;
-  --goldGlow:rgba(214,178,74,.22);
-
-  --danger:#dc2626;
-}
-
-html,body{
-  color:var(--text) !important;
-  background:var(--bg) !important;
-}
-
-body{
-  background:
-    radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.16), transparent 55%),
-    radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
-    radial-gradient(900px 800px at 20% 115%, rgba(17,24,39,0.05), transparent 55%),
-    linear-gradient(180deg, #f4f5f7, #eef1f7 55%, #f4f5f7) !important;
-}
-
-.topbar{
-  border-color: var(--border) !important;
-  background: linear-gradient(180deg, rgba(17,24,39,0.04), rgba(17,24,39,0.015)) !important;
-  box-shadow: 0 18px 50px rgba(17,24,39,.14) !important;
-}
-
-.panel{
-  background: var(--panel) !important;
-  border-color: var(--border) !important;
-  box-shadow: 0 18px 55px rgba(17,24,39,.12) !important;
-}
-
-.divider{ background: rgba(17,24,39,.10) !important; }
-
-.label{ color: var(--muted2) !important; }
-.muted{ color: var(--muted) !important; }
-.hint{ color: var(--muted2) !important; }
-
-.input, select, textarea{
-  background: rgba(17,24,39,0.03) !important;
-  border-color: rgba(17,24,39,0.16) !important;
-  color: rgba(17,24,39,0.92) !important;
-}
-.input::placeholder{ color: rgba(17,24,39,0.45) !important; }
-
-select option{ color:#111827 !important; }
-
-.input:focus, select:focus, textarea:focus{
-  border-color: rgba(214,178,74,0.65) !important;
-  box-shadow: 0 0 0 4px var(--goldGlow) !important;
-  background: rgba(17,24,39,0.02) !important;
-}
-
-.tabBtn{
-  background: rgba(17,24,39,0.03) !important;
-  border-color: rgba(17,24,39,0.14) !important;
-  color: rgba(17,24,39,0.88) !important;
-}
-.tabBtn.on{
-  background: rgba(214,178,74,0.16) !important;
-  border-color: rgba(214,178,74,0.45) !important;
-  box-shadow: 0 0 0 4px rgba(214,178,74,0.14) !important;
-}
-
-.acc{
-  background: rgba(17,24,39,0.02) !important;
-  border-color: rgba(17,24,39,0.12) !important;
-}
-.acc summary{
-  background: rgba(17,24,39,0.015) !important;
-  color: rgba(17,24,39,0.88) !important;
-}
-
-.task{
-  background: rgba(17,24,39,0.02) !important;
-  border-color: rgba(17,24,39,0.12) !important;
-}
-.task:hover{
-  background: rgba(214,178,74,0.10) !important;
-  border-color: rgba(214,178,74,0.35) !important;
-}
-
-.badge{
-  border-color: rgba(214,178,74,0.35) !important;
-  background: rgba(214,178,74,0.14) !important;
-  color: rgba(17,24,39,0.90) !important;
-}
-
-.pill.na{
-  border-color: rgba(17,24,39,0.14) !important;
-  background: rgba(17,24,39,0.03) !important;
-  color: rgba(17,24,39,0.70) !important;
-}
-.pill.in{
-  border-color: rgba(214,178,74,0.55) !important;
-  background: rgba(214,178,74,0.18) !important;
-  color: rgba(17,24,39,0.92) !important;
-}
-.pill.done{
-  border-color: rgba(98,210,111,0.55) !important;
-  background: rgba(98,210,111,0.20) !important;
-  color: rgba(17,24,39,0.92) !important;
-}
-
-/* Fix your inline boxes to be visible in light mode */
-#doneBox{
-  border: 1px solid rgba(98,210,111,0.45) !important;
-  background: rgba(98,210,111,0.14) !important;
-}
-#emptyMisBox{
-  border: 1px solid rgba(17,24,39,0.14) !important;
-  background: rgba(17,24,39,0.03) !important;
-}
-
-.chip{
-  border-color: rgba(17,24,39,0.12) !important;
-  background: rgba(17,24,39,0.02) !important;
-  color: rgba(17,24,39,0.82) !important;
-}
     }
   </style>
 </head>
@@ -350,9 +244,9 @@ select option{ color:#111827 !important; }
           </div>
 
           <div class="space-y-2">
-            <div class="label">Day (select the day you create MIS for)</div>
+            <div class="label">Target day (the day the MIS is for)</div>
             <div class="tabs7" id="dayTabs"></div>
-            <div class="hint">Selects the next occurrence of that weekday</div>
+            <div class="hint">Default = tomorrow</div>
           </div>
         </div>
 
@@ -703,7 +597,7 @@ select option{ color:#111827 !important; }
       loc: "",
       who: "",
       dayKey: getDayKeyToday(),
-      targetDate: nextDateForDayKey(getDayKeyToday()),
+      targetDate: nextDateForDayKey(getDayKeyToday()), // default = tomorrow
       dateISO: "",                    // computed
       weekKey: "",
       selected: {},                   // {id:true}
@@ -766,7 +660,7 @@ select option{ color:#111827 !important; }
           state.targetDate = nextDateForDayKey(state.dayKey);
           syncDerived();
 
-          // Reload saved selection for that day (tomorrow etc.)
+          // Reload saved selection for that day
           loadForCurrentContext();
           updateAllUI();
           renderDayTabs();
@@ -999,7 +893,6 @@ select option{ color:#111827 !important; }
     // We use URL param ?view=mis to behave like a new page.
     // =========================
     function baseUrl(){
-      // keeps current file path; works on https and local servers
       return window.location.origin + window.location.pathname;
     }
 
@@ -1087,8 +980,12 @@ select option{ color:#111827 !important; }
         state.targetDate = new Date(date + "T12:00:00");
         state.dayKey = dayKeyFromDateISO(date);
       } else {
-        state.dayKey = getDayKeyToday();
-        state.targetDate = nextDateForDayKey(state.dayKey);
+        // DEFAULT: tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0,0,0,0);
+        state.targetDate = tomorrow;
+        state.dayKey = dayKeyFromDateISO(dateISOFromLocal(tomorrow));
       }
 
       syncDerived();
