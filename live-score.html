@@ -458,22 +458,22 @@
   <div class="shell w-full">
 
     <header class="hero mt-6">
-      <div class="kicker" id="kickerTap">KAISER</div>
-      <div class="title">Live Score</div>
-      <div class="subtitle">Hurtigt overblik • auto-rotation • manuel data nu (Friendly senere)</div>
-      <div class="goldline"></div>
-
       <div class="controls" aria-label="Navigation">
-        <div class="pill on" id="navOverview">Overblik</div>
-        <div class="pill" id="navLocations">Lokationer</div>
-        <div class="pill" id="navProducts">Produkter</div>
+  <div class="pill on" id="navOverview">Overblik</div>
+  <div class="pill" id="navLocations">Lokationer</div>
+  <div class="pill" id="navProducts">Produkter</div>
+</div>
 
-        <div class="pill"><span style="opacity:.7;">Nu</span> <span id="clockText">—</span></div>
-        <div class="pill"><span style="opacity:.7;">Sidst gemt</span> <span id="savedText">—</span></div>
-
-        <button id="editBtn" class="btnSecondary" type="button">Rediger (leder)</button>
-        <a class="btnPrimary" href="./portal.html">Til portal</a>
-      </div>
+<div class="subtitle" id="statusLine" style="margin-top:12px;">
+  —
+</div>
+     .focusText{
+  font-family:"Playfair Display", serif;
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height:1.06;
+  letter-spacing:-0.02em;
+  font-weight:700;
+}
 
       <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
     </header>
@@ -711,8 +711,8 @@
       setError("");
       const data = loadData();
 
-      $("clockText").textContent = nowDK();
-      $("savedText").textContent = data.meta && data.meta.lastSavedAt ? data.meta.lastSavedAt : "—";
+const saved = (data.meta && data.meta.lastSavedAt) ? data.meta.lastSavedAt : "—";
+$("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
 
       const locs = Array.isArray(data.locations) ? data.locations : [];
       const todayTotal = locs.reduce((s,l) => s + Number(l.todayRevenue||0), 0);
@@ -831,7 +831,7 @@
       startRotation();
     }
 
-    $("editBtn").addEventListener("click", openModal);
+    // Skjult leder-adgang: klik "KAISER" 5 gange hurtigt for at redigere let tapCount = 0; let tapTimer = null;  $("kickerTap").addEventListener("click", () => {   tapCount++;   clearTimeout(tapTimer);   tapTimer = setTimeout(() => { tapCount = 0; }, 900);    if (tapCount >= 5) {     tapCount = 0;     openModal();   } });
     $("closeBtn").addEventListener("click", closeModal);
 
     $("saveBtn").addEventListener("click", () => {
