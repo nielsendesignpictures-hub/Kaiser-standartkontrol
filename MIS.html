@@ -162,6 +162,138 @@
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       font-weight:800;font-size:12px;color:rgba(255,255,255,0.85);
+      /* =========================
+   LIGHT THEME OVERRIDE
+   Paste at the very bottom of <style>
+   ========================= */
+
+:root{
+  --bg:#f4f5f7;
+  --panel:rgba(255,255,255,0.92);
+  --border:rgba(17,24,39,0.12);
+  --text:rgba(17,24,39,0.92);
+  --muted:rgba(17,24,39,0.70);
+  --muted2:rgba(17,24,39,0.55);
+
+  --gold:#d6b24a;
+  --gold2:#b9921f;
+  --goldGlow:rgba(214,178,74,.22);
+
+  --danger:#dc2626;
+}
+
+html,body{
+  color:var(--text) !important;
+  background:var(--bg) !important;
+}
+
+body{
+  background:
+    radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.16), transparent 55%),
+    radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
+    radial-gradient(900px 800px at 20% 115%, rgba(17,24,39,0.05), transparent 55%),
+    linear-gradient(180deg, #f4f5f7, #eef1f7 55%, #f4f5f7) !important;
+}
+
+.topbar{
+  border-color: var(--border) !important;
+  background: linear-gradient(180deg, rgba(17,24,39,0.04), rgba(17,24,39,0.015)) !important;
+  box-shadow: 0 18px 50px rgba(17,24,39,.14) !important;
+}
+
+.panel{
+  background: var(--panel) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 18px 55px rgba(17,24,39,.12) !important;
+}
+
+.divider{ background: rgba(17,24,39,.10) !important; }
+
+.label{ color: var(--muted2) !important; }
+.muted{ color: var(--muted) !important; }
+.hint{ color: var(--muted2) !important; }
+
+.input, select, textarea{
+  background: rgba(17,24,39,0.03) !important;
+  border-color: rgba(17,24,39,0.16) !important;
+  color: rgba(17,24,39,0.92) !important;
+}
+.input::placeholder{ color: rgba(17,24,39,0.45) !important; }
+
+select option{ color:#111827 !important; }
+
+.input:focus, select:focus, textarea:focus{
+  border-color: rgba(214,178,74,0.65) !important;
+  box-shadow: 0 0 0 4px var(--goldGlow) !important;
+  background: rgba(17,24,39,0.02) !important;
+}
+
+.tabBtn{
+  background: rgba(17,24,39,0.03) !important;
+  border-color: rgba(17,24,39,0.14) !important;
+  color: rgba(17,24,39,0.88) !important;
+}
+.tabBtn.on{
+  background: rgba(214,178,74,0.16) !important;
+  border-color: rgba(214,178,74,0.45) !important;
+  box-shadow: 0 0 0 4px rgba(214,178,74,0.14) !important;
+}
+
+.acc{
+  background: rgba(17,24,39,0.02) !important;
+  border-color: rgba(17,24,39,0.12) !important;
+}
+.acc summary{
+  background: rgba(17,24,39,0.015) !important;
+  color: rgba(17,24,39,0.88) !important;
+}
+
+.task{
+  background: rgba(17,24,39,0.02) !important;
+  border-color: rgba(17,24,39,0.12) !important;
+}
+.task:hover{
+  background: rgba(214,178,74,0.10) !important;
+  border-color: rgba(214,178,74,0.35) !important;
+}
+
+.badge{
+  border-color: rgba(214,178,74,0.35) !important;
+  background: rgba(214,178,74,0.14) !important;
+  color: rgba(17,24,39,0.90) !important;
+}
+
+.pill.na{
+  border-color: rgba(17,24,39,0.14) !important;
+  background: rgba(17,24,39,0.03) !important;
+  color: rgba(17,24,39,0.70) !important;
+}
+.pill.in{
+  border-color: rgba(214,178,74,0.55) !important;
+  background: rgba(214,178,74,0.18) !important;
+  color: rgba(17,24,39,0.92) !important;
+}
+.pill.done{
+  border-color: rgba(98,210,111,0.55) !important;
+  background: rgba(98,210,111,0.20) !important;
+  color: rgba(17,24,39,0.92) !important;
+}
+
+/* Fix your inline boxes to be visible in light mode */
+#doneBox{
+  border: 1px solid rgba(98,210,111,0.45) !important;
+  background: rgba(98,210,111,0.14) !important;
+}
+#emptyMisBox{
+  border: 1px solid rgba(17,24,39,0.14) !important;
+  background: rgba(17,24,39,0.03) !important;
+}
+
+.chip{
+  border-color: rgba(17,24,39,0.12) !important;
+  background: rgba(17,24,39,0.02) !important;
+  color: rgba(17,24,39,0.82) !important;
+}
     }
   </style>
 </head>
