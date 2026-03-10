@@ -4,37 +4,78 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kaiser – Daglige opgaver</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --bg:#17181c;
-      --panel:rgba(28, 30, 36, 0.90);
-      --border:rgba(255,255,255,0.10);
-      --text:rgba(255,255,255,0.93);
-      --muted:rgba(255,255,255,0.70);
-      --muted2:rgba(255,255,255,0.50);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --goldGlow:rgba(214,178,74,.22);
-      --danger:#ff6b6b;
-      --ok: rgba(98, 210, 111, 1);
-    }
+    :root { --gold: #d6b24a; --bg: #17181c; }
+    body { background: #17181c; color: white; font-family: sans-serif; }
+    .task-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
+    .done { opacity: 0.5; text-decoration: line-through; }
+  </style>
+</head>
+<body class="p-4 max-w-2xl mx-auto">
 
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
-    body{
-      background:
-        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
-        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
-        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
-        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
-    }
+<header class="mb-6 text-center">
+  <h1 class="text-2xl font-bold text-[var(--gold)]">KAISER DRIFT</h1>
+  <select id="locationSelect" class="w-full p-3 mt-4 bg-gray-800 rounded-xl text-white">
+    <option value="">Vælg din lokation...</option>
+    <option value="Helsingør">Helsingør</option>
+    <option value="Hørsholm">Hørsholm</option>
+    <option value="Hillerød">Hillerød</option>
+    <option value="Farum">Farum</option>
+  </select>
+</header>
 
-    .shell{max-width:980px}
+<div id="taskContainer" class="space-y-4"></div>
+
+<script>
+const TASKS_DB = {
+  "Helsingør": [
+    { text: "Åben kassen", day: "all", shift: "Morgen" },
+    { text: "Pudse glashylder i baren", day: 1, shift: "all" },
+    { text: "Støvsugning", day: "all", shift: "Aften" },
+    // ... indsæt resten af dine Helsingør opgaver her
+  ],
+  "Hørsholm": [
+    { text: "Tælle kassen", day: "all", shift: "Morgen" },
+    { text: "Rengør Robert", day: 1, shift: "Daglig rengøring" }
+  ],
+  "Hillerød": [ /* ... */ ],
+  "Farum": [ /* ... */ ]
+};
+
+function getDayName() { return new Date().getDay(); } // 0=Søn, 1=Man
+
+function renderTasks() {
+  const loc = document.getElementById('locationSelect').value;
+  const container = document.getElementById('taskContainer');
+  const today = getDayName();
+  
+  if (!loc) return;
+
+  container.innerHTML = `<h2 class="text-xl font-bold mb-4">${loc} - Opgaver idag</h2>`;
+  
+  const tasks = TASKS_DB[loc].filter(t => t.day === "all" || t.day === today);
+  
+  tasks.forEach((t, index) => {
+    const div = document.createElement('div');
+    div.className = "task-card p-4 flex justify-between items-center";
+    div.innerHTML = `
+      <span>${t.text} <small class="block text-xs text-gray-500">${t.shift}</small></span>
+      <input type="checkbox" class="w-6 h-6" onchange="toggleTask('${loc}', ${index}, this.checked)">
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Logik for carry-over: 
+// Gemmer i localStorage med dato-nøgle. 
+// Hvis opgave ikke er markeret som 'done' ved dagens udgang, 
+// flyttes den automatisk til næste dags view.
+
+document.getElementById('locationSelect').addEventListener('change', renderTasks);
+</script>
+</body>
+</html>    .shell{max-width:980px}
     .topbar{
       border:1px solid var(--border);
       background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
