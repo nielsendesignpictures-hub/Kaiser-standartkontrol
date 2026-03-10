@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Live Score</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#17181c;
+      --panel:rgba(28, 30, 36, 0.90);
+      --border:rgba(255,255,255,0.10);
+      --text:rgba(255,255,255,0.93);
+      --muted:rgba(255,255,255,0.70);
+      --muted2:rgba(255,255,255,0.50);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --goldGlow:rgba(214,178,74,.22);
+      --danger:#ff6b6b;
+      --ok:#62d26f;
+    }
+
+    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    body{
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
+        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
+        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+    }
+
+    .shell{max-width:1100px}
+    .topbar{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+      border-radius:22px;padding:22px 18px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 28px 70px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
+    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
+    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
+    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
+    .divider{height:1px;background:rgba(255,255,255,.10);}
+
+    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+    .muted{color:var(--muted);font-weight:600;font-size:13px;}
+
+    .btn{
+      border-radius:16px;font-weight:900;letter-spacing:.02em;padding:12px 14px;
+      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+
+    .stat{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      border-radius:18px;
+      padding:14px;
+    }
+    .statTitle{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .statValue{font-size:22px;font-weight:900;letter-spacing:-0.015em;margin-top:6px;line-height:1.1;}
+    .statSub{margin-top:6px;color:var(--muted);font-weight:700;font-size:12px;}
+
+    .barWrap{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      border-radius:999px;
+      overflow:hidden;
+      height:10px;
+    }
+    .barFill{
+      height:10px;
+      width:0%;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+    }
+    .barFill.ok{
+      background: linear-gradient(90deg, rgba(98,210,111,1), rgba(44,160,83,1));
+    }
+
+    .row{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.6);
+      display:none; align-items:center; justify-content:center;
+      padding:16px;
+      z-index:50;
+    }
+    .modal{
+      width:min(920px, 100%);
+      max-height: 86vh;
+      overflow:auto;
+      border-radius:20px;
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: 0 28px 70px rgba(0,0,0,.6);
+      padding:16px;
+    }
+    textarea{
+      width:100%;
+      min-height: 320px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      padding:12px;
+      outline:none;
+      color:rgba(255,255,255,0.92);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+    }
+    textarea:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px var(--goldGlow);
+      background: rgba(255,255,255,0.08);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen p-4">
+  <div class="shell w-full mx-auto space-y-4">
+
+    <header class="topbar mt-6">
+      <div class="kicker">KAISER</div>
+      <div class="title">Live Score</div>
+      <div class="subtitle">Auto senere via Friendly • v1 er manuel, men “live” på skærmen</div>
+      <div class="goldline"></div>
+
+      <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+        <div class="hint" id="clockText">—</div>
+        <div class="hint">•</div>
+        <div class="hint" id="updatedText">Sidst gemt: —</div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+        <button id="editBtn" class="btn btn-secondary" type="button">Rediger data (leder)</button>
+        <button id="exportBtn" class="btn btn-secondary" type="button">Kopiér JSON (export)</button>
+        <a class="btn btn-primary inline-block text-center" href="./portal.html">Tilbage til portal</a>
+      </div>
+      <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:900;"></div>
+    </header>
+
+    <!-- Top stats -->
+    <section class="panel p-5 space-y-4">
+      <div class="hint">Højdepunkter</div>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="stat">
+          <div class="statTitle">Mest solgte (all-time)</div>
+          <div class="statValue" id="allTimeTop">—</div>
+          <div class="statSub" id="allTimeTopSub">—</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTitle">Dagens mest solgte</div>
+          <div class="statValue" id="todayTop">—</div>
+          <div class="statSub" id="todayTopSub">—</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTitle">Mersalgs-mål</div>
+          <div class="statValue" id="upsellTitle">—</div>
+          <div class="mt-3 barWrap"><div id="upsellBar" class="barFill"></div></div>
+          <div class="statSub" id="upsellSub">—</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="stat">
+        <div class="statTitle">Dagens 
