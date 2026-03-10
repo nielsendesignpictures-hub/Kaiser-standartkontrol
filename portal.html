@@ -8,13 +8,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      /* LYSERE MØRK */
       --bg:#17181c;
-
       --panel:rgba(28, 30, 36, 0.90);
       --border:rgba(255,255,255,0.10);
 
@@ -43,7 +41,7 @@
         linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
     }
 
-    .shell{ max-width: 980px; }
+    .shell{ max-width: 1060px; }
 
     .topbar{
       border: 1px solid var(--border);
@@ -60,12 +58,12 @@
       letter-spacing: .22em;
       text-transform: uppercase;
       color: var(--muted2);
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .title{
       font-family: "Playfair Display", serif;
-      font-size: 36px;
+      font-size: 38px;
       line-height: 1.06;
       letter-spacing: -0.015em;
       font-weight: 700;
@@ -74,7 +72,7 @@
 
     .subtitle{
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 13px;
       margin-top: 10px;
     }
@@ -87,7 +85,89 @@
       opacity: .9;
     }
 
-    /* VINDUE/TILE */
+    /* Controls */
+    .controls{
+      margin-top: 12px;
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search{
+      width: min(680px, 100%);
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 12px 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+    }
+    .searchIcon{
+      font-weight: 900;
+      opacity: .75;
+      user-select:none;
+    }
+    .search input{
+      width:100%;
+      background: transparent;
+      border: none;
+      outline:none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .search input::placeholder{ color: rgba(255,255,255,0.45); }
+
+    .filters{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .chip{
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-size: 11px;
+      cursor:pointer;
+      user-select:none;
+      transition: background .18s ease, border-color .18s ease, transform .08s ease;
+    }
+    .chip:active{ transform: translateY(1px); }
+    .chip.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+    }
+
+    /* GRID */
+    main.gridTools{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (min-width: 768px){
+      main.gridTools{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+      /* Hvis ulige antal tiles: sidste spænder over hele rækken */
+      main.gridTools > a.tile:last-child:nth-child(odd){
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* TILE */
     .tile{
       display: block;
       text-decoration: none;
@@ -98,18 +178,36 @@
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow: 0 22px 60px rgba(0,0,0,0.40);
       overflow: hidden;
-      padding: 28px 26px;
-      transition: transform .10s ease, border-color .18s ease, background .18s ease;
+      padding: 26px 24px;
+      transition: transform .10s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
       position: relative;
       cursor: pointer;
+      min-height: 190px;
     }
 
     .tile:hover{
       transform: translateY(-2px);
       border-color: rgba(214,178,74,0.28);
       background:
-        radial-gradient(900px 260px at 50% 0%, rgba(214,178,74,0.10), transparent 55%),
+        radial-gradient(900px 260px at 50% 0%, rgba(214,178,74,0.11), transparent 55%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+
+    .arrow{
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.88);
+      font-weight: 900;
     }
 
     .tileKicker{
@@ -117,13 +215,13 @@
       letter-spacing: .22em;
       text-transform: uppercase;
       color: var(--muted2);
-      font-weight: 800;
+      font-weight: 900;
       text-align: center;
     }
 
     .tileTitle{
       font-family: "Playfair Display", serif;
-      font-size: 44px;
+      font-size: 40px;
       line-height: 1.03;
       letter-spacing: -0.02em;
       font-weight: 700;
@@ -134,9 +232,10 @@
     .tileSub{
       text-align: center;
       color: var(--muted);
-      font-weight: 600;
-      font-size: 15px;
+      font-weight: 700;
+      font-size: 14px;
       margin-top: 12px;
+      line-height: 1.25;
     }
 
     .tileGoldline{
@@ -154,40 +253,45 @@
       justify-content: center;
       gap: 10px;
       color: rgba(255,255,255,0.72);
-      font-weight: 800;
+      font-weight: 900;
       font-size: 12px;
       letter-spacing: .10em;
       text-transform: uppercase;
+      flex-wrap: wrap;
     }
 
     .pill{
       display: inline-flex;
       align-items: center;
-      padding: 6px 10px;
+      padding: 7px 11px;
       border-radius: 999px;
       border: 1px solid rgba(214,178,74,0.22);
       background: rgba(214,178,74,0.08);
       color: rgba(255,255,255,0.90);
-      font-weight: 800;
+      font-weight: 900;
       font-size: 12px;
       letter-spacing: .08em;
       text-transform: uppercase;
     }
+    .pill.lock{
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+    }
 
-    .arrow{
-      position: absolute;
-      right: 18px;
-      top: 18px;
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
+    /* Section labels (small) */
+    .groupTag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.78);
       font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
 
     /* PIN MODAL */
@@ -239,88 +343,135 @@
       color: rgba(255,255,255,0.90);
     }
 
-    .muted{ color: var(--muted); font-weight: 600; }
+    .muted{ color: var(--muted); font-weight: 700; }
+
+    @media (max-width:520px){
+      .tileTitle{ font-size: 34px; }
+      .title{ font-size: 34px; }
+    }
   </style>
 </head>
 
 <body class="min-h-screen flex justify-center p-4">
   <div class="shell w-full">
 
-    <header class="topbar mt-6 mb-6">
+    <header class="topbar mt-6">
       <div class="kicker">KAISER</div>
       <div class="title">Portal</div>
       <div class="subtitle">Interne værktøjer til drift og kvalitet</div>
       <div class="goldline"></div>
+
+      <div class="controls">
+        <div class="search" role="search" aria-label="Søg værktøjer">
+          <div class="searchIcon">⌕</div>
+          <input id="searchInput" type="text" placeholder="Søg… (fx MIS, rengøring, rapport)" />
+        </div>
+
+        <div class="filters" aria-label="Filtrér">
+          <button class="chip on" type="button" data-filter="all">Alle</button>
+          <button class="chip" type="button" data-filter="kitchen">Køkken</button>
+          <button class="chip" type="button" data-filter="drift">Drift</button>
+          <button class="chip" type="button" data-filter="quality">Kvalitet</button>
+        </div>
+      </div>
     </header>
 
-    <main class="grid md:grid-cols-2 gap-5">
-  <!-- Madscore -->
-  <a class="tile" href="./" data-tool="madscore">
-    <div class="arrow">→</div>
-    <div class="tileKicker">KAISER</div>
-    <div class="tileTitle">Gastronomisk Eftersyn</div>
-    <div class="tileSub">Intern vurdering af retter på tværs af lokationer</div>
-    <div class="tileGoldline"></div>
-    <div class="tileMeta">
-      <span class="pill">ÅBEN</span>
-      <span>Foto + rating</span>
-    </div>
-  </a>
+    <main class="gridTools" id="toolsGrid">
 
-  <!-- Skiftlederrapport (PIN) -->
-  <a class="tile" href="./skiftlederrapport1.html" data-tool="skiftleder" data-pin="1">
-    <div class="arrow">→</div>
-    <div class="tileKicker">KAISER</div>
-    <div class="tileTitle">Skiftlederrapport</div>
-    <div class="tileSub">Daglig drift og kvalitet – pr. afdeling</div>
-    <div class="tileGoldline"></div>
-    <div class="tileMeta">
-      <span class="pill">KODE</span>
-      <span>Rapportering</span>
-    </div>
-  </a>
+      <!-- Madscore -->
+      <a class="tile tool"
+         href="./"
+         data-tool="madscore"
+         data-group="quality"
+         data-tags="gastronomisk eftersyn foto rating kvalitet"
+      >
+        <div class="arrow">→</div>
+        <div class="tileKicker">KAISER</div>
+        <div class="tileTitle">Gastronomisk Eftersyn</div>
+        <div class="tileSub">Intern vurdering af retter på tværs af lokationer</div>
+        <div class="tileGoldline"></div>
+        <div class="tileMeta">
+          <span class="pill">ÅBEN</span>
+          <span class="groupTag">Kvalitet</span>
+        </div>
+      </a>
 
-  <!-- Daglige opgaver -->
-  <a class="tile" href="./daglige-opgaver.html" data-tool="opgaver">
-    <div class="arrow">→</div>
-    <div class="tileKicker">KAISER</div>
-    <div class="tileTitle">Daglige opgaver</div>
-    <div class="tileSub">Åbne, lukke, rengøring</div>
-    <div class="tileGoldline"></div>
-    <div class="tileMeta">
-      <span class="pill">ÅBEN</span>
-      <span>Checklister</span>
-    </div>
-  </a>
+      <!-- Skiftlederrapport (PIN) -->
+      <a class="tile tool"
+         href="./skiftlederrapport1.html"
+         data-tool="skiftleder"
+         data-pin="1"
+         data-group="drift"
+         data-tags="skiftleder rapport drift kvalitet afdeling"
+      >
+        <div class="arrow">→</div>
+        <div class="tileKicker">KAISER</div>
+        <div class="tileTitle">Skiftlederrapport</div>
+        <div class="tileSub">Daglig drift og kvalitet – pr. afdeling</div>
+        <div class="tileGoldline"></div>
+        <div class="tileMeta">
+          <span class="pill lock">KODE</span>
+          <span class="groupTag">Drift</span>
+        </div>
+      </a>
 
-  <!-- Cleaning list kitchen (PIN) -->
-  <a class="tile" href="./cleaning-kitchen.html" data-tool="kitchen" data-pin="1">
-    <div class="arrow">→</div>
-    <div class="tileKicker">KAISER</div>
-    <div class="tileTitle">Cleaning list kitchen</div>
-    <div class="tileSub">Cleaning, hygiejne, open & close</div>
-    <div class="tileGoldline"></div>
-    <div class="tileMeta">
-      <span class="pill">KODE</span>
-      <span>Køkken</span>
+      <!-- Daglige opgaver -->
+      <a class="tile tool"
+         href="./daglige-opgaver.html"
+         data-tool="opgaver"
+         data-group="kitchen"
+         data-tags="daglige opgaver åbne lukke rengøring checklister"
+      >
+        <div class="arrow">→</div>
+        <div class="tileKicker">KAISER</div>
+        <div class="tileTitle">Daglige opgaver</div>
+        <div class="tileSub">Åbne, lukke, rengøring</div>
+        <div class="tileGoldline"></div>
+        <div class="tileMeta">
+          <span class="pill">ÅBEN</span>
+          <span class="groupTag">Køkken</span>
+        </div>
+      </a>
+
+      <!-- Cleaning list kitchen (PIN) -->
+      <a class="tile tool"
+         href="./cleaning-kitchen.html"
+         data-tool="kitchen"
+         data-pin="1"
+         data-group="kitchen"
+         data-tags="cleaning rengøring kitchen hygiejne open close kontrol"
+      >
+        <div class="arrow">→</div>
+        <div class="tileKicker">KAISER</div>
+        <div class="tileTitle">Cleaning list kitchen</div>
+        <div class="tileSub">Cleaning, hygiejne, open & close</div>
+        <div class="tileGoldline"></div>
+        <div class="tileMeta">
+          <span class="pill lock">KODE</span>
+          <span class="groupTag">Køkken</span>
+        </div>
+      </a>
 
       <!-- Mise en place (MIS) -->
-<a class="tile" href="./MIS.html" data-tool="mis">
-  <div class="arrow">→</div>
-  <div class="tileKicker">KAISER</div>
-  <div class="tileTitle">Mise en place (MIS)</div>
-  <div class="tileSub">Make MIS to the day after</div>
-  <div class="tileGoldline"></div>
-  <div class="tileMeta">
-    <span class="pill">ÅBEN</span>
-    <span>Køkken</span>
-  </div>
-</a>
-    </div>
-  </a>
-</main>
-</a>
-    
+      <a class="tile tool"
+         href="./MIS.html"
+         data-tool="mis"
+         data-group="kitchen"
+         data-tags="mis mise en place prep forberedelse to-do køkken"
+      >
+        <div class="arrow">→</div>
+        <div class="tileKicker">KAISER</div>
+        <div class="tileTitle">Mise en place (MIS)</div>
+        <div class="tileSub">Opret MIS til i morgen/valgt dag og få en færdig to‑do liste</div>
+        <div class="tileGoldline"></div>
+        <div class="tileMeta">
+          <span class="pill">ÅBEN</span>
+          <span class="groupTag">Køkken</span>
+        </div>
+      </a>
+
+    </main>
+
     <!-- PIN MODAL -->
     <div id="pinModal" class="fixed inset-0 hidden items-center justify-center p-4" style="background: rgba(0,0,0,.55); z-index:9999;">
       <div class="panel p-5 w-full" style="max-width:460px;">
@@ -342,7 +493,7 @@
       </div>
     </div>
 
-    <footer class="mt-7 text-center" style="color:rgba(255,255,255,.55);font-weight:700;font-size:12px;">
+    <footer class="mt-7 text-center" style="color:rgba(255,255,255,.55);font-weight:800;font-size:12px;">
       Kaiser • interne værktøjer
     </footer>
   </div>
@@ -358,6 +509,10 @@
     const pinCancel = document.getElementById("pinCancel");
     const pinError = document.getElementById("pinError");
     const pinModalText = document.getElementById("pinModalText");
+
+    const tools = Array.from(document.querySelectorAll("a.tile.tool"));
+    const searchInput = document.getElementById("searchInput");
+    const filterBtns = Array.from(document.querySelectorAll(".chip[data-filter]"));
 
     let pendingUrl = null;
     let pendingKey = null;
@@ -390,7 +545,37 @@
       pinModal.classList.remove("flex");
     }
 
-    document.querySelectorAll("a.tile").forEach(a => {
+    // Filter logic
+    let activeFilter = "all";
+
+    function applyFilters(){
+      const q = (searchInput.value || "").trim().toLowerCase();
+
+      tools.forEach(a => {
+        const group = (a.getAttribute("data-group") || "").toLowerCase();
+        const tags = (a.getAttribute("data-tags") || "").toLowerCase();
+        const text = (a.innerText || "").toLowerCase();
+
+        const okGroup = (activeFilter === "all") || (group === activeFilter);
+        const okSearch = !q || text.includes(q) || tags.includes(q);
+
+        a.style.display = (okGroup && okSearch) ? "" : "none";
+      });
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("on"));
+        btn.classList.add("on");
+        activeFilter = btn.getAttribute("data-filter");
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+
+    // PIN handling
+    tools.forEach(a => {
       a.addEventListener("click", (e) => {
         const requiresPin = a.getAttribute("data-pin") === "1";
         if (!requiresPin) return;
@@ -406,7 +591,6 @@
           window.location.href = url;
           return;
         }
-
         openPin(url, key, title);
       });
     });
@@ -432,6 +616,9 @@
       if (e.key === "Enter") pinOk.click();
       if (e.key === "Escape") closePin();
     });
+
+    // init
+    applyFilters();
   </script>
 </body>
 </html>
