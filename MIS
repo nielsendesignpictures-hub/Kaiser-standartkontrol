@@ -1,0 +1,1123 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Mise en place</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#17181c;
+      --panel:rgba(28, 30, 36, 0.90);
+      --border:rgba(255,255,255,0.10);
+      --text:rgba(255,255,255,0.93);
+      --muted:rgba(255,255,255,0.70);
+      --muted2:rgba(255,255,255,0.50);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --goldGlow:rgba(214,178,74,.22);
+      --danger:#ff6b6b;
+      --ok:#62d26f;
+    }
+
+    html,body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);background:var(--bg);
+    }
+    body{
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
+        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
+        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+    }
+
+    .shell{max-width:900px}
+
+    .topbar{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+      border-radius:22px;padding:22px 18px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 28px 70px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
+    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
+    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
+    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 26px 72px rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+    }
+    .divider{height:1px;background:rgba(255,255,255,.10);}
+
+    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .input, select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      padding:14px 14px;
+      outline:none;
+      color:rgba(255,255,255,0.92);
+    }
+    select option{color:#0b0c0f;}
+    .input:focus, select:focus, textarea:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px var(--goldGlow);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn{
+      width:100%;
+      border-radius:16px;
+      font-weight:900;
+      letter-spacing:.02em;
+      padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease;
+      user-select:none;
+      border:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{
+      background:linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow:0 18px 40px rgba(214,178,74,0.18);
+    }
+    .btn-primary:hover{filter:brightness(1.04);}
+    .btn-secondary{
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.14);
+      color:rgba(255,255,255,0.90);
+    }
+
+    .muted{color:var(--muted);font-weight:600;font-size:13px;}
+    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+
+    .tabs7{display:grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap:8px;}
+    .tabBtn{
+      border-radius:14px;
+      padding:10px 8px;
+      font-weight:900;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.90);
+      cursor:pointer;
+      font-size:12px;
+    }
+    .tabBtn.on{
+      border-color: rgba(214,178,74,0.38);
+      background: rgba(214,178,74,0.10);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+    }
+
+    .progressWrap{
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      overflow:hidden;
+      height: 10px;
+    }
+    .progressBar{
+      height: 10px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+    }
+
+    /* Accordion (category dropdown) */
+    .acc{
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.03);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    .acc summary{
+      list-style:none;
+      cursor:pointer;
+      user-select:none;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.02);
+    }
+    .acc summary::-webkit-details-marker{ display:none; }
+    .acc .accMeta{
+      letter-spacing:0;
+      text-transform:none;
+      font-size:12px;
+      font-weight:800;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .accBody{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    /* Task row */
+    .task{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:14px 14px;border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.03);
+      cursor:pointer;
+      transition: background .18s ease, border-color .18s ease;
+      user-select:none;
+      touch-action: manipulation;
+    }
+    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
+    .taskBadge{
+      width:34px;height:34px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(214,178,74,0.22);
+      background:rgba(214,178,74,0.08);
+      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
+    }
+    .taskTitle{font-weight:900; letter-spacing:-0.01em;}
+    .taskSub{margin-top:2px;font-size:12px;color:rgba(255,255,255,0.65);font-weight:700;}
+
+    .pill{
+      margin-left:auto;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      font-weight:900;
+      font-size:12px;
+      flex:0 0 auto;
+      white-space:nowrap;
+    }
+    .pill.todo{border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.10); color: rgba(255,255,255,0.92);}
+    .pill.done{border-color: rgba(98,210,111,0.45); background: rgba(98,210,111,0.14); color: rgba(255,255,255,0.92);}
+    .pill.na{border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.70);}
+
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      font-weight:800;font-size:12px;color:rgba(255,255,255,0.85);
+    }
+
+    .seg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+    .segBtn{
+      border-radius:14px;
+      padding:10px 10px;
+      font-weight:900;
+      letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.90);
+      cursor:pointer;
+      font-size:12px;
+    }
+    .segBtn.on{
+      border-color: rgba(214,178,74,0.38);
+      background: rgba(214,178,74,0.10);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+    }
+
+    .holdWrap{
+      position:relative;
+      overflow:hidden;
+    }
+    .holdBar{
+      position:absolute;left:0;top:0;height:100%;
+      width:0%;
+      background: rgba(255,255,255,0.14);
+      pointer-events:none;
+      transition: width .08s linear;
+    }
+    .btnText{position:relative;z-index:1;}
+  </style>
+</head>
+
+<body class="min-h-screen flex justify-center p-4">
+  <div class="shell w-full">
+
+    <header class="topbar mt-6 mb-5">
+      <div class="kicker">KAISER</div>
+      <div class="title">Mise en place</div>
+      <div class="subtitle">Daily prep • Per location • Saved on this device</div>
+      <div class="goldline"></div>
+    </header>
+
+    <!-- ===== Screen 1: Setup ===== -->
+    <section id="setupWrap" class="space-y-4">
+      <section class="panel p-5 space-y-4">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="text-lg font-extrabold">Setup</div>
+          <div class="hint" id="weekKeyText">—</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <div class="label">Location</div>
+            <select id="locationSelect" required>
+              <option value="">Select location…</option>
+              <option>Café Kaiser Helsingør</option>
+              <option>Café Kaiser Hillerød</option>
+              <option>Café Kaiser Farum</option>
+              <option>Café Kaiser Hørsholm</option>
+              <option>Café Kaiser Vanløse</option>
+            </select>
+            <div class="hint" id="gpsStatus">GPS: not checked</div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="label">Performed by</div>
+            <input id="doneBy" class="input" placeholder="Name (required)" />
+            <div class="hint">Saved per date</div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <div class="label">Date / time</div>
+            <input class="input" id="timeField" readonly>
+            <div class="hint" id="dateText">—</div>
+          </div>
+
+          <div class="space-y-2">
+            <div class="label">Day</div>
+            <div class="tabs7" id="dayTabs"></div>
+            <div class="hint">Uses current ISO week</div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="label">Progress (active items)</div>
+          <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
+          <div class="muted" id="progressText">0/0</div>
+          <div class="hint" id="progressHint">Items start as N/A → add what you need</div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <button id="startBtn" class="btn btn-primary" type="button">Open list</button>
+        <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
+      </section>
+    </section>
+
+    <!-- ===== Screen 2: List ===== -->
+    <section id="listWrap" class="hidden space-y-4">
+      <section class="panel p-5 space-y-3">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="text-lg font-extrabold" id="listTitle">Mise en place</div>
+          <div class="hint" id="remainingHint">—</div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="flex flex-wrap gap-2">
+          <div class="chip" id="chipLoc">Location: —</div>
+          <div class="chip" id="chipDay">Day: —</div>
+          <div class="chip" id="chipWho">By: —</div>
+          <div class="chip" id="chipDate">Date: —</div>
+        </div>
+
+        <div class="mt-3 seg3">
+          <button id="viewTodo" class="segBtn" type="button">To do</button>
+          <button id="viewDone" class="segBtn" type="button">Done</button>
+          <button id="viewAdd" class="segBtn" type="button">Add items (N/A)</button>
+        </div>
+      </section>
+
+      <section class="panel p-5 space-y-4">
+        <div class="space-y-2">
+          <div class="label">Progress</div>
+          <div class="progressWrap"><div id="progressBar2" class="progressBar"></div></div>
+          <div class="muted" id="progressText2">0/0</div>
+          <div class="hint" id="tipText">Tip: Hold an item to set it back to N/A</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div id="taskList" class="space-y-3"></div>
+
+        <div id="allDoneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
+          <div style="font-weight:900;">All active prep completed.</div>
+          <div class="muted" style="margin-top:4px;">Your prep makes the difference.</div>
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        <button id="backBtn" class="btn btn-secondary" type="button">Back to setup</button>
+
+        <!-- Hold-to-reset -->
+        <button id="resetBtn" class="btn btn-primary holdWrap" type="button" aria-label="Hold to reset">
+          <div id="resetHoldBar" class="holdBar"></div>
+          <div class="btnText" id="resetBtnText">Hold 5s to reset (new mise en place)</div>
+        </button>
+
+        <div class="muted" style="text-align:center;">Reset clears this location + date on this device.</div>
+      </section>
+    </section>
+
+  </div>
+
+  <script>
+    // ===== Config =====
+    const GPS_AUTOSELECT_M = 900;
+    const RESET_HOLD_MS = 5000;
+    const TASK_HOLD_NA_MS = 900;
+
+    const LOCATION_COORDS = {
+      "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
+      "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
+      "Café Kaiser Farum": { lat: 55.814500, lng: 12.379595 },
+      "Café Kaiser Hørsholm": { lat: 55.881489, lng: 12.497737 },
+      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
+    };
+
+    // ===== Mise en place sections (base) =====
+    const MEP_SECTIONS = [
+      {
+        secId: "veg",
+        title: "Vegetables & Fruit",
+        tasks: [
+          "Cut lettuce for burger",
+          "Cut lettuce for salad",
+          "Cut lettuce for Julie plate",
+          "Cut tomatoes (burger & salad)",
+          "Cut radishes",
+          "Cut red onions",
+          "Cut cucumbers",
+          "Cut lemon",
+          "Cut spring onions",
+          "Cut chives",
+          "Cut cress",
+          "Cut mix cress",
+          "Cut fruits (mix & buffet)"
+        ]
+      },
+      {
+        secId: "meat",
+        title: "Meat & Potatoes",
+        tasks: [
+          "Cut and marinate chicken",
+          "Cut Tenderloin",
+          "Cut Black Angus",
+          "Cut potatoes for Wienerschnitzel",
+          "Cut potatoes for smørrebrød",
+          "Fry bacon",
+          'Fry "stegt flæsk"',
+          "Fry sausages"
+        ]
+      },
+      {
+        secId: "dairy",
+        title: "Cheese & Dairy",
+        tasks: [
+          "Cut cheese for sandwiches",
+          "Cut Vesterhavsost",
+          "Cut Chili cheese",
+          "Cut Blue cheese",
+          "Prepare Chiagrød",
+          "Prepare Blueberry Yogurt",
+          "Fill up yogurt"
+        ]
+      },
+      {
+        secId: "sauces",
+        title: "Sauces & Dressings",
+        tasks: [
+          "Refill Thousand Island dressing",
+          "Refill Tatar sauce",
+          "Refill Remoulade",
+          "Refill Chili Mayo",
+          "Refill Garlic Mayo",
+          "Refill Truffle Mayo",
+          "Refill Curry Mayo",
+          "Refill BBQ Mayo",
+          "Refill Signature dressing",
+          "Refill Caesar dressing",
+          "Refill Rævesovs",
+          "Refill Mayo & Ketchup"
+        ]
+      },
+      {
+        secId: "prep",
+        title: "Prep & Baking",
+        tasks: [
+          "Boil eggs",
+          "Cook rice",
+          "Cook Mango Jam",
+          "Cook Mix Berries Jam",
+          "Cook Apple Jam",
+          "Make garlic paste",
+          "Make caramelized onions",
+          "Make Øland toast",
+          "Bake tomatoes",
+          "Bake Apple tart",
+          "Prepare Chocolate Mousse",
+          "Prepare Crème brûlée"
+        ]
+      },
+      {
+        secId: "setup",
+        title: "Setup & Storage",
+        tasks: [
+          "Setup Brunch",
+          "Setup Julie plate",
+          "Defrost Mango & Edamame",
+          "Defrost Chocolate cake",
+          "Refill Freezer"
+        ]
+      }
+    ];
+
+    // Days
+    const DAYS = [
+      { key:"mon", label:"Mon", full:"Monday" },
+      { key:"tue", label:"Tue", full:"Tuesday" },
+      { key:"wed", label:"Wed", full:"Wednesday" },
+      { key:"thu", label:"Thu", full:"Thursday" },
+      { key:"fri", label:"Fri", full:"Friday" },
+      { key:"sat", label:"Sat", full:"Saturday" },
+      { key:"sun", label:"Sun", full:"Sunday" }
+    ];
+
+    // ===== Helpers =====
+    function $(id){ return document.getElementById(id); }
+    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    function isoWeekKey(date){
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+      const year = d.getUTCFullYear();
+      const ww = String(weekNo).padStart(2,"0");
+      return year + "-W" + ww;
+    }
+
+    function startOfISOWeekLocal(date){
+      const d = new Date(date);
+      d.setHours(0,0,0,0);
+      const day = d.getDay() || 7; // 1..7 (Mon..Sun)
+      d.setDate(d.getDate() - (day - 1));
+      return d; // Monday (local)
+    }
+
+    function dateISOFromDateLocal(d){
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function getDayKeyToday(){
+      const js = new Date().getDay(); // 0 Sun..6 Sat
+      if (js === 0) return "sun";
+      if (js === 1) return "mon";
+      if (js === 2) return "tue";
+      if (js === 3) return "wed";
+      if (js === 4) return "thu";
+      if (js === 5) return "fri";
+      return "sat";
+    }
+
+    function dateISOForSelectedDay(dayKey){
+      const monday = startOfISOWeekLocal(new Date());
+      const idx = Math.max(0, DAYS.findIndex(d => d.key === dayKey)); // 0..6
+      const target = new Date(monday);
+      target.setDate(monday.getDate() + idx);
+      return dateISOFromDateLocal(target);
+    }
+
+    function distanceM(lat1, lon1, lat2, lon2){
+      const R = 6371000;
+      const toRad = (x) => x * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function getGPS(){
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS not supported" });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({
+            ok:true,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            acc: Math.round(pos.coords.accuracy || 0)
+          }),
+          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS denied" }),
+          { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
+        );
+      });
+    }
+
+    // ===== Storage =====
+    const keyBase = "kaiser_mep_2026_v2";
+    function kStatus(loc, dateISO){ return `${keyBase}_status_${loc}_${dateISO}`; }
+    function kDoneBy(loc, dateISO){ return `${keyBase}_doneby_${loc}_${dateISO}`; }
+    function kStarted(loc, dateISO){ return `${keyBase}_started_${loc}_${dateISO}`; }
+
+    // ===== DOM =====
+    const setupWrap = $("setupWrap");
+    const listWrap = $("listWrap");
+
+    const weekKeyText = $("weekKeyText");
+    const dateText = $("dateText");
+    const timeField = $("timeField");
+
+    const locationSelect = $("locationSelect");
+    const doneBy = $("doneBy");
+    const gpsStatus = $("gpsStatus");
+    const dayTabs = $("dayTabs");
+    const startBtn = $("startBtn");
+    const errorText = $("errorText");
+
+    const listTitle = $("listTitle");
+    const remainingHint = $("remainingHint");
+    const taskList = $("taskList");
+
+    const chipLoc = $("chipLoc");
+    const chipDay = $("chipDay");
+    const chipWho = $("chipWho");
+    const chipDate = $("chipDate");
+
+    const progressBar = $("progressBar");
+    const progressText = $("progressText");
+    const progressHint = $("progressHint");
+
+    const progressBar2 = $("progressBar2");
+    const progressText2 = $("progressText2");
+
+    const viewTodoBtn = $("viewTodo");
+    const viewDoneBtn = $("viewDone");
+    const viewAddBtn  = $("viewAdd");
+
+    const allDoneBox = $("allDoneBox");
+
+    const backBtn = $("backBtn");
+    const resetBtn = $("resetBtn");
+    const resetBtnText = $("resetBtnText");
+    const resetHoldBar = $("resetHoldBar");
+
+    // ===== State =====
+    const state = {
+      loc: "",
+      dayKey: getDayKeyToday(),
+      dateISO: dateISOForSelectedDay(getDayKeyToday()),
+      weekKey: isoWeekKey(new Date()),
+      statuses: {},  // id -> "na" | "todo" | "done"
+      view: "todo"   // todo | done | add
+    };
+
+    function setError(msg){
+      if (!msg){
+        errorText.classList.add("hidden");
+        errorText.textContent = "";
+        return;
+      }
+      errorText.textContent = msg;
+      errorText.classList.remove("hidden");
+    }
+
+    function buildSections(){
+      // stable IDs per section/item
+      return MEP_SECTIONS.map(sec => ({
+        secId: sec.secId,
+        title: sec.title,
+        tasks: sec.tasks.map((text, i) => ({
+          id: `${sec.secId.toUpperCase()}-${String(i+1).padStart(2,"0")}`,
+          text
+        }))
+      }));
+    }
+
+    function getStatus(id){
+      return state.statuses[String(id)] || "na";
+    }
+    function setStatus(id, val){
+      state.statuses[String(id)] = val;
+      saveStatuses();
+    }
+
+    function loadStatuses(){
+      if (!state.loc) { state.statuses = {}; return; }
+      const raw = localStorage.getItem(kStatus(state.loc, state.dateISO));
+      if (!raw) { state.statuses = {}; return; }
+      try {
+        const obj = JSON.parse(raw);
+        state.statuses = (obj && typeof obj === "object") ? obj : {};
+      } catch(e){
+        state.statuses = {};
+      }
+    }
+
+    function saveStatuses(){
+      if (!state.loc) return;
+      localStorage.setItem(kStatus(state.loc, state.dateISO), JSON.stringify(state.statuses));
+    }
+
+    function loadDoneBy(){
+      if (!state.loc) { doneBy.value = ""; return; }
+      doneBy.value = localStorage.getItem(kDoneBy(state.loc, state.dateISO)) || "";
+    }
+    function saveDoneBy(){
+      if (!state.loc) return;
+      localStorage.setItem(kDoneBy(state.loc, state.dateISO), (doneBy.value || "").trim());
+    }
+
+    function counts(){
+      const all = buildSections().flatMap(s => s.tasks);
+      let na = 0, todo = 0, done = 0;
+      for (const t of all){
+        const st = getStatus(t.id);
+        if (st === "done") done++;
+        else if (st === "todo") todo++;
+        else na++;
+      }
+      const activeTotal = todo + done; // N/A excluded
+      return { na, todo, done, activeTotal, total: all.length };
+    }
+
+    function remainingActive(){
+      // remaining = todo count
+      return counts().todo;
+    }
+
+    function setView(v){
+      state.view = v;
+      viewTodoBtn.classList.toggle("on", v === "todo");
+      viewDoneBtn.classList.toggle("on", v === "done");
+      viewAddBtn.classList.toggle("on", v === "add");
+      renderTasks();
+      updateProgressUI();
+    }
+
+    function renderDayTabs(){
+      dayTabs.innerHTML = "";
+      DAYS.forEach(d => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tabBtn" + (state.dayKey === d.key ? " on" : "");
+        b.textContent = d.label;
+        b.addEventListener("click", () => {
+          state.dayKey = d.key;
+          state.dateISO = dateISOForSelectedDay(state.dayKey);
+
+          // weekKey should follow selected date
+          const monday = startOfISOWeekLocal(new Date());
+          const idx = Math.max(0, DAYS.findIndex(x => x.key === state.dayKey));
+          const target = new Date(monday); target.setDate(monday.getDate() + idx);
+          state.weekKey = isoWeekKey(target);
+
+          loadStatuses();
+          loadDoneBy();
+          updateUI();
+          renderDayTabs();
+        });
+        dayTabs.appendChild(b);
+      });
+    }
+
+    function updateChips(){
+      const dayFull = (DAYS.find(x => x.key === state.dayKey) || {}).full || state.dayKey;
+      chipLoc.textContent = "Location: " + (state.loc || "—");
+      chipDay.textContent = "Day: " + dayFull;
+      chipWho.textContent = "By: " + ((doneBy.value || "").trim() || "—");
+      chipDate.textContent = "Date: " + (state.dateISO || "—");
+      listTitle.textContent = "Mise en place • " + dayFull;
+      remainingHint.textContent = state.view === "add"
+        ? "Tap items to create today's MIS"
+        : ("Remaining: " + remainingActive());
+    }
+
+    function updateProgressUI(){
+      const c = counts();
+
+      // progress for active items only
+      const total = c.activeTotal;
+      const done = c.done;
+      const pct = total ? Math.round((done/total)*100) : 0;
+
+      progressText.textContent = done + "/" + total;
+      progressBar.style.width = pct + "%";
+
+      progressText2.textContent = done + "/" + total;
+      progressBar2.style.width = pct + "%";
+
+      allDoneBox.classList.toggle("hidden", !(total > 0 && c.todo === 0));
+
+      if (total === 0){
+        progressHint.textContent = "All items start as N/A — add what you need.";
+      } else {
+        progressHint.textContent = "Active items: " + total + " • N/A: " + c.na;
+      }
+    }
+
+    function showSetup(){
+      setupWrap.classList.remove("hidden");
+      listWrap.classList.add("hidden");
+      setError("");
+    }
+    function showList(){
+      setupWrap.classList.add("hidden");
+      listWrap.classList.remove("hidden");
+      setError("");
+    }
+
+    function sectionCounts(sec){
+      let na=0,todo=0,done=0;
+      for (const t of sec.tasks){
+        const st = getStatus(t.id);
+        if (st === "done") done++;
+        else if (st === "todo") todo++;
+        else na++;
+      }
+      return {na,todo,done,total:sec.tasks.length};
+    }
+
+    function tasksForView(sec){
+      // What to show in each view
+      if (state.view === "todo") return sec.tasks.filter(t => getStatus(t.id) === "todo");
+      if (state.view === "done") return sec.tasks.filter(t => getStatus(t.id) === "done");
+      return sec.tasks.filter(t => getStatus(t.id) === "na"); // add view
+    }
+
+    function actionTextForView(){
+      if (state.view === "todo") return { pill:"Done ✓", pillClass:"done", sub:"Tap to mark done • Hold to set N/A" };
+      if (state.view === "done") return { pill:"Undo ↩", pillClass:"todo", sub:"Tap to move back to To do • Hold to set N/A" };
+      return { pill:"+ Add", pillClass:"todo", sub:"Tap to add to To do" };
+    }
+
+    function renderTasks(){
+      const openMap = {};
+      document.querySelectorAll('details[data-sec]').forEach(d => openMap[d.dataset.sec] = d.open);
+
+      taskList.innerHTML = "";
+      const sections = buildSections();
+
+      const meta = actionTextForView();
+
+      sections.forEach((sec, idx) => {
+        const sc = sectionCounts(sec);
+        const list = tasksForView(sec);
+
+        // Auto-open first relevant section
+        const details = document.createElement("details");
+        details.className = "acc";
+        details.dataset.sec = sec.secId;
+
+        const wasOpen = openMap[sec.secId];
+        const shouldOpen =
+          typeof wasOpen === "boolean" ? wasOpen :
+          (idx === 0); // default first open
+
+        details.open = shouldOpen;
+
+        const summary = document.createElement("summary");
+        summary.innerHTML = `
+          <span>${escapeHtml(sec.title)}</span>
+          <span class="accMeta">To do: ${sc.todo} • Done: ${sc.done} • N/A: ${sc.na}</span>
+        `;
+        details.appendChild(summary);
+
+        const body = document.createElement("div");
+        body.className = "accBody";
+
+        if (list.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "muted";
+          empty.textContent =
+            state.view === "todo" ? "No to-do items in this category." :
+            state.view === "done" ? "No completed items in this category." :
+            "No N/A items left to add in this category.";
+          body.appendChild(empty);
+        } else {
+          list.forEach((item, i) => {
+            const row = document.createElement("div");
+            row.className = "task";
+
+            // badge number within the filtered list
+            row.innerHTML = `
+              <div class="taskBadge">${String(i+1)}</div>
+              <div style="flex:1;">
+                <div class="taskTitle">${escapeHtml(item.text)}</div>
+                <div class="taskSub">${escapeHtml(meta.sub)}</div>
+              </div>
+              <div class="pill ${meta.pillClass}">${escapeHtml(meta.pill)}</div>
+            `;
+
+            // Tap action
+            row.addEventListener("click", () => {
+              const st = getStatus(item.id);
+
+              if (state.view === "add") {
+                // N/A -> TODO
+                if (st === "na") setStatus(item.id, "todo");
+                // If you want: tapping again won’t do anything here
+              } else if (state.view === "todo") {
+                // TODO -> DONE
+                if (st === "todo") setStatus(item.id, "done");
+              } else {
+                // DONE -> TODO (undo)
+                if (st === "done") setStatus(item.id, "todo");
+              }
+
+              updateUI();
+
+              // If user just created first active item, jump to To do
+              const c = counts();
+              if (state.view === "add" && c.activeTotal > 0) setView("todo");
+            });
+
+            // Hold action: set back to N/A (from TODO or DONE)
+            attachHoldToSetNA(row, item.id);
+
+            body.appendChild(row);
+          });
+        }
+
+        details.appendChild(body);
+        taskList.appendChild(details);
+      });
+    }
+
+    function attachHoldToSetNA(el, taskId){
+      let t = null;
+      let holding = false;
+
+      const clear = () => {
+        if (t) clearTimeout(t);
+        t = null;
+        holding = false;
+      };
+
+      const start = () => {
+        clear();
+        holding = true;
+        t = setTimeout(() => {
+          const st = getStatus(taskId);
+          if (st !== "na") {
+            setStatus(taskId, "na");
+            updateUI();
+            // if we removed last active tasks, go to Add view
+            if (counts().activeTotal === 0) setView("add");
+          }
+        }, TASK_HOLD_NA_MS);
+      };
+
+      el.addEventListener("pointerdown", (e) => { start(); });
+      el.addEventListener("pointerup", clear);
+      el.addEventListener("pointercancel", clear);
+      el.addEventListener("pointerleave", clear);
+      window.addEventListener("blur", clear);
+    }
+
+    function updateUI(){
+      // update setup fields
+      weekKeyText.textContent = "Week: " + state.weekKey;
+      dateText.textContent = state.dateISO;
+      timeField.value = nowDK();
+
+      state.loc = locationSelect.value || "";
+
+      updateChips();
+      updateProgressUI();
+      renderTasks();
+
+      // Seg buttons on initial
+      viewTodoBtn.classList.toggle("on", state.view === "todo");
+      viewDoneBtn.classList.toggle("on", state.view === "done");
+      viewAddBtn.classList.toggle("on", state.view === "add");
+    }
+
+    async function tryAutoSelectLocation(){
+      gpsStatus.textContent = "GPS: checking…";
+      const gps = await getGPS();
+      if (!gps.ok) {
+        gpsStatus.textContent = "GPS: not available (" + (gps.msg || "") + ")";
+        return;
+      }
+
+      let bestName = null;
+      let bestDist = Infinity;
+      for (const name in LOCATION_COORDS) {
+        const c = LOCATION_COORDS[name];
+        const dist = distanceM(gps.lat, gps.lng, c.lat, c.lng);
+        if (dist < bestDist) { bestDist = dist; bestName = name; }
+      }
+
+      const distM = Math.round(bestDist);
+      if (bestName && distM <= GPS_AUTOSELECT_M) {
+        gpsStatus.textContent = "GPS: near " + bestName + " (" + distM + "m) → selected";
+        locationSelect.value = bestName;
+        state.loc = bestName;
+        loadStatuses();
+        loadDoneBy();
+        updateUI();
+      } else {
+        gpsStatus.textContent = "GPS: select location manually";
+      }
+    }
+
+    // ===== Reset hold-to-confirm =====
+    let resetTimer = null;
+    let resetStart = 0;
+
+    function resetHoldClear(){
+      if (resetTimer) clearInterval(resetTimer);
+      resetTimer = null;
+      resetStart = 0;
+      resetHoldBar.style.width = "0%";
+      resetBtnText.textContent = "Hold 5s to reset (new mise en place)";
+    }
+
+    function doReset(){
+      // Clear only this location + date
+      if (!state.loc) return;
+
+      localStorage.removeItem(kStatus(state.loc, state.dateISO));
+      localStorage.removeItem(kDoneBy(state.loc, state.dateISO));
+      localStorage.removeItem(kStarted(state.loc, state.dateISO));
+
+      state.statuses = {};
+      doneBy.value = "";
+
+      resetHoldClear();
+      showSetup();
+      updateUI();
+    }
+
+    function resetHoldStart(){
+      if (!state.loc) return;
+      resetHoldClear();
+
+      resetStart = Date.now();
+      resetBtnText.textContent = "Keep holding…";
+
+      resetTimer = setInterval(() => {
+        const elapsed = Date.now() - resetStart;
+        const pct = Math.min(100, Math.round((elapsed / RESET_HOLD_MS) * 100));
+        resetHoldBar.style.width = pct + "%";
+        resetBtnText.textContent = "Hold to reset… " + pct + "%";
+
+        if (elapsed >= RESET_HOLD_MS) {
+          clearInterval(resetTimer);
+          resetTimer = null;
+          resetBtnText.textContent = "Resetting…";
+          doReset();
+        }
+      }, 50);
+    }
+
+    // ===== Events =====
+    locationSelect.addEventListener("change", () => {
+      state.loc = locationSelect.value || "";
+      loadStatuses();
+      loadDoneBy();
+      updateUI();
+    });
+
+    doneBy.addEventListener("input", () => {
+      saveDoneBy();
+      updateChips();
+    });
+
+    startBtn.addEventListener("click", () => {
+      setError("");
+
+      state.loc = locationSelect.value || "";
+      if (!state.loc) return setError("Select a location.");
+      const who = (doneBy.value || "").trim();
+      if (!who) return setError("Performed by is required.");
+
+      saveDoneBy();
+      localStorage.setItem(kStarted(state.loc, state.dateISO), "1");
+
+      showList();
+
+      // If no active items yet, go directly to Add view (N/A list)
+      if (counts().activeTotal === 0) setView("add");
+      else setView(state.view || "todo");
+
+      updateUI();
+    });
+
+    backBtn.addEventListener("click", () => {
+      showSetup();
+      updateUI();
+    });
+
+    viewTodoBtn.addEventListener("click", () => setView("todo"));
+    viewDoneBtn.addEventListener("click", () => setView("done"));
+    viewAddBtn.addEventListener("click", () => setView("add"));
+
+    // Hold-to-reset interactions (pointer works on mobile + desktop)
+    resetBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      resetHoldStart();
+    });
+    resetBtn.addEventListener("pointerup", resetHoldClear);
+    resetBtn.addEventListener("pointercancel", resetHoldClear);
+    resetBtn.addEventListener("pointerleave", resetHoldClear);
+    window.addEventListener("blur", resetHoldClear);
+
+    // ===== Init =====
+    renderDayTabs();
+    tryAutoSelectLocation();
+
+    // initial time/date
+    state.dateISO = dateISOForSelectedDay(state.dayKey);
+    dateText.textContent = state.dateISO;
+    timeField.value = nowDK();
+    weekKeyText.textContent = "Week: " + state.weekKey;
+
+    // load if already selected
+    state.loc = locationSelect.value || "";
+    loadStatuses();
+    loadDoneBy();
+    updateUI();
+
+    // auto-resume if started today (on this device)
+    setTimeout(() => {
+      state.loc = locationSelect.value || "";
+      if (!state.loc) return;
+      const started = localStorage.getItem(kStarted(state.loc, state.dateISO)) === "1";
+      if (started) {
+        showList();
+        if (counts().activeTotal === 0) setView("add");
+        else setView("todo");
+        updateUI();
+      }
+    }, 250);
+  </script>
+</body>
+</html>
