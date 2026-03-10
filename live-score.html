@@ -554,8 +554,8 @@
           </div>
         </div>
         <div class="flex gap-2 flex-wrap">
-          <button id="resetBtn" class="btnSecondary" type="button">Reset</button>
-          <button id="closeBtn" class="btnSecondary" type="button">Luk</button>
+          <button id="resetBtn" class="btnSecondary" type="button">Reset til standard</button>
+          <button id="closeBtn" class="btnSecondary" type="button">Luk uden at gemme</button>
           <button id="saveBtn" class="btnPrimary" type="button">Gem</button>
         </div>
       </div>
@@ -569,8 +569,9 @@
   </div>
 
   <script>
-    // Keep same key as your clean v3 so your saved data stays
-    const APP_KEY = "kaiser_live_score_v3_clean";
+    // NY NØGLE V4: Så computeren tvinges til at glemme det gamle JSON fejl-skrammel
+    // og i stedet hente den rigtige data, der ligger gemt lige herunder!
+    const APP_KEY = "kaiser_live_score_v4";
     const LEADER_CODE = "KAISER2026";
     const ROTATE_SECONDS = 14;
 
@@ -598,17 +599,40 @@
       return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 366 : 365;
     }
 
-    // Default data (only used if nothing saved yet)
+    // HER ER DIN DATA HARDCODET RIGTIGT IND! 
     const DEFAULT_DATA = {
       meta: { lastSavedAt: "" },
-      productsToday: { "Filterkaffe": 88, "Cappuccino": 62, "Fadøl": 41, "Kaiserburger": 27, "Brunch": 19, "Dessert": 14 },
-      productsYTD: { "Filterkaffe": 12400, "Cappuccino": 8600, "Fadøl": 6400, "Kaiserburger": 3100, "Brunch": 2700, "Dessert": 1900 },
+      productsToday: { 
+        "Filterkaffe": 88, 
+        "Cappuccino": 62, 
+        "Fadøl": 41, 
+        "Kaiserburger": 27, 
+        "Brunch": 19, 
+        "Dessert": 14 
+      },
+      productsAllTime: {
+        "Filterkaffe": 6210,
+        "Cappuccino": 3980,
+        "Fadøl": 2870,
+        "Kaiserburger": 1240,
+        "Brunch": 1540
+      },
+      // DIN NYE ÅTD LISTE
+      productsYTD: {
+        "Brunchbuffet": 5113,
+        "Brunch - 5 elementer": 3899,
+        "M. P Max": 3707,
+        "Kaiser burger": 3099,
+        "Flæsk ad libitum": 2935,
+        "M. Classic": 2795
+      },
+      // DINE NYE ÅTD OMSÆTNINGSTAL
       locations: [
-        { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 4120000, ytdTarget: 7600000 },
-        { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 3560000, ytdTarget: 7000000 },
-        { name:"Café Kaiser Farum",     todayRevenue: 12150, todayTarget: 20000, ytdRevenue: 2980000, ytdTarget: 6100000 },
-        { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 3890000, ytdTarget: 7400000 },
-        { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2510000, ytdTarget: 5600000 }
+        { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 2943572.61, ytdTarget: 7000000 },
+        { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 2544273.09, ytdTarget: 7400000 },
+        { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2445203.48, ytdTarget: 5600000 },
+        { name:"Café Kaiser Farum",     todayRevenue: 12150, todayTarget: 20000, ytdRevenue: 2199475.77, ytdTarget: 6100000 },
+        { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 1786337.35, ytdTarget: 7600000 }
       ],
       upsell: { title:"Dessert solgt", current: 14, target: 30 },
       focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"" }
@@ -665,7 +689,7 @@
       });
     }
 
-    // Screens (single definition – no duplicates)
+    // Screens
     const screens = ["overview","locations","products"];
     let activeScreen = "overview";
     let rotateTimer = null;
@@ -750,7 +774,7 @@
       const remain = Math.max(0, tar - cur);
       $("kpiDessertRemain").innerHTML = `<span class="miniDot"></span> ${remain ? ("Mangler " + remain) : "Mål nået"}`;
 
-      // Focus (no “Én sætning…” text)
+      // Focus
       const f = data.focus || {};
       $("focusText").textContent = f.text || "—";
       const sub = (f.sub || "").trim();
@@ -777,12 +801,12 @@
           <div class="cardValue">${formatDKK(todayRev)}</div>
           <div class="cardSub">Dagens omsætning</div>
 
-          <div class="meterWrap" title="Dagsmål">
+          <div class="meterWrap" title="Dagsmål" style="margin-top:4px;">
             <div class="meterFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}"
                  style="width:${todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct)*100)}%"></div>
           </div>
 
-          <div class="meterWrap" title="Årsbudget (YTD)">
+          <div class="meterWrap" title="Årsbudget (YTD)" style="margin-top:4px;">
             <div class="meterFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}"
                  style="width:${ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct)*100)}%"></div>
           </div>
@@ -801,7 +825,7 @@
       const ytdEntries = sortedEntries(ytdMap).slice(0,10);
 
       $("prodTodayHint").textContent = todayEntries.length ? "Top 10 i dag" : "Ingen data";
-      $("prodYtdHint").textContent = ytdEntries.length ? "Top 10 ÅTD" : "Udfyld productsYTD";
+      $("prodYtdHint").textContent = ytdEntries.length ? "Top 10 ÅTD" : "Ingen data";
 
       renderTopList($("prodTodayList"), todayEntries);
       renderTopList($("prodYtdList"), ytdEntries);
@@ -815,7 +839,7 @@
     const jsonArea = $("jsonArea");
 
     function openModal(){
-      const code = prompt("Lederkode:");
+      const code = prompt("Lederkode (Live Score):");
       if (!code) return;
       if (code.trim() !== LEADER_CODE) return setError("Forkert lederkode.");
       jsonArea.value = JSON.stringify(loadData(), null, 2);
@@ -836,11 +860,11 @@
         closeModal();
         render();
       } catch(e){
-        setError("JSON fejl: " + (e && e.message ? e.message : "ukendt"));
+        setError("JSON fejl. Tjek at der er anførselstegn rundt om ord, og ingen bogstaver/kr. i tal. " + (e && e.message ? e.message : ""));
       }
     });
     $("resetBtn").addEventListener("click", () => {
-      if (!confirm("Reset til standard-data?")) return;
+      if (!confirm("Er du sikker på du vil slette alt og starte forfra med standardtallene?")) return;
       saveData(structuredClone(DEFAULT_DATA));
       jsonArea.value = JSON.stringify(loadData(), null, 2);
       render();
