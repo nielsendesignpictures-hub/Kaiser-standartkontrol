@@ -71,11 +71,12 @@
       content:"";
       position:absolute; inset:-2px;
       background:
-        radial-gradient(700px 240px at 20% 0%, rgba(214,178,74,0.22), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(214,178,74,0.14), transparent 60%);
+        radial-gradient(700px 240px at 20% 0%, rgba(214,178,74,0.20), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.12), transparent 60%);
       opacity:.55;
       pointer-events:none;
     }
+
     .kicker{
       position:relative;
       font-size:12px;
@@ -142,7 +143,12 @@
       cursor:pointer;
       transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .btn:active, .pill:active{ transform: translateY(1px); }
+    .pill:active, .btn:active{ transform: translateY(1px); }
+    .pill.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    }
     .btn.primary{
       border:none;
       background: linear-gradient(135deg, var(--gold), var(--gold2));
@@ -195,6 +201,39 @@
       font-size:12px;
     }
     .divider{height:1px;background:rgba(255,255,255,0.10);}
+
+    .addWrap{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .input{
+      flex: 1 1 260px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      padding: 12px 12px;
+      outline: none;
+      color: rgba(255,255,255,0.92);
+      font-weight:900;
+    }
+    .input:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
+      background: rgba(255,255,255,0.08);
+    }
+    .helper{
+      color: rgba(255,255,255,0.55);
+      font-weight:900;
+      font-size:12px;
+    }
 
     .grid{
       display:grid;
@@ -309,31 +348,7 @@
     .smallBtn.danger{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
     .smallBtn.gold{ border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.10); }
 
-    /* Add form */
-    .addWrap{
-      padding:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .input{
-      flex: 1 1 260px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      padding: 12px 12px;
-      outline: none;
-      color: rgba(255,255,255,0.92);
-      font-weight:900;
-    }
-    .input:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
-      background: rgba(255,255,255,0.08);
-    }
-
-    /* Modal alarm */
+    /* Alarm modal */
     .alarmBack{
       position:fixed; inset:0;
       display:none;
@@ -382,7 +397,7 @@
     <header class="hero mt-6">
       <div class="kicker">KAISER</div>
       <div class="title">3-timers regel</div>
-      <div class="subtitle">Start timer når noget sættes ud • advarsler + alarm ved udløb</div>
+      <div class="subtitle">Templates + valgfri note • advarsler + alarm ved udløb</div>
       <div class="goldline"></div>
 
       <div class="controls">
@@ -390,10 +405,6 @@
         <button class="btn ghost" id="fsBtn" type="button">Fuld skærm</button>
         <button class="btn ghost" id="wakeBtn" type="button">Hold skærm vågen</button>
         <button class="btn primary" id="notifyBtn" type="button">Tillad notifikationer</button>
-      </div>
-
-      <div class="subtitle" style="margin-top:10px;">
-        Tip: Første gang du starter en timer, er lyd aktiveret (browser-krav). Følg altid jeres HACCP.
       </div>
     </header>
 
@@ -405,10 +416,20 @@
       <div class="divider"></div>
 
       <div class="addWrap">
-        <input id="itemName" class="input" placeholder="Navn (fx Bearnaise / Brunchbuffet / Sauce)" />
-        <button class="btn primary" id="addBtn" type="button">Start 3 timer</button>
-        <button class="btn ghost" id="add30Btn" type="button">Start 30 min</button>
-        <button class="btn ghost" id="clearBtn" type="button">Nulstil alle</button>
+        <div class="row" id="tplRow" aria-label="Templates">
+          <button class="pill on" type="button" data-tpl="Bacon">Bacon</button>
+          <button class="pill" type="button" data-tpl="Pandekager">Pandekager</button>
+          <button class="pill" type="button" data-tpl="Fritekst">Fritekst</button>
+        </div>
+
+        <div class="row">
+          <input id="textInput" class="input" placeholder="Valgfri note (fx bakke 2 / kl. 18:30)" />
+          <button class="btn primary" id="addBtn" type="button">Start 3 timer</button>
+          <button class="btn ghost" id="add30Btn" type="button">Start 30 min</button>
+          <button class="btn ghost" id="clearBtn" type="button">Nulstil alle</button>
+        </div>
+
+        <div class="helper" id="helperText">Template valgt: Bacon • Note er valgfri</div>
       </div>
     </section>
 
@@ -439,7 +460,7 @@
 
   <script>
     // ================= CONFIG =================
-    const APP_KEY = "kaiser_3timer_v1";
+    const APP_KEY = "kaiser_3timer_v1_1";
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000; // 3 hours
     const SHORT_DURATION_MS = 30 * 60 * 1000;       // 30 min
     const WARN_30_MS = 30 * 60 * 1000;
@@ -450,6 +471,8 @@
     let audioUnlocked = false;
     let wakeLock = null;
     let lastAlarmId = null;
+
+    let selectedTpl = "Bacon";
 
     // ================= HELPERS =================
     function $(id){ return document.getElementById(id); }
@@ -462,12 +485,9 @@
       const ss = String(s%60).padStart(2,"0");
       return `${hh}:${mm}:${ss}`;
     }
-
     function clamp01(x){ return Math.max(0, Math.min(1, x)); }
 
-    function saveState(){
-      localStorage.setItem(APP_KEY, JSON.stringify(state));
-    }
+    function saveState(){ localStorage.setItem(APP_KEY, JSON.stringify(state)); }
     function loadState(){
       const raw = localStorage.getItem(APP_KEY);
       if (!raw) return { timers: [] };
@@ -480,9 +500,31 @@
         return { timers: [] };
       }
     }
+    function uid(){ return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
 
-    function uid(){
-      return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    function buildName(){
+      const text = ($("textInput").value || "").trim();
+
+      if (selectedTpl === "Fritekst") {
+        // her er input = navn (kræves)
+        return text;
+      }
+      // template + valgfri note
+      return text ? (selectedTpl + " – " + text) : selectedTpl;
+    }
+
+    function updateTplUI(){
+      [...$("tplRow").querySelectorAll("button[data-tpl]")].forEach(btn => {
+        btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
+      });
+
+      if (selectedTpl === "Fritekst") {
+        $("textInput").placeholder = "Navn (kræves) (fx Bearnaise / Brunchbuffet)";
+        $("helperText").textContent = "Template: Fritekst • Feltet er navnet";
+      } else {
+        $("textInput").placeholder = "Valgfri note (fx bakke 2 / kl. 18:30)";
+        $("helperText").textContent = "Template valgt: " + selectedTpl + " • Note er valgfri";
+      }
     }
 
     // ================= SOUND =================
@@ -510,7 +552,6 @@
         setTimeout(() => ctx.close(), 900);
       } catch(e){}
     }
-
     async function unlockAudio(){
       if (audioUnlocked) return;
       audioUnlocked = true;
@@ -519,10 +560,7 @@
 
     // ================= NOTIFICATIONS =================
     async function ensureNotificationPermission(){
-      if (!("Notification" in window)) {
-        alert("Notifikationer understøttes ikke i denne browser.");
-        return;
-      }
+      if (!("Notification" in window)) return alert("Notifikationer understøttes ikke i denne browser.");
       if (Notification.permission === "granted") return;
       const res = await Notification.requestPermission();
       if (res !== "granted") alert("Notifikationer ikke tilladt.");
@@ -536,10 +574,7 @@
     // ================= WAKE LOCK =================
     async function toggleWakeLock(){
       try{
-        if (!("wakeLock" in navigator)) {
-          alert("Wake Lock understøttes ikke her. Skru evt. op for skærm-timeout.");
-          return;
-        }
+        if (!("wakeLock" in navigator)) return alert("Wake Lock understøttes ikke her. Skru evt. op for skærm-timeout.");
         if (wakeLock){
           await wakeLock.release();
           wakeLock = null;
@@ -560,18 +595,14 @@
     // ================= FULLSCREEN =================
     async function toggleFullscreen(){
       try{
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-        } else {
-          await document.exitFullscreen();
-        }
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
       } catch(e){}
     }
 
     // ================= TIMER LOGIC =================
     function addTimer(name, durationMs){
-      const trimmed = (name || "").trim();
-      const label = trimmed || "Uden navn";
+      const label = (name || "").trim() || "Uden navn";
       const id = uid();
       const startedAt = now();
       const expiresAt = startedAt + durationMs;
@@ -587,7 +618,7 @@
       });
 
       saveState();
-      unlockAudio(); // ensure sound becomes available after user action
+      unlockAudio();
       render();
     }
 
@@ -601,7 +632,6 @@
       const t = state.timers.find(x => x.id === id);
       if (!t) return;
       t.expiresAt += addMs;
-      // allow new warnings again if we extended back over thresholds
       t.warned30 = false;
       t.warned10 = false;
       t.alarmed = false;
@@ -633,29 +663,23 @@
       const tNow = now();
       let changed = false;
 
-      // sort by soonest expiry
       state.timers.sort((a,b) => a.expiresAt - b.expiresAt);
 
       for (const t of state.timers){
         const left = t.expiresAt - tNow;
 
-        // 30 min warning
         if (!t.warned30 && left <= WARN_30_MS && left > WARN_10_MS){
           t.warned30 = true;
           changed = true;
           beep(2);
           notify("3-timers regel – 30 min", `${t.name} • ${fmtHHMMSS(left)}`);
         }
-
-        // 10 min warning
         if (!t.warned10 && left <= WARN_10_MS && left > 0){
           t.warned10 = true;
           changed = true;
           beep(3);
           notify("3-timers regel – 10 min", `${t.name} • ${fmtHHMMSS(left)}`);
         }
-
-        // expired alarm
         if (!t.alarmed && left <= 0){
           t.alarmed = true;
           changed = true;
@@ -675,9 +699,10 @@
       lastAlarmId = timerId;
 
       $("alarmTitle").textContent = "TID UDLØBET";
-      $("alarmSub").textContent = `${t.name} • Startet: ${new Date(t.startedAt).toLocaleTimeString("da-DK", {hour:"2-digit", minute:"2-digit"})}`;
-      $("alarmBack").style.display = "flex";
+      $("alarmSub").textContent =
+        `${t.name} • Startet: ${new Date(t.startedAt).toLocaleTimeString("da-DK", {hour:"2-digit", minute:"2-digit"})}`;
 
+      $("alarmBack").style.display = "flex";
       beep(5);
       notify("3-timers regel – UDLØBET", t.name);
       if (navigator.vibrate) { try { navigator.vibrate([250,120,250,120,250]); } catch(e){} }
@@ -692,7 +717,6 @@
     function stateForTimer(t){
       const left = t.expiresAt - now();
       if (left <= 0) return "exp";
-      if (left <= WARN_10_MS) return "warn";
       if (left <= WARN_30_MS) return "warn";
       return "ok";
     }
@@ -702,15 +726,11 @@
       const timers = state.timers || [];
       $("countText").textContent = timers.length + " aktiv(e)";
 
-      // rebuild full list each time (small scale)
       grid.innerHTML = "";
 
       timers.forEach((t) => {
         const left = t.expiresAt - now();
         const st = stateForTimer(t);
-
-        const card = document.createElement("div");
-        card.className = "card";
 
         const tagText =
           st === "exp" ? "UDLØBET" :
@@ -724,6 +744,8 @@
         const pct = clamp01((t.expiresAt - now()) / t.durationMs);
         const barW = Math.round(pct * 100);
 
+        const card = document.createElement("div");
+        card.className = "card";
         card.innerHTML = `
           <div class="nameRow">
             <div class="itemName" title="${t.name}">${t.name}</div>
@@ -731,6 +753,7 @@
           </div>
 
           <div class="timerBig">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
+
           <div class="meta">
             Start: ${new Date(t.startedAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
             • Slut: ${new Date(t.expiresAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
@@ -750,9 +773,8 @@
         grid.appendChild(card);
       });
 
-      // bind actions
       grid.querySelectorAll("button[data-act]").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", () => {
           unlockAudio();
           const id = btn.getAttribute("data-id");
           const act = btn.getAttribute("data-act");
@@ -765,12 +787,37 @@
 
     function render(){
       renderClock();
+      updateTplUI();
       renderTimersOnly();
     }
 
     // ================= EVENTS =================
-    $("addBtn").addEventListener("click", () => addTimer($("itemName").value, DEFAULT_DURATION_MS));
-    $("add30Btn").addEventListener("click", () => addTimer($("itemName").value, SHORT_DURATION_MS));
+    // Template buttons
+    $("tplRow").querySelectorAll("button[data-tpl]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedTpl = btn.dataset.tpl;
+        // optional: clear text when switching
+        $("textInput").value = "";
+        updateTplUI();
+        $("textInput").focus();
+        unlockAudio();
+      });
+    });
+
+    function startWith(durationMs){
+      const name = buildName();
+      if (selectedTpl === "Fritekst" && !name) {
+        alert("Skriv et navn (Fritekst).");
+        $("textInput").focus();
+        return;
+      }
+      addTimer(name, durationMs);
+      $("textInput").value = "";
+      $("textInput").focus();
+    }
+
+    $("addBtn").addEventListener("click", () => startWith(DEFAULT_DURATION_MS));
+    $("add30Btn").addEventListener("click", () => startWith(SHORT_DURATION_MS));
     $("clearBtn").addEventListener("click", clearAll);
 
     $("fsBtn").addEventListener("click", toggleFullscreen);
@@ -793,24 +840,16 @@
       lastAlarmId = null;
     });
 
-    // allow enter to start
-    $("itemName").addEventListener("keydown", (e) => {
+    $("textInput").addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        addTimer($("itemName").value, DEFAULT_DURATION_MS);
+        startWith(DEFAULT_DURATION_MS);
       }
     });
 
-    // keep time ticking
+    // Init
     render();
     setInterval(tick, 1000);
-
-    // resume wakeLock after visibility change (best effort)
-    document.addEventListener("visibilitychange", async () => {
-      if (document.visibilityState === "visible" && wakeLock === null) {
-        // don't auto-reacquire; user chooses
-      }
-    });
   </script>
 </body>
 </html>
