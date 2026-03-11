@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Køkken Hub</title>
+  <title>Kaiser – Kitchen Hub</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,8 +201,7 @@
     /* Timer widget */
     .twWrap{ padding:14px; display:flex; flex-direction:column; gap:12px; }
     .twTop{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
-    .twLeft{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .twRow{ display:flex; gap:8px; flex-wrap:wrap; }
+    .twRow{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 
     .segBtn{
       padding:10px 12px;
@@ -317,6 +316,32 @@
     .tTag.warn{ border-color: rgba(245,158,11,0.30); background: rgba(245,158,11,0.10); }
     .tTag.exp{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
 
+    .tActions{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .smallBtn{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.90);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .smallBtn:active{ transform: translateY(1px); }
+    .smallBtn.danger{
+      border-color: rgba(255,107,107,0.35);
+      background: rgba(255,107,107,0.12);
+    }
+
     /* Tool tiles */
     .gridTools{
       display:grid;
@@ -411,49 +436,43 @@
 
     <header class="hero mt-6">
       <div class="kicker">KAISER</div>
-      <div class="title">Køkken Hub</div>
-      <div class="subtitle">Alt samlet • uret er altid synligt</div>
+      <div class="title">Kitchen Hub</div>
+      <div class="subtitle">One screen for kitchen tools</div>
       <div class="goldline"></div>
 
       <div class="controls">
         <div class="pill" id="clockPill">—</div>
-        <button class="btn ghost" id="fsBtn" type="button">Fuld skærm</button>
-        <button class="btn ghost" id="wakeBtn" type="button">Hold skærm vågen</button>
-        <a class="btn ghost" href="./portal.html" style="text-decoration:none;">Til portal</a>
+        <button class="btn ghost" id="fsBtn" type="button">Fullscreen</button>
+        <button class="btn ghost" id="wakeBtn" type="button">Keep screen awake</button>
       </div>
     </header>
 
     <!-- TIMER WIDGET -->
-    <section class="section" aria-label="3-timers regel">
+    <section class="section" aria-label="3-hour rule">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> 3-timers regel</div>
-        <div class="sectionSub" id="timerSub">Aktive: 0</div>
+        <div class="sectionTitle"><span class="dot"></span> 3-hour rule</div>
+        <div class="sectionSub" id="timerSub">Active: 0</div>
       </div>
       <div class="divider"></div>
 
       <div class="twWrap">
         <div class="twTop">
-          <div class="twLeft">
-            <div class="twRow" id="tplRow">
-              <button class="segBtn on" type="button" data-tpl="Bacon">Bacon</button>
-              <button class="segBtn" type="button" data-tpl="Pandekager">Pandekager</button>
-              <button class="segBtn" type="button" data-tpl="Fritekst">Fritekst</button>
-            </div>
+          <div class="twRow" id="tplRow">
+            <button class="segBtn on" type="button" data-tpl="Bacon">Bacon</button>
+            <button class="segBtn" type="button" data-tpl="Pancakes">Pancakes</button>
+            <button class="segBtn" type="button" data-tpl="Free text">Free text</button>
           </div>
 
           <div class="twRow">
-            <button class="btn ghost" id="openTimerBtn" type="button">Åbn fuld ur-side</button>
+            <button class="btn ghost" id="clearExpiredBtn" type="button">Clear expired</button>
+            <button class="btn ghost" id="openTimerBtn" type="button">Open full timer</button>
           </div>
         </div>
 
         <div class="twRow">
-          <input id="textInput" class="input" placeholder="Valgfri note (fx bakke 2 / kl. 18:30)" />
-          <button class="btn primary" id="start3hBtn" type="button">Start 3 timer</button>
+          <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2 / 18:30)" />
+          <button class="btn primary" id="start3hBtn" type="button">Start 3 hours</button>
           <button class="btn ghost" id="start30Btn" type="button">Start 30 min</button>
-        </div>
-
-        <div class="subtitle" id="helperText" style="margin:0; text-align:left;">
-          Template: Bacon • Note er valgfri
         </div>
 
         <div class="timerList" id="timerList"></div>
@@ -461,30 +480,30 @@
     </section>
 
     <!-- TOOLS -->
-    <section class="section" aria-label="Værktøjer">
+    <section class="section" aria-label="Tools">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Værktøjer</div>
-        <div class="sectionSub">Åbner i samme skærm</div>
+        <div class="sectionTitle"><span class="dot"></span> Tools</div>
+        <div class="sectionSub">Opens inside this screen</div>
       </div>
       <div class="divider"></div>
 
       <div class="gridTools">
         <div class="tile" data-open="./MIS.html">
-          <div class="tileKicker">Køkken</div>
+          <div class="tileKicker">Kitchen</div>
           <div class="tileTitle">MIS</div>
-          <div class="tileSub">Mise en place • produktion • overblik.</div>
+          <div class="tileSub">Mise en place • production overview.</div>
           <div class="tileMeta">
-            <div class="pill">Åbn</div>
+            <div class="pill">Open</div>
             <div class="pill">In-app</div>
           </div>
         </div>
 
         <div class="tile" data-open="./cleaning-kitchen.html">
-          <div class="tileKicker">Køkken</div>
-          <div class="tileTitle">Rengøring</div>
-          <div class="tileSub">Daglige/ugentlige rengøringslister.</div>
+          <div class="tileKicker">Kitchen</div>
+          <div class="tileTitle">Cleaning</div>
+          <div class="tileSub">Daily/weekly cleaning lists.</div>
           <div class="tileMeta">
-            <div class="pill">Åbn</div>
+            <div class="pill">Open</div>
             <div class="pill">In-app</div>
           </div>
         </div>
@@ -494,8 +513,8 @@
         <div class="toolBar">
           <div class="pill" id="toolName">—</div>
           <div class="twRow">
-            <button class="btn ghost" id="closeToolBtn" type="button">Tilbage</button>
-            <button class="btn ghost" id="openNewTabBtn" type="button">Åbn i ny fane</button>
+            <button class="btn ghost" id="closeToolBtn" type="button">Back</button>
+            <button class="btn ghost" id="openNewTabBtn" type="button">Open in new tab</button>
           </div>
         </div>
         <iframe id="toolFrame" class="frame" src="about:blank" loading="eager"></iframe>
@@ -505,15 +524,14 @@
   </div>
 
   <script>
-    // ---------------- TIMER SHARED STORAGE ----------------
-    // Skal matche din 3-timers-regel.html
+    // Shared storage key (must match your timer page)
     const TIMER_KEY = "kaiser_3timer_v1_1";
-    const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
-    const SHORT_DURATION_MS = 30 * 60 * 1000;
-    const WARN_30_MS = 30 * 60 * 1000;
-    const WARN_10_MS = 10 * 60 * 1000;
 
-    // ---------------- HUB ----------------
+    const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
+    const SHORT_DURATION_MS   = 30 * 60 * 1000;
+    const WARN_30_MS          = 30 * 60 * 1000;
+    const WARN_10_MS          = 10 * 60 * 1000;
+
     let selectedTpl = "Bacon";
     let wakeLock = null;
 
@@ -545,21 +563,20 @@
     function saveTimers(timers){
       localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] }));
     }
-
     function uid(){
       return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
     }
 
     function buildName(){
       const text = ($("textInput").value || "").trim();
-      if (selectedTpl === "Fritekst") return text;
+      if (selectedTpl === "Free text") return text;
       return text ? (selectedTpl + " – " + text) : selectedTpl;
     }
 
     function addTimer(durationMs){
       const name = buildName();
-      if (selectedTpl === "Fritekst" && !name) {
-        alert("Skriv et navn (Fritekst).");
+      if (selectedTpl === "Free text" && !name) {
+        alert("Please enter a name.");
         $("textInput").focus();
         return;
       }
@@ -571,7 +588,7 @@
 
       timers.push({
         id,
-        name: name || "Uden navn",
+        name: name || "Unnamed",
         startedAt,
         durationMs,
         expiresAt,
@@ -585,8 +602,21 @@
       renderTimers();
     }
 
+    function removeTimer(id){
+      const timers = loadTimers().filter(t => t.id !== id);
+      saveTimers(timers);
+      renderTimers();
+    }
+
+    function clearExpired(){
+      const tNow = now();
+      const timers = loadTimers().filter(t => (t.expiresAt || 0) > tNow);
+      saveTimers(timers);
+      renderTimers();
+    }
+
     function timerState(t){
-      const left = t.expiresAt - now();
+      const left = (t.expiresAt || 0) - now();
       if (left <= 0) return "exp";
       if (left <= WARN_10_MS) return "warn";
       if (left <= WARN_30_MS) return "warn";
@@ -598,27 +628,27 @@
         btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
       });
 
-      if (selectedTpl === "Fritekst") {
-        $("textInput").placeholder = "Navn (kræves) (fx Bearnaise / Brunchbuffet)";
-        $("helperText").textContent = "Template: Fritekst • Feltet er navnet";
+      if (selectedTpl === "Free text") {
+        $("textInput").placeholder = "Name (required) – e.g. Bearnaise / Brunch buffet";
       } else {
-        $("textInput").placeholder = "Valgfri note (fx bakke 2 / kl. 18:30)";
-        $("helperText").textContent = "Template: " + selectedTpl + " • Note er valgfri";
+        $("textInput").placeholder = "Optional note (e.g. tray 2 / 18:30)";
       }
     }
 
     function renderClock(){
-      $("clockPill").textContent = "Nu: " + nowDK();
+      $("clockPill").textContent = "Now: " + nowDK();
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
     }
 
     function renderTimers(){
       const list = $("timerList");
       let timers = loadTimers();
 
-      // sort soonest first
       timers = timers.slice().sort((a,b) => (a.expiresAt||0) - (b.expiresAt||0));
-
-      $("timerSub").textContent = "Aktive: " + timers.length;
+      $("timerSub").textContent = "Active: " + timers.length;
 
       list.innerHTML = "";
       if (!timers.length){
@@ -626,21 +656,20 @@
         empty.className = "pill";
         empty.style.justifyContent = "center";
         empty.style.width = "100%";
-        empty.textContent = "Ingen aktive timere – start én ovenfor.";
+        empty.textContent = "No active timers – start one above.";
         list.appendChild(empty);
         return;
       }
 
-      // show up to 6 cards (scroll for more)
       timers.slice(0, 12).forEach(t => {
-        const left = t.expiresAt - now();
+        const left = (t.expiresAt||0) - now();
         const st = timerState(t);
 
-        const pct = clamp01((t.expiresAt - now()) / t.durationMs);
+        const pct = clamp01(((t.expiresAt||0) - now()) / (t.durationMs || DEFAULT_DURATION_MS));
         const w = Math.round(pct * 100);
 
         const tagClass = st === "exp" ? "tTag exp" : (st === "warn" ? "tTag warn" : "tTag ok");
-        const tagText  = st === "exp" ? "UDLØBET" : (left <= WARN_10_MS ? "10 MIN" : (left <= WARN_30_MS ? "30 MIN" : "OK"));
+        const tagText  = st === "exp" ? "EXPIRED" : (left <= WARN_10_MS ? "10 MIN" : (left <= WARN_30_MS ? "30 MIN" : "OK"));
 
         const fillClass = st === "exp" ? "barFill exp" : (st === "warn" ? "barFill warn" : "barFill");
 
@@ -651,21 +680,26 @@
           <div class="tName" title="${escapeHtml(t.name)}">${escapeHtml(t.name)}</div>
           <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
           <div class="tMeta">
-            Slut: ${new Date(t.expiresAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
+            Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
           </div>
           <div class="barWrap">
             <div class="${fillClass}" style="width:${st === "exp" ? 100 : w}%"></div>
           </div>
+          ${st === "exp" ? `
+            <div class="tActions">
+              <button class="smallBtn danger" data-remove="${escapeHtml(t.id)}" type="button">Remove</button>
+            </div>
+          ` : ``}
         `;
         list.appendChild(card);
       });
+
+      list.querySelectorAll("button[data-remove]").forEach(btn => {
+        btn.addEventListener("click", () => removeTimer(btn.getAttribute("data-remove")));
+      });
     }
 
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
-    }
-
-    // ---------------- TOOLS (iframe) ----------------
+    // ---- Tools (iframe) ----
     const toolWrap = $("toolWrap");
     const toolFrame = $("toolFrame");
     const toolName = $("toolName");
@@ -674,50 +708,44 @@
     function openTool(url){
       currentToolUrl = url;
       toolName.textContent = url.replace("./","");
-
       toolFrame.src = url;
       toolWrap.style.display = "flex";
-
-      // scroll into view so staff sees tool
       toolWrap.scrollIntoView({ behavior:"smooth", block:"start" });
     }
-
     function closeTool(){
       toolWrap.style.display = "none";
       toolFrame.src = "about:blank";
       currentToolUrl = "";
     }
 
-    // ---------------- FULLSCREEN + WAKE LOCK ----------------
+    // ---- Fullscreen + Wake Lock ----
     async function toggleFullscreen(){
       try{
         if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
         else await document.exitFullscreen();
       } catch(e){}
     }
-
     async function toggleWakeLock(){
       try{
-        if (!("wakeLock" in navigator)) return alert("Wake Lock understøttes ikke her. Skru evt. op for skærm-timeout.");
+        if (!("wakeLock" in navigator)) return alert("Wake Lock not supported. Increase screen timeout.");
         if (wakeLock){
           await wakeLock.release();
           wakeLock = null;
-          $("wakeBtn").textContent = "Hold skærm vågen";
+          $("wakeBtn").textContent = "Keep screen awake";
           return;
         }
         wakeLock = await navigator.wakeLock.request("screen");
-        $("wakeBtn").textContent = "Skærm vågen: ON";
+        $("wakeBtn").textContent = "Screen awake: ON";
         wakeLock.addEventListener("release", () => {
           wakeLock = null;
-          $("wakeBtn").textContent = "Hold skærm vågen";
+          $("wakeBtn").textContent = "Keep screen awake";
         });
       } catch(e){
-        alert("Kunne ikke aktivere wake lock.");
+        alert("Could not enable wake lock.");
       }
     }
 
-    // ---------------- EVENTS ----------------
-    // Template buttons
+    // ---- Events ----
     $("tplRow").querySelectorAll("button[data-tpl]").forEach(btn => {
       btn.addEventListener("click", () => {
         selectedTpl = btn.dataset.tpl;
@@ -729,14 +757,11 @@
 
     $("start3hBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS));
     $("start30Btn").addEventListener("click", () => addTimer(SHORT_DURATION_MS));
-
     $("textInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        addTimer(DEFAULT_DURATION_MS);
-      }
+      if (e.key === "Enter") { e.preventDefault(); addTimer(DEFAULT_DURATION_MS); }
     });
 
+    $("clearExpiredBtn").addEventListener("click", clearExpired);
     $("openTimerBtn").addEventListener("click", () => openTool("./3-timers-regel.html"));
 
     document.querySelectorAll(".tile[data-open]").forEach(tile => {
@@ -752,19 +777,13 @@
     $("fsBtn").addEventListener("click", toggleFullscreen);
     $("wakeBtn").addEventListener("click", toggleWakeLock);
 
-    // ---------------- INIT ----------------
+    // ---- Init ----
     updateTplUI();
     renderClock();
     renderTimers();
 
-    // Update clock every minute and timers every second
-    setInterval(() => {
-      renderClock();
-    }, 60000);
-
-    setInterval(() => {
-      renderTimers();
-    }, 1000);
+    setInterval(renderClock, 60000);
+    setInterval(renderTimers, 1000);
   </script>
 </body>
 </html>
