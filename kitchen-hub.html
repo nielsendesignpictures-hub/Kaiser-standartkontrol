@@ -1,769 +1,775 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Hub - Kaiser</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg0: #070A12;
-            --bg1: #0B1020;
-            --panel: rgba(255,255,255,0.055);
-            --panel2: rgba(255,255,255,0.035);
-            --border: rgba(255,255,255,0.10);
-            
-            --text: rgba(255,255,255,0.94);
-            --muted: rgba(255,255,255,0.74);
-            --muted2: rgba(255,255,255,0.52);
-            
-            --gold: #d6b24a;
-            --gold2: #b9921f;
-            
-            --kitchen: #f59e0b;
-            --drift: #38bdf8;
-            --quality: #a78bfa;
-            
-            --success: #22c55e;
-            --danger: #ff6b6b;
-            --shadow: 0 26px 75px rgba(0,0,0,.55);
-            --shadow2: 0 18px 55px rgba(0,0,0,.35);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            height: 100%;
-        }
-        
-        body {
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            color: var(--text);
-            background:
-                radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-                radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-                radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-                linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-        
-        body:before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 38px 38px;
-            opacity: 0.06;
-            pointer-events: none;
-            mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
-        }
-        
-        .shell {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 18px 16px 44px;
-        }
-        
-        /* Header */
-        .header {
-            position: relative;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .back-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background: var(--gold);
-            color: var(--bg0);
-            border-color: var(--gold);
-        }
-        
-        .header-title h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        
-        .header-title p {
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 600;
-        }
-        
-        .location-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: linear-gradient(135deg, var(--gold), var(--gold2));
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 14px;
-            color: var(--bg0);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .location-badge .icon {
-            font-size: 18px;
-        }
-        
-        /* Grid Layout */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        /* Panel */
-        .panel {
-            position: relative;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            padding: 24px;
-            box-shadow: var(--shadow2);
-            transition: all 0.3s ease;
-        }
-        
-        .panel:hover {
-            border-color: rgba(255,255,255,0.15);
-            box-shadow: var(--shadow);
-        }
-        
-        .panel-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .panel-icon {
-            font-size: 24px;
-        }
-        
-        .panel-header h2 {
-            font-size: 16px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text);
-        }
-        
-        .refresh-btn {
-            cursor: pointer;
-            font-size: 16px;
-            opacity: 0.7;
-            transition: all 0.3s ease;
-            margin-left: auto;
-            padding: 6px;
-            border-radius: 8px;
-        }
-        
-        .refresh-btn:hover {
-            opacity: 1;
-            background: rgba(255,255,255,0.1);
-            transform: rotate(180deg);
-        }
-        
-        /* Tool Links */
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        
-        .tool-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px 16px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-        
-        .tool-link:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: var(--gold);
-            transform: translateY(-3px);
-        }
-        
-        .tool-link .icon {
-            font-size: 28px;
-        }
-        
-        .tool-link .label {
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Catering Styles */
-        #cateringList {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .catering-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 12px;
-            padding: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .catering-card:hover {
-            background: rgba(255,255,255,0.06);
-            transform: translateX(4px);
-        }
-        
-        .catering-date {
-            font-size: 13px;
-            color: var(--gold);
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .catering-title {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 6px;
-        }
-        
-        .catering-guests {
-            font-size: 14px;
-            color: var(--muted);
-            margin-bottom: 4px;
-        }
-        
-        .catering-note {
-            font-size: 13px;
-            color: var(--muted2);
-            background: rgba(255,255,255,0.03);
-            padding: 10px 12px;
-            border-radius: 8px;
-            border-left: 3px solid var(--muted2);
-            margin-top: 10px;
-            line-height: 1.5;
-        }
-        
-        .catering-empty {
-            text-align: center;
-            padding: 30px;
-            color: var(--muted2);
-            font-size: 14px;
-        }
-        
-        .loading-state {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 30px;
-            color: var(--muted);
-            font-size: 14px;
-        }
-        
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Iframe Panel */
-        .iframe-container {
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.2);
-            min-height: 300px;
-        }
-        
-        .iframe-container iframe {
-            width: 100%;
-            height: 350px;
-            border: none;
-        }
-        
-        /* Full Width Panel */
-        .panel.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        /* Status Indicator */
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        /* Time Display */
-        .time-display {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .time-display .time {
-            font-family: "Playfair Display", serif;
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-        
-        .time-display .date {
-            font-size: 14px;
-            color: var(--muted);
-            font-weight: 600;
-        }
-        
-        /* Quick Stats */
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        
-        .stat-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-        
-        .stat-card .value {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--gold);
-            margin-bottom: 4px;
-        }
-        
-        .stat-card .label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--muted2);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 10px;
-        }
-        
-        /* Mobile */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .header-left {
-                flex-direction: column;
-            }
-            
-            .tool-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .header-title h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kitchen Hub – Kaiser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06080c;
+      --card: rgba(255,255,255,0.03);
+      --card2: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --muted: rgba(255,255,255,0.55);
+      --muted2: rgba(255,255,255,0.35);
+      --gold: #d6b24a;
+      --accent: #38bdf8;
+      --red: #f87171;
+      --green: #4ade80;
+      --orange: #fb923c;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body { 
+      min-height: 100vh; 
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+      background-image: 
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(56,189,248,0.15), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 50%, rgba(214,178,74,0.1), transparent);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--gold);
+      color: var(--bg);
+      border-color: var(--gold);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 32px;
+    }
+
+    .logo h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo p {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .location-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--gold), #b8960c);
+      color: #000;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* Module Card */
+    .module {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card2);
+    }
+
+    .module-header .icon {
+      font-size: 22px;
+    }
+
+    .module-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex: 1;
+    }
+
+    .module-header .refresh-btn {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: all 0.3s;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .module-header .refresh-btn:hover {
+      opacity: 1;
+      background: var(--card2);
+      transform: rotate(180deg);
+    }
+
+    .module-content {
+      padding: 20px;
+    }
+
+    /* Quick Links */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 12px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .quick-link:hover {
+      background: var(--card);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .quick-link .icon {
+      font-size: 28px;
+    }
+
+    .quick-link span {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Catering */
+    #cateringList {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .catering-card {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.2s;
+    }
+
+    .catering-card:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateX(4px);
+    }
+
+    .catering-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .catering-date.today {
+      color: var(--red);
+    }
+
+    .catering-date.tomorrow {
+      color: var(--orange);
+    }
+
+    .catering-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .catering-guests {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .catering-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      border-left: 3px solid var(--muted2);
+      line-height: 1.6;
+    }
+
+    .catering-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Iframe Module */
+    .iframe-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      display: block;
+    }
+
+    /* Clock */
+    .clock-display {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .clock-time {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, var(--text), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .clock-date {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .logo h1 {
+        font-size: 20px;
+      }
+      
+      .clock-time {
+        font-size: 42px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="shell">
-        
-        <!-- HEADER -->
-        <header class="header">
-            <div class="header-left">
-                <a href="portal.html" class="back-btn" title="Tilbage til Portal">←</a>
-                <div class="header-title">
-                    <h1>👨‍🍳 Kitchen Hub</h1>
-                    <p>Køkkenets kommandocentral</p>
-                </div>
-            </div>
-            <div class="location-badge">
-                <span class="icon">📍</span>
-                <span id="locationName">Indlæser...</span>
-            </div>
-        </header>
-        
-        <!-- GRID -->
-        <div class="grid">
-            
-            <!-- CLOCK & DATE -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">🕐</span>
-                    <h2>Tid & Dato</h2>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="time-display">
-                    <div class="time" id="currentTime">--:--</div>
-                    <div class="date" id="currentDate">--</div>
-                </div>
-            </div>
-            
-            <!-- QUICK TOOLS -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">🛠️</span>
-                    <h2>Hurtige Tools</h2>
-                </div>
-                <div class="tool-grid">
-                    <a href="kitchen-percent.html" class="tool-link">
-                        <span class="icon">📈</span>
-                        <span class="label">Kitchen %</span>
-                    </a>
-                    <a href="MIS.html" class="tool-link">
-                        <span class="icon">🍽️</span>
-                        <span class="label">MIS</span>
-                    </a>
-                    <a href="3-timers-regel.html" class="tool-link">
-                        <span class="icon">⏰</span>
-                        <span class="label">3-Timers</span>
-                    </a>
-                    <a href="cleaning-kitchen.html" class="tool-link">
-                        <span class="icon">🧽</span>
-                        <span class="label">Rengøring</span>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- CATERING -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">🎉</span>
-                    <h2>Kommende Catering</h2>
-                    <span class="refresh-btn" onclick="loadCatering()" title="Opdater">🔄</span>
-                </div>
-                <div id="cateringList">
-                    <div class="loading-state">
-                        <span class="spinner"></span>
-                        Henter catering...
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 3-TIMERS REGEL -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">⏰</span>
-                    <h2>3-Timers Regel</h2>
-                </div>
-                <div class="iframe-container">
-                    <iframe src="3-timers-regel.html" title="3-Timers Regel"></iframe>
-                </div>
-            </div>
-            
-            <!-- CLEANING -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">🧽</span>
-                    <h2>Rengøring</h2>
-                </div>
-                <div class="iframe-container">
-                    <iframe src="cleaning-kitchen.html" title="Køkken Rengøring"></iframe>
-                </div>
-            </div>
-            
-            <!-- QUICK STATS -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-icon">📊</span>
-                    <h2>Hurtig Status</h2>
-                </div>
-                <div class="quick-stats">
-                    <div class="stat-card">
-                        <div class="value" id="cateringCount">-</div>
-                        <div class="label">Catering i dag</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value" id="upcomingCount">-</div>
-                        <div class="label">Kommende</div>
-                    </div>
-                </div>
-            </div>
-            
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <a href="portal.html" class="back-btn" title="Tilbage">←</a>
+      <div class="logo">
+        <span class="logo-icon">👨‍🍳</span>
+        <div>
+          <h1>Kitchen Hub</h1>
+          <p>Køkkenets kommandocentral</p>
         </div>
-        
+      </div>
     </div>
+    <div class="location-badge" id="locationBadge">
+      📍 <span id="locationName">Indlæser...</span>
+    </div>
+  </header>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- CLOCK -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">🕐</span>
+        <h2>Tid & Dato</h2>
+      </div>
+      <div class="module-content">
+        <div class="clock-display">
+          <div class="clock-time" id="clockTime">--:--</div>
+          <div class="clock-date" id="clockDate">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK TOOLS -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">🛠️</span>
+        <h2>Hurtige Tools</h2>
+      </div>
+      <div class="module-content">
+        <div class="quick-links">
+          <a href="kitchen-percent.html" class="quick-link">
+            <span class="icon">📈</span>
+            <span>Kitchen %</span>
+          </a>
+          <a href="MIS.html" class="quick-link">
+            <span class="icon">🍽️</span>
+            <span>MIS</span>
+          </a>
+          <a href="3-timers-regel.html" class="quick-link">
+            <span class="icon">⏰</span>
+            <span>3-Timers</span>
+          </a>
+          <a href="cleaning-kitchen.html" class="quick-link">
+            <span class="icon">🧽</span>
+            <span>Rengøring</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATERING -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">🎉</span>
+        <h2>Kommende Catering</h2>
+        <button class="refresh-btn" onclick="loadCatering()" title="Opdater">🔄</button>
+      </div>
+      <div class="module-content">
+        <div id="cateringList">
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <span>Henter catering...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">📊</span>
+        <h2>Status</h2>
+      </div>
+      <div class="module-content">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="todayCount">-</div>
+            <div class="stat-label">Catering i dag</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="upcomingCount">-</div>
+            <div class="stat-label">Kommende</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-TIMERS REGEL -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">⏰</span>
+        <h2>3-Timers Regel</h2>
+      </div>
+      <div class="module-content">
+        <div class="iframe-wrap">
+          <iframe src="3-timers-regel.html" title="3-Timers Regel"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENGØRING -->
+    <div class="module">
+      <div class="module-header">
+        <span class="icon">🧽</span>
+        <h2>Rengøring</h2>
+      </div>
+      <div class="module-content">
+        <div class="iframe-wrap">
+          <iframe src="cleaning-kitchen.html" title="Rengøring"></iframe>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ===== CONFIGURATION =====
+const CATERING_API = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
+
+const LOCATIONS = {
+  'helsingor': 'Helsingør',
+  'helsingør': 'Helsingør',
+  'hillerod': 'Hillerød',
+  'hillerød': 'Hillerød',
+  'farum': 'Farum',
+  'horsholm': 'Hørsholm',
+  'hørsholm': 'Hørsholm',
+  'vanlose': 'Vanløse',
+  'vanløse': 'Vanløse'
+};
+
+// ===== HELPERS =====
+function getUrlParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param) || '';
+}
+
+function getCurrentLocation() {
+  return getUrlParam('loc').toLowerCase();
+}
+
+function getLocationDisplayName() {
+  const loc = getCurrentLocation();
+  return LOCATIONS[loc] ? `Café Kaiser ${LOCATIONS[loc]}` : 'Vælg lokation';
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Set location
+  document.getElementById('locationName').textContent = getLocationDisplayName();
+  
+  // Start clock
+  updateClock();
+  setInterval(updateClock, 1000);
+  
+  // Load catering
+  loadCatering();
+  
+  // Auto-refresh every 60 seconds
+  setInterval(loadCatering, 60000);
+});
+
+// ===== CLOCK =====
+function updateClock() {
+  const now = new Date();
+  
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  document.getElementById('clockTime').textContent = `${hours}:${minutes}`;
+  
+  const days = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'];
+  const months = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+  
+  document.getElementById('clockDate').textContent = 
+    `${days[now.getDay()]} d. ${now.getDate()}. ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+// ===== CATERING =====
+async function loadCatering() {
+  const container = document.getElementById('cateringList');
+  const currentLoc = getCurrentLocation();
+  
+  container.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <span>Henter catering...</span>
+    </div>
+  `;
+
+  try {
+    // Fetch with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     
-    <script>
-        // ===== CONFIGURATION =====
-        const CATERING_API = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
-        
-        // Location mapping
-        const LOCATIONS = {
-            'helsingor': 'Café Kaiser Helsingør',
-            'helsingør': 'Café Kaiser Helsingør',
-            'hillerod': 'Café Kaiser Hillerød',
-            'hillerød': 'Café Kaiser Hillerød',
-            'farum': 'Café Kaiser Farum',
-            'horsholm': 'Café Kaiser Hørsholm',
-            'hørsholm': 'Café Kaiser Hørsholm',
-            'vanlose': 'Café Kaiser Vanløse',
-            'vanløse': 'Café Kaiser Vanløse'
-        };
-        
-        // ===== GET CURRENT LOCATION =====
-        function getCurrentLocation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const loc = urlParams.get('loc') || '';
-            return loc.toLowerCase();
-        }
-        
-        function getLocationDisplayName() {
-            const loc = getCurrentLocation();
-            return LOCATIONS[loc] || 'Ukendt Lokation';
-        }
-        
-        // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set location name
-            document.getElementById('locationName').textContent = getLocationDisplayName();
-            
-            // Start clock
-            updateClock();
-            setInterval(updateClock, 1000);
-            
-            // Load catering
-            loadCatering();
-            
-            // Auto-refresh catering every 60 seconds
-            setInterval(loadCatering, 60000);
+    const response = await fetch(CATERING_API + '?action=list', {
+      method: 'GET',
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    const data = await response.json();
+    
+    if (data.status === 'success') {
+      let events = data.data || [];
+      
+      // Filter for current location
+      if (currentLoc) {
+        events = events.filter(e => {
+          if (!e.location) return false;
+          const eventLoc = e.location.toLowerCase();
+          // Match various formats
+          return eventLoc === currentLoc || 
+                 eventLoc.includes(currentLoc) ||
+                 currentLoc.includes(eventLoc) ||
+                 normalizeLocation(eventLoc) === normalizeLocation(currentLoc);
         });
-        
-        // ===== CLOCK =====
-        function updateClock() {
-            const now = new Date();
-            
-            // Time
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
-            
-            // Date
-            const days = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'];
-            const months = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
-            
-            const dayName = days[now.getDay()];
-            const day = now.getDate();
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            
-            document.getElementById('currentDate').textContent = `${dayName} d. ${day}. ${month} ${year}`;
-        }
-        
-        // ===== CATERING =====
-        async function loadCatering() {
-            const container = document.getElementById('cateringList');
-            const currentLoc = getCurrentLocation();
-            
-            container.innerHTML = `
-                <div class="loading-state">
-                    <span class="spinner"></span>
-                    Henter catering...
-                </div>
-            `;
-            
-            try {
-                const response = await fetch(CATERING_API + '?action=list');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    let events = data.data || [];
-                    
-                    // Filter for current location
-                    if (currentLoc) {
-                        events = events.filter(e => {
-                            if (!e.location) return false;
-                            const eventLoc = e.location.toLowerCase();
-                            return eventLoc === currentLoc || 
-                                   eventLoc.includes(currentLoc) ||
-                                   currentLoc.includes(eventLoc);
-                        });
-                    }
-                    
-                    // Filter out past events
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    const upcomingEvents = events.filter(e => new Date(e.date) >= today);
-                    
-                    // Sort by date
-                    upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-                    
-                    // Update stats
-                    updateStats(upcomingEvents);
-                    
-                    // Take only next 5 events
-                    const displayEvents = upcomingEvents.slice(0, 5);
-                    
-                    renderCatering(displayEvents);
-                } else {
-                    container.innerHTML = '<div class="catering-empty">❌ Kunne ikke hente catering</div>';
-                }
-            } catch (error) {
-                console.error('Catering load error:', error);
-                container.innerHTML = '<div class="catering-empty">❌ Fejl ved hentning</div>';
-            }
-        }
-        
-        function renderCatering(events) {
-            const container = document.getElementById('cateringList');
-            
-            if (events.length === 0) {
-                container.innerHTML = '<div class="catering-empty">🎉 Ingen kommende catering</div>';
-                return;
-            }
-            
-            container.innerHTML = events.map(e => `
-                <div class="catering-card">
-                    <div class="catering-date">📅 ${formatCateringDate(e.date)} kl. ${e.time}</div>
-                    <div class="catering-title">${e.title || 'Ingen titel'}</div>
-                    <div class="catering-guests">👥 ${e.guests} gæster</div>
-                    ${e.note ? `<div class="catering-note">📝 ${e.note}</div>` : ''}
-                </div>
-            `).join('');
-        }
-        
-        function updateStats(events) {
-            // Today's catering
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const todayCount = events.filter(e => {
-                const eventDate = new Date(e.date);
-                return eventDate >= today && eventDate < tomorrow;
-            }).length;
-            
-            document.getElementById('cateringCount').textContent = todayCount;
-            document.getElementById('upcomingCount').textContent = events.length;
-        }
-        
-        function formatCateringDate(dateString) {
-            const date = new Date(dateString);
-            const days = ['Søn', 'Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør'];
-            const months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
-            
-            const dayName = days[date.getDay()];
-            const day = date.getDate();
-            const month = months[date.getMonth()];
-            
-            // Check if it's today or tomorrow
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const eventDate = new Date(date);
-            eventDate.setHours(0, 0, 0, 0);
-            
-            const diffDays = Math.floor((eventDate - today) / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return `🔴 I DAG`;
-            } else if (diffDays === 1) {
-                return `🟡 I MORGEN`;
-            } else {
-                return `${dayName} ${day}. ${month}`;
-            }
-        }
-    </script>
+      }
+      
+      // Filter out past events
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      events = events.filter(e => new Date(e.date) >= today);
+      
+      // Sort by date
+      events.sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      // Update stats
+      updateStats(events);
+      
+      // Render (max 5)
+      renderCatering(events.slice(0, 5));
+      
+    } else {
+      throw new Error('API returned error status');
+    }
+    
+  } catch (error) {
+    console.error('Catering load error:', error);
+    
+    // Show user-friendly error
+    container.innerHTML = `
+      <div class="catering-empty">
+        <p>⚠️ Kunne ikke hente catering</p>
+        <p style="font-size: 12px; margin-top: 8px; opacity: 0.7;">
+          Klik 🔄 for at prøve igen
+        </p>
+      </div>
+    `;
+    
+    // Reset stats
+    document.getElementById('todayCount').textContent = '-';
+    document.getElementById('upcomingCount').textContent = '-';
+  }
+}
+
+function normalizeLocation(loc) {
+  return loc
+    .toLowerCase()
+    .replace(/[æ]/g, 'ae')
+    .replace(/[ø]/g, 'o')
+    .replace(/[å]/g, 'a')
+    .replace(/café\s*/gi, '')
+    .replace(/kaiser\s*/gi, '')
+    .trim();
+}
+
+function renderCatering(events) {
+  const container = document.getElementById('cateringList');
+  
+  if (events.length === 0) {
+    container.innerHTML = '<div class="catering-empty">🎉 Ingen kommende catering</div>';
+    return;
+  }
+  
+  container.innerHTML = events.map(e => {
+    const dateInfo = formatCateringDate(e.date);
+    return `
+      <div class="catering-card">
+        <div class="catering-date ${dateInfo.class}">${dateInfo.text} kl. ${e.time || '--:--'}</div>
+        <div class="catering-title">${escapeHtml(e.title) || 'Ingen titel'}</div>
+        <div class="catering-guests">👥 ${e.guests || '?'} gæster</div>
+        ${e.note ? `<div class="catering-note">${escapeHtml(e.note)}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function updateStats(events) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  const todayCount = events.filter(e => {
+    const d = new Date(e.date);
+    return d >= today && d < tomorrow;
+  }).length;
+  
+  document.getElementById('todayCount').textContent = todayCount;
+  document.getElementById('upcomingCount').textContent = events.length;
+}
+
+function formatCateringDate(dateString) {
+  const date = new Date(dateString);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const eventDate = new Date(date);
+  eventDate.setHours(0, 0, 0, 0);
+  
+  const diffDays = Math.floor((eventDate - today) / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return { text: '🔴 I DAG', class: 'today' };
+  } else if (diffDays === 1) {
+    return { text: '🟡 I MORGEN', class: 'tomorrow' };
+  } else {
+    const days = ['Søn', 'Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør'];
+    const months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+    return { 
+      text: `📅 ${days[date.getDay()]} ${date.getDate()}. ${months[date.getMonth()]}`,
+      class: ''
+    };
+  }
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+
 </body>
 </html>
