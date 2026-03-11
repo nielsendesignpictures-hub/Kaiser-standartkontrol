@@ -103,54 +103,166 @@
     .input:focus{border-color:var(--gold);}
     .input::placeholder{color:rgba(255,255,255,0.4);}
 
-    .grid{display:grid;grid-template-columns:1fr;gap:12px;padding:14px;}
-    @media (min-width: 820px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;} }
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;padding:14px;}
+    @media (min-width: 820px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;} }
 
+    /* Event cards med farve på hele kortet */
     .event{
-      border-radius:22px;border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border-radius:22px;
       box-shadow: 0 18px 50px rgba(0,0,0,.38);
-      padding:14px;
+      padding:18px;
       position:relative;
       overflow:hidden;
-      display:flex;
-      gap:12px;
       transition: transform .15s, box-shadow .15s;
     }
-    .event:hover{transform:translateY(-2px);box-shadow: 0 22px 60px rgba(0,0,0,.45);}
+    .event:hover{transform:translateY(-4px);box-shadow: 0 26px 70px rgba(0,0,0,.50);}
     
-    .bar{
-      width:10px;border-radius:999px;flex:0 0 auto;align-self:stretch;opacity:.95;
-      min-height:60px;
+    /* Farve varianter */
+    .event.green{
+      background: linear-gradient(135deg, rgba(98,210,111,0.15), rgba(98,210,111,0.05));
+      border: 1px solid rgba(98,210,111,0.30);
     }
-    .bar.red{ background: rgba(255,107,107,0.85); box-shadow: 0 0 0 5px rgba(255,107,107,0.10); }
-    .bar.yellow{ background: rgba(245,158,11,0.90); box-shadow: 0 0 0 5px rgba(245,158,11,0.10); }
-    .bar.green{ background: rgba(98,210,111,0.90); box-shadow: 0 0 0 5px rgba(98,210,111,0.10); }
-    .bar.gray{ background: rgba(255,255,255,0.25); box-shadow: 0 0 0 5px rgba(255,255,255,0.06); }
+    .event.yellow{
+      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05));
+      border: 1px solid rgba(245,158,11,0.30);
+    }
+    .event.red{
+      background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05));
+      border: 1px solid rgba(255,107,107,0.30);
+    }
+    .event.gray{
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.15);
+    }
 
-    .body{flex:1;min-width:0;}
-    .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;}
-    .name{font-weight:800;letter-spacing:-0.01em;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
-    .meta{color:rgba(255,255,255,0.65);font-weight:700;font-size:12px;white-space:nowrap;}
-    .msg{margin-top:6px;color:rgba(255,255,255,0.75);font-weight:600;font-size:13px;line-height:1.4;}
-    .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;}
-    .tag{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
-      font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:10px;color:rgba(255,255,255,0.70);
+    /* Dato sektion - STOR og tydelig */
+    .eventDate{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+      padding-bottom:14px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
     }
-    .miniDot{ width:7px;height:7px;border-radius:999px;background:rgba(214,178,74,0.85); }
+    .dateDay{
+      font-family:"Playfair Display",serif;
+      font-size:42px;
+      font-weight:700;
+      line-height:1;
+      min-width:60px;
+    }
+    .event.green .dateDay{ color: rgba(98,210,111,1); }
+    .event.yellow .dateDay{ color: rgba(245,158,11,1); }
+    .event.red .dateDay{ color: rgba(255,107,107,1); }
+    .event.gray .dateDay{ color: rgba(255,255,255,0.6); }
+    
+    .dateInfo{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .dateMonth{
+      font-weight:800;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      color:rgba(255,255,255,0.85);
+    }
+    .dateTime{
+      font-weight:700;
+      font-size:20px;
+      color:rgba(255,255,255,0.95);
+    }
+    .dateYear{
+      font-weight:600;
+      font-size:12px;
+      color:rgba(255,255,255,0.50);
+    }
+
+    /* Status badge */
+    .statusBadge{
+      position:absolute;
+      top:14px;
+      right:14px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:10px;
+    }
+    .event.green .statusBadge{
+      background:rgba(98,210,111,0.20);
+      border:1px solid rgba(98,210,111,0.40);
+      color:rgba(98,210,111,1);
+    }
+    .event.yellow .statusBadge{
+      background:rgba(245,158,11,0.20);
+      border:1px solid rgba(245,158,11,0.40);
+      color:rgba(245,158,11,1);
+    }
+    .event.red .statusBadge{
+      background:rgba(255,107,107,0.20);
+      border:1px solid rgba(255,107,107,0.40);
+      color:rgba(255,107,107,1);
+    }
+    .event.gray .statusBadge{
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.20);
+      color:rgba(255,255,255,0.60);
+    }
+
+    /* Event body */
+    .eventTitle{
+      font-family:"Playfair Display",serif;
+      font-size:24px;
+      font-weight:700;
+      line-height:1.2;
+      margin-bottom:8px;
+    }
+    .eventMeta{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:14px;
+      font-weight:600;
+      color:rgba(255,255,255,0.75);
+      margin-bottom:10px;
+    }
+    .eventMeta span{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .eventNote{
+      font-size:13px;
+      font-weight:500;
+      color:rgba(255,255,255,0.65);
+      line-height:1.5;
+      padding:10px 12px;
+      background:rgba(0,0,0,0.20);
+      border-radius:12px;
+      margin-top:10px;
+    }
+
+    /* Actions */
+    .eventActions{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,0.10);
+      display:flex;
+      gap:8px;
+      justify-content:flex-end;
+    }
     .smallBtn{
-      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.90);
-      font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:10px;cursor:pointer;user-select:none;
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);
+      font-weight:700;letter-spacing:.10em;text-transform:uppercase;font-size:11px;cursor:pointer;user-select:none;
       transition:all .15s;
     }
-    .smallBtn:hover{background:rgba(255,255,255,0.10);}
-    .smallBtn.danger{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
-    .smallBtn.danger:hover{ background: rgba(255,107,107,0.25); }
+    .smallBtn:hover{background:rgba(255,255,255,0.12);}
+    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);}
+    .smallBtn.danger:hover{background:rgba(255,107,107,0.25);}
 
     .msg-box{padding:12px 14px;text-align:center;font-weight:700;border-radius:12px;margin:10px 14px;}
     .err{display:none;background:rgba(255,107,107,0.15);color:var(--danger);}
@@ -174,7 +286,7 @@
     }
     @keyframes spin{to{transform:rotate(360deg);}}
     
-    .empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+    .empty-state{text-align:center;padding:40px 20px;color:var(--muted);grid-column:1/-1;}
     .empty-state .icon{font-size:48px;margin-bottom:12px;opacity:0.5;}
   </style>
 </head>
@@ -223,8 +335,8 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Upcoming Events</div>
-        <div class="sectionSub" id="eventCount">Next 21 days</div>
+        <div class="sectionTitle"><span class="dot"></span> All Events</div>
+        <div class="sectionSub" id="eventCount">Sorted by date</div>
       </div>
       <div class="divider"></div>
 
@@ -241,23 +353,20 @@
     // ============================================================
     // CONFIGURATION
     // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Bf7cLE6br3SUVeDudzY5R84oIwTGXiJvz_R-9OPuHDBdLA44vtBF9wg1HvNiZNSO/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeCnIsYirU3iB8rse1dU7HX4HSzG6hxl0vEPstyIy0hLOhje06kXsyO6-DzMYan-u4/exec";
     const TOKEN = "KAISER_TOKEN_2026";
     const LOC_KEY = "kaiser_catering_loc";
-    const DAYS_AHEAD = 21;
     const LEADER_CODE = "KAISER2026";
 
-    // Korte location navne - matcher hvad du skriver i Sheet
-    const LOCATIONS = [
-      "Helsingør",
-      "Hillerød",
-      "Farum",
-      "Hørsholm",
-      "Vanløse"
-    ];
+    const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
 
-    const GREEN_HOURS = 36;
-    const YELLOW_HOURS = 72;
+    // Farve grænser (timer)
+    const GREEN_HOURS = 48;   // Under 2 dage = grøn (SNART)
+    const YELLOW_HOURS = 168; // Under 7 dage = gul (DENNE UGE)
+    // Over 7 dage = rød (KOMMENDE)
+
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const $ = id => document.getElementById(id);
     let debugMode = false;
@@ -268,9 +377,7 @@
       const logEl = $('debugLog');
       const prefix = type === 'error' ? '❌ ' : type === 'info' ? '⚠️ ' : '✅ ';
       const className = type === 'error' ? 'error' : type === 'info' ? 'info' : '';
-      
       console.log(`[${timestamp}] ${prefix}${msg}`);
-      
       if (logEl) {
         logEl.innerHTML += `<span class="${className}">[${timestamp}] ${prefix}${msg}</span>\n`;
         logEl.scrollTop = logEl.scrollHeight;
@@ -279,8 +386,7 @@
 
     function setErr(msg) {
       const el = $("errText");
-      const successEl = $("successText");
-      successEl.style.display = "none";
+      $("successText").style.display = "none";
       if (!msg) { el.style.display = "none"; return; }
       el.style.display = "block";
       el.textContent = "❌ " + msg;
@@ -289,8 +395,7 @@
 
     function setSuccess(msg) {
       const el = $("successText");
-      const errEl = $("errText");
-      errEl.style.display = "none";
+      $("errText").style.display = "none";
       if (!msg) { el.style.display = "none"; return; }
       el.style.display = "block";
       el.textContent = "✅ " + msg;
@@ -308,7 +413,6 @@
         const cb = "__jsonp_" + Math.random().toString(36).slice(2);
         const qs = new URLSearchParams({ ...params, callback: cb }).toString();
         const src = url + (url.includes("?") ? "&" : "?") + qs;
-
         debugLog(`Request: ${params.action}`, 'info');
 
         const script = document.createElement("script");
@@ -336,7 +440,6 @@
           cleanup();
           reject(new Error("Network error"));
         };
-        
         document.body.appendChild(script);
       });
     }
@@ -351,8 +454,7 @@
     }
 
     function isoToday() {
-      const d = new Date();
-      return d.toISOString().slice(0, 10);
+      return new Date().toISOString().slice(0, 10);
     }
 
     function hoursUntil(dateStr, timeStr) {
@@ -363,16 +465,36 @@
 
     function colorFor(h) {
       if (!isFinite(h)) return "gray";
-      if (h < 0) return "gray";
-      if (h <= GREEN_HOURS) return "green";
-      if (h <= YELLOW_HOURS) return "yellow";
-      return "red";
+      if (h < 0) return "gray";           // Fortid
+      if (h <= GREEN_HOURS) return "green";  // Snart (under 2 dage)
+      if (h <= YELLOW_HOURS) return "yellow"; // Denne uge
+      return "red";                        // Kommende
     }
 
-    function formatTimeLeft(h) {
+    function statusText(h) {
       if (h < 0) return "PAST";
-      if (h < 24) return Math.round(h) + " hours";
-      return Math.round(h / 24) + " days";
+      if (h <= GREEN_HOURS) return "SOON";
+      if (h <= YELLOW_HOURS) return "THIS WEEK";
+      return "UPCOMING";
+    }
+
+    function parseDate(dateStr) {
+      const parts = dateStr.split('-');
+      return {
+        year: parseInt(parts[0]),
+        month: parseInt(parts[1]) - 1,
+        day: parseInt(parts[2])
+      };
+    }
+
+    function formatDateParts(dateStr) {
+      const d = parseDate(dateStr);
+      return {
+        day: d.day,
+        month: MONTHS[d.month],
+        monthFull: MONTHS_FULL[d.month],
+        year: d.year
+      };
     }
 
     async function load() {
@@ -384,14 +506,14 @@
 
       if (!loc) {
         $("grid").innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1;">
+          <div class="empty-state">
             <div class="icon">📍</div>
             <div><strong>Location not set</strong></div>
             <div style="margin-top:8px;font-size:13px;">
               Open page with: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=Hillerød</code>
             </div>
             <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.5);">
-              Valid locations: ${LOCATIONS.join(", ")}
+              Valid: ${LOCATIONS.join(", ")}
             </div>
           </div>
         `;
@@ -404,8 +526,7 @@
       try {
         const data = await jsonp(SCRIPT_URL, {
           action: "catering_get",
-          loc: loc,
-          days: String(DAYS_AHEAD)
+          loc: loc
         });
 
         $("refreshBtn").textContent = "🔄 Refresh";
@@ -422,7 +543,7 @@
         }
 
         $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-        $("eventCount").textContent = `${data.events?.length || 0} events • Next ${DAYS_AHEAD} days`;
+        $("eventCount").textContent = `${data.events?.length || 0} events • Sorted by date`;
 
         renderList(data.events || []);
 
@@ -438,10 +559,10 @@
 
       if (!events || !events.length) {
         grid.innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1;">
+          <div class="empty-state">
             <div class="icon">📅</div>
-            <div><strong>No upcoming events</strong></div>
-            <div style="margin-top:8px;font-size:13px;">Add a new event above</div>
+            <div><strong>No events yet</strong></div>
+            <div style="margin-top:8px;font-size:13px;">Add your first event above</div>
           </div>
         `;
         return;
@@ -449,33 +570,38 @@
 
       grid.innerHTML = "";
 
-      events.forEach((ev, idx) => {
+      events.forEach((ev) => {
         const h = hoursUntil(ev.date, ev.time);
         const col = colorFor(h);
-        const when = ev.date + (ev.time ? " at " + ev.time : "");
-        const timeLeft = formatTimeLeft(h);
+        const status = statusText(h);
+        const dateParts = formatDateParts(ev.date);
 
         const card = document.createElement("div");
-        card.className = "event";
+        card.className = `event ${col}`;
         card.innerHTML = `
-          <div class="bar ${col}"></div>
-          <div class="body">
-            <div class="top">
-              <div class="name">${escapeHtml(ev.title || "Catering")}</div>
-              <div class="meta">${escapeHtml(when)}</div>
+          <div class="statusBadge">${status}</div>
+          
+          <div class="eventDate">
+            <div class="dateDay">${dateParts.day}</div>
+            <div class="dateInfo">
+              <div class="dateMonth">${dateParts.monthFull}</div>
+              <div class="dateTime">${ev.time || "All day"}</div>
+              <div class="dateYear">${dateParts.year}</div>
             </div>
-            <div class="msg">
-              ⏱️ ${escapeHtml(timeLeft)}
-              ${ev.guests ? ` • 👥 ${ev.guests} guests` : ""}
-              ${ev.note ? ` • 📝 ${escapeHtml(ev.note)}` : ""}
-            </div>
-            <div class="tags">
-              <div class="tag"><span class="miniDot"></span>${col === 'green' ? 'SOON' : col === 'yellow' ? 'COMING' : col === 'red' ? 'SCHEDULED' : 'PAST'}</div>
-              <div>
-                <button class="smallBtn" data-edit="${escapeHtml(ev.id)}">✏️ Edit</button>
-                <button class="smallBtn danger" data-del="${escapeHtml(ev.id)}">🗑️ Delete</button>
-              </div>
-            </div>
+          </div>
+          
+          <div class="eventTitle">${escapeHtml(ev.title || "Catering")}</div>
+          
+          <div class="eventMeta">
+            ${ev.guests ? `<span>👥 ${ev.guests} guests</span>` : ""}
+            <span>📍 ${escapeHtml(ev.location)}</span>
+          </div>
+          
+          ${ev.note ? `<div class="eventNote">📝 ${escapeHtml(ev.note)}</div>` : ""}
+          
+          <div class="eventActions">
+            <button class="smallBtn" data-edit="${escapeHtml(ev.id)}">✏️ Edit</button>
+            <button class="smallBtn danger" data-del="${escapeHtml(ev.id)}">🗑️ Delete</button>
           </div>
         `;
 
@@ -618,10 +744,8 @@
       debugLog("Page initialized");
       debugLog(`Script URL: ${SCRIPT_URL.substring(0, 60)}...`);
       debugLog(`Valid locations: ${LOCATIONS.join(", ")}`);
-      
       $("dateInput").value = isoToday();
       load();
-      
       setInterval(load, 60000);
     })();
   </script>
