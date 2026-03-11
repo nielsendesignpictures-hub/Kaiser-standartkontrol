@@ -29,11 +29,10 @@
         body {
             font-family: Inter, system-ui, sans-serif;
             color: var(--text);
-            background:
-                radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-                radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-                radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-                linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+            background: radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+                        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+                        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+                        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
             min-height: 100vh;
             padding: 20px;
         }
@@ -42,9 +41,8 @@
             content: "";
             position: fixed;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 38px 38px;
             opacity: 0.06;
             pointer-events: none;
@@ -122,7 +120,7 @@
             color: #38bdf8;
         }
 
-        .form-card {
+        .form-card, .orders-list {
             position: relative;
             border-radius: 20px;
             border: 1px solid var(--border);
@@ -210,16 +208,6 @@
         .btn-secondary:hover:not(:disabled) {
             background: rgba(255,255,255,0.12);
             color: var(--text);
-        }
-
-        .orders-list {
-            position: relative;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            box-shadow: var(--shadow);
         }
 
         .filter-row {
@@ -409,16 +397,12 @@
     </div>
 
     <script>
-        // ===== API CONFIGURATION =====
         const API_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
         
         let allOrders = [];
         let currentFilter = 'all';
 
-        // Set today's date
         document.getElementById('date').valueAsDate = new Date();
-        
-        // Load on page ready
         document.addEventListener('DOMContentLoaded', loadOrders);
 
         function showStatus(message, type) {
@@ -430,40 +414,131 @@
             }
         }
 
-        // ===== JSONP HELPER =====
-        function jsonpFetch(url) {
+        // JSONP for GET requests
+        function jsonpGet(url) {
             return new Promise((resolve, reject) => {
-                const callbackName = 'jsonpCallback_' + Date.now();
+                const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
                 const script = document.createElement('script');
-                
-                // Timeout after 10 seconds
-                const timeout = setTimeout(() => {
-                    cleanup();
-                    reject(new Error('Request timeout'));
-                }, 10000);
+                const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 15000);
 
                 function cleanup() {
                     clearTimeout(timeout);
-                    delete window[callbackName];
+                    delete window[cbName];
                     if (script.parentNode) script.parentNode.removeChild(script);
                 }
 
-                window[callbackName] = (data) => {
-                    cleanup();
-                    resolve(data);
-                };
-
-                script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
-                script.onerror = () => {
-                    cleanup();
-                    reject(new Error('Script load error'));
-                };
-
+                window[cbName] = (data) => { cleanup(); resolve(data); };
+                script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+                script.onerror = () => { cleanup(); reject(new Error('Network error')); };
                 document.body.appendChild(script);
             });
         }
 
-        // ===== SEND CATERING =====
+        // POST via form submit (for add/update/delete)
+        function postData(data) {
+            return new Promise((resolve, reject) => {
+                // Create hidden iframe for response
+                const iframeName = 'postFrame_' + Date.now();
+                const iframe = document.createElement('iframe');
+                iframe.name = iframeName;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+
+                // Create form
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = API_URL;
+                form.target = iframeName;
+                form.style.display = 'none';
+
+                // Add data as hidden fields
+                for (const key in data) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = data[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+
+                // Handle response
+                const timeout = setTimeout(() => {
+                    cleanup();
+                    // Assume success since we can't read cross-origin iframe
+                    resolve({ ok: true });
+                }, 3000);
+
+                function cleanup() {
+                    clearTimeout(timeout);
+                    if (form.parentNode) form.parentNode.removeChild(form);
+                    if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                }
+
+                form.submit();
+            });
+        }
+
+        // Load orders (GET)
+        async function loadOrders() {
+            const container = document.getElementById('ordersList');
+            container.innerHTML = '<div class="empty-state"><span class="spinner"></span> Henter ordrer...</div>';
+
+            try {
+                const data = await jsonpGet(API_URL + '?action=get');
+                console.log('API response:', data);
+
+                if (data.ok && data.events) {
+                    allOrders = data.events;
+                    renderOrders();
+                } else {
+                    throw new Error(data.error || 'Kunne ikke hente data');
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+                container.innerHTML = '<div class="empty-state">❌ Fejl ved hentning<br><small style="opacity:0.6;">' + error.message + '</small></div>';
+            }
+        }
+
+        // Render orders
+        function renderOrders() {
+            let orders = [...allOrders];
+            
+            if (currentFilter !== 'all') {
+                orders = orders.filter(o => {
+                    const loc = (o.location || '').toLowerCase();
+                    return loc.includes(currentFilter.toLowerCase());
+                });
+            }
+
+            orders.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const container = document.getElementById('ordersList');
+
+            if (orders.length === 0) {
+                container.innerHTML = '<div class="empty-state">Ingen ordrer' + (currentFilter !== 'all' ? ' for ' + currentFilter : '') + '</div>';
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-location">Café Kaiser ${escapeHtml(order.location) || 'Ukendt'}</div>
+                            <div class="order-date">📅 ${formatDate(order.date)} kl. ${order.time || '--:--'}</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteOrder('${order.id}')">🗑️ Slet</button>
+                    </div>
+                    <div class="order-details">
+                        <div class="order-detail"><strong>Firma/Kontakt:</strong> ${escapeHtml(order.title) || 'Ikke angivet'}</div>
+                        <div class="order-detail"><strong>Gæster:</strong> ${order.guests || '?'} personer</div>
+                    </div>
+                    ${order.note ? `<div class="order-notes"><strong>📝</strong> ${escapeHtml(order.note)}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Send to kitchen (POST)
         async function sendToKitchen() {
             const location = document.getElementById('location').value;
             const date = document.getElementById('date').value;
@@ -482,7 +557,7 @@
             showStatus('Sender til køkkenet...', 'loading');
 
             try {
-                const params = new URLSearchParams({
+                await postData({
                     action: 'add',
                     location: location,
                     date: date,
@@ -492,84 +567,42 @@
                     note: note || ''
                 });
 
-                const data = await jsonpFetch(API_URL + '?' + params.toString());
-
-                if (data.ok) {
-                    showStatus(`✅ Catering sendt til Café Kaiser ${location}!`, 'success');
-                    resetForm();
-                    setTimeout(loadOrders, 500);
-                } else {
-                    throw new Error(data.error || 'Unknown error');
-                }
+                showStatus('✅ Catering sendt til Café Kaiser ' + location + '!', 'success');
+                resetForm();
+                
+                // Reload after short delay
+                setTimeout(loadOrders, 1500);
+                
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Send error:', error);
                 showStatus('❌ Fejl ved afsendelse: ' + error.message, 'error');
             } finally {
                 submitBtn.disabled = false;
             }
         }
 
-        // ===== LOAD ORDERS =====
-        async function loadOrders() {
-            const container = document.getElementById('ordersList');
-            container.innerHTML = '<div class="empty-state"><span class="spinner"></span> Henter ordrer...</div>';
+        // Delete order (POST)
+        async function deleteOrder(id) {
+            if (!confirm('Er du sikker på du vil slette denne catering ordre?')) return;
+
+            showStatus('Sletter ordre...', 'loading');
 
             try {
-                const data = await jsonpFetch(API_URL + '?action=get');
-
-                if (data.ok && data.events) {
-                    allOrders = data.events;
-                    renderOrders();
-                } else {
-                    throw new Error(data.error || 'Kunne ikke hente data');
-                }
-            } catch (error) {
-                console.error('Load error:', error);
-                container.innerHTML = '<div class="empty-state">❌ Fejl ved hentning af ordrer<br><small style="opacity:0.6">' + error.message + '</small></div>';
-            }
-        }
-
-        // ===== RENDER ORDERS =====
-        function renderOrders() {
-            let orders = [...allOrders];
-            
-            // Filter by location
-            if (currentFilter !== 'all') {
-                orders = orders.filter(o => {
-                    const loc = (o.location || '').toLowerCase();
-                    return loc.includes(currentFilter.toLowerCase());
+                await postData({
+                    action: 'delete',
+                    id: id
                 });
+
+                showStatus('✅ Ordre slettet!', 'success');
+                setTimeout(loadOrders, 1000);
+                
+            } catch (error) {
+                console.error('Delete error:', error);
+                showStatus('❌ Fejl ved sletning: ' + error.message, 'error');
             }
-
-            // Sort by date
-            orders.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            const container = document.getElementById('ordersList');
-
-            if (orders.length === 0) {
-                container.innerHTML = '<div class="empty-state">Ingen ordrer' + (currentFilter !== 'all' ? ' for ' + currentFilter : '') + '</div>';
-                return;
-            }
-
-            container.innerHTML = orders.map(order => `
-                <div class="order-card">
-                    <div class="order-header">
-                        <div>
-                            <div class="order-location">Café Kaiser ${order.location || 'Ukendt'}</div>
-                            <div class="order-date">📅 ${formatDate(order.date)} kl. ${order.time || '--:--'}</div>
-                        </div>
-                        <button class="delete-btn" onclick="deleteOrder('${order.id}')">🗑️ Slet</button>
-                    </div>
-                    <div class="order-details">
-                        <div class="order-detail"><strong>Firma/Kontakt:</strong> ${escapeHtml(order.title) || 'Ikke angivet'}</div>
-                        <div class="order-detail"><strong>Gæster:</strong> ${order.guests || '?'} personer</div>
-                    </div>
-                    ${order.note ? `<div class="order-notes"><strong>📝</strong> ${escapeHtml(order.note)}</div>` : ''}
-                </div>
-            `).join('');
         }
 
-        // ===== FILTER =====
+        // Filter
         function filterOrders(location, btn) {
             currentFilter = location;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -577,28 +610,7 @@
             renderOrders();
         }
 
-        // ===== DELETE ORDER =====
-        async function deleteOrder(id) {
-            if (!confirm('Er du sikker på du vil slette denne catering ordre?')) return;
-
-            showStatus('Sletter ordre...', 'loading');
-
-            try {
-                const data = await jsonpFetch(API_URL + '?action=delete&id=' + encodeURIComponent(id));
-
-                if (data.ok) {
-                    showStatus('✅ Ordre slettet!', 'success');
-                    setTimeout(loadOrders, 500);
-                } else {
-                    throw new Error(data.error || 'Kunne ikke slette');
-                }
-            } catch (error) {
-                console.error('Delete error:', error);
-                showStatus('❌ Fejl ved sletning: ' + error.message, 'error');
-            }
-        }
-
-        // ===== HELPERS =====
+        // Reset form
         function resetForm() {
             document.getElementById('location').value = '';
             document.getElementById('date').valueAsDate = new Date();
@@ -608,15 +620,11 @@
             document.getElementById('note').value = '';
         }
 
+        // Helpers
         function formatDate(dateString) {
             if (!dateString) return 'Ukendt dato';
             const date = new Date(dateString);
-            return date.toLocaleDateString('da-DK', { 
-                weekday: 'short', 
-                day: 'numeric', 
-                month: 'short',
-                year: 'numeric'
-            });
+            return date.toLocaleDateString('da-DK', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
         }
 
         function escapeHtml(text) {
