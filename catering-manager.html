@@ -4,7 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catering Manager - Kaiser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg0: #070A12;
+            --bg1: #0B1020;
+            --panel: rgba(255,255,255,0.055);
+            --border: rgba(255,255,255,0.10);
+            --text: rgba(255,255,255,0.94);
+            --muted: rgba(255,255,255,0.74);
+            --muted2: rgba(255,255,255,0.52);
+            --gold: #d6b24a;
+            --gold2: #b9921f;
+            --kitchen: #f59e0b;
+            --success: #22c55e;
+            --danger: #ff6b6b;
+            --shadow: 0 26px 75px rgba(0,0,0,.55);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,52 +32,123 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+                radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+                radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+                linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
             min-height: 100vh;
             padding: 20px;
         }
 
+        body:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 38px 38px;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        .header {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
             margin-bottom: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--gold);
+        }
+
+        .header {
+            position: relative;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 25px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
-        h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 10px;
+        .header h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
-        .subtitle {
-            color: #666;
+        .header p {
+            color: var(--muted);
             font-size: 14px;
         }
 
-        .form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .goldline {
+            height: 2px;
+            margin: 20px auto 0;
+            max-width: 400px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
             margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease;
+            font-weight: 600;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-card {
+            position: relative;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
         }
 
         .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -76,9 +167,11 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: var(--muted);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         input[type="text"],
@@ -88,41 +181,36 @@
         select,
         textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
             font-family: inherit;
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            transition: all 0.3s ease;
         }
 
         input:focus,
         select:focus,
         textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(214,178,74,0.15);
         }
 
         select {
             cursor: pointer;
-            background: white;
+        }
+
+        select option {
+            background: var(--bg1);
+            color: var(--text);
         }
 
         textarea {
             resize: vertical;
             min-height: 100px;
-        }
-
-        .location-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-top: 5px;
         }
 
         .button-group {
@@ -133,141 +221,165 @@
 
         .btn {
             flex: 1;
-            padding: 15px;
+            padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            color: var(--bg0);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(214,178,74,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.12);
+            color: var(--text);
+        }
+
+        .orders-list {
+            position: relative;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .success-message {
-            background: #4CAF50;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 20px;
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .orders-list {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--bg0);
+            border-color: var(--gold);
         }
 
         .order-card {
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.04);
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 15px;
             margin-bottom: 15px;
-            border-left: 4px solid #667eea;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateX(5px);
         }
 
         .order-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
 
         .order-location {
-            font-weight: 700;
-            color: #667eea;
+            font-weight: 800;
+            color: var(--gold);
             font-size: 16px;
         }
 
         .order-date {
-            color: #666;
+            color: var(--muted);
             font-size: 14px;
+            font-weight: 600;
+            margin-top: 4px;
         }
 
         .order-details {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #e0e0e0;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
         }
 
         .order-detail {
-            font-size: 14px;
-            color: #555;
+            font-size: 13px;
+            color: var(--muted);
         }
 
         .order-detail strong {
-            color: #333;
+            color: var(--text);
+        }
+
+        .order-notes {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--muted2);
         }
 
         .delete-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 8px 16px;
+            background: rgba(255,107,107,0.15);
+            color: var(--danger);
+            border: 1px solid rgba(255,107,107,0.3);
+            padding: 8px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s ease;
         }
 
         .delete-btn:hover {
-            background: #ff5252;
-            transform: scale(1.05);
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--muted2);
+            padding: 40px;
+            font-size: 14px;
         }
 
         @media (max-width: 768px) {
             .input-row {
                 grid-template-columns: 1fr;
             }
-
             .order-details {
                 grid-template-columns: 1fr;
             }
-
             .button-group {
                 flex-direction: column;
             }
@@ -276,31 +388,30 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <a href="portal.html" class="back-btn">← Tilbage til Portal</a>
+
         <div class="header">
             <h1>🎉 Catering Manager</h1>
-            <p class="subtitle">Opret og send catering ordrer til afdelingerne</p>
+            <p>Opret og send catering ordrer direkte til afdelingernes køkken</p>
+            <div class="goldline"></div>
         </div>
 
-        <!-- Success Message -->
         <div class="success-message" id="successMessage">
-            ✅ Catering ordre sendt til køkkenet!
+            ✅ Catering sendt til køkkenet!
         </div>
 
-        <!-- Form -->
         <div class="form-card">
-            <div class="section-title">
-                📍 Afdeling & Dato
-            </div>
+            <div class="section-title">📍 Afdeling & Tidspunkt</div>
 
             <div class="input-group">
                 <label for="location">Vælg Afdeling *</label>
                 <select id="location" required>
                     <option value="">-- Vælg afdeling --</option>
-                    <option value="Kaiser Emdrup">Kaiser Emdrup</option>
-                    <option value="Kaiser Østerbro">Kaiser Østerbro</option>
-                    <option value="Kaiser Nørrebro">Kaiser Nørrebro</option>
-                    <option value="Kaiser Frederiksberg">Kaiser Frederiksberg</option>
+                    <option value="Café Kaiser Helsingør">Café Kaiser Helsingør</option>
+                    <option value="Café Kaiser Hillerød">Café Kaiser Hillerød</option>
+                    <option value="Café Kaiser Farum">Café Kaiser Farum</option>
+                    <option value="Café Kaiser Hørsholm">Café Kaiser Hørsholm</option>
+                    <option value="Café Kaiser Vanløse">Café Kaiser Vanløse</option>
                 </select>
             </div>
 
@@ -315,9 +426,7 @@
                 </div>
             </div>
 
-            <div class="section-title">
-                👥 Ordre Detaljer
-            </div>
+            <div class="section-title">👥 Ordre Detaljer</div>
 
             <div class="input-row">
                 <div class="input-group">
@@ -331,8 +440,9 @@
                         <option value="Buffet">Buffet</option>
                         <option value="3-retters">3-retters</option>
                         <option value="4-retters">4-retters</option>
-                        <option value="Cocktail">Cocktail</option>
+                        <option value="Cocktail">Cocktail / Snacks</option>
                         <option value="Brunch">Brunch</option>
+                        <option value="Frokost">Frokost</option>
                         <option value="Andet">Andet</option>
                     </select>
                 </div>
@@ -340,18 +450,18 @@
 
             <div class="input-row">
                 <div class="input-group">
-                    <label for="pricePerPerson">Pris pr. Person (DKK)</label>
-                    <input type="number" id="pricePerPerson" placeholder="f.eks. 250" min="0" step="0.01">
-                </div>
-                <div class="input-group">
                     <label for="contactName">Kontaktperson</label>
                     <input type="text" id="contactName" placeholder="Navn på bestiller">
+                </div>
+                <div class="input-group">
+                    <label for="phone">Telefonnummer</label>
+                    <input type="text" id="phone" placeholder="Telefon">
                 </div>
             </div>
 
             <div class="input-group">
                 <label for="notes">Bemærkninger / Specielle Ønsker</label>
-                <textarea id="notes" placeholder="F.eks. vegetar optioner, allergier, særlige ønsker..."></textarea>
+                <textarea id="notes" placeholder="Vegetar, allergier, opstilling, særlige ønsker..."></textarea>
             </div>
 
             <div class="button-group">
@@ -360,26 +470,33 @@
             </div>
         </div>
 
-        <!-- Orders List -->
         <div class="orders-list">
-            <div class="section-title">
-                📋 Aktive Catering Ordrer
+            <div class="section-title">📋 Alle Catering Ordrer</div>
+            
+            <div class="filter-row">
+                <button class="filter-btn active" onclick="filterOrders('all', this)">Alle</button>
+                <button class="filter-btn" onclick="filterOrders('Café Kaiser Helsingør', this)">Helsingør</button>
+                <button class="filter-btn" onclick="filterOrders('Café Kaiser Hillerød', this)">Hillerød</button>
+                <button class="filter-btn" onclick="filterOrders('Café Kaiser Farum', this)">Farum</button>
+                <button class="filter-btn" onclick="filterOrders('Café Kaiser Hørsholm', this)">Hørsholm</button>
+                <button class="filter-btn" onclick="filterOrders('Café Kaiser Vanløse', this)">Vanløse</button>
             </div>
+
             <div id="ordersList">
-                <p style="text-align: center; color: #999; padding: 20px;">Ingen ordrer endnu</p>
+                <div class="empty-state">Ingen ordrer endnu</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Set today's date as default
-        document.getElementById('date').valueAsDate = new Date();
+        // VIGTIG: Bruger SAMME localStorage key som catering-schedule.html
+        const STORAGE_KEY = 'kaiserCateringEvents';
+        let currentFilter = 'all';
 
-        // Load orders on page load
-        window.addEventListener('DOMContentLoaded', loadOrders);
+        document.getElementById('date').valueAsDate = new Date();
+        window.addEventListener('DOMContentLoaded', () => loadOrders());
 
         function sendToKitchen() {
-            // Validate required fields
             const location = document.getElementById('location').value;
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
@@ -391,75 +508,87 @@
                 return;
             }
 
-            // Create order object
-            const order = {
+            // Opret event i SAMME format som catering-schedule.html forventer
+            const event = {
                 id: Date.now(),
-                location: location,
+                title: `${menuType} - ${guests} gæster`,
                 date: date,
                 time: time,
+                location: location,
                 guests: parseInt(guests),
                 menuType: menuType,
-                pricePerPerson: parseFloat(document.getElementById('pricePerPerson').value) || 0,
-                contactName: document.getElementById('contactName').value || 'Ikke angivet',
+                contact: document.getElementById('contactName').value || '',
+                phone: document.getElementById('phone').value || '',
                 notes: document.getElementById('notes').value || '',
                 createdAt: new Date().toISOString(),
-                status: 'active'
+                createdFrom: 'catering-manager' // Så vi ved den kom fra manager
             };
 
-            // Save to localStorage
-            let orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
-            orders.unshift(order);
-            localStorage.setItem('cateringOrders', JSON.stringify(orders));
+            // Gem i localStorage
+            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            events.push(event);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 
-            // Show success message
-            const successMsg = document.getElementById('successMessage');
-            successMsg.classList.add('show');
-            setTimeout(() => {
-                successMsg.classList.remove('show');
-            }, 3000);
+            // Vis success
+            const msg = document.getElementById('successMessage');
+            msg.textContent = `✅ Catering sendt til ${location}!`;
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
 
-            // Reset form
             resetForm();
-
-            // Reload orders list
             loadOrders();
         }
 
         function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
-            const ordersList = document.getElementById('ordersList');
+            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            
+            // Filtrer efter lokation hvis valgt
+            if (currentFilter !== 'all') {
+                events = events.filter(e => e.location === currentFilter);
+            }
 
-            if (orders.length === 0) {
-                ordersList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Ingen ordrer endnu</p>';
+            // Sorter efter dato (nyeste først)
+            events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const container = document.getElementById('ordersList');
+
+            if (events.length === 0) {
+                container.innerHTML = '<div class="empty-state">Ingen ordrer ' + (currentFilter !== 'all' ? 'for ' + currentFilter : '') + '</div>';
                 return;
             }
 
-            ordersList.innerHTML = orders.map(order => `
+            container.innerHTML = events.map(e => `
                 <div class="order-card">
                     <div class="order-header">
                         <div>
-                            <div class="order-location">${order.location}</div>
-                            <div class="order-date">📅 ${formatDate(order.date)} kl. ${order.time}</div>
+                            <div class="order-location">${e.location}</div>
+                            <div class="order-date">📅 ${formatDate(e.date)} kl. ${e.time}</div>
                         </div>
-                        <button class="delete-btn" onclick="deleteOrder(${order.id})">🗑️ Slet</button>
+                        <button class="delete-btn" onclick="deleteOrder(${e.id})">🗑️ Slet</button>
                     </div>
                     <div class="order-details">
-                        <div class="order-detail"><strong>Gæster:</strong> ${order.guests} personer</div>
-                        <div class="order-detail"><strong>Menu:</strong> ${order.menuType}</div>
-                        <div class="order-detail"><strong>Pris:</strong> ${order.pricePerPerson > 0 ? order.pricePerPerson + ' kr/person' : 'Ikke angivet'}</div>
-                        <div class="order-detail"><strong>Kontakt:</strong> ${order.contactName}</div>
+                        <div class="order-detail"><strong>Gæster:</strong> ${e.guests} personer</div>
+                        <div class="order-detail"><strong>Menu:</strong> ${e.menuType}</div>
+                        <div class="order-detail"><strong>Kontakt:</strong> ${e.contact || 'Ikke angivet'}</div>
+                        <div class="order-detail"><strong>Telefon:</strong> ${e.phone || 'Ikke angivet'}</div>
                     </div>
-                    ${order.notes ? `<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 13px; color: #666;"><strong>Bemærkninger:</strong> ${order.notes}</div>` : ''}
+                    ${e.notes ? `<div class="order-notes"><strong>📝</strong> ${e.notes}</div>` : ''}
                 </div>
             `).join('');
         }
 
-        function deleteOrder(orderId) {
-            if (!confirm('Er du sikker på du vil slette denne ordre?')) return;
+        function filterOrders(location, btn) {
+            currentFilter = location;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            loadOrders();
+        }
 
-            let orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
-            orders = orders.filter(order => order.id !== orderId);
-            localStorage.setItem('cateringOrders', JSON.stringify(orders));
+        function deleteOrder(id) {
+            if (!confirm('Slet denne catering ordre?')) return;
+            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            events = events.filter(e => e.id !== id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
             loadOrders();
         }
 
@@ -469,17 +598,17 @@
             document.getElementById('time').value = '';
             document.getElementById('guests').value = '';
             document.getElementById('menuType').value = '';
-            document.getElementById('pricePerPerson').value = '';
             document.getElementById('contactName').value = '';
+            document.getElementById('phone').value = '';
             document.getElementById('notes').value = '';
         }
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            return new Date(dateString).toLocaleDateString('da-DK', { 
+                weekday: 'short', 
+                day: 'numeric', 
+                month: 'short' 
+            });
         }
     </script>
 </body>
