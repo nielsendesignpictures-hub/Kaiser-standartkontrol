@@ -239,13 +239,22 @@
 
   <script>
     // ============================================================
-    // CONFIGURATION - UPDATE THIS URL!
+    // CONFIGURATION
     // ============================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeCnIsYirU3iB8rse1dU7HX4HSzG6hxl0vEPstyIy0hLOhje06kXsyO6-DzMYan-u4/exec";
     const TOKEN = "KAISER_TOKEN_2026";
     const LOC_KEY = "kaiser_catering_loc";
     const DAYS_AHEAD = 21;
     const LEADER_CODE = "KAISER2026";
+
+    // Korte location navne - matcher hvad du skriver i Sheet
+    const LOCATIONS = [
+      "Helsingør",
+      "Hillerød",
+      "Farum",
+      "Hørsholm",
+      "Vanløse"
+    ];
 
     const GREEN_HOURS = 36;
     const YELLOW_HOURS = 72;
@@ -255,7 +264,7 @@
     let editingId = "";
 
     function debugLog(msg, type = 'log') {
-      const timestamp = new Date().toLocaleTimeString('en-US');
+      const timestamp = new Date().toLocaleTimeString('da-DK');
       const logEl = $('debugLog');
       const prefix = type === 'error' ? '❌ ' : type === 'info' ? '⚠️ ' : '✅ ';
       const className = type === 'error' ? 'error' : type === 'info' ? 'info' : '';
@@ -379,7 +388,10 @@
             <div class="icon">📍</div>
             <div><strong>Location not set</strong></div>
             <div style="margin-top:8px;font-size:13px;">
-              Open page with: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=YourLocation</code>
+              Open page with: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=Hillerød</code>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.5);">
+              Valid locations: ${LOCATIONS.join(", ")}
             </div>
           </div>
         `;
@@ -409,7 +421,7 @@
           return;
         }
 
-        $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
         $("eventCount").textContent = `${data.events?.length || 0} events • Next ${DAYS_AHEAD} days`;
 
         renderList(data.events || []);
@@ -605,6 +617,7 @@
     (function init() {
       debugLog("Page initialized");
       debugLog(`Script URL: ${SCRIPT_URL.substring(0, 60)}...`);
+      debugLog(`Valid locations: ${LOCATIONS.join(", ")}`);
       
       $("dateInput").value = isoToday();
       load();
