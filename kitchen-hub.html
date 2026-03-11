@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Køkken Hub</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --border:rgba(255,255,255,0.10);
+
+      --text:rgba(255,255,255,0.94);
+      --muted:rgba(255,255,255,0.74);
+      --muted2:rgba(255,255,255,0.52);
+
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+
+      --ok:#62d26f;
+      --warn:#f59e0b;
+      --danger:#ff6b6b;
+
+      --shadow: 0 26px 75px rgba(0,0,0,.55);
+      --shadow2: 0 18px 55px rgba(0,0,0,.35);
+    }
+
+    html,body{height:100%;}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      overflow-x:hidden;
+      margin:0;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity:0.06;
+      pointer-events:none;
+      mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
+    }
+
+    .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
+
+    .hero{
+      position:relative;
+      border-radius: 28px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      padding: 22px 18px 16px;
+    }
+    .hero:after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.18), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.14), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .kicker{
+      position:relative;
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+      text-align:center;
+    }
+    .title{
+      position:relative;
+      font-family:"Playfair Display", serif;
+      font-size:44px;
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      text-align:center;
+      margin-top:8px;
+    }
+    .subtitle{
+      position:relative;
+      text-align:center;
+      margin-top:8px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+    }
+    .goldline{
+      position:relative;
+      height:2px;
+      margin:16px auto 0;
+      max-width: 720px;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
+      opacity:.95;
+    }
+
+    .controls{
+      position:relative;
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+    }
+    .pill,.btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      font-weight:1000;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.90);
+      white-space:nowrap;
+      user-select:none;
+    }
+    .btn{
+      cursor:pointer;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      border:none;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .section{
+      margin-top:18px;
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .sectionHead{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      background:
+        radial-gradient(900px 200px at 50% 0%, rgba(255,255,255,0.06), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+    }
+    .sectionTitle{
+      font-weight:1000;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.72);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .sectionTitle .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(214,178,74,0.85);
+      box-shadow: 0 0 0 5px rgba(214,178,74,0.10);
+      opacity:.95;
+    }
+    .sectionSub{
+      color: rgba(255,255,255,0.55);
+      font-weight:900;
+      font-size:12px;
+    }
+    .divider{height:1px;background:rgba(255,255,255,0.10);}
+
+    /* Timer widget */
+    .twWrap{ padding:14px; display:flex; flex-direction:column; gap:12px; }
+    .twTop{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .twLeft{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .twRow{ display:flex; gap:8px; flex-wrap:wrap; }
+
+    .segBtn{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      font-weight:1000;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      user-select:none;
+    }
+    .segBtn.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    }
+
+    .input{
+      flex: 1 1 240px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      padding: 12px 12px;
+      outline: none;
+      color: rgba(255,255,255,0.92);
+      font-weight:900;
+    }
+    .input:focus{
+      border-color: rgba(214,178,74,0.55);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .timerList{
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding-bottom:2px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .timerList::-webkit-scrollbar{height:8px}
+    .timerList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.10);border-radius:999px}
+
+    .tCard{
+      flex: 0 0 auto;
+      width: min(360px, 86vw);
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: 0 18px 50px rgba(0,0,0,.38);
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .tName{
+      font-weight:1000;
+      letter-spacing:-0.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .tTime{
+      font-family:"Playfair Display", serif;
+      font-size:34px;
+      line-height:1.05;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      margin-top:6px;
+    }
+    .tMeta{
+      margin-top:6px;
+      color: rgba(255,255,255,0.65);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .barWrap{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+    }
+    .barFill{
+      height:10px;
+      width:0%;
+      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
+    }
+    .barFill.warn{ background: linear-gradient(90deg, rgba(245,158,11,1), rgba(214,178,74,0.95)); }
+    .barFill.exp{ background: linear-gradient(90deg, rgba(255,107,107,1), rgba(245,158,11,1)); }
+
+    .tTag{
+      position:absolute;
+      top:10px; right:10px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.80);
+    }
+    .tTag.ok{ border-color: rgba(98,210,111,0.30); background: rgba(98,210,111,0.10); }
+    .tTag.warn{ border-color: rgba(245,158,11,0.30); background: rgba(245,158,11,0.10); }
+    .tTag.exp{ border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); }
+
+    /* Tool tiles */
+    .gridTools{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      padding:14px;
+    }
+    @media (min-width: 820px){
+      .gridTools{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
+    }
+
+    .tile{
+      border-radius:26px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: 0 20px 60px rgba(0,0,0,.40);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .18s ease, box-shadow .18s ease;
+      min-height: 150px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .tile:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,0.18); box-shadow: 0 30px 85px rgba(0,0,0,.58); }
+
+    .tileKicker{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight:1000;
+    }
+    .tileTitle{
+      font-family:"Playfair Display", serif;
+      font-size:34px;
+      line-height:1.06;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      margin-top: 2px;
+    }
+    .tileSub{
+      color: var(--muted);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.3;
+      max-width: 60ch;
+    }
+    .tileMeta{
+      margin-top:auto;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    /* Tool view (iframe) */
+    .toolWrap{
+      padding:14px;
+      display:none;
+      flex-direction:column;
+      gap:10px;
+    }
+    .toolBar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .frame{
+      width:100%;
+      height: 72vh;
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:22px;
+      background: rgba(0,0,0,0.25);
+    }
+    @media (max-height: 820px){
+      .frame{ height: 66vh; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell w-full">
+
+    <header class="hero mt-6">
+      <div class="kicker">KAISER</div>
+      <div class="title">Køkken Hub</div>
+      <div class="subtitle">Alt samlet • uret er altid synligt</div>
+      <div class="goldline"></div>
+
+      <div class="controls">
+        <div class="pill" id="clockPill">—</div>
+        <button class="btn ghost" id="fsBtn" type="button">Fuld skærm</button>
+        <button class="btn ghost" id="wakeBtn" type="button">Hold skærm vågen</button>
+        <a class="btn ghost" href="./portal.html" style="text-decoration:none;">Til portal</a>
+      </div>
+    </header>
+
+    <!-- TIMER WIDGET -->
+    <section class="section" aria-label="3-timers regel">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> 3-timers regel</div>
+        <div class="sectionSub" id="timerSub">Aktive: 0</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="twWrap">
+        <div class="twTop">
+          <div class="twLeft">
+            <div class="twRow" id="tplRow">
+              <button class="segBtn on" type="button" data-tpl="Bacon">Bacon</button>
+              <button class="segBtn" type="button" data-tpl="Pandekager">Pandekager</button>
+              <button class="segBtn" type="button" data-tpl="Fritekst">Fritekst</button>
+            </div>
+          </div>
+
+          <div class="twRow">
+            <button class="btn ghost" id="openTimerBtn" type="button">Åbn fuld ur-side</button>
+          </div>
+        </div>
+
+        <div class="twRow">
+          <input id="textInput" class="input" placeholder="Valgfri note (fx bakke 2 / kl. 18:30)" />
+          <button class="btn primary" id="start3hBtn" type="button">Start 3 timer</button>
+          <button class="btn ghost" id="start30Btn" type="button">Start 30 min</button>
+        </div>
+
+        <div class="subtitle" id="helperText" style="margin:0; text-align:left;">
+          Template: Bacon • Note er valgfri
+        </div>
+
+        <div class="timerList" id="timerList"></div>
+      </div>
+    </section>
+
+    <!-- TOOLS -->
+    <section class="section" aria-label="Værktøjer">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> Værktøjer</div>
+        <div class="sectionSub">Åbner i samme skærm</div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="gridTools">
+        <div class="tile" data-open="./MIS.html">
+          <div class="tileKicker">Køkken</div>
+          <div class="tileTitle">MIS</div>
+          <div class="tileSub">Mise en place • produktion • overblik.</div>
+          <div class="tileMeta">
+            <div class="pill">Åbn</div>
+            <div class="pill">In-app</div>
+          </div>
+        </div>
+
+        <div class="tile" data-open="./cleaning-kitchen.html">
+          <div class="tileKicker">Køkken</div>
+          <div class="tileTitle">Rengøring</div>
+          <div class="tileSub">Daglige/ugentlige rengøringslister.</div>
+          <div class="tileMeta">
+            <div class="pill">Åbn</div>
+            <div class="pill">In-app</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolWrap" id="toolWrap">
+        <div class="toolBar">
+          <div class="pill" id="toolName">—</div>
+          <div class="twRow">
+            <button class="btn ghost" id="closeToolBtn" type="button">Tilbage</button>
+            <button class="btn ghost" id="openNewTabBtn" type="button">Åbn i ny fane</button>
+          </div>
+        </div>
+        <iframe id="toolFrame" class="frame" src="about:blank" loading="eager"></iframe>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ---------------- TIMER SHARED STORAGE ----------------
+    // Skal matche din 3-timers-regel.html
+    const TIMER_KEY = "kaiser_3timer_v1_1";
+    const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
+    const SHORT_DURATION_MS = 30 * 60 * 1000;
+    const WARN_30_MS = 30 * 60 * 1000;
+    const WARN_10_MS = 10 * 60 * 1000;
+
+    // ---------------- HUB ----------------
+    let selectedTpl = "Bacon";
+    let wakeLock = null;
+
+    function $(id){ return document.getElementById(id); }
+    function now(){ return Date.now(); }
+    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+    function nowDK(){
+      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+    function fmtHHMMSS(ms){
+      const s = Math.max(0, Math.floor(ms/1000));
+      const hh = String(Math.floor(s/3600)).padStart(2,"0");
+      const mm = String(Math.floor((s%3600)/60)).padStart(2,"0");
+      const ss = String(s%60).padStart(2,"0");
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    function loadTimers(){
+      const raw = localStorage.getItem(TIMER_KEY);
+      if (!raw) return [];
+      try{
+        const obj = JSON.parse(raw);
+        return Array.isArray(obj.timers) ? obj.timers : [];
+      } catch(e){
+        return [];
+      }
+    }
+    function saveTimers(timers){
+      localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] }));
+    }
+
+    function uid(){
+      return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
+
+    function buildName(){
+      const text = ($("textInput").value || "").trim();
+      if (selectedTpl === "Fritekst") return text;
+      return text ? (selectedTpl + " – " + text) : selectedTpl;
+    }
+
+    function addTimer(durationMs){
+      const name = buildName();
+      if (selectedTpl === "Fritekst" && !name) {
+        alert("Skriv et navn (Fritekst).");
+        $("textInput").focus();
+        return;
+      }
+
+      const timers = loadTimers();
+      const id = uid();
+      const startedAt = now();
+      const expiresAt = startedAt + durationMs;
+
+      timers.push({
+        id,
+        name: name || "Uden navn",
+        startedAt,
+        durationMs,
+        expiresAt,
+        warned30: false,
+        warned10: false,
+        alarmed: false
+      });
+
+      saveTimers(timers);
+      $("textInput").value = "";
+      renderTimers();
+    }
+
+    function timerState(t){
+      const left = t.expiresAt - now();
+      if (left <= 0) return "exp";
+      if (left <= WARN_10_MS) return "warn";
+      if (left <= WARN_30_MS) return "warn";
+      return "ok";
+    }
+
+    function updateTplUI(){
+      [...$("tplRow").querySelectorAll("button[data-tpl]")].forEach(btn => {
+        btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
+      });
+
+      if (selectedTpl === "Fritekst") {
+        $("textInput").placeholder = "Navn (kræves) (fx Bearnaise / Brunchbuffet)";
+        $("helperText").textContent = "Template: Fritekst • Feltet er navnet";
+      } else {
+        $("textInput").placeholder = "Valgfri note (fx bakke 2 / kl. 18:30)";
+        $("helperText").textContent = "Template: " + selectedTpl + " • Note er valgfri";
+      }
+    }
+
+    function renderClock(){
+      $("clockPill").textContent = "Nu: " + nowDK();
+    }
+
+    function renderTimers(){
+      const list = $("timerList");
+      let timers = loadTimers();
+
+      // sort soonest first
+      timers = timers.slice().sort((a,b) => (a.expiresAt||0) - (b.expiresAt||0));
+
+      $("timerSub").textContent = "Aktive: " + timers.length;
+
+      list.innerHTML = "";
+      if (!timers.length){
+        const empty = document.createElement("div");
+        empty.className = "pill";
+        empty.style.justifyContent = "center";
+        empty.style.width = "100%";
+        empty.textContent = "Ingen aktive timere – start én ovenfor.";
+        list.appendChild(empty);
+        return;
+      }
+
+      // show up to 6 cards (scroll for more)
+      timers.slice(0, 12).forEach(t => {
+        const left = t.expiresAt - now();
+        const st = timerState(t);
+
+        const pct = clamp01((t.expiresAt - now()) / t.durationMs);
+        const w = Math.round(pct * 100);
+
+        const tagClass = st === "exp" ? "tTag exp" : (st === "warn" ? "tTag warn" : "tTag ok");
+        const tagText  = st === "exp" ? "UDLØBET" : (left <= WARN_10_MS ? "10 MIN" : (left <= WARN_30_MS ? "30 MIN" : "OK"));
+
+        const fillClass = st === "exp" ? "barFill exp" : (st === "warn" ? "barFill warn" : "barFill");
+
+        const card = document.createElement("div");
+        card.className = "tCard";
+        card.innerHTML = `
+          <div class="${tagClass}">${tagText}</div>
+          <div class="tName" title="${escapeHtml(t.name)}">${escapeHtml(t.name)}</div>
+          <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
+          <div class="tMeta">
+            Slut: ${new Date(t.expiresAt).toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"})}
+          </div>
+          <div class="barWrap">
+            <div class="${fillClass}" style="width:${st === "exp" ? 100 : w}%"></div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
+
+    // ---------------- TOOLS (iframe) ----------------
+    const toolWrap = $("toolWrap");
+    const toolFrame = $("toolFrame");
+    const toolName = $("toolName");
+    let currentToolUrl = "";
+
+    function openTool(url){
+      currentToolUrl = url;
+      toolName.textContent = url.replace("./","");
+
+      toolFrame.src = url;
+      toolWrap.style.display = "flex";
+
+      // scroll into view so staff sees tool
+      toolWrap.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    function closeTool(){
+      toolWrap.style.display = "none";
+      toolFrame.src = "about:blank";
+      currentToolUrl = "";
+    }
+
+    // ---------------- FULLSCREEN + WAKE LOCK ----------------
+    async function toggleFullscreen(){
+      try{
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      } catch(e){}
+    }
+
+    async function toggleWakeLock(){
+      try{
+        if (!("wakeLock" in navigator)) return alert("Wake Lock understøttes ikke her. Skru evt. op for skærm-timeout.");
+        if (wakeLock){
+          await wakeLock.release();
+          wakeLock = null;
+          $("wakeBtn").textContent = "Hold skærm vågen";
+          return;
+        }
+        wakeLock = await navigator.wakeLock.request("screen");
+        $("wakeBtn").textContent = "Skærm vågen: ON";
+        wakeLock.addEventListener("release", () => {
+          wakeLock = null;
+          $("wakeBtn").textContent = "Hold skærm vågen";
+        });
+      } catch(e){
+        alert("Kunne ikke aktivere wake lock.");
+      }
+    }
+
+    // ---------------- EVENTS ----------------
+    // Template buttons
+    $("tplRow").querySelectorAll("button[data-tpl]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedTpl = btn.dataset.tpl;
+        $("textInput").value = "";
+        updateTplUI();
+        $("textInput").focus();
+      });
+    });
+
+    $("start3hBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS));
+    $("start30Btn").addEventListener("click", () => addTimer(SHORT_DURATION_MS));
+
+    $("textInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addTimer(DEFAULT_DURATION_MS);
+      }
+    });
+
+    $("openTimerBtn").addEventListener("click", () => openTool("./3-timers-regel.html"));
+
+    document.querySelectorAll(".tile[data-open]").forEach(tile => {
+      tile.addEventListener("click", () => openTool(tile.getAttribute("data-open")));
+    });
+
+    $("closeToolBtn").addEventListener("click", closeTool);
+    $("openNewTabBtn").addEventListener("click", () => {
+      if (!currentToolUrl) return;
+      window.open(currentToolUrl, "_blank");
+    });
+
+    $("fsBtn").addEventListener("click", toggleFullscreen);
+    $("wakeBtn").addEventListener("click", toggleWakeLock);
+
+    // ---------------- INIT ----------------
+    updateTplUI();
+    renderClock();
+    renderTimers();
+
+    // Update clock every minute and timers every second
+    setInterval(() => {
+      renderClock();
+    }, 60000);
+
+    setInterval(() => {
+      renderTimers();
+    }, 1000);
+  </script>
+</body>
+</html>
