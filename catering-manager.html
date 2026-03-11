@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Manager - Kaiser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .location-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .orders-list {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .order-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .order-location {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .order-detail {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .order-detail strong {
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎉 Catering Manager</h1>
+            <p class="subtitle">Opret og send catering ordrer til afdelingerne</p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            ✅ Catering ordre sendt til køkkenet!
+        </div>
+
+        <!-- Form -->
+        <div class="form-card">
+            <div class="section-title">
+                📍 Afdeling & Dato
+            </div>
+
+            <div class="input-group">
+                <label for="location">Vælg Afdeling *</label>
+                <select id="location" required>
+                    <option value="">-- Vælg afdeling --</option>
+                    <option value="Kaiser Emdrup">Kaiser Emdrup</option>
+                    <option value="Kaiser Østerbro">Kaiser Østerbro</option>
+                    <option value="Kaiser Nørrebro">Kaiser Nørrebro</option>
+                    <option value="Kaiser Frederiksberg">Kaiser Frederiksberg</option>
+                </select>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="date">Dato *</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="input-group">
+                    <label for="time">Tidspunkt *</label>
+                    <input type="time" id="time" required>
+                </div>
+            </div>
+
+            <div class="section-title">
+                👥 Ordre Detaljer
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="guests">Antal Gæster *</label>
+                    <input type="number" id="guests" placeholder="f.eks. 50" min="1" required>
+                </div>
+                <div class="input-group">
+                    <label for="menuType">Menu Type *</label>
+                    <select id="menuType" required>
+                        <option value="">-- Vælg menu --</option>
+                        <option value="Buffet">Buffet</option>
+                        <option value="3-retters">3-retters</option>
+                        <option value="4-retters">4-retters</option>
+                        <option value="Cocktail">Cocktail</option>
+                        <option value="Brunch">Brunch</option>
+                        <option value="Andet">Andet</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="pricePerPerson">Pris pr. Person (DKK)</label>
+                    <input type="number" id="pricePerPerson" placeholder="f.eks. 250" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="contactName">Kontaktperson</label>
+                    <input type="text" id="contactName" placeholder="Navn på bestiller">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="notes">Bemærkninger / Specielle Ønsker</label>
+                <textarea id="notes" placeholder="F.eks. vegetar optioner, allergier, særlige ønsker..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 Ryd</button>
+                <button class="btn btn-primary" onclick="sendToKitchen()">📤 Send til Køkken</button>
+            </div>
+        </div>
+
+        <!-- Orders List -->
+        <div class="orders-list">
+            <div class="section-title">
+                📋 Aktive Catering Ordrer
+            </div>
+            <div id="ordersList">
+                <p style="text-align: center; color: #999; padding: 20px;">Ingen ordrer endnu</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Load orders on page load
+        window.addEventListener('DOMContentLoaded', loadOrders);
+
+        function sendToKitchen() {
+            // Validate required fields
+            const location = document.getElementById('location').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const guests = document.getElementById('guests').value;
+            const menuType = document.getElementById('menuType').value;
+
+            if (!location || !date || !time || !guests || !menuType) {
+                alert('⚠️ Udfyld venligst alle påkrævede felter (*)');
+                return;
+            }
+
+            // Create order object
+            const order = {
+                id: Date.now(),
+                location: location,
+                date: date,
+                time: time,
+                guests: parseInt(guests),
+                menuType: menuType,
+                pricePerPerson: parseFloat(document.getElementById('pricePerPerson').value) || 0,
+                contactName: document.getElementById('contactName').value || 'Ikke angivet',
+                notes: document.getElementById('notes').value || '',
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+
+            // Save to localStorage
+            let orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
+            orders.unshift(order);
+            localStorage.setItem('cateringOrders', JSON.stringify(orders));
+
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 3000);
+
+            // Reset form
+            resetForm();
+
+            // Reload orders list
+            loadOrders();
+        }
+
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
+            const ordersList = document.getElementById('ordersList');
+
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Ingen ordrer endnu</p>';
+                return;
+            }
+
+            ordersList.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-location">${order.location}</div>
+                            <div class="order-date">📅 ${formatDate(order.date)} kl. ${order.time}</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteOrder(${order.id})">🗑️ Slet</button>
+                    </div>
+                    <div class="order-details">
+                        <div class="order-detail"><strong>Gæster:</strong> ${order.guests} personer</div>
+                        <div class="order-detail"><strong>Menu:</strong> ${order.menuType}</div>
+                        <div class="order-detail"><strong>Pris:</strong> ${order.pricePerPerson > 0 ? order.pricePerPerson + ' kr/person' : 'Ikke angivet'}</div>
+                        <div class="order-detail"><strong>Kontakt:</strong> ${order.contactName}</div>
+                    </div>
+                    ${order.notes ? `<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 13px; color: #666;"><strong>Bemærkninger:</strong> ${order.notes}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function deleteOrder(orderId) {
+            if (!confirm('Er du sikker på du vil slette denne ordre?')) return;
+
+            let orders = JSON.parse(localStorage.getItem('cateringOrders') || '[]');
+            orders = orders.filter(order => order.id !== orderId);
+            localStorage.setItem('cateringOrders', JSON.stringify(orders));
+            loadOrders();
+        }
+
+        function resetForm() {
+            document.getElementById('location').value = '';
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('time').value = '';
+            document.getElementById('guests').value = '';
+            document.getElementById('menuType').value = '';
+            document.getElementById('pricePerPerson').value = '';
+            document.getElementById('contactName').value = '';
+            document.getElementById('notes').value = '';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+    </script>
+</body>
+</html>
