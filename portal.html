@@ -1,420 +1,566 @@
 <!doctype html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Portal</title>
- 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
- 
-  <style>
-    :root{
-      /* Modern dark, but readable */
-      --bg0:#070A12;
-      --bg1:#0B1020;
-      --panel:rgba(255,255,255,0.055);
-      --panel2:rgba(255,255,255,0.035);
-      --border:rgba(255,255,255,0.10);
- 
-      --text:rgba(255,255,255,0.94);
-      --muted:rgba(255,255,255,0.74);
-      --muted2:rgba(255,255,255,0.52);
- 
-      /* Kaiser gold accent */
-      --gold:#d6b24a;
-      --gold2:#b9921f;
- 
-      /* Category colors */
-      --kitchen:#f59e0b; /* amber */
-      --drift:#38bdf8;   /* sky */
-      --quality:#a78bfa; /* violet */
- 
-      --danger:#ff6b6b;
-      --shadow: 0 26px 75px rgba(0,0,0,.55);
-      --shadow2: 0 18px 55px rgba(0,0,0,.35);
-    }
- 
-    html,body{height:100%;}
-    body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      overflow-x:hidden;
-    }
- 
-    /* subtle grid texture */
-    body:before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 38px 38px;
-      opacity:0.06;
-      pointer-events:none;
-      mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
-    }
- 
-    .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
- 
-    /* Header / hero */
-    .hero{
-      position:relative;
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      padding: 26px 20px 18px;
-    }
-    .hero:after{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
-      opacity:.55;
-      pointer-events:none;
-    }
- 
-    .kicker{
-      position:relative;
-      font-size:12px;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      font-weight:900;
-      text-align:center;
-    }
-    .title{
-      position:relative;
-      font-family:"Playfair Display", serif;
-      font-size:48px;
-      line-height:1.02;
-      letter-spacing:-0.02em;
-      font-weight:700;
-      text-align:center;
-      margin-top:10px;
-    }
-    .subtitle{
-      position:relative;
-      text-align:center;
-      margin-top:10px;
-      color:var(--muted);
-      font-weight:700;
-      font-size:13px;
-    }
-    .goldline{
-      position:relative;
-      height:2px;
-      margin:18px auto 0;
-      max-width: 680px;
-      border-radius:999px;
-      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
-      opacity:.95;
-    }
- 
-    /* Controls */
-    .controls{
-      position:relative;
-      margin-top:16px;
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:center;
-    }
- 
-    .search{
-      flex: 1 1 420px;
-      max-width: 760px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
-    }
- 
-    /* Category Sections */
-    .category{
-      position:relative;
-      margin-top:28px;
-    }
-    .category-title{
-      position:relative;
-      font-size:13px;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      font-weight:900;
-      color:var(--muted2);
-      margin-bottom:12px;
-      padding-left:2px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .category-title .dot{
-      width:8px; height:8px; border-radius:999px;
-    }
- 
-    /* Tool Cards Grid */
-    .tools{
-      display:grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap:12px;
-    }
-    @media (min-width: 640px){
-      .tools{ grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (min-width: 1024px){
-      .tools{ grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (min-width: 1280px){
-      .tools{ grid-template-columns: repeat(4, 1fr); }
-    }
- 
-    /* Tool Card */
-    .tool{
-      position:relative;
-      display:block;
-      padding:16px;
-      border-radius:18px;
-      border:1px solid var(--border);
-      background:var(--panel);
-      box-shadow:var(--shadow2);
-      backdrop-filter: blur(10px);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      text-decoration:none;
-      color:var(--text);
-    }
-    .tool:hover{
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-      border-color: rgba(255,255,255,0.16);
-    }
-    .tool-icon{
-      font-size:26px;
-      line-height:1;
-      margin-bottom:8px;
-      display:block;
-    }
-    .tool-title{
-      font-weight:800;
-      font-size:15px;
-      line-height:1.2;
-      margin-bottom:4px;
-      color:var(--text);
-    }
-    .tool-desc{
-      font-size:12px;
-      line-height:1.4;
-      color:var(--muted2);
-      min-height:32px;
-    }
-    .tool-badge{
-      position:absolute;
-      top:10px; right:10px;
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:4px 8px;
-      border-radius:999px;
-      background: rgba(255,255,255,0.06);
-      color:var(--muted);
-      border:1px solid rgba(255,255,255,0.08);
-    }
-    .tool-badge.new{
-      background: rgba(56,189,248,0.18);
-      color:#38bdf8;
-      border-color: rgba(56,189,248,0.35);
-    }
-    .tool-badge.legacy{
-      background: rgba(255,255,255,0.04);
-      color:var(--muted2);
-      border-color: rgba(255,255,255,0.06);
-    }
-    .tool-badge.soon{
-      background: rgba(255,107,107,0.16);
-      color:#ff6b6b;
-      border-color: rgba(255,107,107,0.30);
-    }
-    .tool-badge.hub{
-      background: rgba(214,178,74,0.18);
-      color:#d6b24a;
-      border-color: rgba(214,178,74,0.35);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Kaiser – Portal</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg0: #070A12;
+            --bg1: #0B1020;
+            --panel: rgba(255,255,255,0.055);
+            --panel2: rgba(255,255,255,0.035);
+            --border: rgba(255,255,255,0.10);
+            
+            --text: rgba(255,255,255,0.94);
+            --muted: rgba(255,255,255,0.74);
+            --muted2: rgba(255,255,255,0.52);
+            
+            --gold: #d6b24a;
+            --gold2: #b9921f;
+            
+            --kitchen: #f59e0b;
+            --drift: #38bdf8;
+            --quality: #a78bfa;
+            
+            --danger: #ff6b6b;
+            --success: #22c55e;
+            --shadow: 0 26px 75px rgba(0,0,0,.55);
+            --shadow2: 0 18px 55px rgba(0,0,0,.35);
+        }
+        
+        html, body { height: 100%; }
+        
+        body {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+                radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+                radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+                linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+            overflow-x: hidden;
+        }
+        
+        body:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 38px 38px;
+            opacity: 0.06;
+            pointer-events: none;
+            mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
+        }
+        
+        .shell {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 16px 44px;
+        }
+        
+        /* Header / Hero */
+        .hero {
+            position: relative;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background:
+                radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+                linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            padding: 26px 20px 18px;
+        }
+        
+        .hero:after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background:
+                radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
+                radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
+            opacity: .55;
+            pointer-events: none;
+        }
+        
+        .kicker {
+            position: relative;
+            font-size: 12px;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            font-weight: 900;
+            text-align: center;
+        }
+        
+        .title {
+            position: relative;
+            font-family: "Playfair Display", serif;
+            font-size: 48px;
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .subtitle {
+            position: relative;
+            text-align: center;
+            margin-top: 10px;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px;
+        }
+        
+        .goldline {
+            position: relative;
+            height: 2px;
+            margin: 18px auto 0;
+            max-width: 680px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
+            opacity: .95;
+        }
+        
+        /* Category Sections */
+        .category {
+            position: relative;
+            margin-top: 28px;
+        }
+        
+        .category-title {
+            position: relative;
+            font-size: 13px;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: var(--muted2);
+            margin-bottom: 12px;
+            padding-left: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-title .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+        }
+        
+        /* Tool Cards Grid */
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 12px;
+        }
+        
+        @media (min-width: 640px) {
+            .tools { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (min-width: 1024px) {
+            .tools { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (min-width: 1280px) {
+            .tools { grid-template-columns: repeat(4, 1fr); }
+        }
+        
+        /* Tool Card */
+        .tool {
+            position: relative;
+            display: block;
+            padding: 16px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            box-shadow: var(--shadow2);
+            backdrop-filter: blur(10px);
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .tool:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: rgba(255,255,255,0.16);
+        }
+        
+        .tool-icon {
+            font-size: 26px;
+            line-height: 1;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .tool-title {
+            font-weight: 800;
+            font-size: 15px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        
+        .tool-desc {
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--muted2);
+            min-height: 32px;
+        }
+        
+        .tool-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .tool-badge.new {
+            background: rgba(56,189,248,0.18);
+            color: #38bdf8;
+            border-color: rgba(56,189,248,0.35);
+        }
+        
+        .tool-badge.legacy {
+            background: rgba(255,255,255,0.04);
+            color: var(--muted2);
+            border-color: rgba(255,255,255,0.06);
+        }
+        
+        .tool-badge.soon {
+            background: rgba(255,107,107,0.16);
+            color: #ff6b6b;
+            border-color: rgba(255,107,107,0.30);
+        }
+        
+        .tool-badge.hub {
+            background: rgba(214,178,74,0.18);
+            color: #d6b24a;
+            border-color: rgba(214,178,74,0.35);
+        }
+        
+        /* HQ Password Protection */
+        .hq-locked {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .hq-lock-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .hq-lock-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .hq-lock-box p {
+            color: var(--muted);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .hq-input-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .hq-input-group input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            font-size: 15px;
+            font-family: inherit;
+        }
+        
+        .hq-input-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(214,178,74,0.15);
+        }
+        
+        .hq-input-group button {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            color: var(--bg0);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .hq-input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(214,178,74,0.3);
+        }
+        
+        .hq-error {
+            color: var(--danger) !important;
+            margin-top: 15px !important;
+            margin-bottom: 0 !important;
+            font-weight: 600;
+            min-height: 20px;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+    </style>
 </head>
 <body>
-  <div class="shell">
- 
-    <!-- HERO -->
-    <header class="hero">
-      <div class="kicker">Digital Operations</div>
-      <h1 class="title">Kaiser Universe</h1>
-      <div class="subtitle">Alle dine digitale værktøjer – samlet ét sted</div>
-      <div class="goldline"></div>
- 
-      <div class="controls">
-        <div class="search">
-          <span style="opacity:.7">🔍</span>
-          <input type="text" placeholder="Søg efter et værktøj…" 
-                 style="background:transparent; border:none; outline:none; color:var(--text); width:100%; font-weight:600;">
-        </div>
-      </div>
-    </header>
- 
-    <!-- PORTALER / HUBS -->
-    <section class="category">
-      <div class="category-title">
-        <span class="dot" style="background:var(--gold);"></span>
-        Portaler & Hubs
-      </div>
-      <div class="tools">
-        <a href="drift-hub.html" class="tool">
-          <span class="tool-icon">📋</span>
-          <div class="tool-title">Drift Hub</div>
-          <div class="tool-desc">Central portal for tjenere – daglige opgaver, udsolgte produkter og skiftlederrapport</div>
-          <span class="tool-badge hub">HUB</span>
-        </a>
- 
-        <a href="kitchen-hub.html" class="tool">
-          <span class="tool-icon">👨‍🍳</span>
-          <div class="tool-title">Kitchen Hub</div>
-          <div class="tool-desc">Køkkenets kommandocentral – Kitchen%, catering, cleaning og digitale ure</div>
-          <span class="tool-badge hub">HUB</span>
-        </a>
-      </div>
-    </section>
- 
-    <!-- DRIFT & TJENERE -->
-    <section class="category">
-      <div class="category-title">
-        <span class="dot" style="background:var(--drift);"></span>
-        Drift & Tjenere
-      </div>
-      <div class="tools">
-        <a href="daglige-opgaver.html" class="tool">
-          <span class="tool-icon">✅</span>
-          <div class="tool-title">Daglige Opgaver</div>
-          <div class="tool-desc">Tjeners daglige tjekliste og opgaver</div>
-        </a>
- 
-        <a href="skiftlederrapport1.html" class="tool">
-          <span class="tool-icon">📊</span>
-          <div class="tool-title">Skiftleder Rapport</div>
-          <div class="tool-desc">Ny version med iforms integration</div>
-          <span class="tool-badge new">NY</span>
-        </a>
- 
-        <a href="chef-radar.html" class="tool">
-          <span class="tool-icon">🚨</span>
-          <div class="tool-title">Chef Radar</div>
-          <div class="tool-desc">Manager alerts til udsolgte produkter</div>
-        </a>
- 
-        <a href="live-score.html" class="tool">
-          <span class="tool-icon">💰</span>
-          <div class="tool-title">Live Score</div>
-          <div class="tool-desc">Realtids salgstal fra kassesystem</div>
-          <span class="tool-badge soon">API MANGLER</span>
-        </a>
-      </div>
-    </section>
- 
-    <!-- KØKKEN -->
-    <section class="category">
-      <div class="category-title">
-        <span class="dot" style="background:var(--kitchen);"></span>
-        Køkken
-      </div>
-      <div class="tools">
-        <a href="kitchen-percent.html" class="tool">
-          <span class="tool-icon">📈</span>
-          <div class="tool-title">Kitchen %</div>
-          <div class="tool-desc">Udregner køkken procent og food cost</div>
-        </a>
- 
-        <a href="MIS.html" class="tool">
-          <span class="tool-icon">🍽️</span>
-          <div class="tool-title">Digital MIS</div>
-          <div class="tool-desc">Mise en place til køkken</div>
-        </a>
- 
-        <a href="3-timers-regel.html" class="tool">
-          <span class="tool-icon">⏰</span>
-          <div class="tool-title">3-Timers Regel</div>
-          <div class="tool-desc">Digitale ure til håndtering af 3-timers reglen</div>
-        </a>
- 
-        <a href="catering-schedule.html" class="tool">
-          <span class="tool-icon">🎉</span>
-          <div class="tool-title">Catering Kalender</div>
-          <div class="tool-desc">Oversigt over catering bookinger</div>
-        </a>
-      </div>
-    </section>
- 
-    <!-- RENGØRING -->
-    <section class="category">
-      <div class="category-title">
-        <span class="dot" style="background:var(--kitchen);"></span>
-        Rengøring & Hygiejne
-      </div>
-      <div class="tools">
-        <a href="cleaning-kitchen.html" class="tool">
-          <span class="tool-icon">🧽</span>
-          <div class="tool-title">Køkken Rengøring</div>
-          <div class="tool-desc">Rengøringslister og tjeklister til køkken</div>
-        </a>
-      </div>
-    </section>
- 
-    <!-- KVALITETSKONTROL -->
-    <section class="category">
-      <div class="category-title">
-        <span class="dot" style="background:var(--quality);"></span>
-        Kvalitetskontrol
-      </div>
-      <div class="tools">
-        <a href="index.html" class="tool">
-          <span class="tool-icon">🎯</span>
-          <div class="tool-title">QC App</div>
-          <div class="tool-desc">Kvalitetskontrol applikation (v2 & v3)</div>
-        </a>
-      </div>
-    </section>
- 
-    <!-- LEGACY / ARKIV -->
-    <section class="category" style="opacity:.85;">
-      <div class="category-title">
-        <span class="dot" style="background:var(--muted2);"></span>
-        Arkiv & Legacy
-      </div>
-      <div class="tools">
-        <a href="skiftlederrapport.html" class="tool">
-          <span class="tool-icon">📄</span>
-          <div class="tool-title">Skiftleder Rapport (Gammel)</div>
-          <div class="tool-desc">Tidligere version – brug den nye i stedet</div>
-          <span class="tool-badge legacy">LEGACY</span>
-        </a>
-      </div>
-    </section>
- 
-  </div>
+    <div class="shell">
+        
+        <!-- HERO -->
+        <header class="hero">
+            <div class="kicker">Digital Operations</div>
+            <h1 class="title">Kaiser Universe</h1>
+            <div class="subtitle">Alle dine digitale værktøjer – samlet ét sted</div>
+            <div class="goldline"></div>
+        </header>
+        
+        <!-- PORTALER / HUBS -->
+        <section class="category">
+            <div class="category-title">
+                <span class="dot" style="background:var(--gold);"></span>
+                Portaler & Hubs
+            </div>
+            <div class="tools">
+                <a href="drift-hub.html" class="tool">
+                    <span class="tool-icon">📋</span>
+                    <div class="tool-title">Drift Hub</div>
+                    <div class="tool-desc">Central portal for tjenere – daglige opgaver, udsolgte produkter og skiftlederrapport</div>
+                    <span class="tool-badge hub">HUB</span>
+                </a>
+                
+                <a href="kitchen-hub.html" class="tool">
+                    <span class="tool-icon">👨‍🍳</span>
+                    <div class="tool-title">Kitchen Hub</div>
+                    <div class="tool-desc">Køkkenets kommandocentral – Kitchen%, catering, cleaning og digitale ure</div>
+                    <span class="tool-badge hub">HUB</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- HQ - PASSWORD PROTECTED -->
+        <section class="category" id="hqSection">
+            <div class="category-title">
+                <span class="dot" style="background:var(--gold);"></span>
+                🔐 HQ - Hovedkontor
+                <span id="hqLockIcon" style="margin-left: auto; font-size: 16px;">🔒</span>
+            </div>
+            
+            <!-- Locked State -->
+            <div id="hqLocked" class="hq-locked">
+                <div class="hq-lock-box">
+                    <div class="hq-lock-icon">🔐</div>
+                    <p>Denne sektion kræver adgangskode</p>
+                    <div class="hq-input-group">
+                        <input type="password" id="hqPassword" placeholder="Indtast kode..." onkeypress="if(event.key === 'Enter') unlockHQ()">
+                        <button onclick="unlockHQ()">Lås op</button>
+                    </div>
+                    <p id="hqError" class="hq-error"></p>
+                </div>
+            </div>
+            
+            <!-- Unlocked State -->
+            <div id="hqUnlocked" class="tools" style="display: none;">
+                <a href="catering-manager.html" class="tool">
+                    <span class="tool-icon">🎉</span>
+                    <div class="tool-title">Catering Manager</div>
+                    <div class="tool-desc">Send catering ordrer til afdelingerne fra kontoret</div>
+                    <span class="tool-badge hub">KONTOR</span>
+                </a>
+                
+                <a href="live-score.html" class="tool">
+                    <span class="tool-icon">💰</span>
+                    <div class="tool-title">Live Score</div>
+                    <div class="tool-desc">Realtids salgstal fra kassesystem</div>
+                    <span class="tool-badge soon">API MANGLER</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- DRIFT & TJENERE -->
+        <section class="category">
+            <div class="category-title">
+                <span class="dot" style="background:var(--drift);"></span>
+                Drift & Tjenere
+            </div>
+            <div class="tools">
+                <a href="daglige-opgaver.html" class="tool">
+                    <span class="tool-icon">✅</span>
+                    <div class="tool-title">Daglige Opgaver</div>
+                    <div class="tool-desc">Tjeners daglige tjekliste og opgaver</div>
+                </a>
+                
+                <a href="skiftlederrapport1.html" class="tool">
+                    <span class="tool-icon">📊</span>
+                    <div class="tool-title">Skiftleder Rapport</div>
+                    <div class="tool-desc">Ny version med iforms integration</div>
+                    <span class="tool-badge new">NY</span>
+                </a>
+                
+                <a href="chef-radar.html" class="tool">
+                    <span class="tool-icon">🚨</span>
+                    <div class="tool-title">Chef Radar</div>
+                    <div class="tool-desc">Manager alerts til udsolgte produkter</div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- KØKKEN -->
+        <section class="category">
+            <div class="category-title">
+                <span class="dot" style="background:var(--kitchen);"></span>
+                Køkken
+            </div>
+            <div class="tools">
+                <a href="kitchen-percent.html" class="tool">
+                    <span class="tool-icon">📈</span>
+                    <div class="tool-title">Kitchen %</div>
+                    <div class="tool-desc">Udregner køkken procent og food cost</div>
+                </a>
+                
+                <a href="MIS.html" class="tool">
+                    <span class="tool-icon">🍽️</span>
+                    <div class="tool-title">Digital MIS</div>
+                    <div class="tool-desc">Mise en place til køkken</div>
+                </a>
+                
+                <a href="3-timers-regel.html" class="tool">
+                    <span class="tool-icon">⏰</span>
+                    <div class="tool-title">3-Timers Regel</div>
+                    <div class="tool-desc">Digitale ure til håndtering af 3-timers reglen</div>
+                </a>
+                
+                <a href="catering-schedule.html" class="tool">
+                    <span class="tool-icon">🎉</span>
+                    <div class="tool-title">Catering Kalender</div>
+                    <div class="tool-desc">Oversigt over catering bookinger</div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- RENGØRING -->
+        <section class="category">
+            <div class="category-title">
+                <span class="dot" style="background:var(--kitchen);"></span>
+                Rengøring & Hygiejne
+            </div>
+            <div class="tools">
+                <a href="cleaning-kitchen.html" class="tool">
+                    <span class="tool-icon">🧽</span>
+                    <div class="tool-title">Køkken Rengøring</div>
+                    <div class="tool-desc">Rengøringslister og tjeklister til køkken</div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- KVALITETSKONTROL -->
+        <section class="category">
+            <div class="category-title">
+                <span class="dot" style="background:var(--quality);"></span>
+                Kvalitetskontrol
+            </div>
+            <div class="tools">
+                <a href="index.html" class="tool">
+                    <span class="tool-icon">🎯</span>
+                    <div class="tool-title">QC App</div>
+                    <div class="tool-desc">Kvalitetskontrol applikation (v2 & v3)</div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- LEGACY / ARKIV -->
+        <section class="category" style="opacity:.85;">
+            <div class="category-title">
+                <span class="dot" style="background:var(--muted2);"></span>
+                Arkiv & Legacy
+            </div>
+            <div class="tools">
+                <a href="skiftlederrapport.html" class="tool">
+                    <span class="tool-icon">📄</span>
+                    <div class="tool-title">Skiftleder Rapport (Gammel)</div>
+                    <div class="tool-desc">Tidligere version – brug den nye i stedet</div>
+                    <span class="tool-badge legacy">LEGACY</span>
+                </a>
+            </div>
+        </section>
+        
+    </div>
+    
+    <!-- HQ Password Script -->
+    <script>
+        const HQ_PASSWORD = 'Jegergenial1!';
+        const HQ_STORAGE_KEY = 'kaiserHQUnlocked';
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            const isUnlocked = sessionStorage.getItem(HQ_STORAGE_KEY) === 'true';
+            if (isUnlocked) {
+                showHQContent();
+            }
+        });
+        
+        function unlockHQ() {
+            const input = document.getElementById('hqPassword');
+            const error = document.getElementById('hqError');
+            
+            if (input.value === HQ_PASSWORD) {
+                sessionStorage.setItem(HQ_STORAGE_KEY, 'true');
+                showHQContent();
+                input.value = '';
+                error.textContent = '';
+            } else {
+                error.textContent = '❌ Forkert kode - prøv igen';
+                input.value = '';
+                input.focus();
+                
+                const box = document.querySelector('.hq-lock-box');
+                box.style.animation = 'shake 0.5s ease';
+                setTimeout(() => box.style.animation = '', 500);
+            }
+        }
+        
+        function showHQContent() {
+            document.getElementById('hqLocked').style.display = 'none';
+            document.getElementById('hqUnlocked').style.display = 'grid';
+            document.getElementById('hqLockIcon').textContent = '🔓';
+        }
+    </script>
 </body>
 </html>
