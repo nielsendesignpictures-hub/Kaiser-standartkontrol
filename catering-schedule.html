@@ -354,401 +354,78 @@
     // ============================================================
     // CONFIGURATION
     // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const TOKEN = "KAISER_TOKEN_2026";
-    const LOC_KEY = "kaiser_catering_loc";
-    const LEADER_CODE = "KAISER2026";
+// ERSTAT dit nuværende script med dette:
 
-    const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
+const API_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
 
-    // Farve grænser (timer)
-    const GREEN_HOURS = 48;   // Under 2 dage = grøn (SNART)
-    const YELLOW_HOURS = 168; // Under 7 dage = gul (DENNE UGE)
-    // Over 7 dage = rød (KOMMENDE)
+// Hent lokation fra URL parameter
+const urlParams = new URLSearchParams(window.location.search);
+const currentLocation = urlParams.get('loc') || '';
 
-    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+let allEvents = [];
 
-    const $ = id => document.getElementById(id);
-    let debugMode = false;
-    let editingId = "";
+// Load events on page load
+window.addEventListener('DOMContentLoaded', loadEvents);
 
-    function debugLog(msg, type = 'log') {
-      const timestamp = new Date().toLocaleTimeString('da-DK');
-      const logEl = $('debugLog');
-      const prefix = type === 'error' ? '❌ ' : type === 'info' ? '⚠️ ' : '✅ ';
-      const className = type === 'error' ? 'error' : type === 'info' ? 'info' : '';
-      console.log(`[${timestamp}] ${prefix}${msg}`);
-      if (logEl) {
-        logEl.innerHTML += `<span class="${className}">[${timestamp}] ${prefix}${msg}</span>\n`;
-        logEl.scrollTop = logEl.scrollHeight;
-      }
-    }
+// Auto-refresh every 30 seconds
+setInterval(loadEvents, 30000);
 
-    function setErr(msg) {
-      const el = $("errText");
-      $("successText").style.display = "none";
-      if (!msg) { el.style.display = "none"; return; }
-      el.style.display = "block";
-      el.textContent = "❌ " + msg;
-      debugLog(msg, 'error');
-    }
-
-    function setSuccess(msg) {
-      const el = $("successText");
-      $("errText").style.display = "none";
-      if (!msg) { el.style.display = "none"; return; }
-      el.style.display = "block";
-      el.textContent = "✅ " + msg;
-      debugLog(msg);
-      setTimeout(() => { el.style.display = "none"; }, 4000);
-    }
-
-    function escapeHtml(s) {
-      return String(s || "").replace(/[&<>"']/g, c => 
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
-    }
-
-    function jsonp(url, params) {
-      return new Promise((resolve, reject) => {
-        const cb = "__jsonp_" + Math.random().toString(36).slice(2);
-        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
-        const src = url + (url.includes("?") ? "&" : "?") + qs;
-        debugLog(`Request: ${params.action}`, 'info');
-
-        const script = document.createElement("script");
-        const timeout = setTimeout(() => {
-          cleanup();
-          debugLog("Timeout after 15 seconds", 'error');
-          reject(new Error("Request timeout"));
-        }, 15000);
-
-        function cleanup() {
-          clearTimeout(timeout);
-          delete window[cb];
-          script.remove();
-        }
-
-        window[cb] = (data) => {
-          debugLog(`Response: ${JSON.stringify(data).substring(0, 150)}...`);
-          cleanup();
-          resolve(data);
-        };
-
-        script.src = src;
-        script.onerror = () => {
-          debugLog("Script load error", 'error');
-          cleanup();
-          reject(new Error("Network error"));
-        };
-        document.body.appendChild(script);
-      });
-    }
-
-    function getLoc() {
-      const fromURL = new URLSearchParams(location.search).get("loc");
-      if (fromURL) {
-        localStorage.setItem(LOC_KEY, fromURL);
-        debugLog(`Location set from URL: ${fromURL}`);
-      }
-      return localStorage.getItem(LOC_KEY) || "";
-    }
-
-    function isoToday() {
-      return new Date().toISOString().slice(0, 10);
-    }
-
-    function hoursUntil(dateStr, timeStr) {
-      const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
-      const dt = new Date(dateStr + "T" + t + ":00");
-      return (dt.getTime() - Date.now()) / (3600 * 1000);
-    }
-
-    function colorFor(h) {
-      if (!isFinite(h)) return "gray";
-      if (h < 0) return "gray";           // Fortid
-      if (h <= GREEN_HOURS) return "green";  // Snart (under 2 dage)
-      if (h <= YELLOW_HOURS) return "yellow"; // Denne uge
-      return "red";                        // Kommende
-    }
-
-    function statusText(h) {
-      if (h < 0) return "PAST";
-      if (h <= GREEN_HOURS) return "SOON";
-      if (h <= YELLOW_HOURS) return "THIS WEEK";
-      return "UPCOMING";
-    }
-
-    function parseDate(dateStr) {
-      const parts = dateStr.split('-');
-      return {
-        year: parseInt(parts[0]),
-        month: parseInt(parts[1]) - 1,
-        day: parseInt(parts[2])
-      };
-    }
-
-    function formatDateParts(dateStr) {
-      const d = parseDate(dateStr);
-      return {
-        day: d.day,
-        month: MONTHS[d.month],
-        monthFull: MONTHS_FULL[d.month],
-        year: d.year
-      };
-    }
-
-    async function load() {
-      setErr("");
-      const loc = getLoc();
-      
-      $("locPill").textContent = "📍 " + (loc || "Not set");
-      $("locSubtitle").textContent = loc ? `Events for ${loc}` : "Open with ?loc=YourLocation";
-
-      if (!loc) {
-        $("grid").innerHTML = `
-          <div class="empty-state">
-            <div class="icon">📍</div>
-            <div><strong>Location not set</strong></div>
-            <div style="margin-top:8px;font-size:13px;">
-              Open page with: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=Hillerød</code>
-            </div>
-            <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.5);">
-              Valid: ${LOCATIONS.join(", ")}
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      $("refreshBtn").textContent = "⏳ Loading...";
-      $("refreshBtn").disabled = true;
-
-      try {
-        const data = await jsonp(SCRIPT_URL, {
-          action: "catering_get",
-          loc: loc
-        });
-
-        $("refreshBtn").textContent = "🔄 Refresh";
-        $("refreshBtn").disabled = false;
-
-        if (!data) {
-          setErr("No response from server");
-          return;
-        }
-
-        if (!data.ok) {
-          setErr(data.error || "Unknown server error");
-          return;
-        }
-
-        $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-        $("eventCount").textContent = `${data.events?.length || 0} events • Sorted by date`;
-
-        renderList(data.events || []);
-
-      } catch (e) {
-        $("refreshBtn").textContent = "🔄 Refresh";
-        $("refreshBtn").disabled = false;
-        setErr("Network error: " + e.message);
-      }
-    }
-
-    function renderList(events) {
-      const grid = $("grid");
-
-      if (!events || !events.length) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <div class="icon">📅</div>
-            <div><strong>No events yet</strong></div>
-            <div style="margin-top:8px;font-size:13px;">Add your first event above</div>
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = "";
-
-      events.forEach((ev) => {
-        const h = hoursUntil(ev.date, ev.time);
-        const col = colorFor(h);
-        const status = statusText(h);
-        const dateParts = formatDateParts(ev.date);
-
-        const card = document.createElement("div");
-        card.className = `event ${col}`;
-        card.innerHTML = `
-          <div class="statusBadge">${status}</div>
-          
-          <div class="eventDate">
-            <div class="dateDay">${dateParts.day}</div>
-            <div class="dateInfo">
-              <div class="dateMonth">${dateParts.monthFull}</div>
-              <div class="dateTime">${ev.time || "All day"}</div>
-              <div class="dateYear">${dateParts.year}</div>
-            </div>
-          </div>
-          
-          <div class="eventTitle">${escapeHtml(ev.title || "Catering")}</div>
-          
-          <div class="eventMeta">
-            ${ev.guests ? `<span>👥 ${ev.guests} guests</span>` : ""}
-            <span>📍 ${escapeHtml(ev.location)}</span>
-          </div>
-          
-          ${ev.note ? `<div class="eventNote">📝 ${escapeHtml(ev.note)}</div>` : ""}
-          
-          <div class="eventActions">
-            <button class="smallBtn" data-edit="${escapeHtml(ev.id)}">✏️ Edit</button>
-            <button class="smallBtn danger" data-del="${escapeHtml(ev.id)}">🗑️ Delete</button>
-          </div>
-        `;
-
-        grid.appendChild(card);
-
-        card.querySelector("[data-edit]").onclick = () => {
-          editingId = ev.id;
-          $("dateInput").value = ev.date || "";
-          $("timeInput").value = ev.time || "";
-          $("titleInput").value = ev.title || "";
-          $("guestsInput").value = ev.guests || "";
-          $("noteInput").value = ev.note || "";
-          $("saveBtn").textContent = "💾 Update";
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          debugLog(`Editing event: ${ev.id}`);
-        };
-
-        card.querySelector("[data-del]").onclick = async () => {
-          const code = prompt("Enter leader code to delete:");
-          if (!code) return;
-          if (code.trim() !== LEADER_CODE) {
-            alert("Wrong code!");
-            return;
-          }
-          if (!confirm(`Delete "${ev.title}"?`)) return;
-
-          try {
-            const res = await jsonp(SCRIPT_URL, {
-              action: "catering_delete",
-              token: TOKEN,
-              id: ev.id
-            });
-
-            if (res?.ok) {
-              setSuccess("Event deleted!");
-              load();
-            } else {
-              setErr("Could not delete: " + (res?.error || "Unknown error"));
+async function loadEvents() {
+    try {
+        const response = await fetch(API_URL + '?action=list');
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            allEvents = data.data || [];
+            
+            // Filter for current location
+            if (currentLocation) {
+                allEvents = allEvents.filter(e => 
+                    e.location.toLowerCase() === currentLocation.toLowerCase()
+                );
             }
-          } catch (e) {
-            setErr("Delete error: " + e.message);
-          }
-        };
-      });
-    }
-
-    async function save() {
-      setErr("");
-      setSuccess("");
-
-      const loc = getLoc();
-      if (!loc) {
-        setErr("Location not set!");
-        return;
-      }
-
-      const code = prompt("Enter leader code:");
-      if (!code) return;
-      if (code.trim() !== LEADER_CODE) {
-        alert("Wrong code!");
-        return;
-      }
-
-      const date = $("dateInput").value.trim();
-      const time = $("timeInput").value.trim();
-      const title = $("titleInput").value.trim();
-      const guests = $("guestsInput").value.trim();
-      const note = $("noteInput").value.trim();
-
-      if (!date) {
-        setErr("Date is required");
-        $("dateInput").focus();
-        return;
-      }
-      if (!title) {
-        setErr("Title/company is required");
-        $("titleInput").focus();
-        return;
-      }
-
-      $("saveBtn").textContent = "⏳ Saving...";
-      $("saveBtn").disabled = true;
-
-      try {
-        const res = await jsonp(SCRIPT_URL, {
-          action: "catering_save",
-          token: TOKEN,
-          id: editingId || "",
-          loc: loc,
-          date: date,
-          time: time || "",
-          title: title,
-          guests: guests || "0",
-          note: note || ""
-        });
-
-        $("saveBtn").textContent = "💾 Save";
-        $("saveBtn").disabled = false;
-
-        if (res?.ok) {
-          setSuccess(editingId ? "Event updated!" : "Event created!");
-          clearForm();
-          load();
-        } else {
-          setErr("Could not save: " + (res?.error || "Unknown error"));
+            
+            renderEvents();
         }
-
-      } catch (e) {
-        $("saveBtn").textContent = "💾 Save";
-        $("saveBtn").disabled = false;
-        setErr("Error: " + e.message);
-      }
+    } catch (error) {
+        console.error('Error loading events:', error);
     }
+}
 
-    function clearForm() {
-      editingId = "";
-      $("dateInput").value = isoToday();
-      $("timeInput").value = "";
-      $("titleInput").value = "";
-      $("guestsInput").value = "";
-      $("noteInput").value = "";
-      $("saveBtn").textContent = "💾 Save";
-    }
-
-    $("saveBtn").onclick = save;
-    $("clearBtn").onclick = clearForm;
-    $("refreshBtn").onclick = load;
+function renderEvents() {
+    // Sort by date
+    allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
     
-    $("debugBtn").onclick = () => {
-      debugMode = !debugMode;
-      $("debugPanel").classList.toggle("show", debugMode);
-      $("debugBtn").textContent = debugMode ? "🐛 Hide Debug" : "🐛 Debug";
-    };
+    // Filter out past events
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const upcomingEvents = allEvents.filter(e => new Date(e.date) >= today);
+    
+    // Render to your existing container
+    const container = document.getElementById('eventsList'); // eller dit container ID
+    
+    if (upcomingEvents.length === 0) {
+        container.innerHTML = '<p class="empty">Ingen kommende catering</p>';
+        return;
+    }
+    
+    container.innerHTML = upcomingEvents.map(e => `
+        <div class="event-card">
+            <div class="event-date">📅 ${formatDate(e.date)} kl. ${e.time}</div>
+            <div class="event-title">${e.title}</div>
+            <div class="event-guests">👥 ${e.guests} gæster</div>
+            ${e.note ? `<div class="event-note">📝 ${e.note}</div>` : ''}
+        </div>
+    `).join('');
+}
 
-    ["dateInput", "timeInput", "titleInput", "guestsInput", "noteInput"].forEach(id => {
-      $(id).onkeydown = e => { if (e.key === "Enter") save(); };
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('da-DK', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short'
     });
-
-    (function init() {
-      debugLog("Page initialized");
-      debugLog(`Script URL: ${SCRIPT_URL.substring(0, 60)}...`);
-      debugLog(`Valid locations: ${LOCATIONS.join(", ")}`);
-      $("dateInput").value = isoToday();
-      load();
-      setInterval(load, 60000);
-    })();
+}
   </script>
 </body>
 </html>
