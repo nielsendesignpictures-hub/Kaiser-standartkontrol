@@ -1,141 +1,600 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<title>Kaiser Chef Radar</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Manager Alerts</title>
 
-<style>
-.radar-panel{
-  background:#f8f9fa;
-  border:2px solid #007bff;
-  padding:20px;
-  width:380px;
-  border-radius:10px;
-  font-family:Arial;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-.radar-panel h2{
-  margin-top:0;
-  color:#007bff;
-}
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --panel:rgba(255,255,255,0.055);
+      --border:rgba(255,255,255,0.10);
 
-.radar-panel ul{
-  padding-left:20px;
-}
+      --text:rgba(255,255,255,0.94);
+      --muted:rgba(255,255,255,0.74);
+      --muted2:rgba(255,255,255,0.52);
 
-.radar-panel li{
-  margin-bottom:8px;
-  font-weight:bold;
-}
-</style>
+      --gold:#d6b24a;
+      --gold2:#b9921f;
 
+      --danger:#ff6b6b;
+      --warn:#f59e0b;
+      --info:#38bdf8;
+      --ok:#62d26f;
+
+      --shadow: 0 26px 75px rgba(0,0,0,.55);
+      --shadow2: 0 18px 55px rgba(0,0,0,.35);
+    }
+
+    html,body{height:100%;}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      overflow-x:hidden;
+      margin:0;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity:0.06;
+      pointer-events:none;
+      mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
+    }
+
+    .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
+
+    /* HERO */
+    .hero{
+      position:relative;
+      border-radius: 28px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      padding: 26px 20px 18px;
+    }
+    .hero:after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .kicker{
+      position:relative;
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+      text-align:center;
+    }
+    .title{
+      position:relative;
+      font-family:"Playfair Display", serif;
+      font-size:48px;
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      text-align:center;
+      margin-top:10px;
+    }
+    .subtitle{
+      position:relative;
+      text-align:center;
+      margin-top:10px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
+    }
+    .goldline{
+      position:relative;
+      height:2px;
+      margin:18px auto 0;
+      max-width: 680px;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
+      opacity:.95;
+    }
+
+    /* CONTROLS */
+    .controls{
+      position:relative;
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .pill, .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      font-weight:1000;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.86);
+      white-space:nowrap;
+      user-select:none;
+    }
+    .btn{
+      cursor:pointer;
+      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btnPrimary{
+      border:none;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+    }
+    .seg{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .segBtn{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      font-weight:1000;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      user-select:none;
+    }
+    .segBtn.on{
+      border-color: rgba(214,178,74,0.35);
+      background: rgba(214,178,74,0.12);
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
+    }
+
+    /* SECTION */
+    .section{
+      margin-top:18px;
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .sectionHead{
+      padding:16px 16px 12px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      background:
+        radial-gradient(900px 200px at 50% 0%, rgba(255,255,255,0.06), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+    }
+    .sectionTitle{
+      font-weight:1000;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      font-size:12px;
+      color: rgba(255,255,255,0.72);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .sectionTitle .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: rgba(214,178,74,0.85);
+      box-shadow: 0 0 0 5px rgba(214,178,74,0.10);
+      opacity:.95;
+    }
+    .sectionSub{
+      color: rgba(255,255,255,0.55);
+      font-weight:900;
+      font-size:12px;
+    }
+    .divider{height:1px;background:rgba(255,255,255,0.10);}
+
+    /* ALERTS */
+    .list{
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .alertCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      box-shadow: 0 18px 50px rgba(0,0,0,.38);
+      padding:14px;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .sevBar{
+      width:10px;
+      border-radius:999px;
+      flex:0 0 auto;
+      align-self:stretch;
+      opacity:.95;
+    }
+    .sev-high{ background: rgba(255,107,107,0.85); box-shadow: 0 0 0 5px rgba(255,107,107,0.10); }
+    .sev-med { background: rgba(245,158,11,0.90);  box-shadow: 0 0 0 5px rgba(245,158,11,0.10); }
+    .sev-low { background: rgba(56,189,248,0.90);  box-shadow: 0 0 0 5px rgba(56,189,248,0.10); }
+
+    .alertBody{flex:1; min-width:0;}
+    .alertTop{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .alertTitle{
+      font-weight:1000;
+      letter-spacing:-0.01em;
+      font-size:15px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 100%;
+    }
+    .alertMeta{
+      color: rgba(255,255,255,0.60);
+      font-weight:900;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .alertMsg{
+      margin-top:6px;
+      color: rgba(255,255,255,0.80);
+      font-weight:800;
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .badgeRow{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      color: rgba(255,255,255,0.76);
+    }
+    .badgeDot{ width:7px;height:7px;border-radius:999px; background: rgba(214,178,74,0.85); }
+
+    .smallBtn{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.90);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:11px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .smallBtn:active{ transform: translateY(1px); }
+    .smallBtn.done{
+      border-color: rgba(98,210,111,0.30);
+      background: rgba(98,210,111,0.10);
+    }
+
+    .empty{
+      border-radius:22px;
+      border:1px solid rgba(98,210,111,0.22);
+      background: rgba(98,210,111,0.10);
+      padding:14px;
+      margin:14px;
+      display:none;
+    }
+    .emptyTitle{ font-weight:1000; }
+    .emptySub{ margin-top:6px; color: rgba(255,255,255,0.70); font-weight:800; font-size:13px; }
+
+    @media (max-width:520px){
+      .title{font-size:40px;}
+    }
+  </style>
 </head>
+
 <body>
+  <div class="shell w-full">
 
-<div class="radar-panel">
+    <header class="hero mt-6">
+      <div class="kicker">KAISER</div>
+      <div class="title">Manager Alerts</div>
+      <div class="subtitle" id="greetText">—</div>
+      <div class="goldline"></div>
 
-<h2>Godmorgen Stefan</h2>
-<p>3 ting kræver opmærksomhed:</p>
+      <div class="controls">
+        <div class="pill" id="countPill">—</div>
+        <div class="pill" id="updatedPill">—</div>
+        <button class="btn btnPrimary" id="refreshBtn" type="button">Opdater</button>
+        <a class="btn" href="./portal.html" style="text-decoration:none;">Til portal</a>
+      </div>
 
-<ul id="radar-list"></ul>
+      <div class="controls" style="margin-top:10px;">
+        <div class="seg" id="filterSeg">
+          <button class="segBtn on" type="button" data-filter="all">Alle</button>
+          <button class="segBtn" type="button" data-filter="complaints">Klager</button>
+          <button class="segBtn" type="button" data-filter="rating">Rating</button>
+          <button class="segBtn" type="button" data-filter="oos">Udsolgt</button>
+        </div>
+      </div>
+    </header>
 
-</div>
+    <section class="section" aria-label="Alerts">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> Radar</div>
+        <div class="sectionSub">Lav rating < 3 • klager • udsolgt (live)</div>
+      </div>
+      <div class="divider"></div>
 
-<script>
+      <div id="emptyBox" class="empty">
+        <div class="emptyTitle">Ingen alerts.</div>
+        <div class="emptySub">Alt ser stabilt ud lige nu.</div>
+      </div>
 
-const cafes = [
+      <div class="list" id="radarList"></div>
+    </section>
 
-{
-name:"Nørrebro",
-madRating:3.8,
-kitchenPercent:28,
-complaints:2
-},
+  </div>
 
-{
-name:"Østerbro",
-madRating:4.5,
-kitchenPercent:34,
-complaints:1
-},
+  <script>
+    // =========================================================
+    // VIGTIGT: Browseren kan ikke læse din mail (FormSubmit) direkte.
+    // For automatisk data skal vi have en mellemstation (Sheet/Make/Worker).
+    // Denne side er klar til fetch - men kører demo indtil endpoint findes.
+    // =========================================================
 
-{
-name:"Vesterbro",
-madRating:4.2,
-kitchenPercent:29,
-complaints:5
-},
+    const DATA_ENDPOINT = ""; // senere: URL til jeres data (Sheet/Worker)
 
-{
-name:"Hellerup",
-madRating:4.6,
-kitchenPercent:26,
-complaints:0
-},
+    // Regler du bad om:
+    const MIN_RATING = 3.0; // lav rating under 3
 
-{
-name:"Frederiksberg",
-madRating:4.4,
-kitchenPercent:27,
-complaints:1
-}
+    // Lokal "løst"-liste (kun på denne enhed)
+    const DISMISS_KEY = "kaiser_manager_alerts_dismissed_v1";
+    function loadDismissed(){ try { return JSON.parse(localStorage.getItem(DISMISS_KEY) || "{}"); } catch(e){ return {}; } }
+    function saveDismissed(obj){ localStorage.setItem(DISMISS_KEY, JSON.stringify(obj || {})); }
+    let dismissed = loadDismissed();
 
-];
+    const radarList = document.getElementById("radarList");
+    const emptyBox = document.getElementById("emptyBox");
+    const filterSeg = document.getElementById("filterSeg");
 
+    const demo = [
+      { name:"Café Kaiser Helsingør", rating: 2.8, complaints: 4 },
+      { name:"Café Kaiser Hillerød",  rating: 3.6, complaints: 1 },
+      { name:"Café Kaiser Farum",     rating: 3.1, complaints: 5 },
+      { name:"Café Kaiser Hørsholm",  rating: 4.2, complaints: 0 },
+      { name:"Café Kaiser Vanløse",   rating: 2.9, complaints: 2 }
+    ];
 
-let alerts = [];
+    let activeFilter = "all";
+    let lastAlerts = [];
 
-cafes.forEach(cafe => {
+    function nowDK(){
+      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+    function getManagerName(){
+      const p = new URLSearchParams(location.search);
+      const n = (p.get("name") || "").trim();
+      return n || "F&B Manager";
+    }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
 
-if(cafe.madRating < 4){
-alerts.push({
-text: cafe.name + " lav mad rating",
-severity: 3
-});
-}
+    // Byg alerts ud fra cafe-data
+    function runRadar(cafes){
+      const alerts = [];
 
-if(cafe.kitchenPercent > 30){
-alerts.push({
-text: cafe.name + " høj køkken %",
-severity: 2
-});
-}
+      // 1) Udsolgt (live alert hele tiden, indtil vi har data)
+      // (Når udsolgt tool er bygget, erstatter vi denne med rigtig count + liste)
+      alerts.push({
+        id: "oos|live",
+        type: "oos",
+        location: "Udsolgt produkter",
+        message: "LIVE ALERT: Udsolgt-modul er ikke koblet på endnu. (Bygges næste.)",
+        severity: 3,
+        sticky: true
+      });
 
-if(cafe.complaints >= 3){
-alerts.push({
-text: cafe.name + " mange klager",
-severity: 2
-});
-}
+      (cafes || []).forEach(c => {
+        const loc = c.name || "Lokation";
 
-});
+        // 2) Lav rating < 3
+        if (typeof c.rating === "number" && c.rating < MIN_RATING) {
+          alerts.push({
+            id: "rating|" + loc,
+            type: "rating",
+            location: loc,
+            message: "Lav gastronomisk rating: " + c.rating.toFixed(1) + " (grænse < 3.0)",
+            severity: 3
+          });
+        }
 
+        // 3) Gæsteklager (du kan justere grænse senere)
+        if (Number(c.complaints || 0) >= 3) {
+          alerts.push({
+            id: "complaints|" + loc,
+            type: "complaints",
+            location: loc,
+            message: "Mange gæsteklager: " + Number(c.complaints || 0),
+            severity: 2
+          });
+        }
+      });
 
-alerts.sort((a,b)=> b.severity - a.severity);
+      // Fjern "løst" (undtagen sticky live alerts)
+      const filtered = alerts.filter(a => a.sticky || !dismissed[a.id]);
 
-alerts = alerts.slice(0,3);
+      // Sortér severity desc, sticky altid øverst
+      filtered.sort((a,b) => {
+        if (!!a.sticky !== !!b.sticky) return a.sticky ? -1 : 1;
+        return (b.severity||0) - (a.severity||0);
+      });
 
+      lastAlerts = filtered;
+      render();
+    }
 
-const list = document.getElementById("radar-list");
+    function sevMeta(sev){
+      if (sev >= 3) return { cls:"sev-high", label:"Høj" };
+      if (sev === 2) return { cls:"sev-med", label:"Mellem" };
+      return { cls:"sev-low", label:"Lav" };
+    }
 
-alerts.forEach(alert =>{
+    function passesFilter(a){
+      if (activeFilter === "all") return true;
+      return a.type === activeFilter;
+    }
 
-const li = document.createElement("li");
+    function render(){
+      // Filter
+      const visible = lastAlerts.filter(passesFilter);
 
-li.textContent = alert.text;
+      radarList.innerHTML = "";
+      emptyBox.style.display = visible.length ? "none" : "block";
 
-list.appendChild(li);
+      document.getElementById("countPill").textContent =
+        (lastAlerts.length) + " alerts";
 
-});
+      document.getElementById("updatedPill").textContent =
+        "Opdateret: " + nowDK();
 
-</script>
+      visible.forEach(a => {
+        const sev = sevMeta(a.severity || 1);
 
+        const card = document.createElement("div");
+        card.className = "alertCard";
+        card.innerHTML = `
+          <div class="sevBar ${sev.cls}"></div>
+          <div class="alertBody">
+            <div class="alertTop">
+              <div class="alertTitle">${escapeHtml(a.location)}</div>
+              <div class="alertMeta">Severity: ${sev.label}</div>
+            </div>
+            <div class="alertMsg">${escapeHtml(a.message)}</div>
+
+            <div class="badgeRow">
+              <div class="badge"><span class="badgeDot"></span> handling</div>
+              ${a.sticky
+                ? `<div class="badge"><span class="badgeDot"></span> live</div>`
+                : `<button class="smallBtn done" data-id="${escapeHtml(a.id)}" type="button">Marker som løst</button>`
+              }
+            </div>
+          </div>
+        `;
+        radarList.appendChild(card);
+      });
+
+      // Bind buttons
+      radarList.querySelectorAll("button[data-id]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          dismissed[id] = { doneAt: nowDK() };
+          saveDismissed(dismissed);
+          // re-run to apply dismiss
+          runRadar(lastCafes);
+        });
+      });
+    }
+
+    let lastCafes = demo;
+
+    async function fetchCafeData(){
+      // Hvis endpoint ikke findes endnu, kør demo
+      if (!DATA_ENDPOINT) {
+        lastCafes = demo;
+        runRadar(lastCafes);
+        return;
+      }
+
+      try{
+        const res = await fetch(DATA_ENDPOINT, { cache:"no-store" });
+        const data = await res.json();
+
+        // forventet:
+        // { cafes: [ {name, rating, complaints}, ... ] }
+        lastCafes = Array.isArray(data.cafes) ? data.cafes : [];
+        runRadar(lastCafes);
+      } catch(e){
+        console.error(e);
+        lastCafes = demo;
+        runRadar(lastCafes);
+      }
+    }
+
+    // Filter UI
+    filterSeg.querySelectorAll("button[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeFilter = btn.dataset.filter;
+        filterSeg.querySelectorAll(".segBtn").forEach(b => b.classList.toggle("on", b === btn));
+        render();
+      });
+    });
+
+    // Init
+    document.getElementById("greetText").textContent =
+      "Godmorgen " + getManagerName() + " • det her kræver din opmærksomhed";
+
+    document.getElementById("refreshBtn").addEventListener("click", fetchCafeData);
+
+    fetchCafeData();
+    // optional auto refresh
+    // setInterval(fetchCafeData, 60000);
+  </script>
 </body>
 </html>
-
-fetch("/api/cafe-data")
-.then(res => res.json())
-.then(data => {
-cafes = data
-runRadar()
-})
