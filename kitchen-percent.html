@@ -105,12 +105,8 @@
     .sectionSub{color:rgba(255,255,255,0.55);font-weight:900;font-size:12px;}
     .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-    .grid{
-      display:grid;grid-template-columns:1fr;gap:14px;padding:14px;
-    }
-    @media (min-width: 820px){
-      .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
-    }
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;padding:14px;}
+    @media (min-width: 820px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;} }
 
     .card{
       border-radius:26px;padding:16px;border:1px solid rgba(255,255,255,0.12);
@@ -131,15 +127,13 @@
       background:rgba(255,255,255,0.06);padding:12px;outline:none;color:rgba(255,255,255,0.92);font-weight:900;
     }
 
+    select.input{appearance:none;}
     .list{padding:14px;display:flex;flex-direction:column;gap:10px;}
-    .line{
-      border-radius:18px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
-      padding:12px;
-    }
+    .line{border-radius:18px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);padding:12px;}
     .lineTop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline;}
     .lineDate{font-weight:1000;}
     .lineVals{color:rgba(255,255,255,0.70);font-weight:900;font-size:12px;}
-    
+
     .tag{
       display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
       border:1px solid rgba(255,255,255,0.12);background: rgba(255,255,255,0.03);
@@ -169,6 +163,18 @@
 
     <section class="section">
       <div class="sectionHead">
+        <div class="sectionTitle"><span class="dot"></span> Location</div>
+        <div class="sectionSub">Select once per device</div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <select id="locSelect" class="input"></select>
+        <button class="btn primary" id="setLocBtn" type="button">Set location</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
         <div class="sectionTitle"><span class="dot"></span> Overview</div>
         <div class="sectionSub">Month-to-date</div>
       </div>
@@ -179,7 +185,7 @@
           <div class="cardLabel">Kitchen % (MTD)</div>
           <div class="cardValue" id="kpiPct">—</div>
           <div class="cardSub" id="kpiSub">—</div>
-          <div class="tag" id="kpiMtdTag"><span class="miniDot"></span> —</div>
+          <div class="tag" id="kpiTag"><span class="miniDot"></span> —</div>
         </div>
 
         <div class="card">
@@ -217,13 +223,15 @@
   </div>
 
   <script>
-    // VIGTIGT: SÆT DIN RIGTIGE /EXEC URL IND HER!
-    // F.eks: "https://script.google.com/macros/s/AKfycb.../exec"
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeCnIsYirU3iB8rse1dU7HX4HSzG6hxl0vEPstyIy0hLOhje06kXsyO6-DzMYan-u4/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeCnIsYirU3iB8rse1dU7HX4HSzG6hxl0vEPstyIy0hLOhje06kXsyO6-DzMYan-u4/exec";
     const TOKEN = "KAISER_TOKEN_2026";
     const LEADER_CODE = "KAISER2026";
 
-    // 01-03 to 10-03 baseline data
+    const VAT_FACTOR = 1.25;
+
+    const BASELINE_START = "2026-03-01";
+    const BASELINE_END   = "2026-03-10";
+
     const BASELINE_DATA = {
       "Café Kaiser Hillerød":  { revGross: 424048.75, buy: 64582.71 },
       "Café Kaiser Farum":     { revGross: 352679.74, buy: 59115.96 },
@@ -231,8 +239,6 @@
       "Café Kaiser Vanløse":   { revGross: 402930.64, buy: 65871.02 },
       "Café Kaiser Helsingør": { revGross: 293146.85, buy: 43294.36 }
     };
-
-    const VAT_FACTOR = 1.25;
 
     const LOCATIONS = [
       "Café Kaiser Helsingør",
@@ -268,11 +274,11 @@
 
     function fmtDKK(n){
       const val = Number(n || 0);
-      return val.toLocaleString("en-US", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
+      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
     }
     function pctStr(p){
       if (p === null || !isFinite(p)) return "—";
-      return (p*100).toFixed(1) + "%";
+      return (p*100).toFixed(1).replace(".", ",") + "%";
     }
     function parseMoney(input){
       let s = String(input || "").trim().toLowerCase();
@@ -284,30 +290,8 @@
       return isFinite(n) ? n : NaN;
     }
 
-    function getLoc(){
-      const fromQS = new URLSearchParams(location.search).get("loc");
-      if (fromQS && LOCATIONS.includes(fromQS)) {
-        localStorage.setItem(LOC_KEY, fromQS);
-        return fromQS;
-      }
-      const saved = localStorage.getItem(LOC_KEY) || "";
-      if (saved && LOCATIONS.includes(saved)) return saved;
-
-      const pick = prompt("Select location (exact):\n" + LOCATIONS.join("\n"));
-      if (!pick || !LOCATIONS.includes(pick.trim())) return "";
-      localStorage.setItem(LOC_KEY, pick.trim());
-      return pick.trim();
-    }
-
-    // JSONP setup
     function jsonp(url, params){
       return new Promise((resolve, reject) => {
-        // If script url is not set, just return empty data
-        if (!url || url.includes("PASTE_YOUR_EXEC_URL")) {
-            resolve({ok:true, entries:[], totals:{revenueGross:0, purchases:0}});
-            return;
-        }
-
         const cb = "__cb_" + Math.random().toString(16).slice(2);
         const qs = new URLSearchParams({ ...params, callback: cb }).toString();
         const src = url + (url.includes("?") ? "&" : "?") + qs;
@@ -324,77 +308,101 @@
           s.remove();
         }
 
-        window[cb] = (data) => {
-          cleanup();
-          resolve(data);
-        };
-
+        window[cb] = (data) => { cleanup(); resolve(data); };
         s.src = src;
         s.onerror = () => { cleanup(); reject(new Error("load error")); };
         document.body.appendChild(s);
       });
     }
 
+    function setLoc(loc){
+      localStorage.setItem(LOC_KEY, loc);
+      $("locPill").textContent = "Location: " + loc;
+    }
+    function getLoc(){
+      const fromQS = new URLSearchParams(location.search).get("loc");
+      if (fromQS && LOCATIONS.includes(fromQS)) {
+        setLoc(fromQS);
+        return fromQS;
+      }
+      const saved = localStorage.getItem(LOC_KEY) || "";
+      if (saved && LOCATIONS.includes(saved)) return saved;
+      return "";
+    }
+
+    function baselineAlreadyInEntries(entries){
+      // if we find any entry between BASELINE_START..BASELINE_END, assume baseline is in sheet (avoid double count)
+      return (entries || []).some(e => String(e.date||"") >= BASELINE_START && String(e.date||"") <= BASELINE_END);
+    }
+
     async function loadMonth(){
       setError("");
+      const loc = getLoc();
+      if (!loc) {
+        $("locPill").textContent = "Location: —";
+        return;
+      }
+
+      $("locPill").textContent = "Location: " + loc;
+      const m = monthKey(isoToday());
+
       $("saveBtn").textContent = "Loading...";
       $("saveBtn").disabled = true;
 
-      const loc = getLoc();
-      if (!loc) return setError("Location not set.");
+      let data;
+      try{
+        data = await jsonp(SCRIPT_URL, { action:"get", loc: loc, month: m });
+      } catch(e){
+        data = null;
+      }
 
-      const m = monthKey(isoToday());
-      $("locPill").textContent = "Location: " + loc;
-
-      const data = await jsonp(SCRIPT_URL, { action:"get", loc: loc, month: m }).catch(e => null);
-      
       $("saveBtn").textContent = "Save";
       $("saveBtn").disabled = false;
 
-      if (!data || !data.ok) {
-        // If fetching fails, we still show the baseline
-        data = { entries: [], totals: {revenueGross:0, purchases:0} };
-      }
+      if (!data || !data.ok) return setError("Could not load data from Sheet.");
 
-      $("updatedPill").textContent = "Updated: " + new Date().toLocaleTimeString("da-DK", {hour: '2-digit', minute:'2-digit'});
+      $("updatedPill").textContent = "Updated: " + new Date().toLocaleTimeString("da-DK",{hour:"2-digit", minute:"2-digit"});
 
-      // Add baseline
+      const entries = Array.isArray(data.entries) ? data.entries : [];
       const base = BASELINE_DATA[loc] || { revGross: 0, buy: 0 };
-      const totalGross = data.totals.revenueGross + base.revGross;
-      const totalBuy   = data.totals.purchases + base.buy;
-      const totalNet   = totalGross / VAT_FACTOR;
-      const mtdPct     = totalNet > 0 ? (totalBuy / totalNet) : null;
+      const applyBaseline = (m === "2026-03") && !baselineAlreadyInEntries(entries);
+
+      const totalGross = Number(data.totals.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
+      const totalBuy   = Number(data.totals.purchases || 0) + (applyBaseline ? base.buy : 0);
+
+      const totalNet = totalGross / VAT_FACTOR;
+      const mtdPct = totalNet > 0 ? (totalBuy / totalNet) : null;
 
       $("kpiPct").textContent = pctStr(mtdPct);
       $("kpiBuy").textContent = fmtDKK(totalBuy);
-      $("kpiSub").textContent = "Net Revenue: " + fmtDKK(totalNet);
-      $("kpiMtdTag").innerHTML = `<span class="miniDot"></span> Includes baseline from Mar 1-10`;
+      $("kpiSub").textContent = "Net revenue: " + fmtDKK(totalNet);
+      $("kpiTag").innerHTML = `<span class="miniDot"></span> ${applyBaseline ? "Baseline (Mar 1–10) included" : "Live from Sheet"}`;
 
       const list = $("list");
       list.innerHTML = "";
 
-      const entries = (data.entries || []).slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0, 14);
-      if (!entries.length){
+      const last = entries.slice().sort((a,b) => String(b.date||"").localeCompare(String(a.date||""))).slice(0,14);
+      if (!last.length){
         const div = document.createElement("div");
         div.className = "line";
-        div.textContent = "No recent days saved. Only showing baseline data.";
+        div.textContent = applyBaseline ? "No saved days yet. Showing baseline only." : "No saved days yet.";
         list.appendChild(div);
         return;
       }
 
-      for (const e of entries){
-        const net = (e.revenueGross || 0) / VAT_FACTOR;
-        const pct = net > 0 ? (e.purchases / net) : null;
+      for (const e of last){
+        const net = (Number(e.revenueGross||0)) / VAT_FACTOR;
+        const pct = net > 0 ? (Number(e.purchases||0) / net) : null;
 
         const row = document.createElement("div");
         row.className = "line";
-        row.style.cursor = "pointer";
         row.innerHTML = `
           <div class="lineTop">
             <div class="lineDate">${e.date}</div>
             <div class="lineVals">Rev: ${fmtDKK(e.revenueGross)} • Buy: ${fmtDKK(e.purchases)} • ${pctStr(pct)}</div>
           </div>
         `;
+        row.style.cursor = "pointer";
         row.addEventListener("click", () => {
           $("dateInput").value = e.date;
           $("revInput").value = String(Math.round(e.revenueGross || 0));
@@ -407,12 +415,8 @@
 
     async function saveDay(){
       setError("");
-      if(SCRIPT_URL.includes("PASTE_YOUR_EXEC_URL_HERE")) {
-          return alert("You need to paste your Google Apps Script /exec URL into the code first.");
-      }
-
       const loc = getLoc();
-      if (!loc) return setError("Location not set.");
+      if (!loc) return setError("Select location first.");
 
       const date = ($("dateInput").value || "").trim();
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return setError("Date must be YYYY-MM-DD.");
@@ -420,27 +424,31 @@
       const revenueGross = parseMoney($("revInput").value);
       const purchases = parseMoney($("buyInput").value);
 
-      if (!isFinite(revenueGross) || revenueGross < 0) return setError("Revenue must be a valid number.");
-      if (!isFinite(purchases) || purchases < 0) return setError("Purchases must be a valid number.");
+      if (!isFinite(revenueGross) || revenueGross < 0) return setError("Revenue must be a number.");
+      if (!isFinite(purchases) || purchases < 0) return setError("Purchases must be a number.");
 
       $("saveBtn").textContent = "Saving...";
       $("saveBtn").disabled = true;
 
-      const res = await jsonp(SCRIPT_URL, {
-        action:"save",
-        token: TOKEN,
-        loc: loc,
-        date: date,
-        revenueGross: String(revenueGross),
-        purchases: String(purchases)
-      }).catch(e => null);
-
-      if (!res || !res.ok) {
-          $("saveBtn").textContent = "Save";
-          $("saveBtn").disabled = false;
-          return setError("Save failed. Try again.");
+      let res;
+      try{
+        res = await jsonp(SCRIPT_URL, {
+          action:"save",
+          token: TOKEN,
+          loc: loc,
+          date: date,
+          revenueGross: String(revenueGross),
+          purchases: String(purchases)
+        });
+      } catch(e){
+        res = null;
       }
-      
+
+      $("saveBtn").textContent = "Save";
+      $("saveBtn").disabled = false;
+
+      if (!res || !res.ok) return setError("Save failed. (Token mismatch?)");
+
       $("dateInput").value = isoYesterday();
       $("revInput").value = "";
       $("buyInput").value = "";
@@ -451,14 +459,28 @@
 
     $("changeLocBtn").addEventListener("click", () => {
       const code = prompt("Leader code:");
-      if (code !== LEADER_CODE) return alert("Wrong code.");
+      if (!code || code.trim() !== LEADER_CODE) return;
       localStorage.removeItem(LOC_KEY);
       location.reload();
     });
 
+    // Build location dropdown
     (function init(){
+      const sel = $("locSelect");
+      sel.innerHTML = `<option value="">Select location…</option>` + LOCATIONS.map(l => `<option>${l}</option>`).join("");
+      const current = getLoc();
+      if (current) sel.value = current;
+
+      $("setLocBtn").addEventListener("click", () => {
+        const v = sel.value || "";
+        if (!v) return setError("Select a location.");
+        setLoc(v);
+        loadMonth();
+      });
+
       $("dateInput").value = isoYesterday();
-      loadMonth();
+      if (current) loadMonth();
+      else setError("Select location to start.");
     })();
   </script>
 </body>
