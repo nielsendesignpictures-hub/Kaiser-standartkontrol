@@ -11,7 +11,6 @@
 
   <style>
     :root{
-      /* LYSERE FARVER */
       --bg0:#0d1117;
       --bg1:#161b22;
       --bg2:#21262d;
@@ -48,9 +47,25 @@
       opacity:0.08; pointer-events:none;
     }
 
+    /* Alarm flash overlay */
+    .alarmFlash{
+      position:fixed;
+      inset:0;
+      background:rgba(255,107,107,0.3);
+      pointer-events:none;
+      z-index:9999;
+      animation: flashAnim 0.5s ease-in-out infinite;
+      display:none;
+    }
+    .alarmFlash.active{display:block;}
+    @keyframes flashAnim{
+      0%, 100%{opacity:0;}
+      50%{opacity:1;}
+    }
+
     .shell{max-width:1400px; margin:0 auto; padding:18px 16px 44px;}
 
-    /* GAMLE HERO HEADER */
+    /* HERO HEADER */
     .hero{
       border-radius: 28px;
       border:1px solid rgba(255,255,255,0.12);
@@ -90,8 +105,9 @@
     .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
     .btn.ghost{background:rgba(255,255,255,0.08);}
     .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
+    .btn.danger{background:rgba(255,107,107,0.20);border-color:rgba(255,107,107,0.40);color:var(--danger);}
 
-    /* Toggleable Clock */
+    /* Clock */
     .clockWrap{position:relative;z-index:1;margin-top:16px;text-align:center;display:none;}
     .clockWrap.show{display:block;}
     .clockTime{font-family:"Playfair Display",serif;font-size:72px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
@@ -111,8 +127,7 @@
     .widget{
       border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       padding:16px;
       position:relative;
     }
@@ -204,6 +219,16 @@
       transition:all .15s;
     }
     .tCard:hover{border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
+    .tCard.alarming{
+      border-color:rgba(255,107,107,0.60);
+      background:linear-gradient(180deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05));
+      animation: cardPulse 1s ease-in-out infinite;
+    }
+    @keyframes cardPulse{
+      0%, 100%{box-shadow: 0 0 0 0 rgba(255,107,107,0.4);}
+      50%{box-shadow: 0 0 20px 10px rgba(255,107,107,0.2);}
+    }
+
     .tName{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:70px;}
     .tTime{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;margin-top:6px;}
     .tMeta{font-size:12px;color:var(--muted);margin-top:6px;}
@@ -215,6 +240,11 @@
     .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
     .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
     .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
+    .tTag.alarm{background:rgba(255,107,107,0.30);border:1px solid rgba(255,107,107,0.50);color:#fff;animation: tagBlink 0.5s infinite;}
+    @keyframes tagBlink{
+      0%, 100%{opacity:1;}
+      50%{opacity:0.5;}
+    }
     
     .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
     .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
@@ -263,9 +293,12 @@
 </head>
 
 <body>
+  <!-- Alarm Flash Overlay -->
+  <div class="alarmFlash" id="alarmFlash"></div>
+
   <div class="shell">
 
-    <!-- GAMLE HERO HEADER -->
+    <!-- HERO HEADER -->
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Kitchen Hub</div>
@@ -275,6 +308,8 @@
       <div class="controls">
         <div class="pill" id="locPill">📍 Location: —</div>
         <button class="btn ghost" id="clockToggle">🕐 Show Clock</button>
+        <button class="btn ghost" id="soundToggle">🔔 Sound ON</button>
+        <button class="btn ghost" id="testSoundBtn">🔊 Test</button>
         <button class="btn ghost" id="fsBtn">⛶ Fullscreen</button>
         <button class="btn ghost" id="wakeBtn">☀️ Keep Awake</button>
       </div>
@@ -415,11 +450,13 @@
     const LOC_KEY = "kaiser_kitchenpct_loc";
     const TIMER_KEY = "kaiser_3timer_v1_1";
     const CLOCK_KEY = "kaiser_clock_visible";
+    const SOUND_KEY = "kaiser_sound_enabled";
+    const ALARM_TRIGGERED_KEY = "kaiser_alarm_triggered";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const SHORT_DURATION_MS = 30 * 60 * 1000;
+    const WARN_15_MS = 15 * 60 * 1000; // 15 minutter alarm
     const WARN_30_MS = 30 * 60 * 1000;
-    const WARN_10_MS = 10 * 60 * 1000;
 
     const BASELINE_DATA = {
       "Café Kaiser Hillerød": { revGross: 424048.75, buy: 64582.71 },
@@ -512,6 +549,151 @@
         s.onerror = () => { cleanup(); reject(new Error("load error")); };
         document.body.appendChild(s);
       });
+    }
+
+    // ============================================================
+    // SOUND & VIBRATION ALARM SYSTEM
+    // ============================================================
+    let audioContext = null;
+    let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
+    let alarmTriggered = new Set(JSON.parse(localStorage.getItem(ALARM_TRIGGERED_KEY) || "[]"));
+    let currentlyAlarming = new Set();
+
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioContext;
+    }
+
+    function playAlarmSound() {
+      if (!soundEnabled) return;
+      
+      try {
+        const ctx = initAudio();
+        
+        // Spil 5 høje bip
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            oscillator.frequency.value = 880; // Høj tone (A5)
+            oscillator.type = "square"; // Skarp lyd
+            
+            gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.3);
+          }, i * 400);
+        }
+      } catch (e) {
+        console.log("Audio error:", e);
+      }
+    }
+
+    function playUrgentAlarm() {
+      if (!soundEnabled) return;
+      
+      try {
+        const ctx = initAudio();
+        
+        // Meget høj og gentagende alarm
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            
+            // Alternerende høj/lav for sirene effekt
+            oscillator.frequency.value = i % 2 === 0 ? 1000 : 800;
+            oscillator.type = "square";
+            
+            gainNode.gain.setValueAtTime(0.7, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+            
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.2);
+          }, i * 250);
+        }
+      } catch (e) {
+        console.log("Audio error:", e);
+      }
+    }
+
+    function vibrate() {
+      if (navigator.vibrate) {
+        // Vibrer i mønster: vibrer 500ms, pause 200ms, gentag 5 gange
+        navigator.vibrate([500, 200, 500, 200, 500, 200, 500, 200, 500]);
+      }
+    }
+
+    function triggerAlarm(timerId, timerName) {
+      if (alarmTriggered.has(timerId)) return;
+      
+      // Marker som triggered
+      alarmTriggered.add(timerId);
+      currentlyAlarming.add(timerId);
+      localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
+      
+      // Spil lyd
+      playUrgentAlarm();
+      
+      // Vibrer
+      vibrate();
+      
+      // Vis flash
+      $("alarmFlash").classList.add("active");
+      
+      // Stop flash efter 5 sekunder
+      setTimeout(() => {
+        $("alarmFlash").classList.remove("active");
+      }, 5000);
+      
+      // Vis notification hvis muligt
+      if (Notification.permission === "granted") {
+        new Notification("⏰ KAISER TIMER ALARM!", {
+          body: `${timerName} - kun 15 minutter tilbage!`,
+          icon: "🚨",
+          requireInteraction: true
+        });
+      }
+    }
+
+    function dismissAlarm(timerId) {
+      currentlyAlarming.delete(timerId);
+      $("alarmFlash").classList.remove("active");
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      localStorage.setItem(SOUND_KEY, soundEnabled);
+      updateSoundUI();
+    }
+
+    function updateSoundUI() {
+      $("soundToggle").textContent = soundEnabled ? "🔔 Sound ON" : "🔕 Sound OFF";
+      $("soundToggle").classList.toggle("on", soundEnabled);
+    }
+
+    function testSound() {
+      // Aktiver audio context ved user interaction
+      initAudio();
+      playAlarmSound();
+      vibrate();
+    }
+
+    // Request notification permission
+    function requestNotificationPermission() {
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
     }
 
     // ============================================================
@@ -652,6 +834,10 @@
         $("textInput").focus();
         return;
       }
+      
+      // Aktiver audio ved user interaction
+      initAudio();
+      
       const timers = loadTimers();
       timers.push({
         id: uid(),
@@ -665,19 +851,39 @@
       renderTimers();
     }
 
-    // STOP/REMOVE TIMER - virker for alle timers
     function stopTimer(id) {
       if (confirm("Stop this timer?")) {
+        // Fjern fra alarm tracking
+        alarmTriggered.delete(id);
+        currentlyAlarming.delete(id);
+        localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
+        
         saveTimers(loadTimers().filter(t => t.id !== id));
         renderTimers();
+        
+        // Stop flash hvis ingen flere alarmer
+        if (currentlyAlarming.size === 0) {
+          $("alarmFlash").classList.remove("active");
+        }
       }
     }
 
     function clearExpired() {
       const active = loadTimers().filter(t => (t.expiresAt || 0) > now());
       const removed = loadTimers().length - active.length;
+      
+      // Ryd alarm tracking for removed timers
+      loadTimers().forEach(t => {
+        if ((t.expiresAt || 0) <= now()) {
+          alarmTriggered.delete(t.id);
+          currentlyAlarming.delete(t.id);
+        }
+      });
+      localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
+      
       saveTimers(active);
       renderTimers();
+      
       if (removed > 0) {
         alert(`Removed ${removed} expired timer(s)`);
       }
@@ -686,7 +892,7 @@
     function timerState(t) {
       const left = (t.expiresAt || 0) - now();
       if (left <= 0) return "exp";
-      if (left <= WARN_10_MS) return "warn";
+      if (left <= WARN_15_MS) return "alarm"; // 15 min = alarm!
       if (left <= WARN_30_MS) return "warn";
       return "ok";
     }
@@ -709,20 +915,46 @@
         return;
       }
 
+      // Check for alarms
+      timers.forEach(t => {
+        const left = (t.expiresAt || 0) - now();
+        if (left > 0 && left <= WARN_15_MS && !alarmTriggered.has(t.id)) {
+          triggerAlarm(t.id, t.name);
+        }
+      });
+
       list.innerHTML = timers.map(t => {
         const left = (t.expiresAt || 0) - now();
         const st = timerState(t);
         const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
-        const tagText = st === "exp" ? "EXPIRED" : (left <= WARN_10_MS ? "⚠️ 10 MIN" : (left <= WARN_30_MS ? "⚠️ 30 MIN" : "✓ OK"));
+        
+        let tagText, tagClass;
+        if (st === "exp") {
+          tagText = "EXPIRED";
+          tagClass = "exp";
+        } else if (st === "alarm") {
+          tagText = "🚨 15 MIN!";
+          tagClass = "alarm";
+        } else if (st === "warn") {
+          tagText = "⚠️ 30 MIN";
+          tagClass = "warn";
+        } else {
+          tagText = "✓ OK";
+          tagClass = "ok";
+        }
+
+        const isAlarming = currentlyAlarming.has(t.id);
+        const cardClass = isAlarming ? "tCard alarming" : "tCard";
 
         return `
-          <div class="tCard">
-            <div class="tTag ${st}">${tagText}</div>
+          <div class="${cardClass}">
+            <div class="tTag ${tagClass}">${tagText}</div>
             <div class="tName">${escapeHtml(t.name)}</div>
             <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
             <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
-            <div class="barWrap"><div class="barFill ${st === 'exp' ? 'exp' : st === 'warn' ? 'warn' : ''}" style="width:${st === 'exp' ? 100 : pct}%"></div></div>
+            <div class="barWrap"><div class="barFill ${st === 'exp' ? 'exp' : (st === 'alarm' || st === 'warn') ? 'warn' : ''}" style="width:${st === 'exp' ? 100 : pct}%"></div></div>
             <div class="tActions">
+              ${isAlarming ? `<button class="smallBtn danger" onclick="dismissAlarm('${t.id}')">🔕 Dismiss</button>` : ''}
               <button class="smallBtn danger" onclick="stopTimer('${t.id}')">🛑 Stop</button>
             </div>
           </div>
@@ -730,8 +962,9 @@
       }).join('');
     }
 
-    // Make stopTimer global for onclick
+    // Make functions global for onclick
     window.stopTimer = stopTimer;
+    window.dismissAlarm = dismissAlarm;
 
     // ============================================================
     // COLLAPSIBLE SECTIONS
@@ -819,6 +1052,8 @@
     $("refreshCBtn").onclick = loadCateringMini;
 
     $("clockToggle").onclick = toggleClock;
+    $("soundToggle").onclick = toggleSound;
+    $("testSoundBtn").onclick = testSound;
     $("fsBtn").onclick = toggleFullscreen;
     $("wakeBtn").onclick = toggleWakeLock;
 
@@ -842,6 +1077,12 @@
       // Clock
       updateClockUI();
       updateClock();
+
+      // Sound
+      updateSoundUI();
+
+      // Request notification permission
+      requestNotificationPermission();
 
       // Timer UI
       updateTplUI();
