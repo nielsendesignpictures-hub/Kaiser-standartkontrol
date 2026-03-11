@@ -1,852 +1,1093 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Hub – Kaiser</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0a0e17;
-            --bg2: #0f1420;
-            --card: rgba(255,255,255,0.04);
-            --card-hover: rgba(255,255,255,0.07);
-            --border: rgba(255,255,255,0.08);
-            --text: #ffffff;
-            --text-muted: rgba(255,255,255,0.6);
-            --text-muted2: rgba(255,255,255,0.4);
-            --gold: #d4af37;
-            --gold-dim: rgba(212,175,55,0.15);
-            --accent: #3b82f6;
-            --green: #22c55e;
-            --red: #ef4444;
-            --orange: #f97316;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitchen Hub – Kaiser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    :root {
+      --bg: #05070a;
+      --card: rgba(255,255,255,0.03);
+      --card-hover: rgba(255,255,255,0.055);
+      --border: rgba(255,255,255,0.06);
+      --text: #fff;
+      --text-muted: rgba(255,255,255,0.5);
+      --gold: #bfa14a;
+      --gold-glow: rgba(191,161,74,0.25);
+      --green: #2ed47a;
+      --red: #ff5c5c;
+      --orange: #ffaa00;
+      --radius: 18px;
+      --header-height: 70px;
+    }
 
-        /* ===== HEADER ===== */
-        .header {
-            background: var(--bg2);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    html, body { height: 100%; }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
 
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 18px;
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            background: var(--gold);
-            color: var(--bg);
-            border-color: var(--gold);
-        }
+    /* ───────── HEADER ───────── */
+    header {
+      height: var(--header-height);
+      background: linear-gradient(135deg, rgba(30,30,30,0.85), rgba(20,20,20,0.85));
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .header-title h1 {
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .header-title p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--gold);
+    }
 
-        .location-badge {
-            background: linear-gradient(135deg, var(--gold), #b8960c);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    .logo img {
+      height: 38px;
+      border-radius: 10px;
+    }
 
-        /* ===== MAIN LAYOUT ===== */
-        .main {
-            padding: 24px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
 
-        /* ===== 3-TIMERS SECTION (TOP) ===== */
-        .timer-section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
 
-        .timer-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-        .timer-header h2 {
-            font-size: 16px;
-            font-weight: 700;
-            flex: 1;
-        }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
 
-        .timers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
 
-        .timer-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
+    #clock {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
 
-        .timer-card.warning {
-            border-color: var(--orange);
-            background: rgba(249, 115, 22, 0.1);
-        }
-        .timer-card.danger {
-            border-color: var(--red);
-            background: rgba(239, 68, 68, 0.1);
-            animation: pulse-danger 1s infinite;
-        }
+    .back-link {
+      font-size: 0.78rem;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 7px 16px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
 
-        @keyframes pulse-danger {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
+    .back-link:hover {
+      background: var(--gold);
+      color: #000;
+    }
 
-        .timer-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
+    /* ───────── MAIN GRID ───────── */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 22px;
+      padding: 22px 28px 28px;
+      overflow: auto;
+    }
 
-        .timer-display {
-            font-size: 36px;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            color: var(--text);
-        }
-        .timer-card.warning .timer-display { color: var(--orange); }
-        .timer-card.danger .timer-display { color: var(--red); }
+    @media (max-width: 1100px) {
+      main { grid-template-columns: 1fr; }
+    }
 
-        .timer-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            justify-content: center;
-        }
+    /* ───────── 3-TIMERS (FULL WIDTH TOP) ───────── */
+    .timers-bar {
+      grid-column: 1 / -1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      overflow-x: auto;
+    }
 
-        .timer-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .timer-btn.start { background: var(--green); color: #fff; }
-        .timer-btn.stop { background: var(--red); color: #fff; }
-        .timer-btn.reset { background: var(--card); color: var(--text-muted); border: 1px solid var(--border); }
+    .timers-bar h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
 
-        /* ===== WIDGETS ROW ===== */
-        .widgets-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
+    .timer-group {
+      display: flex;
+      gap: 16px;
+      flex: 1;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        @media (max-width: 900px) {
-            .widgets-row { grid-template-columns: 1fr; }
-        }
+    .timer-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 22px;
+      min-width: 150px;
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
 
-        .widget {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-        }
+    .timer-box.warning {
+      border-color: var(--orange);
+      box-shadow: 0 0 18px rgba(255,170,0,0.25);
+    }
 
-        .widget-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        .widget-header h3 {
-            font-size: 14px;
-            font-weight: 700;
-            flex: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .widget-header .refresh-btn {
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: all 0.3s;
-        }
-        .widget-header .refresh-btn:hover {
-            opacity: 1;
-            transform: rotate(180deg);
-        }
+    .timer-box.danger {
+      border-color: var(--red);
+      box-shadow: 0 0 22px rgba(255,92,92,0.35);
+      animation: shake 0.4s infinite;
+    }
 
-        /* Catering Widget */
-        #cateringList {
-            max-height: 300px;
-            overflow-y: auto;
-        }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
 
-        .catering-item {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 10px;
-        }
-        .catering-item:last-child { margin-bottom: 0; }
+    .timer-box .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
 
-        .catering-date {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-        .catering-date.today { color: var(--red); }
-        .catering-date.tomorrow { color: var(--orange); }
+    .timer-box .time {
+      font-size: 1.65rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
 
-        .catering-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
+    .timer-box.warning .time { color: var(--orange); }
+    .timer-box.danger .time { color: var(--red); }
 
-        .catering-info {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+    .timer-box .controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
 
-        .catering-note {
-            font-size: 11px;
-            color: var(--text-muted2);
-            background: rgba(0,0,0,0.2);
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-top: 8px;
-            line-height: 1.5;
-        }
+    .timer-box .controls button {
+      font-size: 0.7rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.15s;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
+    .timer-box .controls button:active { transform: scale(0.94); }
 
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-start { background: var(--green); color: #000; }
+    .btn-pause { background: var(--orange); color: #000; }
+    .btn-reset { background: var(--card-hover); color: var(--text-muted); border: 1px solid var(--border) !important; }
 
-        /* Kitchen % Widget */
-        .kitchen-percent-display {
-            text-align: center;
-            padding: 20px;
-        }
-        .kitchen-percent-value {
-            font-size: 56px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--gold), var(--green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .kitchen-percent-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
+    .add-timer-btn {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.15s;
+    }
 
-        /* ===== TABS SECTION ===== */
-        .tabs-section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
+    .add-timer-btn:hover { transform: scale(1.04); }
 
-        .tabs-header {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-        }
+    /* ───────── PANELS ───────── */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 340px;
+      max-height: 520px;
+    }
 
-        .tab-btn {
-            flex: 1;
-            padding: 16px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .tab-btn:hover { background: var(--card-hover); }
-        .tab-btn.active {
-            color: var(--gold);
-            background: var(--gold-dim);
-            border-bottom: 2px solid var(--gold);
-        }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
 
-        .tab-content {
-            display: none;
-            padding: 24px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .tab-content.active { display: block; }
+    .panel-header .icon { font-size: 1.1rem; }
 
-        /* Todo & Cleaning Lists */
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-        }
-        .task-item:hover { background: var(--card-hover); }
-        .task-item:last-child { margin-bottom: 0; }
+    .panel-header .refresh-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
 
-        .task-checkbox {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .task-checkbox.checked {
-            background: var(--green);
-            border-color: var(--green);
-        }
-        .task-checkbox.checked::after {
-            content: '✓';
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-        }
+    .panel-header .refresh-btn:hover {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
 
-        .task-text {
-            flex: 1;
-            font-size: 14px;
-        }
-        .task-item.completed .task-text {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
+    .panel-body {
+      flex: 1;
+      padding: 18px 20px;
+      overflow-y: auto;
+    }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    /* ───────── WIDGET: CATERING ───────── */
+    .catering-item {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: background 0.2s, transform 0.2s;
+    }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
-            .main { padding: 16px; }
-            .timer-section, .widget, .tabs-section { padding: 16px; }
-            .timer-display { font-size: 28px; }
-            .kitchen-percent-value { font-size: 42px; }
-        }
-    </style>
+    .catering-item:hover {
+      background: rgba(255,255,255,0.045);
+      transform: translateX(4px);
+    }
+
+    .catering-item:last-child { margin-bottom: 0; }
+
+    .catering-date {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .catering-date.today { color: var(--red); }
+    .catering-date.tomorrow { color: var(--orange); }
+
+    .catering-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .catering-info {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .catering-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.25);
+      border-left: 3px solid var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ───────── WIDGET: KITCHEN % ───────── */
+    .kitchen-percent-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    .percent-ring {
+      position: relative;
+      width: 160px;
+      height: 160px;
+    }
+
+    .percent-ring svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .percent-ring circle {
+      fill: none;
+      stroke-width: 12;
+    }
+
+    .percent-ring .bg { stroke: var(--border); }
+
+    .percent-ring .fill {
+      stroke: var(--gold);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+
+    .percent-ring .value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 800;
+    }
+
+    .percent-label {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .percent-link {
+      margin-top: 16px;
+      color: var(--gold);
+      font-size: 0.78rem;
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 8px 18px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .percent-link:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    /* ───────── TABS PANEL ───────── */
+    .tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover { background: var(--card-hover); }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: rgba(191,161,74,0.08);
+    }
+
+    .tab-content {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px;
+    }
+
+    .tab-content.active { display: block; }
+
+    /* ───────── TASK ITEMS ───────── */
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: background 0.2s;
+    }
+
+    .task-item:hover { background: var(--card-hover); }
+    .task-item:last-child { margin-bottom: 0; }
+
+    .task-checkbox {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .task-checkbox:hover { border-color: var(--gold); }
+
+    .task-checkbox.checked {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .task-checkbox.checked::after {
+      content: '✓';
+      color: #000;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 0.88rem;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* ───────── SCROLLBAR ───────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ───────── MOBILE ───────── */
+    @media (max-width: 700px) {
+      header { padding: 0 16px; }
+      main { padding: 14px; gap: 14px; }
+      .timers-bar { padding: 14px; gap: 14px; flex-wrap: wrap; }
+      .timer-box { min-width: 120px; padding: 12px 16px; }
+      .timer-box .time { font-size: 1.3rem; }
+      .panel { min-height: 280px; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-left">
-            <a href="portal.html" class="back-btn">←</a>
-            <div class="header-title">
-                <h1>👨‍🍳 Kitchen Hub</h1>
-                <p>Køkkenets kommandocentral</p>
-            </div>
+  <!-- ════════════ HEADER ════════════ -->
+  <header>
+    <div class="logo">
+      <span>👨‍🍳</span>
+      <span>Kitchen Hub</span>
+    </div>
+    <div class="header-center">
+      <span class="live-dot"></span>
+      <span id="locationName">Indlæser...</span>
+    </div>
+    <div class="header-right">
+      <span id="clock">--:--</span>
+      <a href="portal.html" class="back-link">← Portal</a>
+    </div>
+  </header>
+
+  <!-- ════════════ MAIN ════════════ -->
+  <main>
+
+    <!-- ───────── 3-TIMERS BAR ───────── -->
+    <section class="timers-bar">
+      <h2>⏰ 3-Timers</h2>
+      <div class="timer-group" id="timerGroup">
+        <!-- Timers rendered by JS -->
+      </div>
+      <button class="add-timer-btn" onclick="addTimer()">+ Tilføj</button>
+    </section>
+
+    <!-- ───────── LEFT: CATERING ───────── -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="icon">🎉</span>
+        Kommende Catering
+        <button class="refresh-btn" onclick="loadCatering()" title="Opdater">🔄</button>
+      </div>
+      <div class="panel-body" id="cateringList">
+        <div class="empty-state">
+          <div class="spinner"></div>
+          <span>Henter catering...</span>
         </div>
-        <div class="location-badge" id="locationBadge">📍 <span id="locationName">Indlæser...</span></div>
-    </header>
+      </div>
+    </div>
 
-    <!-- MAIN -->
-    <main class="main">
-
-        <!-- 3-TIMERS SECTION -->
-        <section class="timer-section">
-            <div class="timer-header">
-                <span>⏰</span>
-                <h2>3-Timers Regel</h2>
-            </div>
-            <div class="timers-grid" id="timersGrid">
-                <!-- Timers generated by JS -->
-            </div>
-            <div style="text-align: center; margin-top: 16px;">
-                <button class="timer-btn reset" onclick="addTimer()">+ Tilføj Timer</button>
-            </div>
-        </section>
-
-        <!-- WIDGETS ROW -->
-        <div class="widgets-row">
-            
-            <!-- CATERING WIDGET -->
-            <div class="widget">
-                <div class="widget-header">
-                    <span>🎉</span>
-                    <h3>Kommende Catering</h3>
-                    <button class="refresh-btn" onclick="loadCatering()">🔄</button>
-                </div>
-                <div id="cateringList">
-                    <div class="empty-state"><span class="spinner"></span> Henter...</div>
-                </div>
-            </div>
-
-            <!-- KITCHEN % WIDGET -->
-            <div class="widget">
-                <div class="widget-header">
-                    <span>📈</span>
-                    <h3>Kitchen %</h3>
-                </div>
-                <div class="kitchen-percent-display">
-                    <div class="kitchen-percent-value" id="kitchenPercent">--</div>
-                    <div class="kitchen-percent-label">Dagens kitchen procent</div>
-                </div>
-                <div style="text-align: center; margin-top: 12px;">
-                    <a href="kitchen-percent.html" style="color: var(--gold); font-size: 13px;">Åbn beregner →</a>
-                </div>
-            </div>
-
+    <!-- ───────── RIGHT: KITCHEN % ───────── -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="icon">📈</span>
+        Kitchen Procent
+      </div>
+      <div class="panel-body">
+        <div class="kitchen-percent-widget">
+          <div class="percent-ring">
+            <svg viewBox="0 0 100 100">
+              <circle class="bg" cx="50" cy="50" r="42"></circle>
+              <circle class="fill" id="percentCircle" cx="50" cy="50" r="42" 
+                      stroke-dasharray="264" stroke-dashoffset="264"></circle>
+            </svg>
+            <div class="value" id="percentValue">--%</div>
+          </div>
+          <div class="percent-label">Dagens Kitchen %</div>
+          <a href="kitchen-percent.html" class="percent-link">Åbn beregner →</a>
         </div>
+      </div>
+    </div>
 
-        <!-- TABS SECTION -->
-        <section class="tabs-section">
-            <div class="tabs-header">
-                <button class="tab-btn active" onclick="switchTab('todo', this)">📋 Todo</button>
-                <button class="tab-btn" onclick="switchTab('cleaning', this)">🧹 Rengøring</button>
-            </div>
+    <!-- ───────── LEFT: TODO / CLEANING TABS ───────── -->
+    <div class="panel" style="grid-column: 1 / -1;">
+      <div class="tabs-header">
+        <button class="tab-btn active" onclick="switchTab('todo', this)">📋 Daglige Opgaver</button>
+        <button class="tab-btn" onclick="switchTab('cleaning', this)">🧹 Rengøring</button>
+      </div>
+      <div class="tab-content active" id="todoTab">
+        <div id="todoList"></div>
+      </div>
+      <div class="tab-content" id="cleaningTab">
+        <div id="cleaningList"></div>
+      </div>
+    </div>
 
-            <!-- TODO TAB -->
-            <div class="tab-content active" id="todoTab">
-                <div id="todoList"></div>
-            </div>
+  </main>
 
-            <!-- CLEANING TAB -->
-            <div class="tab-content" id="cleaningTab">
-                <div id="cleaningList"></div>
-            </div>
-        </section>
+  <!-- ════════════ ALARM SOUND ════════════ -->
+  <audio id="alarmSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRl9vT19teleXQVZFZm10IBAAAAABAAEA..." type="audio/wav">
+  </audio>
 
-    </main>
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════════════════════════
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
 
-    <!-- ALARM SOUND -->
-    <audio id="alarmSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onq2tqYmAd3NucHWAjJmenZaIgXt3dnuDjJSamZKJgXt3d3yFjpWZlpCHf3t3eX+Ij5SXlI+GgHt4eoCHjpOVko+HgHt5e4GHjZKUkY2GgHt6e4GGi5CSkI2FgHt7fIKGi4+Qjo2FgHt7fIKGio6PjYuEf3t7fIGFiY2OjIuEf3t8fYGFiIyNi4qDf3t8fYCEh4uMioqDfnt9foCEhomKiYmCfnt9fn+Dhoha" type="audio/wav">
-    </audio>
+    const LOCATIONS = {
+      'helsingor': 'Café Kaiser Helsingør',
+      'helsingør': 'Café Kaiser Helsingør',
+      'hillerod': 'Café Kaiser Hillerød',
+      'hillerød': 'Café Kaiser Hillerød',
+      'farum': 'Café Kaiser Farum',
+      'horsholm': 'Café Kaiser Hørsholm',
+      'hørsholm': 'Café Kaiser Hørsholm',
+      'vanlose': 'Café Kaiser Vanløse',
+      'vanløse': 'Café Kaiser Vanløse'
+    };
 
-    <script>
-        // ===== CONFIGURATION =====
-        const API_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
+    const TODO_ITEMS = [
+      'Tjek køleskabstemperaturer',
+      'Gennemgå dagens catering',
+      'Mise en place klar',
+      'Tjek lagerbeholdning',
+      'Klargør saucer og tilbehør',
+      'Rengør arbejdsstation'
+    ];
 
-        const LOCATIONS = {
-            'helsingor': 'Helsingør', 'helsingør': 'Helsingør',
-            'hillerod': 'Hillerød', 'hillerød': 'Hillerød',
-            'farum': 'Farum',
-            'horsholm': 'Hørsholm', 'hørsholm': 'Hørsholm',
-            'vanlose': 'Vanløse', 'vanløse': 'Vanløse'
-        };
+    const CLEANING_ITEMS = [
+      'Rengør komfur og ovn',
+      'Aftør alle flader',
+      'Tøm og rengør friture',
+      'Vask gulve',
+      'Rengør køleskabe',
+      'Tøm skraldespande',
+      'Rengør opvasker',
+      'Organiser tørvarer'
+    ];
 
-        const TODO_ITEMS = [
-            'Tjek køleskabstemperaturer',
-            'Gennemgå dagens catering ordrer',
-            'Klargør mise en place',
-            'Tjek lagerbeholdning',
-            'Rengør arbejdsstationer',
-            'Forbered sauce og tilbehør'
-        ];
+    // ═══════════════════════════════════════════════════════════
+    // HELPERS
+    // ═══════════════════════════════════════════════════════════
+    function getUrlParam(param) {
+      return new URLSearchParams(window.location.search).get(param) || '';
+    }
 
-        const CLEANING_ITEMS = [
-            'Rengør komfur og ovn',
-            'Aftør alle arbejdsflader',
-            'Tøm og rengør friture',
-            'Vask gulve',
-            'Rengør køleskabe indvendigt',
-            'Tøm skraldespande',
-            'Rengør opvaskemaskine',
-            'Aftør hylder og reoler'
-        ];
+    function getCurrentLocation() {
+      return getUrlParam('loc').toLowerCase();
+    }
 
-        // ===== HELPERS =====
-        function getUrlParam(param) {
-            return new URLSearchParams(window.location.search).get(param) || '';
+    function getLocationKey() {
+      return getCurrentLocation() || 'default';
+    }
+
+    function getLocationDisplayName() {
+      const loc = getCurrentLocation();
+      return LOCATIONS[loc] || 'Vælg lokation';
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // JSONP Fetch for Google Apps Script
+    function jsonpFetch(url) {
+      return new Promise((resolve, reject) => {
+        const callbackName = 'cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        const script = document.createElement('script');
+        const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 12000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          delete window[callbackName];
+          if (script.parentNode) script.parentNode.removeChild(script);
         }
 
-        function getCurrentLocation() {
-            return getUrlParam('loc').toLowerCase();
-        }
+        window[callbackName] = (data) => { cleanup(); resolve(data); };
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
+        script.onerror = () => { cleanup(); reject(new Error('Script error')); };
+        document.body.appendChild(script);
+      });
+    }
 
-        function getLocationDisplayName() {
-            const loc = getCurrentLocation();
-            return LOCATIONS[loc] ? `Café Kaiser ${LOCATIONS[loc]}` : 'Vælg lokation';
-        }
+    // ═══════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('locationName').textContent = getLocationDisplayName();
+      
+      updateClock();
+      setInterval(updateClock, 1000);
+      
+      initTimers();
+      loadCatering();
+      loadKitchenPercent();
+      renderTodoList();
+      renderCleaningList();
+      
+      // Auto-refresh catering every 60 seconds
+      setInterval(loadCatering, 60000);
+    });
 
-        // JSONP Fetch
-        function jsonpFetch(url) {
-            return new Promise((resolve, reject) => {
-                const callbackName = 'cb_' + Date.now() + Math.random().toString(36).substr(2, 5);
-                const script = document.createElement('script');
-                const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 10000);
+    // ═══════════════════════════════════════════════════════════
+    // CLOCK
+    // ═══════════════════════════════════════════════════════════
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
 
-                function cleanup() {
-                    clearTimeout(timeout);
-                    delete window[callbackName];
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                }
+    // ═══════════════════════════════════════════════════════════
+    // 3-TIMERS
+    // ═══════════════════════════════════════════════════════════
+    let timers = [];
+    let timerIntervals = {};
 
-                window[callbackName] = (data) => { cleanup(); resolve(data); };
-                script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
-                script.onerror = () => { cleanup(); reject(new Error('Load error')); };
-                document.body.appendChild(script);
-            });
-        }
-
-        // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('locationName').textContent = getLocationDisplayName();
-            initTimers();
-            loadCatering();
-            loadKitchenPercent();
-            renderTodoList();
-            renderCleaningList();
-            setInterval(loadCatering, 60000);
+    function initTimers() {
+      const saved = localStorage.getItem('kt_timers_' + getLocationKey());
+      if (saved) {
+        timers = JSON.parse(saved);
+        // Restart running timers
+        timers.forEach(t => {
+          if (t.running) {
+            t.running = false;
+            startTimer(t.id);
+          }
         });
+      } else {
+        timers = [
+          { id: 1, label: 'Timer 1', seconds: 10800, running: false },
+          { id: 2, label: 'Timer 2', seconds: 10800, running: false }
+        ];
+      }
+      renderTimers();
+    }
 
-        // ===== TIMERS =====
-        let timers = [];
-        let timerIntervals = {};
+    function saveTimers() {
+      localStorage.setItem('kt_timers_' + getLocationKey(), JSON.stringify(timers));
+    }
 
-        function initTimers() {
-            const saved = localStorage.getItem('kitchenTimers_' + getCurrentLocation());
-            if (saved) {
-                timers = JSON.parse(saved);
-            } else {
-                timers = [
-                    { id: 1, label: 'Timer 1', seconds: 10800, running: false },
-                    { id: 2, label: 'Timer 2', seconds: 10800, running: false }
-                ];
-            }
-            renderTimers();
+    function renderTimers() {
+      const container = document.getElementById('timerGroup');
+      container.innerHTML = timers.map(t => {
+        let statusClass = '';
+        if (t.seconds <= 0) statusClass = 'danger';
+        else if (t.seconds <= 900) statusClass = 'danger';  // 15 min
+        else if (t.seconds <= 1800) statusClass = 'warning'; // 30 min
+
+        return `
+          <div class="timer-box ${statusClass}" id="timer-${t.id}">
+            <div class="label">${t.label}</div>
+            <div class="time">${formatTime(t.seconds)}</div>
+            <div class="controls">
+              ${t.running
+                ? `<button class="btn-pause" onclick="pauseTimer(${t.id})">Pause</button>`
+                : `<button class="btn-start" onclick="startTimer(${t.id})">Start</button>`
+              }
+              <button class="btn-reset" onclick="resetTimer(${t.id})">Reset</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatTime(secs) {
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer(id) {
+      const timer = timers.find(t => t.id === id);
+      if (!timer || timer.running) return;
+      
+      timer.running = true;
+      saveTimers();
+      renderTimers();
+
+      timerIntervals[id] = setInterval(() => {
+        timer.seconds--;
+        
+        // Alarm ved 15 min tilbage
+        if (timer.seconds === 900) {
+          playAlarm();
         }
-
-        function saveTimers() {
-            localStorage.setItem('kitchenTimers_' + getCurrentLocation(), JSON.stringify(timers));
+        
+        // Alarm ved 0
+        if (timer.seconds <= 0) {
+          timer.seconds = 0;
+          pauseTimer(id);
+          playAlarm();
         }
+        
+        saveTimers();
+        renderTimers();
+      }, 1000);
+    }
 
-        function renderTimers() {
-            const grid = document.getElementById('timersGrid');
-            grid.innerHTML = timers.map(t => {
-                let status = '';
-                if (t.seconds <= 0) status = 'danger';
-                else if (t.seconds <= 900) status = 'danger';
-                else if (t.seconds <= 1800) status = 'warning';
+    function pauseTimer(id) {
+      const timer = timers.find(t => t.id === id);
+      if (!timer) return;
+      
+      timer.running = false;
+      if (timerIntervals[id]) {
+        clearInterval(timerIntervals[id]);
+        delete timerIntervals[id];
+      }
+      saveTimers();
+      renderTimers();
+    }
 
-                return `
-                    <div class="timer-card ${status}" id="timer-${t.id}">
-                        <div class="timer-label">${t.label}</div>
-                        <div class="timer-display">${formatTime(t.seconds)}</div>
-                        <div class="timer-buttons">
-                            ${t.running 
-                                ? `<button class="timer-btn stop" onclick="stopTimer(${t.id})">Stop</button>`
-                                : `<button class="timer-btn start" onclick="startTimer(${t.id})">Start</button>`
-                            }
-                            <button class="timer-btn reset" onclick="resetTimer(${t.id})">Reset</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+    function resetTimer(id) {
+      pauseTimer(id);
+      const timer = timers.find(t => t.id === id);
+      if (timer) {
+        timer.seconds = 10800; // 3 hours
+      }
+      saveTimers();
+      renderTimers();
+    }
+
+    function addTimer() {
+      const newId = timers.length > 0 ? Math.max(...timers.map(t => t.id)) + 1 : 1;
+      timers.push({
+        id: newId,
+        label: `Timer ${newId}`,
+        seconds: 10800,
+        running: false
+      });
+      saveTimers();
+      renderTimers();
+    }
+
+    function playAlarm() {
+      // Try to play sound
+      try {
+        const audio = document.getElementById('alarmSound');
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
         }
+      } catch (e) {}
+      
+      // Also try notification
+      if (Notification.permission === 'granted') {
+        new Notification('⏰ Timer Alert!', { body: '15 minutter tilbage!' });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    }
 
-        function formatTime(seconds) {
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            const s = seconds % 60;
-            return `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    // ═══════════════════════════════════════════════════════════
+    // CATERING (Google Sheets)
+    // ═══════════════════════════════════════════════════════════
+    async function loadCatering() {
+      const container = document.getElementById('cateringList');
+      const currentLoc = getCurrentLocation();
+
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="spinner"></div>
+          <span>Henter catering...</span>
+        </div>
+      `;
+
+      try {
+        const data = await jsonpFetch(API_URL + '?action=get');
+
+        if (data.ok && data.events) {
+          let events = data.events;
+
+          // Filter by location
+          if (currentLoc) {
+            events = events.filter(e => {
+              if (!e.location) return false;
+              const loc = e.location.toLowerCase();
+              return loc.includes(currentLoc) || currentLoc.includes(loc);
+            });
+          }
+
+          // Filter out past events
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          events = events.filter(e => new Date(e.date) >= today);
+
+          // Sort by date
+          events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+          // Render max 5
+          renderCatering(events.slice(0, 5));
+        } else {
+          throw new Error(data.error || 'Ukendt fejl');
         }
+      } catch (error) {
+        console.error('Catering error:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <span>⚠️ Kunne ikke hente catering</span>
+            <span style="font-size: 0.75rem; opacity: 0.6;">Klik 🔄 for at prøve igen</span>
+          </div>
+        `;
+      }
+    }
 
-        function startTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (!timer || timer.running) return;
-            timer.running = true;
-            saveTimers();
-            renderTimers();
+    function renderCatering(events) {
+      const container = document.getElementById('cateringList');
 
-            timerIntervals[id] = setInterval(() => {
-                timer.seconds--;
-                if (timer.seconds <= 900 && timer.seconds % 60 === 0) {
-                    playAlarm();
-                }
-                if (timer.seconds <= 0) {
-                    timer.seconds = 0;
-                    stopTimer(id);
-                    playAlarm();
-                }
-                saveTimers();
-                renderTimers();
-            }, 1000);
-        }
+      if (events.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <span>🎉</span>
+            <span>Ingen kommende catering</span>
+          </div>
+        `;
+        return;
+      }
 
-        function stopTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (!timer) return;
-            timer.running = false;
-            if (timerIntervals[id]) {
-                clearInterval(timerIntervals[id]);
-                delete timerIntervals[id];
-            }
-            saveTimers();
-            renderTimers();
-        }
+      container.innerHTML = events.map(e => {
+        const dateInfo = getCateringDateClass(e.date);
+        return `
+          <div class="catering-item">
+            <div class="catering-date ${dateInfo.class}">${dateInfo.text} kl. ${e.time || '--:--'}</div>
+            <div class="catering-title">${escapeHtml(e.title) || 'Uden titel'}</div>
+            <div class="catering-info">👥 ${e.guests || '?'} gæster</div>
+            ${e.note ? `<div class="catering-note">${escapeHtml(e.note)}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
 
-        function resetTimer(id) {
-            stopTimer(id);
-            const timer = timers.find(t => t.id === id);
-            if (timer) timer.seconds = 10800;
-            saveTimers();
-            renderTimers();
-        }
+    function getCateringDateClass(dateStr) {
+      const date = new Date(dateStr);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const diff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
 
-        function addTimer() {
-            const newId = Math.max(...timers.map(t => t.id), 0) + 1;
-            timers.push({ id: newId, label: `Timer ${newId}`, seconds: 10800, running: false });
-            saveTimers();
-            renderTimers();
-        }
+      if (diff === 0) return { text: '🔴 I DAG', class: 'today' };
+      if (diff === 1) return { text: '🟡 I MORGEN', class: 'tomorrow' };
 
-        function playAlarm() {
-            const audio = document.getElementById('alarmSound');
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(() => {});
-            }
-        }
+      const days = ['Søn', 'Man', 'Tirs', 'Ons', 'Tors', 'Fre', 'Lør'];
+      const months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+      return {
+        text: `📅 ${days[date.getDay()]} ${date.getDate()}. ${months[date.getMonth()]}`,
+        class: ''
+      };
+    }
 
-        // ===== CATERING =====
-        async function loadCatering() {
-            const container = document.getElementById('cateringList');
-            const currentLoc = getCurrentLocation();
+    // ═══════════════════════════════════════════════════════════
+    // KITCHEN PERCENT
+    // ═══════════════════════════════════════════════════════════
+    function loadKitchenPercent() {
+      const saved = localStorage.getItem('kp_today_' + getLocationKey());
+      
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          const today = new Date().toDateString();
+          if (data.date === today && data.percent !== undefined) {
+            setKitchenPercent(data.percent);
+            return;
+          }
+        } catch (e) {}
+      }
+      
+      setKitchenPercent(null);
+    }
 
-            container.innerHTML = '<div class="empty-state"><span class="spinner"></span> Henter catering...</div>';
+    function setKitchenPercent(percent) {
+      const circle = document.getElementById('percentCircle');
+      const valueEl = document.getElementById('percentValue');
+      const circumference = 264; // 2 * PI * 42
 
-            try {
-                const data = await jsonpFetch(API_URL + '?action=get');
+      if (percent === null || percent === undefined) {
+        valueEl.textContent = '--%';
+        circle.style.strokeDashoffset = circumference;
+        return;
+      }
 
-                if (data.ok && data.events) {
-                    let events = data.events;
+      const p = Math.min(100, Math.max(0, percent));
+      const offset = circumference - (p / 100) * circumference;
+      
+      circle.style.strokeDashoffset = offset;
+      valueEl.textContent = p.toFixed(1) + '%';
 
-                    if (currentLoc) {
-                        events = events.filter(e => {
-                            if (!e.location) return false;
-                            const loc = e.location.toLowerCase();
-                            return loc.includes(currentLoc) || currentLoc.includes(loc);
-                        });
-                    }
+      // Color based on percentage
+      if (p < 28) {
+        circle.style.stroke = '#2ed47a'; // Green - good
+      } else if (p <= 32) {
+        circle.style.stroke = '#bfa14a'; // Gold - ok
+      } else {
+        circle.style.stroke = '#ff5c5c'; // Red - bad
+      }
+    }
 
-                    const today = new Date();
-                    today.setHours(0,0,0,0);
-                    events = events.filter(e => new Date(e.date) >= today);
-                    events.sort((a,b) => new Date(a.date) - new Date(b.date));
+    // ═══════════════════════════════════════════════════════════
+    // TABS
+    // ═══════════════════════════════════════════════════════════
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(tabId + 'Tab').classList.add('active');
+    }
 
-                    renderCatering(events.slice(0, 5));
-                } else {
-                    throw new Error(data.error || 'Fejl');
-                }
-            } catch (error) {
-                console.error('Catering error:', error);
-                container.innerHTML = '<div class="empty-state">⚠️ Kunne ikke hente catering</div>';
-            }
-        }
+    // ═══════════════════════════════════════════════════════════
+    // TODO LIST
+    // ═══════════════════════════════════════════════════════════
+    function renderTodoList() {
+      const container = document.getElementById('todoList');
+      const saved = JSON.parse(localStorage.getItem('kt_todo_' + getLocationKey()) || '{}');
 
-        function renderCatering(events) {
-            const container = document.getElementById('cateringList');
+      container.innerHTML = TODO_ITEMS.map((item, i) => {
+        const checked = saved[i] || false;
+        return `
+          <div class="task-item ${checked ? 'completed' : ''}">
+            <div class="task-checkbox ${checked ? 'checked' : ''}" onclick="toggleTodo(${i})"></div>
+            <div class="task-text">${item}</div>
+          </div>
+        `;
+      }).join('');
+    }
 
-            if (events.length === 0) {
-                container.innerHTML = '<div class="empty-state">🎉 Ingen kommende catering</div>';
-                return;
-            }
+    function toggleTodo(index) {
+      const saved = JSON.parse(localStorage.getItem('kt_todo_' + getLocationKey()) || '{}');
+      saved[index] = !saved[index];
+      localStorage.setItem('kt_todo_' + getLocationKey(), JSON.stringify(saved));
+      renderTodoList();
+    }
 
-            container.innerHTML = events.map(e => {
-                const dateClass = getDateClass(e.date);
-                return `
-                    <div class="catering-item">
-                        <div class="catering-date ${dateClass.class}">${dateClass.text} kl. ${e.time || '--:--'}</div>
-                        <div class="catering-title">${escapeHtml(e.title) || 'Ingen titel'}</div>
-                        <div class="catering-info">👥 ${e.guests || '?'} gæster</div>
-                        ${e.note ? `<div class="catering-note">${escapeHtml(e.note)}</div>` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
+    // ═══════════════════════════════════════════════════════════
+    // CLEANING LIST
+    // ═══════════════════════════════════════════════════════════
+    function renderCleaningList() {
+      const container = document.getElementById('cleaningList');
+      const saved = JSON.parse(localStorage.getItem('kt_cleaning_' + getLocationKey()) || '{}');
 
-        function getDateClass(dateStr) {
-            const date = new Date(dateStr);
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const diff = Math.floor((date - today) / (1000*60*60*24));
+      container.innerHTML = CLEANING_ITEMS.map((item, i) => {
+        const checked = saved[i] || false;
+        return `
+          <div class="task-item ${checked ? 'completed' : ''}">
+            <div class="task-checkbox ${checked ? 'checked' : ''}" onclick="toggleCleaning(${i})"></div>
+            <div class="task-text">${item}</div>
+          </div>
+        `;
+      }).join('');
+    }
 
-            if (diff === 0) return { text: '🔴 I DAG', class: 'today' };
-            if (diff === 1) return { text: '🟡 I MORGEN', class: 'tomorrow' };
-            
-            const days = ['Søn','Man','Tirs','Ons','Tors','Fre','Lør'];
-            const months = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
-            return { text: `📅 ${days[date.getDay()]} ${date.getDate()}. ${months[date.getMonth()]}`, class: '' };
-        }
-
-        // ===== KITCHEN % =====
-        function loadKitchenPercent() {
-            const saved = localStorage.getItem('kitchenPercentToday_' + getCurrentLocation());
-            if (saved) {
-                const data = JSON.parse(saved);
-                if (data.date === new Date().toDateString()) {
-                    document.getElementById('kitchenPercent').textContent = data.percent + '%';
-                    return;
-                }
-            }
-            document.getElementById('kitchenPercent').textContent = '--';
-        }
-
-        // ===== TABS =====
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById(tabId + 'Tab').classList.add('active');
-        }
-
-        // ===== TODO LIST =====
-        function renderTodoList() {
-            const container = document.getElementById('todoList');
-            const saved = JSON.parse(localStorage.getItem('kitchenTodo_' + getCurrentLocation()) || '{}');
-
-            container.innerHTML = TODO_ITEMS.map((item, i) => {
-                const checked = saved[i] || false;
-                return `
-                    <div class="task-item ${checked ? 'completed' : ''}">
-                        <div class="task-checkbox ${checked ? 'checked' : ''}" onclick="toggleTodo(${i})"></div>
-                        <div class="task-text">${item}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function toggleTodo(index) {
-            const saved = JSON.parse(localStorage.getItem('kitchenTodo_' + getCurrentLocation()) || '{}');
-            saved[index] = !saved[index];
-            localStorage.setItem('kitchenTodo_' + getCurrentLocation(), JSON.stringify(saved));
-            renderTodoList();
-        }
-
-        // ===== CLEANING LIST =====
-        function renderCleaningList() {
-            const container = document.getElementById('cleaningList');
-            const saved = JSON.parse(localStorage.getItem('kitchenCleaning_' + getCurrentLocation()) || '{}');
-
-            container.innerHTML = CLEANING_ITEMS.map((item, i) => {
-                const checked = saved[i] || false;
-                return `
-                    <div class="task-item ${checked ? 'completed' : ''}">
-                        <div class="task-checkbox ${checked ? 'checked' : ''}" onclick="toggleCleaning(${i})"></div>
-                        <div class="task-text">${item}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function toggleCleaning(index) {
-            const saved = JSON.parse(localStorage.getItem('kitchenCleaning_' + getCurrentLocation()) || '{}');
-            saved[index] = !saved[index];
-            localStorage.setItem('kitchenCleaning_' + getCurrentLocation(), JSON.stringify(saved));
-            renderCleaningList();
-        }
-
-        // ===== HELPERS =====
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>
+    function toggleCleaning(index) {
+      const saved = JSON.parse(localStorage.getItem('kt_cleaning_' + getLocationKey()) || '{}');
+      saved[index] = !saved[index];
+      localStorage.setItem('kt_cleaning_' + getLocationKey(), JSON.stringify(saved));
+      renderCleaningList();
+    }
+  </script>
 </body>
 </html>
