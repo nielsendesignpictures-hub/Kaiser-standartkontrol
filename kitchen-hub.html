@@ -11,14 +11,20 @@
 
   <style>
     :root{
-      --bg0:#070A12; --bg1:#0B1020;
-      --text:rgba(255,255,255,0.94);
-      --muted:rgba(255,255,255,0.74);
-      --muted2:rgba(255,255,255,0.52);
-      --gold:#d6b24a; --gold2:#b9921f;
-      --danger:#ff6b6b; --warn:#f59e0b; --ok:#62d26f;
-      --shadow: 0 26px 75px rgba(0,0,0,.55);
-      --shadow2: 0 18px 55px rgba(0,0,0,.35);
+      /* LYSERE FARVER */
+      --bg0:#0d1117;
+      --bg1:#161b22;
+      --bg2:#21262d;
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.80);
+      --muted2:rgba(255,255,255,0.60);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --danger:#ff6b6b;
+      --warn:#f59e0b;
+      --ok:#62d26f;
+      --shadow: 0 20px 60px rgba(0,0,0,.40);
+      --shadow2: 0 12px 40px rgba(0,0,0,.30);
     }
 
     *{box-sizing:border-box;}
@@ -27,238 +33,250 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
       overflow-x:hidden;
     }
     body:before{
       content:""; position:fixed; inset:0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 38px 38px;
-      opacity:0.06; pointer-events:none;
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity:0.08; pointer-events:none;
     }
 
     .shell{max-width:1400px; margin:0 auto; padding:18px 16px 44px;}
 
-    /* Hero */
+    /* GAMLE HERO HEADER */
     .hero{
       border-radius: 28px;
-      border:1px solid rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.12);
       background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow: var(--shadow);
-      padding: 18px;
+      padding: 22px 18px 16px;
       position:relative; overflow:hidden;
     }
     .hero:after{
       content:""; position:absolute; inset:-2px;
       background:
-        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.18), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.14), transparent 60%);
-      opacity:.55; pointer-events:none;
+        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
+      opacity:.6; pointer-events:none;
     }
 
-    .heroTop{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;position:relative;z-index:1;}
-    .heroLeft{display:flex;align-items:center;gap:14px;}
-    .logo{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;letter-spacing:-0.02em;}
-    .logoSub{font-size:11px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:0.15em;}
+    .kicker{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;text-align:center;position:relative;z-index:1;}
+    .title{font-family:"Playfair Display",serif;font-size:clamp(32px,8vw,48px);line-height:1.02;letter-spacing:-0.02em;font-weight:700;text-align:center;margin-top:8px;position:relative;z-index:1;}
+    .subtitle{color:var(--muted);font-weight:700;font-size:14px;text-align:center;margin-top:8px;position:relative;z-index:1;}
+    .goldline{height:2px;margin:16px auto 0;max-width:720px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(214,178,74,0.95),transparent);position:relative;z-index:1;}
 
-    .heroRight{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .controls{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;z-index:1;}
+    
     .pill,.btn{
       display:inline-flex;align-items:center;justify-content:center;gap:6px;
-      padding:8px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.04);
-      font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:10px;
-      color: rgba(255,255,255,0.90);white-space:nowrap;user-select:none;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:11px;
+      color: rgba(255,255,255,0.92);white-space:nowrap;user-select:none;
     }
     .btn{cursor:pointer;transition:all .15s ease;}
-    .btn:hover{background:rgba(255,255,255,0.08);}
+    .btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25);}
     .btn:active{transform:translateY(1px);}
     .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
-    .btn.ghost{background:rgba(255,255,255,0.06);}
-    .btn.sm{padding:6px 10px;font-size:9px;}
+    .btn.ghost{background:rgba(255,255,255,0.08);}
+    .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
 
-    /* Clock */
-    .clockWrap{position:relative;z-index:1;margin-top:12px;text-align:center;display:none;}
+    /* Toggleable Clock */
+    .clockWrap{position:relative;z-index:1;margin-top:16px;text-align:center;display:none;}
     .clockWrap.show{display:block;}
-    .clockTime{font-family:"Playfair Display",serif;font-size:64px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
-    .clockDate{font-size:14px;font-weight:600;color:var(--muted);margin-top:4px;}
+    .clockTime{font-family:"Playfair Display",serif;font-size:72px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
+    .clockDate{font-size:16px;font-weight:600;color:var(--muted);margin-top:6px;}
 
     /* Mini widgets grid */
     .widgetGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:14px;
-      margin-top:14px;
+      margin-top:16px;
     }
     @media (max-width: 700px){
       .widgetGrid{grid-template-columns:1fr;}
     }
 
     .widget{
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.03);
-      padding:14px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      padding:16px;
       position:relative;
     }
-    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
-    .widgetTitle{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);display:flex;align-items:center;gap:8px;}
+    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+    .widgetTitle{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:flex;align-items:center;gap:8px;}
     .widgetDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
 
     /* Kitchen % mini */
-    .kPctBig{font-family:"Playfair Display",serif;font-size:42px;font-weight:700;line-height:1;}
-    .kPctSub{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px;}
+    .kPctBig{font-family:"Playfair Display",serif;font-size:48px;font-weight:700;line-height:1;}
+    .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
 
     /* Catering mini */
-    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:150px;overflow:auto;}
+    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:160px;overflow:auto;}
     .cMiniEvent{
       display:flex;align-items:center;gap:10px;
-      padding:10px;border-radius:12px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);
+      padding:12px;border-radius:14px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+      transition:all .15s;
     }
-    .cMiniBar{width:4px;height:36px;border-radius:4px;}
+    .cMiniEvent:hover{background:rgba(255,255,255,0.08);}
+    .cMiniBar{width:5px;height:40px;border-radius:4px;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
     .cMiniBar.red{background:var(--danger);}
     .cMiniBar.gray{background:rgba(255,255,255,0.3);}
     .cMiniInfo{flex:1;min-width:0;}
-    .cMiniTitle{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .cMiniMeta{font-size:11px;color:var(--muted);margin-top:2px;}
-    .cMiniEmpty{text-align:center;padding:20px;color:var(--muted2);font-size:12px;}
+    .cMiniTitle{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .cMiniMeta{font-size:12px;color:var(--muted);margin-top:3px;}
+    .cMiniEmpty{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
 
     /* Section */
     .section{
-      margin-top:14px;
+      margin-top:16px;
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
       overflow:hidden;
     }
     .sectionHead{
-      padding:12px 14px;
+      padding:14px 16px;
       display:flex;align-items:center;justify-content:space-between;gap:10px;
-      background:rgba(255,255,255,0.02);
+      background:rgba(255,255,255,0.03);
       cursor:pointer;
       user-select:none;
       transition:background .15s;
     }
-    .sectionHead:hover{background:rgba(255,255,255,0.04);}
-    .sectionTitle{font-weight:800;letter-spacing:.15em;text-transform:uppercase;font-size:11px;color:rgba(255,255,255,0.72);display:flex;align-items:center;gap:8px;}
-    .sectionDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+    .sectionHead:hover{background:rgba(255,255,255,0.06);}
+    .sectionTitle{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px;}
+    .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
+    .sectionRight{display:flex;align-items:center;gap:10px;}
+    .sectionCount{font-size:12px;font-weight:700;color:var(--gold);}
     .sectionArrow{font-size:14px;transition:transform .2s;color:var(--muted);}
     .sectionArrow.open{transform:rotate(180deg);}
-    .sectionBody{display:none;padding:14px;}
+    .sectionBody{display:none;padding:16px;}
     .sectionBody.open{display:block;}
-    .divider{height:1px;background:rgba(255,255,255,0.08);}
+    .divider{height:1px;background:rgba(255,255,255,0.10);}
 
     /* Timer */
-    .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+    .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
     .segBtn{
-      padding:8px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.86);
-      font-weight:700;font-size:10px;letter-spacing:.10em;text-transform:uppercase;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.90);
+      font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
       cursor:pointer;transition:all .15s;
     }
-    .segBtn:hover{background:rgba(255,255,255,0.08);}
-    .segBtn.on{border-color:rgba(214,178,74,0.35);background:rgba(214,178,74,0.12);}
+    .segBtn:hover{background:rgba(255,255,255,0.10);}
+    .segBtn.on{border-color:rgba(214,178,74,0.40);background:rgba(214,178,74,0.15);color:var(--gold);}
 
     .input{
-      flex:1;min-width:150px;border-radius:12px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);padding:10px 12px;outline:none;color:rgba(255,255,255,0.92);
-      font-weight:600;font-size:13px;
+      flex:1;min-width:150px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.08);padding:12px 14px;outline:none;color:var(--text);
+      font-weight:600;font-size:14px;transition:all .15s;
     }
-    .input:focus{border-color:var(--gold);}
+    .input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+    .input::placeholder{color:rgba(255,255,255,0.45);}
 
-    .timerList{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+    .timerList{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;}
+    .timerList::-webkit-scrollbar{height:6px;}
+    .timerList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
+
     .tCard{
-      flex:0 0 auto;width:280px;
-      border-radius:18px;border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      padding:12px;position:relative;
+      flex:0 0 auto;width:300px;
+      border-radius:20px;border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      padding:14px;position:relative;
+      transition:all .15s;
     }
-    .tName{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:60px;}
-    .tTime{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;margin-top:4px;}
-    .tMeta{font-size:11px;color:var(--muted);margin-top:4px;}
+    .tCard:hover{border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
+    .tName{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:70px;}
+    .tTime{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;margin-top:6px;}
+    .tMeta{font-size:12px;color:var(--muted);margin-top:6px;}
     .tTag{
-      position:absolute;top:10px;right:10px;
-      padding:6px 8px;border-radius:999px;
-      font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+      position:absolute;top:12px;right:12px;
+      padding:6px 10px;border-radius:999px;
+      font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
     }
-    .tTag.ok{background:rgba(98,210,111,0.15);border:1px solid rgba(98,210,111,0.30);color:var(--ok);}
-    .tTag.warn{background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.30);color:var(--warn);}
-    .tTag.exp{background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.30);color:var(--danger);}
-    .barWrap{margin-top:8px;height:6px;border-radius:999px;background:rgba(255,255,255,0.08);overflow:hidden;}
+    .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
+    .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
+    .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
+    
+    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
     .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
     .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
     .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
-    .tActions{margin-top:8px;display:flex;justify-content:flex-end;}
+    
+    .tActions{margin-top:10px;display:flex;gap:8px;justify-content:flex-end;}
     .smallBtn{
-      padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.85);
-      font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+      padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);
+      font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
       cursor:pointer;transition:all .15s;
     }
-    .smallBtn:hover{background:rgba(255,255,255,0.10);}
-    .smallBtn.danger{border-color:rgba(255,107,107,0.30);background:rgba(255,107,107,0.12);}
+    .smallBtn:hover{background:rgba(255,255,255,0.12);}
+    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
+    .smallBtn.danger:hover{background:rgba(255,107,107,0.25);}
 
     /* Tools dropdown */
     .toolsGrid{
       display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
-      gap:10px;
+      grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+      gap:12px;
     }
     .toolItem{
-      padding:14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.03);
+      padding:16px;border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
       cursor:pointer;transition:all .15s;
-      display:flex;align-items:center;gap:12px;
+      display:flex;align-items:center;gap:14px;
     }
-    .toolItem:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.18);transform:translateY(-2px);}
-    .toolIcon{font-size:24px;}
+    .toolItem:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
+    .toolIcon{font-size:28px;}
     .toolInfo{flex:1;}
-    .toolName{font-weight:700;font-size:14px;}
-    .toolDesc{font-size:11px;color:var(--muted);margin-top:2px;}
+    .toolName{font-weight:700;font-size:15px;}
+    .toolDesc{font-size:12px;color:var(--muted);margin-top:3px;}
 
     /* Tool viewer */
-    .toolViewer{display:none;margin-top:14px;}
+    .toolViewer{display:none;margin-top:16px;}
     .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px;}
-    .frame{width:100%;height:70vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.3);}
+    .toolBar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .frame{width:100%;height:70vh;border:1px solid rgba(255,255,255,0.12);border-radius:20px;background:rgba(0,0,0,0.25);}
 
-    .emptyState{text-align:center;padding:20px;color:var(--muted2);}
-    .errBox{padding:10px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:10px;font-weight:600;font-size:12px;display:none;}
+    .emptyState{text-align:center;padding:30px;color:var(--muted2);font-size:13px;}
+    .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:600;font-size:13px;display:none;margin-top:10px;}
   </style>
 </head>
 
 <body>
   <div class="shell">
 
-    <!-- Hero Header -->
+    <!-- GAMLE HERO HEADER -->
     <header class="hero">
-      <div class="heroTop">
-        <div class="heroLeft">
-          <div>
-            <div class="logo">Kaiser</div>
-            <div class="logoSub">Kitchen Hub</div>
-          </div>
-        </div>
-        <div class="heroRight">
-          <div class="pill" id="locPill">📍 —</div>
-          <button class="btn ghost sm" id="clockToggle">🕐 Clock</button>
-          <button class="btn ghost sm" id="fsBtn">⛶ Full</button>
-          <button class="btn ghost sm" id="wakeBtn">☀️ Awake</button>
-        </div>
+      <div class="kicker">KAISER</div>
+      <div class="title">Kitchen Hub</div>
+      <div class="subtitle">One screen for all kitchen tools</div>
+      <div class="goldline"></div>
+
+      <div class="controls">
+        <div class="pill" id="locPill">📍 Location: —</div>
+        <button class="btn ghost" id="clockToggle">🕐 Show Clock</button>
+        <button class="btn ghost" id="fsBtn">⛶ Fullscreen</button>
+        <button class="btn ghost" id="wakeBtn">☀️ Keep Awake</button>
       </div>
 
       <!-- Toggleable Clock -->
@@ -274,7 +292,7 @@
       <div class="widget">
         <div class="widgetHead">
           <div class="widgetTitle"><span class="widgetDot"></span> Kitchen %</div>
-          <button class="btn sm ghost" id="refreshKBtn">🔄</button>
+          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshKBtn">🔄 Refresh</button>
         </div>
         <div class="kPctBig" id="kPct">—</div>
         <div class="kPctSub" id="kMeta">Loading...</div>
@@ -284,8 +302,8 @@
       <!-- Catering Mini -->
       <div class="widget">
         <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot"></span> Catering</div>
-          <button class="btn sm ghost" id="refreshCBtn">🔄</button>
+          <div class="widgetTitle"><span class="widgetDot"></span> Catering Events</div>
+          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshCBtn">🔄 Refresh</button>
         </div>
         <div class="cMiniList" id="cMiniList">
           <div class="cMiniEmpty">Loading...</div>
@@ -296,24 +314,27 @@
     <!-- 3-Hour Timer (Collapsible) -->
     <section class="section">
       <div class="sectionHead" id="timerHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> 3-Hour Timer <span id="timerCount" style="color:var(--gold);margin-left:6px;">(0)</span></div>
-        <span class="sectionArrow" id="timerArrow">▼</span>
+        <div class="sectionTitle"><span class="sectionDot"></span> 3-Hour Timer</div>
+        <div class="sectionRight">
+          <span class="sectionCount" id="timerCount">0 active</span>
+          <span class="sectionArrow open" id="timerArrow">▼</span>
+        </div>
       </div>
       <div class="divider"></div>
       <div class="sectionBody open" id="timerBody">
         <div class="timerRow" id="tplRow">
           <button class="segBtn on" data-tpl="Bacon">🥓 Bacon</button>
           <button class="segBtn" data-tpl="Pancakes">🥞 Pancakes</button>
-          <button class="segBtn" data-tpl="Free text">✏️ Free</button>
+          <button class="segBtn" data-tpl="Free text">✏️ Free text</button>
         </div>
         <div class="timerRow">
-          <input id="textInput" class="input" placeholder="Optional note..." />
-          <button class="btn primary" id="start3hBtn">⏰ 3h</button>
-          <button class="btn ghost" id="start30Btn">⏰ 30m</button>
-          <button class="btn ghost" id="clearExpBtn">🗑️ Clear</button>
+          <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
+          <button class="btn primary" id="start3hBtn">⏰ Start 3h</button>
+          <button class="btn ghost" id="start30Btn">⏰ Start 30m</button>
+          <button class="btn ghost" id="clearExpBtn">🗑️ Clear Expired</button>
         </div>
         <div class="timerList" id="timerList">
-          <div class="emptyState">No active timers</div>
+          <div class="emptyState">No active timers — start one above</div>
         </div>
       </div>
     </section>
@@ -322,7 +343,9 @@
     <section class="section">
       <div class="sectionHead" id="toolsHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Quick Tools</div>
-        <span class="sectionArrow" id="toolsArrow">▼</span>
+        <div class="sectionRight">
+          <span class="sectionArrow" id="toolsArrow">▼</span>
+        </div>
       </div>
       <div class="divider"></div>
       <div class="sectionBody" id="toolsBody">
@@ -331,21 +354,21 @@
             <div class="toolIcon">📋</div>
             <div class="toolInfo">
               <div class="toolName">MIS</div>
-              <div class="toolDesc">Mise en place</div>
+              <div class="toolDesc">Mise en place overview</div>
             </div>
           </div>
           <div class="toolItem" data-url="./cleaning-kitchen.html">
             <div class="toolIcon">✨</div>
             <div class="toolInfo">
               <div class="toolName">Cleaning</div>
-              <div class="toolDesc">Daily/weekly lists</div>
+              <div class="toolDesc">Daily & weekly lists</div>
             </div>
           </div>
           <div class="toolItem" data-url="./kitchen-percent.html">
             <div class="toolIcon">📊</div>
             <div class="toolInfo">
               <div class="toolName">Kitchen %</div>
-              <div class="toolDesc">Full analytics</div>
+              <div class="toolDesc">Full analytics page</div>
             </div>
           </div>
           <div class="toolItem" data-url="./3-timers-regel.html">
@@ -371,8 +394,8 @@
       <div class="toolBar">
         <div class="pill" id="toolName">—</div>
         <div style="display:flex;gap:8px;">
-          <button class="btn ghost sm" id="closeToolBtn">← Back</button>
-          <button class="btn ghost sm" id="newTabBtn">↗ New tab</button>
+          <button class="btn ghost" id="closeToolBtn">← Back to Hub</button>
+          <button class="btn ghost" id="newTabBtn">↗ Open in New Tab</button>
         </div>
       </div>
       <iframe id="toolFrame" class="frame" src="about:blank"></iframe>
@@ -382,7 +405,7 @@
 
   <script>
     // ============================================================
-    // CONFIGURATION - OPDATER DENNE URL!
+    // CONFIGURATION
     // ============================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const TOKEN = "KAISER_TOKEN_2026";
@@ -494,19 +517,24 @@
     // ============================================================
     // CLOCK
     // ============================================================
-    let clockVisible = localStorage.getItem(CLOCK_KEY) !== "false";
+    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
 
     function updateClock() {
       const now = new Date();
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
+      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
       $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
     }
 
     function toggleClock() {
       clockVisible = !clockVisible;
       localStorage.setItem(CLOCK_KEY, clockVisible);
+      updateClockUI();
+    }
+
+    function updateClockUI() {
       $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").textContent = clockVisible ? "🕐 Hide" : "🕐 Clock";
+      $("clockToggle").textContent = clockVisible ? "🕐 Hide Clock" : "🕐 Show Clock";
+      $("clockToggle").classList.toggle("on", clockVisible);
     }
 
     // ============================================================
@@ -543,7 +571,7 @@
         const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
 
         $("kPct").textContent = pctStr(pct);
-        $("kMeta").textContent = "Purchases: " + fmtDKK(totalBuy);
+        $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
 
       } catch (e) {
         $("kMeta").textContent = "Error loading";
@@ -557,7 +585,7 @@
       const loc = getLoc();
       
       if (!loc) {
-        $("cMiniList").innerHTML = '<div class="cMiniEmpty">No location set</div>';
+        $("cMiniList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
         return;
       }
 
@@ -565,7 +593,7 @@
         const data = await jsonp(SCRIPT_URL, { action: "catering_get", loc: loc });
 
         if (!data || !data.ok || !data.events || !data.events.length) {
-          $("cMiniList").innerHTML = '<div class="cMiniEmpty">No upcoming events</div>';
+          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No upcoming events</div>';
           return;
         }
 
@@ -578,7 +606,7 @@
               <div class="cMiniBar ${col}"></div>
               <div class="cMiniInfo">
                 <div class="cMiniTitle">${escapeHtml(ev.title)}</div>
-                <div class="cMiniMeta">${dateStr} ${ev.time ? 'at ' + ev.time : ''} • ${ev.guests || 0} guests</div>
+                <div class="cMiniMeta">📅 ${dateStr} ${ev.time ? '⏰ ' + ev.time : ''} • 👥 ${ev.guests || 0}</div>
               </div>
             </div>
           `;
@@ -587,7 +615,7 @@
         $("cMiniList").innerHTML = html;
 
       } catch (e) {
-        $("cMiniList").innerHTML = '<div class="cMiniEmpty">Error loading</div>';
+        $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
       }
     }
 
@@ -620,7 +648,8 @@
     function addTimer(durationMs) {
       const name = buildTimerName();
       if (selectedTpl === "Free text" && !name) {
-        alert("Enter a name!");
+        alert("Please enter a name!");
+        $("textInput").focus();
         return;
       }
       const timers = loadTimers();
@@ -636,14 +665,22 @@
       renderTimers();
     }
 
-    function removeTimer(id) {
-      saveTimers(loadTimers().filter(t => t.id !== id));
-      renderTimers();
+    // STOP/REMOVE TIMER - virker for alle timers
+    function stopTimer(id) {
+      if (confirm("Stop this timer?")) {
+        saveTimers(loadTimers().filter(t => t.id !== id));
+        renderTimers();
+      }
     }
 
     function clearExpired() {
-      saveTimers(loadTimers().filter(t => (t.expiresAt || 0) > now()));
+      const active = loadTimers().filter(t => (t.expiresAt || 0) > now());
+      const removed = loadTimers().length - active.length;
+      saveTimers(active);
       renderTimers();
+      if (removed > 0) {
+        alert(`Removed ${removed} expired timer(s)`);
+      }
     }
 
     function timerState(t) {
@@ -658,17 +695,17 @@
       document.querySelectorAll("#tplRow .segBtn").forEach(btn => {
         btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
       });
-      $("textInput").placeholder = selectedTpl === "Free text" ? "Name (required)" : "Optional note...";
+      $("textInput").placeholder = selectedTpl === "Free text" ? "Name (required)" : "Optional note (e.g. tray 2)";
     }
 
     function renderTimers() {
       const list = $("timerList");
       const timers = loadTimers().sort((a, b) => (a.expiresAt || 0) - (b.expiresAt || 0));
       
-      $("timerCount").textContent = `(${timers.length})`;
+      $("timerCount").textContent = `${timers.length} active`;
 
       if (!timers.length) {
-        list.innerHTML = '<div class="emptyState">No active timers</div>';
+        list.innerHTML = '<div class="emptyState">No active timers — start one above</div>';
         return;
       }
 
@@ -676,7 +713,7 @@
         const left = (t.expiresAt || 0) - now();
         const st = timerState(t);
         const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
-        const tagText = st === "exp" ? "EXPIRED" : (left <= WARN_10_MS ? "10 MIN" : (left <= WARN_30_MS ? "30 MIN" : "OK"));
+        const tagText = st === "exp" ? "EXPIRED" : (left <= WARN_10_MS ? "⚠️ 10 MIN" : (left <= WARN_30_MS ? "⚠️ 30 MIN" : "✓ OK"));
 
         return `
           <div class="tCard">
@@ -685,11 +722,16 @@
             <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
             <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
             <div class="barWrap"><div class="barFill ${st === 'exp' ? 'exp' : st === 'warn' ? 'warn' : ''}" style="width:${st === 'exp' ? 100 : pct}%"></div></div>
-            ${st === "exp" ? `<div class="tActions"><button class="smallBtn danger" onclick="removeTimer('${t.id}')">Remove</button></div>` : ''}
+            <div class="tActions">
+              <button class="smallBtn danger" onclick="stopTimer('${t.id}')">🛑 Stop</button>
+            </div>
           </div>
         `;
       }).join('');
     }
+
+    // Make stopTimer global for onclick
+    window.stopTimer = stopTimer;
 
     // ============================================================
     // COLLAPSIBLE SECTIONS
@@ -735,20 +777,23 @@
     async function toggleWakeLock() {
       try {
         if (!("wakeLock" in navigator)) {
-          alert("Wake Lock not supported");
+          alert("Wake Lock not supported on this device");
           return;
         }
         if (wakeLock) {
           await wakeLock.release();
           wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Awake";
+          $("wakeBtn").textContent = "☀️ Keep Awake";
+          $("wakeBtn").classList.remove("on");
           return;
         }
         wakeLock = await navigator.wakeLock.request("screen");
-        $("wakeBtn").textContent = "☀️ ON";
+        $("wakeBtn").textContent = "☀️ Awake ON";
+        $("wakeBtn").classList.add("on");
         wakeLock.onrelease = () => {
           wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Awake";
+          $("wakeBtn").textContent = "☀️ Keep Awake";
+          $("wakeBtn").classList.remove("on");
         };
       } catch (e) {
         alert("Could not enable wake lock");
@@ -792,16 +837,17 @@
     // ============================================================
     (function init() {
       const loc = getLoc();
-      $("locPill").textContent = "📍 " + (loc || "Not set");
+      $("locPill").textContent = "📍 Location: " + (loc || "Not set");
 
       // Clock
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").textContent = clockVisible ? "🕐 Hide" : "🕐 Clock";
+      updateClockUI();
       updateClock();
 
-      // Load data
+      // Timer UI
       updateTplUI();
       renderTimers();
+
+      // Load data
       loadKitchenPct();
       loadCateringMini();
 
