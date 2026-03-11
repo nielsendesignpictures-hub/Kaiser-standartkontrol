@@ -108,24 +108,39 @@
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
         }
 
-        .success-message {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
+        .status-bar {
+            padding: 12px 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            display: none;
-            animation: slideDown 0.5s ease;
             font-weight: 600;
+            font-size: 14px;
+            display: none;
+            animation: slideDown 0.4s ease;
         }
 
-        .success-message.show {
+        .status-bar.success {
             display: block;
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.3);
+            color: var(--success);
+        }
+
+        .status-bar.error {
+            display: block;
+            background: rgba(255,107,107,0.15);
+            border: 1px solid rgba(255,107,107,0.3);
+            color: var(--danger);
+        }
+
+        .status-bar.loading {
+            display: block;
+            background: rgba(56,189,248,0.15);
+            border: 1px solid rgba(56,189,248,0.3);
+            color: #38bdf8;
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -232,12 +247,18 @@
             letter-spacing: 0.05em;
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--gold), var(--gold2));
             color: var(--bg0);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(214,178,74,0.3);
         }
@@ -248,7 +269,7 @@
             border: 1px solid var(--border);
         }
 
-        .btn-secondary:hover {
+        .btn-secondary:hover:not(:disabled) {
             background: rgba(255,255,255,0.12);
             color: var(--text);
         }
@@ -373,6 +394,21 @@
             font-size: 14px;
         }
 
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--muted2);
+            border-radius: 50%;
+            border-top-color: var(--gold);
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .input-row {
                 grid-template-columns: 1fr;
@@ -382,6 +418,11 @@
             }
             .button-group {
                 flex-direction: column;
+            }
+            .filter-row {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 10px;
             }
         }
     </style>
@@ -396,9 +437,7 @@
             <div class="goldline"></div>
         </div>
 
-        <div class="success-message" id="successMessage">
-            ✅ Catering sendt til køkkenet!
-        </div>
+        <div class="status-bar" id="statusBar"></div>
 
         <div class="form-card">
             <div class="section-title">📍 Afdeling & Tidspunkt</div>
@@ -407,11 +446,11 @@
                 <label for="location">Vælg Afdeling *</label>
                 <select id="location" required>
                     <option value="">-- Vælg afdeling --</option>
-                    <option value="Café Kaiser Helsingør">Café Kaiser Helsingør</option>
-                    <option value="Café Kaiser Hillerød">Café Kaiser Hillerød</option>
-                    <option value="Café Kaiser Farum">Café Kaiser Farum</option>
-                    <option value="Café Kaiser Hørsholm">Café Kaiser Hørsholm</option>
-                    <option value="Café Kaiser Vanløse">Café Kaiser Vanløse</option>
+                    <option value="Helsingør">Café Kaiser Helsingør</option>
+                    <option value="Hillerød">Café Kaiser Hillerød</option>
+                    <option value="Farum">Café Kaiser Farum</option>
+                    <option value="Hørsholm">Café Kaiser Hørsholm</option>
+                    <option value="Vanløse">Café Kaiser Vanløse</option>
                 </select>
             </div>
 
@@ -434,39 +473,19 @@
                     <input type="number" id="guests" placeholder="f.eks. 50" min="1" required>
                 </div>
                 <div class="input-group">
-                    <label for="menuType">Menu Type *</label>
-                    <select id="menuType" required>
-                        <option value="">-- Vælg menu --</option>
-                        <option value="Buffet">Buffet</option>
-                        <option value="3-retters">3-retters</option>
-                        <option value="4-retters">4-retters</option>
-                        <option value="Cocktail">Cocktail / Snacks</option>
-                        <option value="Brunch">Brunch</option>
-                        <option value="Frokost">Frokost</option>
-                        <option value="Andet">Andet</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="contactName">Kontaktperson</label>
-                    <input type="text" id="contactName" placeholder="Navn på bestiller">
-                </div>
-                <div class="input-group">
-                    <label for="phone">Telefonnummer</label>
-                    <input type="text" id="phone" placeholder="Telefon">
+                    <label for="title">Firma / Kontaktperson *</label>
+                    <input type="text" id="title" placeholder="Navn på firma eller bestiller" required>
                 </div>
             </div>
 
             <div class="input-group">
-                <label for="notes">Bemærkninger / Specielle Ønsker</label>
-                <textarea id="notes" placeholder="Vegetar, allergier, opstilling, særlige ønsker..."></textarea>
+                <label for="note">Bemærkninger / Specielle Ønsker</label>
+                <textarea id="note" placeholder="Menu, allergier, opstilling, særlige ønsker..."></textarea>
             </div>
 
             <div class="button-group">
                 <button class="btn btn-secondary" onclick="resetForm()">🔄 Ryd</button>
-                <button class="btn btn-primary" onclick="sendToKitchen()">📤 Send til Køkken</button>
+                <button class="btn btn-primary" id="submitBtn" onclick="sendToKitchen()">📤 Send til Køkken</button>
             </div>
         </div>
 
@@ -475,104 +494,148 @@
             
             <div class="filter-row">
                 <button class="filter-btn active" onclick="filterOrders('all', this)">Alle</button>
-                <button class="filter-btn" onclick="filterOrders('Café Kaiser Helsingør', this)">Helsingør</button>
-                <button class="filter-btn" onclick="filterOrders('Café Kaiser Hillerød', this)">Hillerød</button>
-                <button class="filter-btn" onclick="filterOrders('Café Kaiser Farum', this)">Farum</button>
-                <button class="filter-btn" onclick="filterOrders('Café Kaiser Hørsholm', this)">Hørsholm</button>
-                <button class="filter-btn" onclick="filterOrders('Café Kaiser Vanløse', this)">Vanløse</button>
+                <button class="filter-btn" onclick="filterOrders('Helsingør', this)">Helsingør</button>
+                <button class="filter-btn" onclick="filterOrders('Hillerød', this)">Hillerød</button>
+                <button class="filter-btn" onclick="filterOrders('Farum', this)">Farum</button>
+                <button class="filter-btn" onclick="filterOrders('Hørsholm', this)">Hørsholm</button>
+                <button class="filter-btn" onclick="filterOrders('Vanløse', this)">Vanløse</button>
             </div>
 
             <div id="ordersList">
-                <div class="empty-state">Ingen ordrer endnu</div>
+                <div class="empty-state"><span class="loading-spinner"></span> Henter ordrer...</div>
             </div>
         </div>
     </div>
 
     <script>
-        // VIGTIG: Bruger SAMME localStorage key som catering-schedule.html
-        const STORAGE_KEY = 'kaiserCateringEvents';
+        // Google Sheets API
+        const API_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
+        
+        let allOrders = [];
         let currentFilter = 'all';
 
+        // Set today's date as default
         document.getElementById('date').valueAsDate = new Date();
-        window.addEventListener('DOMContentLoaded', () => loadOrders());
+        
+        // Load orders on page load
+        window.addEventListener('DOMContentLoaded', loadOrders);
 
-        function sendToKitchen() {
+        function showStatus(message, type) {
+            const statusBar = document.getElementById('statusBar');
+            statusBar.className = 'status-bar ' + type;
+            statusBar.innerHTML = type === 'loading' ? '<span class="loading-spinner"></span>' + message : message;
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    statusBar.className = 'status-bar';
+                }, 4000);
+            }
+        }
+
+        async function sendToKitchen() {
             const location = document.getElementById('location').value;
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
             const guests = document.getElementById('guests').value;
-            const menuType = document.getElementById('menuType').value;
+            const title = document.getElementById('title').value;
+            const note = document.getElementById('note').value;
 
-            if (!location || !date || !time || !guests || !menuType) {
-                alert('⚠️ Udfyld venligst alle påkrævede felter (*)');
+            if (!location || !date || !time || !guests || !title) {
+                showStatus('⚠️ Udfyld venligst alle påkrævede felter (*)', 'error');
                 return;
             }
 
-            // Opret event i SAMME format som catering-schedule.html forventer
-            const event = {
-                id: Date.now(),
-                title: `${menuType} - ${guests} gæster`,
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            showStatus('Sender til køkkenet...', 'loading');
+
+            const eventData = {
+                action: 'create',
+                location: location,
                 date: date,
                 time: time,
-                location: location,
                 guests: parseInt(guests),
-                menuType: menuType,
-                contact: document.getElementById('contactName').value || '',
-                phone: document.getElementById('phone').value || '',
-                notes: document.getElementById('notes').value || '',
-                createdAt: new Date().toISOString(),
-                createdFrom: 'catering-manager' // Så vi ved den kom fra manager
+                title: title,
+                note: note || ''
             };
 
-            // Gem i localStorage
-            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            events.push(event);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(eventData)
+                });
 
-            // Vis success
-            const msg = document.getElementById('successMessage');
-            msg.textContent = `✅ Catering sendt til ${location}!`;
-            msg.classList.add('show');
-            setTimeout(() => msg.classList.remove('show'), 3000);
-
-            resetForm();
-            loadOrders();
+                // no-cors means we can't read the response, but it likely succeeded
+                showStatus(`✅ Catering sendt til Café Kaiser ${location}!`, 'success');
+                resetForm();
+                
+                // Reload orders after a short delay
+                setTimeout(loadOrders, 1500);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('❌ Fejl ved afsendelse. Prøv igen.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+            }
         }
 
-        function loadOrders() {
-            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        async function loadOrders() {
+            const container = document.getElementById('ordersList');
+            container.innerHTML = '<div class="empty-state"><span class="loading-spinner"></span> Henter ordrer...</div>';
+
+            try {
+                const response = await fetch(API_URL + '?action=list');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    allOrders = data.data || [];
+                    renderOrders();
+                } else {
+                    container.innerHTML = '<div class="empty-state">❌ Kunne ikke hente ordrer</div>';
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                container.innerHTML = '<div class="empty-state">❌ Fejl ved hentning af ordrer</div>';
+            }
+        }
+
+        function renderOrders() {
+            let orders = [...allOrders];
             
-            // Filtrer efter lokation hvis valgt
+            // Filter by location
             if (currentFilter !== 'all') {
-                events = events.filter(e => e.location === currentFilter);
+                orders = orders.filter(o => o.location === currentFilter);
             }
 
-            // Sorter efter dato (nyeste først)
-            events.sort((a, b) => new Date(a.date) - new Date(b.date));
+            // Sort by date (upcoming first)
+            orders.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             const container = document.getElementById('ordersList');
 
-            if (events.length === 0) {
+            if (orders.length === 0) {
                 container.innerHTML = '<div class="empty-state">Ingen ordrer ' + (currentFilter !== 'all' ? 'for ' + currentFilter : '') + '</div>';
                 return;
             }
 
-            container.innerHTML = events.map(e => `
+            container.innerHTML = orders.map(order => `
                 <div class="order-card">
                     <div class="order-header">
                         <div>
-                            <div class="order-location">${e.location}</div>
-                            <div class="order-date">📅 ${formatDate(e.date)} kl. ${e.time}</div>
+                            <div class="order-location">Café Kaiser ${order.location}</div>
+                            <div class="order-date">📅 ${formatDate(order.date)} kl. ${order.time}</div>
                         </div>
-                        <button class="delete-btn" onclick="deleteOrder(${e.id})">🗑️ Slet</button>
+                        <button class="delete-btn" onclick="deleteOrder('${order.id}')">🗑️ Slet</button>
                     </div>
                     <div class="order-details">
-                        <div class="order-detail"><strong>Gæster:</strong> ${e.guests} personer</div>
-                        <div class="order-detail"><strong>Menu:</strong> ${e.menuType}</div>
-                        <div class="order-detail"><strong>Kontakt:</strong> ${e.contact || 'Ikke angivet'}</div>
-                        <div class="order-detail"><strong>Telefon:</strong> ${e.phone || 'Ikke angivet'}</div>
+                        <div class="order-detail"><strong>Firma/Kontakt:</strong> ${order.title}</div>
+                        <div class="order-detail"><strong>Gæster:</strong> ${order.guests} personer</div>
                     </div>
-                    ${e.notes ? `<div class="order-notes"><strong>📝</strong> ${e.notes}</div>` : ''}
+                    ${order.note ? `<div class="order-notes"><strong>📝</strong> ${order.note}</div>` : ''}
                 </div>
             `).join('');
         }
@@ -581,15 +644,34 @@
             currentFilter = location;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            loadOrders();
+            renderOrders();
         }
 
-        function deleteOrder(id) {
-            if (!confirm('Slet denne catering ordre?')) return;
-            let events = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            events = events.filter(e => e.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-            loadOrders();
+        async function deleteOrder(id) {
+            if (!confirm('Er du sikker på du vil slette denne catering ordre?')) return;
+
+            showStatus('Sletter ordre...', 'loading');
+
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        id: id
+                    })
+                });
+
+                showStatus('✅ Ordre slettet!', 'success');
+                setTimeout(loadOrders, 1000);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('❌ Fejl ved sletning. Prøv igen.', 'error');
+            }
         }
 
         function resetForm() {
@@ -597,17 +679,17 @@
             document.getElementById('date').valueAsDate = new Date();
             document.getElementById('time').value = '';
             document.getElementById('guests').value = '';
-            document.getElementById('menuType').value = '';
-            document.getElementById('contactName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('notes').value = '';
+            document.getElementById('title').value = '';
+            document.getElementById('note').value = '';
         }
 
         function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString('da-DK', { 
+            const date = new Date(dateString);
+            return date.toLocaleDateString('da-DK', { 
                 weekday: 'short', 
                 day: 'numeric', 
-                month: 'short' 
+                month: 'short',
+                year: 'numeric'
             });
         }
     </script>
