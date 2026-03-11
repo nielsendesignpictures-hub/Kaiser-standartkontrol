@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -184,7 +184,7 @@
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Catering Schedule</div>
-      <div class="subtitle" id="locSubtitle">Location-specific</div>
+      <div class="subtitle" id="locSubtitle">Location-specific events</div>
       <div class="goldline"></div>
 
       <div class="controls">
@@ -202,18 +202,18 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Tilføj / Rediger Event</div>
-        <div class="sectionSub">Leader kode påkrævet</div>
+        <div class="sectionTitle"><span class="dot"></span> Add / Edit Event</div>
+        <div class="sectionSub">Leader code required</div>
       </div>
       <div class="divider"></div>
 
       <div class="row">
-        <input class="input" id="dateInput" type="date" placeholder="Dato" title="Vælg dato" />
-        <input class="input" id="timeInput" type="time" placeholder="Tid" title="Vælg tid (valgfrit)" />
-        <input class="input" id="titleInput" placeholder="Firma/Titel *" title="F.eks. firmanavn" />
-        <input class="input" id="guestsInput" type="number" min="0" placeholder="Antal gæster" title="Antal personer" />
-        <input class="input" id="noteInput" placeholder="Note (valgfrit)" title="Ekstra information" />
-        <button class="btn primary" id="saveBtn" type="button">💾 Gem</button>
+        <input class="input" id="dateInput" type="date" placeholder="Date" title="Select date" />
+        <input class="input" id="timeInput" type="time" placeholder="Time" title="Select time (optional)" />
+        <input class="input" id="titleInput" placeholder="Company/Title *" title="e.g. company name" />
+        <input class="input" id="guestsInput" type="number" min="0" placeholder="Guest count" title="Number of people" />
+        <input class="input" id="noteInput" placeholder="Note (optional)" title="Extra information" />
+        <button class="btn primary" id="saveBtn" type="button">💾 Save</button>
         <button class="btn ghost" id="clearBtn" type="button" style="flex:0;">✕</button>
       </div>
 
@@ -223,15 +223,15 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Kommende Events</div>
-        <div class="sectionSub" id="eventCount">Næste 21 dage</div>
+        <div class="sectionTitle"><span class="dot"></span> Upcoming Events</div>
+        <div class="sectionSub" id="eventCount">Next 21 days</div>
       </div>
       <div class="divider"></div>
 
       <div class="grid" id="grid">
         <div class="loading">
           <div class="loading-spinner"></div>
-          Indlæser events...
+          Loading events...
         </div>
       </div>
     </section>
@@ -239,28 +239,23 @@
 
   <script>
     // ============================================================
-    // CONFIGURATION - OPDATER DENNE URL!
+    // CONFIGURATION - UPDATE THIS URL!
     // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Bf7cLE6br3SUVeDudzY5R84oIwTGXiJvz_R-9OPuHDBdLA44vtBF9wg1HvNiZNSO/exec";
+    const SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
     const TOKEN = "KAISER_TOKEN_2026";
     const LOC_KEY = "kaiser_catering_loc";
     const DAYS_AHEAD = 21;
     const LEADER_CODE = "KAISER2026";
 
-    // Color thresholds (hours)
-    const GREEN_HOURS = 36;  // < 36h = green (snart!)
-    const YELLOW_HOURS = 72; // < 72h = yellow (på vej)
-    // > 72h = red (god tid)
+    const GREEN_HOURS = 36;
+    const YELLOW_HOURS = 72;
 
-    // ============================================================
-    // UTILITIES
-    // ============================================================
     const $ = id => document.getElementById(id);
     let debugMode = false;
     let editingId = "";
 
     function debugLog(msg, type = 'log') {
-      const timestamp = new Date().toLocaleTimeString('da-DK');
+      const timestamp = new Date().toLocaleTimeString('en-US');
       const logEl = $('debugLog');
       const prefix = type === 'error' ? '❌ ' : type === 'info' ? '⚠️ ' : '✅ ';
       const className = type === 'error' ? 'error' : type === 'info' ? 'info' : '';
@@ -299,9 +294,6 @@
         ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
     }
 
-    // ============================================================
-    // JSONP REQUEST
-    // ============================================================
     function jsonp(url, params) {
       return new Promise((resolve, reject) => {
         const cb = "__jsonp_" + Math.random().toString(36).slice(2);
@@ -313,7 +305,7 @@
         const script = document.createElement("script");
         const timeout = setTimeout(() => {
           cleanup();
-          debugLog("Timeout efter 15 sekunder", 'error');
+          debugLog("Timeout after 15 seconds", 'error');
           reject(new Error("Request timeout"));
         }, 15000);
 
@@ -331,7 +323,7 @@
 
         script.src = src;
         script.onerror = () => {
-          debugLog("Script load fejl", 'error');
+          debugLog("Script load error", 'error');
           cleanup();
           reject(new Error("Network error"));
         };
@@ -340,21 +332,15 @@
       });
     }
 
-    // ============================================================
-    // LOCATION HANDLING
-    // ============================================================
     function getLoc() {
       const fromURL = new URLSearchParams(location.search).get("loc");
       if (fromURL) {
         localStorage.setItem(LOC_KEY, fromURL);
-        debugLog(`Location sat fra URL: ${fromURL}`);
+        debugLog(`Location set from URL: ${fromURL}`);
       }
       return localStorage.getItem(LOC_KEY) || "";
     }
 
-    // ============================================================
-    // DATE/TIME HELPERS
-    // ============================================================
     function isoToday() {
       const d = new Date();
       return d.toISOString().slice(0, 10);
@@ -368,42 +354,39 @@
 
     function colorFor(h) {
       if (!isFinite(h)) return "gray";
-      if (h < 0) return "gray";           // Overstået
-      if (h <= GREEN_HOURS) return "green";  // Snart!
-      if (h <= YELLOW_HOURS) return "yellow"; // På vej
-      return "red";                        // God tid endnu
+      if (h < 0) return "gray";
+      if (h <= GREEN_HOURS) return "green";
+      if (h <= YELLOW_HOURS) return "yellow";
+      return "red";
     }
 
     function formatTimeLeft(h) {
-      if (h < 0) return "OVERSTÅET";
-      if (h < 24) return Math.round(h) + " timer";
-      return Math.round(h / 24) + " dage";
+      if (h < 0) return "PAST";
+      if (h < 24) return Math.round(h) + " hours";
+      return Math.round(h / 24) + " days";
     }
 
-    // ============================================================
-    // LOAD EVENTS
-    // ============================================================
     async function load() {
       setErr("");
       const loc = getLoc();
       
-      $("locPill").textContent = "📍 " + (loc || "Ikke sat");
-      $("locSubtitle").textContent = loc ? `Events for ${loc}` : "Åbn med ?loc=DinLokation";
+      $("locPill").textContent = "📍 " + (loc || "Not set");
+      $("locSubtitle").textContent = loc ? `Events for ${loc}` : "Open with ?loc=YourLocation";
 
       if (!loc) {
         $("grid").innerHTML = `
           <div class="empty-state" style="grid-column:1/-1;">
             <div class="icon">📍</div>
-            <div><strong>Location ikke sat</strong></div>
+            <div><strong>Location not set</strong></div>
             <div style="margin-top:8px;font-size:13px;">
-              Åbn siden med: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=DinLokation</code>
+              Open page with: <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;">?loc=YourLocation</code>
             </div>
           </div>
         `;
         return;
       }
 
-      $("refreshBtn").textContent = "⏳ Loader...";
+      $("refreshBtn").textContent = "⏳ Loading...";
       $("refreshBtn").disabled = true;
 
       try {
@@ -417,30 +400,27 @@
         $("refreshBtn").disabled = false;
 
         if (!data) {
-          setErr("Ingen respons fra server");
+          setErr("No response from server");
           return;
         }
 
         if (!data.ok) {
-          setErr(data.error || "Ukendt serverfejl");
+          setErr(data.error || "Unknown server error");
           return;
         }
 
-        $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-        $("eventCount").textContent = `${data.events?.length || 0} events • Næste ${DAYS_AHEAD} dage`;
+        $("updPill").textContent = "🕐 " + new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        $("eventCount").textContent = `${data.events?.length || 0} events • Next ${DAYS_AHEAD} days`;
 
         renderList(data.events || []);
 
       } catch (e) {
         $("refreshBtn").textContent = "🔄 Refresh";
         $("refreshBtn").disabled = false;
-        setErr("Netværksfejl: " + e.message);
+        setErr("Network error: " + e.message);
       }
     }
 
-    // ============================================================
-    // RENDER EVENT LIST
-    // ============================================================
     function renderList(events) {
       const grid = $("grid");
 
@@ -448,8 +428,8 @@
         grid.innerHTML = `
           <div class="empty-state" style="grid-column:1/-1;">
             <div class="icon">📅</div>
-            <div><strong>Ingen kommende events</strong></div>
-            <div style="margin-top:8px;font-size:13px;">Tilføj et nyt event ovenfor</div>
+            <div><strong>No upcoming events</strong></div>
+            <div style="margin-top:8px;font-size:13px;">Add a new event above</div>
           </div>
         `;
         return;
@@ -460,7 +440,7 @@
       events.forEach((ev, idx) => {
         const h = hoursUntil(ev.date, ev.time);
         const col = colorFor(h);
-        const when = ev.date + (ev.time ? " kl. " + ev.time : "");
+        const when = ev.date + (ev.time ? " at " + ev.time : "");
         const timeLeft = formatTimeLeft(h);
 
         const card = document.createElement("div");
@@ -474,14 +454,14 @@
             </div>
             <div class="msg">
               ⏱️ ${escapeHtml(timeLeft)}
-              ${ev.guests ? ` • 👥 ${ev.guests} gæster` : ""}
+              ${ev.guests ? ` • 👥 ${ev.guests} guests` : ""}
               ${ev.note ? ` • 📝 ${escapeHtml(ev.note)}` : ""}
             </div>
             <div class="tags">
-              <div class="tag"><span class="miniDot"></span>${col === 'green' ? 'SNART' : col === 'yellow' ? 'PÅ VEJ' : col === 'red' ? 'GOD TID' : 'OVERSTÅET'}</div>
+              <div class="tag"><span class="miniDot"></span>${col === 'green' ? 'SOON' : col === 'yellow' ? 'COMING' : col === 'red' ? 'SCHEDULED' : 'PAST'}</div>
               <div>
-                <button class="smallBtn" data-edit="${escapeHtml(ev.id)}">✏️ Rediger</button>
-                <button class="smallBtn danger" data-del="${escapeHtml(ev.id)}">🗑️ Slet</button>
+                <button class="smallBtn" data-edit="${escapeHtml(ev.id)}">✏️ Edit</button>
+                <button class="smallBtn danger" data-del="${escapeHtml(ev.id)}">🗑️ Delete</button>
               </div>
             </div>
           </div>
@@ -489,7 +469,6 @@
 
         grid.appendChild(card);
 
-        // Edit handler
         card.querySelector("[data-edit]").onclick = () => {
           editingId = ev.id;
           $("dateInput").value = ev.date || "";
@@ -497,20 +476,19 @@
           $("titleInput").value = ev.title || "";
           $("guestsInput").value = ev.guests || "";
           $("noteInput").value = ev.note || "";
-          $("saveBtn").textContent = "💾 Opdater";
+          $("saveBtn").textContent = "💾 Update";
           window.scrollTo({ top: 0, behavior: "smooth" });
-          debugLog(`Redigerer event: ${ev.id}`);
+          debugLog(`Editing event: ${ev.id}`);
         };
 
-        // Delete handler
         card.querySelector("[data-del]").onclick = async () => {
-          const code = prompt("Indtast leader kode for at slette:");
+          const code = prompt("Enter leader code to delete:");
           if (!code) return;
           if (code.trim() !== LEADER_CODE) {
-            alert("Forkert kode!");
+            alert("Wrong code!");
             return;
           }
-          if (!confirm(`Slet "${ev.title}"?`)) return;
+          if (!confirm(`Delete "${ev.title}"?`)) return;
 
           try {
             const res = await jsonp(SCRIPT_URL, {
@@ -520,35 +498,32 @@
             });
 
             if (res?.ok) {
-              setSuccess("Event slettet!");
+              setSuccess("Event deleted!");
               load();
             } else {
-              setErr("Kunne ikke slette: " + (res?.error || "Ukendt fejl"));
+              setErr("Could not delete: " + (res?.error || "Unknown error"));
             }
           } catch (e) {
-            setErr("Fejl ved sletning: " + e.message);
+            setErr("Delete error: " + e.message);
           }
         };
       });
     }
 
-    // ============================================================
-    // SAVE EVENT
-    // ============================================================
     async function save() {
       setErr("");
       setSuccess("");
 
       const loc = getLoc();
       if (!loc) {
-        setErr("Location ikke sat!");
+        setErr("Location not set!");
         return;
       }
 
-      const code = prompt("Indtast leader kode:");
+      const code = prompt("Enter leader code:");
       if (!code) return;
       if (code.trim() !== LEADER_CODE) {
-        alert("Forkert kode!");
+        alert("Wrong code!");
         return;
       }
 
@@ -558,19 +533,18 @@
       const guests = $("guestsInput").value.trim();
       const note = $("noteInput").value.trim();
 
-      // Validation
       if (!date) {
-        setErr("Dato er påkrævet");
+        setErr("Date is required");
         $("dateInput").focus();
         return;
       }
       if (!title) {
-        setErr("Titel/firma er påkrævet");
+        setErr("Title/company is required");
         $("titleInput").focus();
         return;
       }
 
-      $("saveBtn").textContent = "⏳ Gemmer...";
+      $("saveBtn").textContent = "⏳ Saving...";
       $("saveBtn").disabled = true;
 
       try {
@@ -586,27 +560,24 @@
           note: note || ""
         });
 
-        $("saveBtn").textContent = "💾 Gem";
+        $("saveBtn").textContent = "💾 Save";
         $("saveBtn").disabled = false;
 
         if (res?.ok) {
-          setSuccess(editingId ? "Event opdateret!" : "Event oprettet!");
+          setSuccess(editingId ? "Event updated!" : "Event created!");
           clearForm();
           load();
         } else {
-          setErr("Kunne ikke gemme: " + (res?.error || "Ukendt fejl"));
+          setErr("Could not save: " + (res?.error || "Unknown error"));
         }
 
       } catch (e) {
-        $("saveBtn").textContent = "💾 Gem";
+        $("saveBtn").textContent = "💾 Save";
         $("saveBtn").disabled = false;
-        setErr("Fejl: " + e.message);
+        setErr("Error: " + e.message);
       }
     }
 
-    // ============================================================
-    // CLEAR FORM
-    // ============================================================
     function clearForm() {
       editingId = "";
       $("dateInput").value = isoToday();
@@ -614,12 +585,9 @@
       $("titleInput").value = "";
       $("guestsInput").value = "";
       $("noteInput").value = "";
-      $("saveBtn").textContent = "💾 Gem";
+      $("saveBtn").textContent = "💾 Save";
     }
 
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
     $("saveBtn").onclick = save;
     $("clearBtn").onclick = clearForm;
     $("refreshBtn").onclick = load;
@@ -627,25 +595,20 @@
     $("debugBtn").onclick = () => {
       debugMode = !debugMode;
       $("debugPanel").classList.toggle("show", debugMode);
-      $("debugBtn").textContent = debugMode ? "🐛 Skjul Debug" : "🐛 Debug";
+      $("debugBtn").textContent = debugMode ? "🐛 Hide Debug" : "🐛 Debug";
     };
 
-    // Enter to save
     ["dateInput", "timeInput", "titleInput", "guestsInput", "noteInput"].forEach(id => {
       $(id).onkeydown = e => { if (e.key === "Enter") save(); };
     });
 
-    // ============================================================
-    // INIT
-    // ============================================================
     (function init() {
-      debugLog("Side initialiseret");
+      debugLog("Page initialized");
       debugLog(`Script URL: ${SCRIPT_URL.substring(0, 60)}...`);
       
       $("dateInput").value = isoToday();
       load();
       
-      // Auto-refresh hvert minut
       setInterval(load, 60000);
     })();
   </script>
