@@ -1,789 +1,546 @@
-<!doctype html>
-<meta name="robots" content="noindex, nofollow">
-<html lang="da">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Kitchen Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-  <style>
-    :root{
-      --bg0:#0d1117;
-      --bg1:#161b22;
-      --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.75);
-      --muted2:rgba(255,255,255,0.55);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --danger:#ff6b6b;
-      --warn:#f59e0b;
-      --ok:#62d26f;
-      --blue:#58a6ff;
-      --purple:#a78bfa;
-      --shadow: 0 20px 60px rgba(0,0,0,.40);
-    }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-    *{box-sizing:border-box;}
-    html,body{height:100%;margin:0;}
-    body{
-      font-family: Inter, system-ui, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(214,178,74,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.08), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
-      overflow-x:hidden;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    body:before{
-      content:""; position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity:0.06; pointer-events:none;
-    }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-    .shell{max-width:1200px; margin:0 auto; padding:14px 12px 40px;}
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
 
-    /* HERO */
-    .hero{
-      border-radius: 24px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(800px 220px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
-      padding: 20px 16px 16px;
-      position:relative; overflow:hidden;
-    }
-    .hero:after{
-      content:""; position:absolute; inset:-2px;
-      background:
-        radial-gradient(600px 200px at 20% 0%, rgba(167,139,250,0.18), transparent 60%),
-        radial-gradient(600px 200px at 80% 0%, rgba(245,158,11,0.14), transparent 60%);
-      opacity:.5; pointer-events:none;
-    }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
 
-    .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;text-align:center;position:relative;z-index:1;}
-    .title{font-family:"Playfair Display",serif;font-size:clamp(28px,7vw,42px);line-height:1.05;letter-spacing:-0.02em;font-weight:700;text-align:center;margin-top:6px;position:relative;z-index:1;}
-    .subtitle{color:var(--muted);font-weight:600;font-size:13px;text-align:center;margin-top:6px;position:relative;z-index:1;}
-    .blueline{height:2px;margin:14px auto 0;max-width:600px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(167,139,250,0.90),transparent);position:relative;z-index:1;}
+        .card:hover {
+            transform: translateY(-5px);
+        }
 
-    .controls{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;z-index:1;}
-    
-    .pill,.btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:5px;
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px;
-      color: rgba(255,255,255,0.90);white-space:nowrap;user-select:none;
-    }
-    .btn{cursor:pointer;transition:all .12s ease;-webkit-tap-highlight-color:transparent;}
-    .btn:hover{background:rgba(255,255,255,0.10);border-color:rgba(255,255,255,0.22);}
-    .btn:active{transform:scale(0.97);}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;}
-    .btn.gold{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
-    .btn.ghost{background:rgba(255,255,255,0.06);}
-    .btn.on{background:rgba(167,139,250,0.18);border-color:rgba(167,139,250,0.35);color:var(--purple);}
-    .btn.danger{background:rgba(255,107,107,0.18);border-color:rgba(255,107,107,0.35);color:var(--danger);}
-    .btn.warn{background:rgba(245,158,11,0.18);border-color:rgba(245,158,11,0.35);color:var(--warn);}
-    .btn.ok{background:rgba(98,210,111,0.18);border-color:rgba(98,210,111,0.35);color:var(--ok);}
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
 
-    /* Clock */
-    .clockWrap{position:relative;z-index:1;margin-top:14px;text-align:center;display:none;}
-    .clockWrap.show{display:block;}
-    .clockTime{font-family:"Playfair Display",serif;font-size:64px;font-weight:700;line-height:1;}
-    .clockDate{font-size:14px;font-weight:600;color:var(--muted);margin-top:4px;}
+        /* Timer Styles */
+        .timer-container {
+            text-align: center;
+        }
 
-    /* 3-Timer Section */
-    .timerSection{
-      margin-top:14px;
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding:16px;
-    }
-    .timerHeader{
-      display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;
-    }
-    .timerTitle{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.10em;color:var(--muted);display:flex;align-items:center;gap:8px;}
-    .timerDot{width:10px;height:10px;border-radius:50%;background:var(--warn);animation:pulse 2s infinite;}
-    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+        .timer-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
 
-    .timerGrid{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap:12px;
-    }
-    .timerCard{
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      padding:14px;
-      text-align:center;
-      transition:all .2s;
-    }
-    .timerCard.warning{
-      border-color:rgba(245,158,11,0.50);
-      background:rgba(245,158,11,0.12);
-      animation:pulseCard 1s infinite;
-    }
-    .timerCard.expired{
-      border-color:rgba(255,107,107,0.50);
-      background:rgba(255,107,107,0.15);
-    }
-    @keyframes pulseCard{0%,100%{opacity:1;}50%{opacity:0.85;}}
+        .timer-display.warning {
+            color: #ff9800;
+            animation: pulse 1s infinite;
+        }
 
-    .timerLabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;}
-    .timerDisplay{font-family:"Playfair Display",serif;font-size:42px;font-weight:700;line-height:1;}
-    .timerDisplay.warning{color:var(--warn);}
-    .timerDisplay.expired{color:var(--danger);}
-    .timerMeta{font-size:11px;color:var(--muted2);margin-top:6px;}
-    .timerActions{display:flex;gap:6px;margin-top:10px;justify-content:center;}
-    .timerBtn{
-      padding:8px 12px;border-radius:10px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      font-weight:700;font-size:10px;text-transform:uppercase;
-      cursor:pointer;transition:all .12s;
-    }
-    .timerBtn:active{transform:scale(0.95);}
-    .timerBtn.start{background:rgba(98,210,111,0.18);border-color:rgba(98,210,111,0.35);color:var(--ok);}
-    .timerBtn.stop{background:rgba(255,107,107,0.18);border-color:rgba(255,107,107,0.35);color:var(--danger);}
+        .timer-display.danger {
+            color: #f44336;
+            animation: pulse 0.5s infinite;
+        }
 
-    /* Widget Grid - 2 kolonner */
-    .widgetGrid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:12px;
-      margin-top:14px;
-    }
-    @media (max-width: 600px){
-      .widgetGrid{grid-template-columns: 1fr;}
-    }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
-    .widget{
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding:16px;
-      min-height:140px;
-      display:flex;
-      flex-direction:column;
-      cursor:pointer;
-      transition:all .15s;
-    }
-    .widget:active{transform:scale(0.98);background:rgba(255,255,255,0.08);}
-    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
-    .widgetTitle{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.10em;color:var(--muted);display:flex;align-items:center;gap:6px;}
-    .widgetDot{width:8px;height:8px;border-radius:50%;}
-    .widgetDot.purple{background:var(--purple);}
-    .widgetDot.gold{background:var(--gold);}
-    .widgetDot.green{background:var(--ok);}
-    .widgetDot.warn{background:var(--warn);}
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
 
-    .widgetIcon{font-size:48px;margin:auto 0;}
-    .widgetBig{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;line-height:1;margin-top:auto;}
-    .widgetSub{font-size:12px;font-weight:600;color:var(--muted);margin-top:6px;}
+        .timer-controls button {
+            padding: 12px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
 
-    /* Section */
-    .section{
-      margin-top:14px;
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      overflow:hidden;
-    }
-    .sectionHead{
-      padding:12px 14px;
-      display:flex;align-items:center;justify-content:space-between;gap:8px;
-      background:rgba(255,255,255,0.03);
-      cursor:pointer;
-      user-select:none;
-    }
-    .sectionHead:active{background:rgba(255,255,255,0.06);}
-    .sectionTitle{font-weight:800;letter-spacing:.10em;text-transform:uppercase;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
-    .sectionDot{width:8px;height:8px;border-radius:50%;background:var(--purple);}
-    .sectionArrow{font-size:12px;transition:transform .2s;color:var(--muted);}
-    .sectionArrow.open{transform:rotate(180deg);}
-    .sectionBody{display:none;padding:14px;}
-    .sectionBody.open{display:block;}
-    .divider{height:1px;background:rgba(255,255,255,0.08);}
+        .btn-start {
+            background: #4CAF50;
+            color: white;
+        }
 
-    /* Tools grid */
-    .toolsGrid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-    }
-    @media (max-width: 500px){
-      .toolsGrid{grid-template-columns: 1fr;}
-    }
-    .toolItem{
-      padding:16px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      cursor:pointer;transition:all .12s;
-      display:flex;align-items:center;gap:12px;
-    }
-    .toolItem:active{transform:scale(0.97);background:rgba(255,255,255,0.08);}
-    .toolIcon{font-size:28px;}
-    .toolInfo{flex:1;}
-    .toolName{font-weight:700;font-size:14px;}
-    .toolDesc{font-size:11px;color:var(--muted);margin-top:2px;}
+        .btn-start:hover {
+            background: #45a049;
+        }
 
-    /* Tool viewer */
-    .toolViewer{display:none;margin-top:14px;}
-    .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;}
-    .frame{width:100%;height:75vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.25);}
+        .btn-pause {
+            background: #ff9800;
+            color: white;
+        }
 
-    /* Alarm overlay */
-    .alarmOverlay{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(245,158,11,0.95);
-      z-index:9999;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:20px;
-      animation:flashAlarm 0.5s infinite alternate;
-    }
-    .alarmOverlay.show{display:flex;}
-    @keyframes flashAlarm{
-      0%{background:rgba(245,158,11,0.95);}
-      100%{background:rgba(255,107,107,0.95);}
-    }
-    .alarmIcon{font-size:80px;animation:shake 0.3s infinite;}
-    @keyframes shake{
-      0%,100%{transform:rotate(-10deg);}
-      50%{transform:rotate(10deg);}
-    }
-    .alarmText{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;text-align:center;color:#fff;}
-    .alarmSub{font-size:18px;font-weight:600;color:rgba(255,255,255,0.9);}
-    .alarmDismiss{
-      padding:16px 32px;border-radius:16px;
-      background:#fff;color:#0d1117;
-      font-weight:800;font-size:16px;
-      cursor:pointer;border:none;
-      margin-top:20px;
-    }
+        .btn-pause:hover {
+            background: #e68900;
+        }
 
-    /* Touch friendly scrollbar */
-    ::-webkit-scrollbar{width:6px;height:6px;}
-    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
-    ::-webkit-scrollbar-track{background:transparent;}
-  </style>
+        .btn-reset {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #da190b;
+        }
+
+        .time-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .time-input-group input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .time-input-group label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Catering Widget */
+        .catering-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin: 10px 0;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .catering-item:nth-child(even) {
+            background: #e8eaf6;
+        }
+
+        .catering-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .catering-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Kitchen Percentage */
+        .percentage-display {
+            text-align: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .percentage-label {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #c62828;
+        }
+
+        /* Alarm Modal */
+        .alarm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .alarm-modal.active {
+            display: flex;
+        }
+
+        .alarm-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .alarm-content h2 {
+            color: #f44336;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .alarm-content button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .alarm-content button:hover {
+            background: #da190b;
+        }
+    </style>
 </head>
-
 <body>
-  <div class="shell">
+    <div class="dashboard">
+        <h1>🍳 Kitchen Dashboard</h1>
+        
+        <div class="grid-container">
+            <!-- Timer Card -->
+            <div class="card">
+                <h2>⏱️ Timer</h2>
+                <div class="timer-container">
+                    <div class="time-input-group">
+                        <label>
+                            <span>Hours</span>
+                            <input type="number" id="hours-input" min="0" max="23" value="0">
+                        </label>
+                        <label>
+                            <span>Minutes</span>
+                            <input type="number" id="minutes-input" min="0" max="59" value="0">
+                        </label>
+                        <label>
+                            <span>Seconds</span>
+                            <input type="number" id="seconds-input" min="0" max="59" value="0">
+                        </label>
+                    </div>
+                    
+                    <div class="timer-display" id="timer-display">00:00:00</div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar" style="width: 0%;">0%</div>
+                    </div>
+                    
+                    <div class="timer-controls">
+                        <button class="btn-start" onclick="startTimer()">▶ Start</button>
+                        <button class="btn-pause" onclick="pauseTimer()">⏸ Pause</button>
+                        <button class="btn-reset" onclick="resetTimer()">⟳ Reset</button>
+                    </div>
+                </div>
+            </div>
 
-    <!-- HERO -->
-    <header class="hero">
-      <div class="kicker">KAISER</div>
-      <div class="title">Kitchen Hub</div>
-      <div class="subtitle">Køkken styring & 3-timers kontrol</div>
-      <div class="blueline"></div>
+            <!-- Kitchen Percentage Card -->
+            <div class="card">
+                <h2>📊 Kitchen Progress</h2>
+                <div class="percentage-display" id="kitchen-percentage">0%</div>
+                <div class="percentage-label">Completion Rate</div>
+            </div>
 
-      <div class="controls">
-        <div class="pill" id="timePill">🕐 --:--</div>
-        <button class="btn ghost" id="awakeBtn">💡 Awake</button>
-        <button class="btn ghost" id="clockToggle">🕐 Ur</button>
-        <button class="btn ghost" id="fsBtn">⛶ Fuld</button>
-      </div>
-
-      <div class="clockWrap" id="clockWrap">
-        <div class="clockTime" id="clockTime">--:--:--</div>
-        <div class="clockDate" id="clockDate">--</div>
-      </div>
-    </header>
-
-    <!-- 3-TIMERS REGEL -->
-    <section class="timerSection">
-      <div class="timerHeader">
-        <div class="timerTitle"><span class="timerDot"></span> 3-Timers Regel</div>
-        <button class="btn ghost" onclick="addNewTimer()" style="font-size:10px;padding:8px 12px;">➕ Tilføj Timer</button>
-      </div>
-      <div class="timerGrid" id="timerGrid">
-        <!-- Timers will be rendered here -->
-      </div>
-      <div id="noTimers" style="text-align:center;padding:20px;color:var(--muted2);font-size:12px;">
-        Ingen aktive timere. Klik "Tilføj Timer" for at starte.
-      </div>
-    </section>
-
-    <!-- WIDGETS - 2 side by side -->
-    <div class="widgetGrid">
-      <!-- Catering Manager -->
-      <div class="widget" onclick="openTool('catering-manager.html', 'Catering Manager')">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot purple"></span> Catering</div>
+            <!-- Catering Widget Card -->
+            <div class="card">
+                <h2>🍽️ Catering Orders</h2>
+                <div id="catering-widget">
+                    <div class="loading">Loading catering data...</div>
+                </div>
+            </div>
         </div>
-        <div class="widgetIcon">🍽️</div>
-        <div class="widgetBig">Catering Manager</div>
-        <div class="widgetSub">Administrer catering ordrer</div>
-      </div>
-
-      <!-- Kitchen Percent -->
-      <div class="widget" onclick="openTool('kitchen-percent.html', 'Kitchen %')">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot gold"></span> Procent</div>
-        </div>
-        <div class="widgetIcon">📊</div>
-        <div class="widgetBig">Kitchen %</div>
-        <div class="widgetSub">Madspild & statistik</div>
-      </div>
     </div>
 
-    <!-- QUICK TOOLS -->
-    <section class="section">
-      <div class="sectionHead" onclick="toggleSection('tools')">
-        <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
-        <span class="sectionArrow" id="toolsArrow">▼</span>
-      </div>
-      <div class="divider"></div>
-      <div class="sectionBody" id="toolsBody">
-        <div class="toolsGrid">
-          <div class="toolItem" onclick="openTool('cleaning-kitchen.html', 'Rengøring Køkken')">
-            <div class="toolIcon">🧹</div>
-            <div class="toolInfo">
-              <div class="toolName">Rengøring Køkken</div>
-              <div class="toolDesc">Daglig rengørings tjekliste</div>
-            </div>
-          </div>
-          <div class="toolItem" onclick="openTool('MIS.html', 'MIS System')">
-            <div class="toolIcon">📋</div>
-            <div class="toolInfo">
-              <div class="toolName">MIS System</div>
-              <div class="toolDesc">Management Info System</div>
-            </div>
-          </div>
+    <!-- Alarm Modal -->
+    <div class="alarm-modal" id="alarm-modal">
+        <div class="alarm-content">
+            <h2>⚠️ 15 Minutes Remaining!</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">Time to finish up!</p>
+            <button onclick="dismissAlarm()">OK, Got it!</button>
         </div>
-      </div>
-    </section>
-
-    <!-- TOOL VIEWER -->
-    <div class="toolViewer" id="toolViewer">
-      <div class="toolBar">
-        <div class="pill" id="toolName">—</div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn ghost" onclick="closeTool()">← Tilbage</button>
-          <button class="btn ghost" onclick="openInNewTab()">↗ Ny fane</button>
-        </div>
-      </div>
-      <iframe id="toolFrame" class="frame" src="about:blank"></iframe>
     </div>
 
-  </div>
+    <script>
+        // Timer Variables
+        let timerInterval = null;
+        let isPaused = false;
+        let totalSeconds = 0;
+        let initialSeconds = 0;
+        let alarmTriggered = false;
 
-  <!-- ALARM OVERLAY -->
-  <div class="alarmOverlay" id="alarmOverlay">
-    <div class="alarmIcon">⏰</div>
-    <div class="alarmText" id="alarmText">15 MIN TILBAGE!</div>
-    <div class="alarmSub" id="alarmSub">Timer udløber snart</div>
-    <button class="alarmDismiss" onclick="dismissAlarm()">✓ OK, Forstået</button>
-  </div>
+        // Alarm Sound
+        const alarmSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUKzn77RgGwU7k9n0yHInBSl+zPLaizsKGGS56+mjUBELTKXh8bllHAU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBALTKXh8bllHAU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8Q==');
 
-  <!-- ALARM SOUND -->
-  <audio id="alarmSound" preload="auto">
-    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkpONgHBiWFpfaHN/iI2LhXpuY1lYXWRveoWMj42GeG1iWFdcZG93g4yQkIuCdmtgV1ZbYmt3g42Sk5GKf3JmXFZYXmhze4iQlJSPiHxxZVtVV11mbXqFj5OUko2Dd2pfVlRYX2l0f4qSlpWRin50aF5VU1hfaHN+iZGVlpKNgndqX1ZUV15nbniEjZKVlJCJfnNoXlVTV1xkbHeDjJGUlJCKgHVpXlVTV1xjbHeDi5GUlJGLgXZqX1ZUV1xja3aDi5GUk5GKgXZqX1ZUVlxja3WCipCTk5CJgHVpXlVTVltibHWBiY+SkpCJgHVpXlVTVVphanSAiI6Rko+IgHRoXVRTVVphancFiY6Qko+Ig" type="audio/wav">
-  </audio>
-
-  <script>
-    // ============================================================
-    // CONFIGURATION
-    // ============================================================
-    const CLOCK_KEY = "kaiser_kitchen_clock";
-    const TIMER_KEY = "kaiser_kitchen_timers_v2";
-    const ALARM_WARNING_MINUTES = 15;
-
-    // ============================================================
-    // HELPERS
-    // ============================================================
-    const $ = id => document.getElementById(id);
-
-    function timeNowHHMM() {
-      return new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    function generateId() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    // ============================================================
-    // CLOCK
-    // ============================================================
-    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
-
-    function updateClock() {
-      const now = new Date();
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long" });
-      $("timePill").textContent = "🕐 " + timeNowHHMM();
-    }
-
-    function toggleClock() {
-      clockVisible = !clockVisible;
-      localStorage.setItem(CLOCK_KEY, clockVisible);
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").classList.toggle("on", clockVisible);
-    }
-
-    // ============================================================
-    // AWAKE (Screen Wake Lock)
-    // ============================================================
-    let wakeLock = null;
-    let awakeActive = false;
-
-    async function toggleAwake() {
-      if (awakeActive) {
-        // Release wake lock
-        if (wakeLock) {
-          await wakeLock.release();
-          wakeLock = null;
-        }
-        awakeActive = false;
-        $("awakeBtn").classList.remove("on");
-        $("awakeBtn").textContent = "💡 Awake";
-      } else {
-        // Request wake lock
-        try {
-          if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            awakeActive = true;
-            $("awakeBtn").classList.add("on");
-            $("awakeBtn").textContent = "💡 Awake ON";
+        function updateTimerDisplay() {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
             
-            wakeLock.addEventListener('release', () => {
-              awakeActive = false;
-              $("awakeBtn").classList.remove("on");
-              $("awakeBtn").textContent = "💡 Awake";
+            const display = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+            document.getElementById('timer-display').textContent = display;
+            
+            // Update progress bar
+            if (initialSeconds > 0) {
+                const progress = ((initialSeconds - totalSeconds) / initialSeconds) * 100;
+                const progressBar = document.getElementById('progress-bar');
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = Math.round(progress) + '%';
+            }
+            
+            // Update display color based on time remaining
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.classList.remove('warning', 'danger');
+            
+            if (totalSeconds <= 300 && totalSeconds > 60) { // 5 minutes
+                timerDisplay.classList.add('warning');
+            } else if (totalSeconds <= 60) { // 1 minute
+                timerDisplay.classList.add('danger');
+            }
+            
+            // Check for 15-minute alarm
+            if (totalSeconds === 900 && !alarmTriggered) { // 15 minutes = 900 seconds
+                triggerAlarm();
+                alarmTriggered = true;
+            }
+        }
+
+        function pad(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            
+            if (totalSeconds === 0) {
+                const hours = parseInt(document.getElementById('hours-input').value) || 0;
+                const minutes = parseInt(document.getElementById('minutes-input').value) || 0;
+                const seconds = parseInt(document.getElementById('seconds-input').value) || 0;
+                
+                totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+                initialSeconds = totalSeconds;
+                alarmTriggered = false;
+            }
+            
+            if (totalSeconds === 0) {
+                alert('Please set a time first!');
+                return;
+            }
+            
+            isPaused = false;
+            timerInterval = setInterval(() => {
+                if (!isPaused && totalSeconds > 0) {
+                    totalSeconds--;
+                    updateTimerDisplay();
+                    
+                    if (totalSeconds === 0) {
+                        pauseTimer();
+                        playCompletionSound();
+                        alert('Time is up!');
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isPaused = true;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            totalSeconds = 0;
+            initialSeconds = 0;
+            alarmTriggered = false;
+            updateTimerDisplay();
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('progress-bar').textContent = '0%';
+        }
+
+        function triggerAlarm() {
+            document.getElementById('alarm-modal').classList.add('active');
+            playAlarmSound();
+        }
+
+        function dismissAlarm() {
+            document.getElementById('alarm-modal').classList.remove('active');
+            stopAlarmSound();
+        }
+
+        function playAlarmSound() {
+            alarmSound.loop = true;
+            alarmSound.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        function stopAlarmSound() {
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+        }
+
+        function playCompletionSound() {
+            const beep = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUKzn77RgGwU7k9n0yHInBSl+zPLaizsKGGS56+mjUBELTKXh8bllHAU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBALTKXh8bllHAU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8blkGwU2jdXzzn0vBSyCz/HciDwGGGe88OWhUBAMTKTg8Q==');
+            beep.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        // Catering Widget - Fetch from Google Sheets
+        async function loadCateringData() {
+            try {
+                const sheetUrl = 'YOUR_GOOGLE_SHEETS_URL_HERE'; // Replace with your actual Google Sheets URL
+                const response = await fetch(sheetUrl);
+                const data = await response.json();
+                
+                displayCateringData(data);
+            } catch (error) {
+                console.error('Error loading catering data:', error);
+                document.getElementById('catering-widget').innerHTML = 
+                    '<div class="error">Failed to load catering data. Please check your connection.</div>';
+            }
+        }
+
+        function displayCateringData(data) {
+            const widget = document.getElementById('catering-widget');
+            
+            if (!data || data.length === 0) {
+                widget.innerHTML = '<div class="loading">No catering orders found.</div>';
+                return;
+            }
+            
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="catering-item">
+                        <span class="catering-name">${item.name}</span>
+                        <span class="catering-count">${item.count}</span>
+                    </div>
+                `;
             });
-          } else {
-            alert("Wake Lock ikke understøttet i denne browser");
-          }
-        } catch (err) {
-          console.error("Wake Lock fejl:", err);
-          // Fallback: prevent sleep via video
-          awakeActive = true;
-          $("awakeBtn").classList.add("on");
-          $("awakeBtn").textContent = "💡 Awake ON";
+            
+            widget.innerHTML = html;
         }
-      }
-    }
 
-    // ============================================================
-    // FULLSCREEN
-    // ============================================================
-    async function toggleFullscreen() {
-      try {
-        if (!document.fullscreenElement) {
-          await document.documentElement.requestFullscreen();
-          $("fsBtn").classList.add("on");
-        } else {
-          await document.exitFullscreen();
-          $("fsBtn").classList.remove("on");
+        // Kitchen Percentage - Fetch from Google Sheets
+        async function loadKitchenPercentage() {
+            try {
+                const sheetUrl = 'YOUR_KITCHEN_PERCENTAGE_SHEETS_URL_HERE'; // Replace with your actual Google Sheets URL
+                const response = await fetch(sheetUrl);
+                const data = await response.json();
+                
+                const percentage = data.percentage || 0;
+                document.getElementById('kitchen-percentage').textContent = percentage + '%';
+            } catch (error) {
+                console.error('Error loading kitchen percentage:', error);
+                document.getElementById('kitchen-percentage').textContent = 'Error';
+            }
         }
-      } catch (e) { console.error(e); }
-    }
 
-    // ============================================================
-    // 3-TIMERS SYSTEM
-    // ============================================================
-    let timers = [];
-    let alarmShownFor = new Set(); // Track which timers have shown alarm
+        // Auto-refresh data every 30 seconds
+        setInterval(() => {
+            loadCateringData();
+            loadKitchenPercentage();
+        }, 30000);
 
-    function loadTimers() {
-      try {
-        const stored = localStorage.getItem(TIMER_KEY);
-        timers = stored ? JSON.parse(stored) : [];
-        // Clean up expired timers from previous day
-        const now = Date.now();
-        timers = timers.filter(t => t.endTime > now - 86400000); // Keep last 24h
-      } catch (e) {
-        timers = [];
-      }
-    }
-
-    function saveTimers() {
-      localStorage.setItem(TIMER_KEY, JSON.stringify(timers));
-    }
-
-    function addNewTimer() {
-      const label = prompt("Timer navn (f.eks. 'Kylling', 'Salat'):", "Timer " + (timers.length + 1));
-      if (!label) return;
-
-      const hours = parseFloat(prompt("Antal timer (standard 3):", "3"));
-      if (isNaN(hours) || hours <= 0) return;
-
-      const now = Date.now();
-      const timer = {
-        id: generateId(),
-        label: label,
-        startTime: now,
-        endTime: now + (hours * 60 * 60 * 1000),
-        duration: hours,
-        active: true
-      };
-
-      timers.push(timer);
-      saveTimers();
-      renderTimers();
-    }
-
-    function removeTimer(id) {
-      if (!confirm("Fjern denne timer?")) return;
-      timers = timers.filter(t => t.id !== id);
-      alarmShownFor.delete(id);
-      saveTimers();
-      renderTimers();
-    }
-
-    function restartTimer(id) {
-      const timer = timers.find(t => t.id === id);
-      if (!timer) return;
-      
-      const now = Date.now();
-      timer.startTime = now;
-      timer.endTime = now + (timer.duration * 60 * 60 * 1000);
-      timer.active = true;
-      alarmShownFor.delete(id);
-      saveTimers();
-      renderTimers();
-    }
-
-    function getTimeRemaining(endTime) {
-      const now = Date.now();
-      const diff = endTime - now;
-      
-      if (diff <= 0) {
-        return { expired: true, hours: 0, minutes: 0, seconds: 0, totalMinutes: 0 };
-      }
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      const totalMinutes = Math.floor(diff / (1000 * 60));
-
-      return { expired: false, hours, minutes, seconds, totalMinutes };
-    }
-
-    function formatTime(h, m, s) {
-      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
-
-    function renderTimers() {
-      const container = $("timerGrid");
-      const noTimers = $("noTimers");
-
-      if (timers.length === 0) {
-        container.innerHTML = "";
-        noTimers.style.display = "block";
-        return;
-      }
-
-      noTimers.style.display = "none";
-
-      container.innerHTML = timers.map(timer => {
-        const remaining = getTimeRemaining(timer.endTime);
-        const isWarning = !remaining.expired && remaining.totalMinutes <= ALARM_WARNING_MINUTES;
-        const isExpired = remaining.expired;
-
-        const cardClass = isExpired ? "expired" : (isWarning ? "warning" : "");
-        const displayClass = isExpired ? "expired" : (isWarning ? "warning" : "");
-        const timeDisplay = isExpired ? "00:00:00" : formatTime(remaining.hours, remaining.minutes, remaining.seconds);
-
-        const startTimeStr = new Date(timer.startTime).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-
-        return `
-          <div class="timerCard ${cardClass}" data-id="${timer.id}">
-            <div class="timerLabel">${timer.label}</div>
-            <div class="timerDisplay ${displayClass}">${timeDisplay}</div>
-            <div class="timerMeta">Startet kl. ${startTimeStr} • ${timer.duration}t</div>
-            <div class="timerActions">
-              <button class="timerBtn start" onclick="restartTimer('${timer.id}')">🔄 Genstart</button>
-              <button class="timerBtn stop" onclick="removeTimer('${timer.id}')">✕ Fjern</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function checkAlarms() {
-      timers.forEach(timer => {
-        if (!timer.active) return;
-        
-        const remaining = getTimeRemaining(timer.endTime);
-        
-        // Check for 15-minute warning
-        if (!remaining.expired && remaining.totalMinutes <= ALARM_WARNING_MINUTES && remaining.totalMinutes > 0) {
-          if (!alarmShownFor.has(timer.id)) {
-            showAlarm(timer, remaining.totalMinutes);
-            alarmShownFor.add(timer.id);
-          }
-        }
-        
-        // Check for expiration
-        if (remaining.expired && !alarmShownFor.has(timer.id + "_expired")) {
-          showAlarm(timer, 0);
-          alarmShownFor.add(timer.id + "_expired");
-        }
-      });
-    }
-
-    function showAlarm(timer, minutesLeft) {
-      const overlay = $("alarmOverlay");
-      const alarmText = $("alarmText");
-      const alarmSub = $("alarmSub");
-
-      if (minutesLeft > 0) {
-        alarmText.textContent = `⚠️ ${minutesLeft} MIN TILBAGE!`;
-        alarmSub.textContent = `"${timer.label}" udløber snart`;
-      } else {
-        alarmText.textContent = `🚨 UDLØBET!`;
-        alarmSub.textContent = `"${timer.label}" skal håndteres NU`;
-      }
-
-      overlay.classList.add("show");
-      playAlarmSound();
-    }
-
-    function dismissAlarm() {
-      $("alarmOverlay").classList.remove("show");
-      stopAlarmSound();
-    }
-
-    function playAlarmSound() {
-      // Create a beep sound using Web Audio API
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'square';
-        gainNode.gain.value = 0.3;
-        
-        oscillator.start();
-        
-        // Beep pattern
-        let beeps = 0;
-        const beepInterval = setInterval(() => {
-          gainNode.gain.value = gainNode.gain.value > 0 ? 0 : 0.3;
-          beeps++;
-          if (beeps > 10) {
-            clearInterval(beepInterval);
-            oscillator.stop();
-          }
-        }, 200);
-        
-      } catch (e) {
-        console.log("Audio not supported");
-      }
-    }
-
-    function stopAlarmSound() {
-      // Sound stops automatically
-    }
-
-    // ============================================================
-    // SECTIONS (Collapsible)
-    // ============================================================
-    function toggleSection(name) {
-      const body = $(name + "Body");
-      const arrow = $(name + "Arrow");
-      if (body && arrow) {
-        body.classList.toggle("open");
-        arrow.classList.toggle("open");
-      }
-    }
-
-    // ============================================================
-    // TOOL VIEWER
-    // ============================================================
-    let currentToolUrl = "";
-
-    function openTool(url, name) {
-      currentToolUrl = url;
-      $("toolName").textContent = "🔧 " + (name || url);
-      $("toolFrame").src = url;
-      $("toolViewer").classList.add("open");
-      $("toolViewer").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function closeTool() {
-      $("toolViewer").classList.remove("open");
-      $("toolFrame").src = "about:blank";
-      currentToolUrl = "";
-    }
-
-    function openInNewTab() {
-      if (currentToolUrl) window.open(currentToolUrl, "_blank");
-    }
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    function init() {
-      // Clock
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").classList.toggle("on", clockVisible);
-      updateClock();
-
-      // Timers
-      loadTimers();
-      renderTimers();
-
-      // Update intervals
-      setInterval(updateClock, 1000);
-      setInterval(() => {
-        renderTimers();
-        checkAlarms();
-      }, 1000);
-    }
-
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    $("clockToggle").onclick = toggleClock;
-    $("fsBtn").onclick = toggleFullscreen;
-    $("awakeBtn").onclick = toggleAwake;
-
-    // Make functions global
-    window.openTool = openTool;
-    window.closeTool = closeTool;
-    window.openInNewTab = openInNewTab;
-    window.toggleSection = toggleSection;
-    window.addNewTimer = addNewTimer;
-    window.removeTimer = removeTimer;
-    window.restartTimer = restartTimer;
-    window.dismissAlarm = dismissAlarm;
-
-    // Re-request wake lock if page becomes visible again
-    document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible' && awakeActive && !wakeLock) {
-        try {
-          wakeLock = await navigator.wakeLock.request('screen');
-        } catch (e) {}
-      }
-    });
-
-    // Start
-    init();
-  </script>
+        // Initial load
+        window.onload = function() {
+            updateTimerDisplay();
+            loadCateringData();
+            loadKitchenPercentage();
+        };
+    </script>
 </body>
 </html>
