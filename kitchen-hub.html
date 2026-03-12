@@ -37,15 +37,17 @@
         radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
       overflow-x:hidden;
-    }
-    body:before{
-      content:""; position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity:0.08; pointer-events:none;
-    }
+      
+ body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(192,155,60,0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(192,155,60,0.06), transparent);
+  pointer-events: none;  /* <-- TILFØJ DENNE LINJE */
+  z-index: -1;           /* <-- TILFØJ OGSÅ DENNE */
+}
  
     /* Alarm flash overlay */
     .alarmFlash{
