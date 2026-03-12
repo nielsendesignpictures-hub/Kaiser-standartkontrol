@@ -19,7 +19,6 @@
       --gold2:#b9921f;
       --ok:#62d26f;
       --danger:#ff6b6b;
-      --warn:#f59e0b;
       --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
@@ -227,6 +226,13 @@
       font-weight:600;
       text-align:center;
     }
+
+    iframe.hiddenFrame{
+      display:none;
+      width:0;
+      height:0;
+      border:0;
+    }
   </style>
 </head>
 <body>
@@ -282,9 +288,11 @@
       </div>
 
       <div class="status" id="statusBox"></div>
-      <div class="small">Tip: brug links som kitchen-admin.html?loc=Helsingør</div>
+      <div class="small">Tip: brug links som kitchen-percent.html?loc=Helsingør</div>
     </div>
   </div>
+
+  <iframe name="saveTarget" class="hiddenFrame"></iframe>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -414,11 +422,12 @@
         setStatus("Dagens tal hentet.", "ok");
 
       } catch (e) {
+        console.error(e);
         setStatus("Kunne ikke hente dagens tal.", "err");
       }
     }
 
-    async function saveData() {
+    function saveData() {
       clearStatus();
 
       const location = $("locSelect").value;
@@ -435,34 +444,37 @@
       btn.disabled = true;
       btn.textContent = "Gemmer...";
 
-      try {
-        const form = new URLSearchParams();
-        form.append("action", "saveKitchenPct");
-        form.append("date", date);
-        form.append("location", location);
-        form.append("revenueGross", revenueGross);
-        form.append("purchases", purchases);
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = SCRIPT_URL;
+      form.target = "saveTarget";
+      form.style.display = "none";
 
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: form
-        });
+      const fields = {
+        action: "saveKitchenPct",
+        date,
+        location,
+        revenueGross,
+        purchases
+      };
 
-        const data = await res.json();
+      Object.keys(fields).forEach(key => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+      });
 
-        if (!data || !data.ok) {
-          throw new Error(data?.error || "Save failed");
-        }
+      document.body.appendChild(form);
+      form.submit();
 
-        setStatus("✅ Gemt. Hub’en opdaterer automatisk.", "ok");
-
-      } catch (e) {
-        console.error(e);
-        setStatus("❌ Kunne ikke gemme data.", "err");
-      } finally {
+      setTimeout(() => {
+        form.remove();
         btn.disabled = false;
         btn.textContent = "Gem";
-      }
+        setStatus("✅ Data sendt. Tjek nu arket eller klik 'Hent dagens tal' om 2 sek.", "ok");
+      }, 1200);
     }
 
     (function init() {
