@@ -165,6 +165,33 @@
     .divider{height:1px;background:rgba(255,255,255,0.10);}
 
     .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+
+    .presetGrid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .presetBtn{
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.94);
+      font-weight:800;
+      font-size:13px;
+      letter-spacing:.02em;
+      cursor:pointer;
+      transition:all .15s ease;
+      text-align:center;
+    }
+    .presetBtn:hover{
+      background:rgba(255,255,255,0.10);
+      border-color:rgba(255,255,255,0.22);
+      transform:translateY(-1px);
+    }
+    .presetBtn:active{transform:translateY(1px);}
+
     .segBtn{
       padding:10px 14px;border-radius:999px;
       border:1px solid rgba(255,255,255,0.15);
@@ -306,16 +333,31 @@
       </div>
       <div class="divider"></div>
       <div class="sectionBody open" id="timerBody">
+
+        <div class="presetGrid" id="presetGrid">
+          <button class="presetBtn" type="button" data-preset="Pandekager">🥞 Pandekager</button>
+          <button class="presetBtn" type="button" data-preset="Bacon">🥓 Bacon</button>
+          <button class="presetBtn" type="button" data-preset="Flæsk">🥩 Flæsk</button>
+          <button class="presetBtn" type="button" data-preset="Pølser">🌭 Pølser</button>
+          <button class="presetBtn" type="button" data-preset="Toast">🍞 Toast</button>
+          <button class="presetBtn" type="button" data-preset="Smør">🧈 Smør</button>
+          <button class="presetBtn" type="button" data-preset="Mayo">🥣 Mayo</button>
+          <button class="presetBtn" type="button" data-preset="Pomfritter">🍟 Pomfritter</button>
+          <button class="presetBtn" type="button" data-preset="Friske æg">🥚 Friske æg</button>
+        </div>
+
         <div class="timerRow" id="tplRow">
           <button class="segBtn on" data-tpl="Bacon" type="button">🥓 Bacon</button>
           <button class="segBtn" data-tpl="Pancakes" type="button">🥞 Pancakes</button>
           <button class="segBtn" data-tpl="Free text" type="button">✏️ Free text</button>
         </div>
+
         <div class="timerRow">
           <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
           <button class="btn primary" id="start3hBtn" type="button">⏰ Start 3h</button>
           <button class="btn ghost" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
         </div>
+
         <div class="timerList" id="timerList">
           <div class="emptyState">No active timers — start one above</div>
         </div>
@@ -371,14 +413,26 @@
     const VAT_FACTOR = 1.25;
 
     const LOC_KEY = "kaiser_kitchenpct_loc";
-    const TIMER_KEY = "kaiser_3timer_v1_1";
+    const TIMER_KEY = "kaiser_3timer_v2";
     const CLOCK_KEY = "kaiser_clock_visible";
-    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v1";
+    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v2";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
     const WARN_10_MS = 10 * 60 * 1000;
     const ALARM_AT_MS = 15 * 60 * 1000;
+
+    const PRESET_TIMERS = [
+      { name: "Pandekager", icon: "🥞", durationMs: DEFAULT_DURATION_MS },
+      { name: "Bacon", icon: "🥓", durationMs: DEFAULT_DURATION_MS },
+      { name: "Flæsk", icon: "🥩", durationMs: DEFAULT_DURATION_MS },
+      { name: "Pølser", icon: "🌭", durationMs: DEFAULT_DURATION_MS },
+      { name: "Toast", icon: "🍞", durationMs: DEFAULT_DURATION_MS },
+      { name: "Smør", icon: "🧈", durationMs: DEFAULT_DURATION_MS },
+      { name: "Mayo", icon: "🥣", durationMs: DEFAULT_DURATION_MS },
+      { name: "Pomfritter", icon: "🍟", durationMs: DEFAULT_DURATION_MS },
+      { name: "Friske æg", icon: "🥚", durationMs: DEFAULT_DURATION_MS }
+    ];
 
     const BASELINE_DATA = {
       "Café Kaiser Hillerød": { revGross: 424048.75, buy: 64582.71 },
@@ -455,6 +509,21 @@
 
     function sameYMD(dateStr, ymd) {
       return String(dateStr || "").trim() === String(ymd || "").trim();
+    }
+
+    function normalizeLoc(s) {
+      return String(s || "")
+        .toLowerCase()
+        .replace("café", "cafe")
+        .replace("kaiser", "")
+        .replace(/[^\p{L}\p{N}]+/gu, " ")
+        .trim();
+    }
+
+    function locMatches(a, b) {
+      const na = normalizeLoc(a);
+      const nb = normalizeLoc(b);
+      return na === nb || na.includes(nb) || nb.includes(na);
     }
 
     // ============================================================
@@ -585,10 +654,6 @@
 
     // ============================================================
     // CATERING MINI
-    // Shows events for selected location:
-    // - all events from TODAY and forward
-    // - sorted by date/time
-    // - max 3 shown
     // ============================================================
     async function loadCateringMini() {
       const loc = getLoc();
@@ -610,11 +675,7 @@
         const startOfToday = parseLocalDateTime(todayYMD, "00:00");
 
         const events = data.orders
-          .filter(o => {
-            const orderLoc = String(o.location || "").trim().toLowerCase();
-            const currentLoc = String(loc || "").trim().toLowerCase();
-            return orderLoc === currentLoc;
-          })
+          .filter(o => locMatches(o.location, loc))
           .map(o => {
             const date = String(o.deliveryDate || "").trim();
             const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
@@ -713,16 +774,10 @@
       return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
     }
 
-    function buildTimerName() {
-      const text = ($("textInput").value || "").trim();
-      if (selectedTpl === "Free text") return text;
-      return text ? (selectedTpl + " – " + text) : selectedTpl;
-    }
+    function addTimer(durationMs, forcedName = "") {
+      const name = forcedName || buildTimerName();
 
-    function addTimer(durationMs) {
-      const name = buildTimerName();
-
-      if (selectedTpl === "Free text" && !name) {
+      if (!forcedName && selectedTpl === "Free text" && !name) {
         alert("Please enter a name!");
         $("textInput").focus();
         return;
@@ -746,6 +801,12 @@
 
       $("textInput").value = "";
       renderTimers();
+    }
+
+    function buildTimerName() {
+      const text = ($("textInput").value || "").trim();
+      if (selectedTpl === "Free text") return text;
+      return text ? (selectedTpl + " – " + text) : selectedTpl;
     }
 
     function stopTimer(id) {
@@ -980,6 +1041,13 @@
       btn.addEventListener("click", () => {
         selectedTpl = btn.dataset.tpl;
         updateTplUI();
+      });
+    });
+
+    document.querySelectorAll("#presetGrid .presetBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const presetName = btn.dataset.preset || "Timer";
+        addTimer(DEFAULT_DURATION_MS, presetName);
       });
     });
 
