@@ -547,35 +547,14 @@
     const CLOCK_KEY = "kaiser_clock_visible";
     const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v3";
     const RUSH_KEY = "kaiser_rush_mode_v1";
-    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v1";
+    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v2";
     const CACHE_C_KEY = "kaiser_cache_catering_v1";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
     const WARN_15_MS = 15 * 60 * 1000;
-    const WARN_10_MS = 10 * 60 * 1000;
     const ALARM_AT_MS = 15 * 60 * 1000;
     const AUTO_REMOVE_EXPIRED_AFTER_MS = 3 * 60 * 60 * 1000;
-
-    const PRESET_TIMERS = [
-      { name: "Pandekager", icon: "🥞", durationMs: DEFAULT_DURATION_MS },
-      { name: "Bacon", icon: "🥓", durationMs: DEFAULT_DURATION_MS },
-      { name: "Flæsk", icon: "🥩", durationMs: DEFAULT_DURATION_MS },
-      { name: "Pølser", icon: "🌭", durationMs: DEFAULT_DURATION_MS },
-      { name: "Toast", icon: "🍞", durationMs: DEFAULT_DURATION_MS },
-      { name: "Smør", icon: "🧈", durationMs: DEFAULT_DURATION_MS },
-      { name: "Mayo", icon: "🥣", durationMs: DEFAULT_DURATION_MS },
-      { name: "Pomfritter", icon: "🍟", durationMs: DEFAULT_DURATION_MS },
-      { name: "Friske æg", icon: "🥚", durationMs: DEFAULT_DURATION_MS }
-    ];
-
-    const BASELINE_DATA = {
-      "Café Kaiser Hillerød": { revGross: 424048.75, buy: 64582.71 },
-      "Café Kaiser Farum": { revGross: 352679.74, buy: 59115.96 },
-      "Café Kaiser Hørsholm": { revGross: 377223.23, buy: 45801.28 },
-      "Café Kaiser Vanløse": { revGross: 402930.64, buy: 65871.02 },
-      "Café Kaiser Helsingør": { revGross: 293146.85, buy: 43294.36 }
-    };
 
     const GREEN_HOURS = 48;
     const YELLOW_HOURS = 168;
@@ -627,15 +606,9 @@
 
     function fmtTime(ts) {
       if (!ts || !isFinite(ts)) return "—";
-      return new Date(ts).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    function fmtDate(ts) {
-      if (!ts || !isFinite(ts)) return "—";
-      return new Date(ts).toLocaleDateString("da-DK", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
+      return new Date(ts).toLocaleTimeString("da-DK", {
+        hour: "2-digit",
+        minute: "2-digit"
       });
     }
 
@@ -707,7 +680,6 @@
       const pill = kind === "k" ? $("kLivePill") : $("cLivePill");
       const textEl = kind === "k" ? $("kLiveText") : $("cLiveText");
       textEl.textContent = text;
-
       const dot = pill.querySelector(".liveDot");
       dot.className = "liveDot " + status;
     }
@@ -810,33 +782,8 @@
     }
 
     // ============================================================
-    // KITCHEN %
+    // KITCHEN % - MTD FROM kitchen_percent SHEET
     // ============================================================
-    function renderKitchenPctFromPayload(data, sourceLabel = "Live") {
-      const loc = getLoc();
-      const fullLoc = loc ? ("Café Kaiser " + loc) : "";
-
-      if (!loc) {
-        $("kPct").textContent = "—";
-        $("kMeta").textContent = "No location set";
-        $("kUpdatedLine").textContent = "Last update: —";
-        return;
-      }
-
-      const m = monthKey(isoTodayLocal());
-      const entries = Array.isArray(data?.entries) ? data.entries : [];
-      const base = BASELINE_DATA[fullLoc] || { revGross: 0, buy: 0 };
-      const applyBaseline = m === "2026-03" && !entries.some(e => e.date >= "2026-03-01" && e.date <= "2026-03-10");
-
-      const totalGross = Number(data?.totals?.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
-      const totalBuy = Number(data?.totals?.purchases || 0) + (applyBaseline ? base.buy : 0);
-      const totalNet = totalGross / VAT_FACTOR;
-      const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
-
-      $("kPct").textContent = pctStr(pct);
-      $("kMeta").textContent = `${sourceLabel} • MTD Purchases: ${fmtDKK(totalBuy)}`;
-    }
-
     async function loadKitchenPct() {
       const loc = getLoc();
       const fullLoc = loc ? ("Café Kaiser " + loc) : "";
@@ -851,25 +798,53 @@
       }
 
       $("kErr").style.display = "none";
-      const m = monthKey(isoTodayLocal());
 
       try {
-        const data = await jsonp(SCRIPT_URL, { action: "get", loc: fullLoc, month: m });
+        const m = monthKey(isoTodayLocal());
+        const data = await jsonp(SCRIPT_URL, {
+          action: "getKitchenMTD",
+          loc: fullLoc,
+          month: m
+        });
 
-        if (!data || !data.ok) throw new Error("No data");
+        if (!data || !data.ok) {
+          throw new Error(data?.error || "No data");
+        }
 
-        renderKitchenPctFromPayload(data, "Live");
+        const totalGross = Number(data?.totals?.revenueGross || 0);
+        const totalBuy = Number(data?.totals?.purchases || 0);
+        const totalNet = totalGross / VAT_FACTOR;
+        const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
+
+        $("kPct").textContent = pctStr(pct);
+        $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
+
+        let latestUpdatedTs = 0;
+        if (Array.isArray(data.rows) && data.rows.length) {
+          latestUpdatedTs = data.rows
+            .map(r => r.updatedAt ? new Date(r.updatedAt).getTime() : 0)
+            .filter(Boolean)
+            .sort((a, b) => b - a)[0] || 0;
+        }
+
+        $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(latestUpdatedTs || Date.now());
+
         saveCache(CACHE_K_KEY, data);
+        setLiveStatus("k", "ok", "Kitchen %: live " + fmtTime(Date.now()));
 
-        const ts = Date.now();
-        $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(ts);
-        setLiveStatus("k", "ok", "Kitchen %: live " + fmtTime(ts));
       } catch (e) {
         console.error("Kitchen % load error:", e);
 
         const cached = loadCache(CACHE_K_KEY);
+
         if (cached && cached.data) {
-          renderKitchenPctFromPayload(cached.data, "Offline");
+          const totalGross = Number(cached.data?.totals?.revenueGross || 0);
+          const totalBuy = Number(cached.data?.totals?.purchases || 0);
+          const totalNet = totalGross / VAT_FACTOR;
+          const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
+
+          $("kPct").textContent = pctStr(pct);
+          $("kMeta").textContent = "Offline • MTD Purchases: " + fmtDKK(totalBuy);
           $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(cached.ts) + " (cached)";
           $("kErr").textContent = "Live load failed. Showing cached data.";
           $("kErr").style.display = "block";
