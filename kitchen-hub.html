@@ -1,608 +1,191 @@
 <!DOCTYPE html>
-<html lang="da">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Hub - Jeunes Restauranter</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
-            min-height: 100vh;
-            color: #e0e0e0;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(15, 25, 50, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
-            background: linear-gradient(135deg, #d4af37, #f4d03f, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .date-nav {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .date-nav button {
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #d4af37;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .date-nav button:hover {
-            background: rgba(212, 175, 55, 0.3);
-        }
-
-        .date-display {
-            color: #d4af37;
-            font-size: 1.1em;
-            font-weight: 600;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        .back-btn {
-            background: linear-gradient(135deg, #d4af37, #b8960c);
-            color: #0a1628;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9em;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px;
-        }
-
-        /* Grid Layout */
-        .hub-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .hub-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .hub-card-header {
-            background: rgba(212, 175, 55, 0.1);
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .hub-card-header h3 {
-            color: #d4af37;
-            font-size: 1.1em;
-        }
-
-        .hub-card-body {
-            padding: 20px;
-        }
-
-        /* Menu Card */
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .menu-label {
-            color: #8899aa;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .menu-value {
-            color: #e0e0e0;
-            text-align: right;
-            max-width: 60%;
-        }
-
-        /* Catering Card */
-        .catering-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .catering-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .catering-item h4 {
-            color: #d4af37;
-            margin-bottom: 8px;
-        }
-
-        .catering-detail {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            font-size: 0.9em;
-        }
-
-        .catering-detail .label {
-            color: #8899aa;
-        }
-
-        .catering-detail .value {
-            color: #e0e0e0;
-        }
-
-        /* Full width card */
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        /* Status badge */
-        .status-badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 600;
-        }
-
-        .status-aktiv {
-            background: rgba(39, 174, 96, 0.2);
-            color: #2ecc71;
-            border: 1px solid rgba(39, 174, 96, 0.3);
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: #667788;
-        }
-
-        .empty-state .icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        /* Loading */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 300;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(212, 175, 55, 0.2);
-            border-top: 4px solid #d4af37;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hub-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .header-right {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  <base target="_top">
+  <!-- VIGTIGT: Fuld jQuery version for at dropdowns virker -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    /* DIT ORIGINALE DESIGN */
+    body { background-color: #121212; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
+    .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
+    .card:hover { transform: translateY(-2px); }
+    .card-header { background-color: #2c2c2c; border-bottom: 1px solid #333; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .btn-status { margin-right: 5px; }
+    .timer-display { font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: bold; color: #00ff9d; }
+    .detail-row { margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+    .badge-allergies { background-color: #cf6679; color: #000; }
+    
+    /* Status farver fra dit design */
+    .status-Bekræftet { border-left: 5px solid #ffc107; } /* Gul */
+    .status-Igang { border-left: 5px solid #0d6efd; } /* Blå */
+    .status-Klar { border-left: 5px solid #198754; } /* Grøn */
+  </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="header">
-        <div>
-            <h1>👨‍🍳 Kitchen Hub</h1>
-        </div>
-        <div class="header-right">
-            <div class="date-nav">
-                <button onclick="changeDate(-1)">◀</button>
-                <span class="date-display" id="dateDisplay">Indlæser...</span>
-                <button onclick="changeDate(1)">▶</button>
-                <button onclick="goToToday()" style="margin-left:5px;">I dag</button>
-            </div>
-            <a href="index.html" class="back-btn">← Dashboard</a>
-        </div>
+<div class="container-fluid mt-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded" style="background-color: #1e1e1e;">
+    <h2 class="m-0"><i class="fas fa-utensils me-2 text-warning"></i>Kitchen Hub <span class="badge bg-dark border border-secondary ms-2">Live</span></h2>
+    <div class="d-flex align-items-center">
+      <div id="clock" class="me-4 text-white fw-bold fs-5">00:00:00</div>
+      <button class="btn btn-outline-light btn-sm" onclick="loadKitchenOrders()"><i class="fas fa-sync-alt"></i> Opdater</button>
     </div>
+  </div>
 
-    <!-- Loading -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
+  <!-- Loading og Error beskeder -->
+  <div id="loading" class="text-center mt-5">
+    <div class="spinner-border text-warning" role="status"></div>
+    <p class="mt-2 text-muted">Henter ordrer fra serveren...</p>
+  </div>
+  
+  <div id="error-msg" class="alert alert-danger d-none"></div>
 
-    <!-- Content -->
-    <div class="container">
-        <div class="hub-grid">
+  <!-- Her indsættes kortene dynamisk -->
+  <div id="orders-container" class="row"></div>
+</div>
 
-            <!-- Dagens Menu -->
-            <div class="hub-card">
-                <div class="hub-card-header">
-                    <h3>🍽️ Dagens Menu</h3>
-                </div>
-                <div class="hub-card-body" id="menuContent">
-                    <div class="empty-state">
-                        <div class="icon">🔄</div>
-                        <div>Indlæser menu...</div>
-                    </div>
-                </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+    loadKitchenOrders();
+    setInterval(updateClock, 1000);
+    // Auto-refresh hvert minut
+    setInterval(loadKitchenOrders, 60000);
+  });
+
+  function updateClock() {
+    const now = new Date();
+    $('#clock').text(now.toLocaleTimeString('da-DK'));
+  }
+
+  function loadKitchenOrders() {
+    $('#loading').show();
+    $('#error-msg').addClass('d-none');
+    
+    google.script.run
+      .withSuccessHandler(renderOrders)
+      .withFailureHandler(handleError)
+      .getKitchenOrders();
+  }
+
+  function renderOrders(orders) {
+    $('#loading').hide();
+    const container = $('#orders-container');
+    container.empty();
+
+    if (!orders || orders.length === 0) {
+      container.html('<div class="col-12 text-center text-muted mt-5"><h4><i class="fas fa-check-circle"></i> Alt er stille</h4><p>Ingen aktive ordrer i øjeblikket.</p></div>');
+      return;
+    }
+
+    orders.forEach(order => {
+      // Bestem farver baseret på status (matcher dit design)
+      let statusClass = 'status-' + order.status.replace(' ', '');
+      let badgeClass = 'bg-secondary';
+      if(order.status === 'Bekræftet') badgeClass = 'bg-warning text-dark';
+      if(order.status === 'I gang') badgeClass = 'bg-primary';
+      if(order.status === 'Klar') badgeClass = 'bg-success';
+
+      const html = `
+        <div class="col-md-6 col-lg-4">
+          <div class="card ${statusClass}">
+            <div class="card-header">
+              <div>
+                <span class="badge bg-dark border border-secondary me-2">#${order.id.toString().substring(0,6)}</span>
+                <i class="far fa-clock"></i> ${order.deliveryTime}
+              </div>
+              <span class="badge ${badgeClass}">${order.status}</span>
             </div>
+            
+            <div class="card-body">
+              <h4 class="card-title text-white mb-3">${order.menu} <span class="badge bg-light text-dark float-end">${order.guests} pers</span></h4>
+              
+              ${order.allergies ? `<div class="mb-3"><span class="badge badge-allergies w-100 p-2"><i class="fas fa-exclamation-triangle"></i> ALLERGI: ${order.allergies}</span></div>` : ''}
+              
+              <div class="detail-row">
+                <div class="detail-label">Kunde</div>
+                <div class="text-light">${order.customerName}</div>
+              </div>
 
-            <!-- Dagens Catering -->
-            <div class="hub-card">
-                <div class="hub-card-header">
-                    <h3>🎪 Dagens Catering</h3>
-                    <span id="cateringCount" class="status-badge status-aktiv">0</span>
-                </div>
-                <div class="hub-card-body" id="cateringContent">
-                    <div class="empty-state">
-                        <div class="icon">🔄</div>
-                        <div>Indlæser catering...</div>
-                    </div>
-                </div>
+              <div class="detail-row">
+                <div class="detail-label">Lokation</div>
+                <div class="text-light">${order.location}</div>
+              </div>
+              
+              ${order.requests ? `
+              <div class="detail-row">
+                <div class="detail-label text-warning">Noter</div>
+                <div class="text-warning fst-italic">${order.requests}</div>
+              </div>` : ''}
+              
+              <hr style="border-color: #444;">
+              
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                 <div class="timer-section">
+                    ${order.status === 'I gang' ? 
+                      `<i class="fas fa-stopwatch text-muted me-2"></i><span class="timer-display" id="timer-${order.id}">00:00</span>` : 
+                      ''
+                    }
+                 </div>
+                 <div class="btn-group">
+                   ${getButtons(order)}
+                 </div>
+              </div>
             </div>
-
-            <!-- Notater -->
-            <div class="hub-card full-width">
-                <div class="hub-card-header">
-                    <h3>📝 Notater & Allergener</h3>
-                </div>
-                <div class="hub-card-body" id="notesContent">
-                    <div class="empty-state">
-                        <div class="icon">📋</div>
-                        <div>Ingen notater for denne dag</div>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
-    </div>
+      `;
+      container.append(html);
+      
+      if(order.status === 'I gang') {
+        startLocalTimer(order.id);
+      }
+    });
+  }
 
-    <script>
-        // ============================================
-        // KONFIGURATION
-        // ============================================
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfe6VrFMOSHEjeOVyBPMPmGEagLJpw3kEwOiFssnsmz-DjAVKAFVkyBLBMGMAwMb5V/exec';
+  function getButtons(order) {
+    if (order.status === 'Bekræftet') {
+      return `<button class="btn btn-primary btn-sm" onclick="updateStatus('${order.id}', 'I gang')">Start <i class="fas fa-play ms-1"></i></button>`;
+    } else if (order.status === 'I gang') {
+      return `<button class="btn btn-success btn-sm" onclick="updateStatus('${order.id}', 'Klar')">Færdig <i class="fas fa-check ms-1"></i></button>`;
+    } else {
+      return `<button class="btn btn-secondary btn-sm" disabled>Afsluttet</button>`;
+    }
+  }
 
-        // ============================================
-        // DATO HÅNDTERING
-        // ============================================
-        let currentDate = new Date();
+  function updateStatus(id, status) {
+    // Visuel feedback
+    const btn = event.target.closest('button');
+    $(btn).prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
 
-        const dayNames = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'];
-        const monthNames = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+    google.script.run
+      .withSuccessHandler(function() {
+        loadKitchenOrders(); 
+      })
+      .withFailureHandler(handleError)
+      .updateOrderStatus(id, status);
+  }
 
-        function formatDate(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return y + '-' + m + '-' + d;
-        }
+  function startLocalTimer(id) {
+    let seconds = 0;
+    setInterval(function() {
+        seconds++;
+        let m = Math.floor(seconds / 60);
+        let s = seconds % 60;
+        $(`#timer-${id}`).text((m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
+    }, 1000);
+  }
 
-        function formatDisplayDate(date) {
-            return dayNames[date.getDay()] + ' d. ' + date.getDate() + '. ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
-        }
-
-        function changeDate(offset) {
-            currentDate.setDate(currentDate.getDate() + offset);
-            updateDisplay();
-            loadKitchenHub();
-        }
-
-        function goToToday() {
-            currentDate = new Date();
-            updateDisplay();
-            loadKitchenHub();
-        }
-
-        function updateDisplay() {
-            document.getElementById('dateDisplay').textContent = formatDisplayDate(currentDate);
-        }
-
-        // ============================================
-        // LOADING
-        // ============================================
-        function showLoading(show) {
-            const overlay = document.getElementById('loadingOverlay');
-            if (show) {
-                overlay.classList.add('active');
-            } else {
-                overlay.classList.remove('active');
-            }
-        }
-
-        // ============================================
-        // HENT DATA
-        // ============================================
-        async function loadKitchenHub() {
-            try {
-                showLoading(true);
-                const dateStr = formatDate(currentDate);
-                const url = APPS_SCRIPT_URL + '?action=getKitchenHub&date=' + dateStr + '&t=' + Date.now();
-
-                console.log('Kitchen Hub henter:', url);
-
-                const response = await fetch(url, {
-                    method: 'GET',
-                    redirect: 'follow',
-                    mode: 'cors'
-                });
-
-                const text = await response.text();
-                console.log('Response:', text.substring(0, 300));
-
-                let result;
-                try {
-                    result = JSON.parse(text);
-                } catch (e) {
-                    console.error('Parse fejl:', e);
-                    throw new Error('Kunne ikke læse serverens svar');
-                }
-
-                if (result.success) {
-                    renderMenu(result.menu);
-                    renderCatering(result.catering || []);
-                    renderNotes(result.menu);
-                } else {
-                    throw new Error(result.error || 'Serverfejl');
-                }
-
-            } catch (error) {
-                console.error('Kitchen Hub fejl:', error);
-
-                document.getElementById('menuContent').innerHTML =
-                    '<div class="empty-state"><div class="icon">❌</div><div>Fejl: ' + error.message + '</div></div>';
-                document.getElementById('cateringContent').innerHTML =
-                    '<div class="empty-state"><div class="icon">❌</div><div>Fejl: ' + error.message + '</div></div>';
-
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // ============================================
-        // RENDER MENU
-        // ============================================
-        function renderMenu(menu) {
-            const container = document.getElementById('menuContent');
-
-            if (!menu) {
-                container.innerHTML =
-                    '<div class="empty-state">' +
-                    '<div class="icon">📭</div>' +
-                    '<div>Ingen menu registreret for denne dag</div>' +
-                    '</div>';
-                return;
-            }
-
-            let html = '';
-
-            const fields = [
-                { key: 'Forret', label: 'Forret', icon: '🥗' },
-                { key: 'Hovedret', label: 'Hovedret', icon: '🥩' },
-                { key: 'Tilbehoer', label: 'Tilbehør', icon: '🥕' },
-                { key: 'Dessert', label: 'Dessert', icon: '🍰' },
-                { key: 'Antal', label: 'Antal kuverter', icon: '👥' }
-            ];
-
-            for (let i = 0; i < fields.length; i++) {
-                const f = fields[i];
-                const value = menu[f.key] || '';
-                if (value) {
-                    html += '<div class="menu-item">';
-                    html += '<span class="menu-label">' + f.icon + ' ' + f.label + '</span>';
-                    html += '<span class="menu-value">' + escapeHtml(String(value)) + '</span>';
-                    html += '</div>';
-                }
-            }
-
-            if (!html) {
-                html = '<div class="empty-state"><div class="icon">📭</div><div>Ingen menu detaljer</div></div>';
-            }
-
-            container.innerHTML = html;
-        }
-
-        // ============================================
-        // RENDER CATERING
-        // ============================================
-        function renderCatering(cateringList) {
-            const container = document.getElementById('cateringContent');
-            const countBadge = document.getElementById('cateringCount');
-
-            const activeList = cateringList.filter(function(c) {
-                return c.status === 'Aktiv';
-            });
-
-            countBadge.textContent = activeList.length;
-
-            if (activeList.length === 0) {
-                container.innerHTML =
-                    '<div class="empty-state">' +
-                    '<div class="icon">✅</div>' +
-                    '<div>Ingen catering i dag</div>' +
-                    '</div>';
-                return;
-            }
-
-            let html = '';
-            for (let i = 0; i < activeList.length; i++) {
-                const c = activeList[i];
-                html += '<div class="catering-item">';
-                html += '<h4>' + escapeHtml(c.kunde || 'Ukendt kunde') + '</h4>';
-
-                if (c.tidspunkt) {
-                    html += '<div class="catering-detail"><span class="label">Tidspunkt</span><span class="value">' + escapeHtml(c.tidspunkt) + '</span></div>';
-                }
-                if (c.antalPersoner) {
-                    html += '<div class="catering-detail"><span class="label">Personer</span><span class="value">' + escapeHtml(String(c.antalPersoner)) + '</span></div>';
-                }
-                if (c.menutype) {
-                    html += '<div class="catering-detail"><span class="label">Menutype</span><span class="value">' + escapeHtml(c.menutype) + '</span></div>';
-                }
-                if (c.detaljer) {
-                    html += '<div class="catering-detail"><span class="label">Detaljer</span><span class="value">' + escapeHtml(c.detaljer) + '</span></div>';
-                }
-                if (c.kontaktperson) {
-                    html += '<div class="catering-detail"><span class="label">Kontakt</span><span class="value">' + escapeHtml(c.kontaktperson);
-                    if (c.telefon) html += ' (' + escapeHtml(c.telefon) + ')';
-                    html += '</span></div>';
-                }
-
-                html += '</div>';
-            }
-
-            container.innerHTML = html;
-        }
-
-        // ============================================
-        // RENDER NOTES
-        // ============================================
-        function renderNotes(menu) {
-            const container = document.getElementById('notesContent');
-
-            if (!menu) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><div>Ingen notater for denne dag</div></div>';
-                return;
-            }
-
-            let html = '';
-            let hasContent = false;
-
-            if (menu.Allergener) {
-                hasContent = true;
-                html += '<div class="menu-item">';
-                html += '<span class="menu-label">⚠️ Allergener</span>';
-                html += '<span class="menu-value">' + escapeHtml(String(menu.Allergener)) + '</span>';
-                html += '</div>';
-            }
-
-            if (menu.Pi_pi) {
-                hasContent = true;
-                html += '<div class="menu-item">';
-                html += '<span class="menu-label">🔔 Pi-Pi</span>';
-                html += '<span class="menu-value">' + escapeHtml(String(menu.Pi_pi)) + '</span>';
-                html += '</div>';
-            }
-
-            if (menu.Noter) {
-                hasContent = true;
-                html += '<div class="menu-item">';
-                html += '<span class="menu-label">📝 Noter</span>';
-                html += '<span class="menu-value">' + escapeHtml(String(menu.Noter)) + '</span>';
-                html += '</div>';
-            }
-
-            if (!hasContent) {
-                html = '<div class="empty-state"><div class="icon">📋</div><div>Ingen notater for denne dag</div></div>';
-            }
-
-            container.innerHTML = html;
-        }
-
-        // ============================================
-        // HJÆLPEFUNKTION
-        // ============================================
-        function escapeHtml(text) {
-            if (!text) return '';
-            var div = document.createElement('div');
-            div.appendChild(document.createTextNode(text));
-            return div.innerHTML;
-        }
-
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            updateDisplay();
-            loadKitchenHub();
-        });
-    </script>
+  function handleError(error) {
+    $('#loading').hide();
+    $('#error-msg').text("Fejl: " + error.message).removeClass('d-none');
+  }
+</script>
 </body>
 </html>
