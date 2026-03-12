@@ -4,61 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen Hub - Kaiser</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #06080c;
-            --bg2: #0a0e14;
-            --card: rgba(255,255,255,0.04);
-            --card-hover: rgba(255,255,255,0.07);
-            --border: rgba(255,255,255,0.08);
-            --text: #ffffff;
-            --muted: rgba(255,255,255,0.6);
-            --muted2: rgba(255,255,255,0.4);
+            --bg0: #070A12;
+            --bg1: #0B1020;
+            --panel: rgba(255,255,255,0.055);
+            --border: rgba(255,255,255,0.10);
+            --text: rgba(255,255,255,0.94);
+            --muted: rgba(255,255,255,0.74);
+            --muted2: rgba(255,255,255,0.52);
             --gold: #d6b24a;
-            --gold-dim: rgba(214,178,74,0.15);
-            --green: #22c55e;
-            --red: #ef4444;
+            --gold2: #b9921f;
+            --success: #22c55e;
+            --danger: #ff6b6b;
             --orange: #f97316;
-            --blue: #3b82f6;
-            --shadow: 0 20px 50px rgba(0,0,0,0.4);
+            --shadow: 0 26px 75px rgba(0,0,0,.55);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
+            font-family: Inter, system-ui, sans-serif;
             color: var(--text);
+            background: radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
+                        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+                        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+                        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
             min-height: 100vh;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        body::before {
+        body:before {
             content: "";
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(214,178,74,0.08), transparent),
-                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(214,178,74,0.05), transparent);
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 38px 38px;
+            opacity: 0.06;
             pointer-events: none;
             z-index: -1;
         }
 
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        .back-btn:hover { color: var(--gold); }
+
         /* ═══════════ HEADER ═══════════ */
         .header {
-            background: var(--bg2);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 24px 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
+            gap: 20px;
         }
 
         .header-left {
@@ -67,183 +84,172 @@
             gap: 16px;
         }
 
-        .back-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 18px;
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            background: var(--gold);
-            color: var(--bg);
-            border-color: var(--gold);
+        .header-left .icon { font-size: 36px; }
+
+        .header-left h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 32px;
+            font-weight: 700;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .logo-icon { font-size: 28px; }
-        .logo h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .logo p { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+        .header-left p { color: var(--muted); font-size: 13px; margin-top: 4px; }
 
         .header-center {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 20px;
         }
 
         .digital-clock {
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             color: var(--gold);
-            text-shadow: 0 0 20px rgba(214,178,74,0.3);
+            text-shadow: 0 0 30px rgba(214,178,74,0.3);
         }
 
         .location-badge {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: var(--gold-dim);
-            border: 1px solid rgba(214,178,74,0.3);
-            color: var(--gold);
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            border-radius: 12px;
+            color: var(--bg0);
             font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13px;
         }
 
         .header-controls {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .control-btn {
-            padding: 10px 14px;
+            padding: 10px 16px;
             border-radius: 10px;
-            background: var(--card);
             border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
             color: var(--muted);
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .control-btn:hover { background: var(--card-hover); color: var(--text); }
-        .control-btn.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(214,178,74,0.3); }
-
-        /* ═══════════ MAIN ═══════════ */
-        .main {
-            padding: 24px;
-            max-width: 1600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+        .control-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+        .control-btn.active { 
+            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
+            color: var(--bg0); 
+            border-color: var(--gold);
         }
 
-        /* ═══════════ TIMER BAR ═══════════ */
-        .timer-section {
-            background: var(--card);
-            border: 1px solid var(--border);
+        /* ═══════════ CARDS ═══════════ */
+        .card {
             border-radius: 20px;
-            padding: 20px 24px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
         }
 
-        .timer-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .timer-header h2 {
+        .section-title {
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--muted);
+            color: var(--gold);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .add-timer-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background: var(--gold);
+        .section-title .refresh-btn {
+            margin-left: auto;
+            background: none;
             border: none;
-            color: var(--bg);
-            font-size: 12px;
-            font-weight: 700;
+            color: var(--muted);
             cursor: pointer;
-            transition: all 0.2s;
+            font-size: 16px;
+            transition: all 0.3s;
         }
-        .add-timer-btn:hover { transform: scale(1.05); }
+        .section-title .refresh-btn:hover { color: var(--gold); transform: rotate(180deg); }
 
+        /* ═══════════ GRID LAYOUT ═══════════ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════ TIMERS ═══════════ */
         .timers-row {
             display: flex;
             gap: 16px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
         .timer-card {
             flex: 0 0 200px;
-            background: var(--bg2);
+            background: rgba(255,255,255,0.04);
             border: 2px solid var(--border);
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             text-align: center;
             transition: all 0.3s;
         }
-        .timer-card.warning { border-color: var(--orange); box-shadow: 0 0 20px rgba(249,115,22,0.2); }
-        .timer-card.danger { border-color: var(--red); box-shadow: 0 0 25px rgba(239,68,68,0.3); animation: pulse-danger 1s infinite; }
+        .timer-card.warning { 
+            border-color: var(--orange); 
+            box-shadow: 0 0 25px rgba(249,115,22,0.25); 
+        }
+        .timer-card.danger { 
+            border-color: var(--danger); 
+            box-shadow: 0 0 30px rgba(239,68,68,0.35); 
+            animation: pulse-danger 1s infinite;
+        }
 
         @keyframes pulse-danger {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.7; }
         }
 
         .timer-label {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--muted);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .timer-display {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             margin-bottom: 12px;
         }
         .timer-card.warning .timer-display { color: var(--orange); }
-        .timer-card.danger .timer-display { color: var(--red); }
+        .timer-card.danger .timer-display { color: var(--danger); }
 
         .timer-progress {
             height: 6px;
             background: var(--border);
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .timer-progress-bar {
             height: 100%;
@@ -252,7 +258,7 @@
             transition: width 1s linear;
         }
         .timer-card.warning .timer-progress-bar { background: var(--orange); }
-        .timer-card.danger .timer-progress-bar { background: var(--red); }
+        .timer-card.danger .timer-progress-bar { background: var(--danger); }
 
         .timer-controls {
             display: flex;
@@ -270,75 +276,35 @@
             transition: all 0.2s;
         }
         .timer-btn:active { transform: scale(0.95); }
-        .timer-btn.start { background: var(--green); color: #fff; }
+        .timer-btn.start { background: var(--success); color: #fff; }
         .timer-btn.pause { background: var(--orange); color: #fff; }
-        .timer-btn.reset { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
-        .timer-btn.delete { background: var(--red); color: #fff; }
+        .timer-btn.reset { background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid var(--border); }
+        .timer-btn.delete { background: var(--danger); color: #fff; }
 
-        /* ═══════════ WIDGETS ROW ═══════════ */
-        .widgets-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 1000px) {
-            .widgets-row { grid-template-columns: 1fr; }
-        }
-
-        /* ═══════════ WIDGET CARD ═══════════ */
-        .widget {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .widget-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg2);
-        }
-
-        .widget-header .icon { font-size: 18px; }
-        .widget-header h3 {
+        .add-timer-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            border: none;
+            color: var(--bg0);
             font-size: 13px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex: 1;
-        }
-
-        .refresh-btn {
-            background: none;
-            border: none;
-            color: var(--muted);
             cursor: pointer;
-            font-size: 16px;
-            padding: 4px;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            margin-left: auto;
         }
-        .refresh-btn:hover { color: var(--gold); transform: rotate(180deg); }
+        .add-timer-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(214,178,74,0.3); }
 
-        .widget-body {
-            padding: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        /* ═══════════ KITCHEN % WIDGET ═══════════ */
-        .kitchen-percent-display {
+        /* ═══════════ KITCHEN % ═══════════ */
+        .percent-display {
             text-align: center;
-            padding: 30px 20px;
+            padding: 20px;
         }
 
         .percent-circle {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 150px;
+            height: 150px;
             margin: 0 auto 20px;
         }
 
@@ -350,7 +316,7 @@
 
         .percent-circle circle {
             fill: none;
-            stroke-width: 10;
+            stroke-width: 12;
         }
         .percent-circle .bg { stroke: var(--border); }
         .percent-circle .fill {
@@ -365,169 +331,162 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
         }
 
         .percent-label {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--muted);
             margin-bottom: 16px;
         }
 
         .percent-link {
             display: inline-block;
-            padding: 10px 20px;
-            background: var(--gold-dim);
-            border: 1px solid rgba(214,178,74,0.3);
-            border-radius: 10px;
-            color: var(--gold);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            border-radius: 12px;
+            color: var(--bg0);
             text-decoration: none;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
-        .percent-link:hover { background: var(--gold); color: var(--bg); }
+        .percent-link:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(214,178,74,0.3); }
 
-        /* ═══════════ CATERING WIDGET ═══════════ */
+        /* ═══════════ CATERING LIST ═══════════ */
         .catering-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         .catering-item {
-            background: var(--bg2);
+            background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             border-left: 4px solid var(--gold);
-            border-radius: 12px;
-            padding: 14px 16px;
-            transition: all 0.2s;
+            border-radius: 15px;
+            padding: 16px 20px;
+            transition: all 0.3s;
         }
-        .catering-item:hover { background: var(--card-hover); transform: translateX(4px); }
-
-        .catering-item.today { border-left-color: var(--red); }
+        .catering-item:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
+        .catering-item.today { border-left-color: var(--danger); }
         .catering-item.tomorrow { border-left-color: var(--orange); }
 
         .catering-date {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--gold);
             margin-bottom: 6px;
         }
-        .catering-item.today .catering-date { color: var(--red); }
+        .catering-item.today .catering-date { color: var(--danger); }
         .catering-item.tomorrow .catering-date { color: var(--orange); }
 
         .catering-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
         .catering-info {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--muted);
         }
 
         .catering-note {
-            margin-top: 8px;
-            padding: 8px 10px;
+            margin-top: 10px;
+            padding: 10px 12px;
             background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-            font-size: 11px;
+            border-radius: 10px;
+            font-size: 12px;
             color: var(--muted2);
             line-height: 1.5;
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
-            color: var(--muted);
-            font-size: 13px;
+            color: var(--muted2);
+            padding: 40px;
+            font-size: 14px;
         }
 
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border: 2px solid var(--border);
             border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ═══════════ QUICK TOOLS ═══════════ */
-        .quicktools-section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
+        .tools-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .quicktools-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
+        .tool-btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.04);
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: var(--bg2);
-            cursor: pointer;
-            transition: background 0.2s;
         }
-        .quicktools-header:hover { background: var(--card-hover); }
-
-        .quicktools-header h3 {
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex: 1;
+        .tool-btn:hover { 
+            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
+            color: var(--bg0); 
+            border-color: var(--gold);
+            transform: translateY(-2px);
         }
-
-        .quicktools-toggle {
-            font-size: 12px;
-            color: var(--muted);
-            transition: transform 0.3s;
+        .tool-btn.active {
+            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
+            color: var(--bg0); 
+            border-color: var(--gold);
         }
-        .quicktools-toggle.open { transform: rotate(180deg); }
-
-        .quicktools-buttons {
-            padding: 16px 20px;
-            display: none;
-            gap: 12px;
-        }
-        .quicktools-buttons.open { display: flex; flex-wrap: wrap; }
-
-        .tool-btn {
-            padding: 12px 20px;
-            border-radius: 10px;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .tool-btn:hover { background: var(--gold-dim); border-color: rgba(214,178,74,0.3); color: var(--gold); }
 
         .iframe-container {
             display: none;
-            padding: 0;
+            margin-top: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
         .iframe-container.open { display: block; }
         .iframe-container iframe {
             width: 100%;
             height: 500px;
             border: none;
-            border-radius: 0 0 20px 20px;
         }
+
+        .close-iframe-btn {
+            display: none;
+            padding: 10px 20px;
+            margin-top: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .close-iframe-btn.open { display: inline-block; }
+        .close-iframe-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
         /* ═══════════ SCROLLBAR ═══════════ */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -537,111 +496,91 @@
 
         /* ═══════════ RESPONSIVE ═══════════ */
         @media (max-width: 768px) {
-            .header { padding: 12px 16px; }
-            .header-center { order: 3; width: 100%; justify-content: center; }
-            .digital-clock { font-size: 24px; }
-            .main { padding: 16px; gap: 16px; }
-            .timer-card { flex: 0 0 160px; }
-            .timer-display { font-size: 26px; }
+            .header { flex-direction: column; text-align: center; }
+            .header-left { flex-direction: column; }
+            .digital-clock { font-size: 32px; }
+            .timer-card { flex: 0 0 170px; }
+            .timer-display { font-size: 28px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════ ALARM SOUND ═══════════ -->
+    <!-- ALARM SOUND -->
     <audio id="alarmSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACA/4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH8=" type="audio/wav">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACA/4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/" type="audio/wav">
     </audio>
 
-    <!-- ═══════════ HEADER ═══════════ -->
-    <header class="header">
-        <div class="header-left">
-            <a href="portal.html" class="back-btn" title="Back to Portal">←</a>
-            <div class="logo">
-                <span class="logo-icon">👨‍🍳</span>
+    <div class="container">
+        <a href="portal.html" class="back-btn">← Back to Portal</a>
+
+        <!-- ═══════════ HEADER ═══════════ -->
+        <header class="header">
+            <div class="header-left">
+                <span class="icon">👨‍🍳</span>
                 <div>
                     <h1>Kitchen Hub</h1>
                     <p>Command Center</p>
                 </div>
             </div>
-        </div>
 
-        <div class="header-center">
-            <div class="digital-clock" id="digitalClock">--:--:--</div>
-            <div class="location-badge" id="locationBadge">
-                <span>📍</span>
-                <span id="locationName">Detecting...</span>
+            <div class="header-center">
+                <div class="digital-clock" id="digitalClock">--:--:--</div>
+                <div class="location-badge">
+                    <span>📍</span>
+                    <span id="locationName">Detecting...</span>
+                </div>
             </div>
-        </div>
 
-        <div class="header-controls">
-            <button class="control-btn" id="clockToggle" onclick="toggleClock()">
-                <span>🕐</span> Clock
-            </button>
-            <button class="control-btn" id="soundToggle" onclick="toggleSound()">
-                <span>🔊</span> Sound
-            </button>
-            <button class="control-btn" onclick="toggleFullscreen()">
-                <span>⛶</span> Fullscreen
-            </button>
-            <button class="control-btn" id="awakeToggle" onclick="toggleKeepAwake()">
-                <span>☀️</span> Awake
-            </button>
-        </div>
-    </header>
-
-    <!-- ═══════════ MAIN ═══════════ -->
-    <main class="main">
+            <div class="header-controls">
+                <button class="control-btn active" id="clockToggle" onclick="toggleClock()">🕐 Clock</button>
+                <button class="control-btn active" id="soundToggle" onclick="toggleSound()">🔊 Sound</button>
+                <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+                <button class="control-btn" id="awakeToggle" onclick="toggleKeepAwake()">☀️ Awake</button>
+            </div>
+        </header>
 
         <!-- ═══════════ 3-HOUR TIMERS ═══════════ -->
-        <section class="timer-section">
-            <div class="timer-header">
-                <h2><span>⏰</span> 3-Hour Timers</h2>
+        <div class="card">
+            <div class="section-title">
+                <span>⏰</span> 3-Hour Timers
                 <button class="add-timer-btn" onclick="addTimer()">+ Add Timer</button>
             </div>
             <div class="timers-row" id="timersRow">
-                <!-- Timers will be rendered here -->
+                <!-- Timers rendered here -->
             </div>
-        </section>
+        </div>
 
-        <!-- ═══════════ WIDGETS ═══════════ -->
-        <div class="widgets-row">
-
+        <!-- ═══════════ WIDGETS GRID ═══════════ -->
+        <div class="grid-2">
+            
             <!-- Kitchen % -->
-            <div class="widget">
-                <div class="widget-header">
-                    <span class="icon">📈</span>
-                    <h3>Kitchen %</h3>
-                </div>
-                <div class="widget-body">
-                    <div class="kitchen-percent-display">
-                        <div class="percent-circle">
-                            <svg viewBox="0 0 100 100">
-                                <circle class="bg" cx="50" cy="50" r="40"></circle>
-                                <circle class="fill" id="percentCircle" cx="50" cy="50" r="40" 
-                                        stroke-dasharray="251" stroke-dashoffset="251"></circle>
-                            </svg>
-                            <div class="percent-value" id="percentValue">--%</div>
-                        </div>
-                        <div class="percent-label">Today's Kitchen Percentage</div>
-                        <a href="kitchen-percent.html" class="percent-link">Open Calculator →</a>
+            <div class="card">
+                <div class="section-title"><span>📈</span> Kitchen %</div>
+                <div class="percent-display">
+                    <div class="percent-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="fill" id="percentCircle" cx="50" cy="50" r="40" 
+                                    stroke-dasharray="251" stroke-dashoffset="251"></circle>
+                        </svg>
+                        <div class="percent-value" id="percentValue">--%</div>
                     </div>
+                    <div class="percent-label">Today's Kitchen Percentage</div>
+                    <a href="kitchen-percent.html" class="percent-link">Open Calculator →</a>
                 </div>
             </div>
 
             <!-- Catering Events -->
-            <div class="widget">
-                <div class="widget-header">
-                    <span class="icon">🎉</span>
-                    <h3>Catering Events</h3>
-                    <button class="refresh-btn" onclick="loadCatering()" title="Refresh">🔄</button>
+            <div class="card">
+                <div class="section-title">
+                    <span>🎉</span> Catering Events
+                    <button class="refresh-btn" onclick="loadCatering()">🔄</button>
                 </div>
-                <div class="widget-body">
-                    <div class="catering-list" id="cateringList">
-                        <div class="empty-state">
-                            <div class="spinner"></div>
-                            <p>Loading catering events...</p>
-                        </div>
+                <div class="catering-list" id="cateringList">
+                    <div class="empty-state">
+                        <div class="spinner"></div>
+                        <p>Loading catering events...</p>
                     </div>
                 </div>
             </div>
@@ -649,51 +588,38 @@
         </div>
 
         <!-- ═══════════ QUICK TOOLS ═══════════ -->
-        <section class="quicktools-section">
-            <div class="quicktools-header" onclick="toggleQuicktools()">
-                <span>🛠️</span>
-                <h3>Quick Tools</h3>
-                <span class="quicktools-toggle" id="quicktoolsToggle">▼</span>
+        <div class="card">
+            <div class="section-title"><span>🛠️</span> Quick Tools</div>
+            <div class="tools-grid">
+                <button class="tool-btn" onclick="openTool('MIS.html', this)">🍽️ MIS</button>
+                <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">🧹 Cleaning List</button>
             </div>
-            <div class="quicktools-buttons" id="quicktoolsButtons">
-                <button class="tool-btn" onclick="openTool('MIS.html', this)">
-                    <span>🍽️</span> MIS
-                </button>
-                <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">
-                    <span>🧹</span> Cleaning List
-                </button>
-            </div>
+            <button class="close-iframe-btn" id="closeIframeBtn" onclick="closeIframe()">✕ Close Tool</button>
             <div class="iframe-container" id="iframeContainer">
                 <iframe id="toolIframe" src=""></iframe>
             </div>
-        </section>
+        </div>
 
-    </main>
+    </div>
 
     <script>
-        // ═══════════ CONFIGURATION ═══════════
+        // ═══════════ CONFIG ═══════════
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
-        const TIMER_DURATION = 3 * 60 * 60 * 1000; // 3 hours in ms
-        const WARN_TIME = 15 * 60 * 1000; // 15 minutes in ms
+        const TIMER_DURATION = 3 * 60 * 60 * 1000;
+        const WARN_TIME = 15 * 60 * 1000;
 
         const LOCATIONS = {
-            'helsingør': 'Café Kaiser Helsingør',
-            'helsingor': 'Café Kaiser Helsingør',
-            'hillerød': 'Café Kaiser Hillerød',
-            'hillerod': 'Café Kaiser Hillerød',
+            'helsingør': 'Café Kaiser Helsingør', 'helsingor': 'Café Kaiser Helsingør',
+            'hillerød': 'Café Kaiser Hillerød', 'hillerod': 'Café Kaiser Hillerød',
             'farum': 'Café Kaiser Farum',
-            'hørsholm': 'Café Kaiser Hørsholm',
-            'horsholm': 'Café Kaiser Hørsholm',
-            'vanløse': 'Café Kaiser Vanløse',
-            'vanlose': 'Café Kaiser Vanløse'
+            'hørsholm': 'Café Kaiser Hørsholm', 'horsholm': 'Café Kaiser Hørsholm',
+            'vanløse': 'Café Kaiser Vanløse', 'vanlose': 'Café Kaiser Vanløse'
         };
 
         // ═══════════ STATE ═══════════
         let currentLocation = '';
         let showClock = true;
         let soundEnabled = true;
-        let keepAwake = false;
-        let wakeLock = null;
         let timers = [];
         let timerIntervals = {};
 
@@ -705,54 +631,30 @@
             loadTimers();
             loadCatering();
             loadKitchenPercent();
-
-            // Auto-refresh catering every 60 seconds
             setInterval(loadCatering, 60000);
         });
 
         // ═══════════ SETTINGS ═══════════
         function loadSettings() {
-            showClock = localStorage.getItem('kh_showClock') !== 'false';
+            showClock = localStorage.getItem('kh_clock') !== 'false';
             soundEnabled = localStorage.getItem('kh_sound') !== 'false';
-            keepAwake = localStorage.getItem('kh_awake') === 'true';
-
-            updateControlButtons();
-            if (keepAwake) requestWakeLock();
+            updateButtons();
         }
 
-        function updateControlButtons() {
+        function updateButtons() {
             document.getElementById('clockToggle').classList.toggle('active', showClock);
             document.getElementById('soundToggle').classList.toggle('active', soundEnabled);
-            document.getElementById('awakeToggle').classList.toggle('active', keepAwake);
         }
 
         // ═══════════ LOCATION ═══════════
         function detectLocation() {
-            // First check URL parameter
             const urlParams = new URLSearchParams(window.location.search);
-            const locParam = urlParams.get('loc');
-
-            if (locParam) {
-                currentLocation = locParam.toLowerCase();
-                const displayName = LOCATIONS[currentLocation] || `Café Kaiser ${locParam}`;
-                document.getElementById('locationName').textContent = displayName;
-                return;
-            }
-
-            // Try GPS
-            if (navigator.geolocation) {
-                document.getElementById('locationName').textContent = 'Detecting...';
-                navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        // For demo, default to first location
-                        // In production, compare with actual coordinates
-                        currentLocation = 'helsingør';
-                        document.getElementById('locationName').textContent = LOCATIONS[currentLocation];
-                    },
-                    (err) => {
-                        document.getElementById('locationName').textContent = 'Select Location';
-                    }
-                );
+            const loc = urlParams.get('loc');
+            if (loc) {
+                currentLocation = loc.toLowerCase();
+                document.getElementById('locationName').textContent = LOCATIONS[currentLocation] || `Café Kaiser ${loc}`;
+            } else {
+                document.getElementById('locationName').textContent = 'Select Location';
             }
         }
 
@@ -763,22 +665,17 @@
         }
 
         function updateClock() {
-            if (!showClock) {
-                document.getElementById('digitalClock').style.display = 'none';
-                return;
-            }
-            document.getElementById('digitalClock').style.display = 'block';
+            const el = document.getElementById('digitalClock');
+            if (!showClock) { el.style.display = 'none'; return; }
+            el.style.display = 'block';
             const now = new Date();
-            const h = now.getHours().toString().padStart(2, '0');
-            const m = now.getMinutes().toString().padStart(2, '0');
-            const s = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('digitalClock').textContent = `${h}:${m}:${s}`;
+            el.textContent = now.toTimeString().slice(0, 8);
         }
 
         function toggleClock() {
             showClock = !showClock;
-            localStorage.setItem('kh_showClock', showClock);
-            updateControlButtons();
+            localStorage.setItem('kh_clock', showClock);
+            updateButtons();
             updateClock();
         }
 
@@ -786,103 +683,49 @@
         function toggleSound() {
             soundEnabled = !soundEnabled;
             localStorage.setItem('kh_sound', soundEnabled);
-            updateControlButtons();
+            updateButtons();
         }
 
         function playAlarm() {
             if (!soundEnabled) return;
-            const audio = document.getElementById('alarmSound');
-            audio.currentTime = 0;
-            audio.play().catch(() => {});
-
-            // Also try notification
-            if (Notification.permission === 'granted') {
-                new Notification('⏰ Timer Alert!', { body: '15 minutes remaining!' });
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission();
-            }
+            document.getElementById('alarmSound').play().catch(() => {});
         }
 
-        // ═══════════ FULLSCREEN ═══════════
+        // ═══════════ FULLSCREEN & AWAKE ═══════════
         function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         }
 
-        // ═══════════ KEEP AWAKE ═══════════
         async function toggleKeepAwake() {
-            keepAwake = !keepAwake;
-            localStorage.setItem('kh_awake', keepAwake);
-            updateControlButtons();
-
-            if (keepAwake) {
-                await requestWakeLock();
-            } else if (wakeLock) {
-                wakeLock.release();
-                wakeLock = null;
-            }
-        }
-
-        async function requestWakeLock() {
-            try {
-                if ('wakeLock' in navigator) {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                }
-            } catch (err) {
-                console.log('Wake lock error:', err);
+            const btn = document.getElementById('awakeToggle');
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active') && 'wakeLock' in navigator) {
+                try { await navigator.wakeLock.request('screen'); } catch (e) {}
             }
         }
 
         // ═══════════ TIMERS ═══════════
         function loadTimers() {
             const saved = localStorage.getItem('kh_timers_' + currentLocation);
-            if (saved) {
-                timers = JSON.parse(saved);
-            } else {
-                timers = [
-                    { id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }
-                ];
-            }
+            timers = saved ? JSON.parse(saved) : [{ id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }];
             renderTimers();
-
-            // Resume running timers
-            timers.forEach(t => {
-                if (t.running) {
-                    t.running = false;
-                    startTimer(t.id);
-                }
-            });
+            timers.filter(t => t.running).forEach(t => { t.running = false; startTimer(t.id); });
         }
 
-        function saveTimers() {
-            localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers));
-        }
+        function saveTimers() { localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers)); }
 
         function renderTimers() {
-            const container = document.getElementById('timersRow');
-            container.innerHTML = timers.map(t => {
-                let statusClass = '';
-                if (t.remaining <= 0) statusClass = 'danger';
-                else if (t.remaining <= WARN_TIME) statusClass = 'danger';
-                else if (t.remaining <= WARN_TIME * 2) statusClass = 'warning';
-
-                const percent = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
-
+            document.getElementById('timersRow').innerHTML = timers.map(t => {
+                let cls = t.remaining <= 0 || t.remaining <= WARN_TIME ? 'danger' : t.remaining <= WARN_TIME * 2 ? 'warning' : '';
+                let pct = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
                 return `
-                    <div class="timer-card ${statusClass}" id="timer-${t.id}">
+                    <div class="timer-card ${cls}">
                         <div class="timer-label">${t.label}</div>
                         <div class="timer-display">${formatTime(t.remaining)}</div>
-                        <div class="timer-progress">
-                            <div class="timer-progress-bar" style="width: ${percent}%"></div>
-                        </div>
+                        <div class="timer-progress"><div class="timer-progress-bar" style="width:${pct}%"></div></div>
                         <div class="timer-controls">
-                            ${t.running
-                                ? `<button class="timer-btn pause" onclick="pauseTimer(${t.id})">Pause</button>`
-                                : `<button class="timer-btn start" onclick="startTimer(${t.id})">Start</button>`
-                            }
+                            ${t.running ? `<button class="timer-btn pause" onclick="pauseTimer(${t.id})">Pause</button>` : `<button class="timer-btn start" onclick="startTimer(${t.id})">Start</button>`}
                             <button class="timer-btn reset" onclick="resetTimer(${t.id})">Reset</button>
                             ${timers.length > 1 ? `<button class="timer-btn delete" onclick="deleteTimer(${t.id})">✕</button>` : ''}
                         </div>
@@ -892,167 +735,87 @@
         }
 
         function formatTime(ms) {
-            const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-            const h = Math.floor(totalSeconds / 3600);
-            const m = Math.floor((totalSeconds % 3600) / 60);
-            const s = totalSeconds % 60;
-            return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            const s = Math.max(0, Math.floor(ms / 1000));
+            return `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
         }
 
         function startTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (!timer || timer.running) return;
-
-            timer.running = true;
-            timer.alarmed = false;
-            saveTimers();
-            renderTimers();
-
+            const t = timers.find(x => x.id === id);
+            if (!t || t.running) return;
+            t.running = true; t.alarmed = false; saveTimers(); renderTimers();
             timerIntervals[id] = setInterval(() => {
-                timer.remaining -= 1000;
-
-                // Alarm at 15 minutes
-                if (timer.remaining <= WARN_TIME && !timer.alarmed) {
-                    timer.alarmed = true;
-                    playAlarm();
-                }
-
-                // Timer done
-                if (timer.remaining <= 0) {
-                    timer.remaining = 0;
-                    pauseTimer(id);
-                    playAlarm();
-                }
-
-                saveTimers();
-                renderTimers();
+                t.remaining -= 1000;
+                if (t.remaining <= WARN_TIME && !t.alarmed) { t.alarmed = true; playAlarm(); }
+                if (t.remaining <= 0) { t.remaining = 0; pauseTimer(id); playAlarm(); }
+                saveTimers(); renderTimers();
             }, 1000);
         }
 
         function pauseTimer(id) {
-            const timer = timers.find(t => t.id === id);
-            if (!timer) return;
-
-            timer.running = false;
-            if (timerIntervals[id]) {
-                clearInterval(timerIntervals[id]);
-                delete timerIntervals[id];
-            }
-            saveTimers();
-            renderTimers();
+            const t = timers.find(x => x.id === id);
+            if (t) t.running = false;
+            clearInterval(timerIntervals[id]);
+            delete timerIntervals[id];
+            saveTimers(); renderTimers();
         }
 
         function resetTimer(id) {
             pauseTimer(id);
-            const timer = timers.find(t => t.id === id);
-            if (timer) {
-                timer.remaining = TIMER_DURATION;
-                timer.alarmed = false;
-            }
-            saveTimers();
-            renderTimers();
+            const t = timers.find(x => x.id === id);
+            if (t) { t.remaining = TIMER_DURATION; t.alarmed = false; }
+            saveTimers(); renderTimers();
         }
 
         function addTimer() {
             const newId = Math.max(0, ...timers.map(t => t.id)) + 1;
-            timers.push({
-                id: newId,
-                label: `Timer ${newId}`,
-                remaining: TIMER_DURATION,
-                running: false,
-                alarmed: false
-            });
-            saveTimers();
-            renderTimers();
+            timers.push({ id: newId, label: `Timer ${newId}`, remaining: TIMER_DURATION, running: false, alarmed: false });
+            saveTimers(); renderTimers();
         }
 
-        function deleteTimer(id) {
-            pauseTimer(id);
-            timers = timers.filter(t => t.id !== id);
-            saveTimers();
-            renderTimers();
-        }
+        function deleteTimer(id) { pauseTimer(id); timers = timers.filter(t => t.id !== id); saveTimers(); renderTimers(); }
 
         // ═══════════ CATERING ═══════════
         async function loadCatering() {
             const container = document.getElementById('cateringList');
-            
-            if (!currentLocation) {
-                container.innerHTML = '<div class="empty-state"><p>Select a location to view catering</p></div>';
-                return;
-            }
-
+            if (!currentLocation) { container.innerHTML = '<div class="empty-state">Select location to view catering</div>'; return; }
             container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
 
             try {
                 const data = await jsonp(SCRIPT_URL + '?action=getOrders');
-
                 if (data.ok && data.orders) {
-                    let orders = data.orders;
-
-                    // Filter by location
-                    orders = orders.filter(o => {
-                        const loc = (o.location || '').toLowerCase();
-                        return loc.includes(currentLocation) || currentLocation.includes(loc);
-                    });
-
-                    // Filter out past events
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
+                    let orders = data.orders.filter(o => (o.location || '').toLowerCase().includes(currentLocation));
+                    const today = new Date(); today.setHours(0, 0, 0, 0);
                     orders = orders.filter(o => new Date(o.deliveryDate) >= today);
-
-                    // Sort by date
                     orders.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
-
-                    // Take first 6
-                    orders = orders.slice(0, 6);
-
-                    renderCatering(orders);
-                } else {
-                    throw new Error(data.error || 'No data');
-                }
-            } catch (err) {
-                console.error('Catering error:', err);
-                container.innerHTML = '<div class="empty-state"><p>⚠️ Could not load catering</p></div>';
-            }
+                    renderCatering(orders.slice(0, 6));
+                } else throw new Error('No data');
+            } catch (e) { container.innerHTML = '<div class="empty-state">⚠️ Could not load catering</div>'; }
         }
 
         function renderCatering(orders) {
             const container = document.getElementById('cateringList');
-
-            if (orders.length === 0) {
-                container.innerHTML = '<div class="empty-state"><p>🎉 No upcoming catering</p></div>';
-                return;
-            }
-
+            if (!orders.length) { container.innerHTML = '<div class="empty-state">🎉 No upcoming catering</div>'; return; }
             container.innerHTML = orders.map(o => {
-                const dateInfo = getDateInfo(o.deliveryDate);
+                const info = getDateInfo(o.deliveryDate);
                 return `
-                    <div class="catering-item ${dateInfo.class}">
-                        <div class="catering-date">${dateInfo.text} at ${o.deliveryTime || '--:--'}</div>
-                        <div class="catering-title">${escapeHtml(o.customerName)}</div>
+                    <div class="catering-item ${info.cls}">
+                        <div class="catering-date">${info.text} at ${o.deliveryTime || '--:--'}</div>
+                        <div class="catering-title">${o.customerName || 'No name'}</div>
                         <div class="catering-info">👥 ${o.guests} guests</div>
-                        ${o.note ? `<div class="catering-note">📝 ${escapeHtml(o.note)}</div>` : ''}
+                        ${o.note ? `<div class="catering-note">📝 ${o.note}</div>` : ''}
                     </div>
                 `;
             }).join('');
         }
 
         function getDateInfo(dateStr) {
-            const date = new Date(dateStr);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const diff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
-
-            if (diff === 0) return { text: '🔴 TODAY', class: 'today' };
-            if (diff === 1) return { text: '🟡 TOMORROW', class: 'tomorrow' };
-
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return {
-                text: `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`,
-                class: ''
-            };
+            const d = new Date(dateStr), today = new Date(); today.setHours(0,0,0,0);
+            const diff = Math.floor((d - today) / 86400000);
+            if (diff === 0) return { text: '🔴 TODAY', cls: 'today' };
+            if (diff === 1) return { text: '🟡 TOMORROW', cls: 'tomorrow' };
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return { text: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`, cls: '' };
         }
 
         // ═══════════ KITCHEN % ═══════════
@@ -1061,60 +824,34 @@
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    if (data.date === new Date().toDateString()) {
-                        setKitchenPercent(data.percent);
-                        return;
-                    }
+                    if (data.date === new Date().toDateString()) { setPercent(data.percent); return; }
                 } catch (e) {}
             }
-            setKitchenPercent(null);
+            setPercent(null);
         }
 
-        function setKitchenPercent(percent) {
-            const circle = document.getElementById('percentCircle');
-            const value = document.getElementById('percentValue');
-            const circumference = 251; // 2 * PI * 40
-
-            if (percent === null) {
-                value.textContent = '--%';
-                circle.style.strokeDashoffset = circumference;
-                return;
-            }
-
-            const p = Math.min(100, Math.max(0, percent));
-            const offset = circumference - (p / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
-            value.textContent = p.toFixed(1) + '%';
-
-            // Color based on value
-            if (p < 28) circle.style.stroke = '#22c55e';
-            else if (p <= 32) circle.style.stroke = '#d6b24a';
-            else circle.style.stroke = '#ef4444';
+        function setPercent(p) {
+            const circle = document.getElementById('percentCircle'), val = document.getElementById('percentValue');
+            if (p === null) { val.textContent = '--%'; circle.style.strokeDashoffset = 251; return; }
+            val.textContent = p.toFixed(1) + '%';
+            circle.style.strokeDashoffset = 251 - (Math.min(100, p) / 100) * 251;
+            circle.style.stroke = p < 28 ? '#22c55e' : p <= 32 ? '#d6b24a' : '#ef4444';
         }
 
         // ═══════════ QUICK TOOLS ═══════════
-        function toggleQuicktools() {
-            const buttons = document.getElementById('quicktoolsButtons');
-            const toggle = document.getElementById('quicktoolsToggle');
-            buttons.classList.toggle('open');
-            toggle.classList.toggle('open');
-
-            // Close iframe when collapsing
-            if (!buttons.classList.contains('open')) {
-                document.getElementById('iframeContainer').classList.remove('open');
-            }
-        }
-
         function openTool(url, btn) {
-            const iframe = document.getElementById('toolIframe');
-            const container = document.getElementById('iframeContainer');
-
-            iframe.src = url;
-            container.classList.add('open');
-
-            // Highlight active button
             document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            document.getElementById('toolIframe').src = url;
+            document.getElementById('iframeContainer').classList.add('open');
+            document.getElementById('closeIframeBtn').classList.add('open');
+        }
+
+        function closeIframe() {
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('iframeContainer').classList.remove('open');
+            document.getElementById('closeIframeBtn').classList.remove('open');
+            document.getElementById('toolIframe').src = '';
         }
 
         // ═══════════ HELPERS ═══════════
@@ -1129,13 +866,6 @@
                 script.onerror = () => { cleanup(); reject(new Error('Network')); };
                 document.body.appendChild(script);
             });
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
         }
     </script>
 </body>
