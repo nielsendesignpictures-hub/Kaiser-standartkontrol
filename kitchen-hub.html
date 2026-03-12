@@ -1,1072 +1,608 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="da">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Kitchen Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Hub - Jeunes Restauranter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
 
-  <style>
-    :root{
-      --bg0:#0d1117;
-      --bg1:#161b22;
-      --bg2:#21262d;
-      --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.80);
-      --muted2:rgba(255,255,255,0.60);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --danger:#ff6b6b;
-      --warn:#f59e0b;
-      --ok:#62d26f;
-      --shadow: 0 20px 60px rgba(0,0,0,.40);
-      --shadow2: 0 12px 40px rgba(0,0,0,.30);
-    }
+        /* Header */
+        .header {
+            background: rgba(15, 25, 50, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    *{box-sizing:border-box;}
-    html,body{height:100%;margin:0;}
-    body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
-      overflow-x:hidden;
-    }
-    body:before{
-      content:""; position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity:0.08; pointer-events:none;
-    }
+        .header h1 {
+            font-size: 1.8em;
+            background: linear-gradient(135deg, #d4af37, #f4d03f, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    /* Alarm flash overlay */
-    .alarmFlash{
-      position:fixed;
-      inset:0;
-      background:rgba(255,107,107,0.3);
-      pointer-events:none;
-      z-index:9999;
-      animation: flashAnim 0.5s ease-in-out infinite;
-      display:none;
-    }
-    .alarmFlash.active{display:block;}
-    @keyframes flashAnim{
-      0%, 100%{opacity:0;}
-      50%{opacity:1;}
-    }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-    .shell{max-width:1400px; margin:0 auto; padding:18px 16px 44px;}
+        .date-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    /* HERO HEADER */
-    .hero{
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
-      padding: 22px 18px 16px;
-      position:relative; overflow:hidden;
-    }
-    .hero:after{
-      content:""; position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.20), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(56,189,248,0.16), transparent 60%);
-      opacity:.6; pointer-events:none;
-    }
+        .date-nav button {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
 
-    .kicker{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;text-align:center;position:relative;z-index:1;}
-    .title{font-family:"Playfair Display",serif;font-size:clamp(32px,8vw,48px);line-height:1.02;letter-spacing:-0.02em;font-weight:700;text-align:center;margin-top:8px;position:relative;z-index:1;}
-    .subtitle{color:var(--muted);font-weight:700;font-size:14px;text-align:center;margin-top:8px;position:relative;z-index:1;}
-    .goldline{height:2px;margin:16px auto 0;max-width:720px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(214,178,74,0.95),transparent);position:relative;z-index:1;}
+        .date-nav button:hover {
+            background: rgba(212, 175, 55, 0.3);
+        }
 
-    .controls{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;z-index:1;}
-    
-    .pill,.btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:6px;
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:11px;
-      color: rgba(255,255,255,0.92);white-space:nowrap;user-select:none;
-    }
-    .btn{cursor:pointer;transition:all .15s ease;}
-    .btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25);}
-    .btn:active{transform:translateY(1px);}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
-    .btn.ghost{background:rgba(255,255,255,0.08);}
-    .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
-    .btn.danger{background:rgba(255,107,107,0.20);border-color:rgba(255,107,107,0.40);color:var(--danger);}
+        .date-display {
+            color: #d4af37;
+            font-size: 1.1em;
+            font-weight: 600;
+            min-width: 200px;
+            text-align: center;
+        }
 
-    /* Clock */
-    .clockWrap{position:relative;z-index:1;margin-top:16px;text-align:center;display:none;}
-    .clockWrap.show{display:block;}
-    .clockTime{font-family:"Playfair Display",serif;font-size:72px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
-    .clockDate{font-size:16px;font-weight:600;color:var(--muted);margin-top:6px;}
+        .back-btn {
+            background: linear-gradient(135deg, #d4af37, #b8960c);
+            color: #0a1628;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
 
-    /* Mini widgets grid */
-    .widgetGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin-top:16px;
-    }
-    @media (max-width: 700px){
-      .widgetGrid{grid-template-columns:1fr;}
-    }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
 
-    .widget{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding:16px;
-      position:relative;
-    }
-    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
-    .widgetTitle{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:flex;align-items:center;gap:8px;}
-    .widgetDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
 
-    /* Kitchen % mini */
-    .kPctBig{font-family:"Playfair Display",serif;font-size:48px;font-weight:700;line-height:1;}
-    .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
+        /* Grid Layout */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
 
-    /* Catering mini */
-    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:160px;overflow:auto;}
-    .cMiniEvent{
-      display:flex;align-items:center;gap:10px;
-      padding:12px;border-radius:14px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-      transition:all .15s;
-    }
-    .cMiniEvent:hover{background:rgba(255,255,255,0.08);}
-    .cMiniBar{width:5px;height:40px;border-radius:4px;}
-    .cMiniBar.green{background:var(--ok);}
-    .cMiniBar.yellow{background:var(--warn);}
-    .cMiniBar.red{background:var(--danger);}
-    .cMiniBar.gray{background:rgba(255,255,255,0.3);}
-    .cMiniInfo{flex:1;min-width:0;}
-    .cMiniTitle{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .cMiniMeta{font-size:12px;color:var(--muted);margin-top:3px;}
-    .cMiniEmpty{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
+        .hub-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
 
-    /* Section */
-    .section{
-      margin-top:16px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      overflow:hidden;
-    }
-    .sectionHead{
-      padding:14px 16px;
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-      background:rgba(255,255,255,0.03);
-      cursor:pointer;
-      user-select:none;
-      transition:background .15s;
-    }
-    .sectionHead:hover{background:rgba(255,255,255,0.06);}
-    .sectionTitle{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px;}
-    .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
-    .sectionRight{display:flex;align-items:center;gap:10px;}
-    .sectionCount{font-size:12px;font-weight:700;color:var(--gold);}
-    .sectionArrow{font-size:14px;transition:transform .2s;color:var(--muted);}
-    .sectionArrow.open{transform:rotate(180deg);}
-    .sectionBody{display:none;padding:16px;}
-    .sectionBody.open{display:block;}
-    .divider{height:1px;background:rgba(255,255,255,0.10);}
+        .hub-card-header {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    /* Timer */
-    .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-    .segBtn{
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.90);
-      font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
-      cursor:pointer;transition:all .15s;
-    }
-    .segBtn:hover{background:rgba(255,255,255,0.10);}
-    .segBtn.on{border-color:rgba(214,178,74,0.40);background:rgba(214,178,74,0.15);color:var(--gold);}
+        .hub-card-header h3 {
+            color: #d4af37;
+            font-size: 1.1em;
+        }
 
-    .input{
-      flex:1;min-width:150px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.08);padding:12px 14px;outline:none;color:var(--text);
-      font-weight:600;font-size:14px;transition:all .15s;
-    }
-    .input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
-    .input::placeholder{color:rgba(255,255,255,0.45);}
+        .hub-card-body {
+            padding: 20px;
+        }
 
-    .timerList{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;}
-    .timerList::-webkit-scrollbar{height:6px;}
-    .timerList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
+        /* Menu Card */
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    .tCard{
-      flex:0 0 auto;width:300px;
-      border-radius:20px;border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      padding:14px;position:relative;
-      transition:all .15s;
-    }
-    .tCard:hover{border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
-    .tCard.alarming{
-      border-color:rgba(255,107,107,0.60);
-      background:linear-gradient(180deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05));
-      animation: cardPulse 1s ease-in-out infinite;
-    }
-    @keyframes cardPulse{
-      0%, 100%{box-shadow: 0 0 0 0 rgba(255,107,107,0.4);}
-      50%{box-shadow: 0 0 20px 10px rgba(255,107,107,0.2);}
-    }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
 
-    .tName{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:70px;}
-    .tTime{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;margin-top:6px;}
-    .tMeta{font-size:12px;color:var(--muted);margin-top:6px;}
-    .tTag{
-      position:absolute;top:12px;right:12px;
-      padding:6px 10px;border-radius:999px;
-      font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-    }
-    .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
-    .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
-    .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
-    .tTag.alarm{background:rgba(255,107,107,0.30);border:1px solid rgba(255,107,107,0.50);color:#fff;animation: tagBlink 0.5s infinite;}
-    @keyframes tagBlink{
-      0%, 100%{opacity:1;}
-      50%{opacity:0.5;}
-    }
-    
-    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
-    .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
-    .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
-    .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
-    
-    .tActions{margin-top:10px;display:flex;gap:8px;justify-content:flex-end;}
-    .smallBtn{
-      padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);
-      font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-      cursor:pointer;transition:all .15s;
-    }
-    .smallBtn:hover{background:rgba(255,255,255,0.12);}
-    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
-    .smallBtn.danger:hover{background:rgba(255,107,107,0.25);}
+        .menu-label {
+            color: #8899aa;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    /* Tools dropdown */
-    .toolsGrid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-      gap:12px;
-    }
-    .toolItem{
-      padding:16px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      cursor:pointer;transition:all .15s;
-      display:flex;align-items:center;gap:14px;
-    }
-    .toolItem:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
-    .toolIcon{font-size:28px;}
-    .toolInfo{flex:1;}
-    .toolName{font-weight:700;font-size:15px;}
-    .toolDesc{font-size:12px;color:var(--muted);margin-top:3px;}
+        .menu-value {
+            color: #e0e0e0;
+            text-align: right;
+            max-width: 60%;
+        }
 
-    /* Tool viewer */
-    .toolViewer{display:none;margin-top:16px;}
-    .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px;}
-    .frame{width:100%;height:70vh;border:1px solid rgba(255,255,255,0.12);border-radius:20px;background:rgba(0,0,0,0.25);}
+        /* Catering Card */
+        .catering-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
 
-    .emptyState{text-align:center;padding:30px;color:var(--muted2);font-size:13px;}
-    .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:600;font-size:13px;display:none;margin-top:10px;}
-  </style>
+        .catering-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .catering-item h4 {
+            color: #d4af37;
+            margin-bottom: 8px;
+        }
+
+        .catering-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.9em;
+        }
+
+        .catering-detail .label {
+            color: #8899aa;
+        }
+
+        .catering-detail .value {
+            color: #e0e0e0;
+        }
+
+        /* Full width card */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Status badge */
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .status-aktiv {
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #667788;
+        }
+
+        .empty-state .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hub-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Alarm Flash Overlay -->
-  <div class="alarmFlash" id="alarmFlash"></div>
 
-  <div class="shell">
-
-    <!-- HERO HEADER -->
-    <header class="hero">
-      <div class="kicker">KAISER</div>
-      <div class="title">Kitchen Hub</div>
-      <div class="subtitle">One screen for all kitchen tools</div>
-      <div class="goldline"></div>
-
-      <div class="controls">
-        <div class="pill" id="locPill">📍 Location: —</div>
-        <button class="btn ghost" id="clockToggle">🕐 Show Clock</button>
-        <button class="btn ghost" id="soundToggle">🔔 Sound ON</button>
-        <button class="btn ghost" id="testSoundBtn">🔊 Test</button>
-        <button class="btn ghost" id="fsBtn">⛶ Fullscreen</button>
-        <button class="btn ghost" id="wakeBtn">☀️ Keep Awake</button>
-      </div>
-
-      <!-- Toggleable Clock -->
-      <div class="clockWrap" id="clockWrap">
-        <div class="clockTime" id="clockTime">--:--</div>
-        <div class="clockDate" id="clockDate">--</div>
-      </div>
-    </header>
-
-    <!-- Mini Widgets: Kitchen % + Catering -->
-    <div class="widgetGrid">
-      <!-- Kitchen % Mini -->
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot"></span> Kitchen %</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshKBtn">🔄 Refresh</button>
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1>👨‍🍳 Kitchen Hub</h1>
         </div>
-        <div class="kPctBig" id="kPct">—</div>
-        <div class="kPctSub" id="kMeta">Loading...</div>
-        <div class="errBox" id="kErr"></div>
-      </div>
-
-      <!-- Catering Mini -->
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot"></span> Catering Events</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshCBtn">🔄 Refresh</button>
+        <div class="header-right">
+            <div class="date-nav">
+                <button onclick="changeDate(-1)">◀</button>
+                <span class="date-display" id="dateDisplay">Indlæser...</span>
+                <button onclick="changeDate(1)">▶</button>
+                <button onclick="goToToday()" style="margin-left:5px;">I dag</button>
+            </div>
+            <a href="index.html" class="back-btn">← Dashboard</a>
         </div>
-        <div class="cMiniList" id="cMiniList">
-          <div class="cMiniEmpty">Loading...</div>
-        </div>
-      </div>
     </div>
 
-    <!-- 3-Hour Timer (Collapsible) -->
-    <section class="section">
-      <div class="sectionHead" id="timerHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> 3-Hour Timer</div>
-        <div class="sectionRight">
-          <span class="sectionCount" id="timerCount">0 active</span>
-          <span class="sectionArrow open" id="timerArrow">▼</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="sectionBody open" id="timerBody">
-        <div class="timerRow" id="tplRow">
-          <button class="segBtn on" data-tpl="Bacon">🥓 Bacon</button>
-          <button class="segBtn" data-tpl="Pancakes">🥞 Pancakes</button>
-          <button class="segBtn" data-tpl="Free text">✏️ Free text</button>
-          <button class="segBtn" data-tpl="Pølser">Pølser</button>
-        </div>
-        <div class="timerRow">
-          <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
-          <button class="btn primary" id="start3hBtn">⏰ Start 3h</button>
-          <button class="btn ghost" id="start30Btn">⏰ Start 30m</button>
-          <button class="btn ghost" id="clearExpBtn">🗑️ Clear Expired</button>
-        </div>
-        <div class="timerList" id="timerList">
-          <div class="emptyState">No active timers — start one above</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick Tools (Collapsible) -->
-    <section class="section">
-      <div class="sectionHead" id="toolsHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Quick Tools</div>
-        <div class="sectionRight">
-          <span class="sectionArrow" id="toolsArrow">▼</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="sectionBody" id="toolsBody">
-        <div class="toolsGrid">
-          <div class="toolItem" data-url="./MIS.html">
-            <div class="toolIcon">📋</div>
-            <div class="toolInfo">
-              <div class="toolName">MIS</div>
-              <div class="toolDesc">Mise en place overview</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./cleaning-kitchen.html">
-            <div class="toolIcon">✨</div>
-            <div class="toolInfo">
-              <div class="toolName">Cleaning</div>
-              <div class="toolDesc">Daily & weekly lists</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./kitchen-percent.html">
-            <div class="toolIcon">📊</div>
-            <div class="toolInfo">
-              <div class="toolName">Kitchen %</div>
-              <div class="toolDesc">Full analytics page</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./3-timers-regel.html">
-            <div class="toolIcon">⏱️</div>
-            <div class="toolInfo">
-              <div class="toolName">Timer</div>
-              <div class="toolDesc">Full timer page</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./catering-schedule.html">
-            <div class="toolIcon">📅</div>
-            <div class="toolInfo">
-              <div class="toolName">Catering</div>
-              <div class="toolDesc">Full schedule</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tool Viewer (iframe) -->
-    <div class="toolViewer" id="toolViewer">
-      <div class="toolBar">
-        <div class="pill" id="toolName">—</div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn ghost" id="closeToolBtn">← Back to Hub</button>
-          <button class="btn ghost" id="newTabBtn">↗ Open in New Tab</button>
-        </div>
-      </div>
-      <iframe id="toolFrame" class="frame" src="about:blank"></iframe>
+    <!-- Loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
     </div>
 
-  </div>
+    <!-- Content -->
+    <div class="container">
+        <div class="hub-grid">
 
-  <script>
-    // ============================================================
-    // CONFIGURATION
-    // ============================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const TOKEN = "KAISER_TOKEN_2026";
-    const VAT_FACTOR = 1.25;
+            <!-- Dagens Menu -->
+            <div class="hub-card">
+                <div class="hub-card-header">
+                    <h3>🍽️ Dagens Menu</h3>
+                </div>
+                <div class="hub-card-body" id="menuContent">
+                    <div class="empty-state">
+                        <div class="icon">🔄</div>
+                        <div>Indlæser menu...</div>
+                    </div>
+                </div>
+            </div>
 
-    const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
-    const LOC_KEY = "kaiser_kitchenpct_loc";
-    const TIMER_KEY = "kaiser_3timer_v1_1";
-    const CLOCK_KEY = "kaiser_clock_visible";
-    const SOUND_KEY = "kaiser_sound_enabled";
-    const ALARM_TRIGGERED_KEY = "kaiser_alarm_triggered";
+            <!-- Dagens Catering -->
+            <div class="hub-card">
+                <div class="hub-card-header">
+                    <h3>🎪 Dagens Catering</h3>
+                    <span id="cateringCount" class="status-badge status-aktiv">0</span>
+                </div>
+                <div class="hub-card-body" id="cateringContent">
+                    <div class="empty-state">
+                        <div class="icon">🔄</div>
+                        <div>Indlæser catering...</div>
+                    </div>
+                </div>
+            </div>
 
-    const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
-    const SHORT_DURATION_MS = 30 * 60 * 1000;
-    const WARN_15_MS = 15 * 60 * 1000; // 15 minutter alarm
-    const WARN_30_MS = 30 * 60 * 1000;
+            <!-- Notater -->
+            <div class="hub-card full-width">
+                <div class="hub-card-header">
+                    <h3>📝 Notater & Allergener</h3>
+                </div>
+                <div class="hub-card-body" id="notesContent">
+                    <div class="empty-state">
+                        <div class="icon">📋</div>
+                        <div>Ingen notater for denne dag</div>
+                    </div>
+                </div>
+            </div>
 
-    const BASELINE_DATA = {
-      "Café Kaiser Hillerød": { revGross: 424048.75, buy: 64582.71 },
-      "Café Kaiser Farum": { revGross: 352679.74, buy: 59115.96 },
-      "Café Kaiser Hørsholm": { revGross: 377223.23, buy: 45801.28 },
-      "Café Kaiser Vanløse": { revGross: 402930.64, buy: 65871.02 },
-      "Café Kaiser Helsingør": { revGross: 293146.85, buy: 43294.36 }
-    };
+        </div>
+    </div>
 
-    const GREEN_HOURS = 48;
-    const YELLOW_HOURS = 168;
+    <script>
+        // ============================================
+        // KONFIGURATION
+        // ============================================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfe6VrFMOSHEjeOVyBPMPmGEagLJpw3kEwOiFssnsmz-DjAVKAFVkyBLBMGMAwMb5V/exec';
 
-    // ============================================================
-    // HELPERS
-    // ============================================================
-    const $ = id => document.getElementById(id);
-    const now = () => Date.now();
-    const clamp01 = x => Math.max(0, Math.min(1, x));
+        // ============================================
+        // DATO HÅNDTERING
+        // ============================================
+        let currentDate = new Date();
 
-    function escapeHtml(s) {
-      return String(s || "").replace(/[&<>"']/g, c =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
-    }
+        const dayNames = ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'];
+        const monthNames = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
 
-    function fmtHHMMSS(ms) {
-      const s = Math.max(0, Math.floor(ms / 1000));
-      const hh = String(Math.floor(s / 3600)).padStart(2, "0");
-      const mm = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
-      const ss = String(s % 60).padStart(2, "0");
-      return `${hh}:${mm}:${ss}`;
-    }
-
-    function isoToday() {
-      return new Date().toISOString().slice(0, 10);
-    }
-
-    function monthKey(iso) { return String(iso || "").slice(0, 7); }
-
-    function pctStr(p) {
-      if (p === null || !isFinite(p)) return "—";
-      return (p * 100).toFixed(1).replace(".", ",") + "%";
-    }
-
-    function fmtDKK(n) {
-      return Number(n || 0).toLocaleString("da-DK", { style: "currency", currency: "DKK", maximumFractionDigits: 0 });
-    }
-
-    function hoursUntil(dateStr, timeStr) {
-      const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
-      const dt = new Date(dateStr + "T" + t + ":00");
-      return (dt.getTime() - Date.now()) / (3600 * 1000);
-    }
-
-    function colorFor(h) {
-      if (!isFinite(h) || h < 0) return "gray";
-      if (h <= GREEN_HOURS) return "green";
-      if (h <= YELLOW_HOURS) return "yellow";
-      return "red";
-    }
-
-    // ============================================================
-    // LOCATION
-    // ============================================================
-    function getLoc() {
-      const fromQS = new URLSearchParams(location.search).get("loc");
-      if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
-      return localStorage.getItem(LOC_KEY) || "";
-    }
-
-    // ============================================================
-    // JSONP
-    // ============================================================
-    function jsonp(url, params) {
-      return new Promise((resolve, reject) => {
-        const cb = "__cb_" + Math.random().toString(16).slice(2);
-        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
-        const src = url + (url.includes("?") ? "&" : "?") + qs;
-
-        const s = document.createElement("script");
-        const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 15000);
-
-        function cleanup() {
-          clearTimeout(t);
-          delete window[cb];
-          s.remove();
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return y + '-' + m + '-' + d;
         }
 
-        window[cb] = (data) => { cleanup(); resolve(data); };
-        s.src = src;
-        s.onerror = () => { cleanup(); reject(new Error("load error")); };
-        document.body.appendChild(s);
-      });
-    }
-
-    // ============================================================
-    // SOUND & VIBRATION ALARM SYSTEM
-    // ============================================================
-    let audioContext = null;
-    let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
-    let alarmTriggered = new Set(JSON.parse(localStorage.getItem(ALARM_TRIGGERED_KEY) || "[]"));
-    let currentlyAlarming = new Set();
-
-    function initAudio() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      return audioContext;
-    }
-
-    function playAlarmSound() {
-      if (!soundEnabled) return;
-      
-      try {
-        const ctx = initAudio();
-        
-        // Spil 5 høje bip
-        for (let i = 0; i < 5; i++) {
-          setTimeout(() => {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.value = 880; // Høj tone (A5)
-            oscillator.type = "square"; // Skarp lyd
-            
-            gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.3);
-          }, i * 400);
+        function formatDisplayDate(date) {
+            return dayNames[date.getDay()] + ' d. ' + date.getDate() + '. ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
         }
-      } catch (e) {
-        console.log("Audio error:", e);
-      }
-    }
 
-    function playUrgentAlarm() {
-      if (!soundEnabled) return;
-      
-      try {
-        const ctx = initAudio();
-        
-        // Meget høj og gentagende alarm
-        for (let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            // Alternerende høj/lav for sirene effekt
-            oscillator.frequency.value = i % 2 === 0 ? 1000 : 800;
-            oscillator.type = "square";
-            
-            gainNode.gain.setValueAtTime(0.7, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.2);
-          }, i * 250);
+        function changeDate(offset) {
+            currentDate.setDate(currentDate.getDate() + offset);
+            updateDisplay();
+            loadKitchenHub();
         }
-      } catch (e) {
-        console.log("Audio error:", e);
-      }
-    }
 
-    function vibrate() {
-      if (navigator.vibrate) {
-        // Vibrer i mønster: vibrer 500ms, pause 200ms, gentag 5 gange
-        navigator.vibrate([500, 200, 500, 200, 500, 200, 500, 200, 500]);
-      }
-    }
+        function goToToday() {
+            currentDate = new Date();
+            updateDisplay();
+            loadKitchenHub();
+        }
 
-    function triggerAlarm(timerId, timerName) {
-      if (alarmTriggered.has(timerId)) return;
-      
-      // Marker som triggered
-      alarmTriggered.add(timerId);
-      currentlyAlarming.add(timerId);
-      localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
-      
-      // Spil lyd
-      playUrgentAlarm();
-      
-      // Vibrer
-      vibrate();
-      
-      // Vis flash
-      $("alarmFlash").classList.add("active");
-      
-      // Stop flash efter 5 sekunder
-      setTimeout(() => {
-        $("alarmFlash").classList.remove("active");
-      }, 5000);
-      
-      // Vis notification hvis muligt
-      if (Notification.permission === "granted") {
-        new Notification("⏰ KAISER TIMER ALARM!", {
-          body: `${timerName} - kun 15 minutter tilbage!`,
-          icon: "🚨",
-          requireInteraction: true
+        function updateDisplay() {
+            document.getElementById('dateDisplay').textContent = formatDisplayDate(currentDate);
+        }
+
+        // ============================================
+        // LOADING
+        // ============================================
+        function showLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+
+        // ============================================
+        // HENT DATA
+        // ============================================
+        async function loadKitchenHub() {
+            try {
+                showLoading(true);
+                const dateStr = formatDate(currentDate);
+                const url = APPS_SCRIPT_URL + '?action=getKitchenHub&date=' + dateStr + '&t=' + Date.now();
+
+                console.log('Kitchen Hub henter:', url);
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    redirect: 'follow',
+                    mode: 'cors'
+                });
+
+                const text = await response.text();
+                console.log('Response:', text.substring(0, 300));
+
+                let result;
+                try {
+                    result = JSON.parse(text);
+                } catch (e) {
+                    console.error('Parse fejl:', e);
+                    throw new Error('Kunne ikke læse serverens svar');
+                }
+
+                if (result.success) {
+                    renderMenu(result.menu);
+                    renderCatering(result.catering || []);
+                    renderNotes(result.menu);
+                } else {
+                    throw new Error(result.error || 'Serverfejl');
+                }
+
+            } catch (error) {
+                console.error('Kitchen Hub fejl:', error);
+
+                document.getElementById('menuContent').innerHTML =
+                    '<div class="empty-state"><div class="icon">❌</div><div>Fejl: ' + error.message + '</div></div>';
+                document.getElementById('cateringContent').innerHTML =
+                    '<div class="empty-state"><div class="icon">❌</div><div>Fejl: ' + error.message + '</div></div>';
+
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ============================================
+        // RENDER MENU
+        // ============================================
+        function renderMenu(menu) {
+            const container = document.getElementById('menuContent');
+
+            if (!menu) {
+                container.innerHTML =
+                    '<div class="empty-state">' +
+                    '<div class="icon">📭</div>' +
+                    '<div>Ingen menu registreret for denne dag</div>' +
+                    '</div>';
+                return;
+            }
+
+            let html = '';
+
+            const fields = [
+                { key: 'Forret', label: 'Forret', icon: '🥗' },
+                { key: 'Hovedret', label: 'Hovedret', icon: '🥩' },
+                { key: 'Tilbehoer', label: 'Tilbehør', icon: '🥕' },
+                { key: 'Dessert', label: 'Dessert', icon: '🍰' },
+                { key: 'Antal', label: 'Antal kuverter', icon: '👥' }
+            ];
+
+            for (let i = 0; i < fields.length; i++) {
+                const f = fields[i];
+                const value = menu[f.key] || '';
+                if (value) {
+                    html += '<div class="menu-item">';
+                    html += '<span class="menu-label">' + f.icon + ' ' + f.label + '</span>';
+                    html += '<span class="menu-value">' + escapeHtml(String(value)) + '</span>';
+                    html += '</div>';
+                }
+            }
+
+            if (!html) {
+                html = '<div class="empty-state"><div class="icon">📭</div><div>Ingen menu detaljer</div></div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // RENDER CATERING
+        // ============================================
+        function renderCatering(cateringList) {
+            const container = document.getElementById('cateringContent');
+            const countBadge = document.getElementById('cateringCount');
+
+            const activeList = cateringList.filter(function(c) {
+                return c.status === 'Aktiv';
+            });
+
+            countBadge.textContent = activeList.length;
+
+            if (activeList.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state">' +
+                    '<div class="icon">✅</div>' +
+                    '<div>Ingen catering i dag</div>' +
+                    '</div>';
+                return;
+            }
+
+            let html = '';
+            for (let i = 0; i < activeList.length; i++) {
+                const c = activeList[i];
+                html += '<div class="catering-item">';
+                html += '<h4>' + escapeHtml(c.kunde || 'Ukendt kunde') + '</h4>';
+
+                if (c.tidspunkt) {
+                    html += '<div class="catering-detail"><span class="label">Tidspunkt</span><span class="value">' + escapeHtml(c.tidspunkt) + '</span></div>';
+                }
+                if (c.antalPersoner) {
+                    html += '<div class="catering-detail"><span class="label">Personer</span><span class="value">' + escapeHtml(String(c.antalPersoner)) + '</span></div>';
+                }
+                if (c.menutype) {
+                    html += '<div class="catering-detail"><span class="label">Menutype</span><span class="value">' + escapeHtml(c.menutype) + '</span></div>';
+                }
+                if (c.detaljer) {
+                    html += '<div class="catering-detail"><span class="label">Detaljer</span><span class="value">' + escapeHtml(c.detaljer) + '</span></div>';
+                }
+                if (c.kontaktperson) {
+                    html += '<div class="catering-detail"><span class="label">Kontakt</span><span class="value">' + escapeHtml(c.kontaktperson);
+                    if (c.telefon) html += ' (' + escapeHtml(c.telefon) + ')';
+                    html += '</span></div>';
+                }
+
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // RENDER NOTES
+        // ============================================
+        function renderNotes(menu) {
+            const container = document.getElementById('notesContent');
+
+            if (!menu) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><div>Ingen notater for denne dag</div></div>';
+                return;
+            }
+
+            let html = '';
+            let hasContent = false;
+
+            if (menu.Allergener) {
+                hasContent = true;
+                html += '<div class="menu-item">';
+                html += '<span class="menu-label">⚠️ Allergener</span>';
+                html += '<span class="menu-value">' + escapeHtml(String(menu.Allergener)) + '</span>';
+                html += '</div>';
+            }
+
+            if (menu.Pi_pi) {
+                hasContent = true;
+                html += '<div class="menu-item">';
+                html += '<span class="menu-label">🔔 Pi-Pi</span>';
+                html += '<span class="menu-value">' + escapeHtml(String(menu.Pi_pi)) + '</span>';
+                html += '</div>';
+            }
+
+            if (menu.Noter) {
+                hasContent = true;
+                html += '<div class="menu-item">';
+                html += '<span class="menu-label">📝 Noter</span>';
+                html += '<span class="menu-value">' + escapeHtml(String(menu.Noter)) + '</span>';
+                html += '</div>';
+            }
+
+            if (!hasContent) {
+                html = '<div class="empty-state"><div class="icon">📋</div><div>Ingen notater for denne dag</div></div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ============================================
+        // HJÆLPEFUNKTION
+        // ============================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(text));
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
+            loadKitchenHub();
         });
-      }
-    }
-
-    function dismissAlarm(timerId) {
-      currentlyAlarming.delete(timerId);
-      $("alarmFlash").classList.remove("active");
-    }
-
-    function toggleSound() {
-      soundEnabled = !soundEnabled;
-      localStorage.setItem(SOUND_KEY, soundEnabled);
-      updateSoundUI();
-    }
-
-    function updateSoundUI() {
-      $("soundToggle").textContent = soundEnabled ? "🔔 Sound ON" : "🔕 Sound OFF";
-      $("soundToggle").classList.toggle("on", soundEnabled);
-    }
-
-    function testSound() {
-      // Aktiver audio context ved user interaction
-      initAudio();
-      playAlarmSound();
-      vibrate();
-    }
-
-    // Request notification permission
-    function requestNotificationPermission() {
-      if ("Notification" in window && Notification.permission === "default") {
-        Notification.requestPermission();
-      }
-    }
-
-    // ============================================================
-    // CLOCK
-    // ============================================================
-    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
-
-    function updateClock() {
-      const now = new Date();
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-    }
-
-    function toggleClock() {
-      clockVisible = !clockVisible;
-      localStorage.setItem(CLOCK_KEY, clockVisible);
-      updateClockUI();
-    }
-
-    function updateClockUI() {
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").textContent = clockVisible ? "🕐 Hide Clock" : "🕐 Show Clock";
-      $("clockToggle").classList.toggle("on", clockVisible);
-    }
-
-    // ============================================================
-    // KITCHEN %
-    // ============================================================
-    async function loadKitchenPct() {
-      const loc = getLoc();
-      const fullLoc = "Café Kaiser " + loc;
-      
-      if (!loc) {
-        $("kPct").textContent = "—";
-        $("kMeta").textContent = "No location set";
-        return;
-      }
-
-      $("kErr").style.display = "none";
-      const m = monthKey(isoToday());
-
-      try {
-        const data = await jsonp(SCRIPT_URL, { action: "get", loc: fullLoc, month: m });
-        
-        if (!data || !data.ok) {
-          $("kMeta").textContent = "Could not load";
-          return;
-        }
-
-        const entries = Array.isArray(data.entries) ? data.entries : [];
-        const base = BASELINE_DATA[fullLoc] || { revGross: 0, buy: 0 };
-        const applyBaseline = m === "2026-03" && !entries.some(e => e.date >= "2026-03-01" && e.date <= "2026-03-10");
-
-        const totalGross = Number(data.totals.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
-        const totalBuy = Number(data.totals.purchases || 0) + (applyBaseline ? base.buy : 0);
-        const totalNet = totalGross / VAT_FACTOR;
-        const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
-
-        $("kPct").textContent = pctStr(pct);
-        $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
-
-      } catch (e) {
-        $("kMeta").textContent = "Error loading";
-      }
-    }
-
-    // ============================================================
-    // CATERING MINI
-    // ============================================================
-   // ═══════════════════════════════════════════════════════════════
-// ERSTAT renderCalendarWidget() funktionen med denne:
-// ═══════════════════════════════════════════════════════════════
-
-https://pastebin.com/Brp7NCUc
-
-    // ============================================================
-    // TIMER
-    // ============================================================
-    let selectedTpl = "Bacon";
-
-    function loadTimers() {
-      try {
-        const raw = localStorage.getItem(TIMER_KEY);
-        if (!raw) return [];
-        const obj = JSON.parse(raw);
-        return Array.isArray(obj.timers) ? obj.timers : [];
-      } catch (e) { return []; }
-    }
-
-    function saveTimers(timers) {
-      localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] }));
-    }
-
-    function uid() { return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
-
-    function buildTimerName() {
-      const text = ($("textInput").value || "").trim();
-      if (selectedTpl === "Free text") return text;
-      return text ? (selectedTpl + " – " + text) : selectedTpl;
-    }
-
-    function addTimer(durationMs) {
-      const name = buildTimerName();
-      if (selectedTpl === "Free text" && !name) {
-        alert("Please enter a name!");
-        $("textInput").focus();
-        return;
-      }
-      
-      // Aktiver audio ved user interaction
-      initAudio();
-      
-      const timers = loadTimers();
-      timers.push({
-        id: uid(),
-        name: name || "Unnamed",
-        startedAt: now(),
-        durationMs: durationMs,
-        expiresAt: now() + durationMs
-      });
-      saveTimers(timers);
-      $("textInput").value = "";
-      renderTimers();
-    }
-
-    function stopTimer(id) {
-      if (confirm("Stop this timer?")) {
-        // Fjern fra alarm tracking
-        alarmTriggered.delete(id);
-        currentlyAlarming.delete(id);
-        localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
-        
-        saveTimers(loadTimers().filter(t => t.id !== id));
-        renderTimers();
-        
-        // Stop flash hvis ingen flere alarmer
-        if (currentlyAlarming.size === 0) {
-          $("alarmFlash").classList.remove("active");
-        }
-      }
-    }
-
-    function clearExpired() {
-      const active = loadTimers().filter(t => (t.expiresAt || 0) > now());
-      const removed = loadTimers().length - active.length;
-      
-      // Ryd alarm tracking for removed timers
-      loadTimers().forEach(t => {
-        if ((t.expiresAt || 0) <= now()) {
-          alarmTriggered.delete(t.id);
-          currentlyAlarming.delete(t.id);
-        }
-      });
-      localStorage.setItem(ALARM_TRIGGERED_KEY, JSON.stringify([...alarmTriggered]));
-      
-      saveTimers(active);
-      renderTimers();
-      
-      if (removed > 0) {
-        alert(`Removed ${removed} expired timer(s)`);
-      }
-    }
-
-    function timerState(t) {
-      const left = (t.expiresAt || 0) - now();
-      if (left <= 0) return "exp";
-      if (left <= WARN_15_MS) return "alarm"; // 15 min = alarm!
-      if (left <= WARN_30_MS) return "warn";
-      return "ok";
-    }
-
-    function updateTplUI() {
-      document.querySelectorAll("#tplRow .segBtn").forEach(btn => {
-        btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
-      });
-      $("textInput").placeholder = selectedTpl === "Free text" ? "Name (required)" : "Optional note (e.g. tray 2)";
-    }
-
-    function renderTimers() {
-      const list = $("timerList");
-      const timers = loadTimers().sort((a, b) => (a.expiresAt || 0) - (b.expiresAt || 0));
-      
-      $("timerCount").textContent = `${timers.length} active`;
-
-      if (!timers.length) {
-        list.innerHTML = '<div class="emptyState">No active timers — start one above</div>';
-        return;
-      }
-
-      // Check for alarms
-      timers.forEach(t => {
-        const left = (t.expiresAt || 0) - now();
-        if (left > 0 && left <= WARN_15_MS && !alarmTriggered.has(t.id)) {
-          triggerAlarm(t.id, t.name);
-        }
-      });
-
-      list.innerHTML = timers.map(t => {
-        const left = (t.expiresAt || 0) - now();
-        const st = timerState(t);
-        const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
-        
-        let tagText, tagClass;
-        if (st === "exp") {
-          tagText = "EXPIRED";
-          tagClass = "exp";
-        } else if (st === "alarm") {
-          tagText = "🚨 15 MIN!";
-          tagClass = "alarm";
-        } else if (st === "warn") {
-          tagText = "⚠️ 30 MIN";
-          tagClass = "warn";
-        } else {
-          tagText = "✓ OK";
-          tagClass = "ok";
-        }
-
-        const isAlarming = currentlyAlarming.has(t.id);
-        const cardClass = isAlarming ? "tCard alarming" : "tCard";
-
-        return `
-          <div class="${cardClass}">
-            <div class="tTag ${tagClass}">${tagText}</div>
-            <div class="tName">${escapeHtml(t.name)}</div>
-            <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
-            <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
-            <div class="barWrap"><div class="barFill ${st === 'exp' ? 'exp' : (st === 'alarm' || st === 'warn') ? 'warn' : ''}" style="width:${st === 'exp' ? 100 : pct}%"></div></div>
-            <div class="tActions">
-              ${isAlarming ? `<button class="smallBtn danger" onclick="dismissAlarm('${t.id}')">🔕 Dismiss</button>` : ''}
-              <button class="smallBtn danger" onclick="stopTimer('${t.id}')">🛑 Stop</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Make functions global for onclick
-    window.stopTimer = stopTimer;
-    window.dismissAlarm = dismissAlarm;
-
-    // ============================================================
-    // COLLAPSIBLE SECTIONS
-    // ============================================================
-    function setupCollapsible(headId, bodyId, arrowId) {
-      $(headId).onclick = () => {
-        $(bodyId).classList.toggle("open");
-        $(arrowId).classList.toggle("open");
-      };
-    }
-
-    // ============================================================
-    // TOOLS
-    // ============================================================
-    let currentToolUrl = "";
-
-    function openTool(url) {
-      currentToolUrl = url;
-      $("toolName").textContent = url.replace("./", "");
-      $("toolFrame").src = url;
-      $("toolViewer").classList.add("open");
-      $("toolViewer").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function closeTool() {
-      $("toolViewer").classList.remove("open");
-      $("toolFrame").src = "about:blank";
-      currentToolUrl = "";
-    }
-
-    // ============================================================
-    // FULLSCREEN & WAKE LOCK
-    // ============================================================
-    let wakeLock = null;
-
-    async function toggleFullscreen() {
-      try {
-        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-        else await document.exitFullscreen();
-      } catch (e) { }
-    }
-
-    async function toggleWakeLock() {
-      try {
-        if (!("wakeLock" in navigator)) {
-          alert("Wake Lock not supported on this device");
-          return;
-        }
-        if (wakeLock) {
-          await wakeLock.release();
-          wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Keep Awake";
-          $("wakeBtn").classList.remove("on");
-          return;
-        }
-        wakeLock = await navigator.wakeLock.request("screen");
-        $("wakeBtn").textContent = "☀️ Awake ON";
-        $("wakeBtn").classList.add("on");
-        wakeLock.onrelease = () => {
-          wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Keep Awake";
-          $("wakeBtn").classList.remove("on");
-        };
-      } catch (e) {
-        alert("Could not enable wake lock");
-      }
-    }
-
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    document.querySelectorAll("#tplRow .segBtn").forEach(btn => {
-      btn.onclick = () => {
-        selectedTpl = btn.dataset.tpl;
-        updateTplUI();
-      };
-    });
-
-    $("start3hBtn").onclick = () => addTimer(DEFAULT_DURATION_MS);
-    $("start30Btn").onclick = () => addTimer(SHORT_DURATION_MS);
-    $("clearExpBtn").onclick = clearExpired;
-    $("textInput").onkeydown = e => { if (e.key === "Enter") addTimer(DEFAULT_DURATION_MS); };
-
-    $("refreshKBtn").onclick = loadKitchenPct;
-    $("refreshCBtn").onclick = loadCateringMini;
-
-    $("clockToggle").onclick = toggleClock;
-    $("soundToggle").onclick = toggleSound;
-    $("testSoundBtn").onclick = testSound;
-    $("fsBtn").onclick = toggleFullscreen;
-    $("wakeBtn").onclick = toggleWakeLock;
-
-    setupCollapsible("timerHead", "timerBody", "timerArrow");
-    setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
-
-    document.querySelectorAll(".toolItem").forEach(item => {
-      item.onclick = () => openTool(item.dataset.url);
-    });
-
-    $("closeToolBtn").onclick = closeTool;
-    $("newTabBtn").onclick = () => { if (currentToolUrl) window.open(currentToolUrl, "_blank"); };
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    (function init() {
-      const loc = getLoc();
-      $("locPill").textContent = "📍 Location: " + (loc || "Not set");
-
-      // Clock
-      updateClockUI();
-      updateClock();
-
-      // Sound
-      updateSoundUI();
-
-      // Request notification permission
-      requestNotificationPermission();
-
-      // Timer UI
-      updateTplUI();
-      renderTimers();
-
-      // Load data
-      loadKitchenPct();
-      loadCateringMini();
-
-      // Intervals
-      setInterval(updateClock, 1000);
-      setInterval(renderTimers, 1000);
-      setInterval(loadKitchenPct, 60000);
-      setInterval(loadCateringMini, 60000);
-    })();
-  </script>
+    </script>
 </body>
 </html>
