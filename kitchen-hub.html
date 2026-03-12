@@ -1,1011 +1,972 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Hub - Kaiser</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #06080c;
-            --card: rgba(255,255,255,0.04);
-            --card-hover: rgba(255,255,255,0.07);
-            --border: rgba(255,255,255,0.08);
-            --text: #ffffff;
-            --text-muted: rgba(255,255,255,0.6);
-            --text-muted2: rgba(255,255,255,0.4);
-            --gold: #bfa14a;
-            --gold-glow: rgba(191,161,74,0.25);
-            --green: #2ed47a;
-            --red: #ff5c5c;
-            --orange: #ffaa00;
-            --blue: #3b82f6;
-            --shadow: 0 20px 50px rgba(0,0,0,0.4);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html, body { height: 100%; }
-
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(191,161,74,0.12), transparent),
-                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(191,161,74,0.06), transparent);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* ═══════════ HEADER ═══════════ */
-        header {
-            height: 70px;
-            background: linear-gradient(135deg, rgba(30,30,30,0.85), rgba(20,20,20,0.85));
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: var(--gold);
-        }
-
-        .logo img { height: 38px; border-radius: 10px; }
-
-        .header-center {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        #clock {
-            font-variant-numeric: tabular-nums;
-            font-weight: 800;
-            font-size: 2rem;
-            color: var(--gold);
-            text-shadow: 0 0 30px var(--gold-glow);
-        }
-
-        .location-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--green);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.6; }
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .control-btn {
-            padding: 8px 16px;
-            border-radius: 999px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .control-btn:hover { background: var(--card-hover); color: var(--text); }
-        .control-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
-
-        .back-link {
-            font-size: 0.78rem;
-            color: var(--gold);
-            text-decoration: none;
-            border: 1px solid var(--gold);
-            padding: 7px 16px;
-            border-radius: 999px;
-            transition: all 0.2s;
-        }
-        .back-link:hover { background: var(--gold); color: #000; }
-
-        /* ═══════════ MAIN ═══════════ */
-        main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto 1fr;
-            gap: 22px;
-            padding: 22px 28px 28px;
-            overflow: auto;
-        }
-
-        @media (max-width: 1100px) {
-            main { grid-template-columns: 1fr; }
-        }
-
-        /* ═══════════ PANELS ═══════════ */
-        .panel {
-            position: relative;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            display: flex;
-            flex-direction: column;
-            min-height: 200px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-        }
-
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .panel-header .icon { font-size: 1.1rem; }
-
-        .panel-header .refresh-btn {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            padding: 4px;
-        }
-        .panel-header .refresh-btn:hover { color: var(--gold); transform: rotate(180deg); }
-
-        .panel-body {
-            flex: 1;
-            padding: 18px 20px;
-            overflow-y: auto;
-        }
-
-        /* ═══════════ TIMER BAR (Full Width) ═══════════ */
-        .timers-bar {
-            grid-column: 1 / -1;
-        }
-
-        .timer-group {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-        }
-
-        .timer-box {
-            flex: 0 0 180px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .timer-box.warning {
-            border-color: var(--orange);
-            box-shadow: 0 0 18px rgba(255,170,0,0.25);
-        }
-
-        .timer-box.danger {
-            border-color: var(--red);
-            box-shadow: 0 0 22px rgba(255,92,92,0.35);
-            animation: shake 0.4s infinite;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-3px); }
-            75% { transform: translateX(3px); }
-        }
-
-        .timer-box .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .timer-box .time {
-            font-size: 1.8rem;
-            font-weight: 700;
-            font-variant-numeric: tabular-nums;
-            margin-bottom: 12px;
-        }
-
-        .timer-box.warning .time { color: var(--orange); }
-        .timer-box.danger .time { color: var(--red); }
-
-        .timer-box .progress {
-            height: 4px;
-            background: var(--border);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .timer-box .progress-bar {
-            height: 100%;
-            background: var(--gold);
-            border-radius: 10px;
-            transition: width 1s linear;
-        }
-        .timer-box.warning .progress-bar { background: var(--orange); }
-        .timer-box.danger .progress-bar { background: var(--red); }
-
-        .timer-box .controls {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-        }
-
-        .timer-box .controls button {
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.15s;
-        }
-
-        .timer-box .controls button:active { transform: scale(0.94); }
-
-        .btn-start { background: var(--green); color: #000; }
-        .btn-pause { background: var(--orange); color: #000; }
-        .btn-reset { background: var(--card-hover); color: var(--text-muted); border: 1px solid var(--border); }
-        .btn-delete { background: var(--red); color: #fff; }
-
-        .add-timer-btn {
-            background: var(--gold);
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 18px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            cursor: pointer;
-            margin-left: auto;
-            transition: all 0.2s;
-        }
-        .add-timer-btn:hover { transform: scale(1.04); }
-
-        /* ═══════════ KITCHEN % ═══════════ */
-        .kitchen-percent-widget {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            text-align: center;
-        }
-
-        .percent-ring {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            margin-bottom: 16px;
-        }
-
-        .percent-ring svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-
-        .percent-ring circle {
-            fill: none;
-            stroke-width: 10;
-        }
-
-        .percent-ring .bg { stroke: var(--border); }
-
-        .percent-ring .fill {
-            stroke: var(--gold);
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.6s ease;
-        }
-
-        .percent-ring .value {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .percent-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .percent-link {
-            color: var(--gold);
-            font-size: 0.75rem;
-            text-decoration: none;
-            border: 1px solid var(--gold);
-            padding: 8px 16px;
-            border-radius: 999px;
-            transition: all 0.2s;
-        }
-        .percent-link:hover { background: var(--gold); color: #000; }
-
-        /* ═══════════ CATERING ═══════════ */
-        .catering-item {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            transition: all 0.2s;
-        }
-        .catering-item:hover { background: rgba(255,255,255,0.045); transform: translateX(4px); }
-        .catering-item:last-child { margin-bottom: 0; }
-
-        .catering-item.today { border-left-color: var(--red); }
-        .catering-item.tomorrow { border-left-color: var(--orange); }
-
-        .catering-date {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--gold);
-            margin-bottom: 6px;
-        }
-        .catering-item.today .catering-date { color: var(--red); }
-        .catering-item.tomorrow .catering-date { color: var(--orange); }
-
-        .catering-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-
-        .catering-info {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .catering-note {
-            margin-top: 8px;
-            padding: 8px 10px;
-            background: rgba(0,0,0,0.25);
-            border-left: 3px solid var(--text-muted2);
-            border-radius: 8px;
-            font-size: 0.75rem;
-            color: var(--text-muted2);
-            line-height: 1.5;
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-align: center;
-            gap: 8px;
-        }
-
-        .spinner {
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--border);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ═══════════ QUICK TOOLS ═══════════ */
-        .panel.full-width { grid-column: 1 / -1; }
-
-        .quicktools-header {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .quicktools-toggle {
-            margin-left: auto;
-            font-size: 0.9rem;
-            transition: transform 0.3s;
-        }
-        .quicktools-toggle.open { transform: rotate(180deg); }
-
-        .quicktools-content {
-            display: none;
-            padding: 18px 20px;
-        }
-        .quicktools-content.open { display: block; }
-
-        .tool-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .tool-btn {
-            padding: 12px 20px;
-            border-radius: 10px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .tool-btn:hover { background: var(--card-hover); color: var(--gold); }
-        .tool-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
-
-        .iframe-container {
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.2);
-            display: none;
-        }
-        .iframe-container.open { display: block; }
-
-        .iframe-container iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-
-        /* ═══════════ SCROLLBAR ═══════════ */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
-
-        /* ═══════════ MOBILE ═══════════ */
-        @media (max-width: 768px) {
-            header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
-            .header-center { order: 3; width: 100%; justify-content: center; }
-            #clock { font-size: 1.5rem; }
-            main { padding: 14px; gap: 14px; }
-            .timer-box { flex: 0 0 150px; }
-            .timer-box .time { font-size: 1.4rem; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kitchen Hub – Kaiser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #05070a;
+      --card: rgba(255,255,255,0.03);
+      --card-hover: rgba(255,255,255,0.055);
+      --border: rgba(255,255,255,0.06);
+      --text: #fff;
+      --text-muted: rgba(255,255,255,0.5);
+      --gold: #bfa14a;
+      --gold-glow: rgba(191,161,74,0.25);
+      --green: #2ed47a;
+      --red: #ff5c5c;
+      --orange: #ffaa00;
+      --radius: 18px;
+      --header-height: 70px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ───────── HEADER ───────── */
+    header {
+      height: var(--header-height);
+      background: linear-gradient(135deg, rgba(30,30,30,0.85), rgba(20,20,20,0.85));
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--gold);
+    }
+
+    .logo img {
+      height: 38px;
+      border-radius: 10px;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #clock {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--gold);
+      text-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .header-center .location-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .control-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .control-btn:hover { background: var(--card-hover); color: var(--text); }
+    .control-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+    .back-link {
+      font-size: 0.78rem;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 7px 16px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .back-link:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    /* ───────── MAIN GRID ───────── */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
+      padding: 22px 28px 28px;
+      overflow: auto;
+    }
+
+    @media (max-width: 1100px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    /* ───────── PANELS ───────── */
+    .panel {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      overflow: hidden;
+    }
+
+    .panel.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .panel-header .icon { font-size: 1.1rem; }
+
+    .panel-header .refresh-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+    .panel-header .refresh-btn:hover {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
+
+    .panel-header .add-btn {
+      margin-left: auto;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .panel-header .add-btn:hover { transform: scale(1.05); }
+
+    .panel-body {
+      flex: 1;
+      padding: 18px 20px;
+      overflow-y: auto;
+    }
+
+    /* ───────── TIMER BAR ───────── */
+    .timer-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .timer-box {
+      flex: 0 0 180px;
+      background: rgba(255,255,255,0.03);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .timer-box.warning {
+      border-color: var(--orange);
+      box-shadow: 0 0 20px rgba(255,170,0,0.25);
+    }
+
+    .timer-box.danger {
+      border-color: var(--red);
+      box-shadow: 0 0 25px rgba(255,92,92,0.4);
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    .timer-box .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .timer-box .time {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 10px;
+    }
+
+    .timer-box.warning .time { color: var(--orange); }
+    .timer-box.danger .time { color: var(--red); }
+
+    .timer-box .progress {
+      height: 4px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .timer-box .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 10px;
+      transition: width 1s linear;
+    }
+    .timer-box.warning .progress-bar { background: var(--orange); }
+    .timer-box.danger .progress-bar { background: var(--red); }
+
+    .timer-box .controls {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .timer-box .controls button {
+      font-size: 0.68rem;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.15s;
+    }
+    .timer-box .controls button:active { transform: scale(0.94); }
+
+    .btn-start { background: var(--green); color: #000; }
+    .btn-pause { background: var(--orange); color: #000; }
+    .btn-reset { background: var(--card-hover); color: var(--text-muted); }
+    .btn-delete { background: var(--red); color: #fff; }
+
+    /* ───────── KITCHEN % ───────── */
+    .percent-widget {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .percent-ring {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      margin-bottom: 14px;
+    }
+
+    .percent-ring svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .percent-ring circle {
+      fill: none;
+      stroke-width: 10;
+    }
+
+    .percent-ring .bg { stroke: var(--border); }
+
+    .percent-ring .fill {
+      stroke: var(--gold);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+
+    .percent-ring .value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .percent-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .percent-link {
+      color: var(--gold);
+      font-size: 0.75rem;
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 8px 16px;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    .percent-link:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    /* ───────── CATERING ───────── */
+    .catering-item {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .catering-item:hover {
+      background: rgba(255,255,255,0.05);
+      transform: translateX(4px);
+    }
+    .catering-item:last-child { margin-bottom: 0; }
+
+    .catering-item.today { border-left-color: var(--red); }
+    .catering-item.tomorrow { border-left-color: var(--orange); }
+
+    .catering-date {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .catering-item.today .catering-date { color: var(--red); }
+    .catering-item.tomorrow .catering-date { color: var(--orange); }
+
+    .catering-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .catering-info {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .catering-note {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.3);
+      border-left: 3px solid var(--text-muted);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ───────── QUICK TOOLS ───────── */
+    .quicktools-header {
+      cursor: pointer;
+    }
+
+    .quicktools-toggle {
+      margin-left: auto;
+      transition: transform 0.3s;
+    }
+    .quicktools-toggle.open { transform: rotate(180deg); }
+
+    .quicktools-body {
+      display: none;
+      padding: 18px 20px;
+    }
+    .quicktools-body.open { display: block; }
+
+    .tool-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-btn:hover {
+      background: var(--card-hover);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .tool-btn.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    .iframe-container {
+      display: none;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+      margin-top: 12px;
+    }
+    .iframe-container.open { display: block; }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+    }
+
+    .close-tool-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--red);
+      border: none;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+    .close-tool-btn.open { display: inline-block; }
+
+    /* ───────── SCROLLBAR ───────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ───────── MOBILE ───────── */
+    @media (max-width: 768px) {
+      header { padding: 0 16px; flex-wrap: wrap; gap: 10px; height: auto; padding: 12px 16px; }
+      .header-center { width: 100%; justify-content: center; order: 3; }
+      #clock { font-size: 1.5rem; }
+      main { padding: 14px; gap: 14px; }
+      .timer-box { flex: 0 0 150px; }
+      .timer-box .time { font-size: 1.4rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- ALARM SOUND -->
-    <audio id="alarmSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onq2tqYmAd3NucHWAjJmenZaIgXt3dnuDjJSamZKJgXt3d3yFjpWZlpCHf3t3eX+Ij5SXlI+GgHt4eoCHjpOVko+HgHt5e4GHjZKUkY2GgHt6e4GGi5CSkI2FgHt7fIKGi4+Qjo2FgHt7fIKGio6PjYuEf3t7fIGFiY2OjIuEf3t8fYGFiIyNi4qDf3t8fYCEh4uMioqDfnt9foCEhomKiYmCfnt9fn+Dhoha" type="audio/wav">
-    </audio>
+  <!-- ALARM SOUND -->
+  <audio id="alarmSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onq2tqYmAd3NucHWAjJmenZaIgXt3dnuDjJSamZKJgXt3d3yFjpWZlpCHf3t3eX+Ij5SXlI+GgHt4eoCHjpOVko+HgHt5e4GHjZKUkY2GgHt6e4GGi5CSkI2FgHt7fIKGi4+Qjo2FgHt7fIKGio6PjYuEf3t7fIGFiY2OjIuEf3t8fYGFiIyNi4qDf3t8fYCEh4uMioqDfnt9foCEhomKiYmCfnt9fn+Dhoha" type="audio/wav">
+  </audio>
 
-    <!-- ═══════════ HEADER ═══════════ -->
-    <header>
-        <div class="logo">
-            <span>👨‍🍳</span>
-            <span>Kitchen Hub</span>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- HEADER -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <header>
+    <div class="logo">
+      <span>👨‍🍳</span>
+      <span>Kitchen Hub</span>
+    </div>
+
+    <div class="header-center">
+      <div id="clock">--:--:--</div>
+      <div class="location-badge">
+        <span class="live-dot"></span>
+        <span id="locationName">Detecting...</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="control-btn active" id="btnClock" onclick="toggleClock()">🕐 Clock</button>
+      <button class="control-btn active" id="btnSound" onclick="toggleSound()">🔊 Sound</button>
+      <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+      <button class="control-btn" id="btnAwake" onclick="toggleAwake()">☀️ Awake</button>
+      <a href="portal.html" class="back-link">← Portal</a>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MAIN -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- 3-HOUR TIMERS -->
+    <section class="panel full-width">
+      <div class="panel-header">
+        <span class="icon">⏰</span>
+        3-Hour Timers
+        <button class="add-btn" onclick="addTimer()">+ Add</button>
+      </div>
+      <div class="panel-body">
+        <div class="timer-row" id="timerRow"></div>
+      </div>
+    </section>
+
+    <!-- KITCHEN % -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="icon">📈</span>
+        Kitchen %
+      </div>
+      <div class="panel-body">
+        <div class="percent-widget">
+          <div class="percent-ring">
+            <svg viewBox="0 0 100 100">
+              <circle class="bg" cx="50" cy="50" r="40"></circle>
+              <circle class="fill" id="percentCircle" cx="50" cy="50" r="40"
+                      stroke-dasharray="251" stroke-dashoffset="251"></circle>
+            </svg>
+            <div class="value" id="percentValue">--%</div>
+          </div>
+          <div class="percent-label">Today's Kitchen %</div>
+          <a href="kitchen-percent.html" class="percent-link">Open Calculator →</a>
         </div>
+      </div>
+    </section>
 
-        <div class="header-center">
-            <div id="clock">--:--:--</div>
-            <div class="location-badge">
-                <span class="live-dot"></span>
-                <span id="locationName">Detecting...</span>
-            </div>
+    <!-- CATERING EVENTS -->
+    <section class="panel">
+      <div class="panel-header">
+        <span class="icon">🎉</span>
+        Catering Events
+        <button class="refresh-btn" onclick="loadCatering()">🔄</button>
+      </div>
+      <div class="panel-body" id="cateringList">
+        <div class="empty-state">
+          <div class="spinner"></div>
+          <span>Loading catering...</span>
         </div>
+      </div>
+    </section>
 
-        <div class="header-controls">
-            <button class="control-btn active" id="clockToggle" onclick="toggleClock()">🕐 Clock</button>
-            <button class="control-btn active" id="soundToggle" onclick="toggleSound()">🔊 Sound</button>
-            <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-            <button class="control-btn" id="awakeToggle" onclick="toggleKeepAwake()">☀️ Awake</button>
-            <a href="portal.html" class="back-link">← Portal</a>
+    <!-- QUICK TOOLS -->
+    <section class="panel full-width">
+      <div class="panel-header quicktools-header" onclick="toggleQuicktools()">
+        <span class="icon">🛠️</span>
+        Quick Tools
+        <span class="quicktools-toggle" id="qtToggle">▼</span>
+      </div>
+      <div class="quicktools-body" id="qtBody">
+        <div class="tool-buttons">
+          <button class="tool-btn" onclick="openTool('MIS.html', this)">🍽️ MIS</button>
+          <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">🧹 Cleaning List</button>
         </div>
-    </header>
-
-    <!-- ═══════════ MAIN ═══════════ -->
-    <main>
-
-        <!-- ═══════════ 3-HOUR TIMERS (Full Width) ═══════════ -->
-        <section class="panel timers-bar">
-            <div class="panel-header">
-                <span class="icon">⏰</span>
-                3-Hour Timers
-                <button class="add-timer-btn" onclick="addTimer()">+ Add</button>
-            </div>
-            <div class="panel-body">
-                <div class="timer-group" id="timerGroup">
-                    <!-- Timers rendered here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ═══════════ KITCHEN % ═══════════ -->
-        <div class="panel">
-            <div class="panel-header">
-                <span class="icon">📈</span>
-                Kitchen %
-            </div>
-            <div class="panel-body">
-                <div class="kitchen-percent-widget">
-                    <div class="percent-ring">
-                        <svg viewBox="0 0 100 100">
-                            <circle class="bg" cx="50" cy="50" r="42"></circle>
-                            <circle class="fill" id="percentCircle" cx="50" cy="50" r="42" 
-                                    stroke-dasharray="264" stroke-dashoffset="264"></circle>
-                        </svg>
-                        <div class="value" id="percentValue">--%</div>
-                    </div>
-                    <div class="percent-label">Today's Kitchen %</div>
-                    <a href="kitchen-percent.html" class="percent-link">Open Calculator →</a>
-                </div>
-            </div>
+        <button class="close-tool-btn" id="closeTool" onclick="closeTool()">✕ Close Tool</button>
+        <div class="iframe-container" id="iframeBox">
+          <iframe id="toolIframe" src=""></iframe>
         </div>
+      </div>
+    </section>
 
-        <!-- ═══════════ CATERING EVENTS ═══════════ -->
-        <div class="panel">
-            <div class="panel-header">
-                <span class="icon">🎉</span>
-                Catering Events
-                <button class="refresh-btn" onclick="loadCatering()">🔄</button>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SCRIPT -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ═══════════ CONFIG ═══════════
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
+    const TIMER_DURATION = 3 * 60 * 60 * 1000;
+    const WARN_TIME = 15 * 60 * 1000;
+
+    const LOCATIONS = {
+      'helsingør': 'Café Kaiser Helsingør', 'helsingor': 'Café Kaiser Helsingør',
+      'hillerød': 'Café Kaiser Hillerød', 'hillerod': 'Café Kaiser Hillerød',
+      'farum': 'Café Kaiser Farum',
+      'hørsholm': 'Café Kaiser Hørsholm', 'horsholm': 'Café Kaiser Hørsholm',
+      'vanløse': 'Café Kaiser Vanløse', 'vanlose': 'Café Kaiser Vanløse'
+    };
+
+    // ═══════════ STATE ═══════════
+    let currentLocation = '';
+    let showClock = true;
+    let soundOn = true;
+    let timers = [];
+    let timerIntervals = {};
+
+    // ═══════════ INIT ═══════════
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      detectLocation();
+      startClock();
+      loadTimers();
+      loadCatering();
+      loadKitchenPercent();
+      setInterval(loadCatering, 60000);
+    });
+
+    // ═══════════ SETTINGS ═══════════
+    function loadSettings() {
+      showClock = localStorage.getItem('kh_clock') !== 'false';
+      soundOn = localStorage.getItem('kh_sound') !== 'false';
+      updateControlBtns();
+    }
+
+    function updateControlBtns() {
+      document.getElementById('btnClock').classList.toggle('active', showClock);
+      document.getElementById('btnSound').classList.toggle('active', soundOn);
+    }
+
+    // ═══════════ LOCATION ═══════════
+    function detectLocation() {
+      const params = new URLSearchParams(window.location.search);
+      const loc = params.get('loc');
+      if (loc) {
+        currentLocation = loc.toLowerCase();
+        document.getElementById('locationName').textContent = LOCATIONS[currentLocation] || `Café Kaiser ${loc}`;
+      } else {
+        document.getElementById('locationName').textContent = 'Select Location';
+      }
+    }
+
+    // ═══════════ CLOCK ═══════════
+    function startClock() {
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    function updateClock() {
+      const el = document.getElementById('clock');
+      if (!showClock) { el.style.display = 'none'; return; }
+      el.style.display = 'block';
+      el.textContent = new Date().toTimeString().slice(0, 8);
+    }
+
+    function toggleClock() {
+      showClock = !showClock;
+      localStorage.setItem('kh_clock', showClock);
+      updateControlBtns();
+      updateClock();
+    }
+
+    // ═══════════ SOUND ═══════════
+    function toggleSound() {
+      soundOn = !soundOn;
+      localStorage.setItem('kh_sound', soundOn);
+      updateControlBtns();
+    }
+
+    function playAlarm() {
+      if (!soundOn) return;
+      const audio = document.getElementById('alarmSound');
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      if (Notification.permission === 'granted') {
+        new Notification('⏰ Timer Alert!', { body: '15 minutes remaining!' });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    }
+
+    // ═══════════ FULLSCREEN & AWAKE ═══════════
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+
+    async function toggleAwake() {
+      const btn = document.getElementById('btnAwake');
+      btn.classList.toggle('active');
+      if (btn.classList.contains('active') && 'wakeLock' in navigator) {
+        try { await navigator.wakeLock.request('screen'); } catch (e) {}
+      }
+    }
+
+    // ═══════════ TIMERS ═══════════
+    function loadTimers() {
+      const saved = localStorage.getItem('kh_timers_' + currentLocation);
+      timers = saved ? JSON.parse(saved) : [{ id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }];
+      renderTimers();
+      timers.filter(t => t.running).forEach(t => { t.running = false; startTimer(t.id); });
+    }
+
+    function saveTimers() {
+      localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers));
+    }
+
+    function renderTimers() {
+      document.getElementById('timerRow').innerHTML = timers.map(t => {
+        let cls = '';
+        if (t.remaining <= 0 || t.remaining <= WARN_TIME) cls = 'danger';
+        else if (t.remaining <= WARN_TIME * 2) cls = 'warning';
+        const pct = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
+
+        return `
+          <div class="timer-box ${cls}">
+            <div class="label">${t.label}</div>
+            <div class="time">${fmtTime(t.remaining)}</div>
+            <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+            <div class="controls">
+              ${t.running
+                ? `<button class="btn-pause" onclick="pauseTimer(${t.id})">Pause</button>`
+                : `<button class="btn-start" onclick="startTimer(${t.id})">Start</button>`}
+              <button class="btn-reset" onclick="resetTimer(${t.id})">Reset</button>
+              ${timers.length > 1 ? `<button class="btn-delete" onclick="deleteTimer(${t.id})">✕</button>` : ''}
             </div>
-            <div class="panel-body" id="cateringList">
-                <div class="empty-state">
-                    <div class="spinner"></div>
-                    <span>Loading catering...</span>
-                </div>
-            </div>
-        </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-        <!-- ═══════════ QUICK TOOLS (Full Width) ═══════════ -->
-        <section class="panel full-width">
-            <div class="panel-header quicktools-header" onclick="toggleQuicktools()">
-                <span class="icon">🛠️</span>
-                Quick Tools
-                <span class="quicktools-toggle" id="quicktoolsToggle">▼</span>
-            </div>
-            <div class="quicktools-content" id="quicktoolsContent">
-                <div class="tool-buttons">
-                    <button class="tool-btn" onclick="openTool('MIS.html', this)">
-                        <span>🍽️</span> MIS
-                    </button>
-                    <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">
-                        <span>🧹</span> Cleaning List
-                    </button>
-                </div>
-                <div class="iframe-container" id="iframeContainer">
-                    <iframe id="toolIframe" src=""></iframe>
-                </div>
-            </div>
-        </section>
+    function fmtTime(ms) {
+      const s = Math.max(0, Math.floor(ms / 1000));
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
 
-    </main>
+    function startTimer(id) {
+      const t = timers.find(x => x.id === id);
+      if (!t || t.running) return;
+      t.running = true;
+      t.alarmed = false;
+      saveTimers();
+      renderTimers();
 
-    <script>
-        // ═══════════ CONFIG ═══════════
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
-        const TIMER_DURATION = 3 * 60 * 60 * 1000; // 3 hours
-        const WARN_TIME = 15 * 60 * 1000; // 15 minutes
+      timerIntervals[id] = setInterval(() => {
+        t.remaining -= 1000;
+        if (t.remaining <= WARN_TIME && !t.alarmed) { t.alarmed = true; playAlarm(); }
+        if (t.remaining <= 0) { t.remaining = 0; pauseTimer(id); playAlarm(); }
+        saveTimers();
+        renderTimers();
+      }, 1000);
+    }
 
-        const LOCATIONS = {
-            'helsingør': 'Café Kaiser Helsingør',
-            'helsingor': 'Café Kaiser Helsingør',
-            'hillerød': 'Café Kaiser Hillerød',
-            'hillerod': 'Café Kaiser Hillerød',
-            'farum': 'Café Kaiser Farum',
-            'hørsholm': 'Café Kaiser Hørsholm',
-            'horsholm': 'Café Kaiser Hørsholm',
-            'vanløse': 'Café Kaiser Vanløse',
-            'vanlose': 'Café Kaiser Vanløse'
-        };
+    function pauseTimer(id) {
+      const t = timers.find(x => x.id === id);
+      if (t) t.running = false;
+      clearInterval(timerIntervals[id]);
+      delete timerIntervals[id];
+      saveTimers();
+      renderTimers();
+    }
 
-        // ═══════════ STATE ═══════════
-        let currentLocation = '';
-        let showClock = true;
-        let soundEnabled = true;
-        let timers = [];
-        let timerIntervals = {};
+    function resetTimer(id) {
+      pauseTimer(id);
+      const t = timers.find(x => x.id === id);
+      if (t) { t.remaining = TIMER_DURATION; t.alarmed = false; }
+      saveTimers();
+      renderTimers();
+    }
 
-        // ═══════════ INIT ═══════════
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettings();
-            detectLocation();
-            startClock();
-            loadTimers();
-            loadCatering();
-            loadKitchenPercent();
-            setInterval(loadCatering, 60000);
-        });
+    function addTimer() {
+      const newId = Math.max(0, ...timers.map(t => t.id)) + 1;
+      timers.push({ id: newId, label: `Timer ${newId}`, remaining: TIMER_DURATION, running: false, alarmed: false });
+      saveTimers();
+      renderTimers();
+    }
 
-        // ═══════════ SETTINGS ═══════════
-        function loadSettings() {
-            showClock = localStorage.getItem('kh_clock') !== 'false';
-            soundEnabled = localStorage.getItem('kh_sound') !== 'false';
-            updateButtons();
-        }
+    function deleteTimer(id) {
+      pauseTimer(id);
+      timers = timers.filter(t => t.id !== id);
+      saveTimers();
+      renderTimers();
+    }
 
-        function updateButtons() {
-            document.getElementById('clockToggle').classList.toggle('active', showClock);
-            document.getElementById('soundToggle').classList.toggle('active', soundEnabled);
-        }
+    // ═══════════ CATERING ═══════════
+    async function loadCatering() {
+      const container = document.getElementById('cateringList');
+      if (!currentLocation) {
+        container.innerHTML = '<div class="empty-state">Select location to view catering</div>';
+        return;
+      }
+      container.innerHTML = '<div class="empty-state"><div class="spinner"></div><span>Loading...</span></div>';
 
-        // ═══════════ LOCATION ═══════════
-        function detectLocation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const loc = urlParams.get('loc');
-            if (loc) {
-                currentLocation = loc.toLowerCase();
-                document.getElementById('locationName').textContent = LOCATIONS[currentLocation] || `Café Kaiser ${loc}`;
-            } else {
-                document.getElementById('locationName').textContent = 'Select Location';
-            }
-        }
+      try {
+        const data = await jsonp(SCRIPT_URL + '?action=getOrders');
+        if (data.ok && data.orders) {
+          let orders = data.orders.filter(o => (o.location || '').toLowerCase().includes(currentLocation));
+          const today = new Date(); today.setHours(0, 0, 0, 0);
+          orders = orders.filter(o => new Date(o.deliveryDate) >= today);
+          orders.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
+          renderCatering(orders.slice(0, 6));
+        } else throw new Error('No data');
+      } catch (e) {
+        container.innerHTML = '<div class="empty-state">⚠️ Could not load catering</div>';
+      }
+    }
 
-        // ═══════════ CLOCK ═══════════
-        function startClock() {
-            updateClock();
-            setInterval(updateClock, 1000);
-        }
+    function renderCatering(orders) {
+      const container = document.getElementById('cateringList');
+      if (!orders.length) {
+        container.innerHTML = '<div class="empty-state">🎉 No upcoming catering</div>';
+        return;
+      }
+      container.innerHTML = orders.map(o => {
+        const info = dateInfo(o.deliveryDate);
+        return `
+          <div class="catering-item ${info.cls}">
+            <div class="catering-date">${info.text} at ${o.deliveryTime || '--:--'}</div>
+            <div class="catering-title">${esc(o.customerName)}</div>
+            <div class="catering-info">👥 ${o.guests} guests</div>
+            ${o.note ? `<div class="catering-note">📝 ${esc(o.note)}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
 
-        function updateClock() {
-            const el = document.getElementById('clock');
-            if (!showClock) { el.style.display = 'none'; return; }
-            el.style.display = 'block';
-            const now = new Date();
-            el.textContent = now.toTimeString().slice(0, 8);
-        }
+    function dateInfo(str) {
+      const d = new Date(str);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const diff = Math.floor((d - today) / 86400000);
+      if (diff === 0) return { text: '🔴 TODAY', cls: 'today' };
+      if (diff === 1) return { text: '🟡 TOMORROW', cls: 'tomorrow' };
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return { text: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`, cls: '' };
+    }
 
-        function toggleClock() {
-            showClock = !showClock;
-            localStorage.setItem('kh_clock', showClock);
-            updateButtons();
-            updateClock();
-        }
+    // ═══════════ KITCHEN % ═══════════
+    function loadKitchenPercent() {
+      const saved = localStorage.getItem('kp_today_' + currentLocation);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          if (data.date === new Date().toDateString()) { setPercent(data.percent); return; }
+        } catch (e) {}
+      }
+      setPercent(null);
+    }
 
-        // ═══════════ SOUND ═══════════
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            localStorage.setItem('kh_sound', soundEnabled);
-            updateButtons();
-        }
+    function setPercent(p) {
+      const circle = document.getElementById('percentCircle');
+      const val = document.getElementById('percentValue');
+      if (p === null) { val.textContent = '--%'; circle.style.strokeDashoffset = 251; return; }
+      const pct = Math.min(100, Math.max(0, p));
+      circle.style.strokeDashoffset = 251 - (pct / 100) * 251;
+      val.textContent = pct.toFixed(1) + '%';
+      circle.style.stroke = pct < 28 ? '#2ed47a' : pct <= 32 ? '#bfa14a' : '#ff5c5c';
+    }
 
-        function playAlarm() {
-            if (!soundEnabled) return;
-            const audio = document.getElementById('alarmSound');
-            audio.currentTime = 0;
-            audio.play().catch(() => {});
+    // ═══════════ QUICK TOOLS ═══════════
+    function toggleQuicktools() {
+      document.getElementById('qtBody').classList.toggle('open');
+      document.getElementById('qtToggle').classList.toggle('open');
+    }
 
-            if (Notification.permission === 'granted') {
-                new Notification('⏰ Timer Alert!', { body: '15 minutes remaining!' });
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission();
-            }
-        }
+    function openTool(url, btn) {
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('toolIframe').src = url;
+      document.getElementById('iframeBox').classList.add('open');
+      document.getElementById('closeTool').classList.add('open');
+    }
 
-        // ═══════════ FULLSCREEN & AWAKE ═══════════
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-            else document.exitFullscreen();
-        }
+    function closeTool() {
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('iframeBox').classList.remove('open');
+      document.getElementById('closeTool').classList.remove('open');
+      document.getElementById('toolIframe').src = '';
+    }
 
-        async function toggleKeepAwake() {
-            const btn = document.getElementById('awakeToggle');
-            btn.classList.toggle('active');
-            if (btn.classList.contains('active') && 'wakeLock' in navigator) {
-                try { await navigator.wakeLock.request('screen'); } catch (e) {}
-            }
-        }
+    // ═══════════ HELPERS ═══════════
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const cb = 'cb_' + Date.now();
+        const script = document.createElement('script');
+        const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 15000);
+        function cleanup() { clearTimeout(timeout); delete window[cb]; script.remove(); }
+        window[cb] = (data) => { cleanup(); resolve(data); };
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+        script.onerror = () => { cleanup(); reject(new Error('Network')); };
+        document.body.appendChild(script);
+      });
+    }
 
-        // ═══════════ TIMERS ═══════════
-        function loadTimers() {
-            const saved = localStorage.getItem('kh_timers_' + currentLocation);
-            timers = saved ? JSON.parse(saved) : [
-                { id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }
-            ];
-            renderTimers();
-            timers.filter(t => t.running).forEach(t => { t.running = false; startTimer(t.id); });
-        }
-
-        function saveTimers() {
-            localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers));
-        }
-
-        function renderTimers() {
-            document.getElementById('timerGroup').innerHTML = timers.map(t => {
-                let cls = '';
-                if (t.remaining <= 0 || t.remaining <= WARN_TIME) cls = 'danger';
-                else if (t.remaining <= WARN_TIME * 2) cls = 'warning';
-
-                const percent = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
-
-                return `
-                    <div class="timer-box ${cls}">
-                        <div class="label">${t.label}</div>
-                        <div class="time">${formatTime(t.remaining)}</div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: ${percent}%"></div>
-                        </div>
-                        <div class="controls">
-                            ${t.running
-                                ? `<button class="btn-pause" onclick="pauseTimer(${t.id})">Pause</button>`
-                                : `<button class="btn-start" onclick="startTimer(${t.id})">Start</button>`
-                            }
-                            <button class="btn-reset" onclick="resetTimer(${t.id})">Reset</button>
-                            ${timers.length > 1 ? `<button class="btn-delete" onclick="deleteTimer(${t.id})">✕</button>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function formatTime(ms) {
-            const s = Math.max(0, Math.floor(ms / 1000));
-            const h = Math.floor(s / 3600);
-            const m = Math.floor((s % 3600) / 60);
-            const sec = s % 60;
-            return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-        }
-
-        function startTimer(id) {
-            const t = timers.find(x => x.id === id);
-            if (!t || t.running) return;
-
-            t.running = true;
-            t.alarmed = false;
-            saveTimers();
-            renderTimers();
-
-            timerIntervals[id] = setInterval(() => {
-                t.remaining -= 1000;
-
-                if (t.remaining <= WARN_TIME && !t.alarmed) {
-                    t.alarmed = true;
-                    playAlarm();
-                }
-
-                if (t.remaining <= 0) {
-                    t.remaining = 0;
-                    pauseTimer(id);
-                    playAlarm();
-                }
-
-                saveTimers();
-                renderTimers();
-            }, 1000);
-        }
-
-        function pauseTimer(id) {
-            const t = timers.find(x => x.id === id);
-            if (t) t.running = false;
-            clearInterval(timerIntervals[id]);
-            delete timerIntervals[id];
-            saveTimers();
-            renderTimers();
-        }
-
-        function resetTimer(id) {
-            pauseTimer(id);
-            const t = timers.find(x => x.id === id);
-            if (t) { t.remaining = TIMER_DURATION; t.alarmed = false; }
-            saveTimers();
-            renderTimers();
-        }
-
-        function addTimer() {
-            const newId = Math.max(0, ...timers.map(t => t.id)) + 1;
-            timers.push({
-                id: newId,
-                label: `Timer ${newId}`,
-                remaining: TIMER_DURATION,
-                running: false,
-                alarmed: false
-            });
-            saveTimers();
-            renderTimers();
-        }
-
-        function deleteTimer(id) {
-            pauseTimer(id);
-            timers = timers.filter(t => t.id !== id);
-            saveTimers();
-            renderTimers();
-        }
-
-        // ═══════════ CATERING ═══════════
-        async function loadCatering() {
-            const container = document.getElementById('cateringList');
-            if (!currentLocation) {
-                container.innerHTML = '<div class="empty-state">Select location to view catering</div>';
-                return;
-            }
-
-            container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
-
-            try {
-                const data = await jsonp(SCRIPT_URL + '?action=getOrders');
-
-                if (data.ok && data.orders) {
-                    let orders = data.orders.filter(o => {
-                        const loc = (o.location || '').toLowerCase();
-                        return loc.includes(currentLocation);
-                    });
-
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    orders = orders.filter(o => new Date(o.deliveryDate) >= today);
-                    orders.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
-
-                    renderCatering(orders.slice(0, 6));
-                } else {
-                    throw new Error('No data');
-                }
-            } catch (err) {
-                console.error('Catering error:', err);
-                container.innerHTML = '<div class="empty-state">⚠️ Could not load catering</div>';
-            }
-        }
-
-        function renderCatering(orders) {
-            const container = document.getElementById('cateringList');
-
-            if (orders.length === 0) {
-                container.innerHTML = '<div class="empty-state">🎉 No upcoming catering</div>';
-                return;
-            }
-
-            container.innerHTML = orders.map(o => {
-                const info = getDateInfo(o.deliveryDate);
-                return `
-                    <div class="catering-item ${info.cls}">
-                        <div class="catering-date">${info.text} at ${o.deliveryTime || '--:--'}</div>
-                        <div class="catering-title">${escapeHtml(o.customerName)}</div>
-                        <div class="catering-info">👥 ${o.guests} guests</div>
-                        ${o.note ? `<div class="catering-note">📝 ${escapeHtml(o.note)}</div>` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function getDateInfo(dateStr) {
-            const d = new Date(dateStr);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const diff = Math.floor((d - today) / 86400000);
-
-            if (diff === 0) return { text: '🔴 TODAY', cls: 'today' };
-            if (diff === 1) return { text: '🟡 TOMORROW', cls: 'tomorrow' };
-
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return { text: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`, cls: '' };
-        }
-
-        // ═══════════ KITCHEN % ═══════════
-        function loadKitchenPercent() {
-            const saved = localStorage.getItem('kp_today_' + currentLocation);
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    if (data.date === new Date().toDateString()) {
-                        setPercent(data.percent);
-                        return;
-                    }
-                } catch (e) {}
-            }
-            setPercent(null);
-        }
-
-        function setPercent(p) {
-            const circle = document.getElementById('percentCircle');
-            const val = document.getElementById('percentValue');
-            const circumference = 264;
-
-            if (p === null) {
-                val.textContent = '--%';
-                circle.style.strokeDashoffset = circumference;
-                return;
-            }
-
-            const percent = Math.min(100, Math.max(0, p));
-            const offset = circumference - (percent / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
-            val.textContent = percent.toFixed(1) + '%';
-
-            if (percent < 28) circle.style.stroke = '#2ed47a';
-            else if (percent <= 32) circle.style.stroke = '#bfa14a';
-            else circle.style.stroke = '#ff5c5c';
-        }
-
-        // ═══════════ QUICK TOOLS ═══════════
-        function toggleQuicktools() {
-            const content = document.getElementById('quicktoolsContent');
-            const toggle = document.getElementById('quicktoolsToggle');
-            content.classList.toggle('open');
-            toggle.classList.toggle('open');
-        }
-
-        function openTool(url, btn) {
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('toolIframe').src = url;
-            document.getElementById('iframeContainer').classList.add('open');
-        }
-
-        // ═══════════ HELPERS ═══════════
-        function jsonp(url) {
-            return new Promise((resolve, reject) => {
-                const cb = 'cb_' + Date.now();
-                const script = document.createElement('script');
-                const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 15000);
-                function cleanup() { clearTimeout(timeout); delete window[cb]; script.remove(); }
-                window[cb] = (data) => { cleanup(); resolve(data); };
-                script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
-                script.onerror = () => { cleanup(); reject(new Error('Network')); };
-                document.body.appendChild(script);
-            });
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>
+    function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  </script>
 </body>
 </html>
