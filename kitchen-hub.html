@@ -22,6 +22,7 @@
       --danger:#ff6b6b;
       --warn:#f59e0b;
       --ok:#62d26f;
+      --info:#5eb8ff;
       --shadow: 0 20px 60px rgba(0,0,0,.40);
       --shadow2: 0 12px 40px rgba(0,0,0,.30);
     }
@@ -48,6 +49,10 @@
     }
 
     .shell{max-width:1400px; margin:0 auto; padding:18px 16px 44px;}
+    .shell.rush .presetBtn{padding:16px 16px;font-size:15px;}
+    .shell.rush .tCard{width:340px;padding:16px;}
+    .shell.rush .tTime{font-size:42px;}
+    .shell.rush .clockTime{font-size:82px;}
 
     .hero{
       border-radius: 28px;
@@ -88,11 +93,34 @@
     .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
     .btn.ghost{background:rgba(255,255,255,0.08);}
     .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
+    .btn.warnOn{background:rgba(245,158,11,0.18);border-color:rgba(245,158,11,0.40);color:#ffd089;}
 
     .clockWrap{position:relative;z-index:1;margin-top:16px;text-align:center;display:none;}
     .clockWrap.show{display:block;}
     .clockTime{font-family:"Playfair Display",serif;font-size:72px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
     .clockDate{font-size:16px;font-weight:600;color:var(--muted);margin-top:6px;}
+
+    .liveBar{
+      margin-top:14px;
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .livePill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--muted);
+    }
+    .liveDot{width:8px;height:8px;border-radius:50%;}
+    .liveDot.ok{background:var(--ok);}
+    .liveDot.warn{background:var(--warn);}
+    .liveDot.err{background:var(--danger);}
 
     .widgetGrid{
       display:grid;
@@ -115,20 +143,22 @@
     .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
     .widgetTitle{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:flex;align-items:center;gap:8px;}
     .widgetDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+    .widgetSubLine{margin-top:8px;font-size:11px;color:var(--muted2);font-weight:700;}
 
     .kPctBig{font-family:"Playfair Display",serif;font-size:48px;font-weight:700;line-height:1;}
     .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
 
-    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;}
+    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto;}
     .cMiniEvent{
       display:flex;align-items:center;gap:10px;
       padding:12px;border-radius:14px;
       background:rgba(255,255,255,0.05);
       border:1px solid rgba(255,255,255,0.10);
       transition:all .15s;
+      cursor:pointer;
     }
     .cMiniEvent:hover{background:rgba(255,255,255,0.08);}
-    .cMiniBar{width:5px;height:40px;border-radius:4px;flex:0 0 auto;}
+    .cMiniBar{width:5px;height:44px;border-radius:4px;flex:0 0 auto;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
     .cMiniBar.red{background:var(--danger);}
@@ -223,6 +253,20 @@
       transition:all .15s;
     }
     .tCard:hover{border-color:rgba(255,255,255,0.20);transform:translateY(-2px);}
+    .tCard.critical{
+      border-color:rgba(245,158,11,0.45);
+      box-shadow:0 0 0 1px rgba(245,158,11,0.2), 0 0 26px rgba(245,158,11,0.12);
+      animation:pulseWarn 1.2s infinite;
+    }
+    .tCard.expired{
+      border-color:rgba(255,107,107,0.38);
+      box-shadow:0 0 0 1px rgba(255,107,107,0.18);
+    }
+    @keyframes pulseWarn{
+      0%,100%{box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 18px rgba(245,158,11,0.08);}
+      50%{box-shadow:0 0 0 1px rgba(245,158,11,0.32), 0 0 28px rgba(245,158,11,0.22);}
+    }
+
     .tName{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:70px;}
     .tTime{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;margin-top:6px;}
     .tMeta{font-size:12px;color:var(--muted);margin-top:6px;}
@@ -234,6 +278,7 @@
     .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
     .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
     .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
+    .tTag.alarm{background:rgba(245,158,11,0.22);border:1px solid rgba(245,158,11,0.5);color:#ffd089;}
 
     .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
     .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
@@ -276,11 +321,59 @@
 
     .emptyState{text-align:center;padding:30px;color:var(--muted2);font-size:13px;}
     .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:600;font-size:13px;display:none;margin-top:10px;}
+
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.6);
+      display:none; align-items:center; justify-content:center;
+      padding:20px; z-index:9999;
+    }
+    .modalBack.open{display:flex;}
+    .modal{
+      width:min(700px, 100%);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modalHead{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.03);
+    }
+    .modalTitle{
+      font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    }
+    .modalBody{padding:18px;}
+    .mTitle{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;line-height:1.08;}
+    .mMeta{margin-top:10px;font-size:14px;color:var(--muted);font-weight:600;}
+    .mBox{
+      margin-top:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.04);
+      padding:14px;
+    }
+    .mLabel{
+      font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;
+    }
+    .mNote{
+      white-space:pre-wrap;
+      line-height:1.5;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    @media (max-width: 768px) {
+      .toolBar{flex-direction:column;align-items:stretch;}
+    }
   </style>
 </head>
 
 <body>
-  <div class="shell">
+  <div class="shell" id="shell">
 
     <header class="hero">
       <div class="kicker">KAISER</div>
@@ -293,11 +386,18 @@
         <button class="btn ghost" id="clockToggle" type="button">🕐 Show Clock</button>
         <button class="btn ghost" id="fsBtn" type="button">⛶ Fullscreen</button>
         <button class="btn ghost" id="wakeBtn" type="button">☀️ Keep Awake</button>
+        <button class="btn ghost" id="rushBtn" type="button">⚡ Rush Mode</button>
+        <button class="btn ghost" id="alarmTestBtn" type="button">🔔 Test Alarm</button>
       </div>
 
       <div class="clockWrap" id="clockWrap">
         <div class="clockTime" id="clockTime">--:--</div>
         <div class="clockDate" id="clockDate">--</div>
+      </div>
+
+      <div class="liveBar">
+        <div class="livePill" id="kLivePill"><span class="liveDot warn"></span><span id="kLiveText">Kitchen %: waiting</span></div>
+        <div class="livePill" id="cLivePill"><span class="liveDot warn"></span><span id="cLiveText">Catering: waiting</span></div>
       </div>
     </header>
 
@@ -309,6 +409,7 @@
         </div>
         <div class="kPctBig" id="kPct">—</div>
         <div class="kPctSub" id="kMeta">Loading...</div>
+        <div class="widgetSubLine" id="kUpdatedLine">Last update: —</div>
         <div class="errBox" id="kErr"></div>
       </div>
 
@@ -320,6 +421,7 @@
         <div class="cMiniList" id="cMiniList">
           <div class="cMiniEmpty">Loading...</div>
         </div>
+        <div class="widgetSubLine" id="cUpdatedLine">Last update: —</div>
       </div>
     </div>
 
@@ -405,6 +507,34 @@
 
   </div>
 
+  <div class="modalBack" id="cModalBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cModalTitle">
+      <div class="modalHead">
+        <div class="modalTitle" id="cModalTitle">Catering Details</div>
+        <button class="btn ghost" id="closeCModalBtn" type="button">✕ Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="mTitle" id="mTitle">—</div>
+        <div class="mMeta" id="mMeta">—</div>
+
+        <div class="mBox">
+          <div class="mLabel">Customer</div>
+          <div class="mNote" id="mCustomer">—</div>
+        </div>
+
+        <div class="mBox">
+          <div class="mLabel">Guests</div>
+          <div class="mNote" id="mGuests">—</div>
+        </div>
+
+        <div class="mBox">
+          <div class="mLabel">Note</div>
+          <div class="mNote" id="mNote">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ============================================================
     // CONFIGURATION
@@ -413,14 +543,19 @@
     const VAT_FACTOR = 1.25;
 
     const LOC_KEY = "kaiser_kitchenpct_loc";
-    const TIMER_KEY = "kaiser_3timer_v2";
+    const TIMER_KEY = "kaiser_3timer_v3";
     const CLOCK_KEY = "kaiser_clock_visible";
-    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v2";
+    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v3";
+    const RUSH_KEY = "kaiser_rush_mode_v1";
+    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v1";
+    const CACHE_C_KEY = "kaiser_cache_catering_v1";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
+    const WARN_15_MS = 15 * 60 * 1000;
     const WARN_10_MS = 10 * 60 * 1000;
     const ALARM_AT_MS = 15 * 60 * 1000;
+    const AUTO_REMOVE_EXPIRED_AFTER_MS = 3 * 60 * 60 * 1000;
 
     const PRESET_TIMERS = [
       { name: "Pandekager", icon: "🥞", durationMs: DEFAULT_DURATION_MS },
@@ -490,6 +625,31 @@
       });
     }
 
+    function fmtTime(ts) {
+      if (!ts || !isFinite(ts)) return "—";
+      return new Date(ts).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function fmtDate(ts) {
+      if (!ts || !isFinite(ts)) return "—";
+      return new Date(ts).toLocaleDateString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    function fmtDateTime(ts) {
+      if (!ts || !isFinite(ts)) return "—";
+      return new Date(ts).toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
     function colorFor(h) {
       if (!isFinite(h) || h < 0) return "gray";
       if (h <= GREEN_HOURS) return "green";
@@ -502,7 +662,6 @@
       const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
       const [y, m, d] = String(dateStr).split("-").map(Number);
       const [hh, mm] = String(t).split(":").map(Number);
-
       if (!y || !m || !d) return NaN;
       return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0).getTime();
     }
@@ -514,8 +673,8 @@
     function normalizeLoc(s) {
       return String(s || "")
         .toLowerCase()
-        .replace("café", "cafe")
-        .replace("kaiser", "")
+        .replace(/café/g, "cafe")
+        .replace(/kaiser/g, "")
         .replace(/[^\p{L}\p{N}]+/gu, " ")
         .trim();
     }
@@ -526,12 +685,41 @@
       return na === nb || na.includes(nb) || nb.includes(na);
     }
 
+    function saveCache(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
+      } catch (_) {}
+    }
+
+    function loadCache(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.data) return null;
+        return parsed;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function setLiveStatus(kind, status, text) {
+      const pill = kind === "k" ? $("kLivePill") : $("cLivePill");
+      const textEl = kind === "k" ? $("kLiveText") : $("cLiveText");
+      textEl.textContent = text;
+
+      const dot = pill.querySelector(".liveDot");
+      dot.className = "liveDot " + status;
+    }
+
     // ============================================================
-    // LOCATION
+    // LOCATION - locked by ?loc=
     // ============================================================
     function getLoc() {
-      const fromQS = new URLSearchParams(location.search).get("loc");
-      if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
+      const qsLoc = new URLSearchParams(location.search).get("loc");
+      if (qsLoc && qsLoc.trim()) {
+        localStorage.setItem(LOC_KEY, qsLoc.trim());
+      }
       return localStorage.getItem(LOC_KEY) || "";
     }
 
@@ -605,16 +793,60 @@
     }
 
     // ============================================================
+    // RUSH MODE
+    // ============================================================
+    let rushMode = localStorage.getItem(RUSH_KEY) === "true";
+
+    function updateRushUI() {
+      $("shell").classList.toggle("rush", rushMode);
+      $("rushBtn").classList.toggle("warnOn", rushMode);
+      $("rushBtn").textContent = rushMode ? "⚡ Rush Mode ON" : "⚡ Rush Mode";
+    }
+
+    function toggleRushMode() {
+      rushMode = !rushMode;
+      localStorage.setItem(RUSH_KEY, String(rushMode));
+      updateRushUI();
+    }
+
+    // ============================================================
     // KITCHEN %
     // ============================================================
-    async function loadKitchenPct() {
+    function renderKitchenPctFromPayload(data, sourceLabel = "Live") {
       const loc = getLoc();
       const fullLoc = loc ? ("Café Kaiser " + loc) : "";
 
       if (!loc) {
         $("kPct").textContent = "—";
         $("kMeta").textContent = "No location set";
+        $("kUpdatedLine").textContent = "Last update: —";
+        return;
+      }
+
+      const m = monthKey(isoTodayLocal());
+      const entries = Array.isArray(data?.entries) ? data.entries : [];
+      const base = BASELINE_DATA[fullLoc] || { revGross: 0, buy: 0 };
+      const applyBaseline = m === "2026-03" && !entries.some(e => e.date >= "2026-03-01" && e.date <= "2026-03-10");
+
+      const totalGross = Number(data?.totals?.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
+      const totalBuy = Number(data?.totals?.purchases || 0) + (applyBaseline ? base.buy : 0);
+      const totalNet = totalGross / VAT_FACTOR;
+      const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
+
+      $("kPct").textContent = pctStr(pct);
+      $("kMeta").textContent = `${sourceLabel} • MTD Purchases: ${fmtDKK(totalBuy)}`;
+    }
+
+    async function loadKitchenPct() {
+      const loc = getLoc();
+      const fullLoc = loc ? ("Café Kaiser " + loc) : "";
+
+      if (!loc) {
+        $("kPct").textContent = "—";
+        $("kMeta").textContent = "Missing ?loc= in URL";
+        $("kUpdatedLine").textContent = "Last update: —";
         $("kErr").style.display = "none";
+        setLiveStatus("k", "err", "Kitchen %: no location");
         return;
       }
 
@@ -624,102 +856,151 @@
       try {
         const data = await jsonp(SCRIPT_URL, { action: "get", loc: fullLoc, month: m });
 
-        if (!data || !data.ok) {
-          $("kPct").textContent = "—";
-          $("kMeta").textContent = "Could not load";
-          $("kErr").textContent = "Kitchen % data could not be loaded.";
-          $("kErr").style.display = "block";
-          return;
-        }
+        if (!data || !data.ok) throw new Error("No data");
 
-        const entries = Array.isArray(data.entries) ? data.entries : [];
-        const base = BASELINE_DATA[fullLoc] || { revGross: 0, buy: 0 };
-        const applyBaseline = m === "2026-03" && !entries.some(e => e.date >= "2026-03-01" && e.date <= "2026-03-10");
+        renderKitchenPctFromPayload(data, "Live");
+        saveCache(CACHE_K_KEY, data);
 
-        const totalGross = Number(data?.totals?.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
-        const totalBuy = Number(data?.totals?.purchases || 0) + (applyBaseline ? base.buy : 0);
-        const totalNet = totalGross / VAT_FACTOR;
-        const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
-
-        $("kPct").textContent = pctStr(pct);
-        $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
+        const ts = Date.now();
+        $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(ts);
+        setLiveStatus("k", "ok", "Kitchen %: live " + fmtTime(ts));
       } catch (e) {
         console.error("Kitchen % load error:", e);
-        $("kPct").textContent = "—";
-        $("kMeta").textContent = "Error loading";
-        $("kErr").textContent = "Kitchen % could not be loaded.";
-        $("kErr").style.display = "block";
+
+        const cached = loadCache(CACHE_K_KEY);
+        if (cached && cached.data) {
+          renderKitchenPctFromPayload(cached.data, "Offline");
+          $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(cached.ts) + " (cached)";
+          $("kErr").textContent = "Live load failed. Showing cached data.";
+          $("kErr").style.display = "block";
+          setLiveStatus("k", "warn", "Kitchen %: cached " + fmtTime(cached.ts));
+        } else {
+          $("kPct").textContent = "—";
+          $("kMeta").textContent = "Error loading";
+          $("kUpdatedLine").textContent = "Last update: —";
+          $("kErr").textContent = "Kitchen % could not be loaded.";
+          $("kErr").style.display = "block";
+          setLiveStatus("k", "err", "Kitchen %: error");
+        }
       }
     }
 
     // ============================================================
-    // CATERING MINI
+    // CATERING
     // ============================================================
+    let currentCateringEvents = [];
+
+    function renderCateringEvents(events, sourceLabel = "Live", updatedTs = Date.now()) {
+      currentCateringEvents = Array.isArray(events) ? events : [];
+
+      if (!currentCateringEvents.length) {
+        $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No events today/upcoming</div>';
+        $("cUpdatedLine").textContent = "Last update: " + fmtDateTime(updatedTs) + (sourceLabel === "Offline" ? " (cached)" : "");
+        return;
+      }
+
+      $("cMiniList").innerHTML = currentCateringEvents.map((ev, index) => {
+        const h = (ev.ts - Date.now()) / (3600 * 1000);
+        const col = colorFor(h);
+        const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--/----";
+        const todayBadge = ev.isToday ? " • Today" : "";
+
+        return `
+          <div class="cMiniEvent" data-catering-index="${index}">
+            <div class="cMiniBar ${col}"></div>
+            <div class="cMiniInfo">
+              <div class="cMiniTitle">${escapeHtml(ev.customerName || ev.title || "Catering")}</div>
+              <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${todayBadge}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      $("cUpdatedLine").textContent = "Last update: " + fmtDateTime(updatedTs) + (sourceLabel === "Offline" ? " (cached)" : "");
+    }
+
+    function transformOrdersToEvents(orders, loc) {
+      const todayYMD = isoTodayLocal();
+      const startOfToday = parseLocalDateTime(todayYMD, "00:00");
+
+      return (orders || [])
+        .filter(o => locMatches(o.location, loc))
+        .map(o => {
+          const date = String(o.deliveryDate || "").trim();
+          const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
+          const ts = parseLocalDateTime(date, time);
+
+          return {
+            title: o.customerName || "Catering",
+            customerName: o.customerName || "—",
+            date,
+            time,
+            guests: o.guests || 0,
+            note: o.note || "",
+            status: o.status || "Bekræftet",
+            location: o.location || "",
+            ts,
+            isToday: sameYMD(date, todayYMD)
+          };
+        })
+        .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
+        .sort((a, b) => a.ts - b.ts)
+        .slice(0, 3);
+    }
+
     async function loadCateringMini() {
       const loc = getLoc();
 
       if (!loc) {
         $("cMiniList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
+        $("cUpdatedLine").textContent = "Last update: —";
+        setLiveStatus("c", "err", "Catering: no location");
         return;
       }
 
       try {
         const data = await jsonp(SCRIPT_URL, { action: "getOrders" });
+        if (!data || !data.ok || !Array.isArray(data.orders)) throw new Error("No catering data");
 
-        if (!data || !data.ok || !Array.isArray(data.orders)) {
-          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No catering data</div>';
-          return;
-        }
+        const events = transformOrdersToEvents(data.orders, loc);
+        renderCateringEvents(events, "Live", Date.now());
+        saveCache(CACHE_C_KEY, { orders: data.orders, loc });
 
-        const todayYMD = isoTodayLocal();
-        const startOfToday = parseLocalDateTime(todayYMD, "00:00");
-
-        const events = data.orders
-          .filter(o => locMatches(o.location, loc))
-          .map(o => {
-            const date = String(o.deliveryDate || "").trim();
-            const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
-            const ts = parseLocalDateTime(date, time);
-
-            return {
-              title: o.customerName || "Catering",
-              date,
-              time,
-              guests: o.guests || 0,
-              note: o.note || "",
-              ts,
-              isToday: sameYMD(date, todayYMD)
-            };
-          })
-          .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
-          .sort((a, b) => a.ts - b.ts)
-          .slice(0, 3);
-
-        if (!events.length) {
-          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No events today/upcoming</div>';
-          return;
-        }
-
-        $("cMiniList").innerHTML = events.map(ev => {
-          const h = (ev.ts - Date.now()) / (3600 * 1000);
-          const col = colorFor(h);
-          const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--/----";
-          const todayBadge = ev.isToday ? " • Today" : "";
-
-          return `
-            <div class="cMiniEvent">
-              <div class="cMiniBar ${col}"></div>
-              <div class="cMiniInfo">
-                <div class="cMiniTitle">${escapeHtml(ev.title)}</div>
-                <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${todayBadge}</div>
-              </div>
-            </div>
-          `;
-        }).join("");
+        const ts = Date.now();
+        setLiveStatus("c", "ok", "Catering: live " + fmtTime(ts));
       } catch (e) {
         console.error("Catering load error:", e);
-        $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
+
+        const cached = loadCache(CACHE_C_KEY);
+        if (cached && cached.data && Array.isArray(cached.data.orders)) {
+          const events = transformOrdersToEvents(cached.data.orders, loc);
+          renderCateringEvents(events, "Offline", cached.ts);
+          setLiveStatus("c", "warn", "Catering: cached " + fmtTime(cached.ts));
+        } else {
+          $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
+          $("cUpdatedLine").textContent = "Last update: —";
+          setLiveStatus("c", "err", "Catering: error");
+        }
       }
+    }
+
+    function openCateringModal(index) {
+      const ev = currentCateringEvents[index];
+      if (!ev) return;
+
+      $("mTitle").textContent = ev.location ? `Café Kaiser ${ev.location}` : "Catering";
+      $("mMeta").textContent = `${ev.date ? ev.date.split("-").reverse().join("/") : "—"} kl. ${ev.time || "—"} • Status: ${ev.status || "Bekræftet"}`;
+      $("mCustomer").textContent = ev.customerName || "—";
+      $("mGuests").textContent = String(ev.guests || "—");
+      $("mNote").textContent = ev.note || "No note";
+
+      $("cModalBack").classList.add("open");
+      $("cModalBack").setAttribute("aria-hidden", "false");
+    }
+
+    function closeCateringModal() {
+      $("cModalBack").classList.remove("open");
+      $("cModalBack").setAttribute("aria-hidden", "true");
     }
 
     // ============================================================
@@ -768,6 +1049,16 @@
       });
 
       if (changed) saveAlarmState(state);
+    }
+
+    function autoRemoveVeryOldExpiredTimers() {
+      const timers = loadTimers();
+      const cutoff = nowTs() - AUTO_REMOVE_EXPIRED_AFTER_MS;
+      const kept = timers.filter(t => (t.expiresAt || 0) > cutoff);
+      if (kept.length !== timers.length) {
+        saveTimers(kept);
+        cleanupAlarmState(kept);
+      }
     }
 
     function uid() {
@@ -839,9 +1130,17 @@
     function timerState(t) {
       const left = (t.expiresAt || 0) - nowTs();
       if (left <= 0) return "exp";
-      if (left <= WARN_10_MS) return "warn";
+      if (left <= WARN_15_MS) return "alarm";
       if (left <= WARN_30_MS) return "warn";
       return "ok";
+    }
+
+    function timerPriority(t) {
+      const left = (t.expiresAt || 0) - nowTs();
+      if (left <= 0) return 0;
+      if (left <= WARN_15_MS) return 1;
+      if (left <= WARN_30_MS) return 2;
+      return 3;
     }
 
     function updateTplUI() {
@@ -854,8 +1153,15 @@
     }
 
     function renderTimers() {
+      autoRemoveVeryOldExpiredTimers();
+
       const list = $("timerList");
-      const timers = loadTimers().sort((a, b) => (a.expiresAt || 0) - (b.expiresAt || 0));
+      const timers = loadTimers().sort((a, b) => {
+        const pa = timerPriority(a);
+        const pb = timerPriority(b);
+        if (pa !== pb) return pa - pb;
+        return (a.expiresAt || 0) - (b.expiresAt || 0);
+      });
 
       $("timerCount").textContent = `${timers.length} active`;
 
@@ -868,18 +1174,21 @@
         const left = (t.expiresAt || 0) - nowTs();
         const st = timerState(t);
         const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
+        const cardClass = st === "alarm" ? "critical" : st === "exp" ? "expired" : "";
         const tagText = st === "exp"
           ? "EXPIRED"
-          : (left <= WARN_10_MS ? "⚠️ 10 MIN" : (left <= WARN_30_MS ? "⚠️ 30 MIN" : "✓ OK"));
+          : st === "alarm"
+            ? "🔔 15 MIN"
+            : "⚠️ 30 MIN";
 
         return `
-          <div class="tCard">
-            <div class="tTag ${st}">${tagText}</div>
+          <div class="tCard ${cardClass}">
+            <div class="tTag ${st === "exp" ? "exp" : st === "alarm" ? "alarm" : st === "warn" ? "warn" : "ok"}">${st === "ok" ? "✓ OK" : tagText}</div>
             <div class="tName">${escapeHtml(t.name)}</div>
             <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
             <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
             <div class="barWrap">
-              <div class="barFill ${st === "exp" ? "exp" : st === "warn" ? "warn" : ""}" style="width:${st === "exp" ? 100 : pct}%"></div>
+              <div class="barFill ${st === "exp" ? "exp" : (st === "warn" || st === "alarm") ? "warn" : ""}" style="width:${st === "exp" ? 100 : pct}%"></div>
             </div>
             <div class="tActions">
               <button class="smallBtn danger" type="button" data-stop-id="${escapeHtml(t.id)}">🛑 Stop</button>
@@ -889,11 +1198,20 @@
       }).join("");
     }
 
+    // ============================================================
+    // ALARM
+    // ============================================================
     function enableAudio() {
       audioReady = true;
     }
 
-    function playAlarm() {
+    function vibrateIfPossible() {
+      if ("vibrate" in navigator) {
+        try { navigator.vibrate([180, 80, 180]); } catch (_) {}
+      }
+    }
+
+    function playAlarmPattern() {
       if (!audioReady) return;
 
       try {
@@ -906,10 +1224,11 @@
         }
 
         const notes = [
-          { f: 880, d: 0.20 },
-          { f: 988, d: 0.20 },
-          { f: 1047, d: 0.25 },
-          { f: 880, d: 0.20 }
+          { f: 1047, d: 0.18, g: 0.28 },
+          { f: 1318, d: 0.18, g: 0.28 },
+          { f: 1568, d: 0.22, g: 0.30 },
+          { f: 1318, d: 0.18, g: 0.28 },
+          { f: 1047, d: 0.25, g: 0.30 }
         ];
 
         let start = ctx.currentTime;
@@ -918,11 +1237,11 @@
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
 
-          osc.type = "sine";
+          osc.type = "square";
           osc.frequency.setValueAtTime(n.f, start);
 
           gain.gain.setValueAtTime(0.0001, start);
-          gain.gain.exponentialRampToValueAtTime(0.20, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(n.g, start + 0.01);
           gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
 
           osc.connect(gain);
@@ -931,15 +1250,20 @@
           osc.start(start);
           osc.stop(start + n.d);
 
-          start += n.d + 0.03;
+          start += n.d + 0.04;
         });
 
         setTimeout(() => {
           try { ctx.close(); } catch (_) {}
-        }, 1500);
+        }, 1800);
       } catch (e) {
-        console.error("Alarm error:", e);
+        console.error("Alarm audio error:", e);
       }
+    }
+
+    function playAlarm() {
+      vibrateIfPossible();
+      playAlarmPattern();
     }
 
     function checkTimerAlarms() {
@@ -1063,6 +1387,8 @@
     $("clockToggle").addEventListener("click", toggleClock);
     $("fsBtn").addEventListener("click", toggleFullscreen);
     $("wakeBtn").addEventListener("click", toggleWakeLock);
+    $("rushBtn").addEventListener("click", toggleRushMode);
+    $("alarmTestBtn").addEventListener("click", playAlarm);
 
     setupCollapsible("timerHead", "timerBody", "timerArrow");
     setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
@@ -1080,6 +1406,20 @@
       const btn = e.target.closest("[data-stop-id]");
       if (!btn) return;
       stopTimer(btn.getAttribute("data-stop-id"));
+    });
+
+    $("cMiniList").addEventListener("click", (e) => {
+      const row = e.target.closest("[data-catering-index]");
+      if (!row) return;
+      openCateringModal(Number(row.getAttribute("data-catering-index")));
+    });
+
+    $("closeCModalBtn").addEventListener("click", closeCateringModal);
+    $("cModalBack").addEventListener("click", (e) => {
+      if (e.target === $("cModalBack")) closeCateringModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeCateringModal();
     });
 
     document.addEventListener("visibilitychange", async () => {
@@ -1102,10 +1442,15 @@
     // ============================================================
     (function init() {
       const loc = getLoc();
-      $("locPill").textContent = "📍 Location: " + (loc || "Not set");
+      if (!loc) {
+        $("locPill").textContent = "📍 Location: Missing ?loc=";
+      } else {
+        $("locPill").textContent = "📍 Location: " + loc;
+      }
 
       updateClockUI();
       updateClock();
+      updateRushUI();
 
       updateTplUI();
       renderTimers();
