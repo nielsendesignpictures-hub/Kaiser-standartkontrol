@@ -11,7 +11,6 @@
 
   <style>
     :root{
-      /* LYSERE FARVER */
       --bg0:#0d1117;
       --bg1:#161b22;
       --bg2:#21262d;
@@ -50,7 +49,6 @@
 
     .shell{max-width:1400px; margin:0 auto; padding:18px 16px 44px;}
 
-    /* GAMLE HERO HEADER */
     .hero{
       border-radius: 28px;
       border:1px solid rgba(255,255,255,0.12);
@@ -75,7 +73,7 @@
     .goldline{height:2px;margin:16px auto 0;max-width:720px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(214,178,74,0.95),transparent);position:relative;z-index:1;}
 
     .controls{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;z-index:1;}
-    
+
     .pill,.btn{
       display:inline-flex;align-items:center;justify-content:center;gap:6px;
       padding:10px 14px;border-radius:999px;
@@ -91,13 +89,11 @@
     .btn.ghost{background:rgba(255,255,255,0.08);}
     .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
 
-    /* Toggleable Clock */
     .clockWrap{position:relative;z-index:1;margin-top:16px;text-align:center;display:none;}
     .clockWrap.show{display:block;}
     .clockTime{font-family:"Playfair Display",serif;font-size:72px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
     .clockDate{font-size:16px;font-weight:600;color:var(--muted);margin-top:6px;}
 
-    /* Mini widgets grid */
     .widgetGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -120,11 +116,9 @@
     .widgetTitle{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:flex;align-items:center;gap:8px;}
     .widgetDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
 
-    /* Kitchen % mini */
     .kPctBig{font-family:"Playfair Display",serif;font-size:48px;font-weight:700;line-height:1;}
     .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
 
-    /* Catering mini */
     .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:160px;overflow:auto;}
     .cMiniEvent{
       display:flex;align-items:center;gap:10px;
@@ -144,7 +138,6 @@
     .cMiniMeta{font-size:12px;color:var(--muted);margin-top:3px;}
     .cMiniEmpty{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
 
-    /* Section */
     .section{
       margin-top:16px;
       border-radius:22px;
@@ -171,7 +164,6 @@
     .sectionBody.open{display:block;}
     .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-    /* Timer */
     .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
     .segBtn{
       padding:10px 14px;border-radius:999px;
@@ -215,12 +207,12 @@
     .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
     .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
     .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
-    
+
     .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
     .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
     .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
     .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
-    
+
     .tActions{margin-top:10px;display:flex;gap:8px;justify-content:flex-end;}
     .smallBtn{
       padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
@@ -232,7 +224,6 @@
     .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
     .smallBtn.danger:hover{background:rgba(255,107,107,0.25);}
 
-    /* Tools dropdown */
     .toolsGrid{
       display:grid;
       grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
@@ -251,7 +242,6 @@
     .toolName{font-weight:700;font-size:15px;}
     .toolDesc{font-size:12px;color:var(--muted);margin-top:3px;}
 
-    /* Tool viewer */
     .toolViewer{display:none;margin-top:16px;}
     .toolViewer.open{display:block;}
     .toolBar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px;}
@@ -265,7 +255,6 @@
 <body>
   <div class="shell">
 
-    <!-- GAMLE HERO HEADER -->
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Kitchen Hub</div>
@@ -274,36 +263,32 @@
 
       <div class="controls">
         <div class="pill" id="locPill">📍 Location: —</div>
-        <button class="btn ghost" id="clockToggle">🕐 Show Clock</button>
-        <button class="btn ghost" id="fsBtn">⛶ Fullscreen</button>
-        <button class="btn ghost" id="wakeBtn">☀️ Keep Awake</button>
+        <button class="btn ghost" id="clockToggle" type="button">🕐 Show Clock</button>
+        <button class="btn ghost" id="fsBtn" type="button">⛶ Fullscreen</button>
+        <button class="btn ghost" id="wakeBtn" type="button">☀️ Keep Awake</button>
       </div>
 
-      <!-- Toggleable Clock -->
       <div class="clockWrap" id="clockWrap">
         <div class="clockTime" id="clockTime">--:--</div>
         <div class="clockDate" id="clockDate">--</div>
       </div>
     </header>
 
-    <!-- Mini Widgets: Kitchen % + Catering -->
     <div class="widgetGrid">
-      <!-- Kitchen % Mini -->
       <div class="widget">
         <div class="widgetHead">
           <div class="widgetTitle"><span class="widgetDot"></span> Kitchen %</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshKBtn">🔄 Refresh</button>
+          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshKBtn" type="button">🔄 Refresh</button>
         </div>
         <div class="kPctBig" id="kPct">—</div>
         <div class="kPctSub" id="kMeta">Loading...</div>
         <div class="errBox" id="kErr"></div>
       </div>
 
-      <!-- Catering Mini -->
       <div class="widget">
         <div class="widgetHead">
           <div class="widgetTitle"><span class="widgetDot"></span> Catering Events</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshCBtn">🔄 Refresh</button>
+          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshCBtn" type="button">🔄 Refresh</button>
         </div>
         <div class="cMiniList" id="cMiniList">
           <div class="cMiniEmpty">Loading...</div>
@@ -311,7 +296,6 @@
       </div>
     </div>
 
-    <!-- 3-Hour Timer (Collapsible) -->
     <section class="section">
       <div class="sectionHead" id="timerHead">
         <div class="sectionTitle"><span class="sectionDot"></span> 3-Hour Timer</div>
@@ -323,15 +307,14 @@
       <div class="divider"></div>
       <div class="sectionBody open" id="timerBody">
         <div class="timerRow" id="tplRow">
-          <button class="segBtn on" data-tpl="Bacon">🥓 Bacon</button>
-          <button class="segBtn" data-tpl="Pancakes">🥞 Pancakes</button>
-          <button class="segBtn" data-tpl="Free text">✏️ Free text</button>
+          <button class="segBtn on" data-tpl="Bacon" type="button">🥓 Bacon</button>
+          <button class="segBtn" data-tpl="Pancakes" type="button">🥞 Pancakes</button>
+          <button class="segBtn" data-tpl="Free text" type="button">✏️ Free text</button>
         </div>
         <div class="timerRow">
           <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
-          <button class="btn primary" id="start3hBtn">⏰ Start 3h</button>
-          <button class="btn ghost" id="start30Btn">⏰ Start 30m</button>
-          <button class="btn ghost" id="clearExpBtn">🗑️ Clear Expired</button>
+          <button class="btn primary" id="start3hBtn" type="button">⏰ Start 3h</button>
+          <button class="btn ghost" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
         </div>
         <div class="timerList" id="timerList">
           <div class="emptyState">No active timers — start one above</div>
@@ -339,7 +322,6 @@
       </div>
     </section>
 
-    <!-- Quick Tools (Collapsible) -->
     <section class="section">
       <div class="sectionHead" id="toolsHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Quick Tools</div>
@@ -364,41 +346,19 @@
               <div class="toolDesc">Daily & weekly lists</div>
             </div>
           </div>
-          <div class="toolItem" data-url="./kitchen-percent.html">
-            <div class="toolIcon">📊</div>
-            <div class="toolInfo">
-              <div class="toolName">Kitchen %</div>
-              <div class="toolDesc">Full analytics page</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./3-timers-regel.html">
-            <div class="toolIcon">⏱️</div>
-            <div class="toolInfo">
-              <div class="toolName">Timer</div>
-              <div class="toolDesc">Full timer page</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./catering-schedule.html">
-            <div class="toolIcon">📅</div>
-            <div class="toolInfo">
-              <div class="toolName">Catering</div>
-              <div class="toolDesc">Full schedule</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- Tool Viewer (iframe) -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="pill" id="toolName">—</div>
         <div style="display:flex;gap:8px;">
-          <button class="btn ghost" id="closeToolBtn">← Back to Hub</button>
-          <button class="btn ghost" id="newTabBtn">↗ Open in New Tab</button>
+          <button class="btn ghost" id="closeToolBtn" type="button">← Back to Hub</button>
+          <button class="btn ghost" id="newTabBtn" type="button">↗ Open in New Tab</button>
         </div>
       </div>
-      <iframe id="toolFrame" class="frame" src="about:blank"></iframe>
+      <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
 
   </div>
@@ -408,18 +368,17 @@
     // CONFIGURATION
     // ============================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const TOKEN = "KAISER_TOKEN_2026";
     const VAT_FACTOR = 1.25;
 
-    const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
     const LOC_KEY = "kaiser_kitchenpct_loc";
     const TIMER_KEY = "kaiser_3timer_v1_1";
     const CLOCK_KEY = "kaiser_clock_visible";
+    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v1";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
-    const SHORT_DURATION_MS = 30 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
     const WARN_10_MS = 10 * 60 * 1000;
+    const ALARM_AT_MS = 15 * 60 * 1000;
 
     const BASELINE_DATA = {
       "Café Kaiser Hillerød": { revGross: 424048.75, buy: 64582.71 },
@@ -436,7 +395,7 @@
     // HELPERS
     // ============================================================
     const $ = id => document.getElementById(id);
-    const now = () => Date.now();
+    const nowTs = () => Date.now();
     const clamp01 = x => Math.max(0, Math.min(1, x));
 
     function escapeHtml(s) {
@@ -456,7 +415,9 @@
       return new Date().toISOString().slice(0, 10);
     }
 
-    function monthKey(iso) { return String(iso || "").slice(0, 7); }
+    function monthKey(iso) {
+      return String(iso || "").slice(0, 7);
+    }
 
     function pctStr(p) {
       if (p === null || !isFinite(p)) return "—";
@@ -464,10 +425,15 @@
     }
 
     function fmtDKK(n) {
-      return Number(n || 0).toLocaleString("da-DK", { style: "currency", currency: "DKK", maximumFractionDigits: 0 });
+      return Number(n || 0).toLocaleString("da-DK", {
+        style: "currency",
+        currency: "DKK",
+        maximumFractionDigits: 0
+      });
     }
 
     function hoursUntil(dateStr, timeStr) {
+      if (!dateStr) return NaN;
       const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
       const dt = new Date(dateStr + "T" + t + ":00");
       return (dt.getTime() - Date.now()) / (3600 * 1000);
@@ -478,6 +444,13 @@
       if (h <= GREEN_HOURS) return "green";
       if (h <= YELLOW_HOURS) return "yellow";
       return "red";
+    }
+
+    function parseLocalDateTime(dateStr, timeStr) {
+      if (!dateStr) return NaN;
+      const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
+      const dt = new Date(`${dateStr}T${t}:00`);
+      return dt.getTime();
     }
 
     // ============================================================
@@ -492,24 +465,35 @@
     // ============================================================
     // JSONP
     // ============================================================
-    function jsonp(url, params) {
+    function jsonp(url, params = {}) {
       return new Promise((resolve, reject) => {
         const cb = "__cb_" + Math.random().toString(16).slice(2);
         const qs = new URLSearchParams({ ...params, callback: cb }).toString();
         const src = url + (url.includes("?") ? "&" : "?") + qs;
 
         const s = document.createElement("script");
-        const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 15000);
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
 
         function cleanup() {
           clearTimeout(t);
-          delete window[cb];
-          s.remove();
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
         }
 
-        window[cb] = (data) => { cleanup(); resolve(data); };
+        window[cb] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
         s.src = src;
-        s.onerror = () => { cleanup(); reject(new Error("load error")); };
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
         document.body.appendChild(s);
       });
     }
@@ -520,14 +504,23 @@
     let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
 
     function updateClock() {
-      const now = new Date();
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      const d = new Date();
+      $("clockTime").textContent = d.toLocaleTimeString("da-DK", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+      $("clockDate").textContent = d.toLocaleDateString("da-DK", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
     }
 
     function toggleClock() {
       clockVisible = !clockVisible;
-      localStorage.setItem(CLOCK_KEY, clockVisible);
+      localStorage.setItem(CLOCK_KEY, String(clockVisible));
       updateClockUI();
     }
 
@@ -542,11 +535,12 @@
     // ============================================================
     async function loadKitchenPct() {
       const loc = getLoc();
-      const fullLoc = "Café Kaiser " + loc;
-      
+      const fullLoc = loc ? ("Café Kaiser " + loc) : "";
+
       if (!loc) {
         $("kPct").textContent = "—";
         $("kMeta").textContent = "No location set";
+        $("kErr").style.display = "none";
         return;
       }
 
@@ -555,9 +549,12 @@
 
       try {
         const data = await jsonp(SCRIPT_URL, { action: "get", loc: fullLoc, month: m });
-        
+
         if (!data || !data.ok) {
+          $("kPct").textContent = "—";
           $("kMeta").textContent = "Could not load";
+          $("kErr").textContent = "Kitchen % data could not be loaded.";
+          $("kErr").style.display = "block";
           return;
         }
 
@@ -565,16 +562,19 @@
         const base = BASELINE_DATA[fullLoc] || { revGross: 0, buy: 0 };
         const applyBaseline = m === "2026-03" && !entries.some(e => e.date >= "2026-03-01" && e.date <= "2026-03-10");
 
-        const totalGross = Number(data.totals.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
-        const totalBuy = Number(data.totals.purchases || 0) + (applyBaseline ? base.buy : 0);
+        const totalGross = Number(data?.totals?.revenueGross || 0) + (applyBaseline ? base.revGross : 0);
+        const totalBuy = Number(data?.totals?.purchases || 0) + (applyBaseline ? base.buy : 0);
         const totalNet = totalGross / VAT_FACTOR;
         const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
 
         $("kPct").textContent = pctStr(pct);
         $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
-
       } catch (e) {
+        console.error("Kitchen % load error:", e);
+        $("kPct").textContent = "—";
         $("kMeta").textContent = "Error loading";
+        $("kErr").textContent = "Kitchen % could not be loaded.";
+        $("kErr").style.display = "block";
       }
     }
 
@@ -583,38 +583,65 @@
     // ============================================================
     async function loadCateringMini() {
       const loc = getLoc();
-      
+
       if (!loc) {
         $("cMiniList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
         return;
       }
 
       try {
-        const data = await jsonp(SCRIPT_URL, { action: "catering_get", loc: loc });
+        const data = await jsonp(SCRIPT_URL, { action: "getOrders" });
 
-        if (!data || !data.ok || !data.events || !data.events.length) {
+        if (!data || !data.ok || !Array.isArray(data.orders)) {
           $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No upcoming events</div>';
           return;
         }
 
-        const html = data.events.slice(0, 3).map(ev => {
-          const h = hoursUntil(ev.date, ev.time);
+        const now = Date.now();
+
+        const events = data.orders
+          .filter(o => {
+            const orderLoc = String(o.location || "").trim().toLowerCase();
+            const currentLoc = String(loc || "").trim().toLowerCase();
+            return orderLoc === currentLoc;
+          })
+          .map(o => {
+            const ts = parseLocalDateTime(o.deliveryDate, o.deliveryTime);
+            return {
+              title: o.customerName || "Catering",
+              date: o.deliveryDate || "",
+              time: (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00",
+              guests: o.guests || 0,
+              note: o.note || "",
+              ts
+            };
+          })
+          .filter(ev => isFinite(ev.ts) && ev.ts >= now)
+          .sort((a, b) => a.ts - b.ts)
+          .slice(0, 3);
+
+        if (!events.length) {
+          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No upcoming events</div>';
+          return;
+        }
+
+        $("cMiniList").innerHTML = events.map(ev => {
+          const h = (ev.ts - Date.now()) / (3600 * 1000);
           const col = colorFor(h);
-          const dateStr = ev.date.split('-').reverse().join('/');
+          const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--/----";
+
           return `
             <div class="cMiniEvent">
               <div class="cMiniBar ${col}"></div>
               <div class="cMiniInfo">
                 <div class="cMiniTitle">${escapeHtml(ev.title)}</div>
-                <div class="cMiniMeta">📅 ${dateStr} ${ev.time ? '⏰ ' + ev.time : ''} • 👥 ${ev.guests || 0}</div>
+                <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}</div>
               </div>
             </div>
           `;
-        }).join('');
-
-        $("cMiniList").innerHTML = html;
-
+        }).join("");
       } catch (e) {
+        console.error("Catering load error:", e);
         $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
       }
     }
@@ -623,6 +650,7 @@
     // TIMER
     // ============================================================
     let selectedTpl = "Bacon";
+    let audioReady = false;
 
     function loadTimers() {
       try {
@@ -630,14 +658,45 @@
         if (!raw) return [];
         const obj = JSON.parse(raw);
         return Array.isArray(obj.timers) ? obj.timers : [];
-      } catch (e) { return []; }
+      } catch (e) {
+        return [];
+      }
     }
 
     function saveTimers(timers) {
       localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] }));
     }
 
-    function uid() { return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
+    function loadAlarmState() {
+      try {
+        return JSON.parse(localStorage.getItem(TIMER_ALARM_KEY) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveAlarmState(state) {
+      localStorage.setItem(TIMER_ALARM_KEY, JSON.stringify(state || {}));
+    }
+
+    function cleanupAlarmState(timers) {
+      const ids = new Set((timers || []).map(t => t.id));
+      const state = loadAlarmState();
+      let changed = false;
+
+      Object.keys(state).forEach(id => {
+        if (!ids.has(id)) {
+          delete state[id];
+          changed = true;
+        }
+      });
+
+      if (changed) saveAlarmState(state);
+    }
+
+    function uid() {
+      return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
 
     function buildTimerName() {
       const text = ($("textInput").value || "").trim();
@@ -647,44 +706,62 @@
 
     function addTimer(durationMs) {
       const name = buildTimerName();
+
       if (selectedTpl === "Free text" && !name) {
         alert("Please enter a name!");
         $("textInput").focus();
         return;
       }
+
       const timers = loadTimers();
-      timers.push({
+      const newTimer = {
         id: uid(),
         name: name || "Unnamed",
-        startedAt: now(),
+        startedAt: nowTs(),
         durationMs: durationMs,
-        expiresAt: now() + durationMs
-      });
+        expiresAt: nowTs() + durationMs
+      };
+
+      timers.push(newTimer);
       saveTimers(timers);
+
+      const fired = loadAlarmState();
+      delete fired[newTimer.id];
+      saveAlarmState(fired);
+
       $("textInput").value = "";
       renderTimers();
     }
 
-    // STOP/REMOVE TIMER - virker for alle timers
     function stopTimer(id) {
       if (confirm("Stop this timer?")) {
-        saveTimers(loadTimers().filter(t => t.id !== id));
+        const next = loadTimers().filter(t => t.id !== id);
+        saveTimers(next);
+
+        const fired = loadAlarmState();
+        delete fired[id];
+        saveAlarmState(fired);
+
         renderTimers();
       }
     }
 
     function clearExpired() {
-      const active = loadTimers().filter(t => (t.expiresAt || 0) > now());
-      const removed = loadTimers().length - active.length;
+      const timers = loadTimers();
+      const active = timers.filter(t => (t.expiresAt || 0) > nowTs());
+      const removed = timers.length - active.length;
+
       saveTimers(active);
+      cleanupAlarmState(active);
       renderTimers();
+
       if (removed > 0) {
         alert(`Removed ${removed} expired timer(s)`);
       }
     }
 
     function timerState(t) {
-      const left = (t.expiresAt || 0) - now();
+      const left = (t.expiresAt || 0) - nowTs();
       if (left <= 0) return "exp";
       if (left <= WARN_10_MS) return "warn";
       if (left <= WARN_30_MS) return "warn";
@@ -695,13 +772,15 @@
       document.querySelectorAll("#tplRow .segBtn").forEach(btn => {
         btn.classList.toggle("on", btn.dataset.tpl === selectedTpl);
       });
-      $("textInput").placeholder = selectedTpl === "Free text" ? "Name (required)" : "Optional note (e.g. tray 2)";
+      $("textInput").placeholder = selectedTpl === "Free text"
+        ? "Name (required)"
+        : "Optional note (e.g. tray 2)";
     }
 
     function renderTimers() {
       const list = $("timerList");
       const timers = loadTimers().sort((a, b) => (a.expiresAt || 0) - (b.expiresAt || 0));
-      
+
       $("timerCount").textContent = `${timers.length} active`;
 
       if (!timers.length) {
@@ -710,10 +789,12 @@
       }
 
       list.innerHTML = timers.map(t => {
-        const left = (t.expiresAt || 0) - now();
+        const left = (t.expiresAt || 0) - nowTs();
         const st = timerState(t);
         const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
-        const tagText = st === "exp" ? "EXPIRED" : (left <= WARN_10_MS ? "⚠️ 10 MIN" : (left <= WARN_30_MS ? "⚠️ 30 MIN" : "✓ OK"));
+        const tagText = st === "exp"
+          ? "EXPIRED"
+          : (left <= WARN_10_MS ? "⚠️ 10 MIN" : (left <= WARN_30_MS ? "⚠️ 30 MIN" : "✓ OK"));
 
         return `
           <div class="tCard">
@@ -721,26 +802,96 @@
             <div class="tName">${escapeHtml(t.name)}</div>
             <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
             <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
-            <div class="barWrap"><div class="barFill ${st === 'exp' ? 'exp' : st === 'warn' ? 'warn' : ''}" style="width:${st === 'exp' ? 100 : pct}%"></div></div>
+            <div class="barWrap">
+              <div class="barFill ${st === "exp" ? "exp" : st === "warn" ? "warn" : ""}" style="width:${st === "exp" ? 100 : pct}%"></div>
+            </div>
             <div class="tActions">
-              <button class="smallBtn danger" onclick="stopTimer('${t.id}')">🛑 Stop</button>
+              <button class="smallBtn danger" type="button" data-stop-id="${escapeHtml(t.id)}">🛑 Stop</button>
             </div>
           </div>
         `;
-      }).join('');
+      }).join("");
     }
 
-    // Make stopTimer global for onclick
-    window.stopTimer = stopTimer;
+    function enableAudio() {
+      audioReady = true;
+    }
+
+    function playAlarm() {
+      if (!audioReady) return;
+
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+
+        const ctx = new AudioCtx();
+        if (ctx.state === "suspended") {
+          ctx.resume().catch(() => {});
+        }
+
+        const notes = [
+          { f: 880, d: 0.20 },
+          { f: 988, d: 0.20 },
+          { f: 1047, d: 0.25 },
+          { f: 880, d: 0.20 }
+        ];
+
+        let start = ctx.currentTime;
+
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(n.f, start);
+
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(0.20, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(start);
+          osc.stop(start + n.d);
+
+          start += n.d + 0.03;
+        });
+
+        setTimeout(() => {
+          try { ctx.close(); } catch (_) {}
+        }, 1500);
+      } catch (e) {
+        console.error("Alarm error:", e);
+      }
+    }
+
+    function checkTimerAlarms() {
+      const timers = loadTimers();
+      const fired = loadAlarmState();
+      let changed = false;
+
+      timers.forEach(t => {
+        const left = (t.expiresAt || 0) - nowTs();
+        if (left > 0 && left <= ALARM_AT_MS && !fired[t.id]) {
+          playAlarm();
+          fired[t.id] = true;
+          changed = true;
+        }
+      });
+
+      if (changed) saveAlarmState(fired);
+      cleanupAlarmState(timers);
+    }
 
     // ============================================================
     // COLLAPSIBLE SECTIONS
     // ============================================================
     function setupCollapsible(headId, bodyId, arrowId) {
-      $(headId).onclick = () => {
+      $(headId).addEventListener("click", () => {
         $(bodyId).classList.toggle("open");
         $(arrowId).classList.toggle("open");
-      };
+      });
     }
 
     // ============================================================
@@ -749,6 +900,7 @@
     let currentToolUrl = "";
 
     function openTool(url) {
+      if (!url) return;
       currentToolUrl = url;
       $("toolName").textContent = url.replace("./", "");
       $("toolFrame").src = url;
@@ -771,7 +923,7 @@
       try {
         if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
         else await document.exitFullscreen();
-      } catch (e) { }
+      } catch (_) {}
     }
 
     async function toggleWakeLock() {
@@ -780,6 +932,7 @@
           alert("Wake Lock not supported on this device");
           return;
         }
+
         if (wakeLock) {
           await wakeLock.release();
           wakeLock = null;
@@ -787,15 +940,17 @@
           $("wakeBtn").classList.remove("on");
           return;
         }
+
         wakeLock = await navigator.wakeLock.request("screen");
         $("wakeBtn").textContent = "☀️ Awake ON";
         $("wakeBtn").classList.add("on");
+
         wakeLock.onrelease = () => {
           wakeLock = null;
           $("wakeBtn").textContent = "☀️ Keep Awake";
           $("wakeBtn").classList.remove("on");
         };
-      } catch (e) {
+      } catch (_) {
         alert("Could not enable wake lock");
       }
     }
@@ -803,34 +958,62 @@
     // ============================================================
     // EVENT LISTENERS
     // ============================================================
+    document.addEventListener("click", enableAudio, { once: true });
+    document.addEventListener("touchstart", enableAudio, { once: true });
+
     document.querySelectorAll("#tplRow .segBtn").forEach(btn => {
-      btn.onclick = () => {
+      btn.addEventListener("click", () => {
         selectedTpl = btn.dataset.tpl;
         updateTplUI();
-      };
+      });
     });
 
-    $("start3hBtn").onclick = () => addTimer(DEFAULT_DURATION_MS);
-    $("start30Btn").onclick = () => addTimer(SHORT_DURATION_MS);
-    $("clearExpBtn").onclick = clearExpired;
-    $("textInput").onkeydown = e => { if (e.key === "Enter") addTimer(DEFAULT_DURATION_MS); };
+    $("start3hBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS));
+    $("clearExpBtn").addEventListener("click", clearExpired);
+    $("textInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") addTimer(DEFAULT_DURATION_MS);
+    });
 
-    $("refreshKBtn").onclick = loadKitchenPct;
-    $("refreshCBtn").onclick = loadCateringMini;
+    $("refreshKBtn").addEventListener("click", loadKitchenPct);
+    $("refreshCBtn").addEventListener("click", loadCateringMini);
 
-    $("clockToggle").onclick = toggleClock;
-    $("fsBtn").onclick = toggleFullscreen;
-    $("wakeBtn").onclick = toggleWakeLock;
+    $("clockToggle").addEventListener("click", toggleClock);
+    $("fsBtn").addEventListener("click", toggleFullscreen);
+    $("wakeBtn").addEventListener("click", toggleWakeLock);
 
     setupCollapsible("timerHead", "timerBody", "timerArrow");
     setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
 
     document.querySelectorAll(".toolItem").forEach(item => {
-      item.onclick = () => openTool(item.dataset.url);
+      item.addEventListener("click", () => openTool(item.dataset.url));
     });
 
-    $("closeToolBtn").onclick = closeTool;
-    $("newTabBtn").onclick = () => { if (currentToolUrl) window.open(currentToolUrl, "_blank"); };
+    $("closeToolBtn").addEventListener("click", closeTool);
+    $("newTabBtn").addEventListener("click", () => {
+      if (currentToolUrl) window.open(currentToolUrl, "_blank", "noopener,noreferrer");
+    });
+
+    $("timerList").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-stop-id]");
+      if (!btn) return;
+      stopTimer(btn.getAttribute("data-stop-id"));
+    });
+
+    document.addEventListener("visibilitychange", async () => {
+      if (document.visibilityState === "visible" && wakeLock === null) {
+        // Re-request wake lock only if button indicates it should be on
+        if ($("wakeBtn").classList.contains("on") && "wakeLock" in navigator) {
+          try {
+            wakeLock = await navigator.wakeLock.request("screen");
+            wakeLock.onrelease = () => {
+              wakeLock = null;
+              $("wakeBtn").textContent = "☀️ Keep Awake";
+              $("wakeBtn").classList.remove("on");
+            };
+          } catch (_) {}
+        }
+      }
+    });
 
     // ============================================================
     // INIT
@@ -839,21 +1022,21 @@
       const loc = getLoc();
       $("locPill").textContent = "📍 Location: " + (loc || "Not set");
 
-      // Clock
       updateClockUI();
       updateClock();
 
-      // Timer UI
       updateTplUI();
       renderTimers();
+      checkTimerAlarms();
 
-      // Load data
       loadKitchenPct();
       loadCateringMini();
 
-      // Intervals
       setInterval(updateClock, 1000);
-      setInterval(renderTimers, 1000);
+      setInterval(() => {
+        renderTimers();
+        checkTimerAlarms();
+      }, 1000);
       setInterval(loadKitchenPct, 60000);
       setInterval(loadCateringMini, 60000);
     })();
