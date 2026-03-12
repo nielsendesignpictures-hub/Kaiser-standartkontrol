@@ -119,7 +119,7 @@
     .kPctBig{font-family:"Playfair Display",serif;font-size:48px;font-weight:700;line-height:1;}
     .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
 
-    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:160px;overflow:auto;}
+    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;}
     .cMiniEvent{
       display:flex;align-items:center;gap:10px;
       padding:12px;border-radius:14px;
@@ -128,7 +128,7 @@
       transition:all .15s;
     }
     .cMiniEvent:hover{background:rgba(255,255,255,0.08);}
-    .cMiniBar{width:5px;height:40px;border-radius:4px;}
+    .cMiniBar{width:5px;height:40px;border-radius:4px;flex:0 0 auto;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
     .cMiniBar.red{background:var(--danger);}
@@ -411,8 +411,12 @@
       return `${hh}:${mm}:${ss}`;
     }
 
-    function isoToday() {
-      return new Date().toISOString().slice(0, 10);
+    function isoTodayLocal() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
     }
 
     function monthKey(iso) {
@@ -432,13 +436,6 @@
       });
     }
 
-    function hoursUntil(dateStr, timeStr) {
-      if (!dateStr) return NaN;
-      const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
-      const dt = new Date(dateStr + "T" + t + ":00");
-      return (dt.getTime() - Date.now()) / (3600 * 1000);
-    }
-
     function colorFor(h) {
       if (!isFinite(h) || h < 0) return "gray";
       if (h <= GREEN_HOURS) return "green";
@@ -449,8 +446,15 @@
     function parseLocalDateTime(dateStr, timeStr) {
       if (!dateStr) return NaN;
       const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
-      const dt = new Date(`${dateStr}T${t}:00`);
-      return dt.getTime();
+      const [y, m, d] = String(dateStr).split("-").map(Number);
+      const [hh, mm] = String(t).split(":").map(Number);
+
+      if (!y || !m || !d) return NaN;
+      return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0).getTime();
+    }
+
+    function sameYMD(dateStr, ymd) {
+      return String(dateStr || "").trim() === String(ymd || "").trim();
     }
 
     // ============================================================
@@ -494,6 +498,7 @@
           cleanup();
           reject(new Error("load error"));
         };
+
         document.body.appendChild(s);
       });
     }
@@ -545,7 +550,7 @@
       }
 
       $("kErr").style.display = "none";
-      const m = monthKey(isoToday());
+      const m = monthKey(isoTodayLocal());
 
       try {
         const data = await jsonp(SCRIPT_URL, { action: "get", loc: fullLoc, month: m });
@@ -580,6 +585,10 @@
 
     // ============================================================
     // CATERING MINI
+    // Shows events for selected location:
+    // - all events from TODAY and forward
+    // - sorted by date/time
+    // - max 3 shown
     // ============================================================
     async function loadCateringMini() {
       const loc = getLoc();
@@ -593,11 +602,12 @@
         const data = await jsonp(SCRIPT_URL, { action: "getOrders" });
 
         if (!data || !data.ok || !Array.isArray(data.orders)) {
-          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No upcoming events</div>';
+          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No catering data</div>';
           return;
         }
 
-        const now = Date.now();
+        const todayYMD = isoTodayLocal();
+        const startOfToday = parseLocalDateTime(todayYMD, "00:00");
 
         const events = data.orders
           .filter(o => {
@@ -606,22 +616,26 @@
             return orderLoc === currentLoc;
           })
           .map(o => {
-            const ts = parseLocalDateTime(o.deliveryDate, o.deliveryTime);
+            const date = String(o.deliveryDate || "").trim();
+            const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
+            const ts = parseLocalDateTime(date, time);
+
             return {
               title: o.customerName || "Catering",
-              date: o.deliveryDate || "",
-              time: (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00",
+              date,
+              time,
               guests: o.guests || 0,
               note: o.note || "",
-              ts
+              ts,
+              isToday: sameYMD(date, todayYMD)
             };
           })
-          .filter(ev => isFinite(ev.ts) && ev.ts >= now)
+          .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
           .sort((a, b) => a.ts - b.ts)
           .slice(0, 3);
 
         if (!events.length) {
-          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No upcoming events</div>';
+          $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No events today/upcoming</div>';
           return;
         }
 
@@ -629,13 +643,14 @@
           const h = (ev.ts - Date.now()) / (3600 * 1000);
           const col = colorFor(h);
           const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--/----";
+          const todayBadge = ev.isToday ? " • Today" : "";
 
           return `
             <div class="cMiniEvent">
               <div class="cMiniBar ${col}"></div>
               <div class="cMiniInfo">
                 <div class="cMiniTitle">${escapeHtml(ev.title)}</div>
-                <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}</div>
+                <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${todayBadge}</div>
               </div>
             </div>
           `;
@@ -1001,7 +1016,6 @@
 
     document.addEventListener("visibilitychange", async () => {
       if (document.visibilityState === "visible" && wakeLock === null) {
-        // Re-request wake lock only if button indicates it should be on
         if ($("wakeBtn").classList.contains("on") && "wakeLock" in navigator) {
           try {
             wakeLock = await navigator.wakeLock.request("screen");
