@@ -266,13 +266,13 @@
         </div>
 
         <div>
-          <label for="revInput">Omsætning brutto</label>
-          <input id="revInput" type="number" inputmode="decimal" placeholder="Fx 15000" />
+          <label for="revInput">Omsætning brutto inkl. moms</label>
+          <input id="revInput" type="text" inputmode="decimal" placeholder="Fx 339.226,67" />
         </div>
 
         <div>
-          <label for="purInput">Indkøb / bestilling</label>
-          <input id="purInput" type="number" inputmode="decimal" placeholder="Fx 3200" />
+          <label for="purInput">Indkøb / bestilling eks. moms</label>
+          <input id="purInput" type="text" inputmode="decimal" placeholder="Fx 43.294,36" />
         </div>
       </div>
 
@@ -341,9 +341,28 @@
       $("datePill").textContent = "📅 Date: " + ($("dateInput").value || "—");
     }
 
+    function parseDanishNumber(value) {
+      if (!value) return 0;
+      return Number(
+        String(value)
+          .trim()
+          .replace(/\s/g, "")
+          .replace(/\./g, "")
+          .replace(",", ".")
+      ) || 0;
+    }
+
+    function formatDanishNumber(value) {
+      const n = Number(value || 0);
+      return n.toLocaleString("da-DK", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
     function updatePreview() {
-      const revGross = Number(($("revInput").value || "").replace(",", ".")) || 0;
-      const purchases = Number(($("purInput").value || "").replace(",", ".")) || 0;
+      const revGross = parseDanishNumber($("revInput").value);
+      const purchases = parseDanishNumber($("purInput").value);
 
       if (revGross <= 0) {
         $("livePct").textContent = "—";
@@ -416,8 +435,8 @@
           return;
         }
 
-        $("revInput").value = data.row.revenueGross || "";
-        $("purInput").value = data.row.purchases || "";
+        $("revInput").value = formatDanishNumber(data.row.revenueGross || 0);
+        $("purInput").value = formatDanishNumber(data.row.purchases || 0);
         updatePreview();
         setStatus("Dagens tal hentet.", "ok");
 
@@ -432,11 +451,11 @@
 
       const location = $("locSelect").value;
       const date = $("dateInput").value;
-      const revenueGross = $("revInput").value;
-      const purchases = $("purInput").value;
+      const revenueGross = parseDanishNumber($("revInput").value);
+      const purchases = parseDanishNumber($("purInput").value);
 
-      if (!date || revenueGross === "" || purchases === "") {
-        setStatus("Udfyld alle felter.", "err");
+      if (!date || revenueGross <= 0 || purchases < 0) {
+        setStatus("Udfyld alle felter korrekt.", "err");
         return;
       }
 
@@ -454,8 +473,8 @@
         action: "saveKitchenPct",
         date,
         location,
-        revenueGross,
-        purchases
+        revenueGross: String(revenueGross),
+        purchases: String(purchases)
       };
 
       Object.keys(fields).forEach(key => {
@@ -473,8 +492,18 @@
         form.remove();
         btn.disabled = false;
         btn.textContent = "Gem";
-        setStatus("✅ Data sendt. Tjek nu arket eller klik 'Hent dagens tal' om 2 sek.", "ok");
+        setStatus("✅ Data sendt. Klik 'Hent dagens tal' om 2 sek. for at bekræfte.", "ok");
       }, 1200);
+    }
+
+    function bindFormattingOnBlur(inputEl) {
+      inputEl.addEventListener("blur", () => {
+        const val = parseDanishNumber(inputEl.value);
+        if (val > 0 || inputEl.value.trim() !== "") {
+          inputEl.value = formatDanishNumber(val);
+        }
+        updatePreview();
+      });
     }
 
     (function init() {
@@ -503,6 +532,9 @@
 
       $("revInput").addEventListener("input", updatePreview);
       $("purInput").addEventListener("input", updatePreview);
+
+      bindFormattingOnBlur($("revInput"));
+      bindFormattingOnBlur($("purInput"));
 
       $("loadTodayBtn").addEventListener("click", loadTodayData);
       $("saveBtn").addEventListener("click", saveData);
