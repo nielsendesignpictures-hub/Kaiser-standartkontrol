@@ -20,7 +20,9 @@
             --danger: #ff6b6b;
             --shadow: 0 26px 75px rgba(0,0,0,.55);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: Inter, system-ui, sans-serif;
             color: var(--text);
@@ -31,6 +33,7 @@
             min-height: 100vh;
             padding: 20px;
         }
+
         body:before {
             content: "";
             position: fixed;
@@ -42,103 +45,238 @@
             pointer-events: none;
             z-index: -1;
         }
+
         .container { max-width: 900px; margin: 0 auto; }
+
         .back-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            color: var(--muted); text-decoration: none; font-weight: 600;
-            font-size: 14px; margin-bottom: 20px; transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
         }
         .back-btn:hover { color: var(--gold); }
+
         .header {
-            border-radius: 20px; border: 1px solid var(--border);
-            background: var(--panel); backdrop-filter: blur(10px);
-            padding: 30px; margin-bottom: 25px; text-align: center;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
             box-shadow: var(--shadow);
         }
-        .header h1 { font-family: "Playfair Display", serif; font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+
+        .header h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
         .header p { color: var(--muted); font-size: 14px; }
+
         .goldline {
-            height: 2px; margin: 20px auto 0; max-width: 400px; border-radius: 999px;
+            height: 2px;
+            margin: 20px auto 0;
+            max-width: 400px;
+            border-radius: 999px;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
         }
+
         .status-bar {
-            padding: 12px 20px; border-radius: 12px; margin-bottom: 20px;
-            font-weight: 600; font-size: 14px; display: none; text-align: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+            text-align: center;
         }
         .status-bar.success { display: block; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--success); }
         .status-bar.error { display: block; background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); color: var(--danger); }
         .status-bar.loading { display: block; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); color: #38bdf8; }
+
         .form-card, .orders-list {
-            border-radius: 20px; border: 1px solid var(--border);
-            background: var(--panel); backdrop-filter: blur(10px);
-            padding: 30px; margin-bottom: 25px; box-shadow: var(--shadow);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
         }
+
         .section-title {
-            font-size: 14px; font-weight: 800; letter-spacing: 0.1em;
-            text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
-            padding-bottom: 12px; border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
+
         .input-group { margin-bottom: 20px; }
         .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
         label {
-            display: block; margin-bottom: 8px; color: var(--muted);
-            font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
+
         input, select, textarea {
-            width: 100%; padding: 14px 16px; border: 1px solid var(--border);
-            border-radius: 12px; font-size: 15px; font-family: inherit;
-            background: rgba(255,255,255,0.05); color: var(--text); transition: all 0.3s;
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            transition: all 0.3s ease;
         }
         input:focus, select:focus, textarea:focus {
-            outline: none; border-color: var(--gold);
+            outline: none;
+            border-color: var(--gold);
             box-shadow: 0 0 0 3px rgba(214,178,74,0.15);
         }
         select { cursor: pointer; }
         select option { background: var(--bg1); color: var(--text); }
-        textarea { resize: vertical; min-height: 80px; }
+        textarea { resize: vertical; min-height: 100px; }
+
         .button-group { display: flex; gap: 15px; margin-top: 30px; }
+
         .btn {
-            flex: 1; padding: 16px; border: none; border-radius: 12px;
-            font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;
-            text-transform: uppercase; letter-spacing: 0.05em;
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: var(--bg0); }
-        .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(214,178,74,0.3); }
-        .btn-secondary { background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid var(--border); }
-        .btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.12); color: var(--text); }
-        .filter-row { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            color: var(--bg0);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(214,178,74,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255,255,255,0.12);
+            color: var(--text);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
         .filter-btn {
-            padding: 10px 18px; border-radius: 10px; border: 1px solid var(--border);
-            background: rgba(255,255,255,0.05); color: var(--muted);
-            font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .filter-btn:hover, .filter-btn.active { background: var(--gold); color: var(--bg0); border-color: var(--gold); }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--gold);
+            color: var(--bg0);
+            border-color: var(--gold);
+        }
+
         .order-card {
-            background: rgba(255,255,255,0.04); padding: 20px; border-radius: 15px;
-            margin-bottom: 15px; border: 1px solid var(--border);
-            border-left: 4px solid var(--gold); transition: all 0.3s;
+            background: rgba(255,255,255,0.04);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            transition: all 0.3s ease;
         }
-        .order-card:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
-        .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .order-card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateX(5px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
         .order-location { font-weight: 800; color: var(--gold); font-size: 16px; }
         .order-date { color: var(--muted); font-size: 14px; font-weight: 600; margin-top: 4px; }
-        .order-id { color: var(--muted2); font-size: 11px; margin-top: 2px; }
-        .order-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
         .order-detail { font-size: 13px; color: var(--muted); }
         .order-detail strong { color: var(--text); }
-        .order-notes { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted2); }
-        .order-status { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .order-status.confirmed { background: rgba(34,197,94,0.2); color: var(--success); }
-        .order-status.pending { background: rgba(251,191,36,0.2); color: #fbbf24; }
-        .empty-state { text-align: center; color: var(--muted2); padding: 40px; font-size: 14px; }
+
+        .order-notes {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--muted2);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--muted2);
+            padding: 40px;
+            font-size: 14px;
+        }
+
         .spinner {
-            display: inline-block; width: 20px; height: 20px;
-            border: 2px solid var(--border); border-top-color: var(--gold);
-            border-radius: 50%; animation: spin 0.8s linear infinite;
-            margin-right: 8px; vertical-align: middle;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+
         @media (max-width: 768px) {
             .input-row { grid-template-columns: 1fr; }
             .order-details { grid-template-columns: 1fr; }
@@ -160,6 +298,7 @@
 
         <div class="form-card">
             <div class="section-title">📍 Afdeling & Tidspunkt</div>
+
             <div class="input-group">
                 <label for="location">Vælg Afdeling *</label>
                 <select id="location" required>
@@ -171,6 +310,7 @@
                     <option value="Vanløse">Café Kaiser Vanløse</option>
                 </select>
             </div>
+
             <div class="input-row">
                 <div class="input-group">
                     <label for="deliveryDate">Dato *</label>
@@ -182,36 +322,22 @@
                 </div>
             </div>
 
-            <div class="section-title">👥 Kunde & Detaljer</div>
+            <div class="section-title">👥 Kunde & Ordre Detaljer</div>
+
             <div class="input-row">
                 <div class="input-group">
                     <label for="customerName">Kunde / Firma *</label>
-                    <input type="text" id="customerName" placeholder="Navn på kunde" required>
+                    <input type="text" id="customerName" placeholder="Navn på kunde eller firma" required>
                 </div>
                 <div class="input-group">
                     <label for="guests">Antal Gæster *</label>
                     <input type="number" id="guests" placeholder="50" min="1" required>
                 </div>
             </div>
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="customerEmail">Email</label>
-                    <input type="email" id="customerEmail" placeholder="email@firma.dk">
-                </div>
-                <div class="input-group">
-                    <label for="menu">Menu</label>
-                    <select id="menu">
-                        <option value="">-- Vælg --</option>
-                        <option value="Buffet">Buffet</option>
-                        <option value="3-retters">3-retters</option>
-                        <option value="Frokost">Frokost</option>
-                        <option value="Brunch">Brunch</option>
-                    </select>
-                </div>
-            </div>
+
             <div class="input-group">
-                <label for="requests">Bemærkninger (allergier, ønsker, tilvalg)</label>
-                <textarea id="requests" placeholder="Allergier, særlige ønsker, tilvalg..."></textarea>
+                <label for="note">Bemærkninger / Specielle Ønsker</label>
+                <textarea id="note" placeholder="Menu, allergier, opstilling, særlige ønsker..."></textarea>
             </div>
 
             <div class="button-group">
@@ -221,7 +347,8 @@
         </div>
 
         <div class="orders-list">
-            <div class="section-title">📋 Alle Ordrer</div>
+            <div class="section-title">📋 Alle Catering Ordrer</div>
+            
             <div class="filter-row">
                 <button class="filter-btn active" onclick="filterOrders('all', this)">Alle</button>
                 <button class="filter-btn" onclick="filterOrders('Helsingør', this)">Helsingør</button>
@@ -230,6 +357,7 @@
                 <button class="filter-btn" onclick="filterOrders('Hørsholm', this)">Hørsholm</button>
                 <button class="filter-btn" onclick="filterOrders('Vanløse', this)">Vanløse</button>
             </div>
+
             <div id="ordersList">
                 <div class="empty-state"><span class="spinner"></span> Henter ordrer...</div>
             </div>
@@ -261,7 +389,7 @@
                 function cleanup() { clearTimeout(timeout); delete window[cb]; script.remove(); }
                 window[cb] = (data) => { cleanup(); resolve(data); };
                 script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
-                script.onerror = () => { cleanup(); reject(new Error('Netværksfejl')); };
+                script.onerror = () => { cleanup(); reject(new Error('Netværk')); };
                 document.body.appendChild(script);
             });
         }
@@ -280,9 +408,9 @@
                 } else {
                     throw new Error(data.error || 'Ingen data');
                 }
-            } catch (err) {
-                console.error('Load error:', err);
-                container.innerHTML = '<div class="empty-state">⚠️ Kunne ikke hente ordrer<br><small>' + err.message + '</small></div>';
+            } catch (error) {
+                console.error('Load error:', error);
+                container.innerHTML = '<div class="empty-state">❌ Fejl ved hentning<br><small>' + error.message + '</small></div>';
             }
         }
 
@@ -291,8 +419,14 @@
             let orders = [...allOrders];
             
             if (currentFilter !== 'all') {
-                orders = orders.filter(o => (o.location || '').toLowerCase().includes(currentFilter.toLowerCase()));
+                orders = orders.filter(o => {
+                    const loc = (o.location || '').toLowerCase();
+                    return loc.includes(currentFilter.toLowerCase());
+                });
             }
+
+            // Sort by date
+            orders.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
 
             const container = document.getElementById('ordersList');
 
@@ -306,33 +440,28 @@
                     <div class="order-header">
                         <div>
                             <div class="order-location">Café Kaiser ${o.location || 'Ukendt'}</div>
-                            <div class="order-date">📅 ${o.deliveryDate || ''} kl. ${o.deliveryTime || '--:--'}</div>
-                            <div class="order-id">${o.id || ''}</div>
+                            <div class="order-date">📅 ${o.deliveryDate} kl. ${o.deliveryTime}</div>
                         </div>
-                        <span class="order-status ${o.status === 'Bekræftet' ? 'confirmed' : 'pending'}">${o.status || 'Ny'}</span>
+                        <span class="order-status confirmed">${o.status || 'Bekræftet'}</span>
                     </div>
                     <div class="order-details">
-                        <div class="order-detail"><strong>Kunde:</strong> ${o.customerName || '-'}</div>
+                        <div class="order-detail"><strong>Kunde:</strong> ${escapeHtml(o.customerName) || '-'}</div>
                         <div class="order-detail"><strong>Gæster:</strong> ${o.guests || '?'}</div>
-                        <div class="order-detail"><strong>Menu:</strong> ${o.menu || '-'}</div>
-                        <div class="order-detail"><strong>Email:</strong> ${o.customerEmail || '-'}</div>
                     </div>
-                    ${o.requests || o.allergies || o.addons ? `<div class="order-notes">📝 ${o.requests || ''} ${o.allergies || ''} ${o.addons || ''}</div>` : ''}
+                    ${o.note ? `<div class="order-notes"><strong>📝</strong> ${escapeHtml(o.note)}</div>` : ''}
                 </div>
             `).join('');
         }
 
-        // Send order via form POST
+        // Send order
         async function sendOrder() {
             const form = {
                 location: document.getElementById('location').value,
                 deliveryDate: document.getElementById('deliveryDate').value,
                 deliveryTime: document.getElementById('deliveryTime').value,
                 customerName: document.getElementById('customerName').value,
-                customerEmail: document.getElementById('customerEmail').value,
                 guests: document.getElementById('guests').value,
-                menu: document.getElementById('menu').value,
-                requests: document.getElementById('requests').value
+                note: document.getElementById('note').value
             };
 
             if (!form.location || !form.deliveryDate || !form.deliveryTime || !form.customerName || !form.guests) {
@@ -344,20 +473,17 @@
             showStatus('Sender...', 'loading');
 
             try {
-                // Create form and submit
+                // POST via form
                 const formEl = document.createElement('form');
                 formEl.method = 'POST';
                 formEl.action = SCRIPT_URL;
-                formEl.target = 'submitFrame';
                 formEl.style.display = 'none';
 
-                // Add action
                 const actionInput = document.createElement('input');
                 actionInput.name = 'action';
                 actionInput.value = 'addOrder';
                 formEl.appendChild(actionInput);
 
-                // Add form data
                 for (const key in form) {
                     const input = document.createElement('input');
                     input.name = key;
@@ -365,26 +491,13 @@
                     formEl.appendChild(input);
                 }
 
-                // Create iframe
-                let iframe = document.getElementById('submitFrame');
-                if (!iframe) {
-                    iframe = document.createElement('iframe');
-                    iframe.name = 'submitFrame';
-                    iframe.id = 'submitFrame';
-                    iframe.style.display = 'none';
-                    document.body.appendChild(iframe);
-                }
-
                 document.body.appendChild(formEl);
                 formEl.submit();
                 formEl.remove();
 
-                // Wait and reload
-                setTimeout(() => {
-                    showStatus('✅ Ordre sendt til ' + form.location + '!', 'success');
-                    resetForm();
-                    loadOrders();
-                }, 2500);
+                showStatus('✅ Ordre sendt til ' + form.location + '!', 'success');
+                resetForm();
+                setTimeout(loadOrders, 2000);
 
             } catch (err) {
                 showStatus('❌ Fejl: ' + err.message, 'error');
@@ -405,10 +518,15 @@
             document.getElementById('deliveryDate').valueAsDate = new Date();
             document.getElementById('deliveryTime').value = '';
             document.getElementById('customerName').value = '';
-            document.getElementById('customerEmail').value = '';
             document.getElementById('guests').value = '';
-            document.getElementById('menu').value = '';
-            document.getElementById('requests').value = '';
+            document.getElementById('note').value = '';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
     </script>
 </body>
