@@ -4,95 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen Hub - Kaiser</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg0: #070A12;
-            --bg1: #0B1020;
-            --panel: rgba(255,255,255,0.055);
-            --border: rgba(255,255,255,0.10);
-            --text: rgba(255,255,255,0.94);
-            --muted: rgba(255,255,255,0.74);
-            --muted2: rgba(255,255,255,0.52);
-            --gold: #d6b24a;
-            --gold2: #b9921f;
-            --success: #22c55e;
-            --danger: #ff6b6b;
-            --orange: #f97316;
-            --shadow: 0 26px 75px rgba(0,0,0,.55);
+            --bg: #06080c;
+            --card: rgba(255,255,255,0.04);
+            --card-hover: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.08);
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.6);
+            --text-muted2: rgba(255,255,255,0.4);
+            --gold: #bfa14a;
+            --gold-glow: rgba(191,161,74,0.25);
+            --green: #2ed47a;
+            --red: #ff5c5c;
+            --orange: #ffaa00;
+            --blue: #3b82f6;
+            --shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body { height: 100%; }
+
         body {
-            font-family: Inter, system-ui, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
             color: var(--text);
-            background: radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-                        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-                        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-                        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-            min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        body:before {
+        body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 38px 38px;
-            opacity: 0.06;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(191,161,74,0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(191,161,74,0.06), transparent);
             pointer-events: none;
             z-index: -1;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 20px;
-            transition: color 0.3s ease;
-        }
-        .back-btn:hover { color: var(--gold); }
-
         /* ═══════════ HEADER ═══════════ */
-        .header {
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            padding: 24px 30px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
+        header {
+            height: 70px;
+            background: linear-gradient(135deg, rgba(30,30,30,0.85), rgba(20,20,20,0.85));
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header-left {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
-        }
-
-        .header-left .icon { font-size: 36px; }
-
-        .header-left h1 {
-            font-family: "Playfair Display", serif;
-            font-size: 32px;
+            gap: 14px;
             font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--gold);
         }
 
-        .header-left p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+        .logo img { height: 38px; border-radius: 10px; }
 
         .header-center {
             display: flex;
@@ -100,393 +78,437 @@
             gap: 20px;
         }
 
-        .digital-clock {
-            font-size: 42px;
-            font-weight: 800;
+        #clock {
             font-variant-numeric: tabular-nums;
+            font-weight: 800;
+            font-size: 2rem;
             color: var(--gold);
-            text-shadow: 0 0 30px rgba(214,178,74,0.3);
+            text-shadow: 0 0 30px var(--gold-glow);
         }
 
         .location-badge {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: linear-gradient(135deg, var(--gold), var(--gold2));
-            border-radius: 12px;
-            color: var(--bg0);
-            font-weight: 700;
-            font-size: 13px;
+            gap: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
         }
 
         .header-controls {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
         }
 
         .control-btn {
-            padding: 10px 16px;
-            border-radius: 10px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: var(--card);
             border: 1px solid var(--border);
-            background: rgba(255,255,255,0.05);
-            color: var(--muted);
-            font-size: 12px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            transition: all 0.2s;
         }
-        .control-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
-        .control-btn.active { 
-            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
-            color: var(--bg0); 
-            border-color: var(--gold);
-        }
+        .control-btn:hover { background: var(--card-hover); color: var(--text); }
+        .control-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
 
-        /* ═══════════ CARDS ═══════════ */
-        .card {
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            backdrop-filter: blur(10px);
-            padding: 24px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+        .back-link {
+            font-size: 0.78rem;
             color: var(--gold);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            text-decoration: none;
+            border: 1px solid var(--gold);
+            padding: 7px 16px;
+            border-radius: 999px;
+            transition: all 0.2s;
+        }
+        .back-link:hover { background: var(--gold); color: #000; }
+
+        /* ═══════════ MAIN ═══════════ */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 22px;
+            padding: 22px 28px 28px;
+            overflow: auto;
+        }
+
+        @media (max-width: 1100px) {
+            main { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════ PANELS ═══════════ */
+        .panel {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            min-height: 200px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .panel-header {
+            padding: 16px 20px;
             border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.2);
         }
 
-        .section-title .refresh-btn {
+        .panel-header .icon { font-size: 1.1rem; }
+
+        .panel-header .refresh-btn {
             margin-left: auto;
             background: none;
             border: none;
-            color: var(--muted);
+            color: var(--text-muted);
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
             transition: all 0.3s;
+            padding: 4px;
         }
-        .section-title .refresh-btn:hover { color: var(--gold); transform: rotate(180deg); }
+        .panel-header .refresh-btn:hover { color: var(--gold); transform: rotate(180deg); }
 
-        /* ═══════════ GRID LAYOUT ═══════════ */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 900px) {
-            .grid-2 { grid-template-columns: 1fr; }
+        .panel-body {
+            flex: 1;
+            padding: 18px 20px;
+            overflow-y: auto;
         }
 
-        /* ═══════════ TIMERS ═══════════ */
-        .timers-row {
+        /* ═══════════ TIMER BAR (Full Width) ═══════════ */
+        .timers-bar {
+            grid-column: 1 / -1;
+        }
+
+        .timer-group {
             display: flex;
             gap: 16px;
             overflow-x: auto;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
-        .timer-card {
-            flex: 0 0 200px;
+        .timer-box {
+            flex: 0 0 180px;
             background: rgba(255,255,255,0.04);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
             text-align: center;
             transition: all 0.3s;
         }
-        .timer-card.warning { 
-            border-color: var(--orange); 
-            box-shadow: 0 0 25px rgba(249,115,22,0.25); 
-        }
-        .timer-card.danger { 
-            border-color: var(--danger); 
-            box-shadow: 0 0 30px rgba(239,68,68,0.35); 
-            animation: pulse-danger 1s infinite;
+
+        .timer-box.warning {
+            border-color: var(--orange);
+            box-shadow: 0 0 18px rgba(255,170,0,0.25);
         }
 
-        @keyframes pulse-danger {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        .timer-box.danger {
+            border-color: var(--red);
+            box-shadow: 0 0 22px rgba(255,92,92,0.35);
+            animation: shake 0.4s infinite;
         }
 
-        .timer-label {
-            font-size: 11px;
-            font-weight: 700;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        .timer-box .label {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--muted);
-            margin-bottom: 10px;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
-        .timer-display {
-            font-size: 36px;
-            font-weight: 800;
+        .timer-box .time {
+            font-size: 1.8rem;
+            font-weight: 700;
             font-variant-numeric: tabular-nums;
             margin-bottom: 12px;
         }
-        .timer-card.warning .timer-display { color: var(--orange); }
-        .timer-card.danger .timer-display { color: var(--danger); }
 
-        .timer-progress {
-            height: 6px;
+        .timer-box.warning .time { color: var(--orange); }
+        .timer-box.danger .time { color: var(--red); }
+
+        .timer-box .progress {
+            height: 4px;
             background: var(--border);
             border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
-        .timer-progress-bar {
+
+        .timer-box .progress-bar {
             height: 100%;
             background: var(--gold);
             border-radius: 10px;
             transition: width 1s linear;
         }
-        .timer-card.warning .timer-progress-bar { background: var(--orange); }
-        .timer-card.danger .timer-progress-bar { background: var(--danger); }
+        .timer-box.warning .progress-bar { background: var(--orange); }
+        .timer-box.danger .progress-bar { background: var(--red); }
 
-        .timer-controls {
+        .timer-box .controls {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
         }
 
-        .timer-btn {
-            padding: 8px 14px;
+        .timer-box .controls button {
+            font-size: 0.7rem;
+            padding: 6px 12px;
             border-radius: 8px;
             border: none;
-            font-size: 11px;
-            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            font-weight: 600;
+            transition: all 0.15s;
         }
-        .timer-btn:active { transform: scale(0.95); }
-        .timer-btn.start { background: var(--success); color: #fff; }
-        .timer-btn.pause { background: var(--orange); color: #fff; }
-        .timer-btn.reset { background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid var(--border); }
-        .timer-btn.delete { background: var(--danger); color: #fff; }
+
+        .timer-box .controls button:active { transform: scale(0.94); }
+
+        .btn-start { background: var(--green); color: #000; }
+        .btn-pause { background: var(--orange); color: #000; }
+        .btn-reset { background: var(--card-hover); color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-delete { background: var(--red); color: #fff; }
 
         .add-timer-btn {
-            padding: 10px 20px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--gold), var(--gold2));
+            background: var(--gold);
+            color: #000;
             border: none;
-            color: var(--bg0);
-            font-size: 13px;
+            border-radius: 10px;
+            padding: 10px 18px;
             font-weight: 700;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s;
             margin-left: auto;
+            transition: all 0.2s;
         }
-        .add-timer-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(214,178,74,0.3); }
+        .add-timer-btn:hover { transform: scale(1.04); }
 
         /* ═══════════ KITCHEN % ═══════════ */
-        .percent-display {
+        .kitchen-percent-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
             text-align: center;
-            padding: 20px;
         }
 
-        .percent-circle {
+        .percent-ring {
             position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 16px;
         }
 
-        .percent-circle svg {
+        .percent-ring svg {
             transform: rotate(-90deg);
             width: 100%;
             height: 100%;
         }
 
-        .percent-circle circle {
+        .percent-ring circle {
             fill: none;
-            stroke-width: 12;
-        }
-        .percent-circle .bg { stroke: var(--border); }
-        .percent-circle .fill {
-            stroke: var(--gold);
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.5s ease;
+            stroke-width: 10;
         }
 
-        .percent-value {
+        .percent-ring .bg { stroke: var(--border); }
+
+        .percent-ring .fill {
+            stroke: var(--gold);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .percent-ring .value {
             position: absolute;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 2rem;
             font-weight: 800;
         }
 
         .percent-label {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 16px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
         }
 
         .percent-link {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--gold), var(--gold2));
-            border-radius: 12px;
-            color: var(--bg0);
+            color: var(--gold);
+            font-size: 0.75rem;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            transition: all 0.3s;
+            border: 1px solid var(--gold);
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: all 0.2s;
         }
-        .percent-link:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(214,178,74,0.3); }
+        .percent-link:hover { background: var(--gold); color: #000; }
 
-        /* ═══════════ CATERING LIST ═══════════ */
-        .catering-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
+        /* ═══════════ CATERING ═══════════ */
         .catering-item {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.025);
             border: 1px solid var(--border);
             border-left: 4px solid var(--gold);
-            border-radius: 15px;
-            padding: 16px 20px;
-            transition: all 0.3s;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
         }
-        .catering-item:hover { background: rgba(255,255,255,0.06); transform: translateX(5px); }
-        .catering-item.today { border-left-color: var(--danger); }
+        .catering-item:hover { background: rgba(255,255,255,0.045); transform: translateX(4px); }
+        .catering-item:last-child { margin-bottom: 0; }
+
+        .catering-item.today { border-left-color: var(--red); }
         .catering-item.tomorrow { border-left-color: var(--orange); }
 
         .catering-date {
-            font-size: 11px;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
             color: var(--gold);
             margin-bottom: 6px;
         }
-        .catering-item.today .catering-date { color: var(--danger); }
+        .catering-item.today .catering-date { color: var(--red); }
         .catering-item.tomorrow .catering-date { color: var(--orange); }
 
         .catering-title {
-            font-size: 15px;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.95rem;
             margin-bottom: 4px;
         }
 
         .catering-info {
-            font-size: 13px;
-            color: var(--muted);
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         .catering-note {
-            margin-top: 10px;
-            padding: 10px 12px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            font-size: 12px;
-            color: var(--muted2);
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: rgba(0,0,0,0.25);
+            border-left: 3px solid var(--text-muted2);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted2);
             line-height: 1.5;
         }
 
         .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 0.85rem;
             text-align: center;
-            color: var(--muted2);
-            padding: 40px;
-            font-size: 14px;
+            gap: 8px;
         }
 
         .spinner {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border: 2px solid var(--border);
             border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-bottom: 12px;
         }
+
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ═══════════ QUICK TOOLS ═══════════ */
-        .tools-grid {
+        .panel.full-width { grid-column: 1 / -1; }
+
+        .quicktools-header {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .quicktools-toggle {
+            margin-left: auto;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+        .quicktools-toggle.open { transform: rotate(180deg); }
+
+        .quicktools-content {
+            display: none;
+            padding: 18px 20px;
+        }
+        .quicktools-content.open { display: block; }
+
+        .tool-buttons {
             display: flex;
             gap: 12px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
         .tool-btn {
-            padding: 14px 24px;
-            border-radius: 12px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: var(--card);
             border: 1px solid var(--border);
-            background: rgba(255,255,255,0.04);
             color: var(--text);
-            font-size: 14px;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-        .tool-btn:hover { 
-            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
-            color: var(--bg0); 
-            border-color: var(--gold);
-            transform: translateY(-2px);
-        }
-        .tool-btn.active {
-            background: linear-gradient(135deg, var(--gold), var(--gold2)); 
-            color: var(--bg0); 
-            border-color: var(--gold);
-        }
+        .tool-btn:hover { background: var(--card-hover); color: var(--gold); }
+        .tool-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
 
         .iframe-container {
-            display: none;
-            margin-top: 20px;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+            display: none;
         }
         .iframe-container.open { display: block; }
+
         .iframe-container iframe {
             width: 100%;
             height: 500px;
             border: none;
         }
-
-        .close-iframe-btn {
-            display: none;
-            padding: 10px 20px;
-            margin-top: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.05);
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .close-iframe-btn.open { display: inline-block; }
-        .close-iframe-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
         /* ═══════════ SCROLLBAR ═══════════ */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -494,13 +516,14 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-        /* ═══════════ RESPONSIVE ═══════════ */
+        /* ═══════════ MOBILE ═══════════ */
         @media (max-width: 768px) {
-            .header { flex-direction: column; text-align: center; }
-            .header-left { flex-direction: column; }
-            .digital-clock { font-size: 32px; }
-            .timer-card { flex: 0 0 170px; }
-            .timer-display { font-size: 28px; }
+            header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+            .header-center { order: 3; width: 100%; justify-content: center; }
+            #clock { font-size: 1.5rem; }
+            main { padding: 14px; gap: 14px; }
+            .timer-box { flex: 0 0 150px; }
+            .timer-box .time { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -508,112 +531,127 @@
 
     <!-- ALARM SOUND -->
     <audio id="alarmSound" preload="auto">
-        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACA/4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/" type="audio/wav">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2Onq2tqYmAd3NucHWAjJmenZaIgXt3dnuDjJSamZKJgXt3d3yFjpWZlpCHf3t3eX+Ij5SXlI+GgHt4eoCHjpOVko+HgHt5e4GHjZKUkY2GgHt6e4GGi5CSkI2FgHt7fIKGi4+Qjo2FgHt7fIKGio6PjYuEf3t7fIGFiY2OjIuEf3t8fYGFiIyNi4qDf3t8fYCEh4uMioqDfnt9foCEhomKiYmCfnt9fn+Dhoha" type="audio/wav">
     </audio>
 
-    <div class="container">
-        <a href="portal.html" class="back-btn">← Back to Portal</a>
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header>
+        <div class="logo">
+            <span>👨‍🍳</span>
+            <span>Kitchen Hub</span>
+        </div>
 
-        <!-- ═══════════ HEADER ═══════════ -->
-        <header class="header">
-            <div class="header-left">
-                <span class="icon">👨‍🍳</span>
-                <div>
-                    <h1>Kitchen Hub</h1>
-                    <p>Command Center</p>
-                </div>
-            </div>
-
-            <div class="header-center">
-                <div class="digital-clock" id="digitalClock">--:--:--</div>
-                <div class="location-badge">
-                    <span>📍</span>
-                    <span id="locationName">Detecting...</span>
-                </div>
-            </div>
-
-            <div class="header-controls">
-                <button class="control-btn active" id="clockToggle" onclick="toggleClock()">🕐 Clock</button>
-                <button class="control-btn active" id="soundToggle" onclick="toggleSound()">🔊 Sound</button>
-                <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-                <button class="control-btn" id="awakeToggle" onclick="toggleKeepAwake()">☀️ Awake</button>
-            </div>
-        </header>
-
-        <!-- ═══════════ 3-HOUR TIMERS ═══════════ -->
-        <div class="card">
-            <div class="section-title">
-                <span>⏰</span> 3-Hour Timers
-                <button class="add-timer-btn" onclick="addTimer()">+ Add Timer</button>
-            </div>
-            <div class="timers-row" id="timersRow">
-                <!-- Timers rendered here -->
+        <div class="header-center">
+            <div id="clock">--:--:--</div>
+            <div class="location-badge">
+                <span class="live-dot"></span>
+                <span id="locationName">Detecting...</span>
             </div>
         </div>
 
-        <!-- ═══════════ WIDGETS GRID ═══════════ -->
-        <div class="grid-2">
-            
-            <!-- Kitchen % -->
-            <div class="card">
-                <div class="section-title"><span>📈</span> Kitchen %</div>
-                <div class="percent-display">
-                    <div class="percent-circle">
+        <div class="header-controls">
+            <button class="control-btn active" id="clockToggle" onclick="toggleClock()">🕐 Clock</button>
+            <button class="control-btn active" id="soundToggle" onclick="toggleSound()">🔊 Sound</button>
+            <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+            <button class="control-btn" id="awakeToggle" onclick="toggleKeepAwake()">☀️ Awake</button>
+            <a href="portal.html" class="back-link">← Portal</a>
+        </div>
+    </header>
+
+    <!-- ═══════════ MAIN ═══════════ -->
+    <main>
+
+        <!-- ═══════════ 3-HOUR TIMERS (Full Width) ═══════════ -->
+        <section class="panel timers-bar">
+            <div class="panel-header">
+                <span class="icon">⏰</span>
+                3-Hour Timers
+                <button class="add-timer-btn" onclick="addTimer()">+ Add</button>
+            </div>
+            <div class="panel-body">
+                <div class="timer-group" id="timerGroup">
+                    <!-- Timers rendered here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ KITCHEN % ═══════════ -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="icon">📈</span>
+                Kitchen %
+            </div>
+            <div class="panel-body">
+                <div class="kitchen-percent-widget">
+                    <div class="percent-ring">
                         <svg viewBox="0 0 100 100">
-                            <circle class="bg" cx="50" cy="50" r="40"></circle>
-                            <circle class="fill" id="percentCircle" cx="50" cy="50" r="40" 
-                                    stroke-dasharray="251" stroke-dashoffset="251"></circle>
+                            <circle class="bg" cx="50" cy="50" r="42"></circle>
+                            <circle class="fill" id="percentCircle" cx="50" cy="50" r="42" 
+                                    stroke-dasharray="264" stroke-dashoffset="264"></circle>
                         </svg>
-                        <div class="percent-value" id="percentValue">--%</div>
+                        <div class="value" id="percentValue">--%</div>
                     </div>
-                    <div class="percent-label">Today's Kitchen Percentage</div>
+                    <div class="percent-label">Today's Kitchen %</div>
                     <a href="kitchen-percent.html" class="percent-link">Open Calculator →</a>
                 </div>
             </div>
-
-            <!-- Catering Events -->
-            <div class="card">
-                <div class="section-title">
-                    <span>🎉</span> Catering Events
-                    <button class="refresh-btn" onclick="loadCatering()">🔄</button>
-                </div>
-                <div class="catering-list" id="cateringList">
-                    <div class="empty-state">
-                        <div class="spinner"></div>
-                        <p>Loading catering events...</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- ═══════════ QUICK TOOLS ═══════════ -->
-        <div class="card">
-            <div class="section-title"><span>🛠️</span> Quick Tools</div>
-            <div class="tools-grid">
-                <button class="tool-btn" onclick="openTool('MIS.html', this)">🍽️ MIS</button>
-                <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">🧹 Cleaning List</button>
+        <!-- ═══════════ CATERING EVENTS ═══════════ -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="icon">🎉</span>
+                Catering Events
+                <button class="refresh-btn" onclick="loadCatering()">🔄</button>
             </div>
-            <button class="close-iframe-btn" id="closeIframeBtn" onclick="closeIframe()">✕ Close Tool</button>
-            <div class="iframe-container" id="iframeContainer">
-                <iframe id="toolIframe" src=""></iframe>
+            <div class="panel-body" id="cateringList">
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <span>Loading catering...</span>
+                </div>
             </div>
         </div>
 
-    </div>
+        <!-- ═══════════ QUICK TOOLS (Full Width) ═══════════ -->
+        <section class="panel full-width">
+            <div class="panel-header quicktools-header" onclick="toggleQuicktools()">
+                <span class="icon">🛠️</span>
+                Quick Tools
+                <span class="quicktools-toggle" id="quicktoolsToggle">▼</span>
+            </div>
+            <div class="quicktools-content" id="quicktoolsContent">
+                <div class="tool-buttons">
+                    <button class="tool-btn" onclick="openTool('MIS.html', this)">
+                        <span>🍽️</span> MIS
+                    </button>
+                    <button class="tool-btn" onclick="openTool('cleaning-kitchen.html', this)">
+                        <span>🧹</span> Cleaning List
+                    </button>
+                </div>
+                <div class="iframe-container" id="iframeContainer">
+                    <iframe id="toolIframe" src=""></iframe>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <script>
         // ═══════════ CONFIG ═══════════
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec';
-        const TIMER_DURATION = 3 * 60 * 60 * 1000;
-        const WARN_TIME = 15 * 60 * 1000;
+        const TIMER_DURATION = 3 * 60 * 60 * 1000; // 3 hours
+        const WARN_TIME = 15 * 60 * 1000; // 15 minutes
 
         const LOCATIONS = {
-            'helsingør': 'Café Kaiser Helsingør', 'helsingor': 'Café Kaiser Helsingør',
-            'hillerød': 'Café Kaiser Hillerød', 'hillerod': 'Café Kaiser Hillerød',
+            'helsingør': 'Café Kaiser Helsingør',
+            'helsingor': 'Café Kaiser Helsingør',
+            'hillerød': 'Café Kaiser Hillerød',
+            'hillerod': 'Café Kaiser Hillerød',
             'farum': 'Café Kaiser Farum',
-            'hørsholm': 'Café Kaiser Hørsholm', 'horsholm': 'Café Kaiser Hørsholm',
-            'vanløse': 'Café Kaiser Vanløse', 'vanlose': 'Café Kaiser Vanløse'
+            'hørsholm': 'Café Kaiser Hørsholm',
+            'horsholm': 'Café Kaiser Hørsholm',
+            'vanløse': 'Café Kaiser Vanløse',
+            'vanlose': 'Café Kaiser Vanløse'
         };
 
         // ═══════════ STATE ═══════════
@@ -665,7 +703,7 @@
         }
 
         function updateClock() {
-            const el = document.getElementById('digitalClock');
+            const el = document.getElementById('clock');
             if (!showClock) { el.style.display = 'none'; return; }
             el.style.display = 'block';
             const now = new Date();
@@ -688,7 +726,15 @@
 
         function playAlarm() {
             if (!soundEnabled) return;
-            document.getElementById('alarmSound').play().catch(() => {});
+            const audio = document.getElementById('alarmSound');
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+
+            if (Notification.permission === 'granted') {
+                new Notification('⏰ Timer Alert!', { body: '15 minutes remaining!' });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission();
+            }
         }
 
         // ═══════════ FULLSCREEN & AWAKE ═══════════
@@ -708,26 +754,39 @@
         // ═══════════ TIMERS ═══════════
         function loadTimers() {
             const saved = localStorage.getItem('kh_timers_' + currentLocation);
-            timers = saved ? JSON.parse(saved) : [{ id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }];
+            timers = saved ? JSON.parse(saved) : [
+                { id: 1, label: 'Timer 1', remaining: TIMER_DURATION, running: false, alarmed: false }
+            ];
             renderTimers();
             timers.filter(t => t.running).forEach(t => { t.running = false; startTimer(t.id); });
         }
 
-        function saveTimers() { localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers)); }
+        function saveTimers() {
+            localStorage.setItem('kh_timers_' + currentLocation, JSON.stringify(timers));
+        }
 
         function renderTimers() {
-            document.getElementById('timersRow').innerHTML = timers.map(t => {
-                let cls = t.remaining <= 0 || t.remaining <= WARN_TIME ? 'danger' : t.remaining <= WARN_TIME * 2 ? 'warning' : '';
-                let pct = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
+            document.getElementById('timerGroup').innerHTML = timers.map(t => {
+                let cls = '';
+                if (t.remaining <= 0 || t.remaining <= WARN_TIME) cls = 'danger';
+                else if (t.remaining <= WARN_TIME * 2) cls = 'warning';
+
+                const percent = Math.max(0, (t.remaining / TIMER_DURATION) * 100);
+
                 return `
-                    <div class="timer-card ${cls}">
-                        <div class="timer-label">${t.label}</div>
-                        <div class="timer-display">${formatTime(t.remaining)}</div>
-                        <div class="timer-progress"><div class="timer-progress-bar" style="width:${pct}%"></div></div>
-                        <div class="timer-controls">
-                            ${t.running ? `<button class="timer-btn pause" onclick="pauseTimer(${t.id})">Pause</button>` : `<button class="timer-btn start" onclick="startTimer(${t.id})">Start</button>`}
-                            <button class="timer-btn reset" onclick="resetTimer(${t.id})">Reset</button>
-                            ${timers.length > 1 ? `<button class="timer-btn delete" onclick="deleteTimer(${t.id})">✕</button>` : ''}
+                    <div class="timer-box ${cls}">
+                        <div class="label">${t.label}</div>
+                        <div class="time">${formatTime(t.remaining)}</div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${percent}%"></div>
+                        </div>
+                        <div class="controls">
+                            ${t.running
+                                ? `<button class="btn-pause" onclick="pauseTimer(${t.id})">Pause</button>`
+                                : `<button class="btn-start" onclick="startTimer(${t.id})">Start</button>`
+                            }
+                            <button class="btn-reset" onclick="resetTimer(${t.id})">Reset</button>
+                            ${timers.length > 1 ? `<button class="btn-delete" onclick="deleteTimer(${t.id})">✕</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -736,18 +795,37 @@
 
         function formatTime(ms) {
             const s = Math.max(0, Math.floor(ms / 1000));
-            return `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60);
+            const sec = s % 60;
+            return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
         }
 
         function startTimer(id) {
             const t = timers.find(x => x.id === id);
             if (!t || t.running) return;
-            t.running = true; t.alarmed = false; saveTimers(); renderTimers();
+
+            t.running = true;
+            t.alarmed = false;
+            saveTimers();
+            renderTimers();
+
             timerIntervals[id] = setInterval(() => {
                 t.remaining -= 1000;
-                if (t.remaining <= WARN_TIME && !t.alarmed) { t.alarmed = true; playAlarm(); }
-                if (t.remaining <= 0) { t.remaining = 0; pauseTimer(id); playAlarm(); }
-                saveTimers(); renderTimers();
+
+                if (t.remaining <= WARN_TIME && !t.alarmed) {
+                    t.alarmed = true;
+                    playAlarm();
+                }
+
+                if (t.remaining <= 0) {
+                    t.remaining = 0;
+                    pauseTimer(id);
+                    playAlarm();
+                }
+
+                saveTimers();
+                renderTimers();
             }, 1000);
         }
 
@@ -756,65 +834,104 @@
             if (t) t.running = false;
             clearInterval(timerIntervals[id]);
             delete timerIntervals[id];
-            saveTimers(); renderTimers();
+            saveTimers();
+            renderTimers();
         }
 
         function resetTimer(id) {
             pauseTimer(id);
             const t = timers.find(x => x.id === id);
             if (t) { t.remaining = TIMER_DURATION; t.alarmed = false; }
-            saveTimers(); renderTimers();
+            saveTimers();
+            renderTimers();
         }
 
         function addTimer() {
             const newId = Math.max(0, ...timers.map(t => t.id)) + 1;
-            timers.push({ id: newId, label: `Timer ${newId}`, remaining: TIMER_DURATION, running: false, alarmed: false });
-            saveTimers(); renderTimers();
+            timers.push({
+                id: newId,
+                label: `Timer ${newId}`,
+                remaining: TIMER_DURATION,
+                running: false,
+                alarmed: false
+            });
+            saveTimers();
+            renderTimers();
         }
 
-        function deleteTimer(id) { pauseTimer(id); timers = timers.filter(t => t.id !== id); saveTimers(); renderTimers(); }
+        function deleteTimer(id) {
+            pauseTimer(id);
+            timers = timers.filter(t => t.id !== id);
+            saveTimers();
+            renderTimers();
+        }
 
         // ═══════════ CATERING ═══════════
         async function loadCatering() {
             const container = document.getElementById('cateringList');
-            if (!currentLocation) { container.innerHTML = '<div class="empty-state">Select location to view catering</div>'; return; }
+            if (!currentLocation) {
+                container.innerHTML = '<div class="empty-state">Select location to view catering</div>';
+                return;
+            }
+
             container.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Loading...</p></div>';
 
             try {
                 const data = await jsonp(SCRIPT_URL + '?action=getOrders');
+
                 if (data.ok && data.orders) {
-                    let orders = data.orders.filter(o => (o.location || '').toLowerCase().includes(currentLocation));
-                    const today = new Date(); today.setHours(0, 0, 0, 0);
+                    let orders = data.orders.filter(o => {
+                        const loc = (o.location || '').toLowerCase();
+                        return loc.includes(currentLocation);
+                    });
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
                     orders = orders.filter(o => new Date(o.deliveryDate) >= today);
                     orders.sort((a, b) => new Date(a.deliveryDate) - new Date(b.deliveryDate));
+
                     renderCatering(orders.slice(0, 6));
-                } else throw new Error('No data');
-            } catch (e) { container.innerHTML = '<div class="empty-state">⚠️ Could not load catering</div>'; }
+                } else {
+                    throw new Error('No data');
+                }
+            } catch (err) {
+                console.error('Catering error:', err);
+                container.innerHTML = '<div class="empty-state">⚠️ Could not load catering</div>';
+            }
         }
 
         function renderCatering(orders) {
             const container = document.getElementById('cateringList');
-            if (!orders.length) { container.innerHTML = '<div class="empty-state">🎉 No upcoming catering</div>'; return; }
+
+            if (orders.length === 0) {
+                container.innerHTML = '<div class="empty-state">🎉 No upcoming catering</div>';
+                return;
+            }
+
             container.innerHTML = orders.map(o => {
                 const info = getDateInfo(o.deliveryDate);
                 return `
                     <div class="catering-item ${info.cls}">
                         <div class="catering-date">${info.text} at ${o.deliveryTime || '--:--'}</div>
-                        <div class="catering-title">${o.customerName || 'No name'}</div>
+                        <div class="catering-title">${escapeHtml(o.customerName)}</div>
                         <div class="catering-info">👥 ${o.guests} guests</div>
-                        ${o.note ? `<div class="catering-note">📝 ${o.note}</div>` : ''}
+                        ${o.note ? `<div class="catering-note">📝 ${escapeHtml(o.note)}</div>` : ''}
                     </div>
                 `;
             }).join('');
         }
 
         function getDateInfo(dateStr) {
-            const d = new Date(dateStr), today = new Date(); today.setHours(0,0,0,0);
+            const d = new Date(dateStr);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             const diff = Math.floor((d - today) / 86400000);
+
             if (diff === 0) return { text: '🔴 TODAY', cls: 'today' };
             if (diff === 1) return { text: '🟡 TOMORROW', cls: 'tomorrow' };
-            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             return { text: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`, cls: '' };
         }
 
@@ -824,34 +941,49 @@
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    if (data.date === new Date().toDateString()) { setPercent(data.percent); return; }
+                    if (data.date === new Date().toDateString()) {
+                        setPercent(data.percent);
+                        return;
+                    }
                 } catch (e) {}
             }
             setPercent(null);
         }
 
         function setPercent(p) {
-            const circle = document.getElementById('percentCircle'), val = document.getElementById('percentValue');
-            if (p === null) { val.textContent = '--%'; circle.style.strokeDashoffset = 251; return; }
-            val.textContent = p.toFixed(1) + '%';
-            circle.style.strokeDashoffset = 251 - (Math.min(100, p) / 100) * 251;
-            circle.style.stroke = p < 28 ? '#22c55e' : p <= 32 ? '#d6b24a' : '#ef4444';
+            const circle = document.getElementById('percentCircle');
+            const val = document.getElementById('percentValue');
+            const circumference = 264;
+
+            if (p === null) {
+                val.textContent = '--%';
+                circle.style.strokeDashoffset = circumference;
+                return;
+            }
+
+            const percent = Math.min(100, Math.max(0, p));
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            val.textContent = percent.toFixed(1) + '%';
+
+            if (percent < 28) circle.style.stroke = '#2ed47a';
+            else if (percent <= 32) circle.style.stroke = '#bfa14a';
+            else circle.style.stroke = '#ff5c5c';
         }
 
         // ═══════════ QUICK TOOLS ═══════════
+        function toggleQuicktools() {
+            const content = document.getElementById('quicktoolsContent');
+            const toggle = document.getElementById('quicktoolsToggle');
+            content.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+
         function openTool(url, btn) {
             document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('toolIframe').src = url;
             document.getElementById('iframeContainer').classList.add('open');
-            document.getElementById('closeIframeBtn').classList.add('open');
-        }
-
-        function closeIframe() {
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('iframeContainer').classList.remove('open');
-            document.getElementById('closeIframeBtn').classList.remove('open');
-            document.getElementById('toolIframe').src = '';
         }
 
         // ═══════════ HELPERS ═══════════
@@ -866,6 +998,13 @@
                 script.onerror = () => { cleanup(); reject(new Error('Network')); };
                 document.body.appendChild(script);
             });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
     </script>
 </body>
