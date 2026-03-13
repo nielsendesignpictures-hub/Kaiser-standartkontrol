@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – Sold Out Products</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0d1117;
+      --bg1:#161b22;
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.72);
+      --muted2:rgba(255,255,255,0.52);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --ok:#62d26f;
+      --danger:#ff6b6b;
+      --shadow:0 20px 60px rgba(0,0,0,.40);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:18px;
+    }
+
+    .wrap{max-width:900px;margin:0 auto;}
+    .card{
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+
+    .kicker{
+      text-align:center;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    h1{
+      margin:10px 0 0;
+      text-align:center;
+      font-family:"Playfair Display",serif;
+      font-size:46px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      margin-top:10px;
+    }
+
+    .goldline{
+      height:2px;
+      margin:18px auto 0;
+      max-width:420px;
+      border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    }
+
+    .pillRow{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,0.92);
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+      margin-top:22px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    input, select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:14px 16px;
+      font-size:15px;
+      font-weight:700;
+      outline:none;
+    }
+
+    input:focus, select:focus{
+      border-color:var(--gold);
+      background:rgba(255,255,255,0.10);
+    }
+
+    select option{
+      background:#161b22;
+      color:#fff;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .btn{
+      flex:1;
+      min-width:180px;
+      border:none;
+      border-radius:16px;
+      padding:16px;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0b0c0f;
+    }
+
+    .btn.ghost{
+      background:rgba(255,255,255,0.08);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.14);
+    }
+
+    .status{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:700;
+      display:none;
+    }
+    .status.ok{
+      display:block;
+      background:rgba(98,210,111,0.15);
+      border:1px solid rgba(98,210,111,0.35);
+      color:var(--ok);
+    }
+    .status.err{
+      display:block;
+      background:rgba(255,107,107,0.15);
+      border:1px solid rgba(255,107,107,0.35);
+      color:var(--danger);
+    }
+
+    .listWrap{
+      margin-top:24px;
+      border-top:1px solid rgba(255,255,255,0.10);
+      padding-top:20px;
+    }
+
+    .listTitle{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      margin-bottom:12px;
+    }
+
+    .itemList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .bar{
+      width:5px;
+      height:42px;
+      border-radius:4px;
+      background:var(--danger);
+      flex:0 0 auto;
+    }
+
+    .itemInfo{flex:1;min-width:0;}
+    .itemTitle{
+      font-weight:800;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .itemMeta{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .empty{
+      text-align:center;
+      padding:24px;
+      color:var(--muted2);
+      font-size:13px;
+    }
+
+    iframe.hiddenFrame{
+      display:none;
+      width:0;height:0;border:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="kicker">KAISER</div>
+      <h1>Sold Out Products</h1>
+      <div class="sub">Quick registration for products that are sold out</div>
+      <div class="goldline"></div>
+
+      <div class="pillRow">
+        <div class="pill" id="locPill">📍 Location: —</div>
+        <div class="pill" id="datePill">📅 Date: —</div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="locSelect">Location</label>
+          <select id="locSelect">
+            <option value="Café Kaiser Helsingør">Café Kaiser Helsingør</option>
+            <option value="Café Kaiser Hillerød">Café Kaiser Hillerød</option>
+            <option value="Café Kaiser Farum">Café Kaiser Farum</option>
+            <option value="Café Kaiser Hørsholm">Café Kaiser Hørsholm</option>
+            <option value="Café Kaiser Vanløse">Café Kaiser Vanløse</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="dateInput">Date</label>
+          <input id="dateInput" type="date" />
+        </div>
+
+        <div>
+          <label for="productInput">Product name</label>
+          <input id="productInput" type="text" placeholder="e.g. Caesar Salad" />
+        </div>
+
+        <div>
+          <label for="categoryInput">Category</label>
+          <select id="categoryInput">
+            <option value="">Select category (optional)</option>
+            <option value="Brunch">Brunch</option>
+            <option value="Burgers">Burgers</option>
+            <option value="Salads">Salads</option>
+            <option value="Sandwich">Sandwich</option>
+            <option value="Desserts">Desserts</option>
+            <option value="Coffee">Coffee</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Wine">Wine</option>
+            <option value="Beer">Beer</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="refreshBtn" type="button">Refresh list</button>
+        <button class="btn primary" id="submitBtn" type="button">Report Sold Out</button>
+      </div>
+
+      <div class="status" id="statusBox"></div>
+
+      <div class="listWrap">
+        <div class="listTitle">Latest sold out products</div>
+        <div class="itemList" id="itemList">
+          <div class="empty">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <iframe name="saveTarget" class="hiddenFrame"></iframe>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+
+    const $ = id => document.getElementById(id);
+
+    function isoToday() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function setStatus(msg, type) {
+      const box = $("statusBox");
+      box.className = "status " + (type === "ok" ? "ok" : "err");
+      box.textContent = msg;
+    }
+
+    function clearStatus() {
+      $("statusBox").className = "status";
+      $("statusBox").textContent = "";
+    }
+
+    function getLocFromQS() {
+      return new URLSearchParams(location.search).get("loc") || "";
+    }
+
+    function updatePills() {
+      $("locPill").textContent = "📍 Location: " + $("locSelect").value.replace("Café Kaiser ", "");
+      $("datePill").textContent = "📅 Date: " + ($("dateInput").value || "—");
+    }
+
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cb = "__cb_" + Math.random().toString(16).slice(2);
+        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+        const src = url + (url.includes("?") ? "&" : "?") + qs;
+
+        const s = document.createElement("script");
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(t);
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+
+        window[cb] = data => {
+          cleanup();
+          resolve(data);
+        };
+
+        s.src = src;
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
+
+        document.body.appendChild(s);
+      });
+    }
+
+    async function loadItems() {
+      clearStatus();
+      const loc = $("locSelect").value;
+
+      try {
+        const data = await jsonp(SCRIPT_URL, {
+          action: "getSoldoutProducts",
+          loc
+        });
+
+        if (!data || !data.ok || !Array.isArray(data.items) || !data.items.length) {
+          $("itemList").innerHTML = '<div class="empty">No sold out products reported yet</div>';
+          return;
+        }
+
+        $("itemList").innerHTML = data.items.map(item => `
+          <div class="item">
+            <div class="bar"></div>
+            <div class="itemInfo">
+              <div class="itemTitle">${escapeHtml(item.productName)}</div>
+              <div class="itemMeta">📅 ${item.date}${item.category ? " • " + escapeHtml(item.category) : ""}</div>
+            </div>
+          </div>
+        `).join("");
+
+      } catch (e) {
+        $("itemList").innerHTML = '<div class="empty">❌ Error loading</div>';
+      }
+    }
+
+    function submitItem() {
+      clearStatus();
+
+      const location = $("locSelect").value;
+      const date = $("dateInput").value;
+      const productName = ($("productInput").value || "").trim();
+      const category = ($("categoryInput").value || "").trim();
+
+      if (!date || !location || !productName) {
+        setStatus("Please fill location, date and product name.", "err");
+        return;
+      }
+
+      const btn = $("submitBtn");
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = SCRIPT_URL;
+      form.target = "saveTarget";
+      form.style.display = "none";
+
+      const fields = {
+        action: "addSoldoutProduct",
+        date,
+        location,
+        productName,
+        category
+      };
+
+      Object.keys(fields).forEach(key => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        form.remove();
+        btn.disabled = false;
+        btn.textContent = "Report Sold Out";
+        $("productInput").value = "";
+        $("categoryInput").value = "";
+        setStatus("✅ Sold out product reported.", "ok");
+        loadItems();
+      }, 1200);
+    }
+
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, c =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+    }
+
+    (function init() {
+      $("dateInput").value = isoToday();
+
+      const locQS = getLocFromQS();
+      if (locQS) {
+        const wanted = "Café Kaiser " + locQS.trim();
+        const options = Array.from($("locSelect").options);
+        const match = options.find(o => 
