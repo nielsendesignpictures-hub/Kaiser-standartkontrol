@@ -495,4 +495,22 @@
       if (locQS) {
         const wanted = "Café Kaiser " + locQS.trim();
         const options = Array.from($("locSelect").options);
-        const match = options.find(o => 
+        const match = options.find(o => o.value.toLowerCase() === wanted.toLowerCase());
+        if (match) $("locSelect").value = match.value;
+      }
+
+      updatePills();
+      loadItems();
+
+      $("locSelect").addEventListener("change", () => {
+        updatePills();
+        loadItems();
+      });
+
+      $("dateInput").addEventListener("change", updatePills);
+      $("refreshBtn").addEventListener("click", loadItems);
+      $("submitBtn").addEventListener("click", submitItem);
+    })();
+  </script>
+</body>
+</html>
