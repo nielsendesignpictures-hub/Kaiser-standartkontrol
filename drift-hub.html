@@ -1,5 +1,4 @@
 <!doctype html>
-<meta name="robots" content="noindex, nofollow">
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
@@ -8,455 +7,494 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg0:#0d1117;
       --bg1:#161b22;
       --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.75);
+      --muted:rgba(255,255,255,0.78);
       --muted2:rgba(255,255,255,0.55);
       --gold:#d6b24a;
       --gold2:#b9921f;
-      --danger:#ff6b6b;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
       --warn:#f59e0b;
-      --ok:#62d26f;
-      --blue:#58a6ff;
-      --shadow: 0 20px 60px rgba(0,0,0,.40);
+      --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
-    *{box-sizing:border-box;}
-    html,body{height:100%;margin:0;}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      font-family: Inter, system-ui, sans-serif;
-      color: var(--text);
+      min-height:100vh;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(88,166,255,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(214,178,74,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(98,210,111,0.08), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
-      overflow-x:hidden;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    body:before{
-      content:""; position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity:0.06; pointer-events:none;
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:18px;
     }
 
-    .shell{max-width:1400px; margin:0 auto; padding:14px 12px 40px;}
+    .shell{max-width:1380px;margin:0 auto;}
 
-    /* HERO */
     .hero{
-      border-radius: 24px;
+      border-radius:32px;
       border:1px solid rgba(255,255,255,0.12);
       background:
-        radial-gradient(800px 220px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
-      padding: 20px 16px 16px;
-      position:relative; overflow:hidden;
-    }
-    .hero:after{
-      content:""; position:absolute; inset:-2px;
-      background:
-        radial-gradient(600px 200px at 20% 0%, rgba(88,166,255,0.18), transparent 60%),
-        radial-gradient(600px 200px at 80% 0%, rgba(214,178,74,0.14), transparent 60%);
-      opacity:.5; pointer-events:none;
+      box-shadow:var(--shadow);
+      padding:26px 22px 20px;
     }
 
-    .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;text-align:center;position:relative;z-index:1;}
-    .title{font-family:"Playfair Display",serif;font-size:clamp(28px,7vw,42px);line-height:1.05;letter-spacing:-0.02em;font-weight:700;text-align:center;margin-top:6px;position:relative;z-index:1;}
-    .subtitle{color:var(--muted);font-weight:600;font-size:13px;text-align:center;margin-top:6px;position:relative;z-index:1;}
-    .blueline{height:2px;margin:14px auto 0;max-width:600px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(88,166,255,0.90),transparent);position:relative;z-index:1;}
-
-    .controls{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;z-index:1;}
-    
-    .pill,.btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:5px;
-      padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px;
-      color: rgba(255,255,255,0.90);white-space:nowrap;user-select:none;
-    }
-    .btn{cursor:pointer;transition:all .12s ease;-webkit-tap-highlight-color:transparent;}
-    .btn:hover{background:rgba(255,255,255,0.10);border-color:rgba(255,255,255,0.22);}
-    .btn:active{transform:scale(0.97);}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--blue),#1f6feb);color:#fff;}
-    .btn.gold{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
-    .btn.ghost{background:rgba(255,255,255,0.06);}
-    .btn.on{background:rgba(88,166,255,0.18);border-color:rgba(88,166,255,0.35);color:var(--blue);}
-    .btn.danger{background:rgba(255,107,107,0.18);border-color:rgba(255,107,107,0.35);color:var(--danger);}
-
-    /* Clock */
-    .clockWrap{position:relative;z-index:1;margin-top:14px;text-align:center;display:none;}
-    .clockWrap.show{display:block;}
-    .clockTime{font-family:"Playfair Display",serif;font-size:56px;font-weight:700;line-height:1;}
-    .clockDate{font-size:14px;font-weight:600;color:var(--muted);margin-top:4px;}
-
-    /* Widget Grid - 3 kolonner på touch skærm */
-    .widgetGrid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      margin-top:14px;
-    }
-    @media (max-width: 900px){
-      .widgetGrid{grid-template-columns: repeat(2, 1fr);}
-    }
-    @media (max-width: 600px){
-      .widgetGrid{grid-template-columns: 1fr;}
+    .kicker{
+      text-align:center;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted2);
     }
 
-    .widget{
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding:14px;
-      min-height:120px;
+    .title{
+      text-align:center;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(46px,8vw,72px);
+      line-height:1;
+      margin-top:8px;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-weight:800;
+      font-size:14px;
+      margin-top:8px;
+    }
+
+    .goldline{
+      height:2px;
+      margin:18px auto 0;
+      max-width:900px;
+      border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--blue),transparent);
+    }
+
+    .heroRow{
       display:flex;
-      flex-direction:column;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
     }
-    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
-    .widgetTitle{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.10em;color:var(--muted);display:flex;align-items:center;gap:6px;}
-    .widgetDot{width:8px;height:8px;border-radius:50%;}
-    .widgetDot.blue{background:var(--blue);}
-    .widgetDot.gold{background:var(--gold);}
-    .widgetDot.green{background:var(--ok);}
-    .widgetDot.red{background:var(--danger);}
-    .widgetDot.warn{background:var(--warn);}
 
-    .widgetBig{font-family:"Playfair Display",serif;font-size:36px;font-weight:700;line-height:1;}
-    .widgetSub{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px;}
-    .widgetAction{margin-top:auto;padding-top:10px;}
+    .pill,.btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.92);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      min-height:46px;
+      text-align:center;
+    }
 
-    /* Section */
+    .btn{
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .btn:hover{background:rgba(255,255,255,0.10);}
+    .btn.primary{
+      border:none;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0b0c0f;
+    }
+
     .section{
-      margin-top:14px;
-      border-radius:20px;
+      margin-top:20px;
+      border-radius:28px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       overflow:hidden;
+      box-shadow:var(--shadow);
     }
+
     .sectionHead{
-      padding:12px 14px;
-      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 20px;
       background:rgba(255,255,255,0.03);
-      cursor:pointer;
-      user-select:none;
+      border-bottom:1px solid rgba(255,255,255,0.10);
     }
-    .sectionHead:active{background:rgba(255,255,255,0.06);}
-    .sectionTitle{font-weight:800;letter-spacing:.10em;text-transform:uppercase;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
-    .sectionDot{width:8px;height:8px;border-radius:50%;background:var(--blue);}
-    .sectionRight{display:flex;align-items:center;gap:8px;}
-    .sectionCount{font-size:11px;font-weight:700;color:var(--gold);}
-    .sectionArrow{font-size:12px;transition:transform .2s;color:var(--muted);}
-    .sectionArrow.open{transform:rotate(180deg);}
-    .sectionBody{display:none;padding:14px;}
-    .sectionBody.open{display:block;}
-    .divider{height:1px;background:rgba(255,255,255,0.08);}
 
-    /* Udsolgt Log */
-    .soldOutWrap{padding:14px;}
-    .mealTabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-    .mealTab{
-      padding:10px 16px;border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      font-weight:700;font-size:12px;
-      cursor:pointer;transition:all .12s;
-      flex:1;text-align:center;min-width:80px;
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
     }
-    .mealTab:active{transform:scale(0.97);}
-    .mealTab.on{background:rgba(88,166,255,0.18);border-color:rgba(88,166,255,0.35);color:var(--blue);}
 
-    .dishGrid{
+    .sectionDot{
+      width:12px;height:12px;border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:13px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
+    .sectionBody{padding:20px;}
+
+    .topGrid{
       display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap:8px;
-      max-height:300px;
-      overflow-y:auto;
-      padding:4px;
+      grid-template-columns:repeat(5,1fr);
+      gap:18px;
     }
-    .dishBtn{
-      padding:12px 10px;border-radius:14px;
+
+    @media (max-width: 1300px){
+      .topGrid{grid-template-columns:repeat(3,1fr);}
+    }
+
+    @media (max-width: 860px){
+      .topGrid{grid-template-columns:1fr;}
+    }
+
+    .topCard{
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:20px;
+      min-height:230px;
+      position:relative;
+    }
+
+    .topKicker{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--gold);
+      flex:0 0 auto;
+    }
+    .dot.green{background:var(--green);}
+    .dot.red{background:var(--red);}
+    .dot.blue{background:var(--blue);}
+
+    .bigValue{
+      font-family:"Playfair Display",serif;
+      font-size:58px;
+      line-height:1;
+      margin-top:20px;
+      letter-spacing:-.03em;
+    }
+
+    .subValue{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .topActions{
+      margin-top:16px;
+    }
+
+    .fullBtn{
+      width:100%;
+      border:none;
+      border-radius:18px;
+      min-height:46px;
+      padding:14px 16px;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      color:#fff;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+    .fullBtn.blue{
+      background:linear-gradient(135deg,#5ea7ff,#2563eb);
+      border:none;
+    }
+
+    .moduleGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    @media (max-width: 900px){
+      .moduleGrid{grid-template-columns:1fr;}
+    }
+
+    .moduleCard{
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:20px;
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .moduleCard:hover{
+      background:rgba(255,255,255,0.08);
+      transform:translateY(-2px);
+    }
+
+    .moduleIcon{
+      font-size:30px;
+    }
+
+    .moduleName{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .moduleDesc{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+      font-weight:700;
+    }
+
+    .moduleMeta{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .metaChip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);
-      font-weight:600;font-size:13px;
-      cursor:pointer;transition:all .12s;
-      text-align:center;
-    }
-    .dishBtn:active{transform:scale(0.96);}
-    .dishBtn.sold{
-      background:rgba(255,107,107,0.18);
-      border-color:rgba(255,107,107,0.40);
-      color:var(--danger);
-      text-decoration:line-through;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
     }
 
-    .soldOutLog{margin-top:14px;}
-    .soldOutItem{
-      display:flex;align-items:center;justify-content:space-between;gap:8px;
-      padding:10px 12px;border-radius:12px;
-      background:rgba(255,107,107,0.12);
-      border:1px solid rgba(255,107,107,0.25);
-      margin-bottom:8px;
+    .toolViewer{
+      display:none;
+      margin-top:20px;
     }
-    .soldOutInfo{flex:1;}
-    .soldOutName{font-weight:700;font-size:13px;}
-    .soldOutMeta{font-size:11px;color:var(--muted);margin-top:2px;}
-    .soldOutRemove{
-      padding:6px 10px;border-radius:10px;
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.15);
-      font-size:10px;font-weight:700;
-      cursor:pointer;
-    }
-
-    /* Tools grid */
-    .toolsGrid{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap:10px;
-    }
-    .toolItem{
-      padding:14px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      cursor:pointer;transition:all .12s;
-      display:flex;align-items:center;gap:12px;
-    }
-    .toolItem:active{transform:scale(0.97);background:rgba(255,255,255,0.08);}
-    .toolIcon{font-size:26px;}
-    .toolInfo{flex:1;}
-    .toolName{font-weight:700;font-size:14px;}
-    .toolDesc{font-size:11px;color:var(--muted);margin-top:2px;}
-
-    /* Tool viewer */
-    .toolViewer{display:none;margin-top:14px;}
     .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;}
-    .frame{width:100%;height:75vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.25);}
 
-    .emptyState{text-align:center;padding:20px;color:var(--muted2);font-size:12px;}
+    .toolBar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
 
-    /* Touch friendly scrollbar */
-    ::-webkit-scrollbar{width:6px;height:6px;}
-    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
-    ::-webkit-scrollbar-track{background:transparent;}
+    .frame{
+      width:100%;
+      height:72vh;
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;
+      background:rgba(0,0,0,0.25);
+    }
   </style>
 </head>
-
 <body>
   <div class="shell">
 
-    <!-- HERO -->
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Drift Hub</div>
-      <div class="subtitle">Operations & shift management</div>
-      <div class="blueline"></div>
+      <div class="sub">Operations & shift management</div>
+      <div class="goldline"></div>
 
-      <div class="controls">
-        <div class="pill" id="locPill">📍 —</div>
-        <div class="pill" id="timePill">🕐 —</div>
-        <button class="btn ghost" id="clockToggle">🕐 Ur</button>
-        <button class="btn ghost" id="fsBtn">⛶ Fuld</button>
-      </div>
-
-      <div class="clockWrap" id="clockWrap">
-        <div class="clockTime" id="clockTime">--:--</div>
-        <div class="clockDate" id="clockDate">--</div>
+      <div class="heroRow">
+        <div class="pill" id="locPill">📍 Ikke sat</div>
+        <div class="pill" id="timePill">🕐 --:--</div>
+        <button class="btn" id="clockBtn" type="button">🕐 Ur</button>
+        <button class="btn" id="fsBtn" type="button">⛶ Fuld</button>
       </div>
     </header>
 
-    <!-- WIDGETS -->
-    <div class="widgetGrid">
-      <!-- Daglige Opgaver Status -->
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot green"></span> Daglige Opgaver</div>
-        </div>
-        <div class="widgetBig" id="taskStatus">—</div>
-        <div class="widgetSub" id="taskMeta">Loading...</div>
-        <div class="widgetAction">
-          <button class="btn ghost" style="width:100%;font-size:10px;padding:8px;" onclick="openTool('./daglige-opgaver.html')">📋 Åbn opgaver</button>
-        </div>
-      </div>
-
-      <!-- Udsolgt Count -->
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot red"></span> Udsolgt</div>
-        </div>
-        <div class="widgetBig" id="soldOutCount">0</div>
-        <div class="widgetSub" id="soldOutMeta">Ingen udsolgte retter</div>
-        <div class="widgetAction">
-          <button class="btn ghost" style="width:100%;font-size:10px;padding:8px;" onclick="scrollToSection('soldOutSection')">🍽️ Administrer</button>
-        </div>
-      </div>
-
-      <!-- Skiftleder Rapport -->
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot blue"></span> Skiftleder</div>
-        </div>
-        <div class="widgetBig">📝</div>
-        <div class="widgetSub">Send daglig rapport</div>
-        <div class="widgetAction">
-          <button class="btn primary" style="width:100%;font-size:10px;padding:8px;" onclick="openTool('./skiftlederrapport1.html')">✍️ Ny rapport</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- UDSOLGT LOG -->
-    <section class="section" id="soldOutSection">
-      <div class="sectionHead" onclick="toggleSection('soldOut')">
-        <div class="sectionTitle"><span class="sectionDot" style="background:var(--danger);"></span> Udsolgt Produkter</div>
-        <div class="sectionRight">
-          <span class="sectionCount" id="soldOutSectionCount">0 udsolgt</span>
-          <span class="sectionArrow open" id="soldOutArrow">▼</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="sectionBody open" id="soldOutBody">
-        <div class="soldOutWrap">
-          <!-- Meal tabs -->
-          <div class="mealTabs" id="mealTabs">
-            <div class="mealTab on" data-meal="Morgenmad">🌅 Morgenmad</div>
-            <div class="mealTab" data-meal="Frokost">☀️ Frokost</div>
-            <div class="mealTab" data-meal="Aften">🌙 Aften</div>
-          </div>
-
-          <!-- Dish grid -->
-          <div class="dishGrid" id="dishGrid"></div>
-
-          <!-- Current sold out log -->
-          <div class="soldOutLog" id="soldOutLog">
-            <div class="emptyState" id="soldOutEmpty">Ingen udsolgte retter i dag</div>
-          </div>
-
-          <!-- Actions -->
-          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn danger" style="flex:1;" id="clearSoldOutBtn">🗑️ Ryd alle</button>
-            <button class="btn gold" style="flex:1;" id="sendSoldOutBtn">📤 Send til F&B</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- QUICK TOOLS -->
     <section class="section">
-      <div class="sectionHead" onclick="toggleSection('tools')">
-        <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
-        <div class="sectionRight">
-          <span class="sectionArrow" id="toolsArrow">▼</span>
-        </div>
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Drift i dag</div>
+        <div class="sectionInfo">Live status & værktøjer</div>
       </div>
-      <div class="divider"></div>
-      <div class="sectionBody" id="toolsBody">
-        <div class="toolsGrid">
-          <div class="toolItem" onclick="openTool('./daglige-opgaver.html')">
-            <div class="toolIcon">✅</div>
-            <div class="toolInfo">
-              <div class="toolName">Daglige Opgaver</div>
-              <div class="toolDesc">Drift & rengøring</div>
+      <div class="sectionBody">
+        <div class="topGrid">
+          <div class="topCard">
+            <div class="topKicker"><span class="dot green"></span> Daglige opgaver</div>
+            <div class="bigValue">✓</div>
+            <div class="subValue">Daglige opgaver modul</div>
+            <div class="topActions">
+              <button class="fullBtn" data-url="./daglige-opgaver.html">📋 Åbn opgaver</button>
             </div>
           </div>
-          <div class="toolItem" onclick="openTool('./skiftlederrapport1.html')">
-            <div class="toolIcon">📝</div>
-            <div class="toolInfo">
-              <div class="toolName">Skiftleder Rapport</div>
-              <div class="toolDesc">Daglig rapport</div>
-            </div>
-          </div>
-      
 
+          <div class="topCard">
+            <div class="topKicker"><span class="dot red"></span> Udsolgt</div>
+            <div class="bigValue" id="soldoutCount">0</div>
+            <div class="subValue" id="soldoutSub">Ingen udsolgte</div>
+            <div class="topActions">
+              <button class="fullBtn" data-url="./soldout-products.html">🍽️ Administrer</button>
+            </div>
+          </div>
+
+          <div class="topCard">
+            <div class="topKicker"><span class="dot blue"></span> Skiftleder</div>
+            <div class="bigValue" style="font-size:52px;">📝</div>
+            <div class="subValue">Send daglig rapport</div>
+            <div class="topActions">
+              <button class="fullBtn blue" data-url="./skiftlederrapport1.html">✍️ Ny rapport</button>
+            </div>
+          </div>
+
+          <div class="topCard">
+            <div class="topKicker"><span class="dot red"></span> Gæsteklager</div>
+            <div class="bigValue" id="complaintCount">0</div>
+            <div class="subValue" id="complaintSub">Ingen klager i dag</div>
+            <div class="topActions">
+              <button class="fullBtn" data-url="./guest-complaints.html">💬 Åbn modul</button>
+            </div>
+          </div>
+
+          <div class="topCard">
+            <div class="topKicker"><span class="dot red"></span> Fejl & mangler</div>
+            <div class="bigValue" id="faultCount">0</div>
+            <div class="subValue" id="faultSub">Ingen fejl registreret</div>
+            <div class="topActions">
+              <button class="fullBtn" data-url="./faults-issues.html">🛠️ Åbn modul</button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TOOL VIEWER -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
+        <div class="sectionInfo">Åbn moduler direkte i hub</div>
+      </div>
+      <div class="sectionBody">
+        <div class="moduleGrid">
+          <div class="moduleCard" data-url="./daglige-opgaver.html">
+            <div>
+              <div class="moduleIcon">✅</div>
+              <div class="moduleName">Daglige opgaver</div>
+              <div class="moduleDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
+            </div>
+            <div class="moduleMeta">
+              <div class="metaChip">Drift</div>
+              <div class="metaChip">Lokation</div>
+            </div>
+          </div>
+
+          <div class="moduleCard" data-url="./skiftlederrapport1.html">
+            <div>
+              <div class="moduleIcon">📊</div>
+              <div class="moduleName">Skiftlederrapport</div>
+              <div class="moduleDesc">Ny version af skiftrapport og daglig overlevering.</div>
+            </div>
+            <div class="moduleMeta">
+              <div class="metaChip">Rapport</div>
+              <div class="metaChip">Daglig</div>
+            </div>
+          </div>
+
+          <div class="moduleCard" data-url="./soldout-products.html">
+            <div>
+              <div class="moduleIcon">🍽️</div>
+              <div class="moduleName">Udsolgte produkter</div>
+              <div class="moduleDesc">Registrér hvilke varer der er udsolgt i service.</div>
+            </div>
+            <div class="moduleMeta">
+              <div class="metaChip" id="soldoutChip">0 udsolgte</div>
+            </div>
+          </div>
+
+          <div class="moduleCard" data-url="./guest-complaints.html">
+            <div>
+              <div class="moduleIcon">💬</div>
+              <div class="moduleName">Gæsteklager</div>
+              <div class="moduleDesc">Registrér gæsteklager hurtigt og struktureret.</div>
+            </div>
+            <div class="moduleMeta">
+              <div class="metaChip" id="complaintChip">0 klager</div>
+            </div>
+          </div>
+
+          <div class="moduleCard" data-url="./faults-issues.html">
+            <div>
+              <div class="moduleIcon">🛠️</div>
+              <div class="moduleName">Fejl & mangler</div>
+              <div class="moduleDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
+            </div>
+            <div class="moduleMeta">
+              <div class="metaChip" id="faultChip">0 fejl</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="pill" id="toolName">—</div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn ghost" onclick="closeTool()">← Tilbage</button>
-          <button class="btn ghost" onclick="openInNewTab()">↗ Ny fane</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" id="closeToolBtn" type="button">← Tilbage</button>
+          <button class="btn" id="newTabBtn" type="button">↗ Nyt faneblad</button>
         </div>
       </div>
-      <iframe id="toolFrame" class="frame" src="about:blank"></iframe>
+      <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
 
   </div>
 
   <script>
-    // ============================================================
-    // CONFIGURATION
-    // ============================================================
-    const LOC_KEY = "kaiser_drift_loc";
-    const CLOCK_KEY = "kaiser_drift_clock";
-    const SOLDOUT_KEY = "kaiser_soldout_v1";
-    const TASK_KEY = "kaiser_daily_tasks_v6";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+    const LOC_KEY = "kaiser_kitchenpct_loc";
 
-    const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
-
-    // Dishes data
-    const MEALS = ["Morgenmad", "Frokost", "Aften"];
-
-    const DISHES = [
-      { name: "Byg selv brunch", meals: ["Morgenmad"] },
-      { name: "Ostemad", meals: ["Morgenmad", "Frokost"] },
-      { name: "Fiskefilet smørrebrød", meals: ["Frokost"] },
-      { name: "Hønsesalat smørrebrød", meals: ["Frokost"] },
-      { name: "Æg & Rejer smørrebrød", meals: ["Frokost"] },
-      { name: "Hakkebøf smørrebrød", meals: ["Frokost"] },
-      { name: "Roastbeef smørrebrød", meals: ["Frokost"] },
-      { name: "Kylling wrap", meals: ["Frokost", "Aften"] },
-      { name: "Pariserbøf", meals: ["Frokost", "Aften"] },
-      { name: "Fish'n'chips", meals: ["Frokost", "Aften"] },
-      { name: "Stjerneskud", meals: ["Frokost", "Aften"] },
-      { name: "Kaiser burger", meals: ["Frokost", "Aften"] },
-      { name: "Signatur burger", meals: ["Frokost", "Aften"] },
-      { name: "Mexicansk burger", meals: ["Frokost", "Aften"] },
-      { name: "Bearnaise burger", meals: ["Frokost", "Aften"] },
-      { name: "Kylling sandwich", meals: ["Frokost", "Aften"] },
-      { name: "Kaiser sandwich", meals: ["Frokost", "Aften"] },
-      { name: "Tunmousse sandwich", meals: ["Frokost", "Aften"] },
-      { name: "Serrano sandwich", meals: ["Frokost", "Aften"] },
-      { name: "Cæsar salat", meals: ["Frokost", "Aften"] },
-      { name: "Pokebowl", meals: ["Frokost", "Aften"] },
-      { name: "Varmrøget lakse salat", meals: ["Frokost", "Aften"] },
-      { name: "Pommes frites", meals: ["Frokost", "Aften"] },
-      { name: "Snack kurv", meals: ["Frokost", "Aften"] },
-      { name: "Nachos deluxe", meals: ["Frokost", "Aften"] },
-      { name: "Kaiser børneburger", meals: ["Frokost", "Aften"] },
-      { name: "Kaiser børnefiskefilet", meals: ["Frokost", "Aften"] },
-      { name: "Kaiser børnenuggets", meals: ["Frokost", "Aften"] },
-      { name: "Stegt flæsk", meals: ["Aften"] },
-      { name: "Wienerschitzel", meals: ["Aften"] },
-      { name: "Oksemørbrad", meals: ["Aften"] },
-      { name: "Chili con carne", meals: ["Aften"] },
-      { name: "Ærte pasta", meals: ["Aften"] },
-      { name: "Pandekager med is", meals: ["Frokost", "Aften"] },
-      { name: "Chokolade kage", meals: ["Frokost", "Aften"] },
-      { name: "Rabarber crumble", meals: ["Frokost", "Aften"] },
-      { name: "Hindbær dome", meals: ["Frokost", "Aften"] },
-      { name: "Æble-Karameltærte", meals: ["Frokost", "Aften"] },
-      { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
-    ];
-
-    // ============================================================
-    // HELPERS
-    // ============================================================
     const $ = id => document.getElementById(id);
 
     function getLoc() {
@@ -465,77 +503,135 @@
       return localStorage.getItem(LOC_KEY) || "";
     }
 
-    function dayKey() {
+    function isoTodayLocal() {
       const d = new Date();
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      if (local.getHours() < 4) local.setDate(local.getDate() - 1);
-      return local.toISOString().slice(0,10);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
     }
-
-    function nowDK() {
-      return new Date().toLocaleString("da-DK");
-    }
-
-    function timeNowHHMM() {
-      return new Date().toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    // ============================================================
-    // CLOCK
-    // ============================================================
-    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
 
     function updateClock() {
       const now = new Date();
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long" });
-      $("timePill").textContent = "🕐 " + timeNowHHMM();
+      $("timePill").textContent = "🕐 " + now.toLocaleTimeString("da-DK", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
-    function toggleClock() {
-      clockVisible = !clockVisible;
-      localStorage.setItem(CLOCK_KEY, clockVisible);
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").classList.toggle("on", clockVisible);
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cb = "__cb_" + Math.random().toString(16).slice(2);
+        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+        const src = url + (url.includes("?") ? "&" : "?") + qs;
+
+        const s = document.createElement("script");
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(t);
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+
+        window[cb] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        s.src = src;
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
+
+        document.body.appendChild(s);
+      });
     }
 
-    // ============================================================
-    // FULLSCREEN
-    // ============================================================
-    async function toggleFullscreen() {
+    async function loadSoldoutCount() {
+      const loc = getLoc();
+      if (!loc) return;
+
       try {
-        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-        else await document.exitFullscreen();
-      } catch (e) { }
-    }
+        const data = await jsonp(SCRIPT_URL, {
+          action: "getSoldoutProducts",
+          loc: "Café Kaiser " + loc
+        });
 
-    // ============================================================
-    // SECTIONS (Collapsible)
-    // ============================================================
-    function toggleSection(name) {
-      const body = $(name + "Body");
-      const arrow = $(name + "Arrow");
-      if (body && arrow) {
-        body.classList.toggle("open");
-        arrow.classList.toggle("open");
+        const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
+        $("soldoutCount").textContent = count;
+        $("soldoutSub").textContent = count > 0 ? `${count} udsolgte registreret` : "Ingen udsolgte";
+        $("soldoutChip").textContent = `${count} udsolgte`;
+      } catch (e) {
+        $("soldoutCount").textContent = "—";
+        $("soldoutSub").textContent = "Fejl ved hentning";
+        $("soldoutChip").textContent = "Fejl";
       }
     }
 
-    function scrollToSection(id) {
-      const el = $(id);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    async function loadComplaintCount() {
+      const loc = getLoc();
+      if (!loc) return;
+
+      try {
+        const data = await jsonp(SCRIPT_URL, {
+          action: "getGuestComplaints",
+          loc: "Café Kaiser " + loc
+        });
+
+        const count = (data && data.ok && Array.isArray(data.complaints)) ? data.complaints.length : 0;
+        $("complaintCount").textContent = count;
+        $("complaintSub").textContent = count > 0 ? `${count} klager registreret` : "Ingen klager i dag";
+        $("complaintChip").textContent = `${count} klager`;
+      } catch (e) {
+        $("complaintCount").textContent = "—";
+        $("complaintSub").textContent = "Fejl ved hentning";
+        $("complaintChip").textContent = "Fejl";
+      }
     }
 
-    // ============================================================
-    // TOOL VIEWER
-    // ============================================================
+    async function loadFaultCount() {
+      const loc = getLoc();
+      if (!loc) return;
+
+      try {
+        const data = await jsonp(SCRIPT_URL, {
+          action: "getFaultsIssues",
+          loc: "Café Kaiser " + loc
+        });
+
+        const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
+        $("faultCount").textContent = count;
+        $("faultSub").textContent = count > 0 ? `${count} fejl registreret` : "Ingen fejl registreret";
+        $("faultChip").textContent = `${count} fejl`;
+      } catch (e) {
+        $("faultCount").textContent = "—";
+        $("faultSub").textContent = "Fejl ved hentning";
+        $("faultChip").textContent = "Fejl";
+      }
+    }
+
     let currentToolUrl = "";
 
     function openTool(url) {
+      if (!url) return;
       currentToolUrl = url;
-      $("toolName").textContent = url.replace("./", "").replace(".html", "");
-      $("toolFrame").src = url;
+
+      const nameMap = {
+        "./daglige-opgaver.html": "Daglige opgaver",
+        "./skiftlederrapport1.html": "Skiftlederrapport",
+        "./soldout-products.html": "Udsolgte produkter",
+        "./guest-complaints.html": "Gæsteklager",
+        "./faults-issues.html": "Fejl & mangler"
+      };
+
+      $("toolName").textContent = nameMap[url] || url.replace("./", "");
+      $("toolFrame").src = url + (url.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
       $("toolViewer").classList.add("open");
       $("toolViewer").scrollIntoView({ behavior: "smooth" });
     }
@@ -546,235 +642,41 @@
       currentToolUrl = "";
     }
 
-    function openInNewTab() {
-      if (currentToolUrl) window.open(currentToolUrl, "_blank");
-    }
-
-    // ============================================================
-    // SOLD OUT SYSTEM
-    // ============================================================
-    let selectedMeal = "Morgenmad";
-    let soldOutItems = [];
-
-    function loadSoldOut() {
-      const loc = getLoc();
-      const key = SOLDOUT_KEY + "_" + loc + "_" + dayKey();
+    async function toggleFullscreen() {
       try {
-        soldOutItems = JSON.parse(localStorage.getItem(key) || "[]");
-      } catch (e) {
-        soldOutItems = [];
-      }
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      } catch (_) {}
     }
 
-    function saveSoldOut() {
-      const loc = getLoc();
-      const key = SOLDOUT_KEY + "_" + loc + "_" + dayKey();
-      localStorage.setItem(key, JSON.stringify(soldOutItems));
-    }
+    document.querySelectorAll("[data-url]").forEach(el => {
+      el.addEventListener("click", () => openTool(el.dataset.url));
+    });
 
-    function isSoldOut(dishName) {
-      return soldOutItems.some(item => item.name === dishName);
-    }
+    $("closeToolBtn").addEventListener("click", closeTool);
+    $("newTabBtn").addEventListener("click", () => {
+      if (!currentToolUrl) return;
+      const url = currentToolUrl + (currentToolUrl.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
 
-    function toggleSoldOut(dishName) {
-      if (isSoldOut(dishName)) {
-        soldOutItems = soldOutItems.filter(item => item.name !== dishName);
-      } else {
-        soldOutItems.push({
-          name: dishName,
-          time: timeNowHHMM(),
-          meal: selectedMeal,
-          date: dayKey()
-        });
-      }
-      saveSoldOut();
-      renderDishGrid();
-      renderSoldOutLog();
-      updateSoldOutWidget();
-    }
+    $("fsBtn").addEventListener("click", toggleFullscreen);
+    $("clockBtn").addEventListener("click", updateClock);
 
-    function removeSoldOut(dishName) {
-      soldOutItems = soldOutItems.filter(item => item.name !== dishName);
-      saveSoldOut();
-      renderDishGrid();
-      renderSoldOutLog();
-      updateSoldOutWidget();
-    }
-
-    function clearAllSoldOut() {
-      if (!confirm("Ryd alle udsolgte produkter?")) return;
-      soldOutItems = [];
-      saveSoldOut();
-      renderDishGrid();
-      renderSoldOutLog();
-      updateSoldOutWidget();
-    }
-
-    function sendToFB() {
-      if (soldOutItems.length === 0) {
-        alert("Ingen udsolgte produkter at sende.");
-        return;
-      }
-      
-      const loc = getLoc() || "Ukendt lokation";
-      const date = dayKey();
-      
-      // For now - just log it. Later this will POST to F&B Hub
-      const data = {
-        location: loc,
-        date: date,
-        items: soldOutItems,
-        sentAt: nowDK()
-      };
-      
-      console.log("Sending to F&B Hub:", data);
-      
-      // Store for later sync
-      const fbKey = "kaiser_fb_queue";
-      const queue = JSON.parse(localStorage.getItem(fbKey) || "[]");
-      queue.push(data);
-      localStorage.setItem(fbKey, JSON.stringify(queue));
-      
-      alert("Udsolgt log gemt! (Sendes til F&B Hub når den er klar)");
-    }
-
-    function renderMealTabs() {
-      const container = $("mealTabs");
-      container.innerHTML = MEALS.map(meal => {
-        const emoji = meal === "Morgenmad" ? "🌅" : (meal === "Frokost" ? "☀️" : "🌙");
-        const active = meal === selectedMeal ? "on" : "";
-        return `<div class="mealTab ${active}" data-meal="${meal}">${emoji} ${meal}</div>`;
-      }).join("");
-
-      container.querySelectorAll(".mealTab").forEach(tab => {
-        tab.onclick = () => {
-          selectedMeal = tab.dataset.meal;
-          renderMealTabs();
-          renderDishGrid();
-        };
-      });
-    }
-
-    function renderDishGrid() {
-      const container = $("dishGrid");
-      const filtered = DISHES.filter(d => d.meals.includes(selectedMeal));
-      
-      container.innerHTML = filtered.map(dish => {
-        const sold = isSoldOut(dish.name) ? "sold" : "";
-        return `<div class="dishBtn ${sold}" data-dish="${dish.name}">${dish.name}</div>`;
-      }).join("");
-
-      container.querySelectorAll(".dishBtn").forEach(btn => {
-        btn.onclick = () => toggleSoldOut(btn.dataset.dish);
-      });
-    }
-
-    function renderSoldOutLog() {
-      const container = $("soldOutLog");
-      const empty = $("soldOutEmpty");
-
-      if (soldOutItems.length === 0) {
-        empty.style.display = "block";
-        container.innerHTML = "";
-        container.appendChild(empty);
-        return;
-      }
-
-      empty.style.display = "none";
-      container.innerHTML = soldOutItems.map(item => `
-        <div class="soldOutItem">
-          <div class="soldOutInfo">
-            <div class="soldOutName">🚫 ${item.name}</div>
-            <div class="soldOutMeta">${item.meal} • kl. ${item.time}</div>
-          </div>
-          <div class="soldOutRemove" onclick="removeSoldOut('${item.name}')">✕ Fjern</div>
-        </div>
-      `).join("");
-    }
-
-    function updateSoldOutWidget() {
-      const count = soldOutItems.length;
-      $("soldOutCount").textContent = count;
-      $("soldOutMeta").textContent = count === 0 ? "Ingen udsolgte" : `${count} ret${count > 1 ? 'ter' : ''} udsolgt`;
-      $("soldOutSectionCount").textContent = `${count} udsolgt`;
-    }
-
-    // ============================================================
-    // TASK STATUS (Read from daglige-opgaver storage)
-    // ============================================================
-    function getTaskStatus() {
-      const loc = getLoc();
-      if (!loc) return { done: 0, total: 0, overdue: 0 };
-
-      try {
-        const fullLoc = "Café Kaiser " + loc;
-        const key = TASK_KEY + "_done_" + fullLoc;
-        const doneMap = JSON.parse(localStorage.getItem(key) || "{}");
-        
-        const done = Object.keys(doneMap).length;
-        
-        // Simplified - just show done count
-        return { done, total: "?", overdue: 0 };
-      } catch (e) {
-        return { done: 0, total: "?", overdue: 0 };
-      }
-    }
-
-    function updateTaskWidget() {
-      const status = getTaskStatus();
-      $("taskStatus").textContent = status.done + " ✓";
-      $("taskMeta").textContent = "Opgaver udført i dag";
-    }
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    function init() {
+    (function init() {
       const loc = getLoc();
       $("locPill").textContent = "📍 " + (loc || "Ikke sat");
 
-      // Clock
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").classList.toggle("on", clockVisible);
       updateClock();
+      loadSoldoutCount();
+      loadComplaintCount();
+      loadFaultCount();
 
-      // Sold out
-      loadSoldOut();
-      renderMealTabs();
-      renderDishGrid();
-      renderSoldOutLog();
-      updateSoldOutWidget();
-
-      // Tasks
-      updateTaskWidget();
-
-      // Intervals
-      setInterval(updateClock, 1000);
-      setInterval(() => {
-        loadSoldOut();
-        updateSoldOutWidget();
-        updateTaskWidget();
-      }, 30000);
-    }
-
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    $("clockToggle").onclick = toggleClock;
-    $("fsBtn").onclick = toggleFullscreen;
-    $("clearSoldOutBtn").onclick = clearAllSoldOut;
-    $("sendSoldOutBtn").onclick = sendToFB;
-
-    // Make functions global
-    window.openTool = openTool;
-    window.closeTool = closeTool;
-    window.openInNewTab = openInNewTab;
-    window.toggleSection = toggleSection;
-    window.scrollToSection = scrollToSection;
-    window.removeSoldOut = removeSoldOut;
-
-    // Start
-    init();
+      setInterval(updateClock, 30000);
+      setInterval(loadSoldoutCount, 60000);
+      setInterval(loadComplaintCount, 60000);
+      setInterval(loadFaultCount, 60000);
+    })();
   </script>
 </body>
 </html>
