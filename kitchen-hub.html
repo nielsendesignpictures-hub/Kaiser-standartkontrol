@@ -14,22 +14,21 @@
       --bg0:#0d1117;
       --bg1:#161b22;
       --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.80);
-      --muted2:rgba(255,255,255,0.60);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.58);
       --gold:#d6b24a;
       --gold2:#b9921f;
       --danger:#ff6b6b;
       --warn:#f59e0b;
       --ok:#62d26f;
-      --info:#5eb8ff;
-      --shadow: 0 20px 60px rgba(0,0,0,.40);
+      --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
     *{box-sizing:border-box;}
     html,body{height:100%;margin:0;}
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
       background:
         radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
         radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
@@ -40,120 +39,215 @@
     body:before{
       content:""; position:fixed; inset:0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size:40px 40px;
       opacity:0.08; pointer-events:none;
     }
 
-    .shell{max-width:1400px; margin:0 auto; padding:14px 12px 32px;}
-    .shell.rush .tCard{width:280px;padding:14px;}
-    .shell.rush .tTime{font-size:38px;}
-    .shell.rush .clockTime{font-size:68px;}
+    .shell{max-width:1200px;margin:0 auto;padding:12px 12px 28px;}
+    .shell.rush .clockTime{font-size:72px;}
+    .shell.rush .presetBtn{padding:14px 14px;font-size:14px;}
+    .shell.rush .tCard{width:280px;}
+    .shell.rush .tTime{font-size:34px;}
 
-    .hero{
-      border-radius: 24px;
+    .top{
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
-      padding: 18px 14px 14px;
-      position:relative; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:14px 14px 12px;
     }
 
-    .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;text-align:center;position:relative;z-index:1;}
-    .title{font-family:"Playfair Display",serif;font-size:clamp(30px,7vw,46px);line-height:1.02;letter-spacing:-0.02em;font-weight:700;text-align:center;margin-top:8px;position:relative;z-index:1;}
-    .subtitle{color:var(--muted);font-weight:700;font-size:13px;text-align:center;margin-top:8px;position:relative;z-index:1;}
-    .goldline{height:2px;margin:14px auto 0;max-width:720px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(214,178,74,0.95),transparent);position:relative;z-index:1;}
+    .kicker{
+      text-align:center;
+      font-size:10px;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+    }
 
-    .controls{
-      margin-top:12px;
+    .title{
+      text-align:center;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(30px,6vw,42px);
+      line-height:1;
+      margin-top:6px;
+      letter-spacing:-.03em;
+    }
+
+    .topRow{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns:1fr;
       gap:8px;
-      position:relative;
-      z-index:1;
+      margin-top:12px;
     }
 
-    .pill,.btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:6px;
-      padding:10px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:10px;
-      color: rgba(255,255,255,0.92);white-space:nowrap;user-select:none;
+    .locationPill,.controlBtn,.smallInfo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
       min-height:42px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,0.92);
       text-align:center;
     }
-    .pill{grid-column: span 3;}
-    .btn{cursor:pointer;transition:all .15s ease;}
-    .btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25);}
-    .btn:active{transform:translateY(1px);}
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
-    .btn.ghost{background:rgba(255,255,255,0.08);}
-    .btn.on{background:rgba(214,178,74,0.20);border-color:rgba(214,178,74,0.40);color:var(--gold);}
-    .btn.warnOn{background:rgba(245,158,11,0.18);border-color:rgba(245,158,11,0.40);color:#ffd089;}
 
-    .clockWrap{position:relative;z-index:1;margin-top:14px;text-align:center;display:none;}
-    .clockWrap.show{display:block;}
-    .clockTime{font-family:"Playfair Display",serif;font-size:56px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
-    .clockDate{font-size:14px;font-weight:600;color:var(--muted);margin-top:6px;}
-
-    .liveBar{
-      margin-top:12px;
-      position:relative;
-      z-index:1;
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
+    .controls{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
       gap:8px;
     }
-    .livePill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-      color:var(--muted);
+
+    .controlBtn{
+      cursor:pointer;
+      transition:.15s ease;
+      user-select:none;
     }
-    .liveDot{width:8px;height:8px;border-radius:50%;}
-    .liveDot.ok{background:var(--ok);}
-    .liveDot.warn{background:var(--warn);}
-    .liveDot.err{background:var(--danger);}
+    .controlBtn:hover{background:rgba(255,255,255,0.10);}
+    .controlBtn.on{
+      background:rgba(214,178,74,0.18);
+      border-color:rgba(214,178,74,0.42);
+      color:var(--gold);
+    }
+
+    .clockCard{
+      margin-top:12px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:16px 12px 14px;
+      text-align:center;
+      display:none;
+    }
+    .clockCard.show{display:block;}
+    .clockTime{
+      font-family:"Playfair Display",serif;
+      font-size:60px;
+      line-height:1;
+      letter-spacing:-.03em;
+      font-weight:700;
+    }
+    .clockDate{
+      margin-top:6px;
+      color:var(--muted);
+      font-weight:700;
+      font-size:14px;
+    }
 
     .widgetGrid{
       display:grid;
       grid-template-columns:1fr;
       gap:12px;
-      margin-top:14px;
+      margin-top:12px;
     }
 
     .widget{
-      border-radius:20px;
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
       padding:14px;
-      position:relative;
     }
-    .widgetHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
-    .widgetTitle{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);display:flex;align-items:center;gap:8px;}
-    .widgetDot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
-    .widgetSubLine{margin-top:8px;font-size:11px;color:var(--muted2);font-weight:700;}
 
-    .kPctBig{font-family:"Playfair Display",serif;font-size:42px;font-weight:700;line-height:1;}
-    .kPctSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:6px;}
+    .widgetHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
 
-    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;}
-    .cMiniEvent{
-      display:flex;align-items:center;gap:10px;
-      padding:10px;border-radius:14px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-      transition:all .15s;
+    .widgetTitle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .widgetDot{
+      width:8px;height:8px;border-radius:50%;background:var(--gold);
+    }
+
+    .miniBtn{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.92);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
       cursor:pointer;
     }
-    .cMiniBar{width:5px;height:40px;border-radius:4px;flex:0 0 auto;}
+
+    .kPctBig{
+      font-family:"Playfair Display",serif;
+      font-size:44px;
+      line-height:1;
+      font-weight:700;
+    }
+
+    .kPctSub{
+      margin-top:6px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .widgetSubLine{
+      margin-top:8px;
+      font-size:11px;
+      font-weight:700;
+      color:var(--muted2);
+    }
+
+    .errBox{
+      padding:12px;
+      background:rgba(255,107,107,0.15);
+      color:var(--danger);
+      border-radius:12px;
+      font-weight:700;
+      font-size:12px;
+      display:none;
+      margin-top:10px;
+    }
+
+    .cMiniList{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height:220px;
+      overflow:auto;
+    }
+
+    .cMiniEvent{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+      cursor:pointer;
+    }
+
+    .cMiniBar{width:5px;height:42px;border-radius:4px;flex:0 0 auto;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
     .cMiniBar.red{background:var(--danger);}
@@ -161,37 +255,76 @@
     .cMiniInfo{flex:1;min-width:0;}
     .cMiniTitle{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .cMiniMeta{font-size:11px;color:var(--muted);margin-top:3px;}
-    .cMiniEmpty{text-align:center;padding:20px;color:var(--muted2);font-size:13px;}
+    .cMiniEmpty{text-align:center;padding:22px;color:var(--muted2);font-size:13px;}
 
     .section{
-      margin-top:14px;
-      border-radius:20px;
+      margin-top:12px;
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       overflow:hidden;
+      box-shadow:var(--shadow);
     }
+
     .sectionHead{
       padding:12px 14px;
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
       background:rgba(255,255,255,0.03);
       cursor:pointer;
-      user-select:none;
     }
-    .sectionTitle{font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:10px;}
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
     .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
     .sectionRight{display:flex;align-items:center;gap:10px;}
-    .sectionCount{font-size:12px;font-weight:700;color:var(--gold);}
-    .sectionArrow{font-size:14px;transition:transform .2s;color:var(--muted);}
+    .sectionCount{font-size:12px;font-weight:800;color:var(--gold);}
+    .sectionArrow{font-size:14px;color:var(--muted);transition:transform .2s;}
     .sectionArrow.open{transform:rotate(180deg);}
+    .divider{height:1px;background:rgba(255,255,255,0.10);}
     .sectionBody{display:none;padding:14px;}
     .sectionBody.open{display:block;}
-    .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-    .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+    .presetGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-bottom:12px;
+    }
 
-    .select, .input{
+    .presetBtn{
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.95);
+      font-weight:900;
+      font-size:13px;
+      cursor:pointer;
+      text-align:center;
+    }
+
+    .timerRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:10px;
+    }
+
+    .input{
       width:100%;
-      min-width:0;
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.15);
       background:rgba(255,255,255,0.08);
@@ -200,23 +333,59 @@
       color:var(--text);
       font-weight:700;
       font-size:14px;
-      transition:all .15s;
     }
-    .select:focus,.input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
-    .select option{background:#161b22;color:#fff;}
-    .input::placeholder{color:rgba(255,255,255,0.45);}
 
-    .timerList{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
-    .timerList::-webkit-scrollbar{height:6px;}
-    .timerList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px;}
+    .input::placeholder{color:rgba(255,255,255,0.45);}
+    .input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+
+    .actionGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+    }
+
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.08);
+      color:rgba(255,255,255,0.95);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      text-align:center;
+    }
+    .btn.primary{
+      border:none;
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0b0c0f;
+    }
+
+    .timerList{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      margin-top:10px;
+    }
 
     .tCard{
-      flex:0 0 auto;width:250px;
-      border-radius:18px;border:1px solid rgba(255,255,255,0.12);
+      flex:0 0 auto;
+      width:260px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      padding:12px;position:relative;
-      transition:all .15s;
+      padding:12px;
+      position:relative;
     }
+
     .tCard.critical{
       border-color:rgba(245,158,11,0.45);
       box-shadow:0 0 0 1px rgba(245,158,11,0.2), 0 0 22px rgba(245,158,11,0.12);
@@ -226,35 +395,40 @@
       border-color:rgba(255,107,107,0.38);
       box-shadow:0 0 0 1px rgba(255,107,107,0.18);
     }
+
     @keyframes pulseWarn{
       0%,100%{box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 18px rgba(245,158,11,0.08);}
       50%{box-shadow:0 0 0 1px rgba(245,158,11,0.32), 0 0 24px rgba(245,158,11,0.20);}
     }
 
-    .tName{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:64px;}
-    .tTime{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;margin-top:6px;}
-    .tMeta{font-size:11px;color:var(--muted);margin-top:6px;}
     .tTag{
-      position:absolute;top:10px;right:10px;
-      padding:5px 8px;border-radius:999px;
-      font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+      position:absolute;
+      top:10px;right:10px;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
     .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
     .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
     .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
     .tTag.alarm{background:rgba(245,158,11,0.22);border:1px solid rgba(245,158,11,0.5);color:#ffd089;}
 
+    .tName{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:60px;}
+    .tTime{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;margin-top:6px;line-height:1;}
+    .tMeta{font-size:11px;color:var(--muted);margin-top:6px;}
     .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
-    .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s;}
+    .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));}
     .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
     .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
 
-    .tActions{margin-top:10px;display:flex;gap:8px;justify-content:flex-end;}
+    .tActions{margin-top:10px;display:flex;justify-content:flex-end;}
     .smallBtn{
       padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
       background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);
-      font-weight:700;font-size:9px;letter-spacing:.08em;text-transform:uppercase;
-      cursor:pointer;
+      font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
     }
     .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
 
@@ -263,24 +437,28 @@
       grid-template-columns:1fr;
       gap:10px;
     }
+
     .toolItem{
-      padding:14px;border-radius:16px;
+      padding:14px;
+      border-radius:16px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
+      display:flex;
+      align-items:center;
+      gap:12px;
       cursor:pointer;
-      display:flex;align-items:center;gap:12px;
     }
+
     .toolIcon{font-size:24px;}
-    .toolName{font-weight:700;font-size:14px;}
+    .toolName{font-size:14px;font-weight:800;}
     .toolDesc{font-size:12px;color:var(--muted);margin-top:3px;}
 
-    .toolViewer{display:none;margin-top:16px;}
+    .toolViewer{display:none;margin-top:14px;}
     .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;}
-    .frame{width:100%;height:68vh;border:1px solid rgba(255,255,255,0.12);border-radius:20px;background:rgba(0,0,0,0.25);}
+    .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;}
+    .frame{width:100%;height:68vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.25);}
 
     .emptyState{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
-    .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:600;font-size:13px;display:none;margin-top:10px;}
 
     .modalBack{
       position:fixed; inset:0;
@@ -291,7 +469,7 @@
     .modalBack.open{display:flex;}
     .modal{
       width:min(700px, 100%);
-      border-radius:24px;
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.14);
       background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));
       box-shadow:var(--shadow);
@@ -299,69 +477,58 @@
     }
     .modalHead{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:16px 18px;
+      padding:14px 16px;
       border-bottom:1px solid rgba(255,255,255,0.10);
       background:rgba(255,255,255,0.03);
     }
     .modalTitle{
-      font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+      font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
     }
-    .modalBody{padding:18px;}
-    .mTitle{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;line-height:1.08;}
-    .mMeta{margin-top:10px;font-size:14px;color:var(--muted);font-weight:600;}
+    .modalBody{padding:16px;}
+    .mTitle{font-family:"Playfair Display",serif;font-size:26px;font-weight:700;line-height:1.08;}
+    .mMeta{margin-top:8px;font-size:13px;color:var(--muted);font-weight:700;}
     .mBox{
-      margin-top:14px;
-      border-radius:16px;
+      margin-top:12px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,0.10);
       background:rgba(255,255,255,0.04);
-      padding:14px;
+      padding:12px;
     }
     .mLabel{
-      font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;
+      font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;
     }
-    .mNote{
-      white-space:pre-wrap;
-      line-height:1.5;
-      color:var(--text);
-      font-size:14px;
-    }
+    .mNote{white-space:pre-wrap;line-height:1.5;color:var(--text);font-size:14px;}
   </style>
 </head>
 
 <body>
   <div class="shell" id="shell">
 
-    <header class="hero">
+    <div class="top">
       <div class="kicker">KAISER</div>
       <div class="title">Kitchen Hub</div>
-      <div class="subtitle">Compact mode for small kitchen tablets</div>
-      <div class="goldline"></div>
 
-      <div class="controls">
-        <div class="pill" id="locPill">📍 Location: —</div>
-        <button class="btn ghost" id="clockToggle" type="button">🕐 Clock</button>
-        <button class="btn ghost" id="fsBtn" type="button">⛶ Fullscreen</button>
-        <button class="btn ghost" id="wakeBtn" type="button">☀️ Awake</button>
-        <button class="btn ghost" id="rushBtn" type="button">⚡ Rush</button>
-        <button class="btn ghost" id="alarmTestBtn" type="button">🔔 Alarm</button>
-      </div>
+      <div class="topRow">
+        <div class="locationPill" id="locPill">📍 Location: —</div>
 
-      <div class="clockWrap" id="clockWrap">
-        <div class="clockTime" id="clockTime">--:--</div>
-        <div class="clockDate" id="clockDate">--</div>
+        <div class="controls">
+          <button class="controlBtn" id="clockToggle" type="button">🕐 Clock</button>
+          <button class="controlBtn" id="fsBtn" type="button">⛶ Full</button>
+          <button class="controlBtn" id="wakeBtn" type="button">☀️ Awake</button>
+        </div>
       </div>
+    </div>
 
-      <div class="liveBar">
-        <div class="livePill" id="kLivePill"><span class="liveDot warn"></span><span id="kLiveText">Kitchen %: waiting</span></div>
-        <div class="livePill" id="cLivePill"><span class="liveDot warn"></span><span id="cLiveText">Catering: waiting</span></div>
-      </div>
-    </header>
+    <div class="clockCard" id="clockWrap">
+      <div class="clockTime" id="clockTime">--:--</div>
+      <div class="clockDate" id="clockDate">--</div>
+    </div>
 
     <div class="widgetGrid">
       <div class="widget">
         <div class="widgetHead">
           <div class="widgetTitle"><span class="widgetDot"></span> Kitchen %</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshKBtn" type="button">🔄 Refresh</button>
+          <button class="miniBtn" id="refreshKBtn" type="button">Refresh</button>
         </div>
         <div class="kPctBig" id="kPct">—</div>
         <div class="kPctSub" id="kMeta">Loading...</div>
@@ -372,7 +539,7 @@
       <div class="widget">
         <div class="widgetHead">
           <div class="widgetTitle"><span class="widgetDot"></span> Catering Events</div>
-          <button class="btn ghost" style="padding:6px 10px;font-size:10px;" id="refreshCBtn" type="button">🔄 Refresh</button>
+          <button class="miniBtn" id="refreshCBtn" type="button">Refresh</button>
         </div>
         <div class="cMiniList" id="cMiniList">
           <div class="cMiniEmpty">Loading...</div>
@@ -383,7 +550,7 @@
 
     <section class="section">
       <div class="sectionHead" id="timerHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> 3-Hour Timer</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Timers</div>
         <div class="sectionRight">
           <span class="sectionCount" id="timerCount">0 active</span>
           <span class="sectionArrow open" id="timerArrow">▼</span>
@@ -392,28 +559,25 @@
       <div class="divider"></div>
       <div class="sectionBody open" id="timerBody">
 
-        <div class="timerRow">
-          <select id="presetSelect" class="select">
-            <option value="Pandekager">🥞 Pandekager</option>
-            <option value="Bacon" selected>🥓 Bacon</option>
-            <option value="Flæsk">🥩 Flæsk</option>
-            <option value="Pølser">🌭 Pølser</option>
-            <option value="Toast">🍞 Toast</option>
-            <option value="Smør">🧈 Smør</option>
-            <option value="Mayo">🥣 Mayo</option>
-            <option value="Pomfritter">🍟 Pomfritter</option>
-            <option value="Friske æg">🥚 Friske æg</option>
-          </select>
+        <div class="presetGrid">
+          <button class="presetBtn" type="button" data-preset="Pandekager">🥞 Pandekager</button>
+          <button class="presetBtn" type="button" data-preset="Bacon">🥓 Bacon</button>
+          <button class="presetBtn" type="button" data-preset="Flæsk">🥩 Flæsk</button>
+          <button class="presetBtn" type="button" data-preset="Pølser">🌭 Pølser</button>
+          <button class="presetBtn" type="button" data-preset="Toast">🍞 Toast</button>
+          <button class="presetBtn" type="button" data-preset="Smør">🧈 Smør</button>
+          <button class="presetBtn" type="button" data-preset="Mayo">🥣 Mayo</button>
+          <button class="presetBtn" type="button" data-preset="Pomfritter">🍟 Pomfritter</button>
+          <button class="presetBtn" type="button" data-preset="Friske æg">🥚 Friske æg</button>
         </div>
 
         <div class="timerRow">
           <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
         </div>
 
-        <div class="timerRow">
-          <button class="btn primary" id="startPresetBtn" type="button">⏰ Start Selected</button>
-          <button class="btn ghost" id="start3hBtn" type="button">⏰ Start Free</button>
-          <button class="btn ghost" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
+        <div class="actionGrid">
+          <button class="btn primary" id="startFreeBtn" type="button">⏰ Start Free</button>
+          <button class="btn" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
         </div>
 
         <div class="timerList" id="timerList">
@@ -452,10 +616,10 @@
 
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
-        <div class="pill" id="toolName">—</div>
+        <div class="locationPill" id="toolName">—</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn ghost" id="closeToolBtn" type="button">← Back</button>
-          <button class="btn ghost" id="newTabBtn" type="button">↗ New Tab</button>
+          <button class="controlBtn" id="closeToolBtn" type="button">← Back</button>
+          <button class="controlBtn" id="newTabBtn" type="button">↗ New Tab</button>
         </div>
       </div>
       <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
@@ -467,7 +631,7 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cModalTitle">
       <div class="modalHead">
         <div class="modalTitle" id="cModalTitle">Catering Details</div>
-        <button class="btn ghost" id="closeCModalBtn" type="button">✕ Close</button>
+        <button class="controlBtn" id="closeCModalBtn" type="button">✕ Close</button>
       </div>
       <div class="modalBody">
         <div class="mTitle" id="mTitle">—</div>
@@ -496,12 +660,12 @@
     const VAT_FACTOR = 1.25;
 
     const LOC_KEY = "kaiser_kitchenpct_loc";
-    const TIMER_KEY = "kaiser_3timer_v4_compact";
-    const CLOCK_KEY = "kaiser_clock_visible";
-    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v4";
-    const RUSH_KEY = "kaiser_rush_mode_v4";
-    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v4";
-    const CACHE_C_KEY = "kaiser_cache_catering_v4";
+    const TIMER_KEY = "kaiser_3timer_v5";
+    const CLOCK_KEY = "kaiser_clock_visible_v5";
+    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v5";
+    const RUSH_KEY = "kaiser_rush_mode_v5";
+    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v5";
+    const CACHE_C_KEY = "kaiser_cache_catering_v5";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
@@ -627,11 +791,7 @@
     }
 
     function setLiveStatus(kind, status, text) {
-      const pill = kind === "k" ? $("kLivePill") : $("cLivePill");
-      const textEl = kind === "k" ? $("kLiveText") : $("cLiveText");
-      textEl.textContent = text;
-      const dot = pill.querySelector(".liveDot");
-      dot.className = "liveDot " + status;
+      // v5 hides live pills visually; keep function for compatibility
     }
 
     function getLoc() {
@@ -676,7 +836,7 @@
       });
     }
 
-    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
+    let clockVisible = localStorage.getItem(CLOCK_KEY) !== "false";
 
     function updateClock() {
       const d = new Date();
@@ -702,21 +862,12 @@
     function updateClockUI() {
       $("clockWrap").classList.toggle("show", clockVisible);
       $("clockToggle").classList.toggle("on", clockVisible);
-      $("clockToggle").textContent = clockVisible ? "🕐 Hide" : "🕐 Clock";
     }
 
     let rushMode = localStorage.getItem(RUSH_KEY) === "true";
 
     function updateRushUI() {
       $("shell").classList.toggle("rush", rushMode);
-      $("rushBtn").classList.toggle("warnOn", rushMode);
-      $("rushBtn").textContent = rushMode ? "⚡ Rush ON" : "⚡ Rush";
-    }
-
-    function toggleRushMode() {
-      rushMode = !rushMode;
-      localStorage.setItem(RUSH_KEY, String(rushMode));
-      updateRushUI();
     }
 
     async function loadKitchenPct() {
@@ -728,7 +879,6 @@
         $("kMeta").textContent = "Missing ?loc= in URL";
         $("kUpdatedLine").textContent = "Last update: —";
         $("kErr").style.display = "none";
-        setLiveStatus("k", "err", "Kitchen %: no location");
         return;
       }
 
@@ -742,9 +892,7 @@
           month: m
         });
 
-        if (!data || !data.ok) {
-          throw new Error(data?.error || "No data");
-        }
+        if (!data || !data.ok) throw new Error(data?.error || "No data");
 
         const totalGross = Number(data?.totals?.revenueGross || 0);
         const totalBuy = Number(data?.totals?.purchases || 0);
@@ -763,10 +911,7 @@
         }
 
         $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(latestUpdatedTs || Date.now());
-
         saveCache(CACHE_K_KEY, data);
-        setLiveStatus("k", "ok", "Kitchen %: live " + fmtTime(Date.now()));
-
       } catch (e) {
         const cached = loadCache(CACHE_K_KEY);
         if (cached && cached.data) {
@@ -780,14 +925,12 @@
           $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(cached.ts) + " (cached)";
           $("kErr").textContent = "Live load failed. Showing cached data.";
           $("kErr").style.display = "block";
-          setLiveStatus("k", "warn", "Kitchen %: cached " + fmtTime(cached.ts));
         } else {
           $("kPct").textContent = "—";
           $("kMeta").textContent = "Error loading";
           $("kUpdatedLine").textContent = "Last update: —";
           $("kErr").textContent = "Kitchen % could not be loaded.";
           $("kErr").style.display = "block";
-          setLiveStatus("k", "err", "Kitchen %: error");
         }
       }
     }
@@ -858,7 +1001,6 @@
       if (!loc) {
         $("cMiniList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
         $("cUpdatedLine").textContent = "Last update: —";
-        setLiveStatus("c", "err", "Catering: no location");
         return;
       }
 
@@ -869,19 +1011,14 @@
         const events = transformOrdersToEvents(data.orders, loc);
         renderCateringEvents(events, "Live", Date.now());
         saveCache(CACHE_C_KEY, { orders: data.orders, loc });
-
-        const ts = Date.now();
-        setLiveStatus("c", "ok", "Catering: live " + fmtTime(ts));
       } catch (e) {
         const cached = loadCache(CACHE_C_KEY);
         if (cached && cached.data && Array.isArray(cached.data.orders)) {
           const events = transformOrdersToEvents(cached.data.orders, loc);
           renderCateringEvents(events, "Offline", cached.ts);
-          setLiveStatus("c", "warn", "Catering: cached " + fmtTime(cached.ts));
         } else {
           $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
           $("cUpdatedLine").textContent = "Last update: —";
-          setLiveStatus("c", "err", "Catering: error");
         }
       }
     }
@@ -906,7 +1043,6 @@
     }
 
     let audioReady = false;
-    let selectedTpl = "Bacon";
 
     function loadTimers() {
       try {
@@ -964,20 +1100,9 @@
       return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
     }
 
-    function buildTimerName(fromPreset = false) {
-      const text = ($("textInput").value || "").trim();
-      const base = fromPreset ? ($("presetSelect").value || "Timer") : selectedTpl;
-      return text ? (base + " – " + text) : base;
-    }
-
     function addTimer(durationMs, forcedName = "") {
-      const name = forcedName || buildTimerName(false);
-
-      if (!forcedName && selectedTpl === "Free text" && !name) {
-        alert("Please enter a name!");
-        $("textInput").focus();
-        return;
-      }
+      const text = ($("textInput").value || "").trim();
+      const name = forcedName ? (text ? `${forcedName} – ${text}` : forcedName) : (text || "Free timer");
 
       const timers = loadTimers();
       const newTimer = {
@@ -997,11 +1122,6 @@
 
       $("textInput").value = "";
       renderTimers();
-    }
-
-    function addPresetTimer() {
-      const name = buildTimerName(true);
-      addTimer(DEFAULT_DURATION_MS, name);
     }
 
     function stopTimer(id) {
@@ -1111,9 +1231,7 @@
         if (!AudioCtx) return;
 
         const ctx = new AudioCtx();
-        if (ctx.state === "suspended") {
-          ctx.resume().catch(() => {});
-        }
+        if (ctx.state === "suspended") ctx.resume().catch(() => {});
 
         const notes = [
           { f: 1047, d: 0.18, g: 0.28 },
@@ -1124,14 +1242,12 @@
         ];
 
         let start = ctx.currentTime;
-
         notes.forEach(n => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
 
           osc.type = "square";
           osc.frequency.setValueAtTime(n.f, start);
-
           gain.gain.setValueAtTime(0.0001, start);
           gain.gain.exponentialRampToValueAtTime(n.g, start + 0.01);
           gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
@@ -1145,10 +1261,8 @@
           start += n.d + 0.04;
         });
 
-        setTimeout(() => {
-          try { ctx.close(); } catch (_) {}
-        }, 1800);
-      } catch (e) {}
+        setTimeout(() => { try { ctx.close(); } catch (_) {} }, 1800);
+      } catch (_) {}
     }
 
     function playAlarm() {
@@ -1217,18 +1331,15 @@
         if (wakeLock) {
           await wakeLock.release();
           wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Awake";
           $("wakeBtn").classList.remove("on");
           return;
         }
 
         wakeLock = await navigator.wakeLock.request("screen");
-        $("wakeBtn").textContent = "☀️ ON";
         $("wakeBtn").classList.add("on");
 
         wakeLock.onrelease = () => {
           wakeLock = null;
-          $("wakeBtn").textContent = "☀️ Awake";
           $("wakeBtn").classList.remove("on");
         };
       } catch (_) {
@@ -1239,13 +1350,11 @@
     document.addEventListener("click", enableAudio, { once: true });
     document.addEventListener("touchstart", enableAudio, { once: true });
 
-    $("start3hBtn").addEventListener("click", () => {
-      const text = ($("textInput").value || "").trim();
-      const name = text || "Free timer";
-      addTimer(DEFAULT_DURATION_MS, name);
+    document.querySelectorAll(".presetBtn").forEach(btn => {
+      btn.addEventListener("click", () => addTimer(DEFAULT_DURATION_MS, btn.dataset.preset || "Timer"));
     });
 
-    $("startPresetBtn").addEventListener("click", addPresetTimer);
+    $("startFreeBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS, ""));
     $("clearExpBtn").addEventListener("click", clearExpired);
 
     $("refreshKBtn").addEventListener("click", loadKitchenPct);
@@ -1254,13 +1363,10 @@
     $("clockToggle").addEventListener("click", toggleClock);
     $("fsBtn").addEventListener("click", toggleFullscreen);
     $("wakeBtn").addEventListener("click", toggleWakeLock);
-    $("rushBtn").addEventListener("click", toggleRushMode);
-    $("alarmTestBtn").addEventListener("click", playAlarm);
 
     setupCollapsible("timerHead", "timerBody", "timerArrow");
     setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
 
-    // compact default: tools closed
     $("toolsBody").classList.remove("open");
     $("toolsArrow").classList.remove("open");
 
@@ -1290,6 +1396,10 @@
       if (e.target === $("cModalBack")) closeCateringModal();
     });
 
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeCateringModal();
+    });
+
     document.addEventListener("visibilitychange", async () => {
       if (document.visibilityState === "visible" && wakeLock === null) {
         if ($("wakeBtn").classList.contains("on") && "wakeLock" in navigator) {
@@ -1297,7 +1407,6 @@
             wakeLock = await navigator.wakeLock.request("screen");
             wakeLock.onrelease = () => {
               wakeLock = null;
-              $("wakeBtn").textContent = "☀️ Awake";
               $("wakeBtn").classList.remove("on");
             };
           } catch (_) {}
