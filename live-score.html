@@ -14,7 +14,7 @@
       --bg0:#0d1117;
       --bg1:#161b22;
       --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.70);
+      --muted:rgba(255,255,255,0.72);
       --muted2:rgba(255,255,255,0.50);
       --gold:#d6b24a;
       --gold2:#b9921f;
@@ -94,7 +94,7 @@
       margin-top:18px;
     }
 
-    .tabBtn{
+    .tabBtn, .ghostBtn{
       padding:14px 18px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.14);
@@ -107,7 +107,7 @@
       cursor:pointer;
       transition:.15s ease;
     }
-    .tabBtn:hover{background:rgba(255,255,255,0.10);}
+    .tabBtn:hover,.ghostBtn:hover{background:rgba(255,255,255,0.10);}
     .tabBtn.on{
       background:rgba(214,178,74,0.14);
       border-color:rgba(214,178,74,0.40);
@@ -121,6 +121,14 @@
       color:var(--muted);
       font-size:14px;
       font-weight:800;
+    }
+
+    .heroActions{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:14px;
     }
 
     .section{
@@ -263,10 +271,7 @@
       width:9px;height:9px;border-radius:50%;background:var(--gold);
     }
 
-    .focusCard{
-      min-height:160px;
-    }
-
+    .focusCard{min-height:160px;}
     .focusText{
       margin-top:16px;
       font-family:"Playfair Display",serif;
@@ -275,10 +280,7 @@
       letter-spacing:-.03em;
     }
 
-    .storeCard{
-      min-height:260px;
-    }
-
+    .storeCard{min-height:260px;}
     .storeName{
       color:var(--muted2);
       font-size:12px;
@@ -316,10 +318,7 @@
       width:0%;
     }
 
-    .listCard{
-      min-height:500px;
-    }
-
+    .listCard{min-height:500px;}
     .listTitle{
       color:var(--text);
       font-size:16px;
@@ -375,6 +374,91 @@
     }
 
     .hidden{display:none;}
+
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:9999;
+    }
+    .modalBack.open{display:flex;}
+
+    .modal{
+      width:min(760px, 100%);
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .modalHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:18px 20px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.03);
+    }
+
+    .modalTitle{
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .modalBody{padding:20px;}
+
+    .formGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    @media (max-width: 760px){
+      .formGrid{grid-template-columns:1fr;}
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    input, textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:14px 16px;
+      font-size:15px;
+      font-weight:700;
+      outline:none;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:110px;
+      grid-column:1/-1;
+    }
+
+    .modalActions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
   </style>
 </head>
 <body>
@@ -383,7 +467,7 @@
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Dashboard</div>
-      <div class="sub">Hurtigt overblik • auto-rotation • manual data nu (Friendly senere)</div>
+      <div class="sub">Hurtigt overblik • manuel v1 • Friendly senere</div>
       <div class="goldline"></div>
 
       <div class="tabRow">
@@ -392,10 +476,14 @@
         <button class="tabBtn" data-tab="products">Produkter</button>
       </div>
 
+      <div class="heroActions">
+        <button class="ghostBtn" id="editBtn" type="button">✏️ Redigér data</button>
+        <button class="ghostBtn" id="resetBtn" type="button">↺ Reset demo-data</button>
+      </div>
+
       <div class="metaLine" id="metaLine">Nu: — • Sidst gemt: —</div>
     </header>
 
-    <!-- OVERVIEW -->
     <section class="section" id="tab-overview">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Overblik</div>
@@ -451,7 +539,6 @@
       </div>
     </section>
 
-    <!-- LOCATIONS -->
     <section class="section hidden" id="tab-locations">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Lokationer</div>
@@ -462,7 +549,6 @@
       </div>
     </section>
 
-    <!-- PRODUCTS -->
     <section class="section hidden" id="tab-products">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Produkter</div>
@@ -493,32 +579,97 @@
 
   </div>
 
-  <script>
-    // ============================================================
-    // MANUAL CONFIG
-    // ============================================================
-    const MANUAL_CONFIG = {
-      updatedAt: "10.03.2026, 14.17",
-      dailyRevenueGoal: 109000,
-      yearlyBudget: 33700000,
-      ytdActual: 11918862,
-      ytdDelta: 5271191,
-      dessertGoalToday: 30,
-      focusText: "Husk dessert + kaffe ved alle bordene."
-    };
+  <!-- EDIT MODAL -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal">
+      <div class="modalHead">
+        <div class="modalTitle">Dashboard Manual Editor</div>
+        <button class="ghostBtn" id="closeModalBtn" type="button">Luk</button>
+      </div>
+      <div class="modalBody">
+        <div class="formGrid">
+          <div>
+            <label for="dailyRevenueGoalInput">Dagens mål</label>
+            <input id="dailyRevenueGoalInput" type="number" />
+          </div>
 
-    // ============================================================
-    // SKELETON DATA
-    // Replace these later with Friendly API proxy data
-    // ============================================================
-    const DASHBOARD_DATA = {
+          <div>
+            <label for="yearlyBudgetInput">Årsbudget</label>
+            <input id="yearlyBudgetInput" type="number" />
+          </div>
+
+          <div>
+            <label for="ytdActualInput">YTD actual</label>
+            <input id="ytdActualInput" type="number" />
+          </div>
+
+          <div>
+            <label for="ytdDeltaInput">YTD delta</label>
+            <input id="ytdDeltaInput" type="number" />
+          </div>
+
+          <div>
+            <label for="dessertGoalInput">Dessert mål i dag</label>
+            <input id="dessertGoalInput" type="number" />
+          </div>
+
+          <div>
+            <label for="todayRevenueInput">Dagens omsætning</label>
+            <input id="todayRevenueInput" type="number" />
+          </div>
+
+          <div>
+            <label for="topSellerNameInput">Dagens topsælger</label>
+            <input id="topSellerNameInput" type="text" />
+          </div>
+
+          <div>
+            <label for="topSellerQtyInput">Top sælger antal</label>
+            <input id="topSellerQtyInput" type="number" />
+          </div>
+
+          <div>
+            <label for="dessertSoldInput">Dessert solgt i dag</label>
+            <input id="dessertSoldInput" type="number" />
+          </div>
+
+          <div>
+            <label for="updatedAtInput">Sidst gemt tekst</label>
+            <input id="updatedAtInput" type="text" />
+          </div>
+
+          <div style="grid-column:1/-1;">
+            <label for="focusTextInput">Dagens fokus</label>
+            <textarea id="focusTextInput"></textarea>
+          </div>
+        </div>
+
+        <div class="modalActions">
+          <button class="ghostBtn" id="fillDemoBtn" type="button">Fyld demo</button>
+          <button class="ghostBtn" id="saveBtn" type="button">Gem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DASHBOARD_KEY = "kaiser_dashboard_manual_v1";
+
+    const DEFAULT_DATA = {
+      manual: {
+        updatedAt: "10.03.2026, 14.17",
+        dailyRevenueGoal: 109000,
+        yearlyBudget: 33700000,
+        ytdActual: 11918862,
+        ytdDelta: 5271191,
+        dessertGoalToday: 30,
+        focusText: "Husk dessert + kaffe ved alle bordene."
+      },
       overview: {
         todayRevenue: 70850,
-        ordersToday: 36,
         topSellerToday: { name: "Filterkaffe", qty: 88 },
         dessertSoldToday: 14
       },
-
       locations: [
         { id: "1", name: "Café Kaiser Helsingør", revenue: 18500, orders: 7 },
         { id: "2", name: "Café Kaiser Hørsholm", revenue: 16200, orders: 6 },
@@ -526,7 +677,6 @@
         { id: "4", name: "Café Kaiser Farum", revenue: 12150, orders: 4 },
         { id: "5", name: "Café Kaiser Vanløse", revenue: 9900, orders: 3 }
       ],
-
       productsToday: [
         { name: "Filterkaffe", qty: 88 },
         { name: "Cappuccino", qty: 62 },
@@ -535,7 +685,6 @@
         { name: "Brunch", qty: 19 },
         { name: "Dessert", qty: 14 }
       ],
-
       productsYtd: [
         { name: "Brunchbuffet", qty: 5113 },
         { name: "Brunch - 5 elementer", qty: 3899 },
@@ -546,10 +695,27 @@
       ]
     };
 
-    // ============================================================
-    // HELPERS
-    // ============================================================
     const $ = id => document.getElementById(id);
+
+    function clone(obj){
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    let STATE = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(DASHBOARD_KEY);
+        if (!raw) return clone(DEFAULT_DATA);
+        return { ...clone(DEFAULT_DATA), ...JSON.parse(raw) };
+      } catch (e) {
+        return clone(DEFAULT_DATA);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(DASHBOARD_KEY, JSON.stringify(STATE));
+    }
 
     function fmtDKK(n) {
       return Number(n || 0).toLocaleString("da-DK", {
@@ -582,16 +748,13 @@
       });
     }
 
-    // ============================================================
-    // RENDER
-    // ============================================================
     function renderMeta() {
-      $("metaLine").textContent = `Nu: ${nowDa()} • Sidst gemt: ${MANUAL_CONFIG.updatedAt}`;
+      $("metaLine").textContent = `Nu: ${nowDa()} • Sidst gemt: ${STATE.manual.updatedAt}`;
     }
 
     function renderOverview() {
-      const rev = DASHBOARD_DATA.overview.todayRevenue;
-      const goal = MANUAL_CONFIG.dailyRevenueGoal;
+      const rev = STATE.overview.todayRevenue;
+      const goal = STATE.manual.dailyRevenueGoal;
       const revPct = goal > 0 ? rev / goal : 0;
       const revMissing = Math.max(0, goal - rev);
 
@@ -600,8 +763,8 @@
       $("todayRevenuePct").textContent = pctStr(revPct);
       $("todayRevenueGoal").textContent = "Mål: " + fmtDKK(goal);
 
-      const ytdActual = MANUAL_CONFIG.ytdActual;
-      const yearlyBudget = MANUAL_CONFIG.yearlyBudget;
+      const ytdActual = STATE.manual.ytdActual;
+      const yearlyBudget = STATE.manual.yearlyBudget;
       const ytdPct = yearlyBudget > 0 ? ytdActual / yearlyBudget : 0;
       const ytdMissing = Math.max(0, yearlyBudget - ytdActual);
 
@@ -609,13 +772,13 @@
       $("ytdBar").style.width = (clamp01(ytdPct) * 100) + "%";
       $("ytdGap").textContent = "Mangler: " + fmtDKK(ytdMissing);
       $("ytdActualBudget").textContent = `${fmtDKK(ytdActual)} / ${fmtDKK(yearlyBudget)}`;
-      $("ytdDelta").textContent = `+${fmtDKK(MANUAL_CONFIG.ytdDelta)}`;
+      $("ytdDelta").textContent = `+${fmtDKK(STATE.manual.ytdDelta)}`;
 
-      $("topSellerName").textContent = DASHBOARD_DATA.overview.topSellerToday.name || "—";
-      $("topSellerQty").textContent = fmtInt(DASHBOARD_DATA.overview.topSellerToday.qty || 0);
+      $("topSellerName").textContent = STATE.overview.topSellerToday.name || "—";
+      $("topSellerQty").textContent = fmtInt(STATE.overview.topSellerToday.qty || 0);
 
-      const dessertSold = DASHBOARD_DATA.overview.dessertSoldToday;
-      const dessertGoal = MANUAL_CONFIG.dessertGoalToday;
+      const dessertSold = STATE.overview.dessertSoldToday;
+      const dessertGoal = STATE.manual.dessertGoalToday;
       const dessertPct = dessertGoal > 0 ? dessertSold / dessertGoal : 0;
       const dessertMissing = Math.max(0, dessertGoal - dessertSold);
 
@@ -623,14 +786,14 @@
       $("dessertBar").style.width = (clamp01(dessertPct) * 100) + "%";
       $("dessertGap").textContent = `Mangler ${fmtInt(dessertMissing)}`;
 
-      $("focusText").textContent = MANUAL_CONFIG.focusText;
+      $("focusText").textContent = STATE.manual.focusText;
     }
 
     function renderLocations() {
       const wrap = $("locationsGrid");
-      const totalRevenue = DASHBOARD_DATA.locations.reduce((sum, x) => sum + Number(x.revenue || 0), 0);
+      const totalRevenue = STATE.locations.reduce((sum, x) => sum + Number(x.revenue || 0), 0);
 
-      wrap.innerHTML = DASHBOARD_DATA.locations.map((loc, i) => {
+      wrap.innerHTML = STATE.locations.map((loc, i) => {
         const targetPct = totalRevenue > 0 ? (loc.revenue / totalRevenue) : 0;
         const atdPct = Math.max(0, targetPct * 0.6);
 
@@ -638,7 +801,7 @@
           <div class="card storeCard">
             <div class="storeName">${loc.name} #${i + 1}</div>
             <div class="storeValue">${fmtDKK(loc.revenue)}</div>
-            <div class="storeMeta">Dagens omsætning</div>
+            <div class="storeMeta">Dagens omsætning • ${fmtInt(loc.orders)} ordrer</div>
 
             <div class="miniBar"><div class="miniBarFill" style="width:${Math.round(targetPct * 100)}%"></div></div>
             <div class="miniBar"><div class="miniBarFill" style="width:${Math.round(atdPct * 100)}%"></div></div>
@@ -671,13 +834,17 @@
     }
 
     function renderProducts() {
-      renderRankList(DASHBOARD_DATA.productsToday, "productsTodayList", "productsTodayCount");
-      renderRankList(DASHBOARD_DATA.productsYtd, "productsYtdList", "productsYtdCount");
+      renderRankList(STATE.productsToday, "productsTodayList", "productsTodayCount");
+      renderRankList(STATE.productsYtd, "productsYtdList", "productsYtdCount");
     }
 
-    // ============================================================
-    // TABS
-    // ============================================================
+    function renderAll() {
+      renderMeta();
+      renderOverview();
+      renderLocations();
+      renderProducts();
+    }
+
     function openTab(tab) {
       document.querySelectorAll(".tabBtn").forEach(btn => {
         btn.classList.toggle("on", btn.dataset.tab === tab);
@@ -688,41 +855,83 @@
       });
     }
 
+    function openModal() {
+      fillForm();
+      $("modalBack").classList.add("open");
+    }
+
+    function closeModal() {
+      $("modalBack").classList.remove("open");
+    }
+
+    function fillForm() {
+      $("dailyRevenueGoalInput").value = STATE.manual.dailyRevenueGoal;
+      $("yearlyBudgetInput").value = STATE.manual.yearlyBudget;
+      $("ytdActualInput").value = STATE.manual.ytdActual;
+      $("ytdDeltaInput").value = STATE.manual.ytdDelta;
+      $("dessertGoalInput").value = STATE.manual.dessertGoalToday;
+      $("todayRevenueInput").value = STATE.overview.todayRevenue;
+      $("topSellerNameInput").value = STATE.overview.topSellerToday.name;
+      $("topSellerQtyInput").value = STATE.overview.topSellerToday.qty;
+      $("dessertSoldInput").value = STATE.overview.dessertSoldToday;
+      $("updatedAtInput").value = STATE.manual.updatedAt;
+      $("focusTextInput").value = STATE.manual.focusText;
+    }
+
+    function saveForm() {
+      STATE.manual.dailyRevenueGoal = Number($("dailyRevenueGoalInput").value || 0);
+      STATE.manual.yearlyBudget = Number($("yearlyBudgetInput").value || 0);
+      STATE.manual.ytdActual = Number($("ytdActualInput").value || 0);
+      STATE.manual.ytdDelta = Number($("ytdDeltaInput").value || 0);
+      STATE.manual.dessertGoalToday = Number($("dessertGoalInput").value || 0);
+      STATE.overview.todayRevenue = Number($("todayRevenueInput").value || 0);
+      STATE.overview.topSellerToday.name = $("topSellerNameInput").value || "—";
+      STATE.overview.topSellerToday.qty = Number($("topSellerQtyInput").value || 0);
+      STATE.overview.dessertSoldToday = Number($("dessertSoldInput").value || 0);
+      STATE.manual.updatedAt = $("updatedAtInput").value || nowDa();
+      STATE.manual.focusText = $("focusTextInput").value || "";
+
+      saveState();
+      renderAll();
+      closeModal();
+    }
+
+    function fillDemoData() {
+      STATE = clone(DEFAULT_DATA);
+      STATE.manual.updatedAt = nowDa();
+      saveState();
+      renderAll();
+      fillForm();
+    }
+
+    function resetData() {
+      if (confirm("Reset dashboard to default demo data?")) {
+        localStorage.removeItem(DASHBOARD_KEY);
+        STATE = clone(DEFAULT_DATA);
+        renderAll();
+      }
+    }
+
     document.querySelectorAll(".tabBtn").forEach(btn => {
       btn.addEventListener("click", () => openTab(btn.dataset.tab));
     });
 
-    // ============================================================
-    // FUTURE API HOOKS
-    // Replace these with Apps Script / Friendly API integration later
-    // ============================================================
-    async function loadFriendlyOverview() {
-      // TODO:
-      // fetch today revenue
-      // fetch top seller
-      // fetch dessert category
-    }
+    $("editBtn").addEventListener("click", openModal);
+    $("closeModalBtn").addEventListener("click", closeModal);
+    $("saveBtn").addEventListener("click", saveForm);
+    $("fillDemoBtn").addEventListener("click", fillDemoData);
+    $("resetBtn").addEventListener("click", resetData);
 
-    async function loadFriendlyLocations() {
-      // TODO:
-      // fetch stores report
-    }
+    $("modalBack").addEventListener("click", e => {
+      if (e.target === $("modalBack")) closeModal();
+    });
 
-    async function loadFriendlyProducts() {
-      // TODO:
-      // fetch top products today
-      // fetch top products YTD
-    }
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeModal();
+    });
 
-    // ============================================================
-    // INIT
-    // ============================================================
     (function init() {
-      renderMeta();
-      renderOverview();
-      renderLocations();
-      renderProducts();
-
+      renderAll();
       setInterval(renderMeta, 60000);
     })();
   </script>
