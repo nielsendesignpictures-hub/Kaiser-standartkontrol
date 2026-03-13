@@ -36,24 +36,22 @@
         radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
         radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      padding:18px;
+      padding:14px;
     }
 
-    .shell{max-width:1380px;margin:0 auto;}
+    .shell{max-width:1180px;margin:0 auto;}
 
     .hero{
-      border-radius:32px;
+      border-radius:24px;
       border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:26px 22px 20px;
+      padding:18px 16px 14px;
     }
 
     .kicker{
       text-align:center;
-      font-size:12px;
+      font-size:10px;
       font-weight:900;
       letter-spacing:.24em;
       text-transform:uppercase;
@@ -63,52 +61,57 @@
     .title{
       text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(46px,8vw,72px);
+      font-size:clamp(34px,6vw,52px);
       line-height:1;
-      margin-top:8px;
+      margin-top:6px;
       letter-spacing:-.03em;
     }
 
     .sub{
       text-align:center;
       color:var(--muted);
+      font-size:13px;
       font-weight:800;
-      font-size:14px;
       margin-top:8px;
     }
 
     .goldline{
       height:2px;
-      margin:18px auto 0;
-      max-width:900px;
+      margin:14px auto 0;
+      max-width:760px;
       border-radius:999px;
       background:linear-gradient(90deg,transparent,var(--blue),transparent);
     }
 
     .heroRow{
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:20px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+      margin-top:14px;
     }
 
     .pill,.btn{
-      display:inline-flex;
+      display:flex;
       align-items:center;
       justify-content:center;
       gap:6px;
-      padding:12px 14px;
+      min-height:42px;
+      padding:10px 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.14);
       background:rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.92);
-      font-size:12px;
+      font-size:11px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
-      min-height:46px;
       text-align:center;
+    }
+
+    .topControls{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
     }
 
     .btn{
@@ -116,15 +119,10 @@
       transition:.15s ease;
     }
     .btn:hover{background:rgba(255,255,255,0.10);}
-    .btn.primary{
-      border:none;
-      background:linear-gradient(135deg,var(--gold),var(--gold2));
-      color:#0b0c0f;
-    }
 
     .section{
-      margin-top:20px;
-      border-radius:28px;
+      margin-top:14px;
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       overflow:hidden;
@@ -135,8 +133,8 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
-      padding:16px 20px;
+      gap:10px;
+      padding:14px 16px;
       background:rgba(255,255,255,0.03);
       border-bottom:1px solid rgba(255,255,255,0.10);
     }
@@ -146,154 +144,78 @@
       align-items:center;
       gap:10px;
       color:var(--muted);
-      font-size:14px;
+      font-size:12px;
       font-weight:900;
-      letter-spacing:.18em;
+      letter-spacing:.16em;
       text-transform:uppercase;
     }
 
     .sectionDot{
-      width:12px;height:12px;border-radius:50%;
+      width:10px;height:10px;border-radius:50%;
       background:var(--gold);
     }
 
     .sectionInfo{
-      font-size:13px;
+      font-size:12px;
       font-weight:800;
       color:var(--muted2);
     }
 
-    .sectionBody{padding:20px;}
+    .sectionBody{padding:16px;}
 
-    .topGrid{
+    .statusGrid{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:18px;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
     }
 
-    @media (max-width: 1300px){
-      .topGrid{grid-template-columns:repeat(3,1fr);}
+    @media (max-width: 900px){
+      .statusGrid{grid-template-columns:1fr;}
     }
 
-    @media (max-width: 860px){
-      .topGrid{grid-template-columns:1fr;}
-    }
-
-    .topCard{
-      border-radius:24px;
+    .statusCard{
+      border-radius:20px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:20px;
-      min-height:230px;
-      position:relative;
+      padding:18px;
+      min-height:180px;
     }
 
-    .topKicker{
+    .statusKicker{
       display:flex;
       align-items:center;
       gap:8px;
       color:var(--muted);
       font-size:11px;
       font-weight:900;
-      letter-spacing:.14em;
+      letter-spacing:.12em;
       text-transform:uppercase;
     }
 
     .dot{
       width:10px;height:10px;border-radius:50%;
-      background:var(--gold);
       flex:0 0 auto;
     }
-    .dot.green{background:var(--green);}
     .dot.red{background:var(--red);}
+    .dot.green{background:var(--green);}
     .dot.blue{background:var(--blue);}
 
-    .bigValue{
+    .statusValue{
       font-family:"Playfair Display",serif;
-      font-size:58px;
+      font-size:52px;
       line-height:1;
-      margin-top:20px;
+      margin-top:18px;
       letter-spacing:-.03em;
     }
 
-    .subValue{
+    .statusText{
       margin-top:8px;
       color:var(--muted);
       font-size:14px;
       font-weight:800;
     }
 
-    .topActions{
-      margin-top:16px;
-    }
-
-    .fullBtn{
-      width:100%;
-      border:none;
-      border-radius:18px;
-      min-height:46px;
-      padding:14px 16px;
-      font-size:14px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-      color:#fff;
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.14);
-    }
-    .fullBtn.blue{
-      background:linear-gradient(135deg,#5ea7ff,#2563eb);
-      border:none;
-    }
-
-    .moduleGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:18px;
-    }
-
-    @media (max-width: 900px){
-      .moduleGrid{grid-template-columns:1fr;}
-    }
-
-    .moduleCard{
-      border-radius:24px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:20px;
-      min-height:190px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      cursor:pointer;
-      transition:.15s ease;
-    }
-
-    .moduleCard:hover{
-      background:rgba(255,255,255,0.08);
-      transform:translateY(-2px);
-    }
-
-    .moduleIcon{
-      font-size:30px;
-    }
-
-    .moduleName{
-      margin-top:10px;
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .moduleDesc{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.4;
-      font-weight:700;
-    }
-
-    .moduleMeta{
+    .miniMeta{
       margin-top:14px;
       display:flex;
       flex-wrap:wrap;
@@ -315,19 +237,65 @@
       color:var(--muted);
     }
 
+    .toolGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 900px){
+      .toolGrid{grid-template-columns:1fr;}
+    }
+
+    .toolCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .toolCard:hover{
+      background:rgba(255,255,255,0.08);
+      transform:translateY(-2px);
+    }
+
+    .toolIcon{
+      font-size:28px;
+    }
+
+    .toolName{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .toolDesc{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+      font-weight:700;
+    }
+
     .toolViewer{
       display:none;
-      margin-top:20px;
+      margin-top:16px;
     }
     .toolViewer.open{display:block;}
 
     .toolBar{
       display:flex;
-      gap:10px;
+      gap:8px;
       align-items:center;
       justify-content:space-between;
       flex-wrap:wrap;
-      margin-bottom:12px;
+      margin-bottom:10px;
     }
 
     .frame{
@@ -350,61 +318,46 @@
 
       <div class="heroRow">
         <div class="pill" id="locPill">📍 Ikke sat</div>
-        <div class="pill" id="timePill">🕐 --:--</div>
-        <button class="btn" id="clockBtn" type="button">🕐 Ur</button>
-        <button class="btn" id="fsBtn" type="button">⛶ Fuld</button>
+
+        <div class="topControls">
+          <div class="pill" id="timePill">🕐 --:--</div>
+          <button class="btn" id="clockBtn" type="button">🕐 Ur</button>
+          <button class="btn" id="fsBtn" type="button">⛶ Fuld</button>
+        </div>
       </div>
     </header>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Drift i dag</div>
-        <div class="sectionInfo">Live status & værktøjer</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Status nu</div>
+        <div class="sectionInfo">Live driftstal</div>
       </div>
       <div class="sectionBody">
-        <div class="topGrid">
-          <div class="topCard">
-            <div class="topKicker"><span class="dot green"></span> Daglige opgaver</div>
-            <div class="bigValue">✓</div>
-            <div class="subValue">Daglige opgaver modul</div>
-            <div class="topActions">
-              <button class="fullBtn" data-url="./daglige-opgaver.html">📋 Åbn opgaver</button>
+        <div class="statusGrid">
+          <div class="statusCard">
+            <div class="statusKicker"><span class="dot red"></span> Udsolgte produkter</div>
+            <div class="statusValue" id="soldoutCount">0</div>
+            <div class="statusText" id="soldoutSub">Ingen udsolgte</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="soldoutChip">0 registreret</div>
             </div>
           </div>
 
-          <div class="topCard">
-            <div class="topKicker"><span class="dot red"></span> Udsolgt</div>
-            <div class="bigValue" id="soldoutCount">0</div>
-            <div class="subValue" id="soldoutSub">Ingen udsolgte</div>
-            <div class="topActions">
-              <button class="fullBtn" data-url="./soldout-products.html">🍽️ Administrer</button>
+          <div class="statusCard">
+            <div class="statusKicker"><span class="dot red"></span> Gæsteklager</div>
+            <div class="statusValue" id="complaintCount">0</div>
+            <div class="statusText" id="complaintSub">Ingen klager</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="complaintChip">0 registreret</div>
             </div>
           </div>
 
-          <div class="topCard">
-            <div class="topKicker"><span class="dot blue"></span> Skiftleder</div>
-            <div class="bigValue" style="font-size:52px;">📝</div>
-            <div class="subValue">Send daglig rapport</div>
-            <div class="topActions">
-              <button class="fullBtn blue" data-url="./skiftlederrapport1.html">✍️ Ny rapport</button>
-            </div>
-          </div>
-
-          <div class="topCard">
-            <div class="topKicker"><span class="dot red"></span> Gæsteklager</div>
-            <div class="bigValue" id="complaintCount">0</div>
-            <div class="subValue" id="complaintSub">Ingen klager i dag</div>
-            <div class="topActions">
-              <button class="fullBtn" data-url="./guest-complaints.html">💬 Åbn modul</button>
-            </div>
-          </div>
-
-          <div class="topCard">
-            <div class="topKicker"><span class="dot red"></span> Fejl & mangler</div>
-            <div class="bigValue" id="faultCount">0</div>
-            <div class="subValue" id="faultSub">Ingen fejl registreret</div>
-            <div class="topActions">
-              <button class="fullBtn" data-url="./faults-issues.html">🛠️ Åbn modul</button>
+          <div class="statusCard">
+            <div class="statusKicker"><span class="dot blue"></span> Fejl & mangler</div>
+            <div class="statusValue" id="faultCount">0</div>
+            <div class="statusText" id="faultSub">Ingen fejl registreret</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="faultChip">0 registreret</div>
             </div>
           </div>
         </div>
@@ -414,64 +367,64 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
-        <div class="sectionInfo">Åbn moduler direkte i hub</div>
+        <div class="sectionInfo">Åbn moduler direkte</div>
       </div>
       <div class="sectionBody">
-        <div class="moduleGrid">
-          <div class="moduleCard" data-url="./daglige-opgaver.html">
+        <div class="toolGrid">
+          <div class="toolCard" data-url="./daglige-opgaver.html">
             <div>
-              <div class="moduleIcon">✅</div>
-              <div class="moduleName">Daglige opgaver</div>
-              <div class="moduleDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
+              <div class="toolIcon">✅</div>
+              <div class="toolName">Daglige opgaver</div>
+              <div class="toolDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
             </div>
-            <div class="moduleMeta">
+            <div class="miniMeta">
               <div class="metaChip">Drift</div>
               <div class="metaChip">Lokation</div>
             </div>
           </div>
 
-          <div class="moduleCard" data-url="./skiftlederrapport1.html">
+          <div class="toolCard" data-url="./skiftlederrapport1.html">
             <div>
-              <div class="moduleIcon">📊</div>
-              <div class="moduleName">Skiftlederrapport</div>
-              <div class="moduleDesc">Ny version af skiftrapport og daglig overlevering.</div>
+              <div class="toolIcon">📝</div>
+              <div class="toolName">Skiftlederrapport</div>
+              <div class="toolDesc">Ny version af skiftrapport og daglig overlevering.</div>
             </div>
-            <div class="moduleMeta">
+            <div class="miniMeta">
               <div class="metaChip">Rapport</div>
               <div class="metaChip">Daglig</div>
             </div>
           </div>
 
-          <div class="moduleCard" data-url="./soldout-products.html">
+          <div class="toolCard" data-url="./soldout-products.html">
             <div>
-              <div class="moduleIcon">🍽️</div>
-              <div class="moduleName">Udsolgte produkter</div>
-              <div class="moduleDesc">Registrér hvilke varer der er udsolgt i service.</div>
+              <div class="toolIcon">🍽️</div>
+              <div class="toolName">Udsolgte produkter</div>
+              <div class="toolDesc">Registrér hvilke varer der er udsolgt i service.</div>
             </div>
-            <div class="moduleMeta">
-              <div class="metaChip" id="soldoutChip">0 udsolgte</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="soldoutChip2">0 udsolgte</div>
             </div>
           </div>
 
-          <div class="moduleCard" data-url="./guest-complaints.html">
+          <div class="toolCard" data-url="./guest-complaints.html">
             <div>
-              <div class="moduleIcon">💬</div>
-              <div class="moduleName">Gæsteklager</div>
-              <div class="moduleDesc">Registrér gæsteklager hurtigt og struktureret.</div>
+              <div class="toolIcon">💬</div>
+              <div class="toolName">Gæsteklager</div>
+              <div class="toolDesc">Registrér gæsteklager hurtigt og struktureret.</div>
             </div>
-            <div class="moduleMeta">
-              <div class="metaChip" id="complaintChip">0 klager</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="complaintChip2">0 klager</div>
             </div>
           </div>
 
-          <div class="moduleCard" data-url="./faults-issues.html">
+          <div class="toolCard" data-url="./faults-issues.html">
             <div>
-              <div class="moduleIcon">🛠️</div>
-              <div class="moduleName">Fejl & mangler</div>
-              <div class="moduleDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
+              <div class="toolIcon">🛠️</div>
+              <div class="toolName">Fejl & mangler</div>
+              <div class="toolDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
             </div>
-            <div class="moduleMeta">
-              <div class="metaChip" id="faultChip">0 fejl</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="faultChip2">0 fejl</div>
             </div>
           </div>
         </div>
@@ -501,14 +454,6 @@
       const fromQS = new URLSearchParams(location.search).get("loc");
       if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
       return localStorage.getItem(LOC_KEY) || "";
-    }
-
-    function isoTodayLocal() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${day}`;
     }
 
     function updateClock() {
@@ -565,12 +510,14 @@
 
         const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
         $("soldoutCount").textContent = count;
-        $("soldoutSub").textContent = count > 0 ? `${count} udsolgte registreret` : "Ingen udsolgte";
-        $("soldoutChip").textContent = `${count} udsolgte`;
+        $("soldoutSub").textContent = count > 0 ? `${count} registreret` : "Ingen udsolgte";
+        $("soldoutChip").textContent = `${count} registreret`;
+        $("soldoutChip2").textContent = `${count} udsolgte`;
       } catch (e) {
         $("soldoutCount").textContent = "—";
         $("soldoutSub").textContent = "Fejl ved hentning";
         $("soldoutChip").textContent = "Fejl";
+        $("soldoutChip2").textContent = "Fejl";
       }
     }
 
@@ -586,12 +533,14 @@
 
         const count = (data && data.ok && Array.isArray(data.complaints)) ? data.complaints.length : 0;
         $("complaintCount").textContent = count;
-        $("complaintSub").textContent = count > 0 ? `${count} klager registreret` : "Ingen klager i dag";
-        $("complaintChip").textContent = `${count} klager`;
+        $("complaintSub").textContent = count > 0 ? `${count} registreret` : "Ingen klager";
+        $("complaintChip").textContent = `${count} registreret`;
+        $("complaintChip2").textContent = `${count} klager`;
       } catch (e) {
         $("complaintCount").textContent = "—";
         $("complaintSub").textContent = "Fejl ved hentning";
         $("complaintChip").textContent = "Fejl";
+        $("complaintChip2").textContent = "Fejl";
       }
     }
 
@@ -607,12 +556,14 @@
 
         const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
         $("faultCount").textContent = count;
-        $("faultSub").textContent = count > 0 ? `${count} fejl registreret` : "Ingen fejl registreret";
-        $("faultChip").textContent = `${count} fejl`;
+        $("faultSub").textContent = count > 0 ? `${count} registreret` : "Ingen fejl registreret";
+        $("faultChip").textContent = `${count} registreret`;
+        $("faultChip2").textContent = `${count} fejl`;
       } catch (e) {
         $("faultCount").textContent = "—";
         $("faultSub").textContent = "Fejl ved hentning";
         $("faultChip").textContent = "Fejl";
+        $("faultChip2").textContent = "Fejl";
       }
     }
 
