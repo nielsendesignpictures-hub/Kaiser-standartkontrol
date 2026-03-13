@@ -288,12 +288,12 @@
     <div class="card">
       <div class="kicker">KAISER</div>
       <h1>Fejl & Mangler</h1>
-      <div class="sub">Quick reporting of faults and missing items in daily operation</div>
+      <div class="sub">Hurtig registrering af fejl og mangler i driften</div>
       <div class="goldline"></div>
 
       <div class="pillRow">
-        <div class="pill" id="locPill">📍 Location: —</div>
-        <div class="pill" id="datePill">📅 Date: —</div>
+        <div class="pill" id="locPill">📍 Lokation: —</div>
+        <div class="pill" id="datePill">📅 Dato: —</div>
       </div>
 
       <div class="grid">
@@ -329,7 +329,7 @@
         </div>
 
         <div>
-          <label for="issueTypeInput">Type fejl</label>
+          <label for="issueTypeInput">Fejltype</label>
           <select id="issueTypeInput">
             <option value="">Vælg type</option>
             <option value="Equipment">Udstyr</option>
@@ -357,27 +357,27 @@
           <label for="sourceInput">Kilde</label>
           <select id="sourceInput">
             <option value="Drift">Drift</option>
-            <option value="Kitchen">Kitchen</option>
+            <option value="Kitchen">Køkken</option>
           </select>
         </div>
 
         <div class="full">
           <label for="descriptionInput">Beskrivelse</label>
-          <textarea id="descriptionInput" placeholder="Describe the fault or missing item..."></textarea>
+          <textarea id="descriptionInput" placeholder="Beskriv fejlen eller manglen..."></textarea>
         </div>
       </div>
 
       <div class="actions">
-        <button class="btn ghost" id="refreshBtn" type="button">Refresh list</button>
-        <button class="btn primary" id="submitBtn" type="button">Send issue</button>
+        <button class="btn ghost" id="refreshBtn" type="button">Opdater liste</button>
+        <button class="btn primary" id="submitBtn" type="button">Send fejl</button>
       </div>
 
       <div class="status" id="statusBox"></div>
 
       <div class="listWrap">
-        <div class="listTitle">Latest faults & issues</div>
+        <div class="listTitle">Seneste fejl & mangler</div>
         <div class="itemList" id="itemList">
-          <div class="empty">Loading...</div>
+          <div class="empty">Indlæser...</div>
         </div>
       </div>
     </div>
@@ -414,8 +414,8 @@
     }
 
     function updatePills() {
-      $("locPill").textContent = "📍 Location: " + $("locSelect").value.replace("Café Kaiser ", "");
-      $("datePill").textContent = "📅 Date: " + ($("dateInput").value || "—");
+      $("locPill").textContent = "📍 Lokation: " + $("locSelect").value.replace("Café Kaiser ", "");
+      $("datePill").textContent = "📅 Dato: " + ($("dateInput").value || "—");
     }
 
     function jsonp(url, params = {}) {
@@ -464,6 +464,14 @@
       return "high";
     }
 
+    function severityText(sev) {
+      const s = String(sev || "").toLowerCase();
+      if (s === "low") return "Lav";
+      if (s === "medium") return "Mellem";
+      if (s === "high") return "Høj";
+      return sev || "—";
+    }
+
     async function loadItems() {
       clearStatus();
       const loc = $("locSelect").value;
@@ -475,7 +483,7 @@
         });
 
         if (!data || !data.ok || !Array.isArray(data.items) || !data.items.length) {
-          $("itemList").innerHTML = '<div class="empty">No faults/issues reported yet</div>';
+          $("itemList").innerHTML = '<div class="empty">Ingen fejl eller mangler registreret endnu</div>';
           return;
         }
 
@@ -483,15 +491,15 @@
           <div class="item">
             <div class="bar ${severityClass(item.severity)}"></div>
             <div class="itemInfo">
-              <div class="itemTitle">${escapeHtml(item.area)} • ${escapeHtml(item.issueType)} • ${escapeHtml(item.severity)}</div>
-              <div class="itemMeta">📅 ${escapeHtml(item.date)} • Status: ${escapeHtml(item.status)} • Source: ${escapeHtml(item.source)}</div>
+              <div class="itemTitle">${escapeHtml(item.area)} • ${escapeHtml(item.issueType)} • ${escapeHtml(severityText(item.severity))}</div>
+              <div class="itemMeta">📅 ${escapeHtml(item.date)} • Status: ${escapeHtml(item.status)} • Kilde: ${escapeHtml(item.source)}</div>
               <div class="itemDesc">${escapeHtml(item.description)}</div>
             </div>
           </div>
         `).join("");
 
       } catch (e) {
-        $("itemList").innerHTML = '<div class="empty">❌ Error loading</div>';
+        $("itemList").innerHTML = '<div class="empty">❌ Fejl ved indlæsning</div>';
       }
     }
 
@@ -507,13 +515,13 @@
       const source = ($("sourceInput").value || "").trim();
 
       if (!date || !location || !area || !issueType || !severity || !description) {
-        setStatus("Please fill date, location, area, issue type, severity and description.", "err");
+        setStatus("Udfyld dato, lokation, område, fejltype, alvorlighed og beskrivelse.", "err");
         return;
       }
 
       const btn = $("submitBtn");
       btn.disabled = true;
-      btn.textContent = "Sending...";
+      btn.textContent = "Sender...";
 
       const form = document.createElement("form");
       form.method = "POST";
@@ -546,13 +554,13 @@
       setTimeout(() => {
         form.remove();
         btn.disabled = false;
-        btn.textContent = "Send issue";
+        btn.textContent = "Send fejl";
         $("areaInput").value = "";
         $("issueTypeInput").value = "";
         $("severityInput").value = "";
         $("descriptionInput").value = "";
         $("sourceInput").value = "Drift";
-        setStatus("✅ Fault/issue saved.", "ok");
+        setStatus("✅ Fejl/mangel gemt.", "ok");
         loadItems();
       }, 1200);
     }
