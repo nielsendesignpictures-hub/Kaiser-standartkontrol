@@ -84,7 +84,7 @@
       margin-top:12px;
     }
 
-    .locationPill,.controlBtn,.smallInfo{
+    .locationPill,.controlBtn{
       display:flex;
       align-items:center;
       justify-content:center;
@@ -323,7 +323,7 @@
       margin-bottom:10px;
     }
 
-    .input{
+    .input, .select{
       width:100%;
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.15);
@@ -336,7 +336,8 @@
     }
 
     .input::placeholder{color:rgba(255,255,255,0.45);}
-    .input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+    .input:focus,.select:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+    .select option{background:#161b22;color:#fff;}
 
     .actionGrid{
       display:grid;
@@ -586,6 +587,58 @@
       </div>
     </section>
 
+    <!-- SUPPLIER ISSUES -->
+    <section class="section">
+      <div class="sectionHead" id="supplierHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Supplier Issues</div>
+        <div class="sectionRight">
+          <span class="sectionArrow" id="supplierArrow">▼</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="sectionBody" id="supplierBody">
+        <div class="timerRow">
+          <input id="supplierNameInput" class="input" placeholder="Supplier name" />
+        </div>
+
+        <div class="timerRow">
+          <input id="supplierProductInput" class="input" placeholder="Product / item" />
+        </div>
+
+        <div class="timerRow">
+          <select id="supplierTypeInput" class="select">
+            <option value="">Select issue type</option>
+            <option value="Missing item">Missing item</option>
+            <option value="Wrong item">Wrong item</option>
+            <option value="Poor quality">Poor quality</option>
+            <option value="Damaged item">Damaged item</option>
+            <option value="Wrong quantity">Wrong quantity</option>
+            <option value="Late delivery">Late delivery</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="timerRow">
+          <input id="supplierQtyInput" class="input" placeholder="Quantity affected (optional)" />
+        </div>
+
+        <div class="timerRow">
+          <input id="supplierDescInput" class="input" placeholder="Short description (optional)" />
+        </div>
+
+        <div class="timerRow">
+          <button class="btn primary" id="submitSupplierBtn" type="button">📦 Report Issue</button>
+        </div>
+
+        <div class="errBox" id="supplierMsg" style="display:none;"></div>
+
+        <div class="widgetSubLine" style="margin-top:14px;">Latest issues</div>
+        <div class="cMiniList" id="supplierList">
+          <div class="cMiniEmpty">No supplier issues yet</div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="sectionHead" id="toolsHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Quick Tools</div>
@@ -655,17 +708,18 @@
     </div>
   </div>
 
+  <iframe name="saveTarget" style="display:none;width:0;height:0;border:0;"></iframe>
+
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const VAT_FACTOR = 1.25;
 
     const LOC_KEY = "kaiser_kitchenpct_loc";
-    const TIMER_KEY = "kaiser_3timer_v5";
-    const CLOCK_KEY = "kaiser_clock_visible_v5";
-    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v5";
-    const RUSH_KEY = "kaiser_rush_mode_v5";
-    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v5";
-    const CACHE_C_KEY = "kaiser_cache_catering_v5";
+    const TIMER_KEY = "kaiser_3timer_v5_supplier";
+    const CLOCK_KEY = "kaiser_clock_visible_v5_supplier";
+    const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v5_supplier";
+    const CACHE_K_KEY = "kaiser_cache_kitchenpct_v5_supplier";
+    const CACHE_C_KEY = "kaiser_cache_catering_v5_supplier";
 
     const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
     const WARN_30_MS = 30 * 60 * 1000;
@@ -715,14 +769,6 @@
         style: "currency",
         currency: "DKK",
         maximumFractionDigits: 0
-      });
-    }
-
-    function fmtTime(ts) {
-      if (!ts || !isFinite(ts)) return "—";
-      return new Date(ts).toLocaleTimeString("da-DK", {
-        hour: "2-digit",
-        minute: "2-digit"
       });
     }
 
@@ -788,10 +834,6 @@
       } catch (_) {
         return null;
       }
-    }
-
-    function setLiveStatus(kind, status, text) {
-      // v5 hides live pills visually; keep function for compatibility
     }
 
     function getLoc() {
@@ -862,12 +904,6 @@
     function updateClockUI() {
       $("clockWrap").classList.toggle("show", clockVisible);
       $("clockToggle").classList.toggle("on", clockVisible);
-    }
-
-    let rushMode = localStorage.getItem(RUSH_KEY) === "true";
-
-    function updateRushUI() {
-      $("shell").classList.toggle("rush", rushMode);
     }
 
     async function loadKitchenPct() {
@@ -1288,6 +1324,104 @@
       cleanupAlarmState(timers);
     }
 
+    async function loadSupplierIssues() {
+      const loc = getLoc();
+
+      if (!loc) {
+        $("supplierList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
+        return;
+      }
+
+      try {
+        const data = await jsonp(SCRIPT_URL, { action: "getSupplierIssues", loc: "Café Kaiser " + loc });
+
+        if (!data || !data.ok || !Array.isArray(data.issues) || !data.issues.length) {
+          $("supplierList").innerHTML = '<div class="cMiniEmpty">📦 No supplier issues yet</div>';
+          return;
+        }
+
+        $("supplierList").innerHTML = data.issues.map(issue => `
+          <div class="cMiniEvent">
+            <div class="cMiniBar red"></div>
+            <div class="cMiniInfo">
+              <div class="cMiniTitle">${escapeHtml(issue.supplierName)} – ${escapeHtml(issue.productName)}</div>
+              <div class="cMiniMeta">⚠️ ${escapeHtml(issue.issueType)}${issue.quantityAffected ? " • Qty: " + escapeHtml(issue.quantityAffected) : ""}</div>
+            </div>
+          </div>
+        `).join("");
+
+      } catch (e) {
+        $("supplierList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
+      }
+    }
+
+    function showSupplierMsg(msg, isErr = false) {
+      const box = $("supplierMsg");
+      box.textContent = msg;
+      box.style.display = "block";
+      box.style.background = isErr ? "rgba(255,107,107,0.15)" : "rgba(98,210,111,0.15)";
+      box.style.color = isErr ? "var(--danger)" : "var(--ok)";
+    }
+
+    function submitSupplierIssue() {
+      const loc = getLoc();
+      const supplierName = ($("supplierNameInput").value || "").trim();
+      const productName = ($("supplierProductInput").value || "").trim();
+      const issueType = ($("supplierTypeInput").value || "").trim();
+      const quantityAffected = ($("supplierQtyInput").value || "").trim();
+      const description = ($("supplierDescInput").value || "").trim();
+      const date = isoTodayLocal();
+
+      if (!loc) {
+        showSupplierMsg("No location set", true);
+        return;
+      }
+
+      if (!supplierName || !productName || !issueType) {
+        showSupplierMsg("Please fill supplier, product and issue type", true);
+        return;
+      }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = SCRIPT_URL;
+      form.target = "saveTarget";
+      form.style.display = "none";
+
+      const fields = {
+        action: "addSupplierIssue",
+        date: date,
+        location: "Café Kaiser " + loc,
+        supplierName: supplierName,
+        productName: productName,
+        issueType: issueType,
+        quantityAffected: quantityAffected,
+        description: description
+      };
+
+      Object.keys(fields).forEach(key => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        form.remove();
+        $("supplierNameInput").value = "";
+        $("supplierProductInput").value = "";
+        $("supplierTypeInput").value = "";
+        $("supplierQtyInput").value = "";
+        $("supplierDescInput").value = "";
+        showSupplierMsg("✅ Supplier issue reported");
+        loadSupplierIssues();
+      }, 1200);
+    }
+
     function setupCollapsible(headId, bodyId, arrowId) {
       $(headId).addEventListener("click", () => {
         $(bodyId).classList.toggle("open");
@@ -1357,6 +1491,8 @@
     $("startFreeBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS, ""));
     $("clearExpBtn").addEventListener("click", clearExpired);
 
+    $("submitSupplierBtn").addEventListener("click", submitSupplierIssue);
+
     $("refreshKBtn").addEventListener("click", loadKitchenPct);
     $("refreshCBtn").addEventListener("click", loadCateringMini);
 
@@ -1365,6 +1501,7 @@
     $("wakeBtn").addEventListener("click", toggleWakeLock);
 
     setupCollapsible("timerHead", "timerBody", "timerArrow");
+    setupCollapsible("supplierHead", "supplierBody", "supplierArrow");
     setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
 
     $("toolsBody").classList.remove("open");
@@ -1420,13 +1557,13 @@
 
       updateClockUI();
       updateClock();
-      updateRushUI();
 
       renderTimers();
       checkTimerAlarms();
 
       loadKitchenPct();
       loadCateringMini();
+      loadSupplierIssues();
 
       setInterval(updateClock, 1000);
       setInterval(() => {
@@ -1435,6 +1572,7 @@
       }, 1000);
       setInterval(loadKitchenPct, 60000);
       setInterval(loadCateringMini, 60000);
+      setInterval(loadSupplierIssues, 60000);
     })();
   </script>
 </body>
