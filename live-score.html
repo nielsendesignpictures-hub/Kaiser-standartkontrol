@@ -1,902 +1,729 @@
 <!doctype html>
-<meta name="robots" content="noindex, nofollow">
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Live Score</title>
+  <title>Kaiser – Dashboard</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg0:#070A12;
-      --bg1:#0B1020;
-
-      --text:rgba(255,255,255,0.94);
-      --muted:rgba(255,255,255,0.74);
-      --muted2:rgba(255,255,255,0.52);
-
+      --bg0:#0d1117;
+      --bg1:#161b22;
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.70);
+      --muted2:rgba(255,255,255,0.50);
       --gold:#d6b24a;
       --gold2:#b9921f;
-
+      --ok:#62d26f;
+      --warn:#f59e0b;
       --danger:#ff6b6b;
-      --shadow: 0 26px 75px rgba(0,0,0,.55);
-      --shadow2: 0 18px 55px rgba(0,0,0,.35);
+      --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
-    html,body{height:100%;}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter,system-ui,sans-serif;
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.10), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      overflow-x:hidden;
-    }
-    body:before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 38px 38px;
-      opacity:0.06;
-      pointer-events:none;
-      mask-image: radial-gradient(1000px 700px at 50% 0%, black, transparent 75%);
+      padding:18px;
     }
 
-    .shell{max-width:1200px; margin:0 auto; padding:18px 16px 44px;}
+    .shell{max-width:1450px;margin:0 auto;}
 
     .hero{
+      border-radius:32px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:28px 24px 22px;
       position:relative;
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      box-shadow: var(--shadow);
       overflow:hidden;
-      padding: 26px 20px 18px;
-    }
-    .hero:after{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 20% 0%, rgba(214,178,74,0.22), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(214,178,74,0.14), transparent 60%);
-      opacity:.55;
-      pointer-events:none;
     }
 
     .kicker{
-      position:relative;
+      text-align:center;
       font-size:12px;
+      font-weight:900;
       letter-spacing:.24em;
       text-transform:uppercase;
       color:var(--muted2);
-      font-weight:900;
-      text-align:center;
-      user-select:none;
-      cursor: default;
     }
+
     .title{
-      position:relative;
-      font-family:"Playfair Display", serif;
-      font-size:48px;
-      line-height:1.02;
-      letter-spacing:-0.02em;
-      font-weight:700;
+      font-family:"Playfair Display",serif;
       text-align:center;
-      margin-top:10px;
+      font-size:clamp(54px,8vw,76px);
+      line-height:1;
+      margin-top:8px;
+      letter-spacing:-.03em;
     }
-    .subtitle{
-      position:relative;
+
+    .sub{
       text-align:center;
       margin-top:10px;
       color:var(--muted);
-      font-weight:700;
-      font-size:13px;
+      font-weight:800;
+      font-size:14px;
     }
+
     .goldline{
-      position:relative;
       height:2px;
-      margin:18px auto 0;
-      max-width: 680px;
+      margin:20px auto 0;
+      max-width:940px;
       border-radius:999px;
-      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.92), transparent);
-      opacity:.95;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
     }
 
-    .controls{
-      position:relative;
-      margin-top:16px;
+    .tabRow{
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
       justify-content:center;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.04);
-      font-weight:1000;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:11px;
-      color: rgba(255,255,255,0.86);
-      white-space:nowrap;
-      user-select:none;
-      cursor:pointer;
-      transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-    .pill:active{ transform: translateY(1px); }
-    .pill.on{
-      border-color: rgba(214,178,74,0.35);
-      background: rgba(214,178,74,0.12);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.12);
-    }
-
-    .btnPrimary{
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #0b0c0f;
-      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
-      border: none;
-      user-select:none;
-    }
-    .btnSecondary{
-      border-radius: 16px;
-      font-weight: 1000;
-      letter-spacing: .02em;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.90);
-      user-select:none;
-    }
-    .btnPrimary:active, .btnSecondary:active{ transform: translateY(1px); }
-
-    .section{
-      margin-top:18px;
-      border-radius:26px;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-    }
-    .sectionHead{
-      padding:16px 16px 12px;
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
-      background:
-        radial-gradient(900px 200px at 50% 0%, rgba(255,255,255,0.06), transparent 65%),
-        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+      margin-top:18px;
     }
-    .sectionTitle{
-      font-weight:1000;
-      letter-spacing:.20em;
-      text-transform:uppercase;
+
+    .tabBtn{
+      padding:14px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+      color:rgba(255,255,255,0.92);
       font-size:12px;
-      color: rgba(255,255,255,0.72);
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .tabBtn:hover{background:rgba(255,255,255,0.10);}
+    .tabBtn.on{
+      background:rgba(214,178,74,0.14);
+      border-color:rgba(214,178,74,0.40);
+      color:var(--gold);
+      box-shadow:0 0 0 1px rgba(214,178,74,0.15);
+    }
+
+    .metaLine{
+      text-align:center;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .section{
+      margin-top:20px;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      overflow:hidden;
+    }
+
+    .sectionHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:16px 20px;
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid rgba(255,255,255,0.10);
+    }
+
+    .sectionTitle{
       display:flex;
       align-items:center;
       gap:10px;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
     }
-    .sectionTitle .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: rgba(214,178,74,0.85);
-      box-shadow: 0 0 0 5px rgba(214,178,74,0.10);
-      opacity:.95;
-    }
-    .sectionSub{
-      color: rgba(255,255,255,0.55);
-      font-weight:800;
-      font-size:12px;
-    }
-    .divider{height:1px;background:rgba(255,255,255,0.10);}
 
-    /* grids */
-    .grid{
+    .sectionDot{
+      width:12px;height:12px;border-radius:50%;background:var(--gold);
+    }
+
+    .sectionInfo{
+      color:var(--muted2);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .sectionBody{padding:20px;}
+
+    .grid4{
       display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      padding: 14px;
+      grid-template-columns:repeat(4, 1fr);
+      gap:18px;
     }
-    @media (min-width: 820px){
-      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
-    }
-    @media (min-width: 1200px){
-      .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-    .gridTwo{
+
+    .grid2{
       display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      padding: 14px;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
     }
-    @media (min-width: 820px){
-      .gridTwo{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap:18px; }
+
+    .grid5{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:18px;
+    }
+
+    @media (max-width: 1200px){
+      .grid4,.grid5{grid-template-columns:repeat(2,1fr);}
+    }
+    @media (max-width: 760px){
+      .grid4,.grid2,.grid5{grid-template-columns:1fr;}
     }
 
     .card{
-      border-radius:26px;
-      padding:18px 18px 16px;
+      border-radius:24px;
       border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      box-shadow: 0 20px 60px rgba(0,0,0,.40);
-      min-height: 160px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:20px;
+      min-height:230px;
+      position:relative;
     }
-    .cardLabel{
+
+    .cardKicker{
+      color:var(--muted2);
       font-size:12px;
-      letter-spacing:.22em;
+      font-weight:900;
+      letter-spacing:.20em;
       text-transform:uppercase;
-      color: rgba(255,255,255,0.55);
-      font-weight:1000;
     }
-    .cardValue{
-      font-family:"Playfair Display", serif;
-      font-size: clamp(36px, 4.2vw, 56px);
-      line-height:1.02;
-      letter-spacing:-0.02em;
-      font-weight:700;
+
+    .bigValue{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(42px,6vw,64px);
+      line-height:.95;
+      margin-top:22px;
+      letter-spacing:-.03em;
     }
-    .cardValue.small{ font-size: clamp(30px, 3.4vw, 44px); }
-    .cardSub{
-      color: rgba(255,255,255,0.74);
+
+    .bigValue.small{font-size:clamp(34px,4vw,50px);}
+    .subValue{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:15px;
       font-weight:800;
-      font-size:13px;
-      line-height:1.25;
     }
-    .cardMeta{
-      margin-top:auto;
+
+    .progress{
+      margin-top:14px;
+      height:14px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+    .progressFill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      transition:width .3s;
+    }
+
+    .chipRow{
       display:flex;
-      gap:8px;
+      gap:10px;
       flex-wrap:wrap;
+      margin-top:18px;
     }
-    .tag{
+
+    .chip{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:8px 10px;
+      padding:10px 14px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-      font-weight:1000;
-      letter-spacing:.12em;
+      background:rgba(255,255,255,0.05);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
       text-transform:uppercase;
-      font-size:11px;
-      color: rgba(255,255,255,0.76);
-      white-space:nowrap;
-    }
-    .tag .miniDot{ width:7px;height:7px;border-radius:999px; background: rgba(214,178,74,0.85); }
-
-    .meterWrap{
-      height:10px;
-      border-radius:999px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
-    }
-    .meterFill{
-      height:10px;
-      width:0%;
-      background: linear-gradient(90deg, rgba(214,178,74,0.95), rgba(185,146,31,0.95));
-    }
-    .meterFill.ok{
-      background: linear-gradient(90deg, rgba(98,210,111,1), rgba(44,160,83,1));
     }
 
-    .focusBanner{
-      margin: 14px;
-      border-radius:26px;
-      padding:18px 18px 16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      box-shadow: 0 20px 60px rgba(0,0,0,.40);
+    .chipDot{
+      width:9px;height:9px;border-radius:50%;background:var(--gold);
     }
+
+    .focusCard{
+      min-height:160px;
+    }
+
     .focusText{
-      font-family:"Playfair Display", serif;
-      font-size: clamp(26px, 3.2vw, 44px);
-      line-height:1.06;
-      letter-spacing:-0.02em;
-      font-weight:700;
-    }
-    .focusSub{
-      margin-top:8px;
-      color: rgba(255,255,255,0.70);
-      font-weight:800;
-      font-size:13px;
+      margin-top:16px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(40px,5vw,68px);
+      line-height:.95;
+      letter-spacing:-.03em;
     }
 
-    /* top10 list inside card */
-    .miniList{
-      margin-top:8px;
+    .storeCard{
+      min-height:260px;
+    }
+
+    .storeName{
+      color:var(--muted2);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .storeValue{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(48px,5vw,64px);
+      line-height:1;
+      margin-top:18px;
+    }
+
+    .storeMeta{
+      color:var(--muted);
+      font-weight:800;
+      font-size:14px;
+      margin-top:10px;
+    }
+
+    .miniBar{
+      margin-top:16px;
+      height:14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .miniBarFill{
+      height:100%;
+      background:linear-gradient(90deg,var(--gold),var(--gold2));
+      width:0%;
+    }
+
+    .listCard{
+      min-height:500px;
+    }
+
+    .listTitle{
+      color:var(--text);
+      font-size:16px;
+      font-weight:900;
+      margin-top:10px;
+    }
+
+    .rankList{
+      margin-top:20px;
       display:flex;
       flex-direction:column;
-      gap:8px;
-      max-height: 430px;
-      overflow:auto;
-      padding-right: 2px;
+      gap:10px;
     }
-    .miniList::-webkit-scrollbar{ width: 10px; }
-    .miniList::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.10); border-radius:999px; }
 
-    .miniLine{
-      position:relative;
-      border-radius:16px;
+    .rankItem{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(255,255,255,0.05);
       border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.03);
+      position:relative;
       overflow:hidden;
     }
-    .miniFill{
-      position:absolute; inset:0;
+
+    .rankBg{
+      position:absolute;
+      inset:0 auto 0 0;
       width:0%;
-      background: rgba(214,178,74,0.14);
+      background:linear-gradient(90deg, rgba(214,178,74,0.18), rgba(214,178,74,0.02));
+      pointer-events:none;
     }
-    .miniContent{
+
+    .rankText, .rankVal{
       position:relative;
       z-index:1;
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
     }
-    .miniLeft{
-      font-weight:1000;
-      letter-spacing:-0.01em;
-      font-size:13px;
-      min-width:0;
+
+    .rankText{
+      font-size:15px;
+      font-weight:800;
+      white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .miniRight{
-      font-weight:1000;
-      color: rgba(255,255,255,0.88);
-      font-size:12px;
-      letter-spacing:.02em;
-      flex:0 0 auto;
     }
 
-    .hidden{ display:none !important; }
+    .rankVal{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,0.92);
+    }
 
-    /* Modal */
-    .modalBackdrop{
-      position:fixed; inset:0;
-      display:none;
-      align-items:center; justify-content:center;
-      padding:16px;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(6px);
-      z-index:100;
-    }
-    .panelModal{
-      width: min(980px, 100%);
-      max-height: 88vh;
-      overflow:auto;
-      background: rgba(18,20,28,0.92);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      padding: 14px;
-    }
-    textarea{
-      width:100%;
-      min-height: 360px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      padding: 14px 14px;
-      outline: none;
-      color: rgba(255,255,255,0.92);
-      font-weight:800;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size:12px;
-      line-height:1.35;
-    }
-    textarea:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.18);
-      background: rgba(255,255,255,0.08);
-    }
+    .hidden{display:none;}
   </style>
 </head>
+<body>
+  <div class="shell">
 
-<body class="min-h-screen flex justify-center p-4">
-  <div class="shell w-full">
-
-    <header class="hero mt-6">
-      <div class="kicker" id="kickerTap">KAISER</div>
+    <header class="hero">
+      <div class="kicker">KAISER</div>
       <div class="title">Dashboard</div>
-      <div class="subtitle">Hurtigt overblik • auto-rotation • manuel data nu (Friendly senere)</div>
+      <div class="sub">Hurtigt overblik • auto-rotation • manual data nu (Friendly senere)</div>
       <div class="goldline"></div>
 
-      <div class="controls" aria-label="Navigation">
-        <div class="pill on" id="navOverview">Overblik</div>
-        <div class="pill" id="navLocations">Lokationer</div>
-        <div class="pill" id="navProducts">Produkter</div>
+      <div class="tabRow">
+        <button class="tabBtn on" data-tab="overview">Overblik</button>
+        <button class="tabBtn" data-tab="locations">Lokationer</button>
+        <button class="tabBtn" data-tab="products">Produkter</button>
       </div>
 
-      <div class="subtitle" id="statusLine" style="margin-top:12px;">—</div>
-      <div id="errorText" class="mt-3 hidden" style="color:var(--danger);font-weight:1000;text-align:center;"></div>
+      <div class="metaLine" id="metaLine">Nu: — • Sidst gemt: —</div>
     </header>
 
     <!-- OVERVIEW -->
-    <section class="section" id="screenOverview" aria-label="Overblik">
+    <section class="section" id="tab-overview">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Overblik</div>
-        <div class="sectionSub">4 tal • fokus</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Overblik</div>
+        <div class="sectionInfo">4 tal • fokus</div>
       </div>
-      <div class="divider"></div>
+      <div class="sectionBody">
+        <div class="grid4">
+          <div class="card">
+            <div class="cardKicker">Dagens omsætning</div>
+            <div class="bigValue" id="todayRevenue">—</div>
+            <div class="subValue" id="todayRevenueGap">Mangler: —</div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="todayRevenuePct">—</span></div>
+              <div class="chip"><span class="chipDot"></span><span id="todayRevenueGoal">Mål: —</span></div>
+            </div>
+          </div>
 
-      <div class="grid">
-        <div class="card">
-          <div class="cardLabel">Dagens omsætning</div>
-          <div class="cardValue" id="kpiTodayRevenue">—</div>
-          <div class="cardSub" id="kpiTodaySub">—</div>
-          <div class="cardMeta">
-            <div class="tag" id="kpiTodayPct"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiTodayTarget"><span class="miniDot"></span> Mål: —</div>
+          <div class="card">
+            <div class="cardKicker">YTD / Årsbudget</div>
+            <div class="bigValue small" id="ytdPct">—</div>
+            <div class="progress"><div class="progressFill" id="ytdBar"></div></div>
+            <div class="subValue" id="ytdGap">Mangler: —</div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="ytdActualBudget">— / —</span></div>
+              <div class="chip"><span class="chipDot"></span><span id="ytdDelta">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker">Dagens topsælger</div>
+            <div class="bigValue small" id="topSellerName">—</div>
+            <div class="subValue">Antal i dag</div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="topSellerQty">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker">Dessert (mersalg)</div>
+            <div class="bigValue small" id="dessertSold">—</div>
+            <div class="progress"><div class="progressFill" id="dessertBar"></div></div>
+            <div class="subValue">Dessert solgt i dag</div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="dessertGap">Mangler —</span></div>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="cardLabel">YTD / Årsbudget</div>
-          <div class="cardValue" id="kpiYtdPct">—</div>
-          <div class="meterWrap"><div id="kpiYtdBar" class="meterFill"></div></div>
-          <div class="cardSub" id="kpiYtdSub">—</div>
-          <div class="cardMeta">
-            <div class="tag" id="kpiYtdNums"><span class="miniDot"></span> —</div>
-            <div class="tag" id="kpiPace"><span class="miniDot"></span> Pace: —</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardLabel">Dagens topsælger</div>
-          <div class="cardValue small" id="kpiTodayProd">—</div>
-          <div class="cardSub" id="kpiTodayProdSub">—</div>
-          <div class="cardMeta">
-            <div class="tag" id="kpiTodayProdCount"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardLabel">Dessert (mersalg)</div>
-          <div class="cardValue" id="kpiDessert">—</div>
-          <div class="meterWrap"><div id="kpiDessertBar" class="meterFill"></div></div>
-          <div class="cardSub" id="kpiDessertSub">—</div>
-          <div class="cardMeta">
-            <div class="tag" id="kpiDessertRemain"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="focusBanner">
-        <div class="cardLabel">Dagens fokus</div>
-        <div class="focusText" id="focusText">—</div>
-        <div class="focusSub" id="focusSub" style="display:none;"></div>
-      </div>
-    </section>
-
-    <!-- LOCATIONS (cards) -->
-    <section class="section hidden" id="screenLocations" aria-label="Lokationer">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Lokationer</div>
-        <div class="sectionSub">Opbygget som overblik</div>
-      </div>
-      <div class="divider"></div>
-      <div class="grid" id="locCards"></div>
-    </section>
-
-    <!-- PRODUCTS (two cards) -->
-    <section class="section hidden" id="screenProducts" aria-label="Produkter">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="dot"></span> Produkter</div>
-        <div class="sectionSub">Top 10 i dag + Top 10 ÅTD</div>
-      </div>
-      <div class="divider"></div>
-
-      <div class="gridTwo">
-        <div class="card">
-          <div class="cardLabel">Top 10 – i dag</div>
-          <div class="cardSub" id="prodTodayHint">—</div>
-          <div class="miniList" id="prodTodayList"></div>
-          <div class="cardMeta">
-            <div class="tag" id="prodTodayTag"><span class="miniDot"></span> —</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardLabel">Top 10 – ÅTD</div>
-          <div class="cardSub" id="prodYtdHint">—</div>
-          <div class="miniList" id="prodYtdList"></div>
-          <div class="cardMeta">
-            <div class="tag" id="prodYtdTag"><span class="miniDot"></span> —</div>
-          </div>
+        <div class="card focusCard" style="margin-top:18px;">
+          <div class="cardKicker">Dagens fokus</div>
+          <div class="focusText" id="focusText">—</div>
         </div>
       </div>
     </section>
 
-  </div>
+    <!-- LOCATIONS -->
+    <section class="section hidden" id="tab-locations">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Lokationer</div>
+        <div class="sectionInfo">Opbygget som overblik</div>
+      </div>
+      <div class="sectionBody">
+        <div class="grid5" id="locationsGrid"></div>
+      </div>
+    </section>
 
-  <!-- EDIT MODAL -->
-  <div id="modal" class="modalBackdrop">
-    <div class="panelModal space-y-3">
-      <div class="flex items-start justify-between gap-3 flex-wrap">
-        <div>
-          <div style="font-weight:1000;letter-spacing:-0.01em;font-size:18px;">Rediger data (JSON)</div>
-          <div style="color:rgba(255,255,255,0.60);font-weight:900;font-size:12px;">
-            Gemmes kun på denne enhed/skærm.
+    <!-- PRODUCTS -->
+    <section class="section hidden" id="tab-products">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Produkter</div>
+        <div class="sectionInfo">Top 10 i dag + Top 10 ÅTD</div>
+      </div>
+      <div class="sectionBody">
+        <div class="grid2">
+          <div class="card listCard">
+            <div class="cardKicker">Top 10 – i dag</div>
+            <div class="listTitle">Top 10 i dag</div>
+            <div class="rankList" id="productsTodayList"></div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="productsTodayCount">Varer: —</span></div>
+            </div>
+          </div>
+
+          <div class="card listCard">
+            <div class="cardKicker">Top 10 – ÅTD</div>
+            <div class="listTitle">Top 10 ÅTD</div>
+            <div class="rankList" id="productsYtdList"></div>
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span id="productsYtdCount">Varer: —</span></div>
+            </div>
           </div>
         </div>
-        <div class="flex gap-2 flex-wrap">
-          <button id="resetBtn" class="btnSecondary" type="button">Reset til standard</button>
-          <button id="closeBtn" class="btnSecondary" type="button">Luk uden at gemme</button>
-          <button id="saveBtn" class="btnPrimary" type="button">Gem</button>
-        </div>
       </div>
+    </section>
 
-      <textarea id="jsonArea" spellcheck="false"></textarea>
-
-      <div class="tag" style="justify-content:center; display:flex;">
-        <span class="miniDot"></span> Lederkode kræves • KAISER2026
-      </div>
-    </div>
   </div>
 
   <script>
-    // NY NØGLE V4: Så computeren tvinges til at glemme det gamle JSON fejl-skrammel
-    // og i stedet hente den rigtige data, der ligger gemt lige herunder!
-    const APP_KEY = "kaiser_live_score_v4";
-    const LEADER_CODE = "KAISER2026";
-    const ROTATE_SECONDS = 14;
-
-    function $(id){ return document.getElementById(id); }
-    function clamp01(x){ return Math.max(0, Math.min(1, x)); }
-
-    function nowDK(){
-      return new Date().toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-    }
-    function formatDKK(n){
-      const val = Number(n || 0);
-      return val.toLocaleString("da-DK", { style:"currency", currency:"DKK", maximumFractionDigits:0 });
-    }
-    function setError(msg){
-      const el = $("errorText");
-      if (!msg){ el.classList.add("hidden"); el.textContent = ""; return; }
-      el.textContent = msg;
-      el.classList.remove("hidden");
-    }
-    function dayOfYear(d){
-      const start = new Date(d.getFullYear(), 0, 1);
-      return Math.floor((d - start) / (24*3600*1000)) + 1;
-    }
-    function daysInYear(y){
-      return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 366 : 365;
-    }
-
-    // HER ER DIN DATA HARDCODET RIGTIGT IND! 
-    const DEFAULT_DATA = {
-      meta: { lastSavedAt: "" },
-      productsToday: { 
-        "Filterkaffe": 88, 
-        "Cappuccino": 62, 
-        "Fadøl": 41, 
-        "Kaiserburger": 27, 
-        "Brunch": 19, 
-        "Dessert": 14 
-      },
-      productsAllTime: {
-        "Filterkaffe": 6210,
-        "Cappuccino": 3980,
-        "Fadøl": 2870,
-        "Kaiserburger": 1240,
-        "Brunch": 1540
-      },
-      // DIN NYE ÅTD LISTE
-      productsYTD: {
-        "Brunchbuffet": 5113,
-        "Brunch - 5 elementer": 3899,
-        "M. P Max": 3707,
-        "Kaiser burger": 3099,
-        "Flæsk ad libitum": 2935,
-        "M. Classic": 2795
-      },
-      // DINE NYE ÅTD OMSÆTNINGSTAL
-      locations: [
-        { name:"Café Kaiser Hillerød",  todayRevenue: 14100, todayTarget: 22000, ytdRevenue: 2943572.61, ytdTarget: 7000000 },
-        { name:"Café Kaiser Hørsholm",  todayRevenue: 16200, todayTarget: 24000, ytdRevenue: 2544273.09, ytdTarget: 7400000 },
-        { name:"Café Kaiser Vanløse",   todayRevenue: 9900,  todayTarget: 18000, ytdRevenue: 2445203.48, ytdTarget: 5600000 },
-        { name:"Café Kaiser Farum",     todayRevenue: 12150, todayTarget: 20000, ytdRevenue: 2199475.77, ytdTarget: 6100000 },
-        { name:"Café Kaiser Helsingør", todayRevenue: 18500, todayTarget: 25000, ytdRevenue: 1786337.35, ytdTarget: 7600000 }
-      ],
-      upsell: { title:"Dessert solgt", current: 14, target: 30 },
-      focus: { text:"Husk dessert + kaffe ved alle bordene.", sub:"" }
+    // ============================================================
+    // MANUAL CONFIG
+    // ============================================================
+    const MANUAL_CONFIG = {
+      updatedAt: "10.03.2026, 14.17",
+      dailyRevenueGoal: 109000,
+      yearlyBudget: 33700000,
+      ytdActual: 11918862,
+      ytdDelta: 5271191,
+      dessertGoalToday: 30,
+      focusText: "Husk dessert + kaffe ved alle bordene."
     };
 
-    function loadData(){
-      const raw = localStorage.getItem(APP_KEY);
-      if (!raw) return structuredClone(DEFAULT_DATA);
-      try {
-        const obj = JSON.parse(raw);
-        return (obj && typeof obj === "object") ? obj : structuredClone(DEFAULT_DATA);
-      } catch(e){
-        return structuredClone(DEFAULT_DATA);
-      }
-    }
-    function saveData(data){
-      data.meta = data.meta || {};
-      data.meta.lastSavedAt = nowDK();
-      localStorage.setItem(APP_KEY, JSON.stringify(data));
-      return data;
-    }
+    // ============================================================
+    // SKELETON DATA
+    // Replace these later with Friendly API proxy data
+    // ============================================================
+    const DASHBOARD_DATA = {
+      overview: {
+        todayRevenue: 70850,
+        ordersToday: 36,
+        topSellerToday: { name: "Filterkaffe", qty: 88 },
+        dessertSoldToday: 14
+      },
 
-    function topEntry(map){
-      const entries = Object.entries(map || {});
-      if (!entries.length) return null;
-      entries.sort((a,b) => Number(b[1]||0) - Number(a[1]||0));
-      return { name: entries[0][0], value: Number(entries[0][1]||0) };
-    }
-    function sortedEntries(map){
-      return Object.entries(map || {})
-        .map(([k,v]) => ({ name:k, value:Number(v||0) }))
-        .sort((a,b) => b.value - a.value);
-    }
-    function setMeter(elFill, pct){
-      const w = Math.round(clamp01(pct) * 100);
-      elFill.style.width = w + "%";
-      elFill.classList.toggle("ok", pct >= 1);
-    }
-    function renderTopList(container, entries){
-      container.innerHTML = "";
-      const maxV = Math.max(1, ...entries.map(e => e.value));
-      entries.forEach((e, idx) => {
-        const line = document.createElement("div");
-        line.className = "miniLine";
-        const w = Math.round(clamp01(e.value / maxV) * 100);
-        line.innerHTML = `
-          <div class="miniFill" style="width:${w}%"></div>
-          <div class="miniContent">
-            <div class="miniLeft">${idx+1}. ${e.name}</div>
-            <div class="miniRight">${e.value.toLocaleString("da-DK")}</div>
-          </div>
-        `;
-        container.appendChild(line);
+      locations: [
+        { id: "1", name: "Café Kaiser Helsingør", revenue: 18500, orders: 7 },
+        { id: "2", name: "Café Kaiser Hørsholm", revenue: 16200, orders: 6 },
+        { id: "3", name: "Café Kaiser Hillerød", revenue: 14100, orders: 5 },
+        { id: "4", name: "Café Kaiser Farum", revenue: 12150, orders: 4 },
+        { id: "5", name: "Café Kaiser Vanløse", revenue: 9900, orders: 3 }
+      ],
+
+      productsToday: [
+        { name: "Filterkaffe", qty: 88 },
+        { name: "Cappuccino", qty: 62 },
+        { name: "Fadøl", qty: 41 },
+        { name: "Kaiserburger", qty: 27 },
+        { name: "Brunch", qty: 19 },
+        { name: "Dessert", qty: 14 }
+      ],
+
+      productsYtd: [
+        { name: "Brunchbuffet", qty: 5113 },
+        { name: "Brunch - 5 elementer", qty: 3899 },
+        { name: "M. P Max", qty: 3707 },
+        { name: "Kaiser burger", qty: 3099 },
+        { name: "Flæsk ad libitum", qty: 2935 },
+        { name: "M. Classic", qty: 2795 }
+      ]
+    };
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    const $ = id => document.getElementById(id);
+
+    function fmtDKK(n) {
+      return Number(n || 0).toLocaleString("da-DK", {
+        style: "currency",
+        currency: "DKK",
+        maximumFractionDigits: 0
       });
     }
 
-    // Screens
-    const screens = ["overview","locations","products"];
-    let activeScreen = "overview";
-    let rotateTimer = null;
-
-    function setNav(){
-      $("navOverview").classList.toggle("on", activeScreen === "overview");
-      $("navLocations").classList.toggle("on", activeScreen === "locations");
-      $("navProducts").classList.toggle("on", activeScreen === "products");
-    }
-    function setScreen(id){
-      activeScreen = id;
-      $("screenOverview").classList.toggle("hidden", id !== "overview");
-      $("screenLocations").classList.toggle("hidden", id !== "locations");
-      $("screenProducts").classList.toggle("hidden", id !== "products");
-      setNav();
-    }
-    function startRotation(){
-      stopRotation();
-      rotateTimer = setInterval(() => {
-        if ($("modal").style.display === "flex") return;
-        const idx = screens.indexOf(activeScreen);
-        setScreen(screens[(idx + 1) % screens.length]);
-      }, ROTATE_SECONDS * 1000);
-    }
-    function stopRotation(){
-      if (rotateTimer) clearInterval(rotateTimer);
-      rotateTimer = null;
+    function pctStr(p) {
+      if (p === null || !isFinite(p)) return "—";
+      return (p * 100).toFixed(0).replace(".", ",") + "%";
     }
 
-    function render(){
-      setError("");
-      const data = loadData();
+    function fmtInt(n) {
+      return Number(n || 0).toLocaleString("da-DK");
+    }
 
-      const saved = (data.meta && data.meta.lastSavedAt) ? data.meta.lastSavedAt : "—";
-      $("statusLine").textContent = `Nu: ${nowDK()} • Sidst gemt: ${saved}`;
+    function clamp01(x) {
+      return Math.max(0, Math.min(1, x));
+    }
 
-      const locs = Array.isArray(data.locations) ? data.locations : [];
-      const todayTotal = locs.reduce((s,l) => s + Number(l.todayRevenue||0), 0);
-      const todayTargetTotal = locs.reduce((s,l) => s + Number(l.todayTarget||0), 0);
-      const ytdTotal = locs.reduce((s,l) => s + Number(l.ytdRevenue||0), 0);
-      const budgetTotal = locs.reduce((s,l) => s + Number(l.ytdTarget||0), 0);
+    function nowDa() {
+      return new Date().toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-      // KPI: today revenue
-      $("kpiTodayRevenue").textContent = formatDKK(todayTotal);
-      if (todayTargetTotal > 0) {
-        const pct = todayTotal / todayTargetTotal;
-        $("kpiTodayPct").innerHTML = `<span class="miniDot"></span> ${Math.round(pct*100)}%`;
-        $("kpiTodayTarget").innerHTML = `<span class="miniDot"></span> Mål: ${formatDKK(todayTargetTotal)}`;
-        $("kpiTodaySub").textContent = "Mangler: " + formatDKK(Math.max(0, todayTargetTotal - todayTotal));
-      } else {
-        $("kpiTodayPct").innerHTML = `<span class="miniDot"></span> —`;
-        $("kpiTodayTarget").innerHTML = `<span class="miniDot"></span> Mål: —`;
-        $("kpiTodaySub").textContent = "Sæt todayTarget pr. lokation for målopfyldelse.";
-      }
+    // ============================================================
+    // RENDER
+    // ============================================================
+    function renderMeta() {
+      $("metaLine").textContent = `Nu: ${nowDa()} • Sidst gemt: ${MANUAL_CONFIG.updatedAt}`;
+    }
 
-      // KPI: YTD / budget
-      const ytdPct = budgetTotal > 0 ? (ytdTotal / budgetTotal) : 0;
-      $("kpiYtdPct").textContent = Math.round(ytdPct*100) + "%";
-      setMeter($("kpiYtdBar"), ytdPct);
-      $("kpiYtdNums").innerHTML = `<span class="miniDot"></span> ${formatDKK(ytdTotal)} / ${formatDKK(budgetTotal)}`;
-      $("kpiYtdSub").textContent = "Mangler: " + formatDKK(Math.max(0, budgetTotal - ytdTotal));
+    function renderOverview() {
+      const rev = DASHBOARD_DATA.overview.todayRevenue;
+      const goal = MANUAL_CONFIG.dailyRevenueGoal;
+      const revPct = goal > 0 ? rev / goal : 0;
+      const revMissing = Math.max(0, goal - rev);
 
-      const now = new Date();
-      const fracYear = dayOfYear(now) / daysInYear(now.getFullYear());
-      const expected = budgetTotal * fracYear;
-      const delta = ytdTotal - expected;
-      $("kpiPace").innerHTML = `<span class="miniDot"></span> ${delta >= 0 ? ("+"+formatDKK(delta)) : formatDKK(delta)}`;
+      $("todayRevenue").textContent = fmtDKK(rev);
+      $("todayRevenueGap").textContent = "Mangler: " + fmtDKK(revMissing);
+      $("todayRevenuePct").textContent = pctStr(revPct);
+      $("todayRevenueGoal").textContent = "Mål: " + fmtDKK(goal);
 
-      // KPI: today top product
-      const todayTop = topEntry(data.productsToday);
-      $("kpiTodayProd").textContent = todayTop ? todayTop.name : "—";
-      $("kpiTodayProdSub").textContent = todayTop ? "Antal i dag" : "Ingen data";
-      $("kpiTodayProdCount").innerHTML = `<span class="miniDot"></span> ${todayTop ? todayTop.value.toLocaleString("da-DK") : "—"}`;
+      const ytdActual = MANUAL_CONFIG.ytdActual;
+      const yearlyBudget = MANUAL_CONFIG.yearlyBudget;
+      const ytdPct = yearlyBudget > 0 ? ytdActual / yearlyBudget : 0;
+      const ytdMissing = Math.max(0, yearlyBudget - ytdActual);
 
-      // KPI: dessert
-      const ups = data.upsell || {};
-      const cur = Number(ups.current || 0);
-      const tar = Math.max(1, Number(ups.target || 0));
-      $("kpiDessert").textContent = `${cur}/${tar}`;
-      setMeter($("kpiDessertBar"), cur/tar);
-      $("kpiDessertSub").textContent = "Dessert solgt i dag";
-      const remain = Math.max(0, tar - cur);
-      $("kpiDessertRemain").innerHTML = `<span class="miniDot"></span> ${remain ? ("Mangler " + remain) : "Mål nået"}`;
+      $("ytdPct").textContent = pctStr(ytdPct);
+      $("ytdBar").style.width = (clamp01(ytdPct) * 100) + "%";
+      $("ytdGap").textContent = "Mangler: " + fmtDKK(ytdMissing);
+      $("ytdActualBudget").textContent = `${fmtDKK(ytdActual)} / ${fmtDKK(yearlyBudget)}`;
+      $("ytdDelta").textContent = `+${fmtDKK(MANUAL_CONFIG.ytdDelta)}`;
 
-      // Focus
-      const f = data.focus || {};
-      $("focusText").textContent = f.text || "—";
-      const sub = (f.sub || "").trim();
-      $("focusSub").textContent = sub;
-      $("focusSub").style.display = sub ? "" : "none";
+      $("topSellerName").textContent = DASHBOARD_DATA.overview.topSellerToday.name || "—";
+      $("topSellerQty").textContent = fmtInt(DASHBOARD_DATA.overview.topSellerToday.qty || 0);
 
-      // LOCATIONS as cards
-      const locWrap = $("locCards");
-      locWrap.innerHTML = "";
-      const sortedLocs = locs.slice().sort((a,b) => Number(b.todayRevenue||0) - Number(a.todayRevenue||0));
-      sortedLocs.forEach((l, i) => {
-        const todayRev = Number(l.todayRevenue||0);
-        const todayTarget = Number(l.todayTarget||0);
-        const ytdRev = Number(l.ytdRevenue||0);
-        const budget = Number(l.ytdTarget||0);
+      const dessertSold = DASHBOARD_DATA.overview.dessertSoldToday;
+      const dessertGoal = MANUAL_CONFIG.dessertGoalToday;
+      const dessertPct = dessertGoal > 0 ? dessertSold / dessertGoal : 0;
+      const dessertMissing = Math.max(0, dessertGoal - dessertSold);
 
-        const todayGoalPct = todayTarget > 0 ? (todayRev / todayTarget) : null;
-        const ytdGoalPct = budget > 0 ? (ytdRev / budget) : null;
+      $("dessertSold").textContent = `${fmtInt(dessertSold)}/${fmtInt(dessertGoal)}`;
+      $("dessertBar").style.width = (clamp01(dessertPct) * 100) + "%";
+      $("dessertGap").textContent = `Mangler ${fmtInt(dessertMissing)}`;
 
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <div class="cardLabel">${l.name} <span style="opacity:.55;">#${i+1}</span></div>
-          <div class="cardValue">${formatDKK(todayRev)}</div>
-          <div class="cardSub">Dagens omsætning</div>
+      $("focusText").textContent = MANUAL_CONFIG.focusText;
+    }
 
-          <div class="meterWrap" title="Dagsmål" style="margin-top:4px;">
-            <div class="meterFill ${todayGoalPct !== null && todayGoalPct >= 1 ? "ok":""}"
-                 style="width:${todayGoalPct === null ? 0 : Math.round(clamp01(todayGoalPct)*100)}%"></div>
-          </div>
+    function renderLocations() {
+      const wrap = $("locationsGrid");
+      const totalRevenue = DASHBOARD_DATA.locations.reduce((sum, x) => sum + Number(x.revenue || 0), 0);
 
-          <div class="meterWrap" title="Årsbudget (YTD)" style="margin-top:4px;">
-            <div class="meterFill ${ytdGoalPct !== null && ytdGoalPct >= 1 ? "ok":""}"
-                 style="width:${ytdGoalPct === null ? 0 : Math.round(clamp01(ytdGoalPct)*100)}%"></div>
-          </div>
+      wrap.innerHTML = DASHBOARD_DATA.locations.map((loc, i) => {
+        const targetPct = totalRevenue > 0 ? (loc.revenue / totalRevenue) : 0;
+        const atdPct = Math.max(0, targetPct * 0.6);
 
-          <div class="cardMeta">
-            <div class="tag"><span class="miniDot"></span> Mål: ${todayTarget ? Math.round(todayGoalPct*100) + "%" : "—"}</div>
-            <div class="tag"><span class="miniDot"></span> ÅTD: ${budget ? Math.round(ytdGoalPct*100) + "%" : "—"}</div>
+        return `
+          <div class="card storeCard">
+            <div class="storeName">${loc.name} #${i + 1}</div>
+            <div class="storeValue">${fmtDKK(loc.revenue)}</div>
+            <div class="storeMeta">Dagens omsætning</div>
+
+            <div class="miniBar"><div class="miniBarFill" style="width:${Math.round(targetPct * 100)}%"></div></div>
+            <div class="miniBar"><div class="miniBarFill" style="width:${Math.round(atdPct * 100)}%"></div></div>
+
+            <div class="chipRow">
+              <div class="chip"><span class="chipDot"></span><span>Mål: ${Math.round(targetPct * 100)}%</span></div>
+              <div class="chip"><span class="chipDot"></span><span>ÅTD: ${Math.round(atdPct * 100)}%</span></div>
+            </div>
           </div>
         `;
-        locWrap.appendChild(card);
+      }).join("");
+    }
+
+    function renderRankList(items, elId, countId) {
+      const list = $(elId);
+      const max = Math.max(...items.map(x => Number(x.qty || 0)), 1);
+
+      list.innerHTML = items.map((item, i) => {
+        const pct = (Number(item.qty || 0) / max) * 100;
+        return `
+          <div class="rankItem">
+            <div class="rankBg" style="width:${pct}%"></div>
+            <div class="rankText">${i + 1}. ${item.name}</div>
+            <div class="rankVal">${fmtInt(item.qty)}</div>
+          </div>
+        `;
+      }).join("");
+
+      $(countId).textContent = `Varer: ${items.length}`;
+    }
+
+    function renderProducts() {
+      renderRankList(DASHBOARD_DATA.productsToday, "productsTodayList", "productsTodayCount");
+      renderRankList(DASHBOARD_DATA.productsYtd, "productsYtdList", "productsYtdCount");
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    function openTab(tab) {
+      document.querySelectorAll(".tabBtn").forEach(btn => {
+        btn.classList.toggle("on", btn.dataset.tab === tab);
       });
 
-      // PRODUCTS: Top10 today + YTD
-      const todayEntries = sortedEntries(data.productsToday).slice(0,10);
-      const ytdMap = (data.productsYTD && typeof data.productsYTD === "object") ? data.productsYTD : {};
-      const ytdEntries = sortedEntries(ytdMap).slice(0,10);
-
-      $("prodTodayHint").textContent = todayEntries.length ? "Top 10 i dag" : "Ingen data";
-      $("prodYtdHint").textContent = ytdEntries.length ? "Top 10 ÅTD" : "Ingen data";
-
-      renderTopList($("prodTodayList"), todayEntries);
-      renderTopList($("prodYtdList"), ytdEntries);
-
-      $("prodTodayTag").innerHTML = `<span class="miniDot"></span> Varer: ${Object.keys(data.productsToday||{}).length}`;
-      $("prodYtdTag").innerHTML = `<span class="miniDot"></span> Varer: ${Object.keys(ytdMap||{}).length}`;
+      ["overview", "locations", "products"].forEach(name => {
+        $("tab-" + name).classList.toggle("hidden", name !== tab);
+      });
     }
 
-    // Modal (hidden access)
-    const modal = $("modal");
-    const jsonArea = $("jsonArea");
+    document.querySelectorAll(".tabBtn").forEach(btn => {
+      btn.addEventListener("click", () => openTab(btn.dataset.tab));
+    });
 
-    function openModal(){
-      const code = prompt("Lederkode (Live Score):");
-      if (!code) return;
-      if (code.trim() !== LEADER_CODE) return setError("Forkert lederkode.");
-      jsonArea.value = JSON.stringify(loadData(), null, 2);
-      modal.style.display = "flex";
-      stopRotation();
-    }
-    function closeModal(){
-      modal.style.display = "none";
-      startRotation();
+    // ============================================================
+    // FUTURE API HOOKS
+    // Replace these with Apps Script / Friendly API integration later
+    // ============================================================
+    async function loadFriendlyOverview() {
+      // TODO:
+      // fetch today revenue
+      // fetch top seller
+      // fetch dessert category
     }
 
-    $("closeBtn").addEventListener("click", closeModal);
-    $("saveBtn").addEventListener("click", () => {
-      setError("");
-      try{
-        const obj = JSON.parse(jsonArea.value);
-        saveData(obj);
-        closeModal();
-        render();
-      } catch(e){
-        setError("JSON fejl. Tjek at der er anførselstegn rundt om ord, og ingen bogstaver/kr. i tal. " + (e && e.message ? e.message : ""));
-      }
-    });
-    $("resetBtn").addEventListener("click", () => {
-      if (!confirm("Er du sikker på du vil slette alt og starte forfra med standardtallene?")) return;
-      saveData(structuredClone(DEFAULT_DATA));
-      jsonArea.value = JSON.stringify(loadData(), null, 2);
-      render();
-    });
-    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    async function loadFriendlyLocations() {
+      // TODO:
+      // fetch stores report
+    }
 
-    // Nav events
-    $("navOverview").addEventListener("click", () => { setScreen("overview"); startRotation(); });
-    $("navLocations").addEventListener("click", () => { setScreen("locations"); startRotation(); });
-    $("navProducts").addEventListener("click", () => { setScreen("products"); startRotation(); });
+    async function loadFriendlyProducts() {
+      // TODO:
+      // fetch top products today
+      // fetch top products YTD
+    }
 
-    // Hidden leader access: click KAISER 5 times quickly
-    let tapCount = 0;
-    let tapTimer = null;
-    $("kickerTap").addEventListener("click", () => {
-      tapCount++;
-      clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => { tapCount = 0; }, 900);
-      if (tapCount >= 5) {
-        tapCount = 0;
-        openModal();
-      }
-    });
+    // ============================================================
+    // INIT
+    // ============================================================
+    (function init() {
+      renderMeta();
+      renderOverview();
+      renderLocations();
+      renderProducts();
 
-    // Init
-    (function init(){
-      if (!localStorage.getItem(APP_KEY)) saveData(structuredClone(DEFAULT_DATA));
-      setScreen("overview");
-      render();
-      startRotation();
-      setInterval(render, 60 * 1000);
+      setInterval(renderMeta, 60000);
     })();
   </script>
 </body>
