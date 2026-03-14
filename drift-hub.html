@@ -41,64 +41,110 @@
     .shell{max-width:1180px;margin:0 auto;}
 
     .hero{
-      border-radius:24px;
+      border-radius:28px;
       border:1px solid rgba(255,255,255,0.12);
       background:
-        radial-gradient(800px 220px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(700px 220px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 220px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:18px 16px 16px;
+      padding:22px 18px 18px;
       position:relative;
       overflow:hidden;
     }
 
-    .kicker{
+    .heroTop{
       text-align:center;
+    }
+
+    .kicker{
       font-size:10px;
       font-weight:900;
-      letter-spacing:.24em;
+      letter-spacing:.26em;
       text-transform:uppercase;
       color:var(--muted2);
     }
 
     .title{
-      text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(34px,6vw,54px);
+      font-size:clamp(36px,6vw,58px);
       line-height:1;
-      margin-top:6px;
+      margin-top:8px;
       letter-spacing:-.03em;
     }
 
     .sub{
-      text-align:center;
       color:var(--muted);
-      font-size:13px;
+      font-size:14px;
       font-weight:800;
-      margin-top:8px;
+      margin-top:10px;
     }
 
     .goldline{
       height:2px;
-      margin:14px auto 0;
-      max-width:760px;
+      margin:18px auto 0;
+      max-width:820px;
       border-radius:999px;
-      background:linear-gradient(90deg,transparent,var(--blue),transparent);
+      background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent);
+      opacity:.95;
     }
 
-    .topMeta{
+    .heroMeta{
+      margin-top:18px;
       display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin-top:14px;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      align-items:stretch;
     }
 
-    .pill, .btn{
+    @media (max-width: 760px){
+      .heroMeta{grid-template-columns:1fr;}
+    }
+
+    .metaCard{
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      padding:14px;
+    }
+
+    .metaLabel{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .metaValue{
+      margin-top:8px;
+      font-size:18px;
+      font-weight:900;
+      color:rgba(255,255,255,0.96);
+      line-height:1.2;
+    }
+
+    .metaSub{
+      margin-top:6px;
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .controlRow{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .btn{
       display:flex;
       align-items:center;
       justify-content:center;
       gap:6px;
-      min-height:42px;
+      min-height:44px;
       padding:10px 12px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.14);
@@ -108,20 +154,11 @@
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
+      cursor:pointer;
+      transition:.15s ease;
       text-align:center;
     }
 
-    .metaRow{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-    }
-
-    .btn{
-      cursor:pointer;
-      transition:.15s ease;
-      user-select:none;
-    }
     .btn:hover{background:rgba(255,255,255,0.10);}
     .btn.on{
       background:rgba(214,178,74,0.18);
@@ -131,18 +168,18 @@
 
     .clockWrap{
       display:none;
-      margin-top:12px;
-      border-radius:20px;
+      margin-top:14px;
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
-      padding:14px;
+      padding:16px;
       text-align:center;
     }
     .clockWrap.show{display:block;}
 
     .clockTime{
       font-family:"Playfair Display",serif;
-      font-size:50px;
+      font-size:54px;
       line-height:1;
       letter-spacing:-.03em;
       font-weight:700;
@@ -354,19 +391,31 @@
   <div class="shell">
 
     <header class="hero">
-      <div class="kicker">KAISER</div>
-      <div class="title">Drift Hub</div>
-      <div class="sub">Daglig drift samlet ét sted</div>
-      <div class="goldline"></div>
+      <div class="heroTop">
+        <div class="kicker">KAISER</div>
+        <div class="title">Drift Hub</div>
+        <div class="sub">Daglig drift, opgaver og rapportering samlet ét sted</div>
+        <div class="goldline"></div>
+      </div>
 
-      <div class="topMeta">
-        <div class="pill" id="locPill">📍 Ikke sat</div>
-
-        <div class="metaRow">
-          <div class="pill" id="timePill">🕐 --:--</div>
-          <button class="btn" id="clockToggle" type="button">🕐 Ur</button>
-          <button class="btn" id="fsBtn" type="button">⛶ Fuld</button>
+      <div class="heroMeta">
+        <div class="metaCard">
+          <div class="metaLabel">Lokation</div>
+          <div class="metaValue" id="locPill">Ikke sat</div>
+          <div class="metaSub">Denne hub følger den valgte afdeling</div>
         </div>
+
+        <div class="metaCard">
+          <div class="metaLabel">Nu</div>
+          <div class="metaValue" id="timePill">--:--</div>
+          <div class="metaSub">Brug værktøjerne nedenfor til den daglige drift</div>
+        </div>
+      </div>
+
+      <div class="controlRow">
+        <button class="btn" id="clockToggle" type="button">🕐 Vis ur</button>
+        <button class="btn" id="fsBtn" type="button">⛶ Fuldskærm</button>
+        <button class="btn" id="refreshBtn" type="button">↻ Opdater</button>
       </div>
 
       <div class="clockWrap" id="clockWrap">
@@ -378,7 +427,7 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
-        <div class="sectionInfo">Åbn moduler direkte i hub</div>
+        <div class="sectionInfo">Åbn moduler direkte</div>
       </div>
       <div class="sectionBody">
         <div class="toolGrid">
@@ -491,7 +540,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const LOC_KEY = "kaiser_kitchenpct_loc";
-    const CLOCK_KEY = "kaiser_drift_clock_visible_v4";
+    const CLOCK_KEY = "kaiser_drift_clock_visible_v41";
 
     const $ = id => document.getElementById(id);
 
@@ -503,7 +552,8 @@
 
     function updateClockMeta() {
       const now = new Date();
-      $("timePill").textContent = "🕐 " + now.toLocaleTimeString("da-DK", {
+
+      $("timePill").textContent = now.toLocaleTimeString("da-DK", {
         hour: "2-digit",
         minute: "2-digit"
       });
@@ -527,6 +577,7 @@
     function updateClockUI() {
       $("clockWrap").classList.toggle("show", clockVisible);
       $("clockToggle").classList.toggle("on", clockVisible);
+      $("clockToggle").textContent = clockVisible ? "🕐 Skjul ur" : "🕐 Vis ur";
     }
 
     function toggleClock() {
@@ -620,6 +671,15 @@
       }
     }
 
+    async function refreshAll() {
+      await Promise.allSettled([
+        loadSoldoutCount(),
+        loadComplaintCount(),
+        loadFaultCount()
+      ]);
+      updateClockMeta();
+    }
+
     let currentToolUrl = "";
 
     function openTool(url) {
@@ -666,16 +726,14 @@
 
     $("fsBtn").addEventListener("click", toggleFullscreen);
     $("clockToggle").addEventListener("click", toggleClock);
+    $("refreshBtn").addEventListener("click", refreshAll);
 
     (function init() {
       const loc = getLoc();
-      $("locPill").textContent = "📍 " + (loc || "Ikke sat");
+      $("locPill").textContent = loc || "Ikke sat";
 
       updateClockUI();
-      updateClockMeta();
-      loadSoldoutCount();
-      loadComplaintCount();
-      loadFaultCount();
+      refreshAll();
 
       setInterval(updateClockMeta, 30000);
       setInterval(loadSoldoutCount, 60000);
