@@ -21,7 +21,6 @@
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
-      --warn:#f59e0b;
       --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
@@ -44,9 +43,13 @@
     .hero{
       border-radius:24px;
       border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      background:
+        radial-gradient(800px 220px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:18px 16px 14px;
+      padding:18px 16px 16px;
+      position:relative;
+      overflow:hidden;
     }
 
     .kicker{
@@ -61,7 +64,7 @@
     .title{
       text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(34px,6vw,52px);
+      font-size:clamp(34px,6vw,54px);
       line-height:1;
       margin-top:6px;
       letter-spacing:-.03em;
@@ -83,14 +86,14 @@
       background:linear-gradient(90deg,transparent,var(--blue),transparent);
     }
 
-    .heroRow{
+    .topMeta{
       display:grid;
       grid-template-columns:1fr;
       gap:8px;
       margin-top:14px;
     }
 
-    .pill,.btn{
+    .pill, .btn{
       display:flex;
       align-items:center;
       justify-content:center;
@@ -108,7 +111,7 @@
       text-align:center;
     }
 
-    .topControls{
+    .metaRow{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:8px;
@@ -117,8 +120,40 @@
     .btn{
       cursor:pointer;
       transition:.15s ease;
+      user-select:none;
     }
     .btn:hover{background:rgba(255,255,255,0.10);}
+    .btn.on{
+      background:rgba(214,178,74,0.18);
+      border-color:rgba(214,178,74,0.42);
+      color:var(--gold);
+    }
+
+    .clockWrap{
+      display:none;
+      margin-top:12px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      padding:14px;
+      text-align:center;
+    }
+    .clockWrap.show{display:block;}
+
+    .clockTime{
+      font-family:"Playfair Display",serif;
+      font-size:50px;
+      line-height:1;
+      letter-spacing:-.03em;
+      font-weight:700;
+    }
+
+    .clockDate{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+    }
 
     .section{
       margin-top:14px;
@@ -163,60 +198,106 @@
 
     .sectionBody{padding:16px;}
 
-    .statusGrid{
+    .toolGrid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(2,1fr);
       gap:14px;
     }
 
     @media (max-width: 900px){
-      .statusGrid{grid-template-columns:1fr;}
+      .toolGrid{grid-template-columns:1fr;}
     }
 
-    .statusCard{
-      border-radius:20px;
+    .toolCard{
+      border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:180px;
+      min-height:190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      cursor:pointer;
+      transition:.15s ease;
+      position:relative;
+      overflow:hidden;
     }
 
-    .statusKicker{
+    .toolCard:hover{
+      background:rgba(255,255,255,0.08);
+      transform:translateY(-2px);
+    }
+
+    .toolTop{
       display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .toolIcon{
+      font-size:30px;
+    }
+
+    .badge{
+      display:inline-flex;
       align-items:center;
-      gap:8px;
-      color:var(--muted);
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
       font-size:11px;
       font-weight:900;
-      letter-spacing:.12em;
+      letter-spacing:.08em;
       text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
     }
 
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      flex:0 0 auto;
-    }
-    .dot.red{background:var(--red);}
-    .dot.green{background:var(--green);}
-    .dot.blue{background:var(--blue);}
-
-    .statusValue{
-      font-family:"Playfair Display",serif;
-      font-size:52px;
-      line-height:1;
-      margin-top:18px;
-      letter-spacing:-.03em;
+    .badge.red{
+      background:rgba(255,107,107,0.12);
+      border-color:rgba(255,107,107,0.30);
+      color:#ff9494;
     }
 
-    .statusText{
+    .badge.blue{
+      background:rgba(94,167,255,0.12);
+      border-color:rgba(94,167,255,0.30);
+      color:#8cc1ff;
+    }
+
+    .badge.green{
+      background:rgba(98,210,111,0.12);
+      border-color:rgba(98,210,111,0.30);
+      color:#93e49c;
+    }
+
+    .toolName{
+      margin-top:12px;
+      font-size:20px;
+      font-weight:900;
+      line-height:1.15;
+    }
+
+    .toolDesc{
       margin-top:8px;
       color:var(--muted);
       font-size:14px;
-      font-weight:800;
+      line-height:1.45;
+      font-weight:700;
     }
 
-    .miniMeta{
-      margin-top:14px;
+    .toolBottom{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .toolMeta{
       display:flex;
       flex-wrap:wrap;
       gap:8px;
@@ -237,50 +318,12 @@
       color:var(--muted);
     }
 
-    .toolGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
-    }
-
-    @media (max-width: 900px){
-      .toolGrid{grid-template-columns:1fr;}
-    }
-
-    .toolCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:170px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      cursor:pointer;
-      transition:.15s ease;
-    }
-
-    .toolCard:hover{
-      background:rgba(255,255,255,0.08);
-      transform:translateY(-2px);
-    }
-
-    .toolIcon{
-      font-size:28px;
-    }
-
-    .toolName{
-      margin-top:10px;
-      font-size:18px;
+    .launchText{
+      color:rgba(255,255,255,0.90);
+      font-size:12px;
       font-weight:900;
-    }
-
-    .toolDesc{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.4;
-      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
 
     .toolViewer{
@@ -313,118 +356,119 @@
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">Drift Hub</div>
-      <div class="sub">Operations & shift management</div>
+      <div class="sub">Daglig drift samlet ét sted</div>
       <div class="goldline"></div>
 
-      <div class="heroRow">
+      <div class="topMeta">
         <div class="pill" id="locPill">📍 Ikke sat</div>
 
-        <div class="topControls">
+        <div class="metaRow">
           <div class="pill" id="timePill">🕐 --:--</div>
-          <button class="btn" id="clockBtn" type="button">🕐 Ur</button>
+          <button class="btn" id="clockToggle" type="button">🕐 Ur</button>
           <button class="btn" id="fsBtn" type="button">⛶ Fuld</button>
         </div>
+      </div>
+
+      <div class="clockWrap" id="clockWrap">
+        <div class="clockTime" id="clockTime">--:--</div>
+        <div class="clockDate" id="clockDate">--</div>
       </div>
     </header>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Status nu</div>
-        <div class="sectionInfo">Live driftstal</div>
-      </div>
-      <div class="sectionBody">
-        <div class="statusGrid">
-          <div class="statusCard">
-            <div class="statusKicker"><span class="dot red"></span> Udsolgte produkter</div>
-            <div class="statusValue" id="soldoutCount">0</div>
-            <div class="statusText" id="soldoutSub">Ingen udsolgte</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="soldoutChip">0 registreret</div>
-            </div>
-          </div>
-
-          <div class="statusCard">
-            <div class="statusKicker"><span class="dot red"></span> Gæsteklager</div>
-            <div class="statusValue" id="complaintCount">0</div>
-            <div class="statusText" id="complaintSub">Ingen klager</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="complaintChip">0 registreret</div>
-            </div>
-          </div>
-
-          <div class="statusCard">
-            <div class="statusKicker"><span class="dot blue"></span> Fejl & mangler</div>
-            <div class="statusValue" id="faultCount">0</div>
-            <div class="statusText" id="faultSub">Ingen fejl registreret</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="faultChip">0 registreret</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
-        <div class="sectionInfo">Åbn moduler direkte</div>
+        <div class="sectionInfo">Åbn moduler direkte i hub</div>
       </div>
       <div class="sectionBody">
         <div class="toolGrid">
           <div class="toolCard" data-url="./daglige-opgaver.html">
             <div>
-              <div class="toolIcon">✅</div>
+              <div class="toolTop">
+                <div class="toolIcon">✅</div>
+                <div class="badge green">Drift</div>
+              </div>
               <div class="toolName">Daglige opgaver</div>
               <div class="toolDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
             </div>
-            <div class="miniMeta">
-              <div class="metaChip">Drift</div>
-              <div class="metaChip">Lokation</div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Checklist</div>
+                <div class="metaChip">Lokation</div>
+              </div>
+              <div class="launchText">Åbn →</div>
             </div>
           </div>
 
           <div class="toolCard" data-url="./skiftlederrapport1.html">
             <div>
-              <div class="toolIcon">📝</div>
+              <div class="toolTop">
+                <div class="toolIcon">📝</div>
+                <div class="badge blue">Rapport</div>
+              </div>
               <div class="toolName">Skiftlederrapport</div>
-              <div class="toolDesc">Ny version af skiftrapport og daglig overlevering.</div>
+              <div class="toolDesc">Daglig rapport og overlevering mellem vagter.</div>
             </div>
-            <div class="miniMeta">
-              <div class="metaChip">Rapport</div>
-              <div class="metaChip">Daglig</div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Daglig</div>
+                <div class="metaChip">Skift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
             </div>
           </div>
 
           <div class="toolCard" data-url="./soldout-products.html">
             <div>
-              <div class="toolIcon">🍽️</div>
+              <div class="toolTop">
+                <div class="toolIcon">🍽️</div>
+                <div class="badge red" id="soldoutBadge">0 udsolgte</div>
+              </div>
               <div class="toolName">Udsolgte produkter</div>
               <div class="toolDesc">Registrér hvilke varer der er udsolgt i service.</div>
             </div>
-            <div class="miniMeta">
-              <div class="metaChip" id="soldoutChip2">0 udsolgte</div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Live</div>
+                <div class="metaChip">Service</div>
+              </div>
+              <div class="launchText">Åbn →</div>
             </div>
           </div>
 
           <div class="toolCard" data-url="./guest-complaints.html">
             <div>
-              <div class="toolIcon">💬</div>
+              <div class="toolTop">
+                <div class="toolIcon">💬</div>
+                <div class="badge red" id="complaintBadge">0 klager</div>
+              </div>
               <div class="toolName">Gæsteklager</div>
               <div class="toolDesc">Registrér gæsteklager hurtigt og struktureret.</div>
             </div>
-            <div class="miniMeta">
-              <div class="metaChip" id="complaintChip2">0 klager</div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Quality</div>
+                <div class="metaChip">Service</div>
+              </div>
+              <div class="launchText">Åbn →</div>
             </div>
           </div>
 
           <div class="toolCard" data-url="./faults-issues.html">
             <div>
-              <div class="toolIcon">🛠️</div>
+              <div class="toolTop">
+                <div class="toolIcon">🛠️</div>
+                <div class="badge blue" id="faultBadge">0 fejl</div>
+              </div>
               <div class="toolName">Fejl & mangler</div>
               <div class="toolDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
             </div>
-            <div class="miniMeta">
-              <div class="metaChip" id="faultChip2">0 fejl</div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Maintenance</div>
+                <div class="metaChip">Drift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
             </div>
           </div>
         </div>
@@ -447,6 +491,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const LOC_KEY = "kaiser_kitchenpct_loc";
+    const CLOCK_KEY = "kaiser_drift_clock_visible_v4";
 
     const $ = id => document.getElementById(id);
 
@@ -456,12 +501,38 @@
       return localStorage.getItem(LOC_KEY) || "";
     }
 
-    function updateClock() {
+    function updateClockMeta() {
       const now = new Date();
       $("timePill").textContent = "🕐 " + now.toLocaleTimeString("da-DK", {
         hour: "2-digit",
         minute: "2-digit"
       });
+
+      $("clockTime").textContent = now.toLocaleTimeString("da-DK", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      $("clockDate").textContent = now.toLocaleDateString("da-DK", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
+
+    function updateClockUI() {
+      $("clockWrap").classList.toggle("show", clockVisible);
+      $("clockToggle").classList.toggle("on", clockVisible);
+    }
+
+    function toggleClock() {
+      clockVisible = !clockVisible;
+      localStorage.setItem(CLOCK_KEY, String(clockVisible));
+      updateClockUI();
     }
 
     function jsonp(url, params = {}) {
@@ -509,15 +580,9 @@
         });
 
         const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
-        $("soldoutCount").textContent = count;
-        $("soldoutSub").textContent = count > 0 ? `${count} registreret` : "Ingen udsolgte";
-        $("soldoutChip").textContent = `${count} registreret`;
-        $("soldoutChip2").textContent = `${count} udsolgte`;
+        $("soldoutBadge").textContent = `${count} udsolgte`;
       } catch (e) {
-        $("soldoutCount").textContent = "—";
-        $("soldoutSub").textContent = "Fejl ved hentning";
-        $("soldoutChip").textContent = "Fejl";
-        $("soldoutChip2").textContent = "Fejl";
+        $("soldoutBadge").textContent = "Fejl";
       }
     }
 
@@ -532,15 +597,9 @@
         });
 
         const count = (data && data.ok && Array.isArray(data.complaints)) ? data.complaints.length : 0;
-        $("complaintCount").textContent = count;
-        $("complaintSub").textContent = count > 0 ? `${count} registreret` : "Ingen klager";
-        $("complaintChip").textContent = `${count} registreret`;
-        $("complaintChip2").textContent = `${count} klager`;
+        $("complaintBadge").textContent = `${count} klager`;
       } catch (e) {
-        $("complaintCount").textContent = "—";
-        $("complaintSub").textContent = "Fejl ved hentning";
-        $("complaintChip").textContent = "Fejl";
-        $("complaintChip2").textContent = "Fejl";
+        $("complaintBadge").textContent = "Fejl";
       }
     }
 
@@ -555,15 +614,9 @@
         });
 
         const count = (data && data.ok && Array.isArray(data.items)) ? data.items.length : 0;
-        $("faultCount").textContent = count;
-        $("faultSub").textContent = count > 0 ? `${count} registreret` : "Ingen fejl registreret";
-        $("faultChip").textContent = `${count} registreret`;
-        $("faultChip2").textContent = `${count} fejl`;
+        $("faultBadge").textContent = `${count} fejl`;
       } catch (e) {
-        $("faultCount").textContent = "—";
-        $("faultSub").textContent = "Fejl ved hentning";
-        $("faultChip").textContent = "Fejl";
-        $("faultChip2").textContent = "Fejl";
+        $("faultBadge").textContent = "Fejl";
       }
     }
 
@@ -612,18 +665,19 @@
     });
 
     $("fsBtn").addEventListener("click", toggleFullscreen);
-    $("clockBtn").addEventListener("click", updateClock);
+    $("clockToggle").addEventListener("click", toggleClock);
 
     (function init() {
       const loc = getLoc();
       $("locPill").textContent = "📍 " + (loc || "Ikke sat");
 
-      updateClock();
+      updateClockUI();
+      updateClockMeta();
       loadSoldoutCount();
       loadComplaintCount();
       loadFaultCount();
 
-      setInterval(updateClock, 30000);
+      setInterval(updateClockMeta, 30000);
       setInterval(loadSoldoutCount, 60000);
       setInterval(loadComplaintCount, 60000);
       setInterval(loadFaultCount, 60000);
