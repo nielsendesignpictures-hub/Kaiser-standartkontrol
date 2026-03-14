@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser – F&B Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0d1117;
+      --bg1:#161b22;
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.55);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
+      --warn:#f59e0b;
+      --shadow:0 20px 60px rgba(0,0,0,.40);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:16px;
+    }
+
+    .shell{max-width:1400px;margin:0 auto;}
+
+    .hero{
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:24px 18px 18px;
+      overflow:hidden;
+    }
+
+    .kicker{
+      text-align:center;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .title{
+      text-align:center;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(42px,7vw,66px);
+      line-height:1;
+      margin-top:8px;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      margin-top:10px;
+    }
+
+    .goldline{
+      height:2px;
+      margin:18px auto 0;
+      max-width:900px;
+      border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
+    }
+
+    .heroMeta{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    @media (max-width: 900px){
+      .heroMeta{grid-template-columns:1fr;}
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.92);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      text-align:center;
+    }
+
+    .section{
+      margin-top:16px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .sectionHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:15px 18px;
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid rgba(255,255,255,0.10);
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .sectionDot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
+    .sectionBody{padding:16px;}
+
+    .topGrid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 1200px){
+      .topGrid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    @media (max-width: 760px){
+      .topGrid{grid-template-columns:1fr;}
+    }
+
+    .card{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:180px;
+    }
+
+    .cardKicker{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      flex:0 0 auto;
+    }
+    .dot.red{background:var(--red);}
+    .dot.green{background:var(--green);}
+    .dot.blue{background:var(--blue);}
+    .dot.gold{background:var(--gold);}
+
+    .bigValue{
+      font-family:"Playfair Display",serif;
+      font-size:52px;
+      line-height:1;
+      margin-top:18px;
+      letter-spacing:-.03em;
+    }
+
+    .subValue{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.4;
+    }
+
+    .miniMeta{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .metaChip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .grid2{grid-template-columns:1fr;}
+    }
+
+    .listCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:320px;
+    }
+
+    .listTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,0.96);
+      margin-top:10px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .listItem{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .bar{
+      width:5px;
+      min-height:52px;
+      border-radius:4px;
+      flex:0 0 auto;
+    }
+    .bar.red{background:var(--red);}
+    .bar.blue{background:var(--blue);}
+    .bar.gold{background:var(--gold);}
+    .bar.green{background:var(--green);}
+
+    .listInfo{flex:1;min-width:0;}
+    .listMain{
+      font-size:14px;
+      font-weight:800;
+      line-height:1.35;
+    }
+    .listSub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .table{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      align-items:center;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .rowName{
+      font-size:14px;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .rowVal{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,0.92);
+    }
+
+    .empty{
+      text-align:center;
+      padding:26px;
+      color:var(--muted2);
+      font-size:13px;
+    }
+
+    .portalGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 1100px){
+      .portalGrid{grid-template-columns:1fr;}
+    }
+
+    .portalCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:180px;
+    }
+
+    .portalName{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .portalDesc{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.45;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <header class="hero">
+      <div class="kicker">KAISER</div>
+      <div class="title">F&B Portal</div>
+      <div class="sub">Ledelsesoverblik over drift, kvalitet og køkken</div>
+      <div class="goldline"></div>
+
+      <div class="heroMeta">
+        <div class="pill" id="timePill">🕐 --:--</div>
+        <div class="pill">📊 F&B Operations</div>
+        <div class="pill">🧭 Version 1</div>
+      </div>
+    </header>
+
+    <!-- TOP KPI -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Ledelsesblik</div>
+        <div class="sectionInfo">Nøgletal på tværs</div>
+      </div>
+      <div class="sectionBody">
+        <div class="topGrid">
+          <div class="card">
+            <div class="cardKicker"><span class="dot red"></span> Åbne klager</div>
+            <div class="bigValue" id="complaintsTotal">0</div>
+            <div class="subValue">Seneste registrerede gæsteklager</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="complaintLocMeta">Ingen data</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot red"></span> Udsolgte varer</div>
+            <div class="bigValue" id="soldoutTotal">0</div>
+            <div class="subValue">Registreringer i systemet</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="soldoutLocMeta">Ingen data</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
+            <div class="bigValue" id="faultsTotal">0</div>
+            <div class="subValue">Åbne drifts- og vedligeholdelsesfejl</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="faultLocMeta">Ingen data</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot gold"></span> Leverandørfejl</div>
+            <div class="bigValue" id="supplierTotal">0</div>
+            <div class="subValue">Seneste registrerede leverandørproblemer</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="supplierLocMeta">Ingen data</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUALITY + OPERATIONS -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
+        <div class="sectionInfo">Seneste hændelser og hotspots</div>
+      </div>
+      <div class="sectionBody">
+        <div class="grid2">
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
+            <div class="listTitle">Klager, fejl og udsolgte samlet</div>
+            <div class="list" id="latestEventsList">
+              <div class="empty">Indlæser...</div>
+            </div>
+          </div>
+
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot blue"></span> Lokationer i fokus</div>
+            <div class="listTitle">Antal registreringer pr. lokation</div>
+            <div class="table" id="locationFocusList">
+              <div class="empty">Indlæser...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KITCHEN % -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
+        <div class="sectionInfo">Seneste kendte lokationstal</div>
+      </div>
+      <div class="sectionBody">
+        <div class="table" id="kitchenPctList">
+          <div class="empty">Indlæser...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTAL MODULES -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Portal struktur</div>
+        <div class="sectionInfo">Hvad der senere kan udbygges</div>
+      </div>
+      <div class="sectionBody">
+        <div class="portalGrid">
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot red"></span> Quality</div>
+            <div class="portalName">Gæsteklager & ratings</div>
+            <div class="portalDesc">Samlet overblik over gæsteklager, rating trends og tilbagevendende kvalitetsproblemer.</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot blue"></span> Operations</div>
+            <div class="portalName">Udsolgte & fejl</div>
+            <div class="portalDesc">Udsolgte produkter, fejl & mangler og driftsproblemer samlet ét sted til opfølgning.</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot gold"></span> Kitchen & Supply</div>
+            <div class="portalName">Kitchen % & leverandørfejl</div>
+            <div class="portalDesc">Køkkenperformance og leverandørproblemer samlet til F&B-ledelse og prioritering.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+
+    const LOCATIONS = [
+      "Café Kaiser Helsingør",
+      "Café Kaiser Hillerød",
+      "Café Kaiser Farum",
+      "Café Kaiser Hørsholm",
+      "Café Kaiser Vanløse"
+    ];
+
+    const $ = id => document.getElementById(id);
+
+    function fmtTimeNow() {
+      const now = new Date();
+      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cb = "__cb_" + Math.random().toString(16).slice(2);
+        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+        const src = url + (url.includes("?") ? "&" : "?") + qs;
+
+        const s = document.createElement("script");
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(t);
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+
+        window[cb] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        s.src = src;
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
+
+        document.body.appendChild(s);
+      });
+    }
+
+    function esc(s) {
+      return String(s || "").replace(/[&<>"']/g, c =>
+        ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
+    }
+
+    function formatLocationShort(name) {
+      return String(name || "").replace("Café Kaiser ", "");
+    }
+
+    async function loadComplaintsAll() {
+      let all = [];
+      for (const loc of LOCATIONS) {
+        try {
+          const data = await jsonp(SCRIPT_URL, { action: "getGuestComplaints", loc });
+          if (data && data.ok && Array.isArray(data.complaints)) {
+            all = all.concat(data.complaints);
+          }
+        } catch (_) {}
+      }
+      return all;
+    }
+
+    async function loadSoldoutAll() {
+      let all = [];
+      for (const loc of LOCATIONS) {
+        try {
+          const data = await jsonp(SCRIPT_URL, { action: "getSoldoutProducts", loc });
+          if (data && data.ok && Array.isArray(data.items)) {
+            all = all.concat(data.items);
+          }
+        } catch (_) {}
+      }
+      return all;
+    }
+
+    async function loadFaultsAll() {
+      let all = [];
+      for (const loc of LOCATIONS) {
+        try {
+          const data = await jsonp(SCRIPT_URL, { action: "getFaultsIssues", loc });
+          if (data && data.ok && Array.isArray(data.items)) {
+            all = all.concat(data.items);
+          }
+        } catch (_) {}
+      }
+      return all;
+    }
+
+    async function loadSupplierAll() {
+      let all = [];
+      for (const loc of LOCATIONS) {
+        try {
+          const data = await jsonp(SCRIPT_URL, { action: "getSupplierIssues", loc });
+          if (data && data.ok && Array.isArray(data.issues)) {
+            all = all.concat(data.issues);
+          }
+        } catch (_) {}
+      }
+      return all;
+    }
+
+    async function loadKitchenPctAll() {
+      const month = new Date().toISOString().slice(0, 7);
+      let out = [];
+
+      for (const loc of LOCATIONS) {
+        try {
+          const data = await jsonp(SCRIPT_URL, { action: "getKitchenMTD", loc, month });
+          if (data && data.ok) {
+            const gross = Number(data?.totals?.revenueGross || 0);
+            const buy = Number(data?.totals?.purchases || 0);
+            const net = gross / 1.25;
+            const pct = net > 0 ? (buy / net) * 100 : null;
+
+            out.push({
+              location: loc,
+              pct: pct,
+              purchases: buy
+            });
+          }
+        } catch (_) {
+          out.push({
+            location: loc,
+            pct: null,
+            purchases: 0
+          });
+        }
+      }
+
+      return out;
+    }
+
+    function renderTopCards(complaints, soldout, faults, supplier) {
+      $("complaintsTotal").textContent = complaints.length;
+      $("soldoutTotal").textContent = soldout.length;
+      $("faultsTotal").textContent = faults.length;
+      $("supplierTotal").textContent = supplier.length;
+
+      const cLoc = complaints[0]?.location ? formatLocationShort(complaints[0].location) : "Ingen data";
+      const sLoc = soldout[0]?.location ? formatLocationShort(soldout[0].location) : "Ingen data";
+      const fLoc = faults[0]?.location ? formatLocationShort(faults[0].location) : "Ingen data";
+      const supLoc = supplier[0]?.location ? formatLocationShort(supplier[0].location) : "Ingen data";
+
+      $("complaintLocMeta").textContent = cLoc;
+      $("soldoutLocMeta").textContent = sLoc;
+      $("faultLocMeta").textContent = fLoc;
+      $("supplierLocMeta").textContent = supLoc;
+    }
+
+    function renderLatestEvents(complaints, soldout, faults) {
+      const events = [];
+
+      complaints.forEach(x => {
+        events.push({
+          type: "Klage",
+          location: x.location,
+          title: x.category || "Klage",
+          desc: x.description || "",
+          createdAt: x.createdAt || "",
+          color: "red"
+        });
+      });
+
+      soldout.forEach(x => {
+        events.push({
+          type: "Udsolgt",
+          location: x.location,
+          title: x.productName || "Produkt",
+          desc: x.category || "",
+          createdAt: x.createdAt || "",
+          color: "gold"
+        });
+      });
+
+      faults.forEach(x => {
+        events.push({
+          type: "Fejl",
+          location: x.location,
+          title: x.issueType || "Fejl",
+          desc: x.description || "",
+          createdAt: x.createdAt || "",
+          color: "blue"
+        });
+      });
+
+      events.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+      const list = $("latestEventsList");
+      if (!events.length) {
+        list.innerHTML = '<div class="empty">Ingen hændelser endnu</div>';
+        return;
+      }
+
+      list.innerHTML = events.slice(0, 8).map(ev => `
+        <div class="listItem">
+          <div class="bar ${ev.color}"></div>
+          <div class="listInfo">
+            <div class="listMain">${esc(ev.type)} • ${esc(formatLocationShort(ev.location))} • ${esc(ev.title)}</div>
+            <div class="listSub">${esc(ev.desc || "Ingen ekstra note")}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderLocationFocus(complaints, soldout, faults, supplier) {
+      const map = {};
+
+      function addCount(arr, key) {
+        arr.forEach(x => {
+          const loc = x.location || "Ukendt";
+          if (!map[loc]) {
+            map[loc] = { complaints: 0, soldout: 0, faults: 0, supplier: 0, total: 0 };
+          }
+          map[loc][key]++;
+          map[loc].total++;
+        });
+      }
+
+      addCount(complaints, "complaints");
+      addCount(soldout, "soldout");
+      addCount(faults, "faults");
+      addCount(supplier, "supplier");
+
+      const rows = Object.entries(map)
+        .map(([loc, val]) => ({ loc, ...val }))
+        .sort((a, b) => b.total - a.total);
+
+      const wrap = $("locationFocusList");
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="empty">Ingen registreringer endnu</div>';
+        return;
+      }
+
+      wrap.innerHTML = rows.map(r => `
+        <div class="row">
+          <div class="rowName">${esc(formatLocationShort(r.loc))}</div>
+          <div class="rowVal">${r.total} total</div>
+          <div class="rowVal">${r.complaints} klager • ${r.soldout} udsolgt • ${r.faults} fejl</div>
+        </div>
+      `).join("");
+    }
+
+    function renderKitchenPct(list) {
+      const wrap = $("kitchenPctList");
+      if (!list.length) {
+        wrap.innerHTML = '<div class="empty">Ingen kitchen data endnu</div>';
+        return;
+      }
+
+      wrap.innerHTML = list.map(item => {
+        const pctText = item.pct === null || !isFinite(item.pct)
+          ? "—"
+          : item.pct.toFixed(1).replace(".", ",") + "%";
+
+        return `
+          <div class="row">
+            <div class="rowName">${esc(formatLocationShort(item.location))}</div>
+            <div class="rowVal">${pctText}</div>
+            <div class="rowVal">${Number(item.purchases || 0).toLocaleString("da-DK")} kr.</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function loadPortalData() {
+      try {
+        const [complaints, soldout, faults, supplier, kitchen] = await Promise.all([
+          loadComplaintsAll(),
+          loadSoldoutAll(),
+          loadFaultsAll(),
+          loadSupplierAll(),
+          loadKitchenPctAll()
+        ]);
+
+        renderTopCards(complaints, soldout, faults, supplier);
+        renderLatestEvents(complaints, soldout, faults);
+        renderLocationFocus(complaints, soldout, faults, supplier);
+        renderKitchenPct(kitchen);
+
+      } catch (e) {
+        console.error("Portal load error:", e);
+        $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+        $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+        $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+      }
+    }
+
+    (function init() {
+      fmtTimeNow();
+      loadPortalData();
+
+      setInterval(fmtTimeNow, 30000);
+      setInterval(loadPortalData, 60000);
+    })();
+  </script>
+</body>
+</html>
