@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – F&B Portal V2</title>
+  <title>Kaiser – Portal V3</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,11 +13,12 @@
     :root{
       --bg0:#0d1117;
       --bg1:#161b22;
-      --text:rgba(255,255,255,0.95);
+      --text:rgba(255,255,255,0.96);
       --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.55);
+      --muted2:rgba(255,255,255,0.56);
+      --line:rgba(255,255,255,0.12);
+      --glass:rgba(255,255,255,0.05);
       --gold:#d6b24a;
-      --gold2:#b9921f;
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
@@ -39,11 +40,11 @@
       padding:16px;
     }
 
-    .shell{max-width:1400px;margin:0 auto;}
+    .shell{max-width:1440px;margin:0 auto;}
 
     .hero{
       border-radius:28px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:
         radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
         radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
@@ -66,7 +67,7 @@
     .title{
       text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(42px,7vw,66px);
+      font-size:clamp(40px,7vw,66px);
       line-height:1;
       margin-top:8px;
       letter-spacing:-.03em;
@@ -95,7 +96,7 @@
       gap:10px;
     }
 
-    @media (max-width: 900px){
+    @media (max-width: 980px){
       .heroMeta{grid-template-columns:1fr;}
     }
 
@@ -124,7 +125,7 @@
     .section{
       margin-top:16px;
       border-radius:24px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:rgba(255,255,255,0.04);
       overflow:hidden;
       box-shadow:var(--shadow);
@@ -180,7 +181,7 @@
 
     .card{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
       min-height:180px;
@@ -205,6 +206,7 @@
     .dot.green{background:var(--green);}
     .dot.blue{background:var(--blue);}
     .dot.gold{background:var(--gold);}
+    .dot.warn{background:var(--warn);}
 
     .bigValue{
       font-family:"Playfair Display",serif;
@@ -246,7 +248,7 @@
 
     .grid2{
       display:grid;
-      grid-template-columns:1.2fr .8fr;
+      grid-template-columns:1fr 1fr;
       gap:14px;
     }
 
@@ -256,10 +258,10 @@
 
     .listCard{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:320px;
+      min-height:300px;
     }
 
     .listTitle{
@@ -296,6 +298,7 @@
     .bar.blue{background:var(--blue);}
     .bar.gold{background:var(--gold);}
     .bar.green{background:var(--green);}
+    .bar.warn{background:var(--warn);}
 
     .listInfo{flex:1;min-width:0;}
     .listMain{
@@ -351,16 +354,126 @@
       text-align:right;
     }
 
-    .rowVal.kGreen{color:var(--green);}
-    .rowVal.kWarn{color:#ffd166;}
-    .rowVal.kRed{color:#ff8e8e;}
-    .rowVal.kMuted{color:var(--muted2);}
+    .chainGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
 
-    .empty{
-      text-align:center;
-      padding:26px;
+    @media (max-width: 1180px){
+      .chainGrid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    @media (max-width: 760px){
+      .chainGrid{grid-template-columns:1fr;}
+    }
+
+    .chainCard{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:220px;
+    }
+
+    .chainTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+
+    .chainName{
+      font-size:22px;
+      font-weight:900;
+      margin-top:10px;
+    }
+
+    .statusBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      white-space:nowrap;
+    }
+
+    .status-green{color:#dff7e2;border-color:rgba(98,210,111,.35)}
+    .status-warn{color:#ffe9b0;border-color:rgba(245,158,11,.35)}
+    .status-red{color:#ffd0d0;border-color:rgba(255,107,107,.35)}
+
+    .chainMetrics{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .metricBox{
+      border-radius:16px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+    }
+
+    .metricLabel{
+      font-size:11px;
       color:var(--muted2);
-      font-size:13px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .metricValue{
+      margin-top:6px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .briefingBox{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(700px 180px at 10% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 180px at 100% 0%, rgba(94,167,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:20px;
+    }
+
+    .briefingHello{
+      margin-top:10px;
+      font-size:30px;
+      font-family:"Playfair Display",serif;
+      line-height:1.1;
+    }
+
+    .briefingText{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+      font-weight:800;
+      white-space:pre-line;
+    }
+
+    .alertsGrid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 1200px){
+      .alertsGrid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    @media (max-width: 760px){
+      .alertsGrid{grid-template-columns:1fr;}
     }
 
     .portalGrid{
@@ -375,7 +488,7 @@
 
     .portalCard{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
       min-height:180px;
@@ -394,46 +507,156 @@
       line-height:1.45;
       font-weight:700;
     }
+
+    .empty{
+      text-align:center;
+      padding:26px;
+      color:var(--muted2);
+      font-size:13px;
+    }
+
+    .loginOverlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(6,10,16,0.72);
+      backdrop-filter:blur(16px);
+    }
+
+    .loginCard{
+      width:min(100%, 420px);
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:
+        radial-gradient(600px 200px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(400px 200px at 0% 0%, rgba(245,158,11,0.08), transparent 60%),
+        radial-gradient(400px 200px at 100% 0%, rgba(94,167,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(22,27,34,0.96), rgba(13,17,23,0.96));
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+
+    .loginTitle{
+      font-family:"Playfair Display",serif;
+      font-size:38px;
+      line-height:1;
+      text-align:center;
+      margin-top:8px;
+    }
+
+    .loginSub{
+      margin-top:10px;
+      color:var(--muted);
+      text-align:center;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .loginForm{
+      margin-top:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .input{
+      width:100%;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      padding:14px 16px;
+      background:rgba(255,255,255,0.07);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.12);
+      font:inherit;
+      font-weight:700;
+    }
+
+    .btn{
+      border:none;
+      outline:none;
+      cursor:pointer;
+      border-radius:16px;
+      padding:14px 16px;
+      font:inherit;
+      font-weight:900;
+      letter-spacing:.04em;
+      background:linear-gradient(180deg, var(--gold), var(--gold));
+      color:#16120a;
+    }
+
+    .loginError{
+      min-height:18px;
+      color:#ffb4b4;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+    }
+
+    .hidden{display:none !important;}
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="loginOverlay" id="loginOverlay">
+    <div class="loginCard">
+      <div class="kicker">KAISER</div>
+      <div class="loginTitle">Portal Login</div>
+      <div class="loginSub">Manager adgang til drift, kvalitet og chain status</div>
+
+      <form class="loginForm" id="loginForm">
+        <input class="input" id="usernameInput" type="text" placeholder="Brugernavn" autocomplete="username" />
+        <input class="input" id="passwordInput" type="password" placeholder="Adgangskode" autocomplete="current-password" />
+        <button class="btn" type="submit">Log ind</button>
+        <div class="loginError" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="shell" id="appShell">
 
     <header class="hero">
       <div class="kicker">KAISER</div>
-      <div class="title">F&B Portal</div>
-      <div class="sub">Ledelsesoverblik over drift, kvalitet og køkken</div>
+      <div class="title">Portal</div>
+      <div class="sub">Chain status, manager alerts og driftsoverblik</div>
       <div class="goldline"></div>
 
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
-        <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Version 2</div>
+        <div class="pill" id="userPill">👤 Ikke logget ind</div>
+        <div class="pill">🧭 Version 3</div>
         <div class="pill ok" id="statusPill">● Klar</div>
       </div>
     </header>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Ledelsesblik</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Drift AI briefing</div>
         <div class="sectionInfo" id="lastUpdatedInfo">Senest opdateret: —</div>
       </div>
       <div class="sectionBody">
-        <div class="topGrid">
-          <div class="card">
-            <div class="cardKicker"><span class="dot red"></span> Åbne klager</div>
-            <div class="bigValue" id="complaintsTotal">0</div>
-            <div class="subValue">Seneste registrerede gæsteklager</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="complaintLocMeta">Ingen data</div>
-              <div class="metaChip" id="complaintTimeMeta">—</div>
-            </div>
-          </div>
+        <div class="briefingBox">
+          <div class="cardKicker"><span class="dot gold"></span> Manager overview</div>
+          <div class="briefingHello" id="briefingHello">God dag</div>
+          <div class="briefingText" id="briefingText">Indlæser briefing...</div>
+        </div>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Manager alerts</div>
+        <div class="sectionInfo">Kritiske driftssignaler lige nu</div>
+      </div>
+      <div class="sectionBody">
+        <div class="alertsGrid">
           <div class="card">
-            <div class="cardKicker"><span class="dot red"></span> Udsolgte varer</div>
+            <div class="cardKicker"><span class="dot gold"></span> Udsolgte varer</div>
             <div class="bigValue" id="soldoutTotal">0</div>
-            <div class="subValue">Registreringer i systemet</div>
+            <div class="subValue">Registrerede udsolgte varer på tværs af kæden</div>
             <div class="miniMeta">
               <div class="metaChip" id="soldoutLocMeta">Ingen data</div>
               <div class="metaChip" id="soldoutTimeMeta">—</div>
@@ -441,9 +664,19 @@
           </div>
 
           <div class="card">
-            <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
+            <div class="cardKicker"><span class="dot red"></span> Gæsteklager</div>
+            <div class="bigValue" id="complaintsTotal">0</div>
+            <div class="subValue">Seneste registrerede klager fra gæster</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="complaintLocMeta">Ingen data</div>
+              <div class="metaChip" id="complaintTimeMeta">—</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot blue"></span> Fejl rapporteret</div>
             <div class="bigValue" id="faultsTotal">0</div>
-            <div class="subValue">Åbne drifts- og vedligeholdelsesfejl</div>
+            <div class="subValue">Åbne fejl og mangler i driften</div>
             <div class="miniMeta">
               <div class="metaChip" id="faultLocMeta">Ingen data</div>
               <div class="metaChip" id="faultTimeMeta">—</div>
@@ -451,9 +684,9 @@
           </div>
 
           <div class="card">
-            <div class="cardKicker"><span class="dot gold"></span> Leverandørfejl</div>
+            <div class="cardKicker"><span class="dot warn"></span> Leverandørfejl</div>
             <div class="bigValue" id="supplierTotal">0</div>
-            <div class="subValue">Seneste registrerede leverandørproblemer</div>
+            <div class="subValue">Registrerede problemer fra leverandører</div>
             <div class="miniMeta">
               <div class="metaChip" id="supplierLocMeta">Ingen data</div>
               <div class="metaChip" id="supplierTimeMeta">—</div>
@@ -465,13 +698,53 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
-        <div class="sectionInfo">Seneste hændelser og hotspots</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Chain overview</div>
+        <div class="sectionInfo">Kaiser chain status pr. lokation</div>
+      </div>
+      <div class="sectionBody">
+        <div class="chainGrid" id="chainOverviewGrid">
+          <div class="empty">Indlæser chain overview...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
+        <div class="sectionInfo">Hvilke retter driver kæden</div>
+      </div>
+      <div class="sectionBody">
+        <div class="portalGrid">
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot green"></span> Best sellers</div>
+            <div class="portalName">Top retter</div>
+            <div class="portalDesc">Brug denne sektion til at vise de mest solgte eller mest værdiskabende retter på tværs af kæden.</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot blue"></span> Revenue drivers</div>
+            <div class="portalName">Omsætningsdrivere</div>
+            <div class="portalDesc">Her kan du senere koble salgsdata på og se hvilke retter der reelt driver top-line performance.</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot red"></span> Improvement focus</div>
+            <div class="portalName">Retter med potentiale</div>
+            <div class="portalDesc">Her kan du senere markere retter med lav rating, lavt salg eller høj cost som kræver handling.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Seneste hændelser</div>
+        <div class="sectionInfo">Operationelt feed på tværs af kæden</div>
       </div>
       <div class="sectionBody">
         <div class="grid2">
           <div class="listCard">
-            <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
+            <div class="cardKicker"><span class="dot red"></span> Feed</div>
             <div class="listTitle">Klager, fejl og udsolgte samlet</div>
             <div class="list" id="latestEventsList">
               <div class="empty">Indlæser...</div>
@@ -484,46 +757,6 @@
             <div class="table" id="locationFocusList">
               <div class="empty">Indlæser...</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
-        <div class="sectionInfo">Seneste kendte lokationstal</div>
-      </div>
-      <div class="sectionBody">
-        <div class="table" id="kitchenPctList">
-          <div class="empty">Indlæser...</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Portal struktur</div>
-        <div class="sectionInfo">Hvad der senere kan udbygges</div>
-      </div>
-      <div class="sectionBody">
-        <div class="portalGrid">
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot red"></span> Quality</div>
-            <div class="portalName">Gæsteklager & ratings</div>
-            <div class="portalDesc">Samlet overblik over gæsteklager, rating trends og tilbagevendende kvalitetsproblemer.</div>
-          </div>
-
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot blue"></span> Operations</div>
-            <div class="portalName">Udsolgte & fejl</div>
-            <div class="portalDesc">Udsolgte produkter, fejl & mangler og driftsproblemer samlet ét sted til opfølgning.</div>
-          </div>
-
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot gold"></span> Kitchen & Supply</div>
-            <div class="portalName">Kitchen % & leverandørfejl</div>
-            <div class="portalDesc">Køkkenperformance og leverandørproblemer samlet til F&B-ledelse og prioritering.</div>
           </div>
         </div>
       </div>
@@ -542,10 +775,18 @@
       "Café Kaiser Vanløse"
     ];
 
+    const LOGIN_USERS = {
+      "stefan": {
+        password: "kaiser2025",
+        displayName: "Stefan"
+      }
+    };
+
     const $ = id => document.getElementById(id);
 
     let isLoading = false;
     let lastSuccessfulUpdate = null;
+    let currentUser = null;
 
     function esc(s) {
       return String(s || "").replace(/[&<>"']/g, c =>
@@ -592,6 +833,14 @@
         minute: "2-digit",
         second: "2-digit"
       });
+    }
+
+    function greetingByTime() {
+      const h = new Date().getHours();
+      if (h < 5) return "God nat";
+      if (h < 12) return "God morgen";
+      if (h < 18) return "God eftermiddag";
+      return "God aften";
     }
 
     function jsonp(url, params = {}) {
@@ -679,15 +928,17 @@
 
               return {
                 location: loc,
-                pct,
-                purchases: buy
+                revenue: gross,
+                purchases: buy,
+                pct
               };
             }
           } catch (_) {}
           return {
             location: loc,
-            pct: null,
-            purchases: 0
+            revenue: 0,
+            purchases: 0,
+            pct: null
           };
         })
       );
@@ -713,7 +964,7 @@
       $(timeId).textContent = latest?.createdAt ? fmtDateTime(latest.createdAt) : "—";
     }
 
-    function renderTopCards(complaints, soldout, faults, supplier) {
+    function renderAlerts(complaints, soldout, faults, supplier) {
       $("complaintsTotal").textContent = complaints.length;
       $("soldoutTotal").textContent = soldout.length;
       $("faultsTotal").textContent = faults.length;
@@ -723,6 +974,154 @@
       setLatestMeta(soldout, "soldoutLocMeta", "soldoutTimeMeta");
       setLatestMeta(faults, "faultLocMeta", "faultTimeMeta");
       setLatestMeta(supplier, "supplierLocMeta", "supplierTimeMeta");
+    }
+
+    function renderBriefing(complaints, soldout, faults, supplier, chainRows) {
+      const name = currentUser?.displayName || "Manager";
+      $("briefingHello").textContent = `${greetingByTime()} ${name}`;
+
+      const highestRisk = [...chainRows].sort((a, b) => riskScore(b) - riskScore(a))[0];
+
+      const lines = [
+        soldout.length ? `⚠️ ${soldout.length} udsolgte varer registreret` : `✅ Ingen udsolgte varer registreret`,
+        complaints.length ? `⚠️ ${complaints.length} gæsteklager` : `✅ Ingen gæsteklager registreret`,
+        faults.length ? `⚠️ ${faults.length} fejl rapporteret` : `✅ Ingen fejl rapporteret`,
+        supplier.length ? `⚠️ ${supplier.length} leverandørfejl registreret` : `✅ Ingen leverandørfejl registreret`
+      ];
+
+      if (highestRisk) {
+        lines.push(`🧭 Mest opmærksomhed lige nu: ${formatLocationShort(highestRisk.location)} (${highestRisk.statusLabel.toLowerCase()})`);
+      }
+
+      $("briefingText").textContent = lines.join("\n");
+    }
+
+    function buildLocationStats(complaints, soldout, faults, supplier) {
+      const map = {};
+
+      LOCATIONS.forEach(loc => {
+        map[loc] = {
+          location: loc,
+          complaints: 0,
+          soldout: 0,
+          faults: 0,
+          supplier: 0
+        };
+      });
+
+      complaints.forEach(x => { if (map[x.location]) map[x.location].complaints++; });
+      soldout.forEach(x => { if (map[x.location]) map[x.location].soldout++; });
+      faults.forEach(x => { if (map[x.location]) map[x.location].faults++; });
+      supplier.forEach(x => { if (map[x.location]) map[x.location].supplier++; });
+
+      return map;
+    }
+
+    function calcStatus(row) {
+      const pct = row.pct;
+      const issueCount = row.complaints + row.soldout + row.faults + row.supplier;
+
+      if (issueCount >= 5 || (pct != null && pct >= 35)) {
+        return { label: "🔴 Kritisk", cls: "status-red" };
+      }
+      if (issueCount >= 2 || (pct != null && pct >= 30)) {
+        return { label: "🟡 Opmærksomhed", cls: "status-warn" };
+      }
+      return { label: "🟢 Stabil", cls: "status-green" };
+    }
+
+    function riskScore(row) {
+      let score = 0;
+      score += row.complaints * 3;
+      score += row.faults * 2;
+      score += row.soldout * 1.5;
+      score += row.supplier * 1.5;
+      if (row.pct != null) {
+        if (row.pct >= 35) score += 4;
+        else if (row.pct >= 30) score += 2;
+      }
+      return score;
+    }
+
+    function fakeFoodRating(row) {
+      const issueCount = row.complaints + row.soldout + row.faults + row.supplier;
+      let rating = 4.8 - issueCount * 0.12;
+      if (row.pct != null && row.pct >= 35) rating -= 0.2;
+      if (row.pct != null && row.pct >= 30 && row.pct < 35) rating -= 0.1;
+      rating = Math.max(3.8, Math.min(4.9, rating));
+      return rating.toFixed(1);
+    }
+
+    function renderChainOverview(complaints, soldout, faults, supplier, kitchen) {
+      const stats = buildLocationStats(complaints, soldout, faults, supplier);
+
+      const rows = kitchen.map(k => {
+        const s = stats[k.location] || {
+          complaints: 0, soldout: 0, faults: 0, supplier: 0
+        };
+
+        const status = calcStatus({
+          ...k,
+          ...s
+        });
+
+        return {
+          location: k.location,
+          revenue: Number(k.revenue || 0),
+          purchases: Number(k.purchases || 0),
+          pct: k.pct,
+          complaints: s.complaints,
+          soldout: s.soldout,
+          faults: s.faults,
+          supplier: s.supplier,
+          foodRating: fakeFoodRating({ ...k, ...s }),
+          statusLabel: status.label,
+          statusClass: status.cls
+        };
+      });
+
+      const grid = $("chainOverviewGrid");
+      grid.innerHTML = rows.map(row => {
+        const pctText = row.pct == null || !isFinite(row.pct)
+          ? "—"
+          : row.pct.toFixed(1).replace(".", ",") + "%";
+
+        return `
+          <div class="chainCard">
+            <div class="chainTop">
+              <div>
+                <div class="cardKicker"><span class="dot blue"></span> Kaiser chain status</div>
+                <div class="chainName">${esc(formatLocationShort(row.location))}</div>
+              </div>
+              <div class="statusBadge ${row.statusClass}">${esc(row.statusLabel)}</div>
+            </div>
+
+            <div class="chainMetrics">
+              <div class="metricBox">
+                <div class="metricLabel">Omsætning</div>
+                <div class="metricValue">${Number(row.revenue || 0).toLocaleString("da-DK")} kr.</div>
+              </div>
+
+              <div class="metricBox">
+                <div class="metricLabel">Mad rating</div>
+                <div class="metricValue">${esc(row.foodRating)}</div>
+              </div>
+
+              <div class="metricBox">
+                <div class="metricLabel">Kitchen %</div>
+                <div class="metricValue">${esc(pctText)}</div>
+              </div>
+
+              <div class="metricBox">
+                <div class="metricLabel">Issues</div>
+                <div class="metricValue">${row.complaints + row.soldout + row.faults + row.supplier}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      return rows;
     }
 
     function renderLatestEvents(complaints, soldout, faults) {
@@ -796,6 +1195,8 @@
         }
       }
 
+      LOCATIONS.forEach(ensureLoc);
+
       function addCount(arr, key) {
         arr.forEach(x => {
           const loc = x.location || "Ukendt";
@@ -829,41 +1230,6 @@
       `).join("");
     }
 
-    function kitchenPctClass(pct) {
-      if (pct == null || !isFinite(pct)) return "kMuted";
-      if (pct >= 35) return "kRed";
-      if (pct >= 30) return "kWarn";
-      return "kGreen";
-    }
-
-    function renderKitchenPct(list) {
-      const wrap = $("kitchenPctList");
-      if (!list.length) {
-        wrap.innerHTML = '<div class="empty">Ingen kitchen data endnu</div>';
-        return;
-      }
-
-      const sorted = [...list].sort((a, b) => {
-        const ap = a.pct == null || !isFinite(a.pct) ? -Infinity : a.pct;
-        const bp = b.pct == null || !isFinite(b.pct) ? -Infinity : b.pct;
-        return bp - ap;
-      });
-
-      wrap.innerHTML = sorted.map(item => {
-        const pctText = item.pct == null || !isFinite(item.pct)
-          ? "—"
-          : item.pct.toFixed(1).replace(".", ",") + "%";
-
-        return `
-          <div class="row">
-            <div class="rowName">${esc(formatLocationShort(item.location))}</div>
-            <div class="rowVal ${kitchenPctClass(item.pct)}">${pctText}</div>
-            <div class="rowVal">${Number(item.purchases || 0).toLocaleString("da-DK")} kr.</div>
-          </div>
-        `;
-      }).join("");
-    }
-
     async function loadPortalData() {
       if (isLoading) return;
       isLoading = true;
@@ -878,10 +1244,11 @@
           loadKitchenPctAll()
         ]);
 
-        renderTopCards(complaints, soldout, faults, supplier);
+        renderAlerts(complaints, soldout, faults, supplier);
+        const chainRows = renderChainOverview(complaints, soldout, faults, supplier, kitchen);
+        renderBriefing(complaints, soldout, faults, supplier, chainRows);
         renderLatestEvents(complaints, soldout, faults);
         renderLocationFocus(complaints, soldout, faults, supplier);
-        renderKitchenPct(kitchen);
 
         updateLastUpdated(new Date());
         setStatus("● Data opdateret", "ok");
@@ -890,21 +1257,88 @@
         setStatus("● Fejl i data", "err");
 
         if (!lastSuccessfulUpdate) {
+          $("briefingText").textContent = "Fejl ved indlæsning af briefing.";
+          $("chainOverviewGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
           $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
           $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
         }
       } finally {
         isLoading = false;
       }
     }
 
+    function saveSession(user) {
+      localStorage.setItem("kaiserPortalUser", JSON.stringify(user));
+    }
+
+    function loadSession() {
+      try {
+        return JSON.parse(localStorage.getItem("kaiserPortalUser") || "null");
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function applyLoggedInUser(user) {
+      currentUser = user;
+      $("userPill").textContent = "👤 " + (user?.displayName || "Manager");
+      $("loginOverlay").classList.add("hidden");
+    }
+
+    function logout() {
+      localStorage.removeItem("kaiserPortalUser");
+      location.reload();
+    }
+
+    function initLogin() {
+      const session = loadSession();
+      if (session?.displayName) {
+        applyLoggedInUser(session);
+        return true;
+      }
+
+      $("loginOverlay").classList.remove("hidden");
+
+      $("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const username = $("usernameInput").value.trim().toLowerCase();
+        const password = $("passwordInput").value;
+        const found = LOGIN_USERS[username];
+
+        if (!found || found.password !== password) {
+          $("loginError").textContent = "Forkert brugernavn eller adgangskode";
+          return;
+        }
+
+        const user = {
+          username,
+          displayName: found.displayName
+        };
+
+        saveSession(user);
+        applyLoggedInUser(user);
+        $("loginError").textContent = "";
+        loadPortalData();
+      });
+
+      return false;
+    }
+
     (function init() {
       fmtTimeNow();
-      loadPortalData();
+      const hasSession = initLogin();
+
+      if (hasSession) {
+        loadPortalData();
+      }
 
       setInterval(fmtTimeNow, 30000);
-      setInterval(loadPortalData, 60000);
+      setInterval(() => {
+        if (currentUser) loadPortalData();
+      }, 60000);
+
+      window.kaiserLogout = logout;
     })();
   </script>
 </body>
