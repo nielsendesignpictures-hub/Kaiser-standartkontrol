@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – F&B Portal</title>
+  <title>Kaiser – F&B Portal V2</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,7 +91,7 @@
     .heroMeta{
       margin-top:18px;
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:10px;
     }
 
@@ -116,6 +116,10 @@
       text-transform:uppercase;
       text-align:center;
     }
+
+    .pill.ok{border-color:rgba(98,210,111,.35); color:#dff7e2;}
+    .pill.warn{border-color:rgba(245,158,11,.35); color:#ffe9b0;}
+    .pill.err{border-color:rgba(255,107,107,.35); color:#ffd0d0;}
 
     .section{
       margin-top:16px;
@@ -284,7 +288,7 @@
 
     .bar{
       width:5px;
-      min-height:52px;
+      min-height:64px;
       border-radius:4px;
       flex:0 0 auto;
     }
@@ -305,6 +309,14 @@
       color:var(--muted);
       font-weight:700;
       line-height:1.4;
+    }
+    .listMeta{
+      margin-top:6px;
+      font-size:11px;
+      color:var(--muted2);
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
     }
 
     .table{
@@ -336,7 +348,13 @@
       font-size:13px;
       font-weight:900;
       color:rgba(255,255,255,0.92);
+      text-align:right;
     }
+
+    .rowVal.kGreen{color:var(--green);}
+    .rowVal.kWarn{color:#ffd166;}
+    .rowVal.kRed{color:#ff8e8e;}
+    .rowVal.kMuted{color:var(--muted2);}
 
     .empty{
       text-align:center;
@@ -390,15 +408,15 @@
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
         <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Version 1</div>
+        <div class="pill">🧭 Version 2</div>
+        <div class="pill ok" id="statusPill">● Klar</div>
       </div>
     </header>
 
-    <!-- TOP KPI -->
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Ledelsesblik</div>
-        <div class="sectionInfo">Nøgletal på tværs</div>
+        <div class="sectionInfo" id="lastUpdatedInfo">Senest opdateret: —</div>
       </div>
       <div class="sectionBody">
         <div class="topGrid">
@@ -408,6 +426,7 @@
             <div class="subValue">Seneste registrerede gæsteklager</div>
             <div class="miniMeta">
               <div class="metaChip" id="complaintLocMeta">Ingen data</div>
+              <div class="metaChip" id="complaintTimeMeta">—</div>
             </div>
           </div>
 
@@ -417,6 +436,7 @@
             <div class="subValue">Registreringer i systemet</div>
             <div class="miniMeta">
               <div class="metaChip" id="soldoutLocMeta">Ingen data</div>
+              <div class="metaChip" id="soldoutTimeMeta">—</div>
             </div>
           </div>
 
@@ -426,6 +446,7 @@
             <div class="subValue">Åbne drifts- og vedligeholdelsesfejl</div>
             <div class="miniMeta">
               <div class="metaChip" id="faultLocMeta">Ingen data</div>
+              <div class="metaChip" id="faultTimeMeta">—</div>
             </div>
           </div>
 
@@ -435,13 +456,13 @@
             <div class="subValue">Seneste registrerede leverandørproblemer</div>
             <div class="miniMeta">
               <div class="metaChip" id="supplierLocMeta">Ingen data</div>
+              <div class="metaChip" id="supplierTimeMeta">—</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- QUALITY + OPERATIONS -->
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
@@ -468,7 +489,6 @@
       </div>
     </section>
 
-    <!-- KITCHEN % -->
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
@@ -481,7 +501,6 @@
       </div>
     </section>
 
-    <!-- PORTAL MODULES -->
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Portal struktur</div>
@@ -525,6 +544,18 @@
 
     const $ = id => document.getElementById(id);
 
+    let isLoading = false;
+    let lastSuccessfulUpdate = null;
+
+    function esc(s) {
+      return String(s || "").replace(/[&<>"']/g, c =>
+        ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
+    }
+
+    function formatLocationShort(name) {
+      return String(name || "").replace("Café Kaiser ", "");
+    }
+
     function fmtTimeNow() {
       const now = new Date();
       $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
@@ -532,6 +563,34 @@
         month: "2-digit",
         hour: "2-digit",
         minute: "2-digit"
+      });
+    }
+
+    function fmtDateTime(value) {
+      const d = new Date(value);
+      if (isNaN(d)) return "Ukendt tidspunkt";
+      return d.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function setStatus(text, cls) {
+      const el = $("statusPill");
+      el.textContent = text;
+      el.className = "pill " + cls;
+    }
+
+    function updateLastUpdated(ts = new Date()) {
+      lastSuccessfulUpdate = ts;
+      $("lastUpdatedInfo").textContent = "Senest opdateret: " + ts.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
       });
     }
 
@@ -569,96 +628,89 @@
       });
     }
 
-    function esc(s) {
-      return String(s || "").replace(/[&<>"']/g, c =>
-        ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
-    }
-
-    function formatLocationShort(name) {
-      return String(name || "").replace("Café Kaiser ", "");
+    async function loadByLocation(action, responseKey) {
+      const results = await Promise.all(
+        LOCATIONS.map(async (loc) => {
+          try {
+            const data = await jsonp(SCRIPT_URL, { action, loc });
+            if (data && data.ok && Array.isArray(data[responseKey])) {
+              return data[responseKey].map(item => ({
+                ...item,
+                location: item.location || loc
+              }));
+            }
+            return [];
+          } catch (_) {
+            return [];
+          }
+        })
+      );
+      return results.flat();
     }
 
     async function loadComplaintsAll() {
-      let all = [];
-      for (const loc of LOCATIONS) {
-        try {
-          const data = await jsonp(SCRIPT_URL, { action: "getGuestComplaints", loc });
-          if (data && data.ok && Array.isArray(data.complaints)) {
-            all = all.concat(data.complaints);
-          }
-        } catch (_) {}
-      }
-      return all;
+      return loadByLocation("getGuestComplaints", "complaints");
     }
 
     async function loadSoldoutAll() {
-      let all = [];
-      for (const loc of LOCATIONS) {
-        try {
-          const data = await jsonp(SCRIPT_URL, { action: "getSoldoutProducts", loc });
-          if (data && data.ok && Array.isArray(data.items)) {
-            all = all.concat(data.items);
-          }
-        } catch (_) {}
-      }
-      return all;
+      return loadByLocation("getSoldoutProducts", "items");
     }
 
     async function loadFaultsAll() {
-      let all = [];
-      for (const loc of LOCATIONS) {
-        try {
-          const data = await jsonp(SCRIPT_URL, { action: "getFaultsIssues", loc });
-          if (data && data.ok && Array.isArray(data.items)) {
-            all = all.concat(data.items);
-          }
-        } catch (_) {}
-      }
-      return all;
+      return loadByLocation("getFaultsIssues", "items");
     }
 
     async function loadSupplierAll() {
-      let all = [];
-      for (const loc of LOCATIONS) {
-        try {
-          const data = await jsonp(SCRIPT_URL, { action: "getSupplierIssues", loc });
-          if (data && data.ok && Array.isArray(data.issues)) {
-            all = all.concat(data.issues);
-          }
-        } catch (_) {}
-      }
-      return all;
+      return loadByLocation("getSupplierIssues", "issues");
     }
 
     async function loadKitchenPctAll() {
       const month = new Date().toISOString().slice(0, 7);
-      let out = [];
 
-      for (const loc of LOCATIONS) {
-        try {
-          const data = await jsonp(SCRIPT_URL, { action: "getKitchenMTD", loc, month });
-          if (data && data.ok) {
-            const gross = Number(data?.totals?.revenueGross || 0);
-            const buy = Number(data?.totals?.purchases || 0);
-            const net = gross / 1.25;
-            const pct = net > 0 ? (buy / net) * 100 : null;
+      const results = await Promise.all(
+        LOCATIONS.map(async (loc) => {
+          try {
+            const data = await jsonp(SCRIPT_URL, { action: "getKitchenMTD", loc, month });
+            if (data && data.ok) {
+              const gross = Number(data?.totals?.revenueGross || 0);
+              const buy = Number(data?.totals?.purchases || 0);
+              const net = gross / 1.25;
+              const pct = net > 0 ? (buy / net) * 100 : null;
 
-            out.push({
-              location: loc,
-              pct: pct,
-              purchases: buy
-            });
-          }
-        } catch (_) {
-          out.push({
+              return {
+                location: loc,
+                pct,
+                purchases: buy
+              };
+            }
+          } catch (_) {}
+          return {
             location: loc,
             pct: null,
             purchases: 0
-          });
-        }
-      }
+          };
+        })
+      );
 
-      return out;
+      return results;
+    }
+
+    function sortByCreatedAtDesc(items) {
+      return [...items].sort((a, b) => {
+        const at = new Date(a.createdAt || 0).getTime();
+        const bt = new Date(b.createdAt || 0).getTime();
+        return bt - at;
+      });
+    }
+
+    function getLatestItem(items) {
+      return sortByCreatedAtDesc(items)[0] || null;
+    }
+
+    function setLatestMeta(items, locId, timeId) {
+      const latest = getLatestItem(items);
+      $(locId).textContent = latest?.location ? formatLocationShort(latest.location) : "Ingen data";
+      $(timeId).textContent = latest?.createdAt ? fmtDateTime(latest.createdAt) : "—";
     }
 
     function renderTopCards(complaints, soldout, faults, supplier) {
@@ -667,15 +719,10 @@
       $("faultsTotal").textContent = faults.length;
       $("supplierTotal").textContent = supplier.length;
 
-      const cLoc = complaints[0]?.location ? formatLocationShort(complaints[0].location) : "Ingen data";
-      const sLoc = soldout[0]?.location ? formatLocationShort(soldout[0].location) : "Ingen data";
-      const fLoc = faults[0]?.location ? formatLocationShort(faults[0].location) : "Ingen data";
-      const supLoc = supplier[0]?.location ? formatLocationShort(supplier[0].location) : "Ingen data";
-
-      $("complaintLocMeta").textContent = cLoc;
-      $("soldoutLocMeta").textContent = sLoc;
-      $("faultLocMeta").textContent = fLoc;
-      $("supplierLocMeta").textContent = supLoc;
+      setLatestMeta(complaints, "complaintLocMeta", "complaintTimeMeta");
+      setLatestMeta(soldout, "soldoutLocMeta", "soldoutTimeMeta");
+      setLatestMeta(faults, "faultLocMeta", "faultTimeMeta");
+      setLatestMeta(supplier, "supplierLocMeta", "supplierTimeMeta");
     }
 
     function renderLatestEvents(complaints, soldout, faults) {
@@ -714,7 +761,7 @@
         });
       });
 
-      events.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      events.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
       const list = $("latestEventsList");
       if (!events.length) {
@@ -728,6 +775,7 @@
           <div class="listInfo">
             <div class="listMain">${esc(ev.type)} • ${esc(formatLocationShort(ev.location))} • ${esc(ev.title)}</div>
             <div class="listSub">${esc(ev.desc || "Ingen ekstra note")}</div>
+            <div class="listMeta">${esc(fmtDateTime(ev.createdAt))}</div>
           </div>
         </div>
       `).join("");
@@ -736,12 +784,22 @@
     function renderLocationFocus(complaints, soldout, faults, supplier) {
       const map = {};
 
+      function ensureLoc(loc) {
+        if (!map[loc]) {
+          map[loc] = {
+            complaints: 0,
+            soldout: 0,
+            faults: 0,
+            supplier: 0,
+            total: 0
+          };
+        }
+      }
+
       function addCount(arr, key) {
         arr.forEach(x => {
           const loc = x.location || "Ukendt";
-          if (!map[loc]) {
-            map[loc] = { complaints: 0, soldout: 0, faults: 0, supplier: 0, total: 0 };
-          }
+          ensureLoc(loc);
           map[loc][key]++;
           map[loc].total++;
         });
@@ -766,9 +824,16 @@
         <div class="row">
           <div class="rowName">${esc(formatLocationShort(r.loc))}</div>
           <div class="rowVal">${r.total} total</div>
-          <div class="rowVal">${r.complaints} klager • ${r.soldout} udsolgt • ${r.faults} fejl</div>
+          <div class="rowVal">${r.complaints} klager • ${r.soldout} udsolgt • ${r.faults} fejl • ${r.supplier} leverandør</div>
         </div>
       `).join("");
+    }
+
+    function kitchenPctClass(pct) {
+      if (pct == null || !isFinite(pct)) return "kMuted";
+      if (pct >= 35) return "kRed";
+      if (pct >= 30) return "kWarn";
+      return "kGreen";
     }
 
     function renderKitchenPct(list) {
@@ -778,15 +843,21 @@
         return;
       }
 
-      wrap.innerHTML = list.map(item => {
-        const pctText = item.pct === null || !isFinite(item.pct)
+      const sorted = [...list].sort((a, b) => {
+        const ap = a.pct == null || !isFinite(a.pct) ? -Infinity : a.pct;
+        const bp = b.pct == null || !isFinite(b.pct) ? -Infinity : b.pct;
+        return bp - ap;
+      });
+
+      wrap.innerHTML = sorted.map(item => {
+        const pctText = item.pct == null || !isFinite(item.pct)
           ? "—"
           : item.pct.toFixed(1).replace(".", ",") + "%";
 
         return `
           <div class="row">
             <div class="rowName">${esc(formatLocationShort(item.location))}</div>
-            <div class="rowVal">${pctText}</div>
+            <div class="rowVal ${kitchenPctClass(item.pct)}">${pctText}</div>
             <div class="rowVal">${Number(item.purchases || 0).toLocaleString("da-DK")} kr.</div>
           </div>
         `;
@@ -794,6 +865,10 @@
     }
 
     async function loadPortalData() {
+      if (isLoading) return;
+      isLoading = true;
+      setStatus("● Opdaterer", "warn");
+
       try {
         const [complaints, soldout, faults, supplier, kitchen] = await Promise.all([
           loadComplaintsAll(),
@@ -808,11 +883,19 @@
         renderLocationFocus(complaints, soldout, faults, supplier);
         renderKitchenPct(kitchen);
 
+        updateLastUpdated(new Date());
+        setStatus("● Data opdateret", "ok");
       } catch (e) {
         console.error("Portal load error:", e);
-        $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-        $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-        $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+        setStatus("● Fejl i data", "err");
+
+        if (!lastSuccessfulUpdate) {
+          $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+        }
+      } finally {
+        isLoading = false;
       }
     }
 
