@@ -1,8 +1,12 @@
 // ==========================
 // KONFIG
 // ==========================
+alert("NY APP-V3.JS LOADED");
+console.log("NY APP-V3.JS LOADED");
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
+window.__WEBHOOK_URL__ = https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec;
+console.log("WEBHOOK_URL AKTIV:", https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec);
 
 // Lokationer
 const LOCATIONS = [
