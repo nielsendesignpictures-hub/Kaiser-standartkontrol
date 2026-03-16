@@ -1,7 +1,7 @@
 // ==========================
 // KONFIG
 // ==========================
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwDgUow5SsLiJFDtTmP0scE2eR0Y4ASfg77tYkLXOvELv33LIjqCx1_Q3C-A7h3fnag/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 // Lokationer
