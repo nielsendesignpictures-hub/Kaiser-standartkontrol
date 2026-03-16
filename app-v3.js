@@ -389,7 +389,7 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 }
 
 // ==========================
-// SUBMIT
+// SUBMIT VIA HIDDEN FORM
 // ==========================
 function initCommentAndSubmit() {
   const comment = $("commentInput");
@@ -424,6 +424,61 @@ function setError(msg) {
   setHidden(el, false);
 }
 
+function postViaHiddenForm(url, payload) {
+  return new Promise((resolve, reject) => {
+    try {
+      const iframeName = "submit_iframe_" + Date.now();
+      const iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = url;
+      form.target = iframeName;
+      form.style.display = "none";
+
+      Object.entries(payload).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value == null ? "" : String(value);
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(form);
+
+      let done = false;
+
+      const cleanup = () => {
+        setTimeout(() => {
+          if (form.parentNode) form.parentNode.removeChild(form);
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+        }, 500);
+      };
+
+      iframe.onload = () => {
+        if (done) return;
+        done = true;
+        cleanup();
+        resolve({ ok: true });
+      };
+
+      setTimeout(() => {
+        if (done) return;
+        done = true;
+        cleanup();
+        resolve({ ok: true });
+      }, 4000);
+
+      form.submit();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 async function submit() {
   setError("");
   setSubmitting(true);
@@ -455,27 +510,7 @@ async function submit() {
       billedeBase64: state.imageBase64
     };
 
-    const res = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    let result = null;
-    try {
-      result = await res.json();
-    } catch (_) {}
-
-    if (!res.ok) {
-      throw new Error("Serverfejl ved indsendelse.");
-    }
-
-    if (result && result.ok === false) {
-      throw new Error(result.error || "Kunne ikke gemme vurderingen.");
-    }
-
+    await postViaHiddenForm(WEBHOOK_URL, payload);
     showScreen("confirmation");
   } catch (err) {
     console.error(err);
