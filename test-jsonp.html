@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JSONP test</title>
+  <style>
+    body{
+      font-family:Arial,sans-serif;
+      background:#111;
+      color:#fff;
+      padding:20px;
+    }
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:#222;
+      padding:12px;
+      border-radius:8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>JSONP test</h1>
+  <div id="status">Starter...</div>
+  <pre id="out"></pre>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cb = "__cb_" + Math.random().toString(16).slice(2);
+        const qs = new URLSearchParams({
+          ...params,
+          callback: cb,
+          _t: Date.now() + "_" + Math.random().toString(16).slice(2)
+        }).toString();
+
+        const src = url + (url.includes("?") ? "&" : "?") + qs;
+        document.getElementById("status").textContent = "Loader: " + src;
+
+        const s = document.createElement("script");
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(t);
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+
+        window[cb] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        s.src = src;
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
+
+        document.body.appendChild(s);
+      });
+    }
+
+    jsonp(SCRIPT_URL, {
+      action: "fbPortalBundle",
+      month: "2026-03"
+    })
+    .then(data => {
+      document.getElementById("status").textContent = "SUCCESS";
+      document.getElementById("out").textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(err => {
+      document.getElementById("status").textContent = "ERROR: " + err.message;
+      document.getElementById("out").textContent = String(err.stack || err);
+    });
+  </script>
+</body>
+</html>
