@@ -1,14 +1,6 @@
-// ==========================
-// KONFIG
-// ==========================
-alert("NY APP-V3.JS LOADED");
-console.log("NY APP-V3.JS LOADED");
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
+const WEBHOOK_URL = "1qWbTEeSjL8DWLSlmaDVRP79WR8Eq4N1aQH8KdkHydPE";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
-window.__WEBHOOK_URL__ = https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec;
-console.log("WEBHOOK_URL AKTIV:", https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec);
 
-// Lokationer
 const LOCATIONS = [
   "Café Kaiser Helsingør",
   "Café Kaiser Hillerød",
@@ -72,9 +64,6 @@ const QUOTES = [
   "Fokus på detaljen. Gæsten mærker det."
 ];
 
-// ==========================
-// STATE
-// ==========================
 const state = {
   screen: "location",
   location: "",
@@ -92,9 +81,6 @@ const state = {
   isSubmitting: false
 };
 
-// ==========================
-// DOM HELPERS
-// ==========================
 const $ = (id) => document.getElementById(id);
 
 const screens = {
@@ -134,9 +120,6 @@ function setHidden(el, hidden) {
   el.classList.toggle("hidden", hidden);
 }
 
-// ==========================
-// SCREEN 1
-// ==========================
 function initLocationSelect() {
   const select = $("locationSelect");
   if (!select) return;
@@ -191,9 +174,6 @@ function updateNextEnabled() {
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-// ==========================
-// SCREEN 2
-// ==========================
 function initDishSelect() {
   const select = $("dishSelect");
   if (!select) return;
@@ -229,9 +209,6 @@ function populateDishSelect() {
   select.value = "";
 }
 
-// ==========================
-// SCREEN 3
-// ==========================
 const ratingLabels = {
   taste: "SMAG",
   presentation: "ANRETNING",
@@ -258,14 +235,12 @@ function renderRatingBlocks() {
       b.type = "button";
       b.className = "text-4xl leading-none";
       b.textContent = "☆";
-
       b.addEventListener("click", () => {
         if ((field === "taste" || field === "temperature") && !state.tasted) return;
         state.ratings[field] = i;
         paintStars();
         updateSubmitEnabled();
       });
-
       starsWrap.appendChild(b);
     }
   });
@@ -327,9 +302,6 @@ function updateSubmitEnabled() {
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-// ==========================
-// IMAGE
-// ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
   const input = $("imageInput");
@@ -392,9 +364,6 @@ function fileToCompressedDataUrl(file, maxW, quality) {
   });
 }
 
-// ==========================
-// SUBMIT VIA HIDDEN FORM
-// ==========================
 function initCommentAndSubmit() {
   const comment = $("commentInput");
   if (comment) {
@@ -524,9 +493,6 @@ async function submit() {
   }
 }
 
-// ==========================
-// NAV + RESET
-// ==========================
 function initNavButtons() {
   const next = $("btnNextToDish");
   if (next) {
@@ -599,9 +565,6 @@ function resetAll() {
   setError("");
 }
 
-// ==========================
-// BOOT
-// ==========================
 function boot() {
   initLocationSelect();
   initMealRadios();
