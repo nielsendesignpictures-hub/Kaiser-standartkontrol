@@ -3,23 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – F&B Portal V2</title>
+  <title>Kaiser – F&B Portal</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg0:#0b0f14;
-      --bg1:#121821;
-      --bg2:#1a2230;
-      --panel:rgba(255,255,255,0.05);
-      --panel2:rgba(255,255,255,0.07);
-      --line:rgba(255,255,255,0.10);
+      --bg0:#0d1117;
+      --bg1:#161b22;
       --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.72);
-      --muted2:rgba(255,255,255,0.52);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.55);
       --gold:#d6b24a;
       --gold2:#b9921f;
       --green:#62d26f;
@@ -27,7 +23,6 @@
       --blue:#5ea7ff;
       --warn:#f59e0b;
       --shadow:0 20px 60px rgba(0,0,0,.40);
-      --radius:24px;
     }
 
     *{box-sizing:border-box}
@@ -37,36 +32,33 @@
       font-family:Inter,system-ui,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1000px 600px at 10% -10%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(900px 600px at 100% 0%, rgba(56,189,248,0.10), transparent 55%),
-        radial-gradient(700px 500px at 30% 100%, rgba(245,158,11,0.10), transparent 55%),
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      padding:18px;
+      padding:16px;
     }
 
-    .shell{
-      max-width:1480px;
-      margin:0 auto;
-    }
+    .shell{max-width:1400px;margin:0 auto;}
 
     .hero{
-      border-radius:30px;
-      border:1px solid var(--line);
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.12);
       background:
         radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        radial-gradient(800px 240px at 15% 0%, rgba(245,158,11,0.10), transparent 60%),
-        radial-gradient(800px 240px at 85% 0%, rgba(94,167,255,0.10), transparent 60%),
+        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 240px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
+      padding:24px 18px 18px;
       overflow:hidden;
-      padding:24px 22px 18px;
     }
 
     .kicker{
       text-align:center;
       font-size:10px;
       font-weight:900;
-      letter-spacing:.28em;
+      letter-spacing:.26em;
       text-transform:uppercase;
       color:var(--muted2);
     }
@@ -74,25 +66,25 @@
     .title{
       text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(42px,7vw,72px);
+      font-size:clamp(42px,7vw,66px);
       line-height:1;
-      letter-spacing:-.04em;
       margin-top:8px;
+      letter-spacing:-.03em;
     }
 
     .sub{
       text-align:center;
-      margin-top:10px;
       color:var(--muted);
-      font-size:15px;
+      font-size:14px;
       font-weight:800;
+      margin-top:10px;
     }
 
-    .heroLine{
+    .goldline{
       height:2px;
-      border-radius:999px;
       margin:18px auto 0;
-      max-width:980px;
+      max-width:900px;
+      border-radius:999px;
       background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
     }
 
@@ -103,29 +95,25 @@
       gap:10px;
     }
 
-    @media (max-width: 980px){
-      .heroMeta{grid-template-columns:1fr 1fr;}
-    }
-
-    @media (max-width: 640px){
+    @media (max-width: 900px){
       .heroMeta{grid-template-columns:1fr;}
     }
 
     .pill{
-      min-height:46px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.05);
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
+      gap:6px;
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.92);
       font-size:11px;
       font-weight:900;
-      text-transform:uppercase;
       letter-spacing:.08em;
-      color:rgba(255,255,255,0.93);
+      text-transform:uppercase;
       text-align:center;
     }
 
@@ -133,74 +121,39 @@
     .pill.warn{border-color:rgba(245,158,11,.35);color:#ffe9b0;}
     .pill.err{border-color:rgba(255,107,107,.35);color:#ffd0d0;}
 
-    .navWrap{
-      margin-top:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .navBtn{
-      min-height:44px;
-      padding:10px 16px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.05);
-      color:var(--text);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-    }
-
-    .navBtn.active{
-      background:linear-gradient(135deg, rgba(214,178,74,.18), rgba(94,167,255,.12));
-      border-color:rgba(214,178,74,.32);
-      color:#fff2c6;
-    }
-
-    .page{
-      display:none;
-      margin-top:16px;
-    }
-
-    .page.active{display:block;}
-
     .section{
       margin-top:16px;
-      border-radius:var(--radius);
-      border:1px solid var(--line);
-      background:var(--panel);
-      box-shadow:var(--shadow);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
       overflow:hidden;
+      box-shadow:var(--shadow);
     }
 
     .sectionHead{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:12px;
+      gap:10px;
       padding:15px 18px;
-      border-bottom:1px solid var(--line);
       background:rgba(255,255,255,0.03);
+      border-bottom:1px solid rgba(255,255,255,0.10);
     }
 
     .sectionTitle{
       display:flex;
       align-items:center;
       gap:10px;
+      color:var(--muted);
       font-size:12px;
       font-weight:900;
-      text-transform:uppercase;
       letter-spacing:.16em;
-      color:var(--muted);
+      text-transform:uppercase;
     }
 
     .sectionDot{
       width:10px;height:10px;border-radius:50%;
       background:var(--gold);
-      flex:0 0 auto;
     }
 
     .sectionInfo{
@@ -211,26 +164,26 @@
 
     .sectionBody{padding:16px;}
 
-    .kpiGrid{
+    .topGrid{
       display:grid;
-      grid-template-columns:repeat(6,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:14px;
     }
 
-    @media (max-width: 1300px){
-      .kpiGrid{grid-template-columns:repeat(3,1fr);}
+    @media (max-width: 1200px){
+      .topGrid{grid-template-columns:repeat(2,1fr);}
     }
 
     @media (max-width: 760px){
-      .kpiGrid{grid-template-columns:1fr;}
+      .topGrid{grid-template-columns:1fr;}
     }
 
     .card{
       border-radius:22px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:170px;
+      min-height:180px;
     }
 
     .cardKicker{
@@ -250,25 +203,25 @@
     }
 
     .dot.red{background:var(--red);}
-    .dot.gold{background:var(--gold);}
-    .dot.blue{background:var(--blue);}
     .dot.green{background:var(--green);}
+    .dot.blue{background:var(--blue);}
+    .dot.gold{background:var(--gold);}
     .dot.warn{background:var(--warn);}
 
     .bigValue{
-      margin-top:18px;
       font-family:"Playfair Display",serif;
       font-size:52px;
       line-height:1;
+      margin-top:18px;
       letter-spacing:-.03em;
     }
 
     .subValue{
       margin-top:8px;
+      color:var(--muted);
       font-size:14px;
       font-weight:800;
-      color:var(--muted);
-      line-height:1.5;
+      line-height:1.4;
     }
 
     .miniMeta{
@@ -284,196 +237,182 @@
       gap:6px;
       padding:8px 12px;
       border-radius:999px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);
-      color:var(--muted);
       font-size:11px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
+      color:var(--muted);
     }
 
     .briefingBox{
       border-radius:22px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,0.12);
       background:
-        radial-gradient(700px 180px at 10% 0%, rgba(245,158,11,0.10), transparent 60%),
-        radial-gradient(700px 180px at 100% 0%, rgba(94,167,255,0.10), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:22px;
+        radial-gradient(700px 200px at 10% 0%, rgba(245,158,11,0.12), transparent 60%),
+        radial-gradient(700px 200px at 100% 0%, rgba(94,167,255,0.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      padding:20px;
+      position:relative;
+      overflow:hidden;
     }
 
-    .briefingHello{
-      margin-top:10px;
-      font-family:"Playfair Display",serif;
-      font-size:32px;
-      line-height:1.1;
-    }
-
-    .briefingText{
-      margin-top:14px;
-      white-space:pre-line;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.7;
-      font-weight:800;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:14px;
-    }
-
-    @media (max-width: 980px){
-      .grid2{grid-template-columns:1fr;}
-    }
-
-    .listCard{
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:320px;
-    }
-
-    .listTitle{
-      margin-top:10px;
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,0.96);
-    }
-
-    .list{
-      margin-top:16px;
+    .briefingTopRow{
       display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .listItem{
-      display:flex;
+      justify-content:space-between;
       align-items:flex-start;
-      gap:10px;
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.05);
-    }
-
-    .bar{
-      width:5px;
-      min-height:64px;
-      border-radius:4px;
-      flex:0 0 auto;
-    }
-
-    .bar.red{background:var(--red);}
-    .bar.blue{background:var(--blue);}
-    .bar.gold{background:var(--gold);}
-    .bar.warn{background:var(--warn);}
-    .bar.green{background:var(--green);}
-
-    .listInfo{flex:1;min-width:0;}
-    .listMain{font-size:14px;font-weight:800;line-height:1.35;}
-    .listSub{margin-top:4px;font-size:12px;color:var(--muted);font-weight:700;line-height:1.4;}
-    .listMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
-
-    .table{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:1.2fr auto auto auto;
       gap:12px;
-      align-items:center;
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.05);
+      flex-wrap:wrap;
     }
 
-    @media (max-width: 980px){
-      .row{
-        grid-template-columns:1fr;
-        align-items:flex-start;
-      }
+    .briefingPills{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
 
-    .rowName{
-      font-size:14px;
-      font-weight:800;
-    }
-
-    .rowVal{
-      font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,0.92);
-      text-align:right;
-    }
-
-    @media (max-width: 980px){
-      .rowVal{text-align:left;}
-    }
-
-    .badge{
+    .briefingPill{
       display:inline-flex;
       align-items:center;
       gap:6px;
       padding:8px 12px;
       border-radius:999px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);
+      color:rgba(255,255,255,0.92);
       font-size:11px;
       font-weight:900;
-      text-transform:uppercase;
       letter-spacing:.08em;
-      white-space:nowrap;
+      text-transform:uppercase;
     }
 
-    .status-green{color:#dff7e2;border-color:rgba(98,210,111,.35);}
-    .status-warn{color:#ffe9b0;border-color:rgba(245,158,11,.35);}
-    .status-red{color:#ffd0d0;border-color:rgba(255,107,107,.35);}
+    .briefingPill.ok{border-color:rgba(98,210,111,.35);color:#dff7e2;}
+    .briefingPill.warn{border-color:rgba(245,158,11,.35);color:#ffe9b0;}
+    .briefingPill.err{border-color:rgba(255,107,107,.35);color:#ffd0d0;}
 
-    .locationGrid{
+    .briefingHello{
+      margin-top:14px;
+      font-size:30px;
+      font-family:"Playfair Display",serif;
+      line-height:1.1;
+    }
+
+    .briefingLead{
+      margin-top:10px;
+      color:rgba(255,255,255,0.92);
+      font-size:16px;
+      line-height:1.7;
+      font-weight:800;
+      max-width:980px;
+    }
+
+    .briefingHighlight{
+      margin-top:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(214,178,74,.25);
+      background:rgba(214,178,74,0.10);
+      color:#fff0c2;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .briefingGrid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+
+    @media (max-width: 860px){
+      .briefingGrid{grid-template-columns:1fr;}
+    }
+
+    .briefCard{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+      padding:14px;
+      min-height:120px;
+    }
+
+    .briefCardLabel{
+      font-size:11px;
+      color:var(--muted2);
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .briefCardText{
+      margin-top:8px;
+      font-size:14px;
+      line-height:1.6;
+      color:var(--text);
+      font-weight:800;
+    }
+
+    .chainGrid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:14px;
     }
 
     @media (max-width: 1180px){
-      .locationGrid{grid-template-columns:repeat(2,1fr);}
+      .chainGrid{grid-template-columns:repeat(2,1fr);}
     }
 
     @media (max-width: 760px){
-      .locationGrid{grid-template-columns:1fr;}
+      .chainGrid{grid-template-columns:1fr;}
     }
 
-    .locationCard{
+    .chainCard{
       border-radius:22px;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:260px;
+      min-height:220px;
     }
 
-    .locationTop{
+    .chainTop{
       display:flex;
       justify-content:space-between;
       gap:10px;
       align-items:flex-start;
     }
 
-    .locationName{
-      margin-top:10px;
+    .chainName{
       font-size:22px;
       font-weight:900;
+      margin-top:10px;
     }
 
-    .metricGrid{
+    .statusBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      white-space:nowrap;
+    }
+
+    .status-green{color:#dff7e2;border-color:rgba(98,210,111,.35)}
+    .status-warn{color:#ffe9b0;border-color:rgba(245,158,11,.35)}
+    .status-red{color:#ffd0d0;border-color:rgba(255,107,107,.35)}
+
+    .chainMetrics{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
@@ -482,9 +421,9 @@
 
     .metricBox{
       border-radius:16px;
+      padding:12px;
       border:1px solid rgba(255,255,255,0.10);
       background:rgba(255,255,255,0.05);
-      padding:12px;
     }
 
     .metricLabel{
@@ -501,33 +440,165 @@
       font-weight:900;
     }
 
-    .toolbar{
+    .menuGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 1100px){
+      .menuGrid{grid-template-columns:1fr;}
+    }
+
+    .portalCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:180px;
+    }
+
+    .portalName{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .portalDesc{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.45;
+      font-weight:700;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .grid2{grid-template-columns:1fr;}
+    }
+
+    .listCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:320px;
+    }
+
+    .listTitle{
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,0.96);
+      margin-top:10px;
+    }
+
+    .list{
       display:flex;
-      flex-wrap:wrap;
+      flex-direction:column;
       gap:10px;
-      margin-bottom:14px;
+      margin-top:16px;
     }
 
-    .toolSelect,.toolInput{
-      min-height:42px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.06);
-      color:var(--text);
+    .listItem{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .bar{
+      width:5px;
+      min-height:64px;
+      border-radius:4px;
+      flex:0 0 auto;
+    }
+
+    .bar.red{background:var(--red);}
+    .bar.blue{background:var(--blue);}
+    .bar.gold{background:var(--gold);}
+    .bar.green{background:var(--green);}
+    .bar.warn{background:var(--warn);}
+
+    .listInfo{flex:1;min-width:0;}
+
+    .listMain{
+      font-size:14px;
       font-weight:800;
-      font-size:13px;
-      outline:none;
+      line-height:1.35;
     }
 
-    .toolInput::placeholder{color:rgba(255,255,255,0.45);}
-    .toolSelect option{background:#161b22;color:#fff;}
+    .listSub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .listMeta{
+      margin-top:6px;
+      font-size:11px;
+      color:var(--muted2);
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .table{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:12px;
+      align-items:center;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .rowName{
+      font-size:14px;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .rowVal{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,0.92);
+      text-align:right;
+    }
 
     .empty{
       text-align:center;
-      padding:28px;
+      padding:26px;
       color:var(--muted2);
       font-size:13px;
+    }
+
+    .cateringGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .cateringGrid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -536,777 +607,427 @@
 
     <header class="hero">
       <div class="kicker">KAISER</div>
-      <div class="title">F&B Portal V2</div>
-      <div class="sub">Personligt ledelsesoverblik over drift, performance, kvalitet og fokusområder</div>
-      <div class="heroLine"></div>
+      <div class="title">F&B Portal</div>
+      <div class="sub">Ledelsesoverblik over drift, kvalitet, ratings, catering og køkken</div>
+      <div class="goldline"></div>
 
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
-        <div class="pill">👤 Personlig ledelsesportal</div>
-        <div class="pill">📊 F&B Intelligence</div>
-        <div class="pill ok" id="statusPill">● Konceptmode</div>
-      </div>
-
-      <div class="navWrap">
-        <button class="navBtn active" data-page="overview">Overview</button>
-        <button class="navBtn" data-page="locations">Lokationer</button>
-        <button class="navBtn" data-page="drift">Drift</button>
-        <button class="navBtn" data-page="kitchen">Kitchen</button>
-        <button class="navBtn" data-page="quality">Kvalitet</button>
+        <div class="pill">📊 F&B Operations</div>
+        <div class="pill">🧭 Version 3</div>
+        <div class="pill ok" id="statusPill">● Data opdateret</div>
       </div>
     </header>
 
-    <!-- OVERVIEW -->
-    <main class="page active" id="page-overview">
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Executive overview</div>
-          <div class="sectionInfo" id="overviewUpdated">Senest opdateret: —</div>
-        </div>
-        <div class="sectionBody">
-          <div class="kpiGrid" id="overviewKpis"></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Manager briefing</div>
-          <div class="sectionInfo">Din prioritering lige nu</div>
-        </div>
-        <div class="sectionBody">
-          <div class="briefingBox">
-            <div class="cardKicker"><span class="dot gold"></span> AI / lederblik</div>
-            <div class="briefingHello" id="briefingHello">God dag Stefan</div>
-            <div class="briefingText" id="briefingText"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Lokationsstatus</div>
-          <div class="sectionInfo">Rangering efter opmærksomhed</div>
-        </div>
-        <div class="sectionBody">
-          <div class="locationGrid" id="overviewLocations"></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Seneste driftshændelser</div>
-          <div class="sectionInfo">Det nyeste i kæden</div>
-        </div>
-        <div class="sectionBody">
-          <div class="grid2">
-            <div class="listCard">
-              <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
-              <div class="listTitle">Tværgående feed</div>
-              <div class="list" id="overviewEvents"></div>
+    <!-- BRIEFING FIRST -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Drift AI briefing</div>
+        <div class="sectionInfo" id="lastUpdatedInfo">Senest opdateret: —</div>
+      </div>
+      <div class="sectionBody">
+        <div class="briefingBox">
+          <div class="briefingTopRow">
+            <div class="cardKicker"><span class="dot gold"></span> Daglig lederbrief</div>
+            <div class="briefingPills">
+              <div class="briefingPill warn" id="chainStatusPill">Kædestatus: Opmærksomhed</div>
+              <div class="briefingPill warn" id="focusPill">Dagens fokus: Farum</div>
             </div>
-            <div class="listCard">
-              <div class="cardKicker"><span class="dot blue"></span> Fokuslokationer</div>
-              <div class="listTitle">Hvor du bør kigge først</div>
-              <div class="table" id="overviewFocus"></div>
+          </div>
+
+          <div class="briefingHello" id="briefingHello">God dag Stefan</div>
+          <div class="briefingLead" id="briefingLead">Farum er i dag den lokation, der tydeligst kalder på opmærksomhed. Resten af kæden ser forholdsvis stabil ud.</div>
+          <div class="briefingHighlight" id="briefingHighlight">Første check-in bør gå til Farum</div>
+
+          <div class="briefingGrid">
+            <div class="briefCard">
+              <div class="briefCardLabel">Dagens fokus</div>
+              <div class="briefCardText" id="briefFocus">Farum har flest driftssignaler og bør være dit første fokuspunkt, før du går bredere ud i kæden.</div>
+            </div>
+
+            <div class="briefCard">
+              <div class="briefCardLabel">Risikobillede</div>
+              <div class="briefCardText" id="briefRisk">Kombinationen af leverandørfejl og udsolgte varer er den største risiko, fordi den både presser vareflow og kan blive synlig for gæsterne.</div>
+            </div>
+
+            <div class="briefCard">
+              <div class="briefCardLabel">Positivt signal</div>
+              <div class="briefCardText" id="briefPositive">Chain kitchen % ligger på et sundt niveau, hvilket giver et stabilt økonomisk billede i driften.</div>
+            </div>
+
+            <div class="briefCard">
+              <div class="briefCardLabel">Anbefalet handling</div>
+              <div class="briefCardText" id="briefAction">Tag først fat i Farum og få afklaret varestatus, så udsolgte varer ikke udvikler sig til gæstepres i serviceperioden.</div>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <!-- LOKATIONER -->
-    <main class="page" id="page-locations">
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Alle lokationer</div>
-          <div class="sectionInfo">Sammenligning af enheder</div>
-        </div>
-        <div class="sectionBody">
-          <div class="locationGrid" id="locationsGrid"></div>
-        </div>
-      </section>
-    </main>
-
-    <!-- DRIFT -->
-    <main class="page" id="page-drift">
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Driftshændelser</div>
-          <div class="sectionInfo">Filtrerede hændelser</div>
-        </div>
-        <div class="sectionBody">
-          <div class="toolbar">
-            <select class="toolSelect" id="filterType">
-              <option value="all">Alle typer</option>
-              <option value="complaint">Klager</option>
-              <option value="soldout">Udsolgt</option>
-              <option value="fault">Fejl</option>
-              <option value="supplier">Leverandør</option>
-            </select>
-
-            <select class="toolSelect" id="filterLocation">
-              <option value="all">Alle lokationer</option>
-            </select>
-
-            <input class="toolInput" id="filterSearch" placeholder="Søg i titel eller beskrivelse" />
+    <!-- CATERING OVERVIEW -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Catering overview</div>
+        <div class="sectionInfo">Dagens og kommende catering events</div>
+      </div>
+      <div class="sectionBody">
+        <div class="cateringGrid">
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot green"></span> Catering i dag</div>
+            <div class="listTitle">Bekræftede events i dag</div>
+            <div class="list" id="cateringTodayList">
+              <div class="empty">Indlæser catering...</div>
+            </div>
           </div>
 
           <div class="listCard">
-            <div class="cardKicker"><span class="dot warn"></span> Incident center</div>
-            <div class="listTitle">Aktive og seneste registreringer</div>
-            <div class="list" id="incidentList"></div>
+            <div class="cardKicker"><span class="dot blue"></span> Kommende catering</div>
+            <div class="listTitle">Næste planlagte events</div>
+            <div class="list" id="cateringUpcomingList">
+              <div class="empty">Indlæser catering...</div>
+            </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+
+    <!-- MANAGER ALERTS -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Manager alerts</div>
+        <div class="sectionInfo">Kritiske driftssignaler lige nu</div>
+      </div>
+      <div class="sectionBody">
+        <div class="topGrid">
+          <div class="card">
+            <div class="cardKicker"><span class="dot red"></span> Åbne klager</div>
+            <div class="bigValue" id="complaintsTotal">0</div>
+            <div class="subValue">Seneste registrerede gæsteklager</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="complaintLocMeta">Ingen data</div>
+              <div class="metaChip" id="complaintTimeMeta">—</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot gold"></span> Udsolgte varer</div>
+            <div class="bigValue" id="soldoutTotal">1</div>
+            <div class="subValue">Registreringer i systemet</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="soldoutLocMeta">Farum</div>
+              <div class="metaChip" id="soldoutTimeMeta">16.03, 07:53</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
+            <div class="bigValue" id="faultsTotal">0</div>
+            <div class="subValue">Åbne drifts- og vedligeholdelsesfejl</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="faultLocMeta">Ingen data</div>
+              <div class="metaChip" id="faultTimeMeta">—</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardKicker"><span class="dot warn"></span> Leverandørfejl</div>
+            <div class="bigValue" id="supplierTotal">4</div>
+            <div class="subValue">Seneste registrerede leverandørproblemer</div>
+            <div class="miniMeta">
+              <div class="metaChip" id="supplierLocMeta">Vanløse</div>
+              <div class="metaChip" id="supplierTimeMeta">14.03, 08:56</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAIN OVERVIEW -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Chain overview</div>
+        <div class="sectionInfo">Status, omsætning, mad rating og kitchen % pr. lokation</div>
+      </div>
+      <div class="sectionBody">
+        <div class="chainGrid" id="chainOverviewGrid">
+          <div class="chainCard">
+            <div class="chainTop">
+              <div>
+                <div class="cardKicker"><span class="dot blue"></span> Kaiser chain status</div>
+                <div class="chainName">Helsingør</div>
+              </div>
+              <div class="statusBadge status-warn">🟡 Opmærksomhed</div>
+            </div>
+
+            <div class="chainMetrics">
+              <div class="metricBox">
+                <div class="metricLabel">Omsætning</div>
+                <div class="metricValue">339.227 kr.</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Mad rating</div>
+                <div class="metricValue">4,2</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Kitchen %</div>
+                <div class="metricValue">16,0%</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Ratings</div>
+                <div class="metricValue">8</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chainCard">
+            <div class="chainTop">
+              <div>
+                <div class="cardKicker"><span class="dot blue"></span> Kaiser chain status</div>
+                <div class="chainName">Farum</div>
+              </div>
+              <div class="statusBadge status-warn">🟡 Opmærksomhed</div>
+            </div>
+
+            <div class="chainMetrics">
+              <div class="metricBox">
+                <div class="metricLabel">Omsætning</div>
+                <div class="metricValue">440.988 kr.</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Mad rating</div>
+                <div class="metricValue">4,5</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Kitchen %</div>
+                <div class="metricValue">12,2%</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Ratings</div>
+                <div class="metricValue">6</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chainCard">
+            <div class="chainTop">
+              <div>
+                <div class="cardKicker"><span class="dot blue"></span> Kaiser chain status</div>
+                <div class="chainName">Hillerød</div>
+              </div>
+              <div class="statusBadge status-warn">🟡 Opmærksomhed</div>
+            </div>
+
+            <div class="chainMetrics">
+              <div class="metricBox">
+                <div class="metricLabel">Omsætning</div>
+                <div class="metricValue">655.445 kr.</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Mad rating</div>
+                <div class="metricValue">4,4</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Kitchen %</div>
+                <div class="metricValue">12,3%</div>
+              </div>
+              <div class="metricBox">
+                <div class="metricLabel">Ratings</div>
+                <div class="metricValue">10</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MENU INTELLIGENCE -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
+        <div class="sectionInfo">Hvilke retter der driver kæden</div>
+      </div>
+      <div class="sectionBody">
+        <div class="menuGrid" id="menuIntelligenceGrid">
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot gold"></span> Top dish #1</div>
+            <div class="portalName">Bøf Bearnaise</div>
+            <div class="portalDesc">Vurderinger: 6<br>Gennemsnitlig rating: 4,8</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot blue"></span> Top dish #2</div>
+            <div class="portalName">Club Sandwich</div>
+            <div class="portalDesc">Vurderinger: 7<br>Gennemsnitlig rating: 4,6</div>
+          </div>
+
+          <div class="portalCard">
+            <div class="cardKicker"><span class="dot green"></span> Top dish #3</div>
+            <div class="portalName">Pasta Trøffel</div>
+            <div class="portalDesc">Vurderinger: 4<br>Gennemsnitlig rating: 4,5</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KVALITET & DRIFT -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
+        <div class="sectionInfo">Seneste hændelser og hotspots</div>
+      </div>
+      <div class="sectionBody">
+        <div class="grid2">
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
+            <div class="listTitle">Klager, fejl og udsolgte samlet</div>
+            <div class="list" id="latestEventsList">
+              <div class="listItem">
+                <div class="bar gold"></div>
+                <div class="listInfo">
+                  <div class="listMain">Udsolgt • Farum • Wienerschnitzel</div>
+                  <div class="listSub">Ingen ekstra note</div>
+                  <div class="listMeta">16.03, 07:53</div>
+                </div>
+              </div>
+
+              <div class="listItem">
+                <div class="bar warn"></div>
+                <div class="listInfo">
+                  <div class="listMain">Leverandør • Vanløse • Burgerbøffer</div>
+                  <div class="listSub">Erstattet med frost</div>
+                  <div class="listMeta">14.03, 08:56</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot blue"></span> Lokationer i fokus</div>
+            <div class="listTitle">Antal registreringer pr. lokation</div>
+            <div class="table" id="locationFocusList">
+              <div class="row">
+                <div class="rowName">Helsingør</div>
+                <div class="rowVal">2 total</div>
+                <div class="rowVal">0 klager • 0 udsolgt • 0 fejl • 2 leverandør</div>
+              </div>
+              <div class="row">
+                <div class="rowName">Farum</div>
+                <div class="rowVal">1 total</div>
+                <div class="rowVal">0 klager • 1 udsolgt • 0 fejl • 0 leverandør</div>
+              </div>
+              <div class="row">
+                <div class="rowName">Vanløse</div>
+                <div class="rowVal">1 total</div>
+                <div class="rowVal">0 klager • 0 udsolgt • 0 fejl • 1 leverandør</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- KITCHEN -->
-    <main class="page" id="page-kitchen">
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Kitchen performance</div>
-          <div class="sectionInfo">Kæde og lokationer</div>
-        </div>
-        <div class="sectionBody">
-          <div class="kpiGrid" id="kitchenKpis"></div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Kitchen ranking</div>
-          <div class="sectionInfo">MTD pr. lokation</div>
-        </div>
-        <div class="sectionBody">
-          <div class="table" id="kitchenTable"></div>
-        </div>
-      </section>
-    </main>
-
-    <!-- QUALITY -->
-    <main class="page" id="page-quality">
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & ratings</div>
-          <div class="sectionInfo">Mockup til næste fase</div>
-        </div>
-        <div class="sectionBody">
-          <div class="grid2">
-            <div class="listCard">
-              <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
-              <div class="listTitle">Bedst performende retter</div>
-              <div class="table" id="topDishesTable"></div>
-            </div>
-
-            <div class="listCard">
-              <div class="cardKicker"><span class="dot red"></span> Lowest dishes</div>
-              <div class="listTitle">Retter med lavest score</div>
-              <div class="table" id="lowDishesTable"></div>
-            </div>
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
+        <div class="sectionInfo">Seneste kendte lokationstal</div>
+      </div>
+      <div class="sectionBody">
+        <div class="table" id="kitchenPctList">
+          <div class="row">
+            <div class="rowName">Helsingør</div>
+            <div class="rowVal">16,0%</div>
+            <div class="rowVal">43.294 kr.</div>
+          </div>
+          <div class="row">
+            <div class="rowName">Hillerød</div>
+            <div class="rowVal">12,3%</div>
+            <div class="rowVal">64.733 kr.</div>
+          </div>
+          <div class="row">
+            <div class="rowName">Farum</div>
+            <div class="rowVal">12,2%</div>
+            <div class="rowVal">43.123 kr.</div>
           </div>
         </div>
-      </section>
-
-      <section class="section">
-        <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Seneste standardkontroller</div>
-          <div class="sectionInfo">Seneste kvalitetsblik</div>
-        </div>
-        <div class="sectionBody">
-          <div class="list" id="recentChecksList"></div>
-        </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
   </div>
 
   <script>
-    const portalData = {
-      meta: {
-        generatedAt: new Date().toISOString(),
-        timezone: "Europe/Copenhagen",
-        version: "2.0-concept"
-      },
-      overview: {
-        chainStatus: "warn",
-        totals: {
-          complaintsOpen: 0,
-          soldoutOpen: 1,
-          faultsOpen: 0,
-          supplierOpen: 4,
-          cateringToday: 2,
-          chainKitchenPct: 13.5
-        },
-        briefing:
-`Der er rolig drift i kæden, men enkelte forhold kræver opmærksomhed.
-
-• 1 udsolgt vare er registreret i Farum
-• 4 leverandørfejl ligger åbne, især på Helsingør, Hillerød og Vanløse
-• Chain kitchen % ligger på et sundt niveau
-• Vanløse og Helsingør bør følges tættere i dag`
-      },
-      locations: [
-        {
-          name: "Café Kaiser Helsingør",
-          shortName: "Helsingør",
-          status: "warn",
-          revenueMTD: 339226.67,
-          purchasesMTD: 43294.36,
-          kitchenPct: 15.95,
-          complaintsOpen: 0,
-          soldoutOpen: 0,
-          faultsOpen: 0,
-          supplierOpen: 2,
-          incidentTotal: 2,
-          ratingAvg: 4.2,
-          ratingCount: 8,
-          nextCatering: { date: "2026-03-17", time: "12:00", customerName: "Advokatfirma", guests: 24 }
-        },
-        {
-          name: "Café Kaiser Hillerød",
-          shortName: "Hillerød",
-          status: "warn",
-          revenueMTD: 655444.99,
-          purchasesMTD: 64733.38,
-          kitchenPct: 12.35,
-          complaintsOpen: 0,
-          soldoutOpen: 0,
-          faultsOpen: 0,
-          supplierOpen: 1,
-          incidentTotal: 1,
-          ratingAvg: 4.4,
-          ratingCount: 10,
-          nextCatering: { date: "2026-03-16", time: "13:00", customerName: "Kommunen", guests: 18 }
-        },
-        {
-          name: "Café Kaiser Farum",
-          shortName: "Farum",
-          status: "warn",
-          revenueMTD: 440988.39,
-          purchasesMTD: 43123.28,
-          kitchenPct: 12.22,
-          complaintsOpen: 0,
-          soldoutOpen: 1,
-          faultsOpen: 0,
-          supplierOpen: 0,
-          incidentTotal: 1,
-          ratingAvg: 4.5,
-          ratingCount: 6,
-          nextCatering: null
-        },
-        {
-          name: "Café Kaiser Hørsholm",
-          shortName: "Hørsholm",
-          status: "green",
-          revenueMTD: 0,
-          purchasesMTD: 0,
-          kitchenPct: null,
-          complaintsOpen: 0,
-          soldoutOpen: 0,
-          faultsOpen: 0,
-          supplierOpen: 0,
-          incidentTotal: 0,
-          ratingAvg: null,
-          ratingCount: 0,
-          nextCatering: null
-        },
-        {
-          name: "Café Kaiser Vanløse",
-          shortName: "Vanløse",
-          status: "warn",
-          revenueMTD: 0,
-          purchasesMTD: 0,
-          kitchenPct: null,
-          complaintsOpen: 0,
-          soldoutOpen: 0,
-          faultsOpen: 0,
-          supplierOpen: 1,
-          incidentTotal: 1,
-          ratingAvg: 4.1,
-          ratingCount: 4,
-          nextCatering: { date: "2026-03-18", time: "11:30", customerName: "Kontorhus", guests: 32 }
-        }
-      ],
-      incidents: {
-        recent: [
-          {
-            id: "s1",
-            type: "soldout",
-            location: "Café Kaiser Farum",
-            title: "Wienerschnitzel",
-            subtitle: "Udsolgt vare",
-            description: "Registreret i driftssystemet",
-            severity: "medium",
-            status: "open",
-            createdAt: "2026-03-16T06:53:14.382Z"
-          },
-          {
-            id: "su1",
-            type: "supplier",
-            location: "Café Kaiser Vanløse",
-            title: "Burgerbøffer",
-            subtitle: "BC",
-            description: "Erstattet med frost",
-            severity: "medium",
-            status: "open",
-            createdAt: "2026-03-14T07:56:35.768Z"
-          },
-          {
-            id: "su2",
-            type: "supplier",
-            location: "Café Kaiser Hillerød",
-            title: "Flæsk",
-            subtitle: "BC",
-            description: "Erstattet med frost",
-            severity: "medium",
-            status: "open",
-            createdAt: "2026-03-14T07:55:42.817Z"
-          },
-          {
-            id: "su3",
-            type: "supplier",
-            location: "Café Kaiser Helsingør",
-            title: "150g bøf",
-            subtitle: "BC",
-            description: "Erstattet med frost",
-            severity: "medium",
-            status: "open",
-            createdAt: "2026-03-14T07:55:04.448Z"
-          }
-        ]
-      },
-      kitchen: {
-        chain: {
-          revenueMTD: 1435660.05,
-          purchasesMTD: 151151.02,
-          kitchenPct: 13.15
-        }
-      },
-      quality: {
-        topDishes: [
-          { dish: "Bøf Bearnaise", averageRating: 4.8, count: 6 },
-          { dish: "Club Sandwich", averageRating: 4.6, count: 7 },
-          { dish: "Pasta Trøffel", averageRating: 4.5, count: 4 }
-        ],
-        lowDishes: [
-          { dish: "Fish & Chips", averageRating: 3.9, count: 5 },
-          { dish: "Caesar Salat", averageRating: 4.0, count: 4 },
-          { dish: "Burger Classic", averageRating: 4.1, count: 6 }
-        ],
-        recentChecks: [
-          {
-            date: "2026-03-16",
-            location: "Café Kaiser Farum",
-            dish: "Pasta Trøffel",
-            scoreAvg: 4.3,
-            comment: "Flot anretning og god temperatur."
-          },
-          {
-            date: "2026-03-15",
-            location: "Café Kaiser Hillerød",
-            dish: "Club Sandwich",
-            scoreAvg: 4.5,
-            comment: "Meget stabil og veldisponeret ret."
-          },
-          {
-            date: "2026-03-14",
-            location: "Café Kaiser Helsingør",
-            dish: "Fish & Chips",
-            scoreAvg: 3.9,
-            comment: "Bør arbejdes med sprødhed og præsentation."
-          }
-        ]
-      }
-    };
-
-    const $ = id => document.getElementById(id);
-
-    function esc(s) {
-      return String(s || "").replace(/[&<>"']/g, c =>
-        ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
-    }
-
-    function formatMoney(n) {
-      return Number(n || 0).toLocaleString("da-DK") + " kr.";
-    }
-
-    function formatPct(n) {
-      if (n === null || n === undefined || !isFinite(n)) return "—";
-      return Number(n).toFixed(1).replace(".", ",") + "%";
-    }
-
-    function formatRating(n) {
-      if (n === null || n === undefined || !isFinite(n)) return "—";
-      return Number(n).toFixed(1).replace(".", ",");
-    }
-
-    function formatDateTime(v) {
-      const d = new Date(v);
-      if (isNaN(d)) return "—";
-      return d.toLocaleString("da-DK", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function greetingByTime() {
-      const h = new Date().getHours();
-      if (h < 5) return "God nat";
-      if (h < 12) return "God morgen";
-      if (h < 18) return "God eftermiddag";
-      return "God aften";
-    }
-
-    function statusClass(status) {
-      if (status === "red") return "status-red";
-      if (status === "warn") return "status-warn";
-      return "status-green";
-    }
-
-    function statusLabel(status) {
-      if (status === "red") return "🔴 Kritisk";
-      if (status === "warn") return "🟡 Opmærksomhed";
-      return "🟢 Stabil";
-    }
-
-    function incidentColor(type) {
-      if (type === "complaint") return "red";
-      if (type === "soldout") return "gold";
-      if (type === "fault") return "blue";
-      if (type === "supplier") return "warn";
-      return "green";
-    }
-
     function updateClock() {
       const now = new Date();
-      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
+      const timePill = document.getElementById("timePill");
+      const lastUpdated = document.getElementById("lastUpdatedInfo");
+
+      timePill.textContent = "🕐 " + now.toLocaleString("da-DK", {
         day: "2-digit",
         month: "2-digit",
         hour: "2-digit",
         minute: "2-digit"
       });
+
+      lastUpdated.textContent = "Senest opdateret: " + now.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
     }
 
-    function renderOverviewKpis() {
-      const t = portalData.overview.totals;
-      const items = [
-        {
-          title: "Åbne klager",
-          dot: "red",
-          value: t.complaintsOpen,
-          sub: "Seneste registrerede gæsteklager",
-          meta: ["Ingen aktive"]
-        },
-        {
-          title: "Udsolgte varer",
-          dot: "gold",
-          value: t.soldoutOpen,
-          sub: "Produkter ude af drift",
-          meta: ["Farum", "Wienerschnitzel"]
-        },
-        {
-          title: "Fejl & mangler",
-          dot: "blue",
-          value: t.faultsOpen,
-          sub: "Tekniske og driftsmæssige fejl",
-          meta: ["Ingen aktive"]
-        },
-        {
-          title: "Leverandørfejl",
-          dot: "warn",
-          value: t.supplierOpen,
-          sub: "Registrerede leverandørproblemer",
-          meta: ["Vanløse", "Helsingør", "Hillerød"]
-        },
-        {
-          title: "Catering i dag",
-          dot: "green",
-          value: t.cateringToday,
-          sub: "Bekræftede events i dag",
-          meta: ["Hillerød", "1 større event"]
-        },
-        {
-          title: "Chain kitchen %",
-          dot: "green",
-          value: formatPct(t.chainKitchenPct),
-          sub: "Samlet MTD performance",
-          meta: ["Stabilt niveau"]
-        }
-      ];
-
-      $("overviewKpis").innerHTML = items.map(item => `
-        <div class="card">
-          <div class="cardKicker"><span class="dot ${item.dot}"></span> ${esc(item.title)}</div>
-          <div class="bigValue">${esc(item.value)}</div>
-          <div class="subValue">${esc(item.sub)}</div>
-          <div class="miniMeta">
-            ${item.meta.map(m => `<div class="metaChip">${esc(m)}</div>`).join("")}
+    function renderCateringToday() {
+      const wrap = document.getElementById("cateringTodayList");
+      wrap.innerHTML = `
+        <div class="listItem">
+          <div class="bar green"></div>
+          <div class="listInfo">
+            <div class="listMain">Hillerød • Kommunen</div>
+            <div class="listSub">13:00 • 18 gæster</div>
+            <div class="listMeta">I dag • Bekræftet</div>
           </div>
         </div>
-      `).join("");
-    }
 
-    function renderBriefing() {
-      $("briefingHello").textContent = greetingByTime() + " Stefan";
-      $("briefingText").textContent = portalData.overview.briefing;
-      $("overviewUpdated").textContent = "Senest opdateret: " + formatDateTime(portalData.meta.generatedAt);
-    }
-
-    function renderLocationCard(loc) {
-      return `
-        <div class="locationCard">
-          <div class="locationTop">
-            <div>
-              <div class="cardKicker"><span class="dot blue"></span> Lokationsstatus</div>
-              <div class="locationName">${esc(loc.shortName)}</div>
-            </div>
-            <div class="badge ${statusClass(loc.status)}">${esc(statusLabel(loc.status))}</div>
-          </div>
-
-          <div class="metricGrid">
-            <div class="metricBox">
-              <div class="metricLabel">Omsætning MTD</div>
-              <div class="metricValue">${esc(formatMoney(loc.revenueMTD))}</div>
-            </div>
-            <div class="metricBox">
-              <div class="metricLabel">Kitchen %</div>
-              <div class="metricValue">${esc(formatPct(loc.kitchenPct))}</div>
-            </div>
-            <div class="metricBox">
-              <div class="metricLabel">Incidents</div>
-              <div class="metricValue">${loc.incidentTotal}</div>
-            </div>
-            <div class="metricBox">
-              <div class="metricLabel">Rating</div>
-              <div class="metricValue">${esc(formatRating(loc.ratingAvg))}</div>
-            </div>
-          </div>
-
-          <div class="miniMeta">
-            <div class="metaChip">${loc.complaintsOpen} klager</div>
-            <div class="metaChip">${loc.soldoutOpen} udsolgt</div>
-            <div class="metaChip">${loc.faultsOpen} fejl</div>
-            <div class="metaChip">${loc.supplierOpen} leverandør</div>
+        <div class="listItem">
+          <div class="bar green"></div>
+          <div class="listInfo">
+            <div class="listMain">Helsingør • Advokatfirma</div>
+            <div class="listSub">12:00 • 24 gæster</div>
+            <div class="listMeta">I dag • Bekræftet</div>
           </div>
         </div>
       `;
     }
 
-    function renderOverviewLocations() {
-      const sorted = [...portalData.locations].sort((a,b) => b.incidentTotal - a.incidentTotal);
-      $("overviewLocations").innerHTML = sorted.map(renderLocationCard).join("");
-    }
-
-    function renderOverviewEvents() {
-      const events = portalData.incidents.recent;
-      $("overviewEvents").innerHTML = events.map(ev => `
+    function renderCateringUpcoming() {
+      const wrap = document.getElementById("cateringUpcomingList");
+      wrap.innerHTML = `
         <div class="listItem">
-          <div class="bar ${incidentColor(ev.type)}"></div>
+          <div class="bar blue"></div>
           <div class="listInfo">
-            <div class="listMain">${esc(ev.location)} • ${esc(ev.title)}</div>
-            <div class="listSub">${esc(ev.subtitle || "")}${ev.description ? " — " + esc(ev.description) : ""}</div>
-            <div class="listMeta">${esc(formatDateTime(ev.createdAt))} • ${esc(ev.type)}</div>
+            <div class="listMain">Vanløse • Kontorhus</div>
+            <div class="listSub">18.03 • 11:30 • 32 gæster</div>
+            <div class="listMeta">Kommende event</div>
           </div>
         </div>
-      `).join("");
-    }
 
-    function renderOverviewFocus() {
-      const rows = [...portalData.locations]
-        .sort((a,b) => b.incidentTotal - a.incidentTotal)
-        .map(loc => `
-          <div class="row">
-            <div class="rowName">${esc(loc.shortName)}</div>
-            <div class="rowVal">${esc(statusLabel(loc.status))}</div>
-            <div class="rowVal">${loc.incidentTotal} incidents</div>
-            <div class="rowVal">${esc(formatPct(loc.kitchenPct))}</div>
-          </div>
-        `).join("");
-
-      $("overviewFocus").innerHTML = rows;
-    }
-
-    function renderLocationsPage() {
-      $("locationsGrid").innerHTML = portalData.locations.map(renderLocationCard).join("");
-    }
-
-    function allIncidents() {
-      return [...portalData.incidents.recent];
-    }
-
-    function renderDriftPage() {
-      const locationSelect = $("filterLocation");
-      locationSelect.innerHTML = `<option value="all">Alle lokationer</option>` +
-        portalData.locations.map(l => `<option value="${esc(l.name)}">${esc(l.shortName)}</option>`).join("");
-
-      function draw() {
-        const type = $("filterType").value;
-        const loc = $("filterLocation").value;
-        const q = $("filterSearch").value.trim().toLowerCase();
-
-        let items = allIncidents();
-
-        if (type !== "all") items = items.filter(i => i.type === type);
-        if (loc !== "all") items = items.filter(i => i.location === loc);
-        if (q) {
-          items = items.filter(i =>
-            String(i.title).toLowerCase().includes(q) ||
-            String(i.description).toLowerCase().includes(q) ||
-            String(i.subtitle).toLowerCase().includes(q)
-          );
-        }
-
-        $("incidentList").innerHTML = items.length ? items.map(ev => `
-          <div class="listItem">
-            <div class="bar ${incidentColor(ev.type)}"></div>
-            <div class="listInfo">
-              <div class="listMain">${esc(ev.location)} • ${esc(ev.title)}</div>
-              <div class="listSub">${esc(ev.subtitle || "")}${ev.description ? " — " + esc(ev.description) : ""}</div>
-              <div class="listMeta">${esc(formatDateTime(ev.createdAt))} • ${esc(ev.type)} • ${esc(ev.status)}</div>
-            </div>
-          </div>
-        `).join("") : `<div class="empty">Ingen hændelser matcher filtrene</div>`;
-      }
-
-      ["filterType","filterLocation","filterSearch"].forEach(id => {
-        $(id).addEventListener("input", draw);
-        $(id).addEventListener("change", draw);
-      });
-
-      draw();
-    }
-
-    function renderKitchenPage() {
-      const chain = portalData.kitchen.chain;
-      const locations = [...portalData.locations]
-        .sort((a,b) => {
-          const ap = a.kitchenPct == null ? -Infinity : a.kitchenPct;
-          const bp = b.kitchenPct == null ? -Infinity : b.kitchenPct;
-          return bp - ap;
-        });
-
-      const kpis = [
-        {
-          title: "Chain revenue MTD",
-          dot: "blue",
-          value: formatMoney(chain.revenueMTD),
-          sub: "Samlet omsætning i kæden"
-        },
-        {
-          title: "Chain purchases MTD",
-          dot: "gold",
-          value: formatMoney(chain.purchasesMTD),
-          sub: "Samlede varekøb"
-        },
-        {
-          title: "Chain kitchen %",
-          dot: "green",
-          value: formatPct(chain.kitchenPct),
-          sub: "Kædens samlede performance"
-        },
-        {
-          title: "Højeste kitchen %",
-          dot: "warn",
-          value: locations[0] ? locations[0].shortName : "—",
-          sub: locations[0] ? formatPct(locations[0].kitchenPct) : "—"
-        },
-        {
-          title: "Laveste kitchen %",
-          dot: "green",
-          value: [...locations].reverse()[0] ? [...locations].reverse()[0].shortName : "—",
-          sub: [...locations].reverse()[0] ? formatPct([...locations].reverse()[0].kitchenPct) : "—"
-        },
-        {
-          title: "Lokationer med data",
-          dot: "blue",
-          value: locations.filter(l => l.kitchenPct != null).length,
-          sub: "Datadækning i kæden"
-        }
-      ];
-
-      $("kitchenKpis").innerHTML = kpis.map(item => `
-        <div class="card">
-          <div class="cardKicker"><span class="dot ${item.dot}"></span> ${esc(item.title)}</div>
-          <div class="bigValue" style="font-size:40px;">${esc(item.value)}</div>
-          <div class="subValue">${esc(item.sub)}</div>
-        </div>
-      `).join("");
-
-      $("kitchenTable").innerHTML = locations.map(loc => `
-        <div class="row">
-          <div class="rowName">${esc(loc.shortName)}</div>
-          <div class="rowVal">${esc(formatMoney(loc.revenueMTD))}</div>
-          <div class="rowVal">${esc(formatMoney(loc.purchasesMTD))}</div>
-          <div class="rowVal">${esc(formatPct(loc.kitchenPct))}</div>
-        </div>
-      `).join("");
-    }
-
-    function renderQualityPage() {
-      $("topDishesTable").innerHTML = portalData.quality.topDishes.map(d => `
-        <div class="row">
-          <div class="rowName">${esc(d.dish)}</div>
-          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
-          <div class="rowVal">${d.count} ratings</div>
-          <div class="rowVal">Top performer</div>
-        </div>
-      `).join("");
-
-      $("lowDishesTable").innerHTML = portalData.quality.lowDishes.map(d => `
-        <div class="row">
-          <div class="rowName">${esc(d.dish)}</div>
-          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
-          <div class="rowVal">${d.count} ratings</div>
-          <div class="rowVal">Kræver fokus</div>
-        </div>
-      `).join("");
-
-      $("recentChecksList").innerHTML = portalData.quality.recentChecks.map(c => `
         <div class="listItem">
-          <div class="bar gold"></div>
+          <div class="bar blue"></div>
           <div class="listInfo">
-            <div class="listMain">${esc(c.location)} • ${esc(c.dish)} • Score ${esc(formatRating(c.scoreAvg))}</div>
-            <div class="listSub">${esc(c.comment)}</div>
-            <div class="listMeta">${esc(c.date)}</div>
+            <div class="listMain">Helsingør • Advokatfirma</div>
+            <div class="listSub">17.03 • 12:00 • 24 gæster</div>
+            <div class="listMeta">Kommende event</div>
           </div>
         </div>
-      `).join("");
+      `;
     }
 
-    function setupNav() {
-      document.querySelectorAll(".navBtn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".navBtn").forEach(b => b.classList.remove("active"));
-          document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-
-          btn.classList.add("active");
-          $("page-" + btn.dataset.page).classList.add("active");
-        });
-      });
-    }
-
-    function init() {
-      updateClock();
-      setInterval(updateClock, 30000);
-
-      renderOverviewKpis();
-      renderBriefing();
-      renderOverviewLocations();
-      renderOverviewEvents();
-      renderOverviewFocus();
-
-      renderLocationsPage();
-      renderDriftPage();
-      renderKitchenPage();
-      renderQualityPage();
-
-      setupNav();
-    }
-
-    init();
+    updateClock();
+    renderCateringToday();
+    renderCateringUpcoming();
+    setInterval(updateClock, 30000);
   </script>
 </body>
 </html>
+
