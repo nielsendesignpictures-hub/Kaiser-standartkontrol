@@ -149,8 +149,17 @@
       text-transform:uppercase;
     }
 
-    .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
-    .sectionInfo{font-size:12px;font-weight:800;color:var(--muted2);}
+    .sectionDot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
     .sectionBody{padding:16px;}
 
     .topGrid{
@@ -349,8 +358,19 @@
       .menuGrid{grid-template-columns:1fr;}
     }
 
-    .portalName{margin-top:10px;font-size:18px;font-weight:900;}
-    .portalDesc{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.45;font-weight:700;}
+    .portalName{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .portalDesc{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.45;
+      font-weight:700;
+    }
 
     .grid2{
       display:grid;
@@ -400,11 +420,35 @@
     .bar.warn{background:var(--warn);}
 
     .listInfo{flex:1;min-width:0;}
-    .listMain{font-size:14px;font-weight:800;line-height:1.35;}
-    .listSub{margin-top:4px;font-size:12px;color:var(--muted);font-weight:700;line-height:1.4;}
-    .listMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
 
-    .table{display:flex;flex-direction:column;gap:10px;}
+    .listMain{
+      font-size:14px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    .listSub{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.4;
+    }
+
+    .listMeta{
+      margin-top:6px;
+      font-size:11px;
+      color:var(--muted2);
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .table{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
 
     .row{
       display:grid;
@@ -432,7 +476,12 @@
       text-align:right;
     }
 
-    .empty{text-align:center;padding:26px;color:var(--muted2);font-size:13px;}
+    .empty{
+      text-align:center;
+      padding:26px;
+      color:var(--muted2);
+      font-size:13px;
+    }
 
     .errBox{
       padding:12px;
@@ -458,7 +507,7 @@
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
         <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Apps Script</div>
+        <div class="pill">🧭 Version 4</div>
         <div class="pill ok" id="statusPill">● Klar</div>
       </div>
 
@@ -544,14 +593,14 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
-        <div class="sectionInfo">Ratings kobles på senere</div>
+        <div class="sectionInfo">Ratings tilkobles senere</div>
       </div>
       <div class="sectionBody">
         <div class="menuGrid" id="menuIntelligenceGrid">
           <div class="portalCard">
             <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
             <div class="portalName">Afventer ratings</div>
-            <div class="portalDesc">Driftdelen kører nu direkte fra Apps Script for bedre stabilitet på iPad og mobil.</div>
+            <div class="portalDesc">Driftdata vises nu robust med samme metode som Kitchen Hub.</div>
           </div>
         </div>
       </div>
@@ -598,6 +647,9 @@
   </div>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+    const CACHE_KEY = "kaiser_fb_portal_bundle_v1";
+
     const LOCATIONS = [
       "Café Kaiser Helsingør",
       "Café Kaiser Hillerød",
@@ -608,10 +660,38 @@
 
     const $ = id => document.getElementById(id);
     let isLoading = false;
+    let lastSuccessfulUpdate = null;
 
     function esc(s) {
       return String(s || "").replace(/[&<>"']/g, c =>
         ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
+    }
+
+    function saveCache(data) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+      } catch (_) {}
+    }
+
+    function loadCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.data) return null;
+        return parsed;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function pad2(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function getLocalMonthString() {
+      const now = new Date();
+      return now.getFullYear() + "-" + pad2(now.getMonth() + 1);
     }
 
     function formatLocationShort(name) {
@@ -672,13 +752,56 @@
       $("mainErr").style.display = "none";
     }
 
-    function updateLastUpdated(ts = new Date()) {
-      $("lastUpdatedInfo").textContent = "Senest opdateret: " + ts.toLocaleString("da-DK", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
+    function updateLastUpdated(ts = new Date(), cached = false) {
+      lastSuccessfulUpdate = ts;
+      $("lastUpdatedInfo").textContent =
+        "Senest opdateret: " +
+        ts.toLocaleString("da-DK", {
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        }) +
+        (cached ? " (cache)" : "");
+    }
+
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cb = "__cb_" + Math.random().toString(16).slice(2);
+        const qs = new URLSearchParams({
+          ...params,
+          callback: cb,
+          _t: Date.now() + "_" + Math.random().toString(16).slice(2)
+        }).toString();
+
+        const src = url + (url.includes("?") ? "&" : "?") + qs;
+
+        const s = document.createElement("script");
+        const t = setTimeout(() => {
+          cleanup();
+          reject(new Error("timeout"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(t);
+          try { delete window[cb]; } catch (_) {}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
+
+        window[cb] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        s.src = src;
+        s.async = true;
+        s.onerror = () => {
+          cleanup();
+          reject(new Error("load error"));
+        };
+
+        document.body.appendChild(s);
       });
     }
 
@@ -813,7 +936,7 @@
       return rows;
     }
 
-    function renderBriefing(complaints, soldout, faults, supplier, chainRows) {
+    function renderBriefing(complaints, soldout, faults, supplier, chainRows, cached = false) {
       $("briefingHello").textContent = greetingByTime() + " Stefan";
 
       const critical = [...chainRows].filter(x => x.statusLabel.includes("Kritisk"));
@@ -828,6 +951,10 @@
         lines.push(`🔴 Kritiske lokationer: ${critical.map(x => formatLocationShort(x.location)).join(", ")}`);
       }
 
+      if (cached) {
+        lines.push("ℹ️ Viser senest gemte data (cache)");
+      }
+
       $("briefingText").textContent = lines.join("\n");
     }
 
@@ -836,17 +963,17 @@
         <div class="portalCard">
           <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
           <div class="portalName">Afventer ratings</div>
-          <div class="portalDesc">Ratings kobles på senere uden at påvirke resten af systemet.</div>
+          <div class="portalDesc">Denne sektion kobles på senere uden at påvirke resten af systemet.</div>
         </div>
         <div class="portalCard">
-          <div class="cardKicker"><span class="dot blue"></span> Apps Script</div>
-          <div class="portalName">Mobilstabil løsning</div>
-          <div class="portalDesc">Portalen hostes nu direkte i Apps Script for bedre kompatibilitet på iPad og telefon.</div>
+          <div class="cardKicker"><span class="dot blue"></span> Driftdata</div>
+          <div class="portalName">Kitchen Hub model aktiv</div>
+          <div class="portalDesc">Portalen bruger nu cache + robust fallback som Kitchen Hub.</div>
         </div>
         <div class="portalCard">
           <div class="cardKicker"><span class="dot green"></span> Status</div>
-          <div class="portalName">Live driftdata</div>
-          <div class="portalDesc">Data trækkes direkte server-side fra samme løsning som resten af driftsbackend.</div>
+          <div class="portalName">Stabil visning</div>
+          <div class="portalDesc">Hvis live load fejler, vises seneste gemte data i stedet.</div>
         </div>
       `;
     }
@@ -975,7 +1102,7 @@
       }).join("");
     }
 
-    function renderBundle(data) {
+    function renderBundle(data, cached = false, cacheTs = null) {
       const complaints = cleanItems(data.complaints);
       const soldout = cleanItems(data.soldout);
       const faults = cleanItems(data.faults);
@@ -984,40 +1111,59 @@
 
       renderTopCards(complaints, soldout, faults, supplier);
       const chainRows = renderChainOverview(complaints, soldout, faults, supplier, kitchen);
-      renderBriefing(complaints, soldout, faults, supplier, chainRows);
+      renderBriefing(complaints, soldout, faults, supplier, chainRows, cached);
       renderMenuPlaceholder();
       renderLatestEvents(complaints, soldout, faults);
       renderLocationFocus(complaints, soldout, faults, supplier);
       renderKitchenPct(kitchen);
-      updateLastUpdated(new Date());
+
+      updateLastUpdated(cacheTs ? new Date(cacheTs) : new Date(), cached);
     }
 
-    function loadPortalData() {
+    async function loadPortalData() {
       if (isLoading) return;
       isLoading = true;
       setStatus("● Opdaterer", "warn");
       hideError();
 
-      google.script.run
-        .withSuccessHandler(data => {
-          if (!data || !data.ok) {
-            setStatus("● Fejl i data", "err");
-            showError((data && data.error) ? data.error : "Ugyldigt svar fra server");
-            isLoading = false;
-            return;
-          }
+      try {
+        const month = getLocalMonthString();
 
-          renderBundle(data);
-          setStatus("● Data opdateret", "ok");
-          isLoading = false;
-        })
-        .withFailureHandler(err => {
-          console.error(err);
+        const data = await jsonp(SCRIPT_URL, {
+          action: "fbPortalBundle",
+          month: month
+        });
+
+        if (!data || !data.ok) {
+          throw new Error(data?.error || "No data");
+        }
+
+        renderBundle(data, false, Date.now());
+        saveCache(data);
+        setStatus("● Data opdateret", "ok");
+
+      } catch (e) {
+        const cached = loadCache();
+
+        if (cached && cached.data) {
+          renderBundle(cached.data, true, cached.ts);
+          setStatus("● Cache aktiv", "warn");
+          showError("Live indlæsning fejlede. Viser senest gemte data.");
+        } else {
           setStatus("● Fejl i data", "err");
-          showError("Serverfejl ved indlæsning af portaldata");
-          isLoading = false;
-        })
-        .getFbPortalDataServer_();
+          showError("Data kunne ikke indlæses.");
+          $("chainOverviewGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("menuIntelligenceGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
+          $("briefingText").textContent = "Fejl ved indlæsning af briefing.";
+        }
+
+        console.error("Portal load error:", e);
+      } finally {
+        isLoading = false;
+      }
     }
 
     (function init() {
