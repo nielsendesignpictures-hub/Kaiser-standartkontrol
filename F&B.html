@@ -15,6 +15,7 @@
       --bg1:#121821;
       --bg2:#1a2230;
       --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.07);
       --line:rgba(255,255,255,0.10);
       --text:rgba(255,255,255,0.95);
       --muted:rgba(255,255,255,0.72);
@@ -45,7 +46,9 @@
 
     .shell{max-width:1480px;margin:0 auto;}
 
-    .hero,.section,.card,.listCard,.briefingBox,.locationCard{box-shadow:var(--shadow);}
+    .hero,.section,.card,.chainCard,.portalCard,.listCard,.briefingBox,.locationCard{
+      box-shadow:var(--shadow);
+    }
 
     .hero{
       border-radius:30px;
@@ -100,11 +103,11 @@
       gap:10px;
     }
 
-    @media (max-width:980px){
+    @media (max-width: 980px){
       .heroMeta{grid-template-columns:1fr 1fr;}
     }
 
-    @media (max-width:640px){
+    @media (max-width: 640px){
       .heroMeta{grid-template-columns:1fr;}
     }
 
@@ -209,11 +212,11 @@
       gap:14px;
     }
 
-    @media (max-width:1300px){
+    @media (max-width: 1300px){
       .kpiGrid{grid-template-columns:repeat(3,1fr);}
     }
 
-    @media (max-width:760px){
+    @media (max-width: 760px){
       .kpiGrid{grid-template-columns:1fr;}
     }
 
@@ -286,133 +289,28 @@
     }
 
     .briefingBox{
-      border-radius:24px;
+      border-radius:22px;
       border:1px solid var(--line);
       background:
-        radial-gradient(700px 220px at 10% 0%, rgba(245,158,11,0.12), transparent 60%),
-        radial-gradient(700px 220px at 100% 0%, rgba(94,167,255,0.12), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+        radial-gradient(700px 180px at 10% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 180px at 100% 0%, rgba(94,167,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:22px;
-      position:relative;
-      overflow:hidden;
     }
-
-    .briefingBox:before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(135deg, rgba(214,178,74,0.05), transparent 35%, rgba(94,167,255,0.05));
-      pointer-events:none;
-    }
-
-    .briefingTopRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
-    }
-
-    .briefingPills{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .briefingPill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      color:rgba(255,255,255,0.92);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-
-    .briefingPill.ok{border-color:rgba(98,210,111,.35);color:#dff7e2;}
-    .briefingPill.warn{border-color:rgba(245,158,11,.35);color:#ffe9b0;}
-    .briefingPill.err{border-color:rgba(255,107,107,.35);color:#ffd0d0;}
 
     .briefingHello{
-      margin-top:16px;
-      position:relative;
-      z-index:1;
+      margin-top:10px;
       font-family:"Playfair Display",serif;
-      font-size:34px;
-      line-height:1.05;
-      letter-spacing:-.02em;
+      font-size:32px;
+      line-height:1.1;
     }
 
-    .briefingLead{
-      margin-top:12px;
-      position:relative;
-      z-index:1;
-      color:rgba(255,255,255,0.92);
-      font-size:16px;
-      line-height:1.7;
-      font-weight:800;
-      max-width:980px;
-    }
-
-    .briefingHighlight{
+    .briefingText{
       margin-top:14px;
-      position:relative;
-      z-index:1;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(214,178,74,.25);
-      background:rgba(214,178,74,0.10);
-      color:#fff0c2;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    }
-
-    .briefingGrid{
-      margin-top:18px;
-      position:relative;
-      z-index:1;
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-    }
-
-    @media (max-width:860px){
-      .briefingGrid{grid-template-columns:1fr;}
-    }
-
-    .briefCard{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.05);
-      padding:14px;
-      min-height:128px;
-    }
-
-    .briefCardLabel{
-      font-size:11px;
-      color:var(--muted2);
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-
-    .briefCardText{
-      margin-top:8px;
-      font-size:14px;
-      line-height:1.65;
-      color:var(--text);
+      white-space:pre-line;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.7;
       font-weight:800;
     }
 
@@ -422,7 +320,7 @@
       gap:14px;
     }
 
-    @media (max-width:980px){
+    @media (max-width: 980px){
       .grid2{grid-template-columns:1fr;}
     }
 
@@ -493,7 +391,7 @@
       background:rgba(255,255,255,0.05);
     }
 
-    @media (max-width:980px){
+    @media (max-width: 980px){
       .row{grid-template-columns:1fr;align-items:flex-start;}
     }
 
@@ -526,13 +424,8 @@
       gap:14px;
     }
 
-    @media (max-width:1180px){
-      .locationGrid{grid-template-columns:repeat(2,1fr);}
-    }
-
-    @media (max-width:760px){
-      .locationGrid{grid-template-columns:1fr;}
-    }
+    @media (max-width:1180px){.locationGrid{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:760px){.locationGrid{grid-template-columns:1fr;}}
 
     .locationCard{
       border-radius:22px;
@@ -619,7 +512,7 @@
     <header class="hero">
       <div class="kicker">KAISER</div>
       <div class="title">F&B Portal V2</div>
-      <div class="sub">Personligt ledelsesoverblik over drift, performance og fokusområder</div>
+      <div class="sub">Personligt ledelsesoverblik over drift, performance, kvalitet og fokusområder</div>
       <div class="heroLine"></div>
 
       <div class="heroMeta">
@@ -645,39 +538,9 @@
         </div>
         <div class="sectionBody">
           <div class="briefingBox">
-            <div class="briefingTopRow">
-              <div class="cardKicker"><span class="dot gold"></span> Premium lederbrief</div>
-              <div class="briefingPills">
-                <div class="briefingPill" id="chainStatusPill">Kædestatus: —</div>
-                <div class="briefingPill" id="focusPill">Dagens fokus: —</div>
-              </div>
-            </div>
-
+            <div class="cardKicker"><span class="dot gold"></span> AI / lederblik</div>
             <div class="briefingHello" id="briefingHello">God dag Stefan</div>
-            <div class="briefingLead" id="briefingLead">Indlæser dit personlige ledelsesoverblik...</div>
-            <div class="briefingHighlight" id="briefingHighlight">Overblik opdateres...</div>
-
-            <div class="briefingGrid">
-              <div class="briefCard">
-                <div class="briefCardLabel">Dagens fokus</div>
-                <div class="briefCardText" id="briefFocus">—</div>
-              </div>
-
-              <div class="briefCard">
-                <div class="briefCardLabel">Risikobillede</div>
-                <div class="briefCardText" id="briefRisk">—</div>
-              </div>
-
-              <div class="briefCard">
-                <div class="briefCardLabel">Positivt signal</div>
-                <div class="briefCardText" id="briefPositive">—</div>
-              </div>
-
-              <div class="briefCard">
-                <div class="briefCardLabel">Anbefalet handling</div>
-                <div class="briefCardText" id="briefAction">—</div>
-              </div>
-            </div>
+            <div class="briefingText" id="briefingText">Indlæser briefing...</div>
           </div>
         </div>
       </section>
@@ -858,12 +721,6 @@
       return "🟢 Stabil";
     }
 
-    function pillClassFromText(status) {
-      if (status === "Kritisk") return "err";
-      if (status === "Opmærksomhed") return "warn";
-      return "ok";
-    }
-
     function incidentColor(type) {
       if (type === "complaint") return "red";
       if (type === "soldout") return "gold";
@@ -978,138 +835,65 @@
       const faultCount = cleanItems(bundle.faults).length;
       const supplierCount = cleanItems(bundle.supplier).length;
 
-      const focusLocations = locations
-        .filter(l => l.status !== "green")
-        .sort((a, b) => b.incidentTotal - a.incidentTotal);
+      const focus = locations.filter(l => l.status !== "green").map(l => l.shortName);
 
-      const criticalLocations = locations.filter(l => l.status === "red");
-      const warningLocations = locations.filter(l => l.status === "warn");
+      const lines = [
+        soldoutCount ? `⚠️ ${soldoutCount} udsolgte varer registreret` : `✅ Ingen udsolgte varer registreret`,
+        complaintCount ? `⚠️ ${complaintCount} gæsteklager registreret` : `✅ Ingen gæsteklager registreret`,
+        faultCount ? `⚠️ ${faultCount} fejl rapporteret` : `✅ Ingen fejl rapporteret`,
+        supplierCount ? `⚠️ ${supplierCount} leverandørfejl registreret` : `✅ Ingen leverandørfejl registreret`
+      ];
 
-      const withKitchen = locations.filter(l => l.kitchenPct != null);
-      const bestKitchen = [...withKitchen].sort((a, b) => (a.kitchenPct ?? 999) - (b.kitchenPct ?? 999))[0] || null;
-      const worstKitchen = [...withKitchen].sort((a, b) => (b.kitchenPct ?? -999) - (a.kitchenPct ?? -999))[0] || null;
-
-      const totalRevenue = withKitchen.reduce((sum, l) => sum + (l.revenueMTD || 0), 0);
-      const totalBuy = withKitchen.reduce((sum, l) => sum + (l.purchasesMTD || 0), 0);
-      const net = totalRevenue / 1.25;
-      const chainKitchenPct = net > 0 ? (totalBuy / net) * 100 : null;
-
-      const topFocus = focusLocations[0] || null;
-
-      let chainStatus = "Stabil";
-      if (criticalLocations.length) chainStatus = "Kritisk";
-      else if (warningLocations.length) chainStatus = "Opmærksomhed";
-
-      let focusPill = "Ingen akutte signaler";
-      if (topFocus) focusPill = topFocus.shortName;
-
-      let lead = "Kæden står generelt stabilt, og dit vigtigste arbejde i dag er at bevare momentum og lukke mindre afvigelser hurtigt.";
-      if (criticalLocations.length) {
-        lead = `Du har kritiske signaler i ${criticalLocations.map(l => l.shortName).join(", ")}. Det bør være din første ledelsesprioritet i dag.`;
-      } else if (topFocus) {
-        lead = `${topFocus.shortName} er den lokation, der tydeligst kalder på din opmærksomhed lige nu. Resten af driften ser forholdsvis kontrolleret ud.`;
-      } else if (chainKitchenPct != null) {
-        lead = `Kæden fremstår rolig, og kitchen %-niveauet ligger på ${formatPct(chainKitchenPct)}. Fokus bør være på at holde kvalitet og tempo stabilt gennem dagen.`;
+      if (focus.length) {
+        lines.push(`🎯 Fokuslokationer: ${focus.join(", ")}`);
+      } else {
+        lines.push(`✅ Ingen lokationer kræver akut opmærksomhed lige nu`);
       }
 
-      let highlight = "Rolig drift og lavt støjniveau i kæden.";
-      if (criticalLocations.length) {
-        highlight = `Akut prioritet: ${criticalLocations.map(l => l.shortName).join(", ")} kræver opfølgning i dag.`;
-      } else if (topFocus) {
-        highlight = `Første check-in bør gå til ${topFocus.shortName}.`;
-      } else if (bestKitchen) {
-        highlight = `Stærkeste køkkenkontrol lige nu ses i ${bestKitchen.shortName}.`;
-      }
-
-      let focusText = "Ingen lokationer kræver akut opmærksomhed.";
-      if (criticalLocations.length) {
-        focusText = `De vigtigste lokationer i dag er ${criticalLocations.map(l => l.shortName).join(", ")}. Her bør du tage første operationelle check-in og afklare årsagen bag signalerne.`;
-      } else if (topFocus) {
-        focusText = `${topFocus.shortName} har flest driftssignaler og bør være dit første fokuspunkt, før du går bredere ud i kæden.`;
-      }
-
-      let riskText = "Der er ikke noget tydeligt samlet risikobillede lige nu.";
-      if (supplierCount > 0 && soldoutCount > 0) {
-        riskText = `Kombinationen af ${supplierCount} leverandørfejl og ${soldoutCount} udsolgte varer er den største risiko, fordi den både presser vareflow og kan blive synlig for gæsterne.`;
-      } else if (supplierCount > 0) {
-        riskText = `Leverandørleddet er den største risikofaktor lige nu med ${supplierCount} åbne registreringer. Det bør lukkes tidligt, før det spreder sig til service eller produktion.`;
-      } else if (soldoutCount > 0) {
-        riskText = `${soldoutCount} udsolgte varer er den mest direkte gæsterisiko i øjeblikket og bør håndteres hurtigt.`;
-      } else if (complaintCount > 0) {
-        riskText = `${complaintCount} registrerede klager betyder, at gæsteoplevelsen skal følges tæt og mønstre bør observeres.`;
-      } else if (faultCount > 0) {
-        riskText = `${faultCount} fejl i driften kan skabe unødvendig friktion, hvis de ikke lukkes hurtigt.`;
-      }
-
-      let positiveText = "Den generelle drift virker rolig.";
-      if (chainKitchenPct != null && chainKitchenPct < 20) {
-        positiveText = `Chain kitchen % ligger på ${formatPct(chainKitchenPct)}, hvilket er et stærkt sundhedstegn for driften og giver plads til at fokusere på kvalitet og execution.`;
-      } else if (complaintCount === 0 && faultCount === 0) {
-        positiveText = `Der er ingen åbne klager og ingen fejl i driften, hvilket giver et stabilt udgangspunkt for dagen.`;
-      } else if (bestKitchen) {
-        positiveText = `${bestKitchen.shortName} ligger bedst på kitchen med ${formatPct(bestKitchen.kitchenPct)} og viser stærk køkkenkontrol.`;
-      }
-
-      let actionText = "Følg driften tæt og hold fokus på hurtig lukning af nye afvigelser.";
-      if (topFocus && supplierCount > 0) {
-        actionText = `Start med en kort opfølgning på ${topFocus.shortName} og få afklaret leverandørforholdene tidligt i dagen, så støjen ikke vokser.`;
-      } else if (topFocus && soldoutCount > 0) {
-        actionText = `Tag først fat i ${topFocus.shortName} og få afklaret varestatus, så udsolgte varer ikke udvikler sig til gæstepres i serviceperioden.`;
-      } else if (worstKitchen && worstKitchen.kitchenPct != null && worstKitchen.kitchenPct >= 30) {
-        actionText = `Gennemgå vareforbrug og køb i ${worstKitchen.shortName}, som aktuelt ligger højest på kitchen %.`;
-      } else if (warningLocations.length) {
-        actionText = `Brug 10 minutter på et hurtigt check-in med ${warningLocations.map(l => l.shortName).join(", ")} for at holde signalerne under kontrol, før de vokser.`;
-      }
-
-      return {
-        chainStatus,
-        focusPill,
-        lead,
-        highlight,
-        focusText,
-        riskText,
-        positiveText,
-        actionText
-      };
+      return lines.join("\n");
     }
 
     function renderOverviewKpis() {
+      const incidents = portalData.incidents.recent;
       const locations = portalData.locations;
-
-      const totalRevenue = locations.reduce((sum,l) => sum + l.revenueMTD, 0);
-      const totalBuy = locations.reduce((sum,l) => sum + l.purchasesMTD, 0);
-      const net = totalRevenue / 1.25;
-      const chainKitchen = net > 0 ? (totalBuy / net) * 100 : null;
+      const chainKitchen = (() => {
+        const withPct = locations.filter(l => l.kitchenPct != null);
+        if (!withPct.length) return null;
+        const totalRevenue = withPct.reduce((sum,l) => sum + l.revenueMTD, 0);
+        const totalBuy = withPct.reduce((sum,l) => sum + l.purchasesMTD, 0);
+        const net = totalRevenue / 1.25;
+        return net > 0 ? (totalBuy / net) * 100 : null;
+      })();
 
       const items = [
         {
           title: "Åbne klager",
           dot: "red",
-          value: locations.reduce((s,l) => s + l.complaintsOpen, 0),
+          value: portalData.locations.reduce((s,l) => s + l.complaintsOpen, 0),
           sub: "Seneste registrerede gæsteklager"
         },
         {
           title: "Udsolgte varer",
           dot: "gold",
-          value: locations.reduce((s,l) => s + l.soldoutOpen, 0),
+          value: portalData.locations.reduce((s,l) => s + l.soldoutOpen, 0),
           sub: "Produkter ude af drift"
         },
         {
           title: "Fejl & mangler",
           dot: "blue",
-          value: locations.reduce((s,l) => s + l.faultsOpen, 0),
+          value: portalData.locations.reduce((s,l) => s + l.faultsOpen, 0),
           sub: "Driftsmæssige fejl"
         },
         {
           title: "Leverandørfejl",
           dot: "warn",
-          value: locations.reduce((s,l) => s + l.supplierOpen, 0),
+          value: portalData.locations.reduce((s,l) => s + l.supplierOpen, 0),
           sub: "Registrerede leverandørproblemer"
         },
         {
           title: "Lokationer i fokus",
           dot: "green",
-          value: locations.filter(l => l.status !== "green").length,
+          value: portalData.locations.filter(l => l.status !== "green").length,
           sub: "Lokationer med opmærksomhedsbehov"
         },
         {
@@ -1131,20 +915,8 @@
 
     function renderBriefing() {
       $("briefingHello").textContent = greetingByTime() + " Stefan";
+      $("briefingText").textContent = portalData.briefing;
       $("overviewUpdated").textContent = "Senest opdateret: " + formatDateTime(portalData.generatedAt);
-
-      $("chainStatusPill").textContent = "Kædestatus: " + portalData.briefing.chainStatus;
-      $("chainStatusPill").className = "briefingPill " + pillClassFromText(portalData.briefing.chainStatus);
-
-      $("focusPill").textContent = "Dagens fokus: " + portalData.briefing.focusPill;
-      $("focusPill").className = "briefingPill warn";
-
-      $("briefingLead").textContent = portalData.briefing.lead;
-      $("briefingHighlight").textContent = portalData.briefing.highlight;
-      $("briefFocus").textContent = portalData.briefing.focusText;
-      $("briefRisk").textContent = portalData.briefing.riskText;
-      $("briefPositive").textContent = portalData.briefing.positiveText;
-      $("briefAction").textContent = portalData.briefing.actionText;
     }
 
     function renderLocationCard(loc) {
@@ -1379,7 +1151,7 @@
         .withSuccessHandler(data => {
           if (!data || !data.ok) {
             setStatus("● Fejl i data", "err");
-            $("briefingLead").textContent = "Kunne ikke indlæse portaldata.";
+            $("briefingText").textContent = "Kunne ikke indlæse portaldata.";
             return;
           }
           renderPortal(data);
@@ -1387,7 +1159,7 @@
         .withFailureHandler(err => {
           console.error(err);
           setStatus("● Serverfejl", "err");
-          $("briefingLead").textContent = "Serverfejl ved indlæsning af portaldata.";
+          $("briefingText").textContent = "Serverfejl ved indlæsning af portaldata.";
         })
         .getFbPortalDataServer_();
     }
