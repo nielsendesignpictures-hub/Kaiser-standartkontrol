@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Kaiser – F&B Portal V2</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -681,6 +684,35 @@
       return String(name || "").replace("Café Kaiser ", "");
     }
 
+    function pad2(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function getLocalMonthString() {
+      const now = new Date();
+      return now.getFullYear() + "-" + pad2(now.getMonth() + 1);
+    }
+
+    function parseDateSafe(value) {
+      if (!value) return null;
+      if (value instanceof Date) return value;
+
+      let s = String(value).trim();
+
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
+        s = s.replace(" ", "T");
+      }
+
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(s)) {
+        s = s.replace(" ", "T");
+      }
+
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) return d;
+
+      return null;
+    }
+
     function fmtTimeNow() {
       const now = new Date();
       $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
@@ -692,8 +724,8 @@
     }
 
     function fmtDateTime(value) {
-      const d = new Date(value);
-      if (isNaN(d)) return "Ukendt tidspunkt";
+      const d = parseDateSafe(value);
+      if (!d) return "Ukendt tidspunkt";
       return d.toLocaleString("da-DK", {
         day: "2-digit",
         month: "2-digit",
@@ -730,7 +762,12 @@
     function jsonp(url, params = {}) {
       return new Promise((resolve, reject) => {
         const cb = "__cb_" + Math.random().toString(16).slice(2);
-        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+        const qs = new URLSearchParams({
+          ...params,
+          callback: cb,
+          _t: Date.now() + "_" + Math.random().toString(16).slice(2)
+        }).toString();
+
         const src = url + (url.includes("?") ? "&" : "?") + qs;
 
         const s = document.createElement("script");
@@ -772,8 +809,10 @@
                 location: item.location || loc
               }));
             }
+            console.warn("Ugyldigt eller tomt svar:", action, loc, data);
             return [];
-          } catch (_) {
+          } catch (err) {
+            console.error("Fejl i loadByLocation:", action, loc, err);
             return [];
           }
         })
@@ -798,15 +837,15 @@
     }
 
     async function loadKitchenPctAll() {
-      const month = new Date().toISOString().slice(0, 7);
+      const month = getLocalMonthString();
 
       const results = await Promise.all(
         LOCATIONS.map(async (loc) => {
           try {
             const data = await jsonp(OPS_SCRIPT_URL, { action: "getKitchenMTD", loc, month });
             if (data && data.ok) {
-              const gross = Number(data?.totals?.revenueGross || 0);
-              const buy = Number(data?.totals?.purchases || 0);
+              const gross = Number((data.totals && data.totals.revenueGross) || 0);
+              const buy = Number((data.totals && data.totals.purchases) || 0);
               const net = gross / 1.25;
               const pct = net > 0 ? (buy / net) * 100 : null;
 
@@ -817,7 +856,9 @@
                 pct
               };
             }
-          } catch (_) {}
+          } catch (err) {
+            console.error("Fejl i loadKitchenPctAll:", loc, err);
+          }
 
           return {
             location: loc,
@@ -839,7 +880,8 @@
       try {
         const data = await jsonp(RATING_SCRIPT_URL, { action: "getRatingsSummary" });
         return data && data.ok && Array.isArray(data.items) ? data.items : [];
-      } catch (_) {
+      } catch (err) {
+        console.error("Fejl i loadRatingsSummary:", err);
         return [];
       }
     }
@@ -852,15 +894,16 @@
       try {
         const data = await jsonp(RATING_SCRIPT_URL, { action: "getTopDishes" });
         return data && data.ok && Array.isArray(data.items) ? data.items : [];
-      } catch (_) {
+      } catch (err) {
+        console.error("Fejl i loadTopDishes:", err);
         return [];
       }
     }
 
     function sortByCreatedAtDesc(items) {
       return [...items].sort((a, b) => {
-        const at = new Date(a.createdAt || 0).getTime();
-        const bt = new Date(b.createdAt || 0).getTime();
+        const at = (parseDateSafe(a.createdAt) || new Date(0)).getTime();
+        const bt = (parseDateSafe(b.createdAt) || new Date(0)).getTime();
         return bt - at;
       });
     }
@@ -871,8 +914,8 @@
 
     function setLatestMeta(items, locId, timeId) {
       const latest = getLatestItem(items);
-      $(locId).textContent = latest?.location ? formatLocationShort(latest.location) : "Ingen data";
-      $(timeId).textContent = latest?.createdAt ? fmtDateTime(latest.createdAt) : "—";
+      $(locId).textContent = latest && latest.location ? formatLocationShort(latest.location) : "Ingen data";
+      $(timeId).textContent = latest && latest.createdAt ? fmtDateTime(latest.createdAt) : "—";
     }
 
     function buildLocationStats(complaints, soldout, faults, supplier) {
@@ -938,8 +981,8 @@
       const rows = kitchen.map(k => {
         const s = stats[k.location] || { complaints:0, soldout:0, faults:0, supplier:0 };
         const rr = ratingsMap[k.location] || null;
-        const foodRating = rr?.averageRating ?? null;
-        const ratingCount = rr?.count ?? 0;
+        const foodRating = rr && rr.averageRating != null ? Number(rr.averageRating) : null;
+        const ratingCount = rr && rr.count != null ? Number(rr.count) : 0;
         const status = calcStatus({ ...k, ...s, foodRating });
 
         return {
@@ -1104,7 +1147,11 @@
         });
       });
 
-      events.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+      events.sort((a, b) => {
+        const at = (parseDateSafe(a.createdAt) || new Date(0)).getTime();
+        const bt = (parseDateSafe(b.createdAt) || new Date(0)).getTime();
+        return bt - at;
+      });
 
       const list = $("latestEventsList");
       if (!events.length) {
@@ -1228,13 +1275,13 @@
       }
     }
 
-    (function init() {
+    window.addEventListener("load", () => {
       fmtTimeNow();
       loadPortalData();
 
       setInterval(fmtTimeNow, 30000);
       setInterval(loadPortalData, 60000);
-    })();
+    });
   </script>
 </body>
 </html>
