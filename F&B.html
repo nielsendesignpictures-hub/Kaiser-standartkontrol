@@ -44,10 +44,9 @@
       padding:18px;
     }
 
-    .shell{max-width:1480px;margin:0 auto;}
-
-    .hero,.section,.card,.chainCard,.portalCard,.listCard,.briefingBox,.locationCard{
-      box-shadow:var(--shadow);
+    .shell{
+      max-width:1480px;
+      margin:0 auto;
     }
 
     .hero{
@@ -58,6 +57,7 @@
         radial-gradient(800px 240px at 15% 0%, rgba(245,158,11,0.10), transparent 60%),
         radial-gradient(800px 240px at 85% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
       overflow:hidden;
       padding:24px 22px 18px;
     }
@@ -160,7 +160,11 @@
       color:#fff2c6;
     }
 
-    .page{display:none;margin-top:16px;}
+    .page{
+      display:none;
+      margin-top:16px;
+    }
+
     .page.active{display:block;}
 
     .section{
@@ -168,6 +172,7 @@
       border-radius:var(--radius);
       border:1px solid var(--line);
       background:var(--panel);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
 
@@ -392,12 +397,27 @@
     }
 
     @media (max-width: 980px){
-      .row{grid-template-columns:1fr;align-items:flex-start;}
+      .row{
+        grid-template-columns:1fr;
+        align-items:flex-start;
+      }
     }
 
-    .rowName{font-size:14px;font-weight:800;}
-    .rowVal{font-size:13px;font-weight:900;color:rgba(255,255,255,0.92);text-align:right;}
-    @media (max-width:980px){.rowVal{text-align:left;}}
+    .rowName{
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .rowVal{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,0.92);
+      text-align:right;
+    }
+
+    @media (max-width: 980px){
+      .rowVal{text-align:left;}
+    }
 
     .badge{
       display:inline-flex;
@@ -424,8 +444,13 @@
       gap:14px;
     }
 
-    @media (max-width:1180px){.locationGrid{grid-template-columns:repeat(2,1fr);}}
-    @media (max-width:760px){.locationGrid{grid-template-columns:1fr;}}
+    @media (max-width: 1180px){
+      .locationGrid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    @media (max-width: 760px){
+      .locationGrid{grid-template-columns:1fr;}
+    }
 
     .locationCard{
       border-radius:22px;
@@ -519,7 +544,7 @@
         <div class="pill" id="timePill">🕐 --:--</div>
         <div class="pill">👤 Personlig ledelsesportal</div>
         <div class="pill">📊 F&B Intelligence</div>
-        <div class="pill warn" id="statusPill">● Indlæser data</div>
+        <div class="pill ok" id="statusPill">● Konceptmode</div>
       </div>
 
       <div class="navWrap">
@@ -527,31 +552,34 @@
         <button class="navBtn" data-page="locations">Lokationer</button>
         <button class="navBtn" data-page="drift">Drift</button>
         <button class="navBtn" data-page="kitchen">Kitchen</button>
+        <button class="navBtn" data-page="quality">Kvalitet</button>
       </div>
     </header>
 
+    <!-- OVERVIEW -->
     <main class="page active" id="page-overview">
+
       <section class="section">
         <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Manager briefing</div>
+          <div class="sectionTitle"><span class="sectionDot"></span> Executive overview</div>
           <div class="sectionInfo" id="overviewUpdated">Senest opdateret: —</div>
         </div>
         <div class="sectionBody">
-          <div class="briefingBox">
-            <div class="cardKicker"><span class="dot gold"></span> AI / lederblik</div>
-            <div class="briefingHello" id="briefingHello">God dag Stefan</div>
-            <div class="briefingText" id="briefingText">Indlæser briefing...</div>
-          </div>
+          <div class="kpiGrid" id="overviewKpis"></div>
         </div>
       </section>
 
       <section class="section">
         <div class="sectionHead">
-          <div class="sectionTitle"><span class="sectionDot"></span> Executive overview</div>
-          <div class="sectionInfo">Kædens vigtigste KPI’er lige nu</div>
+          <div class="sectionTitle"><span class="sectionDot"></span> Manager briefing</div>
+          <div class="sectionInfo">Din prioritering lige nu</div>
         </div>
         <div class="sectionBody">
-          <div class="kpiGrid" id="overviewKpis"></div>
+          <div class="briefingBox">
+            <div class="cardKicker"><span class="dot gold"></span> AI / lederblik</div>
+            <div class="briefingHello" id="briefingHello">God dag Stefan</div>
+            <div class="briefingText" id="briefingText"></div>
+          </div>
         </div>
       </section>
 
@@ -587,6 +615,7 @@
       </section>
     </main>
 
+    <!-- LOKATIONER -->
     <main class="page" id="page-locations">
       <section class="section">
         <div class="sectionHead">
@@ -599,6 +628,7 @@
       </section>
     </main>
 
+    <!-- DRIFT -->
     <main class="page" id="page-drift">
       <section class="section">
         <div class="sectionHead">
@@ -631,6 +661,7 @@
       </section>
     </main>
 
+    <!-- KITCHEN -->
     <main class="page" id="page-kitchen">
       <section class="section">
         <div class="sectionHead">
@@ -653,10 +684,241 @@
       </section>
     </main>
 
+    <!-- QUALITY -->
+    <main class="page" id="page-quality">
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & ratings</div>
+          <div class="sectionInfo">Mockup til næste fase</div>
+        </div>
+        <div class="sectionBody">
+          <div class="grid2">
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
+              <div class="listTitle">Bedst performende retter</div>
+              <div class="table" id="topDishesTable"></div>
+            </div>
+
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot red"></span> Lowest dishes</div>
+              <div class="listTitle">Retter med lavest score</div>
+              <div class="table" id="lowDishesTable"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Seneste standardkontroller</div>
+          <div class="sectionInfo">Seneste kvalitetsblik</div>
+        </div>
+        <div class="sectionBody">
+          <div class="list" id="recentChecksList"></div>
+        </div>
+      </section>
+    </main>
+
   </div>
 
   <script>
-    let portalData = null;
+    const portalData = {
+      meta: {
+        generatedAt: new Date().toISOString(),
+        timezone: "Europe/Copenhagen",
+        version: "2.0-concept"
+      },
+      overview: {
+        chainStatus: "warn",
+        totals: {
+          complaintsOpen: 0,
+          soldoutOpen: 1,
+          faultsOpen: 0,
+          supplierOpen: 4,
+          cateringToday: 2,
+          chainKitchenPct: 13.5
+        },
+        briefing:
+`Der er rolig drift i kæden, men enkelte forhold kræver opmærksomhed.
+
+• 1 udsolgt vare er registreret i Farum
+• 4 leverandørfejl ligger åbne, især på Helsingør, Hillerød og Vanløse
+• Chain kitchen % ligger på et sundt niveau
+• Vanløse og Helsingør bør følges tættere i dag`
+      },
+      locations: [
+        {
+          name: "Café Kaiser Helsingør",
+          shortName: "Helsingør",
+          status: "warn",
+          revenueMTD: 339226.67,
+          purchasesMTD: 43294.36,
+          kitchenPct: 15.95,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 2,
+          incidentTotal: 2,
+          ratingAvg: 4.2,
+          ratingCount: 8,
+          nextCatering: { date: "2026-03-17", time: "12:00", customerName: "Advokatfirma", guests: 24 }
+        },
+        {
+          name: "Café Kaiser Hillerød",
+          shortName: "Hillerød",
+          status: "warn",
+          revenueMTD: 655444.99,
+          purchasesMTD: 64733.38,
+          kitchenPct: 12.35,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 1,
+          incidentTotal: 1,
+          ratingAvg: 4.4,
+          ratingCount: 10,
+          nextCatering: { date: "2026-03-16", time: "13:00", customerName: "Kommunen", guests: 18 }
+        },
+        {
+          name: "Café Kaiser Farum",
+          shortName: "Farum",
+          status: "warn",
+          revenueMTD: 440988.39,
+          purchasesMTD: 43123.28,
+          kitchenPct: 12.22,
+          complaintsOpen: 0,
+          soldoutOpen: 1,
+          faultsOpen: 0,
+          supplierOpen: 0,
+          incidentTotal: 1,
+          ratingAvg: 4.5,
+          ratingCount: 6,
+          nextCatering: null
+        },
+        {
+          name: "Café Kaiser Hørsholm",
+          shortName: "Hørsholm",
+          status: "green",
+          revenueMTD: 0,
+          purchasesMTD: 0,
+          kitchenPct: null,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 0,
+          incidentTotal: 0,
+          ratingAvg: null,
+          ratingCount: 0,
+          nextCatering: null
+        },
+        {
+          name: "Café Kaiser Vanløse",
+          shortName: "Vanløse",
+          status: "warn",
+          revenueMTD: 0,
+          purchasesMTD: 0,
+          kitchenPct: null,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 1,
+          incidentTotal: 1,
+          ratingAvg: 4.1,
+          ratingCount: 4,
+          nextCatering: { date: "2026-03-18", time: "11:30", customerName: "Kontorhus", guests: 32 }
+        }
+      ],
+      incidents: {
+        recent: [
+          {
+            id: "s1",
+            type: "soldout",
+            location: "Café Kaiser Farum",
+            title: "Wienerschnitzel",
+            subtitle: "Udsolgt vare",
+            description: "Registreret i driftssystemet",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-16T06:53:14.382Z"
+          },
+          {
+            id: "su1",
+            type: "supplier",
+            location: "Café Kaiser Vanløse",
+            title: "Burgerbøffer",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:56:35.768Z"
+          },
+          {
+            id: "su2",
+            type: "supplier",
+            location: "Café Kaiser Hillerød",
+            title: "Flæsk",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:55:42.817Z"
+          },
+          {
+            id: "su3",
+            type: "supplier",
+            location: "Café Kaiser Helsingør",
+            title: "150g bøf",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:55:04.448Z"
+          }
+        ]
+      },
+      kitchen: {
+        chain: {
+          revenueMTD: 1435660.05,
+          purchasesMTD: 151151.02,
+          kitchenPct: 13.15
+        }
+      },
+      quality: {
+        topDishes: [
+          { dish: "Bøf Bearnaise", averageRating: 4.8, count: 6 },
+          { dish: "Club Sandwich", averageRating: 4.6, count: 7 },
+          { dish: "Pasta Trøffel", averageRating: 4.5, count: 4 }
+        ],
+        lowDishes: [
+          { dish: "Fish & Chips", averageRating: 3.9, count: 5 },
+          { dish: "Caesar Salat", averageRating: 4.0, count: 4 },
+          { dish: "Burger Classic", averageRating: 4.1, count: 6 }
+        ],
+        recentChecks: [
+          {
+            date: "2026-03-16",
+            location: "Café Kaiser Farum",
+            dish: "Pasta Trøffel",
+            scoreAvg: 4.3,
+            comment: "Flot anretning og god temperatur."
+          },
+          {
+            date: "2026-03-15",
+            location: "Café Kaiser Hillerød",
+            dish: "Club Sandwich",
+            scoreAvg: 4.5,
+            comment: "Meget stabil og veldisponeret ret."
+          },
+          {
+            date: "2026-03-14",
+            location: "Café Kaiser Helsingør",
+            dish: "Fish & Chips",
+            scoreAvg: 3.9,
+            comment: "Bør arbejdes med sprødhed og præsentation."
+          }
+        ]
+      }
+    };
 
     const $ = id => document.getElementById(id);
 
@@ -672,6 +934,11 @@
     function formatPct(n) {
       if (n === null || n === undefined || !isFinite(n)) return "—";
       return Number(n).toFixed(1).replace(".", ",") + "%";
+    }
+
+    function formatRating(n) {
+      if (n === null || n === undefined || !isFinite(n)) return "—";
+      return Number(n).toFixed(1).replace(".", ",");
     }
 
     function formatDateTime(v) {
@@ -691,22 +958,6 @@
       if (h < 12) return "God morgen";
       if (h < 18) return "God eftermiddag";
       return "God aften";
-    }
-
-    function updateClock() {
-      const now = new Date();
-      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function setStatus(text, cls) {
-      const el = $("statusPill");
-      el.textContent = text;
-      el.className = "pill " + cls;
     }
 
     function statusClass(status) {
@@ -729,178 +980,60 @@
       return "green";
     }
 
-    function cleanItems(items) {
-      return (Array.isArray(items) ? items : []).filter(item => {
-        if (!item || typeof item !== "object") return false;
-        return Object.values(item).some(v => String(v || "").trim() !== "");
+    function updateClock() {
+      const now = new Date();
+      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
       });
-    }
-
-    function buildLocations(bundle) {
-      const names = [
-        "Café Kaiser Helsingør",
-        "Café Kaiser Hillerød",
-        "Café Kaiser Farum",
-        "Café Kaiser Hørsholm",
-        "Café Kaiser Vanløse"
-      ];
-
-      const complaints = cleanItems(bundle.complaints);
-      const soldout = cleanItems(bundle.soldout);
-      const faults = cleanItems(bundle.faults);
-      const supplier = cleanItems(bundle.supplier);
-      const kitchen = cleanItems(bundle.kitchen);
-
-      const kitchenMap = {};
-      kitchen.forEach(k => { kitchenMap[k.location] = k; });
-
-      return names.map(name => {
-        const c = complaints.filter(x => x.location === name).length;
-        const s = soldout.filter(x => x.location === name).length;
-        const f = faults.filter(x => x.location === name).length;
-        const su = supplier.filter(x => x.location === name).length;
-        const incidentTotal = c + s + f + su;
-
-        const k = kitchenMap[name] || { revenue: 0, purchases: 0, pct: null };
-
-        let status = "green";
-        if (incidentTotal >= 5 || (k.pct != null && k.pct >= 35)) status = "red";
-        else if (incidentTotal >= 1 || (k.pct != null && k.pct >= 30)) status = "warn";
-
-        return {
-          name,
-          shortName: name.replace("Café Kaiser ", ""),
-          status,
-          revenueMTD: Number(k.revenue || 0),
-          purchasesMTD: Number(k.purchases || 0),
-          kitchenPct: k.pct,
-          complaintsOpen: c,
-          soldoutOpen: s,
-          faultsOpen: f,
-          supplierOpen: su,
-          incidentTotal
-        };
-      });
-    }
-
-    function buildRecentIncidents(bundle) {
-      const complaints = cleanItems(bundle.complaints).map(x => ({
-        type: "complaint",
-        location: x.location,
-        title: x.category || "Klage",
-        subtitle: x.severity || "",
-        description: x.description || "",
-        status: x.status || "open",
-        createdAt: x.createdAt || ""
-      }));
-
-      const soldout = cleanItems(bundle.soldout).map(x => ({
-        type: "soldout",
-        location: x.location,
-        title: x.productName || "Produkt",
-        subtitle: x.category || "",
-        description: "",
-        status: x.status || "open",
-        createdAt: x.createdAt || ""
-      }));
-
-      const faults = cleanItems(bundle.faults).map(x => ({
-        type: "fault",
-        location: x.location,
-        title: x.issueType || "Fejl",
-        subtitle: x.area || "",
-        description: x.description || "",
-        status: x.status || "open",
-        createdAt: x.createdAt || ""
-      }));
-
-      const supplier = cleanItems(bundle.supplier).map(x => ({
-        type: "supplier",
-        location: x.location,
-        title: x.productName || "Leverandørfejl",
-        subtitle: x.supplierName || "",
-        description: x.description || "",
-        status: x.status || "open",
-        createdAt: x.createdAt || ""
-      }));
-
-      return [...complaints, ...soldout, ...faults, ...supplier]
-        .sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 20);
-    }
-
-    function buildBriefing(locations, bundle) {
-      const soldoutCount = cleanItems(bundle.soldout).length;
-      const complaintCount = cleanItems(bundle.complaints).length;
-      const faultCount = cleanItems(bundle.faults).length;
-      const supplierCount = cleanItems(bundle.supplier).length;
-
-      const focus = locations.filter(l => l.status !== "green").map(l => l.shortName);
-
-      const lines = [
-        soldoutCount ? `⚠️ ${soldoutCount} udsolgte varer registreret` : `✅ Ingen udsolgte varer registreret`,
-        complaintCount ? `⚠️ ${complaintCount} gæsteklager registreret` : `✅ Ingen gæsteklager registreret`,
-        faultCount ? `⚠️ ${faultCount} fejl rapporteret` : `✅ Ingen fejl rapporteret`,
-        supplierCount ? `⚠️ ${supplierCount} leverandørfejl registreret` : `✅ Ingen leverandørfejl registreret`
-      ];
-
-      if (focus.length) {
-        lines.push(`🎯 Fokuslokationer: ${focus.join(", ")}`);
-      } else {
-        lines.push(`✅ Ingen lokationer kræver akut opmærksomhed lige nu`);
-      }
-
-      return lines.join("\n");
     }
 
     function renderOverviewKpis() {
-      const incidents = portalData.incidents.recent;
-      const locations = portalData.locations;
-      const chainKitchen = (() => {
-        const withPct = locations.filter(l => l.kitchenPct != null);
-        if (!withPct.length) return null;
-        const totalRevenue = withPct.reduce((sum,l) => sum + l.revenueMTD, 0);
-        const totalBuy = withPct.reduce((sum,l) => sum + l.purchasesMTD, 0);
-        const net = totalRevenue / 1.25;
-        return net > 0 ? (totalBuy / net) * 100 : null;
-      })();
-
+      const t = portalData.overview.totals;
       const items = [
         {
           title: "Åbne klager",
           dot: "red",
-          value: portalData.locations.reduce((s,l) => s + l.complaintsOpen, 0),
-          sub: "Seneste registrerede gæsteklager"
+          value: t.complaintsOpen,
+          sub: "Seneste registrerede gæsteklager",
+          meta: ["Ingen aktive"]
         },
         {
           title: "Udsolgte varer",
           dot: "gold",
-          value: portalData.locations.reduce((s,l) => s + l.soldoutOpen, 0),
-          sub: "Produkter ude af drift"
+          value: t.soldoutOpen,
+          sub: "Produkter ude af drift",
+          meta: ["Farum", "Wienerschnitzel"]
         },
         {
           title: "Fejl & mangler",
           dot: "blue",
-          value: portalData.locations.reduce((s,l) => s + l.faultsOpen, 0),
-          sub: "Driftsmæssige fejl"
+          value: t.faultsOpen,
+          sub: "Tekniske og driftsmæssige fejl",
+          meta: ["Ingen aktive"]
         },
         {
           title: "Leverandørfejl",
           dot: "warn",
-          value: portalData.locations.reduce((s,l) => s + l.supplierOpen, 0),
-          sub: "Registrerede leverandørproblemer"
+          value: t.supplierOpen,
+          sub: "Registrerede leverandørproblemer",
+          meta: ["Vanløse", "Helsingør", "Hillerød"]
         },
         {
-          title: "Lokationer i fokus",
+          title: "Catering i dag",
           dot: "green",
-          value: portalData.locations.filter(l => l.status !== "green").length,
-          sub: "Lokationer med opmærksomhedsbehov"
+          value: t.cateringToday,
+          sub: "Bekræftede events i dag",
+          meta: ["Hillerød", "1 større event"]
         },
         {
           title: "Chain kitchen %",
           dot: "green",
-          value: formatPct(chainKitchen),
-          sub: "Samlet MTD performance"
+          value: formatPct(t.chainKitchenPct),
+          sub: "Samlet MTD performance",
+          meta: ["Stabilt niveau"]
         }
       ];
 
@@ -909,14 +1042,17 @@
           <div class="cardKicker"><span class="dot ${item.dot}"></span> ${esc(item.title)}</div>
           <div class="bigValue">${esc(item.value)}</div>
           <div class="subValue">${esc(item.sub)}</div>
+          <div class="miniMeta">
+            ${item.meta.map(m => `<div class="metaChip">${esc(m)}</div>`).join("")}
+          </div>
         </div>
       `).join("");
     }
 
     function renderBriefing() {
       $("briefingHello").textContent = greetingByTime() + " Stefan";
-      $("briefingText").textContent = portalData.briefing;
-      $("overviewUpdated").textContent = "Senest opdateret: " + formatDateTime(portalData.generatedAt);
+      $("briefingText").textContent = portalData.overview.briefing;
+      $("overviewUpdated").textContent = "Senest opdateret: " + formatDateTime(portalData.meta.generatedAt);
     }
 
     function renderLocationCard(loc) {
@@ -944,8 +1080,8 @@
               <div class="metricValue">${loc.incidentTotal}</div>
             </div>
             <div class="metricBox">
-              <div class="metricLabel">Purchases</div>
-              <div class="metricValue">${esc(formatMoney(loc.purchasesMTD))}</div>
+              <div class="metricLabel">Rating</div>
+              <div class="metricValue">${esc(formatRating(loc.ratingAvg))}</div>
             </div>
           </div>
 
@@ -965,7 +1101,8 @@
     }
 
     function renderOverviewEvents() {
-      $("overviewEvents").innerHTML = portalData.incidents.recent.slice(0,8).map(ev => `
+      const events = portalData.incidents.recent;
+      $("overviewEvents").innerHTML = events.map(ev => `
         <div class="listItem">
           <div class="bar ${incidentColor(ev.type)}"></div>
           <div class="listInfo">
@@ -996,6 +1133,10 @@
       $("locationsGrid").innerHTML = portalData.locations.map(renderLocationCard).join("");
     }
 
+    function allIncidents() {
+      return [...portalData.incidents.recent];
+    }
+
     function renderDriftPage() {
       const locationSelect = $("filterLocation");
       locationSelect.innerHTML = `<option value="all">Alle lokationer</option>` +
@@ -1006,7 +1147,7 @@
         const loc = $("filterLocation").value;
         const q = $("filterSearch").value.trim().toLowerCase();
 
-        let items = [...portalData.incidents.recent];
+        let items = allIncidents();
 
         if (type !== "all") items = items.filter(i => i.type === type);
         if (loc !== "all") items = items.filter(i => i.location === loc);
@@ -1039,54 +1180,49 @@
     }
 
     function renderKitchenPage() {
-      const locations = [...portalData.locations].sort((a,b) => {
-        const ap = a.kitchenPct == null ? -Infinity : a.kitchenPct;
-        const bp = b.kitchenPct == null ? -Infinity : b.kitchenPct;
-        return bp - ap;
-      });
-
-      const totalRevenue = locations.reduce((sum,l) => sum + l.revenueMTD, 0);
-      const totalBuy = locations.reduce((sum,l) => sum + l.purchasesMTD, 0);
-      const net = totalRevenue / 1.25;
-      const chainPct = net > 0 ? (totalBuy / net) * 100 : null;
-
-      const withPct = locations.filter(l => l.kitchenPct != null);
+      const chain = portalData.kitchen.chain;
+      const locations = [...portalData.locations]
+        .sort((a,b) => {
+          const ap = a.kitchenPct == null ? -Infinity : a.kitchenPct;
+          const bp = b.kitchenPct == null ? -Infinity : b.kitchenPct;
+          return bp - ap;
+        });
 
       const kpis = [
         {
           title: "Chain revenue MTD",
           dot: "blue",
-          value: formatMoney(totalRevenue),
+          value: formatMoney(chain.revenueMTD),
           sub: "Samlet omsætning i kæden"
         },
         {
           title: "Chain purchases MTD",
           dot: "gold",
-          value: formatMoney(totalBuy),
+          value: formatMoney(chain.purchasesMTD),
           sub: "Samlede varekøb"
         },
         {
           title: "Chain kitchen %",
           dot: "green",
-          value: formatPct(chainPct),
+          value: formatPct(chain.kitchenPct),
           sub: "Kædens samlede performance"
         },
         {
           title: "Højeste kitchen %",
           dot: "warn",
-          value: withPct[0] ? withPct[0].shortName : "—",
-          sub: withPct[0] ? formatPct(withPct[0].kitchenPct) : "—"
+          value: locations[0] ? locations[0].shortName : "—",
+          sub: locations[0] ? formatPct(locations[0].kitchenPct) : "—"
         },
         {
           title: "Laveste kitchen %",
           dot: "green",
-          value: withPct.length ? [...withPct].reverse()[0].shortName : "—",
-          sub: withPct.length ? formatPct([...withPct].reverse()[0].kitchenPct) : "—"
+          value: [...locations].reverse()[0] ? [...locations].reverse()[0].shortName : "—",
+          sub: [...locations].reverse()[0] ? formatPct([...locations].reverse()[0].kitchenPct) : "—"
         },
         {
           title: "Lokationer med data",
           dot: "blue",
-          value: withPct.length,
+          value: locations.filter(l => l.kitchenPct != null).length,
           sub: "Datadækning i kæden"
         }
       ];
@@ -1109,68 +1245,65 @@
       `).join("");
     }
 
+    function renderQualityPage() {
+      $("topDishesTable").innerHTML = portalData.quality.topDishes.map(d => `
+        <div class="row">
+          <div class="rowName">${esc(d.dish)}</div>
+          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
+          <div class="rowVal">${d.count} ratings</div>
+          <div class="rowVal">Top performer</div>
+        </div>
+      `).join("");
+
+      $("lowDishesTable").innerHTML = portalData.quality.lowDishes.map(d => `
+        <div class="row">
+          <div class="rowName">${esc(d.dish)}</div>
+          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
+          <div class="rowVal">${d.count} ratings</div>
+          <div class="rowVal">Kræver fokus</div>
+        </div>
+      `).join("");
+
+      $("recentChecksList").innerHTML = portalData.quality.recentChecks.map(c => `
+        <div class="listItem">
+          <div class="bar gold"></div>
+          <div class="listInfo">
+            <div class="listMain">${esc(c.location)} • ${esc(c.dish)} • Score ${esc(formatRating(c.scoreAvg))}</div>
+            <div class="listSub">${esc(c.comment)}</div>
+            <div class="listMeta">${esc(c.date)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
     function setupNav() {
       document.querySelectorAll(".navBtn").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".navBtn").forEach(b => b.classList.remove("active"));
           document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+
           btn.classList.add("active");
           $("page-" + btn.dataset.page).classList.add("active");
         });
       });
     }
 
-    function renderPortal(bundle) {
-      const locations = buildLocations(bundle);
-      const incidents = buildRecentIncidents(bundle);
-      const briefing = buildBriefing(locations, bundle);
+    function init() {
+      updateClock();
+      setInterval(updateClock, 30000);
 
-      portalData = {
-        generatedAt: bundle.generatedAt || new Date().toISOString(),
-        locations,
-        incidents: { recent: incidents },
-        briefing
-      };
-
-      renderBriefing();
       renderOverviewKpis();
+      renderBriefing();
       renderOverviewLocations();
       renderOverviewEvents();
       renderOverviewFocus();
+
       renderLocationsPage();
       renderDriftPage();
       renderKitchenPage();
+      renderQualityPage();
 
-      setStatus("● Data opdateret", "ok");
-    }
-
-    function loadData() {
-      setStatus("● Indlæser data", "warn");
-
-      google.script.run
-        .withSuccessHandler(data => {
-          if (!data || !data.ok) {
-            setStatus("● Fejl i data", "err");
-            $("briefingText").textContent = "Kunne ikke indlæse portaldata.";
-            return;
-          }
-          renderPortal(data);
-        })
-        .withFailureHandler(err => {
-          console.error(err);
-          setStatus("● Serverfejl", "err");
-          $("briefingText").textContent = "Serverfejl ved indlæsning af portaldata.";
-        })
-        .getFbPortalDataServer_();
-    }
-
-    function init() {
       setupNav();
-      updateClock();
-      loadData();
-
-      setInterval(updateClock, 30000);
-      setInterval(loadData, 60000);
     }
 
     init();
