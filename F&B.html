@@ -3,25 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – F&B Portal</title>
+  <title>Kaiser – F&B Portal V2</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg0:#0d1117;
-      --bg1:#161b22;
+      --bg0:#0b0f14;
+      --bg1:#121821;
+      --bg2:#1a2230;
+      --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.07);
+      --line:rgba(255,255,255,0.10);
       --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.55);
+      --muted:rgba(255,255,255,0.72);
+      --muted2:rgba(255,255,255,0.52);
       --gold:#d6b24a;
+      --gold2:#b9921f;
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
       --warn:#f59e0b;
       --shadow:0 20px 60px rgba(0,0,0,.40);
+      --radius:24px;
     }
 
     *{box-sizing:border-box}
@@ -31,33 +37,36 @@
       font-family:Inter,system-ui,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        radial-gradient(1000px 600px at 10% -10%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(900px 600px at 100% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(700px 500px at 30% 100%, rgba(245,158,11,0.10), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      padding:16px;
+      padding:18px;
     }
 
-    .shell{max-width:1400px;margin:0 auto;}
-    .hero,.section,.card,.chainCard,.portalCard,.listCard,.briefingBox{box-shadow:var(--shadow);}
+    .shell{
+      max-width:1480px;
+      margin:0 auto;
+    }
 
     .hero{
-      border-radius:28px;
-      border:1px solid rgba(255,255,255,0.12);
+      border-radius:30px;
+      border:1px solid var(--line);
       background:
         radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
-        radial-gradient(700px 240px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
+        radial-gradient(800px 240px at 15% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(800px 240px at 85% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      padding:24px 18px 18px;
+      box-shadow:var(--shadow);
       overflow:hidden;
+      padding:24px 22px 18px;
     }
 
     .kicker{
       text-align:center;
       font-size:10px;
       font-weight:900;
-      letter-spacing:.26em;
+      letter-spacing:.28em;
       text-transform:uppercase;
       color:var(--muted2);
     }
@@ -65,25 +74,25 @@
     .title{
       text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(42px,7vw,66px);
+      font-size:clamp(42px,7vw,72px);
       line-height:1;
+      letter-spacing:-.04em;
       margin-top:8px;
-      letter-spacing:-.03em;
     }
 
     .sub{
       text-align:center;
-      color:var(--muted);
-      font-size:14px;
-      font-weight:800;
       margin-top:10px;
+      color:var(--muted);
+      font-size:15px;
+      font-weight:800;
     }
 
-    .goldline{
+    .heroLine{
       height:2px;
-      margin:18px auto 0;
-      max-width:900px;
       border-radius:999px;
+      margin:18px auto 0;
+      max-width:980px;
       background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
     }
 
@@ -94,25 +103,29 @@
       gap:10px;
     }
 
-    @media (max-width: 900px){
+    @media (max-width: 980px){
+      .heroMeta{grid-template-columns:1fr 1fr;}
+    }
+
+    @media (max-width: 640px){
       .heroMeta{grid-template-columns:1fr;}
     }
 
     .pill{
+      min-height:46px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.05);
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:6px;
-      min-height:44px;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.92);
+      gap:8px;
       font-size:11px;
       font-weight:900;
-      letter-spacing:.08em;
       text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(255,255,255,0.93);
       text-align:center;
     }
 
@@ -120,11 +133,46 @@
     .pill.warn{border-color:rgba(245,158,11,.35);color:#ffe9b0;}
     .pill.err{border-color:rgba(255,107,107,.35);color:#ffd0d0;}
 
+    .navWrap{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .navBtn{
+      min-height:44px;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .navBtn.active{
+      background:linear-gradient(135deg, rgba(214,178,74,.18), rgba(94,167,255,.12));
+      border-color:rgba(214,178,74,.32);
+      color:#fff2c6;
+    }
+
+    .page{
+      display:none;
+      margin-top:16px;
+    }
+
+    .page.active{display:block;}
+
     .section{
       margin-top:16px;
-      border-radius:24px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:var(--panel);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
 
@@ -132,26 +180,27 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
+      gap:12px;
       padding:15px 18px;
+      border-bottom:1px solid var(--line);
       background:rgba(255,255,255,0.03);
-      border-bottom:1px solid rgba(255,255,255,0.10);
     }
 
     .sectionTitle{
       display:flex;
       align-items:center;
       gap:10px;
-      color:var(--muted);
       font-size:12px;
       font-weight:900;
-      letter-spacing:.16em;
       text-transform:uppercase;
+      letter-spacing:.16em;
+      color:var(--muted);
     }
 
     .sectionDot{
       width:10px;height:10px;border-radius:50%;
       background:var(--gold);
+      flex:0 0 auto;
     }
 
     .sectionInfo{
@@ -162,31 +211,27 @@
 
     .sectionBody{padding:16px;}
 
-    .topGrid{
+    .kpiGrid{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(6,1fr);
       gap:14px;
     }
 
-    @media (max-width: 1200px){
-      .topGrid{grid-template-columns:repeat(2,1fr);}
+    @media (max-width: 1300px){
+      .kpiGrid{grid-template-columns:repeat(3,1fr);}
     }
 
     @media (max-width: 760px){
-      .topGrid{grid-template-columns:1fr;}
+      .kpiGrid{grid-template-columns:1fr;}
     }
 
-    .card,.chainCard,.portalCard,.listCard{
+    .card{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
+      min-height:170px;
     }
-
-    .card{min-height:180px}
-    .chainCard{min-height:220px}
-    .portalCard{min-height:180px}
-    .listCard{min-height:320px}
 
     .cardKicker{
       display:flex;
@@ -205,25 +250,25 @@
     }
 
     .dot.red{background:var(--red);}
-    .dot.green{background:var(--green);}
-    .dot.blue{background:var(--blue);}
     .dot.gold{background:var(--gold);}
+    .dot.blue{background:var(--blue);}
+    .dot.green{background:var(--green);}
     .dot.warn{background:var(--warn);}
 
     .bigValue{
+      margin-top:18px;
       font-family:"Playfair Display",serif;
       font-size:52px;
       line-height:1;
-      margin-top:18px;
       letter-spacing:-.03em;
     }
 
     .subValue{
       margin-top:8px;
-      color:var(--muted);
       font-size:14px;
       font-weight:800;
-      line-height:1.4;
+      color:var(--muted);
+      line-height:1.5;
     }
 
     .miniMeta{
@@ -239,88 +284,196 @@
       gap:6px;
       padding:8px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:rgba(255,255,255,0.05);
+      color:var(--muted);
       font-size:11px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
-      color:var(--muted);
     }
 
     .briefingBox{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border:1px solid var(--line);
       background:
         radial-gradient(700px 180px at 10% 0%, rgba(245,158,11,0.10), transparent 60%),
         radial-gradient(700px 180px at 100% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:20px;
+      padding:22px;
     }
 
     .briefingHello{
       margin-top:10px;
-      font-size:30px;
       font-family:"Playfair Display",serif;
+      font-size:32px;
       line-height:1.1;
     }
 
     .briefingText{
       margin-top:14px;
+      white-space:pre-line;
       color:var(--muted);
       font-size:15px;
-      line-height:1.6;
+      line-height:1.7;
       font-weight:800;
-      white-space:pre-line;
     }
 
-    .chainGrid{
+    .grid2{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .grid2{grid-template-columns:1fr;}
+    }
+
+    .listCard{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:320px;
+    }
+
+    .listTitle{
+      margin-top:10px;
+      font-size:15px;
+      font-weight:900;
+      color:rgba(255,255,255,0.96);
+    }
+
+    .list{
+      margin-top:16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .listItem{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+    }
+
+    .bar{
+      width:5px;
+      min-height:64px;
+      border-radius:4px;
+      flex:0 0 auto;
+    }
+
+    .bar.red{background:var(--red);}
+    .bar.blue{background:var(--blue);}
+    .bar.gold{background:var(--gold);}
+    .bar.warn{background:var(--warn);}
+    .bar.green{background:var(--green);}
+
+    .listInfo{flex:1;min-width:0;}
+    .listMain{font-size:14px;font-weight:800;line-height:1.35;}
+    .listSub{margin-top:4px;font-size:12px;color:var(--muted);font-weight:700;line-height:1.4;}
+    .listMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
+
+    .table{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1.2fr auto auto auto;
+      gap:12px;
+      align-items:center;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 980px){
+      .row{
+        grid-template-columns:1fr;
+        align-items:flex-start;
+      }
+    }
+
+    .rowName{
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .rowVal{
+      font-size:13px;
+      font-weight:900;
+      color:rgba(255,255,255,0.92);
+      text-align:right;
+    }
+
+    @media (max-width: 980px){
+      .rowVal{text-align:left;}
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.05);
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+
+    .status-green{color:#dff7e2;border-color:rgba(98,210,111,.35);}
+    .status-warn{color:#ffe9b0;border-color:rgba(245,158,11,.35);}
+    .status-red{color:#ffd0d0;border-color:rgba(255,107,107,.35);}
+
+    .locationGrid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:14px;
     }
 
     @media (max-width: 1180px){
-      .chainGrid{grid-template-columns:repeat(2,1fr);}
+      .locationGrid{grid-template-columns:repeat(2,1fr);}
     }
 
     @media (max-width: 760px){
-      .chainGrid{grid-template-columns:1fr;}
+      .locationGrid{grid-template-columns:1fr;}
     }
 
-    .chainTop{
+    .locationCard{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:18px;
+      min-height:260px;
+    }
+
+    .locationTop{
       display:flex;
       justify-content:space-between;
       gap:10px;
       align-items:flex-start;
     }
 
-    .chainName{
+    .locationName{
+      margin-top:10px;
       font-size:22px;
       font-weight:900;
-      margin-top:10px;
     }
 
-    .statusBadge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      white-space:nowrap;
-    }
-
-    .status-green{color:#dff7e2;border-color:rgba(98,210,111,.35)}
-    .status-warn{color:#ffe9b0;border-color:rgba(245,158,11,.35)}
-    .status-red{color:#ffd0d0;border-color:rgba(255,107,107,.35)}
-
-    .chainMetrics{
+    .metricGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
@@ -329,9 +482,9 @@
 
     .metricBox{
       border-radius:16px;
-      padding:12px;
       border:1px solid rgba(255,255,255,0.10);
       background:rgba(255,255,255,0.05);
+      padding:12px;
     }
 
     .metricLabel{
@@ -348,150 +501,33 @@
       font-weight:900;
     }
 
-    .menuGrid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-    }
-
-    @media (max-width: 1100px){
-      .menuGrid{grid-template-columns:1fr;}
-    }
-
-    .portalName{
-      margin-top:10px;
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .portalDesc{
-      margin-top:8px;
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.45;
-      font-weight:700;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:14px;
-    }
-
-    @media (max-width: 980px){
-      .grid2{grid-template-columns:1fr;}
-    }
-
-    .listTitle{
-      font-size:15px;
-      font-weight:900;
-      color:rgba(255,255,255,0.96);
-      margin-top:10px;
-    }
-
-    .list{
+    .toolbar{
       display:flex;
-      flex-direction:column;
+      flex-wrap:wrap;
       gap:10px;
-      margin-top:16px;
+      margin-bottom:14px;
     }
 
-    .listItem{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      padding:12px;
-      border-radius:16px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-    }
-
-    .bar{
-      width:5px;
-      min-height:64px;
-      border-radius:4px;
-      flex:0 0 auto;
-    }
-
-    .bar.red{background:var(--red);}
-    .bar.blue{background:var(--blue);}
-    .bar.gold{background:var(--gold);}
-    .bar.green{background:var(--green);}
-    .bar.warn{background:var(--warn);}
-
-    .listInfo{flex:1;min-width:0;}
-
-    .listMain{
-      font-size:14px;
+    .toolSelect,.toolInput{
+      min-height:42px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
       font-weight:800;
-      line-height:1.35;
-    }
-
-    .listSub{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      line-height:1.4;
-    }
-
-    .listMeta{
-      margin-top:6px;
-      font-size:11px;
-      color:var(--muted2);
-      font-weight:800;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-    }
-
-    .table{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:1fr auto auto;
-      gap:12px;
-      align-items:center;
-      padding:12px;
-      border-radius:16px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-    }
-
-    .rowName{
-      font-size:14px;
-      font-weight:800;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .rowVal{
       font-size:13px;
-      font-weight:900;
-      color:rgba(255,255,255,0.92);
-      text-align:right;
+      outline:none;
     }
+
+    .toolInput::placeholder{color:rgba(255,255,255,0.45);}
+    .toolSelect option{background:#161b22;color:#fff;}
 
     .empty{
       text-align:center;
-      padding:26px;
+      padding:28px;
       color:var(--muted2);
       font-size:13px;
-    }
-
-    .errBox{
-      padding:12px;
-      background:rgba(255,107,107,0.15);
-      color:var(--red);
-      border-radius:12px;
-      font-weight:700;
-      font-size:12px;
-      display:none;
-      margin-top:12px;
     }
   </style>
 </head>
@@ -500,226 +536,414 @@
 
     <header class="hero">
       <div class="kicker">KAISER</div>
-      <div class="title">F&B Portal</div>
-      <div class="sub">Ledelsesoverblik over drift, kvalitet og køkken</div>
-      <div class="goldline"></div>
+      <div class="title">F&B Portal V2</div>
+      <div class="sub">Personligt ledelsesoverblik over drift, performance, kvalitet og fokusområder</div>
+      <div class="heroLine"></div>
 
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
-        <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Version 4</div>
-        <div class="pill ok" id="statusPill">● Klar</div>
+        <div class="pill">👤 Personlig ledelsesportal</div>
+        <div class="pill">📊 F&B Intelligence</div>
+        <div class="pill ok" id="statusPill">● Konceptmode</div>
       </div>
 
-      <div class="errBox" id="mainErr"></div>
+      <div class="navWrap">
+        <button class="navBtn active" data-page="overview">Overview</button>
+        <button class="navBtn" data-page="locations">Lokationer</button>
+        <button class="navBtn" data-page="drift">Drift</button>
+        <button class="navBtn" data-page="kitchen">Kitchen</button>
+        <button class="navBtn" data-page="quality">Kvalitet</button>
+      </div>
     </header>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Drift AI briefing</div>
-        <div class="sectionInfo" id="lastUpdatedInfo">Senest opdateret: —</div>
-      </div>
-      <div class="sectionBody">
-        <div class="briefingBox">
-          <div class="cardKicker"><span class="dot gold"></span> Manager overview</div>
-          <div class="briefingHello" id="briefingHello">God dag Stefan</div>
-          <div class="briefingText" id="briefingText">Indlæser briefing...</div>
+    <!-- OVERVIEW -->
+    <main class="page active" id="page-overview">
+
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Executive overview</div>
+          <div class="sectionInfo" id="overviewUpdated">Senest opdateret: —</div>
         </div>
-      </div>
-    </section>
+        <div class="sectionBody">
+          <div class="kpiGrid" id="overviewKpis"></div>
+        </div>
+      </section>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Manager alerts</div>
-        <div class="sectionInfo">Kritiske driftssignaler lige nu</div>
-      </div>
-      <div class="sectionBody">
-        <div class="topGrid">
-          <div class="card">
-            <div class="cardKicker"><span class="dot red"></span> Åbne klager</div>
-            <div class="bigValue" id="complaintsTotal">0</div>
-            <div class="subValue">Seneste registrerede gæsteklager</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="complaintLocMeta">Ingen data</div>
-              <div class="metaChip" id="complaintTimeMeta">—</div>
-            </div>
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Manager briefing</div>
+          <div class="sectionInfo">Din prioritering lige nu</div>
+        </div>
+        <div class="sectionBody">
+          <div class="briefingBox">
+            <div class="cardKicker"><span class="dot gold"></span> AI / lederblik</div>
+            <div class="briefingHello" id="briefingHello">God dag Stefan</div>
+            <div class="briefingText" id="briefingText"></div>
           </div>
+        </div>
+      </section>
 
-          <div class="card">
-            <div class="cardKicker"><span class="dot gold"></span> Udsolgte varer</div>
-            <div class="bigValue" id="soldoutTotal">0</div>
-            <div class="subValue">Registreringer i systemet</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="soldoutLocMeta">Ingen data</div>
-              <div class="metaChip" id="soldoutTimeMeta">—</div>
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Lokationsstatus</div>
+          <div class="sectionInfo">Rangering efter opmærksomhed</div>
+        </div>
+        <div class="sectionBody">
+          <div class="locationGrid" id="overviewLocations"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Seneste driftshændelser</div>
+          <div class="sectionInfo">Det nyeste i kæden</div>
+        </div>
+        <div class="sectionBody">
+          <div class="grid2">
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
+              <div class="listTitle">Tværgående feed</div>
+              <div class="list" id="overviewEvents"></div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
-            <div class="bigValue" id="faultsTotal">0</div>
-            <div class="subValue">Åbne drifts- og vedligeholdelsesfejl</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="faultLocMeta">Ingen data</div>
-              <div class="metaChip" id="faultTimeMeta">—</div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="cardKicker"><span class="dot warn"></span> Leverandørfejl</div>
-            <div class="bigValue" id="supplierTotal">0</div>
-            <div class="subValue">Seneste registrerede leverandørproblemer</div>
-            <div class="miniMeta">
-              <div class="metaChip" id="supplierLocMeta">Ingen data</div>
-              <div class="metaChip" id="supplierTimeMeta">—</div>
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot blue"></span> Fokuslokationer</div>
+              <div class="listTitle">Hvor du bør kigge først</div>
+              <div class="table" id="overviewFocus"></div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Chain overview</div>
-        <div class="sectionInfo">Status, omsætning og kitchen % pr. lokation</div>
-      </div>
-      <div class="sectionBody">
-        <div class="chainGrid" id="chainOverviewGrid">
-          <div class="empty">Indlæser chain overview...</div>
+    <!-- LOKATIONER -->
+    <main class="page" id="page-locations">
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Alle lokationer</div>
+          <div class="sectionInfo">Sammenligning af enheder</div>
         </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
-        <div class="sectionInfo">Ratings tilkobles senere</div>
-      </div>
-      <div class="sectionBody">
-        <div class="menuGrid" id="menuIntelligenceGrid">
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
-            <div class="portalName">Afventer ratings</div>
-            <div class="portalDesc">Driftdata vises nu robust med samme metode som Kitchen Hub.</div>
-          </div>
+        <div class="sectionBody">
+          <div class="locationGrid" id="locationsGrid"></div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
-        <div class="sectionInfo">Seneste hændelser og hotspots</div>
-      </div>
-      <div class="sectionBody">
-        <div class="grid2">
-          <div class="listCard">
-            <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
-            <div class="listTitle">Klager, fejl og udsolgte samlet</div>
-            <div class="list" id="latestEventsList">
-              <div class="empty">Indlæser...</div>
-            </div>
+    <!-- DRIFT -->
+    <main class="page" id="page-drift">
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Driftshændelser</div>
+          <div class="sectionInfo">Filtrerede hændelser</div>
+        </div>
+        <div class="sectionBody">
+          <div class="toolbar">
+            <select class="toolSelect" id="filterType">
+              <option value="all">Alle typer</option>
+              <option value="complaint">Klager</option>
+              <option value="soldout">Udsolgt</option>
+              <option value="fault">Fejl</option>
+              <option value="supplier">Leverandør</option>
+            </select>
+
+            <select class="toolSelect" id="filterLocation">
+              <option value="all">Alle lokationer</option>
+            </select>
+
+            <input class="toolInput" id="filterSearch" placeholder="Søg i titel eller beskrivelse" />
           </div>
 
           <div class="listCard">
-            <div class="cardKicker"><span class="dot blue"></span> Lokationer i fokus</div>
-            <div class="listTitle">Antal registreringer pr. lokation</div>
-            <div class="table" id="locationFocusList">
-              <div class="empty">Indlæser...</div>
+            <div class="cardKicker"><span class="dot warn"></span> Incident center</div>
+            <div class="listTitle">Aktive og seneste registreringer</div>
+            <div class="list" id="incidentList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- KITCHEN -->
+    <main class="page" id="page-kitchen">
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Kitchen performance</div>
+          <div class="sectionInfo">Kæde og lokationer</div>
+        </div>
+        <div class="sectionBody">
+          <div class="kpiGrid" id="kitchenKpis"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Kitchen ranking</div>
+          <div class="sectionInfo">MTD pr. lokation</div>
+        </div>
+        <div class="sectionBody">
+          <div class="table" id="kitchenTable"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- QUALITY -->
+    <main class="page" id="page-quality">
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & ratings</div>
+          <div class="sectionInfo">Mockup til næste fase</div>
+        </div>
+        <div class="sectionBody">
+          <div class="grid2">
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
+              <div class="listTitle">Bedst performende retter</div>
+              <div class="table" id="topDishesTable"></div>
+            </div>
+
+            <div class="listCard">
+              <div class="cardKicker"><span class="dot red"></span> Lowest dishes</div>
+              <div class="listTitle">Retter med lavest score</div>
+              <div class="table" id="lowDishesTable"></div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
-        <div class="sectionInfo">Seneste kendte lokationstal</div>
-      </div>
-      <div class="sectionBody">
-        <div class="table" id="kitchenPctList">
-          <div class="empty">Indlæser...</div>
+      <section class="section">
+        <div class="sectionHead">
+          <div class="sectionTitle"><span class="sectionDot"></span> Seneste standardkontroller</div>
+          <div class="sectionInfo">Seneste kvalitetsblik</div>
         </div>
-      </div>
-    </section>
+        <div class="sectionBody">
+          <div class="list" id="recentChecksList"></div>
+        </div>
+      </section>
+    </main>
 
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const CACHE_KEY = "kaiser_fb_portal_bundle_v1";
+    const portalData = {
+      meta: {
+        generatedAt: new Date().toISOString(),
+        timezone: "Europe/Copenhagen",
+        version: "2.0-concept"
+      },
+      overview: {
+        chainStatus: "warn",
+        totals: {
+          complaintsOpen: 0,
+          soldoutOpen: 1,
+          faultsOpen: 0,
+          supplierOpen: 4,
+          cateringToday: 2,
+          chainKitchenPct: 13.5
+        },
+        briefing:
+`Der er rolig drift i kæden, men enkelte forhold kræver opmærksomhed.
 
-    const LOCATIONS = [
-      "Café Kaiser Helsingør",
-      "Café Kaiser Hillerød",
-      "Café Kaiser Farum",
-      "Café Kaiser Hørsholm",
-      "Café Kaiser Vanløse"
-    ];
+• 1 udsolgt vare er registreret i Farum
+• 4 leverandørfejl ligger åbne, især på Helsingør, Hillerød og Vanløse
+• Chain kitchen % ligger på et sundt niveau
+• Vanløse og Helsingør bør følges tættere i dag`
+      },
+      locations: [
+        {
+          name: "Café Kaiser Helsingør",
+          shortName: "Helsingør",
+          status: "warn",
+          revenueMTD: 339226.67,
+          purchasesMTD: 43294.36,
+          kitchenPct: 15.95,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 2,
+          incidentTotal: 2,
+          ratingAvg: 4.2,
+          ratingCount: 8,
+          nextCatering: { date: "2026-03-17", time: "12:00", customerName: "Advokatfirma", guests: 24 }
+        },
+        {
+          name: "Café Kaiser Hillerød",
+          shortName: "Hillerød",
+          status: "warn",
+          revenueMTD: 655444.99,
+          purchasesMTD: 64733.38,
+          kitchenPct: 12.35,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 1,
+          incidentTotal: 1,
+          ratingAvg: 4.4,
+          ratingCount: 10,
+          nextCatering: { date: "2026-03-16", time: "13:00", customerName: "Kommunen", guests: 18 }
+        },
+        {
+          name: "Café Kaiser Farum",
+          shortName: "Farum",
+          status: "warn",
+          revenueMTD: 440988.39,
+          purchasesMTD: 43123.28,
+          kitchenPct: 12.22,
+          complaintsOpen: 0,
+          soldoutOpen: 1,
+          faultsOpen: 0,
+          supplierOpen: 0,
+          incidentTotal: 1,
+          ratingAvg: 4.5,
+          ratingCount: 6,
+          nextCatering: null
+        },
+        {
+          name: "Café Kaiser Hørsholm",
+          shortName: "Hørsholm",
+          status: "green",
+          revenueMTD: 0,
+          purchasesMTD: 0,
+          kitchenPct: null,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 0,
+          incidentTotal: 0,
+          ratingAvg: null,
+          ratingCount: 0,
+          nextCatering: null
+        },
+        {
+          name: "Café Kaiser Vanløse",
+          shortName: "Vanløse",
+          status: "warn",
+          revenueMTD: 0,
+          purchasesMTD: 0,
+          kitchenPct: null,
+          complaintsOpen: 0,
+          soldoutOpen: 0,
+          faultsOpen: 0,
+          supplierOpen: 1,
+          incidentTotal: 1,
+          ratingAvg: 4.1,
+          ratingCount: 4,
+          nextCatering: { date: "2026-03-18", time: "11:30", customerName: "Kontorhus", guests: 32 }
+        }
+      ],
+      incidents: {
+        recent: [
+          {
+            id: "s1",
+            type: "soldout",
+            location: "Café Kaiser Farum",
+            title: "Wienerschnitzel",
+            subtitle: "Udsolgt vare",
+            description: "Registreret i driftssystemet",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-16T06:53:14.382Z"
+          },
+          {
+            id: "su1",
+            type: "supplier",
+            location: "Café Kaiser Vanløse",
+            title: "Burgerbøffer",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:56:35.768Z"
+          },
+          {
+            id: "su2",
+            type: "supplier",
+            location: "Café Kaiser Hillerød",
+            title: "Flæsk",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:55:42.817Z"
+          },
+          {
+            id: "su3",
+            type: "supplier",
+            location: "Café Kaiser Helsingør",
+            title: "150g bøf",
+            subtitle: "BC",
+            description: "Erstattet med frost",
+            severity: "medium",
+            status: "open",
+            createdAt: "2026-03-14T07:55:04.448Z"
+          }
+        ]
+      },
+      kitchen: {
+        chain: {
+          revenueMTD: 1435660.05,
+          purchasesMTD: 151151.02,
+          kitchenPct: 13.15
+        }
+      },
+      quality: {
+        topDishes: [
+          { dish: "Bøf Bearnaise", averageRating: 4.8, count: 6 },
+          { dish: "Club Sandwich", averageRating: 4.6, count: 7 },
+          { dish: "Pasta Trøffel", averageRating: 4.5, count: 4 }
+        ],
+        lowDishes: [
+          { dish: "Fish & Chips", averageRating: 3.9, count: 5 },
+          { dish: "Caesar Salat", averageRating: 4.0, count: 4 },
+          { dish: "Burger Classic", averageRating: 4.1, count: 6 }
+        ],
+        recentChecks: [
+          {
+            date: "2026-03-16",
+            location: "Café Kaiser Farum",
+            dish: "Pasta Trøffel",
+            scoreAvg: 4.3,
+            comment: "Flot anretning og god temperatur."
+          },
+          {
+            date: "2026-03-15",
+            location: "Café Kaiser Hillerød",
+            dish: "Club Sandwich",
+            scoreAvg: 4.5,
+            comment: "Meget stabil og veldisponeret ret."
+          },
+          {
+            date: "2026-03-14",
+            location: "Café Kaiser Helsingør",
+            dish: "Fish & Chips",
+            scoreAvg: 3.9,
+            comment: "Bør arbejdes med sprødhed og præsentation."
+          }
+        ]
+      }
+    };
 
     const $ = id => document.getElementById(id);
-    let isLoading = false;
-    let lastSuccessfulUpdate = null;
 
     function esc(s) {
       return String(s || "").replace(/[&<>"']/g, c =>
         ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
     }
 
-    function saveCache(data) {
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-      } catch (_) {}
+    function formatMoney(n) {
+      return Number(n || 0).toLocaleString("da-DK") + " kr.";
     }
 
-    function loadCache() {
-      try {
-        const raw = localStorage.getItem(CACHE_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (!parsed || !parsed.data) return null;
-        return parsed;
-      } catch (_) {
-        return null;
-      }
+    function formatPct(n) {
+      if (n === null || n === undefined || !isFinite(n)) return "—";
+      return Number(n).toFixed(1).replace(".", ",") + "%";
     }
 
-    function pad2(n) {
-      return String(n).padStart(2, "0");
+    function formatRating(n) {
+      if (n === null || n === undefined || !isFinite(n)) return "—";
+      return Number(n).toFixed(1).replace(".", ",");
     }
 
-    function getLocalMonthString() {
-      const now = new Date();
-      return now.getFullYear() + "-" + pad2(now.getMonth() + 1);
-    }
-
-    function formatLocationShort(name) {
-      return String(name || "").replace("Café Kaiser ", "");
-    }
-
-    function parseDateSafe(value) {
-      if (!value) return null;
-      let s = String(value).trim();
-      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) s = s.replace(" ", "T");
-      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(s)) s = s.replace(" ", "T");
-      const d = new Date(s);
-      return isNaN(d.getTime()) ? null : d;
-    }
-
-    function fmtTimeNow() {
-      const now = new Date();
-      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function fmtDateTime(value) {
-      const d = parseDateSafe(value);
-      if (!d) return "Ukendt tidspunkt";
+    function formatDateTime(v) {
+      const d = new Date(v);
+      if (isNaN(d)) return "—";
       return d.toLocaleString("da-DK", {
         day: "2-digit",
         month: "2-digit",
@@ -736,443 +960,353 @@
       return "God aften";
     }
 
-    function setStatus(text, cls) {
-      const el = $("statusPill");
-      el.textContent = text;
-      el.className = "pill " + cls;
+    function statusClass(status) {
+      if (status === "red") return "status-red";
+      if (status === "warn") return "status-warn";
+      return "status-green";
     }
 
-    function showError(msg) {
-      const el = $("mainErr");
-      el.textContent = msg;
-      el.style.display = "block";
+    function statusLabel(status) {
+      if (status === "red") return "🔴 Kritisk";
+      if (status === "warn") return "🟡 Opmærksomhed";
+      return "🟢 Stabil";
     }
 
-    function hideError() {
-      $("mainErr").style.display = "none";
+    function incidentColor(type) {
+      if (type === "complaint") return "red";
+      if (type === "soldout") return "gold";
+      if (type === "fault") return "blue";
+      if (type === "supplier") return "warn";
+      return "green";
     }
 
-    function updateLastUpdated(ts = new Date(), cached = false) {
-      lastSuccessfulUpdate = ts;
-      $("lastUpdatedInfo").textContent =
-        "Senest opdateret: " +
-        ts.toLocaleString("da-DK", {
-          day: "2-digit",
-          month: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        }) +
-        (cached ? " (cache)" : "");
+    function updateClock() {
+      const now = new Date();
+      $("timePill").textContent = "🕐 " + now.toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
-    function jsonp(url, params = {}) {
-      return new Promise((resolve, reject) => {
-        const cb = "__cb_" + Math.random().toString(16).slice(2);
-        const qs = new URLSearchParams({
-          ...params,
-          callback: cb,
-          _t: Date.now() + "_" + Math.random().toString(16).slice(2)
-        }).toString();
-
-        const src = url + (url.includes("?") ? "&" : "?") + qs;
-
-        const s = document.createElement("script");
-        const t = setTimeout(() => {
-          cleanup();
-          reject(new Error("timeout"));
-        }, 15000);
-
-        function cleanup() {
-          clearTimeout(t);
-          try { delete window[cb]; } catch (_) {}
-          if (s.parentNode) s.parentNode.removeChild(s);
+    function renderOverviewKpis() {
+      const t = portalData.overview.totals;
+      const items = [
+        {
+          title: "Åbne klager",
+          dot: "red",
+          value: t.complaintsOpen,
+          sub: "Seneste registrerede gæsteklager",
+          meta: ["Ingen aktive"]
+        },
+        {
+          title: "Udsolgte varer",
+          dot: "gold",
+          value: t.soldoutOpen,
+          sub: "Produkter ude af drift",
+          meta: ["Farum", "Wienerschnitzel"]
+        },
+        {
+          title: "Fejl & mangler",
+          dot: "blue",
+          value: t.faultsOpen,
+          sub: "Tekniske og driftsmæssige fejl",
+          meta: ["Ingen aktive"]
+        },
+        {
+          title: "Leverandørfejl",
+          dot: "warn",
+          value: t.supplierOpen,
+          sub: "Registrerede leverandørproblemer",
+          meta: ["Vanløse", "Helsingør", "Hillerød"]
+        },
+        {
+          title: "Catering i dag",
+          dot: "green",
+          value: t.cateringToday,
+          sub: "Bekræftede events i dag",
+          meta: ["Hillerød", "1 større event"]
+        },
+        {
+          title: "Chain kitchen %",
+          dot: "green",
+          value: formatPct(t.chainKitchenPct),
+          sub: "Samlet MTD performance",
+          meta: ["Stabilt niveau"]
         }
-
-        window[cb] = (data) => {
-          cleanup();
-          resolve(data);
-        };
-
-        s.src = src;
-        s.async = true;
-        s.onerror = () => {
-          cleanup();
-          reject(new Error("load error"));
-        };
-
-        document.body.appendChild(s);
-      });
-    }
-
-    function cleanItems(items) {
-      return (Array.isArray(items) ? items : []).filter(item => {
-        if (!item || typeof item !== "object") return false;
-        return Object.values(item).some(v => String(v || "").trim() !== "");
-      });
-    }
-
-    function sortByCreatedAtDesc(items) {
-      return [...items].sort((a, b) => {
-        const at = (parseDateSafe(a.createdAt) || new Date(0)).getTime();
-        const bt = (parseDateSafe(b.createdAt) || new Date(0)).getTime();
-        return bt - at;
-      });
-    }
-
-    function getLatestItem(items) {
-      return sortByCreatedAtDesc(items)[0] || null;
-    }
-
-    function setLatestMeta(items, locId, timeId) {
-      const latest = getLatestItem(items);
-      $(locId).textContent = latest && latest.location ? formatLocationShort(latest.location) : "Ingen data";
-      $(timeId).textContent = latest && latest.createdAt ? fmtDateTime(latest.createdAt) : "—";
-    }
-
-    function buildLocationStats(complaints, soldout, faults, supplier) {
-      const map = {};
-      LOCATIONS.forEach(loc => {
-        map[loc] = { complaints:0, soldout:0, faults:0, supplier:0 };
-      });
-
-      complaints.forEach(x => { if (map[x.location]) map[x.location].complaints++; });
-      soldout.forEach(x => { if (map[x.location]) map[x.location].soldout++; });
-      faults.forEach(x => { if (map[x.location]) map[x.location].faults++; });
-      supplier.forEach(x => { if (map[x.location]) map[x.location].supplier++; });
-
-      return map;
-    }
-
-    function calcStatus(row) {
-      const issues = row.complaints + row.soldout + row.faults + row.supplier;
-      const pct = row.pct;
-
-      if (issues >= 5 || (pct != null && pct >= 35)) return { label: "🔴 Kritisk", cls: "status-red" };
-      if (issues >= 2 || (pct != null && pct >= 30)) return { label: "🟡 Opmærksomhed", cls: "status-warn" };
-      return { label: "🟢 Stabil", cls: "status-green" };
-    }
-
-    function kitchenPctClass(pct) {
-      if (pct == null || !isFinite(pct)) return "";
-      if (pct >= 35) return "color:#ff8e8e;";
-      if (pct >= 30) return "color:#ffd166;";
-      return "color:#62d26f;";
-    }
-
-    function renderTopCards(complaints, soldout, faults, supplier) {
-      $("complaintsTotal").textContent = complaints.length;
-      $("soldoutTotal").textContent = soldout.length;
-      $("faultsTotal").textContent = faults.length;
-      $("supplierTotal").textContent = supplier.length;
-
-      setLatestMeta(complaints, "complaintLocMeta", "complaintTimeMeta");
-      setLatestMeta(soldout, "soldoutLocMeta", "soldoutTimeMeta");
-      setLatestMeta(faults, "faultLocMeta", "faultTimeMeta");
-      setLatestMeta(supplier, "supplierLocMeta", "supplierTimeMeta");
-    }
-
-    function renderChainOverview(complaints, soldout, faults, supplier, kitchen) {
-      const stats = buildLocationStats(complaints, soldout, faults, supplier);
-      const kitchenMap = {};
-      kitchen.forEach(k => { kitchenMap[k.location] = k; });
-
-      const rows = LOCATIONS.map(loc => {
-        const s = stats[loc] || { complaints:0, soldout:0, faults:0, supplier:0 };
-        const k = kitchenMap[loc] || { location: loc, revenue: 0, purchases: 0, pct: null };
-        const status = calcStatus({ ...k, ...s });
-
-        return {
-          location: loc,
-          revenue: Number(k.revenue || 0),
-          purchases: Number(k.purchases || 0),
-          pct: k.pct,
-          complaints: s.complaints,
-          soldout: s.soldout,
-          faults: s.faults,
-          supplier: s.supplier,
-          statusLabel: status.label,
-          statusClass: status.cls
-        };
-      });
-
-      $("chainOverviewGrid").innerHTML = rows.map(row => {
-        const pctText = row.pct == null || !isFinite(row.pct)
-          ? "—"
-          : row.pct.toFixed(1).replace(".", ",") + "%";
-
-        return `
-          <div class="chainCard">
-            <div class="chainTop">
-              <div>
-                <div class="cardKicker"><span class="dot blue"></span> Kaiser chain status</div>
-                <div class="chainName">${esc(formatLocationShort(row.location))}</div>
-              </div>
-              <div class="statusBadge ${row.statusClass}">${esc(row.statusLabel)}</div>
-            </div>
-
-            <div class="chainMetrics">
-              <div class="metricBox">
-                <div class="metricLabel">Omsætning</div>
-                <div class="metricValue">${Number(row.revenue || 0).toLocaleString("da-DK")} kr.</div>
-              </div>
-              <div class="metricBox">
-                <div class="metricLabel">Kitchen %</div>
-                <div class="metricValue">${esc(pctText)}</div>
-              </div>
-              <div class="metricBox">
-                <div class="metricLabel">Registreringer</div>
-                <div class="metricValue">${row.complaints + row.soldout + row.faults + row.supplier}</div>
-              </div>
-              <div class="metricBox">
-                <div class="metricLabel">Køb</div>
-                <div class="metricValue">${Number(row.purchases || 0).toLocaleString("da-DK")} kr.</div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      return rows;
-    }
-
-    function renderBriefing(complaints, soldout, faults, supplier, chainRows, cached = false) {
-      $("briefingHello").textContent = greetingByTime() + " Stefan";
-
-      const critical = [...chainRows].filter(x => x.statusLabel.includes("Kritisk"));
-      const lines = [
-        soldout.length ? `⚠️ ${soldout.length} udsolgte varer registreret` : `✅ Ingen udsolgte varer registreret`,
-        complaints.length ? `⚠️ ${complaints.length} gæsteklager registreret` : `✅ Ingen gæsteklager registreret`,
-        faults.length ? `⚠️ ${faults.length} fejl rapporteret` : `✅ Ingen fejl rapporteret`,
-        supplier.length ? `⚠️ ${supplier.length} leverandørfejl registreret` : `✅ Ingen leverandørfejl registreret`
       ];
 
-      if (critical.length) {
-        lines.push(`🔴 Kritiske lokationer: ${critical.map(x => formatLocationShort(x.location)).join(", ")}`);
-      }
-
-      if (cached) {
-        lines.push("ℹ️ Viser senest gemte data (cache)");
-      }
-
-      $("briefingText").textContent = lines.join("\n");
+      $("overviewKpis").innerHTML = items.map(item => `
+        <div class="card">
+          <div class="cardKicker"><span class="dot ${item.dot}"></span> ${esc(item.title)}</div>
+          <div class="bigValue">${esc(item.value)}</div>
+          <div class="subValue">${esc(item.sub)}</div>
+          <div class="miniMeta">
+            ${item.meta.map(m => `<div class="metaChip">${esc(m)}</div>`).join("")}
+          </div>
+        </div>
+      `).join("");
     }
 
-    function renderMenuPlaceholder() {
-      $("menuIntelligenceGrid").innerHTML = `
-        <div class="portalCard">
-          <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
-          <div class="portalName">Afventer ratings</div>
-          <div class="portalDesc">Denne sektion kobles på senere uden at påvirke resten af systemet.</div>
-        </div>
-        <div class="portalCard">
-          <div class="cardKicker"><span class="dot blue"></span> Driftdata</div>
-          <div class="portalName">Kitchen Hub model aktiv</div>
-          <div class="portalDesc">Portalen bruger nu cache + robust fallback som Kitchen Hub.</div>
-        </div>
-        <div class="portalCard">
-          <div class="cardKicker"><span class="dot green"></span> Status</div>
-          <div class="portalName">Stabil visning</div>
-          <div class="portalDesc">Hvis live load fejler, vises seneste gemte data i stedet.</div>
+    function renderBriefing() {
+      $("briefingHello").textContent = greetingByTime() + " Stefan";
+      $("briefingText").textContent = portalData.overview.briefing;
+      $("overviewUpdated").textContent = "Senest opdateret: " + formatDateTime(portalData.meta.generatedAt);
+    }
+
+    function renderLocationCard(loc) {
+      return `
+        <div class="locationCard">
+          <div class="locationTop">
+            <div>
+              <div class="cardKicker"><span class="dot blue"></span> Lokationsstatus</div>
+              <div class="locationName">${esc(loc.shortName)}</div>
+            </div>
+            <div class="badge ${statusClass(loc.status)}">${esc(statusLabel(loc.status))}</div>
+          </div>
+
+          <div class="metricGrid">
+            <div class="metricBox">
+              <div class="metricLabel">Omsætning MTD</div>
+              <div class="metricValue">${esc(formatMoney(loc.revenueMTD))}</div>
+            </div>
+            <div class="metricBox">
+              <div class="metricLabel">Kitchen %</div>
+              <div class="metricValue">${esc(formatPct(loc.kitchenPct))}</div>
+            </div>
+            <div class="metricBox">
+              <div class="metricLabel">Incidents</div>
+              <div class="metricValue">${loc.incidentTotal}</div>
+            </div>
+            <div class="metricBox">
+              <div class="metricLabel">Rating</div>
+              <div class="metricValue">${esc(formatRating(loc.ratingAvg))}</div>
+            </div>
+          </div>
+
+          <div class="miniMeta">
+            <div class="metaChip">${loc.complaintsOpen} klager</div>
+            <div class="metaChip">${loc.soldoutOpen} udsolgt</div>
+            <div class="metaChip">${loc.faultsOpen} fejl</div>
+            <div class="metaChip">${loc.supplierOpen} leverandør</div>
+          </div>
         </div>
       `;
     }
 
-    function renderLatestEvents(complaints, soldout, faults) {
-      const events = [];
+    function renderOverviewLocations() {
+      const sorted = [...portalData.locations].sort((a,b) => b.incidentTotal - a.incidentTotal);
+      $("overviewLocations").innerHTML = sorted.map(renderLocationCard).join("");
+    }
 
-      complaints.forEach(x => {
-        events.push({
-          type: "Klage",
-          location: x.location,
-          title: x.category || "Klage",
-          desc: x.description || "",
-          createdAt: x.createdAt || "",
-          color: "red"
-        });
-      });
-
-      soldout.forEach(x => {
-        events.push({
-          type: "Udsolgt",
-          location: x.location,
-          title: x.productName || "Produkt",
-          desc: x.category || "",
-          createdAt: x.createdAt || "",
-          color: "gold"
-        });
-      });
-
-      faults.forEach(x => {
-        events.push({
-          type: "Fejl",
-          location: x.location,
-          title: x.issueType || "Fejl",
-          desc: x.description || "",
-          createdAt: x.createdAt || "",
-          color: "blue"
-        });
-      });
-
-      events.sort((a, b) => {
-        const at = (parseDateSafe(a.createdAt) || new Date(0)).getTime();
-        const bt = (parseDateSafe(b.createdAt) || new Date(0)).getTime();
-        return bt - at;
-      });
-
-      if (!events.length) {
-        $("latestEventsList").innerHTML = '<div class="empty">Ingen hændelser endnu</div>';
-        return;
-      }
-
-      $("latestEventsList").innerHTML = events.slice(0, 8).map(ev => `
+    function renderOverviewEvents() {
+      const events = portalData.incidents.recent;
+      $("overviewEvents").innerHTML = events.map(ev => `
         <div class="listItem">
-          <div class="bar ${ev.color}"></div>
+          <div class="bar ${incidentColor(ev.type)}"></div>
           <div class="listInfo">
-            <div class="listMain">${esc(ev.type)} • ${esc(formatLocationShort(ev.location))} • ${esc(ev.title)}</div>
-            <div class="listSub">${esc(ev.desc || "Ingen ekstra note")}</div>
-            <div class="listMeta">${esc(fmtDateTime(ev.createdAt))}</div>
+            <div class="listMain">${esc(ev.location)} • ${esc(ev.title)}</div>
+            <div class="listSub">${esc(ev.subtitle || "")}${ev.description ? " — " + esc(ev.description) : ""}</div>
+            <div class="listMeta">${esc(formatDateTime(ev.createdAt))} • ${esc(ev.type)}</div>
           </div>
         </div>
       `).join("");
     }
 
-    function renderLocationFocus(complaints, soldout, faults, supplier) {
-      const map = {};
-      LOCATIONS.forEach(loc => {
-        map[loc] = { complaints:0, soldout:0, faults:0, supplier:0, total:0 };
-      });
-
-      function add(arr, key) {
-        arr.forEach(x => {
-          if (!map[x.location]) return;
-          map[x.location][key]++;
-          map[x.location].total++;
-        });
-      }
-
-      add(complaints, "complaints");
-      add(soldout, "soldout");
-      add(faults, "faults");
-      add(supplier, "supplier");
-
-      const rows = Object.entries(map)
-        .map(([loc, val]) => ({ loc, ...val }))
-        .sort((a, b) => b.total - a.total);
-
-      $("locationFocusList").innerHTML = rows.map(r => `
-        <div class="row">
-          <div class="rowName">${esc(formatLocationShort(r.loc))}</div>
-          <div class="rowVal">${r.total} total</div>
-          <div class="rowVal">${r.complaints} klager • ${r.soldout} udsolgt • ${r.faults} fejl • ${r.supplier} leverandør</div>
-        </div>
-      `).join("");
-    }
-
-    function renderKitchenPct(list) {
-      const kitchenMap = {};
-      list.forEach(item => {
-        if (item && item.location) kitchenMap[item.location] = item;
-      });
-
-      const rows = LOCATIONS.map(loc => kitchenMap[loc] || {
-        location: loc,
-        purchases: 0,
-        pct: null
-      });
-
-      const sorted = [...rows].sort((a, b) => {
-        const ap = a.pct == null || !isFinite(a.pct) ? -Infinity : a.pct;
-        const bp = b.pct == null || !isFinite(b.pct) ? -Infinity : b.pct;
-        return bp - ap;
-      });
-
-      $("kitchenPctList").innerHTML = sorted.map(item => {
-        const pctText = item.pct == null || !isFinite(item.pct)
-          ? "—"
-          : item.pct.toFixed(1).replace(".", ",") + "%";
-
-        return `
+    function renderOverviewFocus() {
+      const rows = [...portalData.locations]
+        .sort((a,b) => b.incidentTotal - a.incidentTotal)
+        .map(loc => `
           <div class="row">
-            <div class="rowName">${esc(formatLocationShort(item.location))}</div>
-            <div class="rowVal" style="${kitchenPctClass(item.pct)}">${pctText}</div>
-            <div class="rowVal">${Number(item.purchases || 0).toLocaleString("da-DK")} kr.</div>
+            <div class="rowName">${esc(loc.shortName)}</div>
+            <div class="rowVal">${esc(statusLabel(loc.status))}</div>
+            <div class="rowVal">${loc.incidentTotal} incidents</div>
+            <div class="rowVal">${esc(formatPct(loc.kitchenPct))}</div>
           </div>
-        `;
-      }).join("");
+        `).join("");
+
+      $("overviewFocus").innerHTML = rows;
     }
 
-    function renderBundle(data, cached = false, cacheTs = null) {
-      const complaints = cleanItems(data.complaints);
-      const soldout = cleanItems(data.soldout);
-      const faults = cleanItems(data.faults);
-      const supplier = cleanItems(data.supplier);
-      const kitchen = cleanItems(data.kitchen);
-
-      renderTopCards(complaints, soldout, faults, supplier);
-      const chainRows = renderChainOverview(complaints, soldout, faults, supplier, kitchen);
-      renderBriefing(complaints, soldout, faults, supplier, chainRows, cached);
-      renderMenuPlaceholder();
-      renderLatestEvents(complaints, soldout, faults);
-      renderLocationFocus(complaints, soldout, faults, supplier);
-      renderKitchenPct(kitchen);
-
-      updateLastUpdated(cacheTs ? new Date(cacheTs) : new Date(), cached);
+    function renderLocationsPage() {
+      $("locationsGrid").innerHTML = portalData.locations.map(renderLocationCard).join("");
     }
 
-    async function loadPortalData() {
-      if (isLoading) return;
-      isLoading = true;
-      setStatus("● Opdaterer", "warn");
-      hideError();
+    function allIncidents() {
+      return [...portalData.incidents.recent];
+    }
 
-      try {
-        const month = getLocalMonthString();
+    function renderDriftPage() {
+      const locationSelect = $("filterLocation");
+      locationSelect.innerHTML = `<option value="all">Alle lokationer</option>` +
+        portalData.locations.map(l => `<option value="${esc(l.name)}">${esc(l.shortName)}</option>`).join("");
 
-        const data = await jsonp(SCRIPT_URL, {
-          action: "fbPortalBundle",
-          month: month
+      function draw() {
+        const type = $("filterType").value;
+        const loc = $("filterLocation").value;
+        const q = $("filterSearch").value.trim().toLowerCase();
+
+        let items = allIncidents();
+
+        if (type !== "all") items = items.filter(i => i.type === type);
+        if (loc !== "all") items = items.filter(i => i.location === loc);
+        if (q) {
+          items = items.filter(i =>
+            String(i.title).toLowerCase().includes(q) ||
+            String(i.description).toLowerCase().includes(q) ||
+            String(i.subtitle).toLowerCase().includes(q)
+          );
+        }
+
+        $("incidentList").innerHTML = items.length ? items.map(ev => `
+          <div class="listItem">
+            <div class="bar ${incidentColor(ev.type)}"></div>
+            <div class="listInfo">
+              <div class="listMain">${esc(ev.location)} • ${esc(ev.title)}</div>
+              <div class="listSub">${esc(ev.subtitle || "")}${ev.description ? " — " + esc(ev.description) : ""}</div>
+              <div class="listMeta">${esc(formatDateTime(ev.createdAt))} • ${esc(ev.type)} • ${esc(ev.status)}</div>
+            </div>
+          </div>
+        `).join("") : `<div class="empty">Ingen hændelser matcher filtrene</div>`;
+      }
+
+      ["filterType","filterLocation","filterSearch"].forEach(id => {
+        $(id).addEventListener("input", draw);
+        $(id).addEventListener("change", draw);
+      });
+
+      draw();
+    }
+
+    function renderKitchenPage() {
+      const chain = portalData.kitchen.chain;
+      const locations = [...portalData.locations]
+        .sort((a,b) => {
+          const ap = a.kitchenPct == null ? -Infinity : a.kitchenPct;
+          const bp = b.kitchenPct == null ? -Infinity : b.kitchenPct;
+          return bp - ap;
         });
 
-        if (!data || !data.ok) {
-          throw new Error(data?.error || "No data");
+      const kpis = [
+        {
+          title: "Chain revenue MTD",
+          dot: "blue",
+          value: formatMoney(chain.revenueMTD),
+          sub: "Samlet omsætning i kæden"
+        },
+        {
+          title: "Chain purchases MTD",
+          dot: "gold",
+          value: formatMoney(chain.purchasesMTD),
+          sub: "Samlede varekøb"
+        },
+        {
+          title: "Chain kitchen %",
+          dot: "green",
+          value: formatPct(chain.kitchenPct),
+          sub: "Kædens samlede performance"
+        },
+        {
+          title: "Højeste kitchen %",
+          dot: "warn",
+          value: locations[0] ? locations[0].shortName : "—",
+          sub: locations[0] ? formatPct(locations[0].kitchenPct) : "—"
+        },
+        {
+          title: "Laveste kitchen %",
+          dot: "green",
+          value: [...locations].reverse()[0] ? [...locations].reverse()[0].shortName : "—",
+          sub: [...locations].reverse()[0] ? formatPct([...locations].reverse()[0].kitchenPct) : "—"
+        },
+        {
+          title: "Lokationer med data",
+          dot: "blue",
+          value: locations.filter(l => l.kitchenPct != null).length,
+          sub: "Datadækning i kæden"
         }
+      ];
 
-        renderBundle(data, false, Date.now());
-        saveCache(data);
-        setStatus("● Data opdateret", "ok");
+      $("kitchenKpis").innerHTML = kpis.map(item => `
+        <div class="card">
+          <div class="cardKicker"><span class="dot ${item.dot}"></span> ${esc(item.title)}</div>
+          <div class="bigValue" style="font-size:40px;">${esc(item.value)}</div>
+          <div class="subValue">${esc(item.sub)}</div>
+        </div>
+      `).join("");
 
-      } catch (e) {
-        const cached = loadCache();
-
-        if (cached && cached.data) {
-          renderBundle(cached.data, true, cached.ts);
-          setStatus("● Cache aktiv", "warn");
-          showError("Live indlæsning fejlede. Viser senest gemte data.");
-        } else {
-          setStatus("● Fejl i data", "err");
-          showError("Data kunne ikke indlæses.");
-          $("chainOverviewGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("menuIntelligenceGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-          $("briefingText").textContent = "Fejl ved indlæsning af briefing.";
-        }
-
-        console.error("Portal load error:", e);
-      } finally {
-        isLoading = false;
-      }
+      $("kitchenTable").innerHTML = locations.map(loc => `
+        <div class="row">
+          <div class="rowName">${esc(loc.shortName)}</div>
+          <div class="rowVal">${esc(formatMoney(loc.revenueMTD))}</div>
+          <div class="rowVal">${esc(formatMoney(loc.purchasesMTD))}</div>
+          <div class="rowVal">${esc(formatPct(loc.kitchenPct))}</div>
+        </div>
+      `).join("");
     }
 
-    (function init() {
-      fmtTimeNow();
-      loadPortalData();
+    function renderQualityPage() {
+      $("topDishesTable").innerHTML = portalData.quality.topDishes.map(d => `
+        <div class="row">
+          <div class="rowName">${esc(d.dish)}</div>
+          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
+          <div class="rowVal">${d.count} ratings</div>
+          <div class="rowVal">Top performer</div>
+        </div>
+      `).join("");
 
-      setInterval(fmtTimeNow, 30000);
-      setInterval(loadPortalData, 60000);
-    })();
+      $("lowDishesTable").innerHTML = portalData.quality.lowDishes.map(d => `
+        <div class="row">
+          <div class="rowName">${esc(d.dish)}</div>
+          <div class="rowVal">${esc(formatRating(d.averageRating))}</div>
+          <div class="rowVal">${d.count} ratings</div>
+          <div class="rowVal">Kræver fokus</div>
+        </div>
+      `).join("");
+
+      $("recentChecksList").innerHTML = portalData.quality.recentChecks.map(c => `
+        <div class="listItem">
+          <div class="bar gold"></div>
+          <div class="listInfo">
+            <div class="listMain">${esc(c.location)} • ${esc(c.dish)} • Score ${esc(formatRating(c.scoreAvg))}</div>
+            <div class="listSub">${esc(c.comment)}</div>
+            <div class="listMeta">${esc(c.date)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function setupNav() {
+      document.querySelectorAll(".navBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".navBtn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+
+          btn.classList.add("active");
+          $("page-" + btn.dataset.page).classList.add("active");
+        });
+      });
+    }
+
+    function init() {
+      updateClock();
+      setInterval(updateClock, 30000);
+
+      renderOverviewKpis();
+      renderBriefing();
+      renderOverviewLocations();
+      renderOverviewEvents();
+      renderOverviewFocus();
+
+      renderLocationsPage();
+      renderDriftPage();
+      renderKitchenPage();
+      renderQualityPage();
+
+      setupNav();
+    }
+
+    init();
   </script>
 </body>
 </html>
