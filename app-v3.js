@@ -1,7 +1,7 @@
 // ==========================
-// KONFIG (Google Apps Script webhook)
+// KONFIG
 // ==========================
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec"; 
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwDgUow5SsLiJFDtTmP0scE2eR0Y4ASfg77tYkLXOvELv33LIjqCx1_Q3C-A7h3fnag/exec";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 // Lokationer
@@ -57,7 +57,6 @@ const DISHES = [
   { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
 ];
 
-// Quotes (vises på side 4)
 const QUOTES = [
   "Små forbedringer hver dag bliver til store resultater.",
   "Kvalitet er ikke en handling – det er en vane.",
@@ -104,7 +103,6 @@ const screens = {
 function showScreen(name) {
   state.screen = name;
 
-  // hide/show header: kun side 1
   const header = $("topHeader");
   if (header) header.classList.toggle("hidden", name !== "location");
 
@@ -130,16 +128,6 @@ function setText(id, text) {
 function setHidden(el, hidden) {
   if (!el) return;
   el.classList.toggle("hidden", hidden);
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[c]));
 }
 
 // ==========================
@@ -200,7 +188,7 @@ function updateNextEnabled() {
 }
 
 // ==========================
-// SCREEN 2 (dish dropdown)
+// SCREEN 2
 // ==========================
 function initDishSelect() {
   const select = $("dishSelect");
@@ -209,12 +197,11 @@ function initDishSelect() {
   select.addEventListener("change", () => {
     const val = select.value;
     if (!val) return;
+
     state.dish = val;
     setText("chosenDishName", val);
 
-    // reset rating screen state when dish changes
     resetRatingScreenState();
-
     renderRatingBlocks();
     updateSubmitEnabled();
     showScreen("rating");
@@ -239,7 +226,7 @@ function populateDishSelect() {
 }
 
 // ==========================
-// SCREEN 3 (rating)
+// SCREEN 3
 // ==========================
 const ratingLabels = {
   taste: "SMAG",
@@ -267,14 +254,14 @@ function renderRatingBlocks() {
       b.type = "button";
       b.className = "text-4xl leading-none";
       b.textContent = "☆";
-      b.addEventListener("click", () => {
-        // lås smag/temperatur indtil “Jeg har smagt maden”
-        if ((field === "taste" || field === "temperature") && !state.tasted) return;
 
+      b.addEventListener("click", () => {
+        if ((field === "taste" || field === "temperature") && !state.tasted) return;
         state.ratings[field] = i;
         paintStars();
         updateSubmitEnabled();
       });
+
       starsWrap.appendChild(b);
     }
   });
@@ -308,12 +295,12 @@ function initTastedToggle() {
     state.tasted = !!check.checked;
     wrap.classList.toggle("hidden", !state.tasted);
 
-    // hvis de slår det fra igen, nulstil smag/temp
     if (!state.tasted) {
       state.ratings.taste = 0;
       state.ratings.temperature = 0;
       paintStars();
     }
+
     updateSubmitEnabled();
   });
 }
@@ -337,7 +324,7 @@ function updateSubmitEnabled() {
 }
 
 // ==========================
-// IMAGE -> base64 (komprimeret) + KRAV
+// IMAGE
 // ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
@@ -354,13 +341,12 @@ function initImageUpload() {
       const previewUrl = URL.createObjectURL(file);
       const img = $("imagePreview");
       const placeholder = $("imagePlaceholder");
+
       if (img) img.src = previewUrl;
       setHidden(img, false);
       setHidden(placeholder, true);
 
-      // komprimering (stabilt til mail)
       state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
-
       updateSubmitEnabled();
     } catch (e) {
       console.error(e);
@@ -375,9 +361,11 @@ function fileToCompressedDataUrl(file, maxW, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;
+
     reader.onload = () => {
       const img = new Image();
       img.onerror = reject;
+
       img.onload = () => {
         const ratio = Math.min(1, maxW / img.width);
         const w = Math.round(img.width * ratio);
@@ -392,14 +380,16 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 
         resolve(canvas.toDataURL("image/jpeg", quality));
       };
+
       img.src = reader.result;
     };
+
     reader.readAsDataURL(file);
   });
 }
 
 // ==========================
-// SUBMIT -> Apps Script
+// SUBMIT
 // ==========================
 function initCommentAndSubmit() {
   const comment = $("commentInput");
@@ -423,11 +413,13 @@ function setSubmitting(submitting) {
 function setError(msg) {
   const el = $("submitError");
   if (!el) return;
+
   if (!msg) {
     setHidden(el, true);
     el.textContent = "";
     return;
   }
+
   el.textContent = msg;
   setHidden(el, false);
 }
@@ -437,11 +429,17 @@ async function submit() {
   setSubmitting(true);
 
   try {
-    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
-    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
+    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSÆT")) {
+      throw new Error("WEBHOOK_URL mangler i app-v3.js");
+    }
 
-    // ekstra sikkerhed: billedet er krav
-    if (!state.imageBase64) throw new Error("Billede mangler (krav).");
+    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSÆT")) {
+      throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
+    }
+
+    if (!state.imageBase64) {
+      throw new Error("Billede mangler (krav).");
+    }
 
     const payload = {
       secret: WEBHOOK_SECRET,
@@ -453,15 +451,30 @@ async function submit() {
       scoreTemperatur: state.ratings.temperature,
       scorePortion: state.ratings.portion,
       kommentar: state.comment || "",
-      dato: new Date().toLocaleString("da-DK"),
+      dato: new Date().toISOString(),
       billedeBase64: state.imageBase64
     };
 
-    await fetch(WEBHOOK_URL, {
+    const res = await fetch(WEBHOOK_URL, {
       method: "POST",
-      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(payload)
     });
+
+    let result = null;
+    try {
+      result = await res.json();
+    } catch (_) {}
+
+    if (!res.ok) {
+      throw new Error("Serverfejl ved indsendelse.");
+    }
+
+    if (result && result.ok === false) {
+      throw new Error(result.error || "Kunne ikke gemme vurderingen.");
+    }
 
     showScreen("confirmation");
   } catch (err) {
@@ -491,7 +504,12 @@ function initNavButtons() {
   if (back2) back2.addEventListener("click", () => showScreen("dish"));
 
   const reset = $("btnReset");
-  if (reset) reset.addEventListener("click", () => { resetAll(); showScreen("location"); });
+  if (reset) {
+    reset.addEventListener("click", () => {
+      resetAll();
+      showScreen("location");
+    });
+  }
 
   const close = $("btnClose");
   if (close) close.addEventListener("click", () => window.location.reload());
@@ -500,7 +518,12 @@ function initNavButtons() {
 function resetRatingScreenState() {
   state.imageBase64 = "";
   state.tasted = false;
-  state.ratings = { taste: 0, presentation: 0, temperature: 0, portion: 0 };
+  state.ratings = {
+    taste: 0,
+    presentation: 0,
+    temperature: 0,
+    portion: 0
+  };
   state.comment = "";
 
   const check = $("tastedCheck");
@@ -529,7 +552,9 @@ function resetAll() {
   const locationSelect = $("locationSelect");
   if (locationSelect) locationSelect.value = "";
 
-  document.querySelectorAll('input[name="meal"]').forEach((i) => (i.checked = false));
+  document.querySelectorAll('input[name="meal"]').forEach((i) => {
+    i.checked = false;
+  });
 
   updateNextEnabled();
   setError("");
