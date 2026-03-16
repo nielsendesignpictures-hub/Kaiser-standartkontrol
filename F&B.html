@@ -20,7 +20,6 @@
       --muted:rgba(255,255,255,0.78);
       --muted2:rgba(255,255,255,0.55);
       --gold:#d6b24a;
-      --gold2:#b9921f;
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
@@ -43,6 +42,9 @@
     }
 
     .shell{max-width:1400px;margin:0 auto;}
+    .hero,.section,.card,.chainCard,.portalCard,.listCard,.briefingBox{
+      box-shadow:var(--shadow);
+    }
 
     .hero{
       border-radius:28px;
@@ -52,9 +54,9 @@
         radial-gradient(700px 240px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
         radial-gradient(700px 240px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow:var(--shadow);
       padding:24px 18px 18px;
       overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
     }
 
     .kicker{
@@ -130,7 +132,6 @@
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
       overflow:hidden;
-      box-shadow:var(--shadow);
     }
 
     .sectionHead{
@@ -181,13 +182,17 @@
       .topGrid{grid-template-columns:1fr;}
     }
 
-    .card{
+    .card,.chainCard,.portalCard,.listCard{
       border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:180px;
     }
+
+    .card{min-height:180px}
+    .chainCard{min-height:220px}
+    .portalCard{min-height:180px}
+    .listCard{min-height:320px}
 
     .cardKicker{
       display:flex;
@@ -289,14 +294,6 @@
       .chainGrid{grid-template-columns:1fr;}
     }
 
-    .chainCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:220px;
-    }
-
     .chainTop{
       display:flex;
       justify-content:space-between;
@@ -367,14 +364,6 @@
       .menuGrid{grid-template-columns:1fr;}
     }
 
-    .portalCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:180px;
-    }
-
     .portalName{
       margin-top:10px;
       font-size:18px;
@@ -397,14 +386,6 @@
 
     @media (max-width: 980px){
       .grid2{grid-template-columns:1fr;}
-    }
-
-    .listCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:320px;
     }
 
     .listTitle{
@@ -521,7 +502,7 @@
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
         <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Version 2</div>
+        <div class="pill">🧭 Version 3</div>
         <div class="pill ok" id="statusPill">● Klar</div>
       </div>
     </header>
@@ -593,7 +574,7 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Chain overview</div>
-        <div class="sectionInfo">Status, omsætning, mad rating og kitchen % pr. lokation</div>
+        <div class="sectionInfo">Status, omsætning og kitchen % pr. lokation</div>
       </div>
       <div class="sectionBody">
         <div class="chainGrid" id="chainOverviewGrid">
@@ -605,14 +586,14 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
-        <div class="sectionInfo">Hvilke retter der driver kæden</div>
+        <div class="sectionInfo">Ratings kobles på i næste trin</div>
       </div>
       <div class="sectionBody">
         <div class="menuGrid" id="menuIntelligenceGrid">
           <div class="portalCard">
             <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
-            <div class="portalName">Indlæser...</div>
-            <div class="portalDesc">Henter vurderingsdata...</div>
+            <div class="portalName">Afventer ratings</div>
+            <div class="portalDesc">Denne sektion aktiveres, når rating-scriptet kobles på fetch-versionen.</div>
           </div>
         </div>
       </div>
@@ -660,7 +641,6 @@
 
   <script>
     const OPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const RATING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDgUow5SsLiJFDtTmP0scE2eR0Y4ASfg77tYkLXOvELv33LIjqCx1_Q3C-A7h3fnag/exec";
 
     const LOCATIONS = [
       "Café Kaiser Helsingør",
@@ -680,10 +660,6 @@
         ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
     }
 
-    function formatLocationShort(name) {
-      return String(name || "").replace("Café Kaiser ", "");
-    }
-
     function pad2(n) {
       return String(n).padStart(2, "0");
     }
@@ -693,24 +669,21 @@
       return now.getFullYear() + "-" + pad2(now.getMonth() + 1);
     }
 
+    function formatLocationShort(name) {
+      return String(name || "").replace("Café Kaiser ", "");
+    }
+
     function parseDateSafe(value) {
       if (!value) return null;
       if (value instanceof Date) return value;
 
       let s = String(value).trim();
 
-      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
-        s = s.replace(" ", "T");
-      }
-
-      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(s)) {
-        s = s.replace(" ", "T");
-      }
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) s = s.replace(" ", "T");
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(s)) s = s.replace(" ", "T");
 
       const d = new Date(s);
-      if (!isNaN(d.getTime())) return d;
-
-      return null;
+      return isNaN(d.getTime()) ? null : d;
     }
 
     function fmtTimeNow() {
@@ -759,145 +732,31 @@
       });
     }
 
-    function jsonp(url, params = {}) {
-      return new Promise((resolve, reject) => {
-        const cb = "__cb_" + Math.random().toString(16).slice(2);
-        const qs = new URLSearchParams({
-          ...params,
-          callback: cb,
-          _t: Date.now() + "_" + Math.random().toString(16).slice(2)
-        }).toString();
+    async function fetchJson(url, params = {}) {
+      const qs = new URLSearchParams({
+        ...params,
+        mode: "json",
+        _t: Date.now().toString()
+      }).toString();
 
-        const src = url + (url.includes("?") ? "&" : "?") + qs;
-
-        const s = document.createElement("script");
-        const t = setTimeout(() => {
-          cleanup();
-          reject(new Error("timeout"));
-        }, 15000);
-
-        function cleanup() {
-          clearTimeout(t);
-          try { delete window[cb]; } catch (_) {}
-          if (s.parentNode) s.parentNode.removeChild(s);
-        }
-
-        window[cb] = (data) => {
-          cleanup();
-          resolve(data);
-        };
-
-        s.src = src;
-        s.async = true;
-        s.onerror = () => {
-          cleanup();
-          reject(new Error("load error"));
-        };
-
-        document.body.appendChild(s);
+      const fullUrl = url + (url.includes("?") ? "&" : "?") + qs;
+      const res = await fetch(fullUrl, {
+        method: "GET",
+        cache: "no-store"
       });
-    }
 
-    async function loadByLocation(action, responseKey) {
-      const results = await Promise.all(
-        LOCATIONS.map(async (loc) => {
-          try {
-            const data = await jsonp(OPS_SCRIPT_URL, { action, loc });
-            if (data && data.ok && Array.isArray(data[responseKey])) {
-              return data[responseKey].map(item => ({
-                ...item,
-                location: item.location || loc
-              }));
-            }
-            console.warn("Ugyldigt eller tomt svar:", action, loc, data);
-            return [];
-          } catch (err) {
-            console.error("Fejl i loadByLocation:", action, loc, err);
-            return [];
-          }
-        })
-      );
-      return results.flat();
-    }
-
-    async function loadComplaintsAll() {
-      return loadByLocation("getGuestComplaints", "complaints");
-    }
-
-    async function loadSoldoutAll() {
-      return loadByLocation("getSoldoutProducts", "items");
-    }
-
-    async function loadFaultsAll() {
-      return loadByLocation("getFaultsIssues", "items");
-    }
-
-    async function loadSupplierAll() {
-      return loadByLocation("getSupplierIssues", "issues");
-    }
-
-    async function loadKitchenPctAll() {
-      const month = getLocalMonthString();
-
-      const results = await Promise.all(
-        LOCATIONS.map(async (loc) => {
-          try {
-            const data = await jsonp(OPS_SCRIPT_URL, { action: "getKitchenMTD", loc, month });
-            if (data && data.ok) {
-              const gross = Number((data.totals && data.totals.revenueGross) || 0);
-              const buy = Number((data.totals && data.totals.purchases) || 0);
-              const net = gross / 1.25;
-              const pct = net > 0 ? (buy / net) * 100 : null;
-
-              return {
-                location: loc,
-                revenue: gross,
-                purchases: buy,
-                pct
-              };
-            }
-          } catch (err) {
-            console.error("Fejl i loadKitchenPctAll:", loc, err);
-          }
-
-          return {
-            location: loc,
-            revenue: 0,
-            purchases: 0,
-            pct: null
-          };
-        })
-      );
-
-      return results;
-    }
-
-    async function loadRatingsSummary() {
-      if (!RATING_SCRIPT_URL || RATING_SCRIPT_URL.includes("INDSÆT_DIN_RATING_SCRIPT_EXEC_URL_HER")) {
-        return [];
+      if (!res.ok) {
+        throw new Error("HTTP " + res.status);
       }
 
-      try {
-        const data = await jsonp(RATING_SCRIPT_URL, { action: "getRatingsSummary" });
-        return data && data.ok && Array.isArray(data.items) ? data.items : [];
-      } catch (err) {
-        console.error("Fejl i loadRatingsSummary:", err);
-        return [];
-      }
+      return await res.json();
     }
 
-    async function loadTopDishes() {
-      if (!RATING_SCRIPT_URL || RATING_SCRIPT_URL.includes("INDSÆT_DIN_RATING_SCRIPT_EXEC_URL_HER")) {
-        return [];
-      }
-
-      try {
-        const data = await jsonp(RATING_SCRIPT_URL, { action: "getTopDishes" });
-        return data && data.ok && Array.isArray(data.items) ? data.items : [];
-      } catch (err) {
-        console.error("Fejl i loadTopDishes:", err);
-        return [];
-      }
+    function cleanItems(items) {
+      return (Array.isArray(items) ? items : []).filter(item => {
+        if (!item || typeof item !== "object") return false;
+        return Object.values(item).some(v => String(v || "").trim() !== "");
+      });
     }
 
     function sortByCreatedAtDesc(items) {
@@ -940,12 +799,11 @@
     function calcStatus(row) {
       const issues = row.complaints + row.soldout + row.faults + row.supplier;
       const pct = row.pct;
-      const rating = row.foodRating;
 
-      if (issues >= 5 || (pct != null && pct >= 35) || (rating != null && rating < 4.0)) {
+      if (issues >= 5 || (pct != null && pct >= 35)) {
         return { label: "🔴 Kritisk", cls: "status-red" };
       }
-      if (issues >= 2 || (pct != null && pct >= 30) || (rating != null && rating < 4.3)) {
+      if (issues >= 2 || (pct != null && pct >= 30)) {
         return { label: "🟡 Opmærksomhed", cls: "status-warn" };
       }
       return { label: "🟢 Stabil", cls: "status-green" };
@@ -970,23 +828,21 @@
       setLatestMeta(supplier, "supplierLocMeta", "supplierTimeMeta");
     }
 
-    function renderChainOverview(complaints, soldout, faults, supplier, kitchen, ratings) {
+    function renderChainOverview(complaints, soldout, faults, supplier, kitchen) {
       const stats = buildLocationStats(complaints, soldout, faults, supplier);
-      const ratingsMap = {};
 
-      ratings.forEach(r => {
-        ratingsMap[r.location] = r;
+      const kitchenMap = {};
+      kitchen.forEach(k => {
+        kitchenMap[k.location] = k;
       });
 
-      const rows = kitchen.map(k => {
-        const s = stats[k.location] || { complaints:0, soldout:0, faults:0, supplier:0 };
-        const rr = ratingsMap[k.location] || null;
-        const foodRating = rr && rr.averageRating != null ? Number(rr.averageRating) : null;
-        const ratingCount = rr && rr.count != null ? Number(rr.count) : 0;
-        const status = calcStatus({ ...k, ...s, foodRating });
+      const rows = LOCATIONS.map(loc => {
+        const s = stats[loc] || { complaints:0, soldout:0, faults:0, supplier:0 };
+        const k = kitchenMap[loc] || { location: loc, revenue: 0, purchases: 0, pct: null };
+        const status = calcStatus({ ...k, ...s });
 
         return {
-          location: k.location,
+          location: loc,
           revenue: Number(k.revenue || 0),
           purchases: Number(k.purchases || 0),
           pct: k.pct,
@@ -994,8 +850,6 @@
           soldout: s.soldout,
           faults: s.faults,
           supplier: s.supplier,
-          foodRating,
-          ratingCount,
           statusLabel: status.label,
           statusClass: status.cls
         };
@@ -1006,10 +860,6 @@
         const pctText = row.pct == null || !isFinite(row.pct)
           ? "—"
           : row.pct.toFixed(1).replace(".", ",") + "%";
-
-        const ratingText = row.foodRating == null
-          ? "—"
-          : row.foodRating.toFixed(1).replace(".", ",");
 
         return `
           <div class="chainCard">
@@ -1028,18 +878,18 @@
               </div>
 
               <div class="metricBox">
-                <div class="metricLabel">Mad rating</div>
-                <div class="metricValue">${esc(ratingText)}</div>
-              </div>
-
-              <div class="metricBox">
                 <div class="metricLabel">Kitchen %</div>
                 <div class="metricValue">${esc(pctText)}</div>
               </div>
 
               <div class="metricBox">
-                <div class="metricLabel">Ratings</div>
-                <div class="metricValue">${row.ratingCount}</div>
+                <div class="metricLabel">Registreringer</div>
+                <div class="metricValue">${row.complaints + row.soldout + row.faults + row.supplier}</div>
+              </div>
+
+              <div class="metricBox">
+                <div class="metricLabel">Køb</div>
+                <div class="metricValue">${Number(row.purchases || 0).toLocaleString("da-DK")} kr.</div>
               </div>
             </div>
           </div>
@@ -1053,13 +903,10 @@
       $("briefingHello").textContent = greetingByTime() + " Stefan";
 
       const critical = [...chainRows].filter(x => x.statusLabel.includes("Kritisk"));
-      const lowRating = [...chainRows]
-        .filter(x => x.foodRating != null)
-        .sort((a, b) => a.foodRating - b.foodRating)[0];
 
       const lines = [
         soldout.length ? `⚠️ ${soldout.length} udsolgte varer registreret` : `✅ Ingen udsolgte varer registreret`,
-        complaints.length ? `⚠️ ${complaints.length} gæsteklager` : `✅ Ingen gæsteklager registreret`,
+        complaints.length ? `⚠️ ${complaints.length} gæsteklager registreret` : `✅ Ingen gæsteklager registreret`,
         faults.length ? `⚠️ ${faults.length} fejl rapporteret` : `✅ Ingen fejl rapporteret`,
         supplier.length ? `⚠️ ${supplier.length} leverandørfejl registreret` : `✅ Ingen leverandørfejl registreret`
       ];
@@ -1068,47 +915,27 @@
         lines.push(`🔴 Kritiske lokationer: ${critical.map(x => formatLocationShort(x.location)).join(", ")}`);
       }
 
-      if (lowRating) {
-        lines.push(`⭐ Laveste mad rating: ${formatLocationShort(lowRating.location)} (${String(lowRating.foodRating.toFixed(1)).replace(".", ",")})`);
-      }
-
       $("briefingText").textContent = lines.join("\n");
     }
 
-    function renderMenuIntelligence(dishes) {
-      const wrap = $("menuIntelligenceGrid");
-
-      if (!dishes.length) {
-        wrap.innerHTML = `
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
-            <div class="portalName">Ingen data endnu</div>
-            <div class="portalDesc">Når standardkontroller er gemt i ratings-arket, vises top retter her.</div>
-          </div>
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot blue"></span> Ratings</div>
-            <div class="portalName">Afventer vurderinger</div>
-            <div class="portalDesc">Tilføj flere gastronomiske eftersyn for at få indblik i de bedst ratede retter.</div>
-          </div>
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot green"></span> Insight</div>
-            <div class="portalName">Menu intelligence aktiveres snart</div>
-            <div class="portalDesc">Sektionen bliver automatisk levende, når der kommer ret-data ind i backend.</div>
-          </div>
-        `;
-        return;
-      }
-
-      wrap.innerHTML = dishes.slice(0, 3).map((dish, i) => `
+    function renderMenuIntelligencePlaceholder() {
+      $("menuIntelligenceGrid").innerHTML = `
         <div class="portalCard">
-          <div class="cardKicker"><span class="dot ${i === 0 ? "gold" : i === 1 ? "blue" : "green"}"></span> Top dish #${i + 1}</div>
-          <div class="portalName">${esc(dish.dish)}</div>
-          <div class="portalDesc">
-            Vurderinger: ${dish.count}<br>
-            Gennemsnitlig rating: ${dish.averageRating == null ? "—" : String(dish.averageRating).replace(".", ",")}
-          </div>
+          <div class="cardKicker"><span class="dot gold"></span> Top dishes</div>
+          <div class="portalName">Afventer ratings</div>
+          <div class="portalDesc">Når rating-scriptet kobles på fetch-versionen, vises top retter her.</div>
         </div>
-      `).join("");
+        <div class="portalCard">
+          <div class="cardKicker"><span class="dot blue"></span> Ratings</div>
+          <div class="portalName">Næste fase</div>
+          <div class="portalDesc">Denne sektion bliver aktiveret uden at påvirke de eksisterende sider.</div>
+        </div>
+        <div class="portalCard">
+          <div class="cardKicker"><span class="dot green"></span> Insight</div>
+          <div class="portalName">Backend klar</div>
+          <div class="portalDesc">Driftdata kører nu via fetch-bundle og er mere stabil på Safari/iPad.</div>
+        </div>
+      `;
     }
 
     function renderLatestEvents(complaints, soldout, faults) {
@@ -1211,7 +1038,18 @@
         return;
       }
 
-      const sorted = [...list].sort((a, b) => {
+      const kitchenMap = {};
+      list.forEach(item => {
+        if (item && item.location) kitchenMap[item.location] = item;
+      });
+
+      const rows = LOCATIONS.map(loc => kitchenMap[loc] || {
+        location: loc,
+        purchases: 0,
+        pct: null
+      });
+
+      const sorted = [...rows].sort((a, b) => {
         const ap = a.pct == null || !isFinite(a.pct) ? -Infinity : a.pct;
         const bp = b.pct == null || !isFinite(b.pct) ? -Infinity : b.pct;
         return bp - ap;
@@ -1238,20 +1076,27 @@
       setStatus("● Opdaterer", "warn");
 
       try {
-        const [complaints, soldout, faults, supplier, kitchen, ratings, topDishes] = await Promise.all([
-          loadComplaintsAll(),
-          loadSoldoutAll(),
-          loadFaultsAll(),
-          loadSupplierAll(),
-          loadKitchenPctAll(),
-          loadRatingsSummary(),
-          loadTopDishes()
-        ]);
+        const month = getLocalMonthString();
+
+        const data = await fetchJson(OPS_SCRIPT_URL, {
+          action: "fbPortalBundle",
+          month
+        });
+
+        if (!data || !data.ok) {
+          throw new Error(data && data.error ? data.error : "Ugyldigt svar fra backend");
+        }
+
+        const complaints = cleanItems(data.complaints);
+        const soldout = cleanItems(data.soldout);
+        const faults = cleanItems(data.faults);
+        const supplier = cleanItems(data.supplier);
+        const kitchen = cleanItems(data.kitchen);
 
         renderTopCards(complaints, soldout, faults, supplier);
-        const chainRows = renderChainOverview(complaints, soldout, faults, supplier, kitchen, ratings);
+        const chainRows = renderChainOverview(complaints, soldout, faults, supplier, kitchen);
         renderBriefing(complaints, soldout, faults, supplier, chainRows);
-        renderMenuIntelligence(topDishes);
+        renderMenuIntelligencePlaceholder();
         renderLatestEvents(complaints, soldout, faults);
         renderLocationFocus(complaints, soldout, faults, supplier);
         renderKitchenPct(kitchen);
