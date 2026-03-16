@@ -1,5 +1,6 @@
 const WEBHOOK_URL = "1qWbTEeSjL8DWLSlmaDVRP79WR8Eq4N1aQH8KdkHydPE";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
 
 const LOCATIONS = [
   "Café Kaiser Helsingør",
