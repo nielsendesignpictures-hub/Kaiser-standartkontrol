@@ -39,7 +39,7 @@
       padding:16px;
     }
 
-    .shell{max-width:1400px;margin:0 auto;}
+    .shell{max-width:1450px;margin:0 auto;}
     .hero{
       border-radius:28px;
       border:1px solid rgba(255,255,255,0.12);
@@ -357,6 +357,21 @@
       font-weight:800;
     }
 
+    .cateringGrid,
+    .eventCategoryGrid,
+    .menuGrid{
+      display:grid;
+      gap:14px;
+    }
+
+    .cateringGrid{grid-template-columns:1fr 1fr;}
+    .eventCategoryGrid{grid-template-columns:repeat(2,1fr);}
+    .menuGrid{grid-template-columns:1fr 1fr;}
+
+    @media (max-width: 1100px){
+      .menuGrid,.eventCategoryGrid,.cateringGrid{grid-template-columns:1fr;}
+    }
+
     .grid2{
       display:grid;
       grid-template-columns:1.2fr .8fr;
@@ -367,19 +382,27 @@
       .grid2{grid-template-columns:1fr;}
     }
 
-    .listCard{
+    .listCard, .portalCard, .menuPanel{
       border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:320px;
+      min-height:220px;
     }
 
-    .listTitle{
+    .listTitle, .portalName{
       font-size:15px;
       font-weight:900;
       color:rgba(255,255,255,0.96);
       margin-top:10px;
+    }
+
+    .portalDesc{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.5;
+      font-weight:700;
     }
 
     .list{
@@ -413,29 +436,9 @@
     .bar.warn{background:var(--warn);}
 
     .listInfo{flex:1;min-width:0;}
-
-    .listMain{
-      font-size:14px;
-      font-weight:800;
-      line-height:1.35;
-    }
-
-    .listSub{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      line-height:1.4;
-    }
-
-    .listMeta{
-      margin-top:6px;
-      font-size:11px;
-      color:var(--muted2);
-      font-weight:800;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-    }
+    .listMain{font-size:14px;font-weight:800;line-height:1.35;}
+    .listSub{margin-top:4px;font-size:12px;color:var(--muted);font-weight:700;line-height:1.4;}
+    .listMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
 
     .table{
       display:flex;
@@ -474,16 +477,6 @@
       padding:26px;
       color:var(--muted2);
       font-size:13px;
-    }
-
-    .cateringGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-
-    @media (max-width: 980px){
-      .cateringGrid{grid-template-columns:1fr;}
     }
 
     .chainGrid{
@@ -568,37 +561,27 @@
       font-weight:900;
     }
 
-    .menuGrid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
+    .menuMiniTable{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:14px;
     }
 
-    @media (max-width: 1100px){
-      .menuGrid{grid-template-columns:1fr;}
+    .menuMiniTable th,.menuMiniTable td{
+      padding:10px 8px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      font-size:13px;
     }
 
-    .portalCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:180px;
+    .menuMiniTable th{
+      color:var(--muted2);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:11px;
+      text-align:left;
     }
 
-    .portalName{
-      margin-top:10px;
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .portalDesc{
-      margin-top:8px;
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.45;
-      font-weight:700;
-    }
+    .right{text-align:right;}
   </style>
 </head>
 <body>
@@ -613,7 +596,7 @@
       <div class="heroMeta">
         <div class="pill" id="timePill">🕐 --:--</div>
         <div class="pill">📊 F&B Operations</div>
-        <div class="pill">🧭 Version 4 Live</div>
+        <div class="pill">🧭 Version 5</div>
         <div class="pill ok" id="statusPill">● Data opdateret</div>
       </div>
     </header>
@@ -642,17 +625,14 @@
               <div class="briefCardLabel">Dagens fokus</div>
               <div class="briefCardText" id="briefFocus">—</div>
             </div>
-
             <div class="briefCard">
               <div class="briefCardLabel">Risikobillede</div>
               <div class="briefCardText" id="briefRisk">—</div>
             </div>
-
             <div class="briefCard">
               <div class="briefCardLabel">Positivt signal</div>
               <div class="briefCardText" id="briefPositive">—</div>
             </div>
-
             <div class="briefCard">
               <div class="briefCardLabel">Anbefalet handling</div>
               <div class="briefCardText" id="briefAction">—</div>
@@ -672,17 +652,13 @@
           <div class="listCard">
             <div class="cardKicker"><span class="dot green"></span> Catering i dag</div>
             <div class="listTitle">Bekræftede events i dag</div>
-            <div class="list" id="cateringTodayList">
-              <div class="empty">Indlæser catering...</div>
-            </div>
+            <div class="list" id="cateringTodayList"><div class="empty">Indlæser catering...</div></div>
           </div>
 
           <div class="listCard">
             <div class="cardKicker"><span class="dot blue"></span> Kommende catering</div>
             <div class="listTitle">Næste planlagte events</div>
-            <div class="list" id="cateringUpcomingList">
-              <div class="empty">Indlæser catering...</div>
-            </div>
+            <div class="list" id="cateringUpcomingList"><div class="empty">Indlæser catering...</div></div>
           </div>
         </div>
       </div>
@@ -753,14 +729,53 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Menu intelligence</div>
-        <div class="sectionInfo">Ratings placeholder</div>
+        <div class="sectionInfo">Top retter, byer og performance</div>
       </div>
       <div class="sectionBody">
-        <div class="menuGrid" id="menuIntelligenceGrid">
-          <div class="portalCard">
-            <div class="cardKicker"><span class="dot gold"></span> Ratings</div>
-            <div class="portalName">Ikke koblet live endnu</div>
-            <div class="portalDesc">Denne sektion kan tilsluttes dit rating-script bagefter.</div>
+        <div class="menuGrid">
+          <div class="menuPanel">
+            <div class="cardKicker"><span class="dot gold"></span> Top retter samlet</div>
+            <div class="portalName" id="menuPeriodText">Indlæser periode...</div>
+            <table class="menuMiniTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Ret</th>
+                  <th class="right">Antal</th>
+                </tr>
+              </thead>
+              <tbody id="menuOverallBody">
+                <tr><td colspan="3" class="empty">Indlæser...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="menuPanel">
+            <div class="cardKicker"><span class="dot blue"></span> By-performance</div>
+            <div class="portalName">Top-10 mængde pr. by</div>
+            <table class="menuMiniTable">
+              <thead>
+                <tr>
+                  <th>By</th>
+                  <th class="right">Antal</th>
+                </tr>
+              </thead>
+              <tbody id="menuStoreSummaryBody">
+                <tr><td colspan="2" class="empty">Indlæser...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="menuGrid" style="margin-top:14px;">
+          <div class="menuPanel">
+            <div class="cardKicker"><span class="dot green"></span> Insights</div>
+            <div id="menuInsightsWrap" class="portalDesc">Indlæser insights...</div>
+          </div>
+
+          <div class="menuPanel">
+            <div class="cardKicker"><span class="dot warn"></span> Top retter pr. by</div>
+            <div id="menuStoresWrap" class="portalDesc">Indlæser bydata...</div>
           </div>
         </div>
       </div>
@@ -769,37 +784,47 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Kvalitet & drift</div>
-        <div class="sectionInfo">Seneste hændelser og hotspots</div>
+        <div class="sectionInfo">Opdelt efter hændelsestyper</div>
       </div>
       <div class="sectionBody">
-        <div class="grid2">
+        <div class="eventCategoryGrid">
           <div class="listCard">
-            <div class="cardKicker"><span class="dot red"></span> Seneste hændelser</div>
-            <div class="listTitle">Klager, fejl, leverandør og udsolgte samlet</div>
-            <div class="list" id="latestEventsList">
-              <div class="empty">Indlæser...</div>
-            </div>
+            <div class="cardKicker"><span class="dot red"></span> Klager</div>
+            <div class="listTitle">Seneste gæsteklager</div>
+            <div class="list" id="complaintsEventsList"><div class="empty">Indlæser...</div></div>
           </div>
 
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot gold"></span> Udsolgte varer</div>
+            <div class="listTitle">Seneste udsolgte produkter</div>
+            <div class="list" id="soldoutEventsList"><div class="empty">Indlæser...</div></div>
+          </div>
+
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
+            <div class="listTitle">Seneste drift- og vedligeholdelsesfejl</div>
+            <div class="list" id="faultsEventsList"><div class="empty">Indlæser...</div></div>
+          </div>
+
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot warn"></span> Leverandørfejl</div>
+            <div class="listTitle">Seneste leverandørproblemer</div>
+            <div class="list" id="supplierEventsList"><div class="empty">Indlæser...</div></div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:14px;">
           <div class="listCard">
             <div class="cardKicker"><span class="dot blue"></span> Lokationer i fokus</div>
             <div class="listTitle">Antal registreringer pr. lokation</div>
-            <div class="table" id="locationFocusList">
-              <div class="empty">Indlæser...</div>
-            </div>
+            <div class="table" id="locationFocusList"><div class="empty">Indlæser...</div></div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Kitchen %</div>
-        <div class="sectionInfo">Live MTD lokationstal</div>
-      </div>
-      <div class="sectionBody">
-        <div class="table" id="kitchenPctList">
-          <div class="empty">Indlæser...</div>
+          <div class="listCard">
+            <div class="cardKicker"><span class="dot gold"></span> Kitchen %</div>
+            <div class="listTitle">Live MTD lokationstal</div>
+            <div class="table" id="kitchenPctList"><div class="empty">Indlæser...</div></div>
+          </div>
         </div>
       </div>
     </section>
@@ -888,11 +913,26 @@
       return n.toLocaleString("da-DK", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
     }
 
+    function fmtInt(v) {
+      return Number(v || 0).toLocaleString("da-DK");
+    }
+
     function monthISO() {
       const d = new Date();
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, "0");
       return `${y}-${m}`;
+    }
+
+    function isoDate(d) {
+      return d.toISOString().split("T")[0];
+    }
+
+    function menuDateRange() {
+      const to = new Date();
+      const from = new Date();
+      from.setDate(to.getDate() - 30);
+      return { from: isoDate(from), to: isoDate(to) };
     }
 
     function parseLocalDateTime(dateStr, timeStr) {
@@ -977,8 +1017,17 @@
         const todayEvents = events.filter(ev => sameYMD(ev.deliveryDate, todayYMD));
         const upcomingEvents = events.filter(ev => ev.ts > now && !sameYMD(ev.deliveryDate, todayYMD)).slice(0, 6);
 
-        renderCateringTodayReal(todayEvents);
-        renderCateringUpcomingReal(upcomingEvents);
+        renderSimpleEventList("cateringTodayList", todayEvents, "green", ev => `
+          <div class="listMain">${escapeHtml(ev.location)} • ${escapeHtml(ev.customerName)}</div>
+          <div class="listSub">${escapeHtml(ev.deliveryTime)} • ${escapeHtml(String(ev.guests))} gæster${ev.note ? " • " + escapeHtml(ev.note) : ""}</div>
+          <div class="listMeta">I dag • ${escapeHtml(ev.status)}</div>
+        `, "Ingen catering i dag");
+
+        renderSimpleEventList("cateringUpcomingList", upcomingEvents, "blue", ev => `
+          <div class="listMain">${escapeHtml(ev.location)} • ${escapeHtml(ev.customerName)}</div>
+          <div class="listSub">${escapeHtml(ev.deliveryDate)} • ${escapeHtml(ev.deliveryTime)} • ${escapeHtml(String(ev.guests))} gæster</div>
+          <div class="listMeta">${escapeHtml(ev.status)}</div>
+        `, "Ingen kommende catering events");
 
       } catch (err) {
         console.error("Catering load error:", err);
@@ -987,39 +1036,18 @@
       }
     }
 
-    function renderCateringTodayReal(events) {
-      const wrap = $("cateringTodayList");
-      if (!events.length) {
-        wrap.innerHTML = '<div class="empty">Ingen catering i dag</div>';
+    function renderSimpleEventList(targetId, items, color, innerFn, emptyText) {
+      const wrap = $(targetId);
+      if (!items || !items.length) {
+        wrap.innerHTML = `<div class="empty">${emptyText}</div>`;
         return;
       }
 
-      wrap.innerHTML = events.map(ev => `
+      wrap.innerHTML = items.map(item => `
         <div class="listItem">
-          <div class="bar green"></div>
+          <div class="bar ${color}"></div>
           <div class="listInfo">
-            <div class="listMain">${escapeHtml(ev.location)} • ${escapeHtml(ev.customerName)}</div>
-            <div class="listSub">${escapeHtml(ev.deliveryTime)} • ${escapeHtml(String(ev.guests))} gæster${ev.note ? " • " + escapeHtml(ev.note) : ""}</div>
-            <div class="listMeta">I dag • ${escapeHtml(ev.status)}</div>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function renderCateringUpcomingReal(events) {
-      const wrap = $("cateringUpcomingList");
-      if (!events.length) {
-        wrap.innerHTML = '<div class="empty">Ingen kommende catering events</div>';
-        return;
-      }
-
-      wrap.innerHTML = events.map(ev => `
-        <div class="listItem">
-          <div class="bar blue"></div>
-          <div class="listInfo">
-            <div class="listMain">${escapeHtml(ev.location)} • ${escapeHtml(ev.customerName)}</div>
-            <div class="listSub">${escapeHtml(ev.deliveryDate)} • ${escapeHtml(ev.deliveryTime)} • ${escapeHtml(String(ev.guests))} gæster</div>
-            <div class="listMeta">${escapeHtml(ev.status)}</div>
+            ${innerFn(item)}
           </div>
         </div>
       `).join("");
@@ -1044,18 +1072,12 @@
       const kitchen = bundle.kitchen || [];
 
       const locationCount = {};
-
-      function bump(arr) {
+      [complaints, soldout, faults, supplier].forEach(arr => {
         arr.forEach(x => {
           const loc = x.location || "Ukendt";
           locationCount[loc] = (locationCount[loc] || 0) + 1;
         });
-      }
-
-      bump(complaints);
-      bump(soldout);
-      bump(faults);
-      bump(supplier);
+      });
 
       const topLoc = Object.entries(locationCount).sort((a,b) => b[1]-a[1])[0];
       const focusLoc = topLoc ? topLoc[0] : "Ingen tydelig lokation";
@@ -1067,8 +1089,8 @@
 
       let chainStatus = "Stabil";
       let chainClass = "ok";
-
       const totalSignals = complaints.length + soldout.length + faults.length + supplier.length;
+
       if (totalSignals >= 8) { chainStatus = "Høj opmærksomhed"; chainClass = "err"; }
       else if (totalSignals >= 3) { chainStatus = "Opmærksomhed"; chainClass = "warn"; }
 
@@ -1080,35 +1102,31 @@
 
       $("briefingHello").textContent = "God dag Stefan";
 
-      $("briefingLead").textContent =
-        topLoc
-          ? `${focusLoc} er i dag den lokation, der tydeligst kalder på opmærksomhed med ${focusCount} registrerede driftssignaler. Resten af kæden bør holdes under observation ud fra dagens samlede billede.`
-          : `Der er få eller ingen aktuelle driftssignaler i systemet lige nu. Brug dagen på stabil opfølgning og forebyggelse.`;
+      $("briefingLead").textContent = topLoc
+        ? `${focusLoc} er i dag den tydeligste fokuslokation med ${focusCount} registrerede driftssignaler. Brug første ledercheck på at få overblik over de åbne forhold her, før du går bredt ud.`
+        : `Der er få eller ingen registrerede driftssignaler i systemet lige nu. Dagen bør bruges på forebyggelse, vareflow og stabil kvalitetsopfølgning.`;
 
-      $("briefingHighlight").textContent =
-        topLoc
-          ? `Første check-in bør gå til ${focusLoc}`
-          : `Driften ser rolig ud lige nu`;
+      $("briefingHighlight").textContent = topLoc
+        ? `Første check-in bør gå til ${focusLoc}`
+        : `Driften ser rolig ud lige nu`;
 
-      $("briefFocus").textContent =
-        topLoc
-          ? `${focusLoc} har flest registreringer og bør være dit første fokuspunkt i dag.`
-          : `Ingen enkeltlokation skiller sig negativt ud lige nu.`;
+      $("briefFocus").textContent = topLoc
+        ? `${focusLoc} har flest registreringer og er derfor den vigtigste lokation at følge op på først i dag.`
+        : `Ingen enkeltlokation skiller sig negativt ud i den aktuelle drift.`;
 
       $("briefRisk").textContent =
-        supplier.length || soldout.length
-          ? `Leverandørfejl og udsolgte varer er den største operationelle risiko, fordi de hurtigt kan påvirke service og gæsteoplevelse.`
-          : `Det største risikobillede er lav synlighed, hvis problemer ikke bliver registreret hurtigt nok.`;
+        (supplier.length + soldout.length) > 0
+          ? `Den største risiko er vareflow: leverandørfejl og udsolgte varer kan hurtigt presse service, tempo og gæsteoplevelse.`
+          : `Det største risikobillede er skjulte problemer, hvis små hændelser ikke bliver registreret tidligt nok.`;
 
       $("briefPositive").textContent =
         avgKitchen !== null
-          ? `Kædens gennemsnitlige kitchen % ligger omkring ${fmtPct(avgKitchen)}, hvilket giver et nyttigt økonomisk pejlemærke for dagen.`
-          : `Der er endnu ikke nok kitchen-data til at vurdere kædens økonomiske balance live.`;
+          ? `Kædens gennemsnitlige kitchen % ligger omkring ${fmtPct(avgKitchen)}, hvilket giver et brugbart økonomisk pejlemærke i dagens drift.`
+          : `Kitchen-data er endnu for begrænset til at give et stærkt live-billede på kædeniveau.`;
 
-      $("briefAction").textContent =
-        topLoc
-          ? `Tag først fat i ${focusLoc}, afklar status på dagens vigtigste hændelser og luk de mest synlige driftsproblemer tidligt.`
-          : `Brug dagen på forebyggende opfølgning, varestatus og kvalitetssikring på tværs af caféerne.`;
+      $("briefAction").textContent = topLoc
+        ? `Start i ${focusLoc}, afklar de åbne sager og luk først de ting der direkte rammer gæst, produkttilgængelighed eller driftstempo.`
+        : `Følg op på varestatus, køkkenøkonomi og ensartet kvalitet på tværs af caféerne som forebyggende ledelsesgreb.`;
     }
 
     function renderManagerAlerts(bundle) {
@@ -1128,57 +1146,35 @@
       latestMeta(supplier, "supplierLocMeta", "supplierTimeMeta", i => `${i.location || "Ukendt"}${i.productName ? " • " + i.productName : ""}`);
     }
 
-    function renderLatestEvents(bundle) {
-      const list = $("latestEventsList");
+    function renderCategoryBoxes(bundle) {
+      const complaints = (bundle.complaints || []).slice(0, 6);
+      const soldout = (bundle.soldout || []).slice(0, 6);
+      const faults = (bundle.faults || []).slice(0, 6);
+      const supplier = (bundle.supplier || []).slice(0, 6);
 
-      const events = [
-        ...(bundle.complaints || []).map(x => ({
-          type: "Klage",
-          color: "red",
-          title: `Klage • ${x.location || "Ukendt"} • ${x.category || "Generel"}`,
-          sub: x.description || "Ingen beskrivelse",
-          time: x.createdAt || x.updatedAt || x.date
-        })),
-        ...(bundle.soldout || []).map(x => ({
-          type: "Udsolgt",
-          color: "gold",
-          title: `Udsolgt • ${x.location || "Ukendt"} • ${x.productName || "Vare"}`,
-          sub: x.category || "Ingen kategori",
-          time: x.createdAt || x.updatedAt || x.date
-        })),
-        ...(bundle.faults || []).map(x => ({
-          type: "Fejl",
-          color: "blue",
-          title: `Fejl • ${x.location || "Ukendt"} • ${x.issueType || x.area || "Drift"}`,
-          sub: x.description || "Ingen beskrivelse",
-          time: x.createdAt || x.updatedAt || x.date
-        })),
-        ...(bundle.supplier || []).map(x => ({
-          type: "Leverandør",
-          color: "warn",
-          title: `Leverandør • ${x.location || "Ukendt"} • ${x.productName || "Vare"}`,
-          sub: x.description || x.issueType || "Ingen note",
-          time: x.createdAt || x.updatedAt || x.date
-        }))
-      ]
-      .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
-      .slice(0, 10);
+      renderSimpleEventList("complaintsEventsList", complaints, "red", ev => `
+        <div class="listMain">${esc(ev.location || "Ukendt")} • ${esc(ev.category || "Klage")}</div>
+        <div class="listSub">${esc(ev.description || "Ingen beskrivelse")}</div>
+        <div class="listMeta">${esc(fmtDateTime(ev.createdAt || ev.updatedAt || ev.date))}</div>
+      `, "Ingen klager registreret");
 
-      if (!events.length) {
-        list.innerHTML = '<div class="empty">Ingen hændelser fundet</div>';
-        return;
-      }
+      renderSimpleEventList("soldoutEventsList", soldout, "gold", ev => `
+        <div class="listMain">${esc(ev.location || "Ukendt")} • ${esc(ev.productName || "Produkt")}</div>
+        <div class="listSub">${esc(ev.category || "Ingen kategori")}</div>
+        <div class="listMeta">${esc(fmtDateTime(ev.createdAt || ev.updatedAt || ev.date))}</div>
+      `, "Ingen udsolgte varer registreret");
 
-      list.innerHTML = events.map(ev => `
-        <div class="listItem">
-          <div class="bar ${ev.color}"></div>
-          <div class="listInfo">
-            <div class="listMain">${esc(ev.title)}</div>
-            <div class="listSub">${esc(ev.sub)}</div>
-            <div class="listMeta">${esc(fmtDateTime(ev.time))}</div>
-          </div>
-        </div>
-      `).join("");
+      renderSimpleEventList("faultsEventsList", faults, "blue", ev => `
+        <div class="listMain">${esc(ev.location || "Ukendt")} • ${esc(ev.issueType || ev.area || "Fejl")}</div>
+        <div class="listSub">${esc(ev.description || "Ingen beskrivelse")}</div>
+        <div class="listMeta">${esc(fmtDateTime(ev.createdAt || ev.updatedAt || ev.date))}</div>
+      `, "Ingen fejl registreret");
+
+      renderSimpleEventList("supplierEventsList", supplier, "warn", ev => `
+        <div class="listMain">${esc(ev.location || "Ukendt")} • ${esc(ev.productName || "Produkt")}</div>
+        <div class="listSub">${esc(ev.description || ev.issueType || "Ingen note")}</div>
+        <div class="listMeta">${esc(fmtDateTime(ev.createdAt || ev.updatedAt || ev.date))}</div>
+      `, "Ingen leverandørfejl registreret");
     }
 
     function renderLocationFocus(bundle) {
@@ -1294,6 +1290,75 @@
       }).join("");
     }
 
+    async function loadMenuIntelligence() {
+      try {
+        const range = menuDateRange();
+        const params = new URLSearchParams({ from: range.from, to: range.to });
+        const res = await fetch(`/api/menu-by-products?${params.toString()}`);
+
+        if (!res.ok) throw new Error("Kunne ikke hente menu intelligence data");
+        const data = await res.json();
+
+        $("menuPeriodText").textContent = `${data.filters?.from || range.from} → ${data.filters?.to || range.to}`;
+
+        const overall = Array.isArray(data.overallTopProducts) ? data.overallTopProducts.slice(0, 8) : [];
+        $("menuOverallBody").innerHTML = overall.length
+          ? overall.map((item, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${esc(item.name)}</td>
+                <td class="right">${fmtInt(item.qty)}</td>
+              </tr>
+            `).join("")
+          : `<tr><td colspan="3" class="empty">Ingen data</td></tr>`;
+
+        const stores = Array.isArray(data.stores) ? data.stores : [];
+        $("menuStoreSummaryBody").innerHTML = stores.length
+          ? stores.map(store => `
+              <tr>
+                <td>${esc(store.name)}</td>
+                <td class="right">${fmtInt(store.totalQty)}</td>
+              </tr>
+            `).join("")
+          : `<tr><td colspan="2" class="empty">Ingen data</td></tr>`;
+
+        const insights = Array.isArray(data.insights) ? data.insights : [];
+        $("menuInsightsWrap").innerHTML = insights.length
+          ? insights.map(insight => `
+              <div class="listItem" style="margin-top:10px;">
+                <div class="bar ${insight.type === 'overperformer' ? 'green' : 'warn'}"></div>
+                <div class="listInfo">
+                  <div class="listMain">${esc(insight.title)}</div>
+                  <div class="listSub">${esc(insight.recommendation || "")}</div>
+                  <div class="listMeta">${esc(insight.type || "Insight")}</div>
+                </div>
+              </div>
+            `).join("")
+          : `<div class="empty">Ingen tydelige insights i valgt periode</div>`;
+
+        $("menuStoresWrap").innerHTML = stores.length
+          ? stores.slice(0, 4).map(store => `
+              <div class="listItem" style="margin-top:10px;">
+                <div class="bar blue"></div>
+                <div class="listInfo">
+                  <div class="listMain">${esc(store.name)}</div>
+                  <div class="listSub">${(store.topProducts || []).slice(0,3).map(p => `${esc(p.name)} (${fmtInt(p.qty)})`).join(" • ")}</div>
+                  <div class="listMeta">Top-10 total: ${fmtInt(store.totalQty)}</div>
+                </div>
+              </div>
+            `).join("")
+          : `<div class="empty">Ingen bydata fundet</div>`;
+
+      } catch (err) {
+        console.error("Menu intelligence load error:", err);
+        $("menuPeriodText").textContent = "Menu intelligence ikke tilgængelig";
+        $("menuOverallBody").innerHTML = `<tr><td colspan="3" class="empty">Forbindelse til menu intelligence mangler</td></tr>`;
+        $("menuStoreSummaryBody").innerHTML = `<tr><td colspan="2" class="empty">Ingen forbindelse</td></tr>`;
+        $("menuInsightsWrap").innerHTML = `<div class="empty">Denne sektion kræver adgang til /api/menu-by-products</div>`;
+        $("menuStoresWrap").innerHTML = `<div class="empty">Send backend-endpointet, så kobler jeg den helt live</div>`;
+      }
+    }
+
     async function loadPortalBundle() {
       try {
         const data = await jsonp(OPS_SCRIPT_URL, {
@@ -1306,7 +1371,7 @@
         }
 
         renderManagerAlerts(data);
-        renderLatestEvents(data);
+        renderCategoryBoxes(data);
         renderLocationFocus(data);
         renderKitchen(data);
         renderChainOverview(data);
@@ -1316,10 +1381,6 @@
       } catch (err) {
         console.error("Bundle load error:", err);
         setStatus(false, "● Datafejl");
-        $("latestEventsList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-        $("locationFocusList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-        $("kitchenPctList").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
-        $("chainOverviewGrid").innerHTML = '<div class="empty">Fejl ved indlæsning</div>';
       }
     }
 
@@ -1327,7 +1388,8 @@
       updateClock();
       await Promise.allSettled([
         loadPortalBundle(),
-        loadCateringData()
+        loadCateringData(),
+        loadMenuIntelligence()
       ]);
     }
 
@@ -1335,6 +1397,7 @@
     setInterval(updateClock, 30000);
     setInterval(loadPortalBundle, 60000);
     setInterval(loadCateringData, 60000);
+    setInterval(loadMenuIntelligence, 180000);
   </script>
 </body>
 </html>
