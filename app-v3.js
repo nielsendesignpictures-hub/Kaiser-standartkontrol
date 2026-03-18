@@ -1,8 +1,9 @@
 // ==========================
 // KONFIG (Google Apps Script webhook)
 // ==========================
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec"; 
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyWds-PHayXHll-vvpUwgs2vCU6KqFkgd9Sceg63fB1xM1_o7ZRH3jZrA778ZsxRaOMfw/exec";"; 
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
+const RATING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWds-PHayXHll-vvpUwgs2vCU6KqFkgd9Sceg63fB1xM1_o7ZRH3jZrA778ZsxRaOMfw/exec";
 
 // Lokationer
 const LOCATIONS = [
