@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Kaiser – F&B Portal</title>
+  <title>Kaiser – F&B Operations Board</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,21 +11,22 @@
 
   <style>
     :root{
-      --bg0:#0c1016;
-      --bg1:#151b23;
+      --bg0:#0a0e14;
+      --bg1:#111823;
       --panel:rgba(255,255,255,0.05);
-      --panel2:rgba(255,255,255,0.04);
+      --panel2:rgba(255,255,255,0.035);
       --line:rgba(255,255,255,0.10);
-      --text:rgba(255,255,255,0.96);
+      --line2:rgba(255,255,255,0.07);
+      --text:rgba(255,255,255,0.97);
       --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.56);
+      --muted2:rgba(255,255,255,0.54);
       --gold:#d6b24a;
       --gold2:#b9921f;
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
       --warn:#f59e0b;
-      --shadow:0 24px 70px rgba(0,0,0,.38);
+      --shadow:0 24px 70px rgba(0,0,0,.42);
       --radius:24px;
     }
 
@@ -36,49 +37,48 @@
       font-family:Inter,system-ui,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
       padding:14px;
     }
 
-    .shell{max-width:1500px;margin:0 auto;}
+    .shell{max-width:1520px;margin:0 auto;}
 
-    .topbar{
+    .boardTop{
       position:sticky;
       top:0;
-      z-index:20;
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
+      z-index:50;
       border:1px solid var(--line);
-      background:rgba(12,16,22,0.72);
-      border-radius:28px;
-      padding:14px;
+      border-radius:30px;
+      background:rgba(10,14,20,0.80);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
       box-shadow:var(--shadow);
+      padding:14px;
     }
 
-    .topbarGrid{
+    .boardTopGrid{
       display:grid;
-      grid-template-columns:1.2fr repeat(5,1fr);
+      grid-template-columns:1.3fr repeat(5,1fr);
       gap:10px;
-      align-items:stretch;
     }
 
-    @media (max-width: 1180px){
-      .topbarGrid{grid-template-columns:1fr 1fr 1fr;}
+    @media (max-width: 1280px){
+      .boardTopGrid{grid-template-columns:1fr 1fr 1fr;}
     }
 
     @media (max-width: 760px){
-      .topbarGrid{grid-template-columns:1fr;}
+      .boardTopGrid{grid-template-columns:1fr;}
     }
 
-    .brandBox{
-      min-height:90px;
-      border-radius:22px;
+    .brandCard{
+      min-height:96px;
+      border-radius:24px;
       border:1px solid var(--line);
       background:
-        radial-gradient(500px 180px at 40% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(700px 200px at 50% 0%, rgba(255,255,255,0.07), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       padding:16px 18px;
       display:flex;
@@ -97,7 +97,7 @@
     .brandTitle{
       margin-top:8px;
       font-family:"Playfair Display",serif;
-      font-size:34px;
+      font-size:36px;
       line-height:1;
       letter-spacing:-.03em;
     }
@@ -109,9 +109,9 @@
       color:var(--muted);
     }
 
-    .miniCard{
-      min-height:90px;
-      border-radius:22px;
+    .topStat{
+      min-height:96px;
+      border-radius:24px;
       border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:14px 16px;
@@ -120,7 +120,7 @@
       justify-content:space-between;
     }
 
-    .miniLabel{
+    .topStatLabel{
       font-size:11px;
       font-weight:900;
       letter-spacing:.12em;
@@ -128,24 +128,24 @@
       color:var(--muted2);
     }
 
-    .miniValue{
+    .topStatValue{
       margin-top:8px;
-      font-size:24px;
-      line-height:1.1;
+      font-size:26px;
+      line-height:1.08;
       font-weight:900;
       letter-spacing:-.03em;
     }
 
-    .miniSub{
+    .topStatSub{
       margin-top:6px;
       font-size:12px;
       font-weight:800;
       color:var(--muted);
     }
 
-    .statusText.ok{color:#dff7e2}
-    .statusText.warn{color:#ffe9b0}
-    .statusText.err{color:#ffd0d0}
+    .okText{color:#dff7e2}
+    .warnText{color:#ffe9b0}
+    .errText{color:#ffd0d0}
 
     .section{
       margin-top:14px;
@@ -160,10 +160,10 @@
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
+      gap:12px;
       padding:14px 18px;
       background:rgba(255,255,255,0.03);
-      border-bottom:1px solid var(--line);
+      border-bottom:1px solid var(--line2);
     }
 
     .sectionTitle{
@@ -190,75 +190,163 @@
 
     .sectionBody{padding:16px;}
 
-    .actionGrid{
+    .heroGrid{
       display:grid;
-      grid-template-columns:1.2fr 1fr 1fr 1fr;
+      grid-template-columns:1.4fr .8fr .8fr;
       gap:14px;
     }
 
     @media (max-width: 1180px){
-      .actionGrid{grid-template-columns:1fr 1fr;}
+      .heroGrid{grid-template-columns:1fr;}
     }
 
-    @media (max-width: 760px){
-      .actionGrid{grid-template-columns:1fr;}
-    }
-
-    .actionCard{
-      border-radius:22px;
+    .heroCard{
+      border-radius:24px;
       border:1px solid var(--line);
       background:
-        radial-gradient(600px 180px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
       padding:18px;
-      min-height:190px;
+      min-height:220px;
     }
 
-    .actionBig{
-      margin-top:14px;
-      font-size:34px;
-      line-height:1.05;
-      font-weight:900;
-      letter-spacing:-.04em;
+    .heroMain{
+      min-height:220px;
+    }
+
+    .heroFocus{
+      margin-top:16px;
       font-family:"Playfair Display",serif;
+      font-size:42px;
+      line-height:1.02;
+      letter-spacing:-.04em;
+      max-width:700px;
     }
 
-    .actionText{
-      margin-top:10px;
-      font-size:14px;
-      line-height:1.6;
-      font-weight:800;
+    .heroLead{
+      margin-top:12px;
+      font-size:15px;
+      line-height:1.7;
       color:var(--muted);
+      font-weight:800;
+      max-width:860px;
     }
 
-    .highlightChip{
+    .heroPills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .heroPill{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      margin-top:12px;
+      gap:6px;
       padding:10px 12px;
       border-radius:999px;
-      border:1px solid rgba(214,178,74,.28);
-      background:rgba(214,178,74,0.10);
-      color:#fff0c2;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
       font-size:11px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
     }
 
-    .listCard{
-      border-radius:22px;
+    .heroPill.ok{border-color:rgba(98,210,111,.35);color:#dff7e2;}
+    .heroPill.warn{border-color:rgba(245,158,11,.35);color:#ffe9b0;}
+    .heroPill.err{border-color:rgba(255,107,107,.35);color:#ffd0d0;}
+
+    .heroSmallTitle{
+      margin-top:12px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .heroSmallBig{
+      margin-top:12px;
+      font-size:34px;
+      line-height:1.04;
+      font-weight:900;
+      letter-spacing:-.04em;
+      font-family:"Playfair Display",serif;
+    }
+
+    .heroSmallText{
+      margin-top:10px;
+      font-size:14px;
+      line-height:1.6;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .opsGrid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 1280px){
+      .opsGrid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    @media (max-width: 760px){
+      .opsGrid{grid-template-columns:1fr;}
+    }
+
+    .signalCard,
+    .infoCard,
+    .chainCard{
+      border-radius:24px;
       border:1px solid var(--line);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:16px;
-      min-height:260px;
     }
 
-    .listTitle{
-      font-size:16px;
+    .cardKicker{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:11px;
       font-weight:900;
-      margin-top:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      flex:0 0 auto;
+    }
+
+    .dot.red{background:var(--red);}
+    .dot.green{background:var(--green);}
+    .dot.blue{background:var(--blue);}
+    .dot.gold{background:var(--gold);}
+    .dot.warn{background:var(--warn);}
+
+    .signalHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .signalTitle{
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .signalCount{
+      font-size:34px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.04em;
+      font-family:"Playfair Display",serif;
     }
 
     .list{
@@ -296,34 +384,26 @@
     .listSub{margin-top:4px;font-size:12px;line-height:1.45;color:var(--muted);font-weight:700;}
     .listMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:900;letter-spacing:.05em;text-transform:uppercase;}
 
-    .signalGrid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
-    }
-
-    @media (max-width: 1280px){
-      .signalGrid{grid-template-columns:repeat(2,1fr);}
-    }
-
-    @media (max-width: 760px){
-      .signalGrid{grid-template-columns:1fr;}
-    }
-
-    .lowerGrid{
+    .midGrid{
       display:grid;
       grid-template-columns:1.1fr .9fr;
       gap:14px;
     }
 
-    @media (max-width: 1100px){
-      .lowerGrid{grid-template-columns:1fr;}
+    @media (max-width: 1180px){
+      .midGrid{grid-template-columns:1fr;}
+    }
+
+    .splitStack{
+      display:grid;
+      gap:14px;
     }
 
     .table{
       display:flex;
       flex-direction:column;
       gap:10px;
+      margin-top:14px;
     }
 
     .row{
@@ -364,14 +444,6 @@
 
     @media (max-width: 760px){
       .chainGrid{grid-template-columns:1fr;}
-    }
-
-    .chainCard{
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:220px;
     }
 
     .chainTop{
@@ -435,11 +507,11 @@
       font-weight:900;
     }
 
-    .iframeToggle{
+    .toggleBtn{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      min-height:42px;
+      min-height:44px;
       padding:10px 14px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.12);
@@ -462,7 +534,7 @@
 
     .iframeFrame{
       width:100%;
-      height:820px;
+      height:860px;
       border:0;
       border-radius:20px;
       background:#0f141b;
@@ -470,7 +542,7 @@
 
     .empty{
       text-align:center;
-      padding:26px;
+      padding:24px;
       color:var(--muted2);
       font-size:13px;
     }
@@ -479,79 +551,77 @@
 <body>
   <div class="shell">
 
-    <section class="topbar">
-      <div class="topbarGrid">
-        <div class="brandBox">
+    <section class="boardTop">
+      <div class="boardTopGrid">
+        <div class="brandCard">
           <div class="brandKicker">KAISER</div>
-          <div class="brandTitle">F&B Portal</div>
-          <div class="brandSub">iPad live driftsoverblik for ledelse og daglig opfølgning</div>
+          <div class="brandTitle">F&B Operations Board</div>
+          <div class="brandSub">Live iPad-overblik til daglig ledelse, fokus og handling</div>
         </div>
 
-        <div class="miniCard">
-          <div class="miniLabel">Tid</div>
-          <div class="miniValue" id="timePill">--:--</div>
-          <div class="miniSub" id="lastUpdatedInfo">Senest opdateret: —</div>
+        <div class="topStat">
+          <div class="topStatLabel">Tid</div>
+          <div class="topStatValue" id="timePill">--:--</div>
+          <div class="topStatSub" id="lastUpdatedInfo">Senest opdateret: —</div>
         </div>
 
-        <div class="miniCard">
-          <div class="miniLabel">Data status</div>
-          <div class="miniValue statusText ok" id="statusPill">Live</div>
-          <div class="miniSub">Automatisk opdatering</div>
+        <div class="topStat">
+          <div class="topStatLabel">Data status</div>
+          <div class="topStatValue okText" id="statusPill">Live</div>
+          <div class="topStatSub">Auto refresh aktiv</div>
         </div>
 
-        <div class="miniCard">
-          <div class="miniLabel">Kædestatus</div>
-          <div class="miniValue" id="topChainStatus">—</div>
-          <div class="miniSub">Samlet driftsbillede</div>
+        <div class="topStat">
+          <div class="topStatLabel">Kædestatus</div>
+          <div class="topStatValue" id="topChainStatus">—</div>
+          <div class="topStatSub">Samlet driftsbillede</div>
         </div>
 
-        <div class="miniCard">
-          <div class="miniLabel">Dagens fokus</div>
-          <div class="miniValue" id="topFocusLocation">—</div>
-          <div class="miniSub">Lokation med flest signaler</div>
+        <div class="topStat">
+          <div class="topStatLabel">Fokuslokation</div>
+          <div class="topStatValue" id="topFocusLocation">—</div>
+          <div class="topStatSub">Første ledercheck</div>
         </div>
 
-        <div class="miniCard">
-          <div class="miniLabel">Åbne signaler</div>
-          <div class="miniValue" id="topSignalsTotal">0</div>
-          <div class="miniSub">Klager, udsolgt, fejl og leverandør</div>
+        <div class="topStat">
+          <div class="topStatLabel">Åbne signaler</div>
+          <div class="topStatValue" id="topSignalsTotal">0</div>
+          <div class="topStatSub">Klager, udsolgt, fejl, leverandør</div>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Hvad kræver handling nu</div>
-        <div class="sectionInfo">Første blik til iPad og live drift</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Ledelsesblik</div>
+        <div class="sectionInfo">Hvad der kræver handling nu</div>
       </div>
       <div class="sectionBody">
-        <div class="actionGrid">
-          <div class="actionCard">
-            <div class="miniLabel">Fokuslokation</div>
-            <div class="actionBig" id="briefFocusLocation">Indlæser...</div>
-            <div class="actionText" id="briefLeadText">Indlæser driftsoverblik...</div>
-            <div class="highlightChip" id="briefHighlightChip">Finder dagens fokus</div>
+        <div class="heroGrid">
+          <div class="heroCard heroMain">
+            <div class="cardKicker"><span class="dot gold"></span> Daglig briefing</div>
+            <div class="heroFocus" id="heroFocusTitle">Indlæser dagens fokus...</div>
+            <div class="heroLead" id="heroLeadText">Indlæser driftsoverblik...</div>
+
+            <div class="heroPills">
+              <div class="heroPill warn" id="heroChainPill">Kædestatus: —</div>
+              <div class="heroPill warn" id="heroFocusPill">Fokus: —</div>
+              <div class="heroPill ok" id="heroActionPill">Handling: —</div>
+            </div>
           </div>
 
-          <div class="actionCard">
-            <div class="miniLabel">Catering i dag</div>
-            <div class="actionBig" id="todayCateringCount">0</div>
-            <div class="actionText" id="todayCateringText">Indlæser dagens catering...</div>
-            <div class="highlightChip">Dagens events</div>
+          <div class="heroCard">
+            <div class="cardKicker"><span class="dot warn"></span> Største risiko</div>
+            <div class="heroSmallTitle">Operationelt risikobillede</div>
+            <div class="heroSmallBig" id="riskTitle">—</div>
+            <div class="heroSmallText" id="riskText">Indlæser risikobillede...</div>
           </div>
 
-          <div class="actionCard">
-            <div class="miniLabel">Største risiko</div>
-            <div class="actionBig" id="riskTitle">—</div>
-            <div class="actionText" id="riskText">Indlæser risikobillede...</div>
-            <div class="highlightChip">Operationel risiko</div>
-          </div>
-
-          <div class="actionCard">
-            <div class="miniLabel">Kitchen signal</div>
-            <div class="actionBig" id="kitchenHeadline">—</div>
-            <div class="actionText" id="kitchenHeadlineText">Indlæser kitchen-status...</div>
-            <div class="highlightChip">Økonomisk pejlemærke</div>
+          <div class="heroCard">
+            <div class="cardKicker"><span class="dot green"></span> Dagens drift</div>
+            <div class="heroSmallTitle">Catering og kitchen signal</div>
+            <div class="heroSmallBig" id="opsHeadline">—</div>
+            <div class="heroSmallText" id="opsText">Indlæser dagens driftsbillede...</div>
           </div>
         </div>
       </div>
@@ -560,31 +630,43 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Driftssignaler</div>
-        <div class="sectionInfo">Opdelt efter hændelsestyper</div>
+        <div class="sectionInfo">Tydeligt opdelt efter hændelsestype</div>
       </div>
       <div class="sectionBody">
-        <div class="signalGrid">
-          <div class="listCard">
+        <div class="opsGrid">
+          <div class="signalCard">
             <div class="cardKicker"><span class="dot red"></span> Klager</div>
-            <div class="listTitle">Seneste gæsteklager</div>
+            <div class="signalHead">
+              <div class="signalTitle">Gæsteklager</div>
+              <div class="signalCount" id="complaintsCount">0</div>
+            </div>
             <div class="list" id="complaintsEventsList"><div class="empty">Indlæser...</div></div>
           </div>
 
-          <div class="listCard">
+          <div class="signalCard">
             <div class="cardKicker"><span class="dot gold"></span> Udsolgte varer</div>
-            <div class="listTitle">Seneste udsolgte produkter</div>
+            <div class="signalHead">
+              <div class="signalTitle">Produkttilgængelighed</div>
+              <div class="signalCount" id="soldoutCount">0</div>
+            </div>
             <div class="list" id="soldoutEventsList"><div class="empty">Indlæser...</div></div>
           </div>
 
-          <div class="listCard">
+          <div class="signalCard">
             <div class="cardKicker"><span class="dot blue"></span> Fejl & mangler</div>
-            <div class="listTitle">Seneste drift- og vedligeholdelsesfejl</div>
+            <div class="signalHead">
+              <div class="signalTitle">Driftsfejl</div>
+              <div class="signalCount" id="faultsCount">0</div>
+            </div>
             <div class="list" id="faultsEventsList"><div class="empty">Indlæser...</div></div>
           </div>
 
-          <div class="listCard">
+          <div class="signalCard">
             <div class="cardKicker"><span class="dot warn"></span> Leverandørfejl</div>
-            <div class="listTitle">Seneste leverandørproblemer</div>
+            <div class="signalHead">
+              <div class="signalTitle">Vareflow</div>
+              <div class="signalCount" id="supplierCount">0</div>
+            </div>
             <div class="list" id="supplierEventsList"><div class="empty">Indlæser...</div></div>
           </div>
         </div>
@@ -593,28 +675,32 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Driftsoverblik</div>
-        <div class="sectionInfo">Catering, lokationer i fokus og kitchen %</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Drift og lokationer</div>
+        <div class="sectionInfo">Dagens events, hotspots og kitchen %</div>
       </div>
       <div class="sectionBody">
-        <div class="lowerGrid">
-          <div class="listCard">
+        <div class="midGrid">
+          <div class="infoCard">
             <div class="cardKicker"><span class="dot green"></span> Catering</div>
-            <div class="listTitle">I dag og næste events</div>
+            <div class="signalHead">
+              <div class="signalTitle">Dagens og kommende events</div>
+              <div class="signalCount" id="todayCateringCount">0</div>
+            </div>
+
             <div class="list" id="cateringTodayList"><div class="empty">Indlæser catering i dag...</div></div>
             <div class="list" id="cateringUpcomingList" style="margin-top:14px;"><div class="empty">Indlæser kommende catering...</div></div>
           </div>
 
-          <div style="display:grid;gap:14px;">
-            <div class="listCard">
+          <div class="splitStack">
+            <div class="infoCard">
               <div class="cardKicker"><span class="dot blue"></span> Lokationer i fokus</div>
-              <div class="listTitle">Antal registreringer pr. lokation</div>
+              <div class="signalTitle" style="margin-top:12px;">Samlet signalbillede pr. lokation</div>
               <div class="table" id="locationFocusList"><div class="empty">Indlæser...</div></div>
             </div>
 
-            <div class="listCard">
+            <div class="infoCard">
               <div class="cardKicker"><span class="dot gold"></span> Kitchen %</div>
-              <div class="listTitle">Live MTD lokationstal</div>
+              <div class="signalTitle" style="margin-top:12px;">Live MTD lokationstal</div>
               <div class="table" id="kitchenPctList"><div class="empty">Indlæser...</div></div>
             </div>
           </div>
@@ -625,7 +711,7 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Lokationsoverblik</div>
-        <div class="sectionInfo">Status, signaler og økonomisk retning pr. lokation</div>
+        <div class="sectionInfo">Den del du bruger til at beslutte, hvor du går hen først</div>
       </div>
       <div class="sectionBody">
         <div class="chainGrid" id="chainOverviewGrid">
@@ -636,11 +722,11 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Analyse</div>
-        <div class="sectionInfo">Ekstra dybde ved behov</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Analysepanel</div>
+        <div class="sectionInfo">Åbn kun når du vil dykke ned</div>
       </div>
       <div class="sectionBody" style="padding:14px 16px;">
-        <button class="iframeToggle" type="button" onclick="toggleMenuIframe()">
+        <button class="toggleBtn" type="button" onclick="toggleMenuIframe()">
           <span id="iframeArrow">▼</span>
           <span id="iframeButtonText">Åbn Menu Intelligence</span>
         </button>
@@ -650,8 +736,7 @@
           class="iframeFrame"
           src="https://kaiser-live-dashboard.onrender.com/menu-intelligence.html"
           title="Menu Intelligence"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
+          loading="lazy">
         </iframe>
       </div>
     </section>
@@ -789,7 +874,7 @@
     function setStatus(ok, text) {
       const el = $("statusPill");
       el.textContent = text;
-      el.className = "miniValue statusText " + (ok ? "ok" : "err");
+      el.className = "topStatValue " + (ok ? "okText" : "errText");
     }
 
     function renderSimpleEventList(targetId, items, color, innerFn, emptyText) {
@@ -853,16 +938,21 @@
         `, "Ingen kommende catering events");
 
         $("todayCateringCount").textContent = String(todayEvents.length);
-        $("todayCateringText").textContent = todayEvents.length
-          ? `${todayEvents[0].location} er første bekræftede catering-event i dag.`
-          : `Ingen bekræftede catering-events i dag.`;
+
+        const next = todayEvents[0] || upcomingEvents[0];
+        if (next) {
+          $("opsHeadline").textContent = `${todayEvents.length} catering`;
+          $("opsText").textContent = `${next.location} er næste tydelige cateringpunkt i driften. Kitchen og varestatus bør matche dagens eventniveau.`;
+        } else {
+          $("opsHeadline").textContent = `Rolig dag`;
+          $("opsText").textContent = `Ingen tydelige catering-events lige nu. Brug dagen på forebyggende drift og opfølgning.`;
+        }
 
       } catch (err) {
         console.error("Catering load error:", err);
         $("cateringTodayList").innerHTML = '<div class="empty">Fejl ved indlæsning af catering</div>';
         $("cateringUpcomingList").innerHTML = '<div class="empty">Fejl ved indlæsning af catering</div>';
         $("todayCateringCount").textContent = "—";
-        $("todayCateringText").textContent = "Kunne ikke hente catering-data.";
       }
     }
 
@@ -881,10 +971,15 @@
     }
 
     function renderCategoryBoxes(bundle) {
-      const complaints = (bundle.complaints || []).slice(0, 5);
-      const soldout = (bundle.soldout || []).slice(0, 5);
-      const faults = (bundle.faults || []).slice(0, 5);
-      const supplier = (bundle.supplier || []).slice(0, 5);
+      const complaints = (bundle.complaints || []).slice(0, 4);
+      const soldout = (bundle.soldout || []).slice(0, 4);
+      const faults = (bundle.faults || []).slice(0, 4);
+      const supplier = (bundle.supplier || []).slice(0, 4);
+
+      $("complaintsCount").textContent = String((bundle.complaints || []).length);
+      $("soldoutCount").textContent = String((bundle.soldout || []).length);
+      $("faultsCount").textContent = String((bundle.faults || []).length);
+      $("supplierCount").textContent = String((bundle.supplier || []).length);
 
       renderSimpleEventList("complaintsEventsList", complaints, "red", ev => `
         <div class="listMain">${esc(ev.location || "Ukendt")} • ${esc(ev.category || "Klage")}</div>
@@ -966,10 +1061,6 @@
           <div class="rowVal">${esc(fmtMoney(r.purchases))}</div>
         </div>
       `).join("");
-
-      const avgKitchen = rows.reduce((sum, x) => sum + (Number(x.pct) || 0), 0) / rows.length;
-      $("kitchenHeadline").textContent = fmtPct(avgKitchen);
-      $("kitchenHeadlineText").textContent = `Gennemsnitlig kitchen % på tværs af lokationer denne måned.`;
     }
 
     function renderChainOverview(bundle) {
@@ -998,7 +1089,7 @@
           <div class="chainCard">
             <div class="chainTop">
               <div>
-                <div class="miniLabel">Lokation</div>
+                <div class="topStatLabel">Lokation</div>
                 <div class="chainName">${esc(k.location)}</div>
               </div>
               <div class="statusBadge ${cls}">${txt}</div>
@@ -1014,7 +1105,7 @@
       }).join("");
     }
 
-    function buildTopAndActionArea(bundle) {
+    function buildLeadershipArea(bundle) {
       const complaints = bundle.complaints || [];
       const soldout = bundle.soldout || [];
       const faults = bundle.faults || [];
@@ -1036,43 +1127,53 @@
       const totalSignals = complaints.length + soldout.length + faults.length + supplier.length;
 
       let chainStatus = "Stabil";
-      if (totalSignals >= 8) chainStatus = "Kritisk";
-      else if (totalSignals >= 3) chainStatus = "Opmærksomhed";
+      let chainClass = "ok";
+      if (totalSignals >= 8) { chainStatus = "Kritisk"; chainClass = "err"; }
+      else if (totalSignals >= 3) { chainStatus = "Opmærksomhed"; chainClass = "warn"; }
 
       $("topChainStatus").textContent = chainStatus;
       $("topFocusLocation").textContent = focusLoc;
       $("topSignalsTotal").textContent = String(totalSignals);
 
-      $("briefFocusLocation").textContent = focusLoc;
-      $("briefLeadText").textContent = topLoc
-        ? `${focusLoc} skiller sig ud med ${focusCount} registrerede driftssignaler og bør være første ledercheck i dag.`
-        : `Ingen lokation skiller sig negativt ud lige nu. Brug dagen på forebyggelse og stabil opfølgning.`;
-      $("briefHighlightChip").textContent = topLoc
-        ? `Første check-in: ${focusLoc}`
-        : `Driften ser rolig ud`;
+      $("heroFocusTitle").textContent = topLoc
+        ? `${focusLoc} bør være dit første fokus i dag`
+        : `Driften ser rolig ud lige nu`;
+
+      $("heroLeadText").textContent = topLoc
+        ? `${focusLoc} har ${focusCount} registrerede driftssignaler og skiller sig tydeligst ud i det samlede billede. Start her, få overblik over åbne forhold og luk først de ting der direkte påvirker gæst, service eller vareflow.`
+        : `Der er få eller ingen tydelige driftssignaler i systemet lige nu. Brug dagen på kvalitetssikring, varestatus og forebyggende opfølgning på tværs af lokationerne.`;
+
+      $("heroChainPill").textContent = `Kædestatus: ${chainStatus}`;
+      $("heroChainPill").className = `heroPill ${chainClass}`;
+
+      $("heroFocusPill").textContent = `Fokus: ${focusLoc}`;
+      $("heroFocusPill").className = `heroPill ${focusCount >= 3 ? "err" : "warn"}`;
+
+      $("heroActionPill").textContent = topLoc ? `Handling: Check ${focusLoc}` : `Handling: Forebyggelse`;
+      $("heroActionPill").className = `heroPill ok`;
 
       const supplyRisk = supplier.length + soldout.length;
       if (supplyRisk > 0) {
         $("riskTitle").textContent = "Vareflow";
-        $("riskText").textContent = `Leverandørfejl og udsolgte varer er det tydeligste risikobillede lige nu og bør afklares tidligt.`;
+        $("riskText").textContent = "Leverandørfejl og udsolgte varer er det tydeligste risikobillede lige nu. Afklar status tidligt, så gæst og service ikke bliver presset senere på dagen.";
       } else if (faults.length > 0) {
         $("riskTitle").textContent = "Driftsfejl";
-        $("riskText").textContent = `Tekniske fejl og mangler kan presse serviceafviklingen, hvis de ikke lukkes hurtigt.`;
+        $("riskText").textContent = "Tekniske fejl og mangler er det mest synlige operationelle fokus. Prioritér de fejl der bremser service eller påvirker arbejdsgange.";
       } else if (complaints.length > 0) {
         $("riskTitle").textContent = "Gæstetryk";
-        $("riskText").textContent = `Gæsteklager bør gennemgås hurtigt for at undgå gentagelser i serviceperioden.`;
+        $("riskText").textContent = "Gæsteklager bør gennemgås hurtigt for at undgå gentagelser og sikre læring i serviceperioden.";
       } else {
         $("riskTitle").textContent = "Lav risiko";
-        $("riskText").textContent = `Der er ikke noget tydeligt operationelt hotspotsignal lige nu i data.`;
+        $("riskText").textContent = "Ingen markante operationelle hotspots i data lige nu. Hold fokus på stabilitet og ensartethed.";
       }
 
       if (kitchen.length) {
         const avgKitchen = kitchen.reduce((sum, x) => sum + (Number(x.pct) || 0), 0) / kitchen.length;
-        $("kitchenHeadline").textContent = fmtPct(avgKitchen);
-        $("kitchenHeadlineText").textContent = `Kædens gennemsnitlige kitchen % giver et hurtigt økonomisk billede i dag.`;
+        $("opsHeadline").textContent = `${fmtPct(avgKitchen)} kitchen`;
+        $("opsText").textContent = "Kitchen % giver et hurtigt økonomisk pejlemærke for kæden. Brug det sammen med dagens signaler og cateringniveau.";
       } else {
-        $("kitchenHeadline").textContent = "—";
-        $("kitchenHeadlineText").textContent = `Ingen kitchen-data fundet endnu.`;
+        $("opsHeadline").textContent = "Ingen kitchen";
+        $("opsText").textContent = "Kitchen-data er ikke tilgængelig lige nu, så økonomisk driftssignal er svagere end normalt.";
       }
     }
 
@@ -1087,7 +1188,7 @@
           throw new Error(data && data.error ? data.error : "Bundle load failed");
         }
 
-        buildTopAndActionArea(data);
+        buildLeadershipArea(data);
         renderCategoryBoxes(data);
         renderLocationFocus(data);
         renderKitchen(data);
