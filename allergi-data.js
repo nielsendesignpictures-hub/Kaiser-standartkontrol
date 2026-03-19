@@ -1,4 +1,4 @@
-[
+window.ALLERGI_DATA = [
   {
     "ret": "Stegt flæsk",
     "allergener": {
