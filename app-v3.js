@@ -440,8 +440,6 @@ async function submit() {
 
   try {
     if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
-    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
-
     if (!state.imageBase64) throw new Error("Billede mangler (krav).");
 
     const payload = {
@@ -477,70 +475,6 @@ async function submit() {
     setSubmitting(false);
   }
 }
-
-// ==========================
-// NAV + RESET
-// ==========================
-function initNavButtons() {
-  const next = $("btnNextToDish");
-  if (next) {
-    next.addEventListener("click", () => {
-      populateDishSelect();
-      showScreen("dish");
-    });
-  }
-
-  const back1 = $("btnBackToLocation");
-  if (back1) back1.addEventListener("click", () => showScreen("location"));
-
-  const back2 = $("btnBackToDish");
-  if (back2) back2.addEventListener("click", () => showScreen("dish"));
-
-  const reset = $("btnReset");
-  if (reset) reset.addEventListener("click", () => { resetAll(); showScreen("location"); });
-
-  const close = $("btnClose");
-  if (close) close.addEventListener("click", () => window.location.reload());
-}
-
-function resetRatingScreenState() {
-  state.imageBase64 = "";
-  state.tasted = false;
-  state.ratings = { taste: 0, presentation: 0, temperature: 0, portion: 0 };
-  state.comment = "";
-
-  const check = $("tastedCheck");
-  const wrap = $("afterTasteWrap");
-  if (check) check.checked = false;
-  if (wrap) wrap.classList.add("hidden");
-
-  const img = $("imagePreview");
-  const placeholder = $("imagePlaceholder");
-  setHidden(img, true);
-  setHidden(placeholder, false);
-
-  const file = $("imageInput");
-  if (file) file.value = "";
-
-  const comment = $("commentInput");
-  if (comment) comment.value = "";
-}
-
-function resetAll() {
-  state.location = "";
-  state.meal = "";
-  state.dish = "";
-  resetRatingScreenState();
-
-  const locationSelect = $("locationSelect");
-  if (locationSelect) locationSelect.value = "";
-
-  document.querySelectorAll('input[name="meal"]').forEach((i) => (i.checked = false));
-
-  updateNextEnabled();
-  setError("");
-}
-
 // ==========================
 // BOOT
 // ==========================
