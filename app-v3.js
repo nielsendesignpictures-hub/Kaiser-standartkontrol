@@ -1,11 +1,5 @@
-// ==========================
-// KONFIG (Google Apps Script webhook)
-// ==========================
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwzgmmKMzilTzD9bWoEoO6zjyZhRx48ydAgrwMSqqW5fOAOoHeQEJ5dLpcbjZduv0_9sg/exec";
-const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
-const RATING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWds-PHayXHll-vvpUwgs2vCU6KqFkgd9Sceg63fB1xM1_o7ZRH3jZrA778ZsxRaOMfw/exec";
 
-// Lokationer
 const LOCATIONS = [
   "Café Kaiser Helsingør",
   "Café Kaiser Hillerød",
@@ -20,107 +14,32 @@ const DISHES = [
   { name: "Byg selv brunch", meals: ["Morgenmad"] },
   { name: "Ostemad", meals: ["Morgenmad", "Frokost"] },
   { name: "Fiskefilet smørrebrød", meals: ["Frokost"] },
-  { name: "Hønsesalat smørrebrød", meals: ["Frokost"] },
-  { name: "Æg & Rejer smørrebrød", meals: ["Frokost"] },
-  { name: "Hakkebøf smørrebrød", meals: ["Frokost"] },
-  { name: "Roastbeef smørrebrød", meals: ["Frokost"] },
-  { name: "Kylling wrap", meals: ["Frokost", "Aften"] },
   { name: "Pariserbøf", meals: ["Frokost", "Aften"] },
-  { name: "Fish'n'chips", meals: ["Frokost", "Aften"] },
-  { name: "Stjerneskud", meals: ["Frokost", "Aften"] },
   { name: "Kaiser burger", meals: ["Frokost", "Aften"] },
-  { name: "Signatur burger", meals: ["Frokost", "Aften"] },
-  { name: "Mexicansk burger", meals: ["Frokost", "Aften"] },
-  { name: "Bearnaise burger", meals: ["Frokost", "Aften"] },
-  { name: "Kylling sandwich", meals: ["Frokost", "Aften"] },
-  { name: "Kaiser sandwich", meals: ["Frokost", "Aften"] },
-  { name: "Tunmousse sandwich", meals: ["Frokost", "Aften"] },
-  { name: "Serrano sandwich", meals: ["Frokost", "Aften"] },
-  { name: "Cæsar salat", meals: ["Frokost", "Aften"] },
-  { name: "Pokebowl", meals: ["Frokost", "Aften"] },
-  { name: "Varmrøget lakse salat", meals: ["Frokost", "Aften"] },
-  { name: "Pommes frites", meals: ["Frokost", "Aften"] },
-  { name: "Snack kurv", meals: ["Frokost", "Aften"] },
-  { name: "Nachos deluxe", meals: ["Frokost", "Aften"] },
-  { name: "Kaiser børneburger", meals: ["Frokost", "Aften"] },
-  { name: "Kaiser børnefiskefilet", meals: ["Frokost", "Aften"] },
-  { name: "Kaiser børnenuggets", meals: ["Frokost", "Aften"] },
   { name: "Stegt flæsk", meals: ["Aften"] },
-  { name: "Wienerschitzel", meals: ["Aften"] },
-  { name: "Oksemørbrad", meals: ["Aften"] },
-  { name: "Chili con carne", meals: ["Aften"] },
-  { name: "Ærte pasta", meals: ["Aften"] },
-  { name: "Pandekager med is", meals: ["Frokost", "Aften"] },
-  { name: "Chokolade kage", meals: ["Frokost", "Aften"] },
-  { name: "Rabarber crumble", meals: ["Frokost", "Aften"] },
-  { name: "Hindbær dome", meals: ["Frokost", "Aften"] },
-  { name: "Æble-Karameltærte", meals: ["Frokost", "Aften"] },
-  { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
+  { name: "Wienerschitzel", meals: ["Aften"] }
 ];
 
-// Quotes (vises på side 4)
-const QUOTES = [
-  "Små forbedringer hver dag bliver til store resultater.",
-  "Kvalitet er ikke en handling – det er en vane.",
-  "Detaljer skaber helheden.",
-  "Konsekvens slår inspiration.",
-  "Standarder giver frihed i driften.",
-  "Vi rammer samme kvalitet – hver gang.",
-  "Godt arbejde. Næste ret.",
-  "Fokus på detaljen. Gæsten mærker det."
-];
-
-// ==========================
-// STATE
-// ==========================
 const state = {
-  screen: "location",
   location: "",
   meal: "",
   dish: "",
   imageBase64: "",
   tasted: false,
   ratings: {
-    taste: 0,
     presentation: 0,
-    temperature: 0,
-    portion: 0
+    portion: 0,
+    taste: 0,
+    temperature: 0
   },
-  comment: "",
-  isSubmitting: false
+  comment: ""
 };
 
-// ==========================
-// DOM HELPERS
-// ==========================
 const $ = (id) => document.getElementById(id);
 
-const screens = {
-  location: $("screen-location"),
-  dish: $("screen-dish"),
-  rating: $("screen-rating"),
-  confirmation: $("screen-confirmation")
-};
-
-function showScreen(name) {
-  state.screen = name;
-
-  // hide/show header: kun side 1
-  const header = $("topHeader");
-  if (header) header.classList.toggle("hidden", name !== "location");
-
-  Object.entries(screens).forEach(([k, el]) => {
-    if (!el) return;
-    el.classList.toggle("hidden", k !== name);
-  });
-
-  if (name === "confirmation") {
-    const quoteEl = $("quoteText");
-    if (quoteEl) {
-      const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-      quoteEl.textContent = `"${q}"`;
-    }
-  }
+function setHidden(el, hidden) {
+  if (!el) return;
+  el.classList.toggle("hidden", hidden);
 }
 
 function setText(id, text) {
@@ -128,29 +47,29 @@ function setText(id, text) {
   if (el) el.textContent = text;
 }
 
-function setHidden(el, hidden) {
-  if (!el) return;
-  el.classList.toggle("hidden", hidden);
+function showScreen(name) {
+  const screens = {
+    location: $("screen-location"),
+    dish: $("screen-dish"),
+    rating: $("screen-rating"),
+    confirmation: $("screen-confirmation")
+  };
+
+  Object.entries(screens).forEach(([key, el]) => {
+    if (!el) return;
+    el.classList.toggle("hidden", key !== name);
+  });
+
+  const header = $("topHeader");
+  if (header) header.classList.toggle("hidden", name !== "location");
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[c]));
-}
-
-// ==========================
-// SCREEN 1
-// ==========================
 function initLocationSelect() {
   const select = $("locationSelect");
   if (!select) return;
 
   select.innerHTML = `<option value="">Vælg lokation...</option>`;
+
   LOCATIONS.forEach((loc) => {
     const opt = document.createElement("option");
     opt.value = loc;
@@ -169,22 +88,34 @@ function initMealRadios() {
   if (!wrap) return;
 
   wrap.innerHTML = "";
+
   MEALS.forEach((meal) => {
     const label = document.createElement("label");
+    label.style.display = "flex";
+    label.style.alignItems = "center";
+    label.style.justifyContent = "center";
+    label.style.gap = "10px";
+    label.style.minHeight = "56px";
+    label.style.padding = "14px 12px";
+    label.style.border = "1px solid rgba(255,255,255,0.10)";
+    label.style.background = "rgba(255,255,255,0.03)";
+    label.style.borderRadius = "16px";
+    label.style.cursor = "pointer";
 
     const input = document.createElement("input");
     input.type = "radio";
     input.name = "meal";
     input.value = meal;
-    input.className = "w-6 h-6";
+
     input.addEventListener("change", () => {
       state.meal = meal;
       updateNextEnabled();
     });
 
     const span = document.createElement("span");
-    span.className = "text-xl font-semibold";
     span.textContent = meal;
+    span.style.fontSize = "16px";
+    span.style.fontWeight = "700";
 
     label.appendChild(input);
     label.appendChild(span);
@@ -195,14 +126,12 @@ function initMealRadios() {
 function updateNextEnabled() {
   const btn = $("btnNextToDish");
   if (!btn) return;
+
   const ok = !!state.location && !!state.meal;
   btn.disabled = !ok;
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-// ==========================
-// SCREEN 2 (dish dropdown)
-// ==========================
 function initDishSelect() {
   const select = $("dishSelect");
   if (!select) return;
@@ -210,12 +139,9 @@ function initDishSelect() {
   select.addEventListener("change", () => {
     const val = select.value;
     if (!val) return;
+
     state.dish = val;
     setText("chosenDishName", val);
-
-    // reset rating screen state when dish changes
-    resetRatingScreenState();
-
     renderRatingBlocks();
     updateSubmitEnabled();
     showScreen("rating");
@@ -228,25 +154,23 @@ function populateDishSelect() {
 
   select.innerHTML = `<option value="">Vælg ret...</option>`;
 
-  const filtered = DISHES.filter(d => !state.meal || d.meals.includes(state.meal));
-  filtered.forEach(d => {
-    const opt = document.createElement("option");
-    opt.value = d.name;
-    opt.textContent = d.name;
-    select.appendChild(opt);
-  });
+  DISHES
+    .filter(d => d.meals.includes(state.meal))
+    .forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.name;
+      opt.textContent = d.name;
+      select.appendChild(opt);
+    });
 
   select.value = "";
 }
 
-// ==========================
-// SCREEN 3 (rating)
-// ==========================
 const ratingLabels = {
-  taste: "SMAG",
   presentation: "ANRETNING",
-  temperature: "TEMPERATUR",
-  portion: "PORTION"
+  portion: "PORTION",
+  taste: "SMAG",
+  temperature: "TEMPERATUR"
 };
 
 function renderRatingBlocks() {
@@ -264,19 +188,19 @@ function renderRatingBlocks() {
 
     const starsWrap = block.querySelector(`[data-stars="${field}"]`);
     for (let i = 1; i <= 5; i++) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "text-4xl leading-none";
-      b.textContent = "☆";
-      b.addEventListener("click", () => {
-        // lås smag/temperatur indtil “Jeg har smagt maden”
-        if ((field === "taste" || field === "temperature") && !state.tasted) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "☆";
+      btn.className = "text-4xl leading-none";
 
+      btn.addEventListener("click", () => {
+        if ((field === "taste" || field === "temperature") && !state.tasted) return;
         state.ratings[field] = i;
         paintStars();
         updateSubmitEnabled();
       });
-      starsWrap.appendChild(b);
+
+      starsWrap.appendChild(btn);
     }
   });
 
@@ -293,9 +217,7 @@ function paintStars() {
       const starNum = idx + 1;
       const active = starNum <= value;
       b.textContent = active ? "★" : "☆";
-      b.className = active
-        ? "text-4xl leading-none text-yellow-400"
-        : "text-4xl leading-none text-slate-300";
+      b.style.color = active ? "#d6b24a" : "rgba(255,255,255,0.25)";
     });
   });
 }
@@ -309,37 +231,16 @@ function initTastedToggle() {
     state.tasted = !!check.checked;
     wrap.classList.toggle("hidden", !state.tasted);
 
-    // hvis de slår det fra igen, nulstil smag/temp
     if (!state.tasted) {
       state.ratings.taste = 0;
       state.ratings.temperature = 0;
       paintStars();
     }
+
     updateSubmitEnabled();
   });
 }
 
-function updateSubmitEnabled() {
-  const btn = $("btnSubmit");
-  if (!btn) return;
-
-  const hasImage = !!state.imageBase64;
-  const allRated =
-    state.ratings.presentation > 0 &&
-    state.ratings.portion > 0 &&
-    state.tasted &&
-    state.ratings.taste > 0 &&
-    state.ratings.temperature > 0;
-
-  const ok = hasImage && allRated && !state.isSubmitting;
-
-  btn.disabled = !ok;
-  btn.classList.toggle("btn-disabled", !ok);
-}
-
-// ==========================
-// IMAGE -> base64 (komprimeret) + KRAV
-// ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
   const input = $("imageInput");
@@ -352,23 +253,18 @@ function initImageUpload() {
     if (!file) return;
 
     try {
-      const previewUrl = URL.createObjectURL(file);
       const img = $("imagePreview");
       const placeholder = $("imagePlaceholder");
-      if (img) img.src = previewUrl;
-    
+
+      img.src = URL.createObjectURL(file);
       setHidden(img, false);
       setHidden(placeholder, true);
 
-      // komprimering (stabilt til mail)
       state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
-
       updateSubmitEnabled();
-    } catch (e) {
-      console.error(e);
-      state.imageBase64 = "";
-      alert("Kunne ikke læse billedet. Prøv igen.");
-      updateSubmitEnabled();
+    } catch (err) {
+      console.error(err);
+      alert("Kunne ikke læse billede");
     }
   });
 }
@@ -377,9 +273,11 @@ function fileToCompressedDataUrl(file, maxW, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;
+
     reader.onload = () => {
       const img = new Image();
       img.onerror = reject;
+
       img.onload = () => {
         const ratio = Math.min(1, maxW / img.width);
         const w = Math.round(img.width * ratio);
@@ -394,15 +292,30 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 
         resolve(canvas.toDataURL("image/jpeg", quality));
       };
+
       img.src = reader.result;
     };
+
     reader.readAsDataURL(file);
   });
 }
 
-// ==========================
-// SUBMIT -> Apps Script
-// ==========================
+function updateSubmitEnabled() {
+  const btn = $("btnSubmit");
+  if (!btn) return;
+
+  const ok =
+    !!state.imageBase64 &&
+    state.ratings.presentation > 0 &&
+    state.ratings.portion > 0 &&
+    state.tasted &&
+    state.ratings.taste > 0 &&
+    state.ratings.temperature > 0;
+
+  btn.disabled = !ok;
+  btn.classList.toggle("btn-disabled", !ok);
+}
+
 function initCommentAndSubmit() {
   const comment = $("commentInput");
   if (comment) {
@@ -416,22 +329,22 @@ function initCommentAndSubmit() {
 }
 
 function setSubmitting(submitting) {
-  state.isSubmitting = submitting;
   const label = $("submitLabel");
   if (label) label.textContent = submitting ? "SENDER..." : "Indsend";
-  updateSubmitEnabled();
 }
 
 function setError(msg) {
   const el = $("submitError");
   if (!el) return;
+
   if (!msg) {
-    setHidden(el, true);
     el.textContent = "";
+    el.classList.add("hidden");
     return;
   }
+
   el.textContent = msg;
-  setHidden(el, false);
+  el.classList.remove("hidden");
 }
 
 async function submit() {
@@ -439,8 +352,7 @@ async function submit() {
   setSubmitting(true);
 
   try {
-    if (!WEBHOOK_URL) throw new Error("WEBHOOK_URL mangler");
-    if (!state.imageBase64) throw new Error("Billede mangler (krav).");
+    if (!state.imageBase64) throw new Error("Billede mangler");
 
     const payload = {
       lokation: state.location,
@@ -469,8 +381,56 @@ async function submit() {
     showScreen("confirmation");
   } catch (err) {
     console.error(err);
-    setError(err?.message || "Kunne ikke sende. Prøv igen.");
+    setError(err.message || "Kunne ikke sende");
   } finally {
     setSubmitting(false);
   }
 }
+
+function initNavButtons() {
+  const next = $("btnNextToDish");
+  if (next) {
+    next.addEventListener("click", () => {
+      populateDishSelect();
+      showScreen("dish");
+    });
+  }
+
+  const back1 = $("btnBackToLocation");
+  if (back1) back1.addEventListener("click", () => showScreen("location"));
+
+  const back2 = $("btnBackToDish");
+  if (back2) back2.addEventListener("click", () => showScreen("dish"));
+
+  const reset = $("btnReset");
+  if (reset) {
+    reset.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
+
+  const close = $("btnClose");
+  if (close) {
+    close.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
+}
+
+function boot() {
+  console.log("boot starter");
+  initLocationSelect();
+  initMealRadios();
+  initDishSelect();
+  initTastedToggle();
+  initNavButtons();
+  initImageUpload();
+  initCommentAndSubmit();
+  updateNextEnabled();
+  renderRatingBlocks();
+  updateSubmitEnabled();
+  showScreen("location");
+  console.log("boot færdig");
+}
+
+document.addEventListener("DOMContentLoaded", boot);
