@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Todo Liste</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #taskInput {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #taskInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #prioritySelect {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            background: white;
+        }
+
+        #addBtn {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #addBtn:hover {
+            background: #5568d3;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .priority-high {
+            background: #ffe0e0;
+            color: #c62828;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-low {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .delete-btn {
+            padding: 5px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Min Todo Liste</h1>
+        
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Tilføj ny opgave...">
+            <select id="prioritySelect">
+                <option value="high">🔴 Haster</option>
+                <option value="medium">🟠 Denne uge</option>
+                <option value="low">🟡 Projekt</option>
+            </select>
+            <button id="addBtn">Tilføj</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title priority-high">
+                🔴 Haster (inden mandag)
+            </div>
+            <ul class="task-list" id="highPriority"></ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title priority-medium">
+                🟠 Denne uge
+            </div>
+            <ul class="task-list" id="mediumPriority"></ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title priority-low">
+                🟡 Igangværende / Projekter
+            </div>
+            <ul class="task-list" id="lowPriority"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Load tasks from localStorage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || {
+            high: [],
+            medium: [],
+            low: []
+        };
+
+        const taskInput = document.getElementById('taskInput');
+        const prioritySelect = document.getElementById('prioritySelect');
+        const addBtn = document.getElementById('addBtn');
+
+        // Render all tasks
+        function renderTasks() {
+            ['high', 'medium', 'low'].forEach(priority => {
+                const list = document.getElementById(`${priority}Priority`);
+                list.innerHTML = '';
+
+                if (tasks[priority].length === 0) {
+                    list.innerHTML = '<div class="empty-state">Ingen opgaver endnu</div>';
+                    return;
+                }
+
+                tasks[priority].forEach((task, index) => {
+                    const li = document.createElement('li');
+                    li.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    li.innerHTML = `
+                        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                               onchange="toggleTask('${priority}', ${index})">
+                        <span class="task-text">${task.text}</span>
+                        <button class="delete-btn" onclick="deleteTask('${priority}', ${index})">Slet</button>
+                    `;
+                    list.appendChild(li);
+                });
+            });
+        }
+
+        // Add new task
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text === '') return;
+
+            const priority = prioritySelect.value;
+            tasks[priority].push({
+                text: text,
+                completed: false
+            });
+
+            saveTasks();
+            renderTasks();
+            taskInput.value = '';
+        }
+
+        // Toggle task completion
+        function toggleTask(priority, index) {
+            tasks[priority][index].completed = !tasks[priority][index].completed;
+            saveTasks();
+            renderTasks();
+        }
+
+        // Delete task
+        function deleteTask(priority, index) {
+            tasks[priority].splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+
+        // Save to localStorage
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // Event listeners
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        // Initial render
+        renderTasks();
+    </script>
+</body>
+</html>
