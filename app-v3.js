@@ -1,7 +1,7 @@
 // ==========================
 // KONFIG (Google Apps Script webhook)
 // ==========================
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec"; 
+const WEBHOOK_URL = "INDSÆT_DIN_GAMLE_MAIL_WEBHOOK_URL_HER";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 // Lokationer
@@ -57,7 +57,6 @@ const DISHES = [
   { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
 ];
 
-// Quotes (vises på side 4)
 const QUOTES = [
   "Små forbedringer hver dag bliver til store resultater.",
   "Kvalitet er ikke en handling – det er en vane.",
@@ -104,7 +103,6 @@ const screens = {
 function showScreen(name) {
   state.screen = name;
 
-  // hide/show header: kun side 1
   const header = $("topHeader");
   if (header) header.classList.toggle("hidden", name !== "location");
 
@@ -130,16 +128,6 @@ function setText(id, text) {
 function setHidden(el, hidden) {
   if (!el) return;
   el.classList.toggle("hidden", hidden);
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[c]));
 }
 
 // ==========================
@@ -200,7 +188,7 @@ function updateNextEnabled() {
 }
 
 // ==========================
-// SCREEN 2 (dish dropdown)
+// SCREEN 2
 // ==========================
 function initDishSelect() {
   const select = $("dishSelect");
@@ -212,9 +200,7 @@ function initDishSelect() {
     state.dish = val;
     setText("chosenDishName", val);
 
-    // reset rating screen state when dish changes
     resetRatingScreenState();
-
     renderRatingBlocks();
     updateSubmitEnabled();
     showScreen("rating");
@@ -239,7 +225,7 @@ function populateDishSelect() {
 }
 
 // ==========================
-// SCREEN 3 (rating)
+// SCREEN 3
 // ==========================
 const ratingLabels = {
   taste: "SMAG",
@@ -268,7 +254,6 @@ function renderRatingBlocks() {
       b.className = "text-4xl leading-none";
       b.textContent = "☆";
       b.addEventListener("click", () => {
-        // lås smag/temperatur indtil “Jeg har smagt maden”
         if ((field === "taste" || field === "temperature") && !state.tasted) return;
 
         state.ratings[field] = i;
@@ -308,7 +293,6 @@ function initTastedToggle() {
     state.tasted = !!check.checked;
     wrap.classList.toggle("hidden", !state.tasted);
 
-    // hvis de slår det fra igen, nulstil smag/temp
     if (!state.tasted) {
       state.ratings.taste = 0;
       state.ratings.temperature = 0;
@@ -337,7 +321,7 @@ function updateSubmitEnabled() {
 }
 
 // ==========================
-// IMAGE -> base64 (komprimeret) + KRAV
+// IMAGE
 // ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
@@ -358,9 +342,7 @@ function initImageUpload() {
       setHidden(img, false);
       setHidden(placeholder, true);
 
-      // komprimering (stabilt til mail)
       state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
-
       updateSubmitEnabled();
     } catch (e) {
       console.error(e);
@@ -399,7 +381,7 @@ function fileToCompressedDataUrl(file, maxW, quality) {
 }
 
 // ==========================
-// SUBMIT -> Apps Script
+// SUBMIT -> MAIL WEBHOOK
 // ==========================
 function initCommentAndSubmit() {
   const comment = $("commentInput");
@@ -439,8 +421,6 @@ async function submit() {
   try {
     if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
     if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
-
-    // ekstra sikkerhed: billedet er krav
     if (!state.imageBase64) throw new Error("Billede mangler (krav).");
 
     const payload = {
@@ -456,6 +436,8 @@ async function submit() {
       dato: new Date().toLocaleString("da-DK"),
       billedeBase64: state.imageBase64
     };
+
+    console.log("Sender payload:", payload);
 
     await fetch(WEBHOOK_URL, {
       method: "POST",
