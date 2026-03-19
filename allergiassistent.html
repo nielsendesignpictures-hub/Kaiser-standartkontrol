@@ -380,8 +380,9 @@
   const $ = id => document.getElementById(id);
 
   const state = {
-    lastAllergy: null,
-    lastResult: null
+    lastAllergies: [],
+    lastResult: null,
+    lastDish: null
   };
 
   function escapeHtml(str) {
@@ -406,12 +407,17 @@
       .trim();
   }
 
+  function capitalize(str) {
+    str = String(str || "");
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   function getAllergiesFromData() {
     const rows = window.ALLERGI_DATA || [];
     const set = new Set();
 
     rows.forEach(row => {
-      const allergener = row && row.allergener ? row.allergener : {};
+      const allergener = row?.allergener || {};
       Object.keys(allergener).forEach(key => set.add(key));
     });
 
@@ -445,10 +451,8 @@
     scrollChatToBottom();
   }
 
-  function detectAllergyFromMessage(message) {
-    const text = normalizeText(message);
-
-    const aliasMap = {
+  function allergyAliasMap() {
+    return {
       "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
       "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
       "nødder": ["nødder", "nøddeallergi", "noedder"],
@@ -464,136 +468,201 @@
       "bløddyr": ["bløddyr", "bloeddyr", "muslinger", "østers", "oesters"],
       "sennep": ["sennep"]
     };
-
-    for (const allergy in aliasMap) {
-      const aliases = aliasMap[allergy];
-      if (aliases.some(alias => text.includes(normalizeText(alias)))) {
-        return allergy;
-      }
-    }
-
-    return null;
   }
 
-  function getResultsForAllergy(allergy) {
+  function detectAllergiesFromMessage(message) {
+    const text = normalizeText(message);
+    const aliasMap = allergyAliasMap();
+    const found = [];
+
+    Object.keys(aliasMap).forEach(allergy => {
+      const aliases = aliasMap[allergy];
+      if (aliases.some(alias => text.includes(normalizeText(alias)))) {
+        found.push(allergy);
+      }
+    });
+
+    return [...new Set(found)];
+  }
+
+  function findDishByMessage(message) {
+    const text = normalizeText(message);
+    const rows = window.ALLERGI_DATA || [];
+
+    let bestMatch = null;
+    let bestLength = 0;
+
+    rows.forEach(row => {
+      const dish = normalizeText(row.ret);
+      if (!dish) return;
+
+      if (text.includes(dish) && dish.length > bestLength) {
+        bestMatch = row;
+        bestLength = dish.length;
+      }
+    });
+
+    return bestMatch;
+  }
+
+  function getDishStatusForAllergy(row, allergy) {
+    return normalizeValue(row?.allergener?.[allergy]);
+  }
+
+  function getResultsForAllergies(allergies) {
     const rows = window.ALLERGI_DATA || [];
     const safe = [];
     const trace = [];
     const avoid = [];
 
     rows.forEach(row => {
-      const value = normalizeValue(row?.allergener?.[allergy]);
+      const values = allergies.map(allergy => getDishStatusForAllergy(row, allergy));
 
-      if (value === "nej") {
-        safe.push(row);
-      } else if (value === "spor af") {
-        trace.push(row);
-      } else if (value === "ja") {
+      if (values.some(v => v === "ja")) {
         avoid.push(row);
+      } else if (values.some(v => v === "spor af")) {
+        trace.push(row);
+      } else if (values.every(v => v === "nej")) {
+        safe.push(row);
       }
     });
 
     return { safe, trace, avoid };
   }
 
-  function formatDishList(items, limit = 5) {
+  function formatDishList(items, limit = 5, withSuggestions = false, allergies = []) {
     if (!items.length) return "Ingen fundet.";
 
-    return items
-      .slice(0, limit)
-      .map((item, index) => `${index + 1}. ${item.ret}`)
-      .join("\n");
+    return items.slice(0, limit).map((item, index) => {
+      let line = `${index + 1}. ${item.ret}`;
+
+      if (withSuggestions) {
+        const suggestion = getModificationSuggestion(item, allergies);
+        if (suggestion) line += ` (${suggestion})`;
+      }
+
+      return line;
+    }).join("\n");
   }
 
-  function formatMainReply(allergy, result) {
-    const safeText = formatDishList(result.safe, 5);
+  function getModificationSuggestion(row, allergies) {
+    const name = normalizeText(row?.ret || "");
+    const suggestions = [];
+
+    allergies.forEach(allergy => {
+      const status = getDishStatusForAllergy(row, allergy);
+
+      if (status !== "ja") return;
+
+      if (allergy === "gluten") {
+        if (name.includes("cæsar") || name.includes("caesar")) suggestions.push("muligvis uden croutoner");
+        else if (name.includes("burger")) suggestions.push("muligvis uden bolle");
+        else if (name.includes("sandwich")) suggestions.push("muligvis uden brød");
+        else if (name.includes("salat")) suggestions.push("muligvis uden croutoner eller topping");
+      }
+
+      if (allergy === "laktose") {
+        if (name.includes("salat")) suggestions.push("muligvis uden dressing eller ost");
+        else if (name.includes("burger")) suggestions.push("muligvis uden ost");
+        else if (name.includes("pasta")) suggestions.push("muligvis uden ost eller flødesauce");
+      }
+
+      if (allergy === "æg") {
+        if (name.includes("burger")) suggestions.push("spørg om mayo kan undlades");
+        if (name.includes("salat")) suggestions.push("spørg om dressing kan serveres ved siden af");
+      }
+    });
+
+    return suggestions.length ? suggestions.join(" / ") : "";
+  }
+
+  function formatAllergyReply(allergies, result) {
+    const label = allergies.map(capitalize).join(" + ");
 
     return `
-<b>${escapeHtml(capitalize(allergy))}</b>
+<b>${escapeHtml(label)}</b>
 
 Du kan spise:
-${escapeHtml(safeText)}
+${escapeHtml(formatDishList(result.safe, 5, false, allergies))}
 
-Vil du også have retter med spor af i?
+Mulige tilpasninger:
+${escapeHtml(formatDishList(result.avoid.filter(r => getModificationSuggestion(r, allergies)).slice(0, 3), 3, true, allergies))}
+
+Vil du også have retter med spor af eller retter der bør undgås?
     `.trim();
   }
 
-  function formatTraceReply(allergy, result) {
-    if (!result.trace.length) {
-      return `
-<b>${escapeHtml(capitalize(allergy))}</b>
-
-Der er ingen retter registreret med spor af ${escapeHtml(allergy)}.
-      `.trim();
-    }
+  function formatTraceReply(allergies, result) {
+    const label = allergies.map(capitalize).join(" + ");
 
     return `
-<b>${escapeHtml(capitalize(allergy))}</b>
+<b>${escapeHtml(label)}</b>
 
 Retter med spor af:
-${escapeHtml(formatDishList(result.trace, 10))}
-
-Vil du også se hvilke retter der bør undgås?
+${escapeHtml(formatDishList(result.trace, 10, false, allergies))}
     `.trim();
   }
 
-  function formatAvoidReply(allergy, result) {
-    if (!result.avoid.length) {
-      return `
-<b>${escapeHtml(capitalize(allergy))}</b>
-
-Der er ingen retter registreret som bør undgås.
-      `.trim();
-    }
+  function formatAvoidReply(allergies, result) {
+    const label = allergies.map(capitalize).join(" + ");
 
     return `
-<b>${escapeHtml(capitalize(allergy))}</b>
+<b>${escapeHtml(label)}</b>
 
 Bør undgås:
-${escapeHtml(formatDishList(result.avoid, 10))}
+${escapeHtml(formatDishList(result.avoid, 10, false, allergies))}
     `.trim();
   }
 
-  function capitalize(str) {
-    str = String(str || "");
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  function formatDishReply(row, allergies) {
+    const dishName = row.ret;
+    const lines = [`<b>${escapeHtml(dishName)}</b>`];
+
+    allergies.forEach(allergy => {
+      const status = getDishStatusForAllergy(row, allergy);
+
+      if (status === "ja") {
+        lines.push(`${capitalize(allergy)}: Indeholder`);
+      } else if (status === "nej") {
+        lines.push(`${capitalize(allergy)}: Nej`);
+      } else if (status === "spor af") {
+        lines.push(`${capitalize(allergy)}: Spor af`);
+      } else {
+        lines.push(`${capitalize(allergy)}: Ukendt`);
+      }
+
+      const suggestion = getModificationSuggestion(row, [allergy]);
+      if (suggestion) {
+        lines.push(`Forslag: ${suggestion}`);
+      }
+    });
+
+    lines.push(`Kategori: ${escapeHtml(row.kategori || "Ukendt")}`);
+    lines.push(`Bekræft altid med køkkenet ved ændringer.`);
+
+    return lines.join("\n");
   }
 
-  function isYesToTrace(message) {
+  function wantsTrace(message) {
     const text = normalizeText(message);
-    return [
-      "ja",
-      "ja tak",
-      "vis spor af",
-      "vis dem",
-      "spor af",
-      "gerne",
-      "ok",
-      "okay"
-    ].includes(text);
+    return text.includes("spor af") || text === "ja" || text === "ja tak";
   }
 
-  function isAskAvoid(message) {
+  function wantsAvoid(message) {
     const text = normalizeText(message);
-    return (
-      text.includes("undgå") ||
-      text.includes("undga") ||
-      text.includes("bør undgås") ||
-      text.includes("skal undgås") ||
-      text.includes("hvad må de ikke få")
-    );
+    return text.includes("undgå") || text.includes("undga") || text.includes("må ikke");
   }
 
   function handleFollowUp(message) {
-    if (!state.lastAllergy || !state.lastResult) return false;
+    if (!state.lastAllergies.length || !state.lastResult) return false;
 
-    if (isYesToTrace(message)) {
-      addBotMessage(formatTraceReply(state.lastAllergy, state.lastResult));
+    if (wantsTrace(message)) {
+      addBotMessage(formatTraceReply(state.lastAllergies, state.lastResult));
       return true;
     }
 
-    if (isAskAvoid(message)) {
-      addBotMessage(formatAvoidReply(state.lastAllergy, state.lastResult));
+    if (wantsAvoid(message)) {
+      addBotMessage(formatAvoidReply(state.lastAllergies, state.lastResult));
       return true;
     }
 
@@ -608,21 +677,33 @@ ${escapeHtml(formatDishList(result.avoid, 10))}
 
     if (handleFollowUp(text)) return;
 
-    const allergy = detectAllergyFromMessage(text);
+    const allergies = detectAllergiesFromMessage(text);
+    const dish = findDishByMessage(text);
 
-    if (!allergy) {
+    if (dish && allergies.length) {
+      state.lastDish = dish;
+      addBotMessage(formatDishReply(dish, allergies));
+      return;
+    }
+
+    if (allergies.length) {
+      const result = getResultsForAllergies(allergies);
+      state.lastAllergies = allergies;
+      state.lastResult = result;
+      addBotMessage(formatAllergyReply(allergies, result));
+      return;
+    }
+
+    if (dish) {
       addBotMessage(
-        `Jeg kunne ikke genkende allergien.\n\nPrøv fx:\n- Gluten\n- Laktose\n- Min gæst har nøddeallergi\n- Hvad kan en med fisk spise?`
+        `<b>${escapeHtml(dish.ret)}</b>\n\nJeg fandt retten, men ikke allergien i beskeden.\n\nPrøv fx:\n- Indeholder ${escapeHtml(dish.ret)} gluten?\n- Kan ${escapeHtml(dish.ret)} laves uden laktose?`
       );
       return;
     }
 
-    const result = getResultsForAllergy(allergy);
-
-    state.lastAllergy = allergy;
-    state.lastResult = result;
-
-    addBotMessage(formatMainReply(allergy, result));
+    addBotMessage(
+      `Jeg kunne ikke forstå spørgsmålet.\n\nPrøv fx:\n- Gluten\n- Gluten og laktose\n- Indeholder Cæsar salat gluten?\n- Kan burger laves uden laktose?`
+    );
   }
 
   function buildQuickActions() {
@@ -635,9 +716,7 @@ ${escapeHtml(formatDishList(result.avoid, 10))}
       const btn = document.createElement("button");
       btn.className = "quickBtn";
       btn.textContent = capitalize(allergy);
-      btn.addEventListener("click", () => {
-        handleMessage(allergy);
-      });
+      btn.addEventListener("click", () => handleMessage(allergy));
       wrap.appendChild(btn);
     });
   }
@@ -669,7 +748,7 @@ ${escapeHtml(formatDishList(result.avoid, 10))}
     bindEvents();
 
     addBotMessage(
-      `Hej.\n\nSkriv en allergi, fx:\n- Gluten\n- Laktose\n- Nødder\n\nSå viser jeg hurtigt hvad gæsten kan spise.`
+      `Hej.\n\nSkriv fx:\n- Gluten\n- Gluten og laktose\n- Indeholder Cæsar salat gluten?\n- Kan burger laves uden laktose?\n\nSå giver jeg et hurtigt serversvar.`
     );
   }
 
