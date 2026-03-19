@@ -320,7 +320,6 @@ function initImageUpload() {
       setHidden(placeholder, true);
 
       state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
-
       updateSubmitEnabled();
     } catch (e) {
       console.error(e);
@@ -398,6 +397,7 @@ async function submit() {
     if (!state.imageBase64) throw new Error("Billede mangler (krav).");
 
     const params = new URLSearchParams();
+    params.append("action", "addFoodRatingViaGet");
     params.append("lokation", state.location);
     params.append("maaltid", state.meal);
     params.append("ret", state.dish);
@@ -407,17 +407,14 @@ async function submit() {
     params.append("scorePortion", String(state.ratings.portion));
     params.append("kommentar", state.comment || "");
     params.append("dato", new Date().toLocaleString("da-DK"));
-    params.append("billedeBase64", state.imageBase64 || "");
 
-    console.log("Sender payload:", Object.fromEntries(params.entries()));
+    const url = `${WEBHOOK_URL}?${params.toString()}`;
 
-    await fetch(WEBHOOK_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-      },
-      body: params.toString()
+    console.log("Sender GET:", url);
+
+    await fetch(url, {
+      method: "GET",
+      mode: "no-cors"
     });
 
     showScreen("confirmation");
