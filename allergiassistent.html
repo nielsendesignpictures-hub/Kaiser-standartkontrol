@@ -376,262 +376,266 @@
   </div>
 
   <script src="./allergi-data.js"></script>
-  <script>
-    const $ = id => document.getElementById(id);
+<script>
+  const $ = id => document.getElementById(id);
 
-    function escapeHtml(str) {
-      return String(str || "").replace(/[&<>"']/g, c => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-      }[c]));
+  function escapeHtml(str) {
+    return String(str || "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[c]));
+  }
+
+  function normalizeValue(v) {
+    return String(v || "").trim().toLowerCase();
+  }
+
+  function normalizeText(v) {
+    return String(v || "")
+      .toLowerCase()
+      .replace(/[.,!?]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function getAllergiesFromData() {
+    const rows = window.ALLERGI_DATA || [];
+    const set = new Set();
+
+    rows.forEach(row => {
+      const allergener = row && row.allergener ? row.allergener : {};
+      Object.keys(allergener).forEach(key => set.add(key));
+    });
+
+    return [...set];
+  }
+
+  function scrollChatToBottom() {
+    const box = $("chatBox");
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function addUserMessage(text) {
+    const el = document.createElement("div");
+    el.className = "msg user";
+    el.innerHTML = `
+      <div class="msgLabel">Tjener</div>
+      <div class="msgText">${escapeHtml(text)}</div>
+    `;
+    $("chatBox").appendChild(el);
+    scrollChatToBottom();
+  }
+
+  function renderDishList(items) {
+    if (!items.length) {
+      return `<div class="dish"><div class="dishMeta">Ingen retter fundet</div></div>`;
     }
 
-    function normalizeValue(v) {
-      return String(v || "").trim().toLowerCase();
-    }
+    return items.map(item => `
+      <div class="dish">
+        <div class="dishName">${escapeHtml(item.ret || "Ukendt ret")}</div>
+        <div class="dishMeta">${escapeHtml(item.kategori || "Ukendt kategori")}</div>
+      </div>
+    `).join("");
+  }
 
-    function normalizeText(v) {
-      return String(v || "")
-        .toLowerCase()
-        .replace(/[.,!?]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-    }
+  function addBotMessage(text, result = null) {
+    const el = document.createElement("div");
+    el.className = "msg bot";
 
-    function getAllergiesFromData() {
-      const first = (window.ALLERGI_DATA || [])[0];
-      if (!first || !first.allergener) return [];
-      return Object.keys(first.allergener);
-    }
+    let cards = "";
 
-    function scrollChatToBottom() {
-      const box = $("chatBox");
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function addUserMessage(text) {
-      const el = document.createElement("div");
-      el.className = "msg user";
-      el.innerHTML = `
-        <div class="msgLabel">Tjener</div>
-        <div class="msgText">${escapeHtml(text)}</div>
-      `;
-      $("chatBox").appendChild(el);
-      scrollChatToBottom();
-    }
-
-    function renderDishList(items) {
-      if (!items.length) {
-        return `<div class="dish"><div class="dishMeta">Ingen retter fundet</div></div>`;
-      }
-
-      return items.map(item => `
-        <div class="dish">
-          <div class="dishName">${escapeHtml(item.ret || "Ukendt ret")}</div>
-          <div class="dishMeta">${escapeHtml(item.kategori || "Ukendt kategori")}</div>
-        </div>
-      `).join("");
-    }
-
-    function addBotMessage(text, result = null) {
-      const el = document.createElement("div");
-      el.className = "msg bot";
-
-      let cards = "";
-
-      if (result) {
-        cards = `
-          <div class="replyCards">
-            <div class="replyCard">
-              <div class="replyHead">
-                <div class="replyTitle">Kan anbefales</div>
-                <div class="badge green">${result.safe.length} retter</div>
-              </div>
-              <div class="dishList">${renderDishList(result.safe)}</div>
+    if (result) {
+      cards = `
+        <div class="replyCards">
+          <div class="replyCard">
+            <div class="replyHead">
+              <div class="replyTitle">Kan anbefales</div>
+              <div class="badge green">${result.safe.length} retter</div>
             </div>
-
-            <div class="replyCard">
-              <div class="replyHead">
-                <div class="replyTitle">Spor af / vær opmærksom</div>
-                <div class="badge warn">${result.trace.length} retter</div>
-              </div>
-              <div class="dishList">${renderDishList(result.trace)}</div>
-            </div>
-
-            <div class="replyCard">
-              <div class="replyHead">
-                <div class="replyTitle">Bør undgås</div>
-                <div class="badge red">${result.avoid.length} retter</div>
-              </div>
-              <div class="dishList">${renderDishList(result.avoid)}</div>
-            </div>
+            <div class="dishList">${renderDishList(result.safe)}</div>
           </div>
-        `;
-      }
 
-      el.innerHTML = `
-        <div class="msgLabel">Kaiser</div>
-        <div class="msgText">${text}</div>
-        ${cards}
+          <div class="replyCard">
+            <div class="replyHead">
+              <div class="replyTitle">Spor af / vær opmærksom</div>
+              <div class="badge warn">${result.trace.length} retter</div>
+            </div>
+            <div class="dishList">${renderDishList(result.trace)}</div>
+          </div>
+
+          <div class="replyCard">
+            <div class="replyHead">
+              <div class="replyTitle">Bør undgås</div>
+              <div class="badge red">${result.avoid.length} retter</div>
+            </div>
+            <div class="dishList">${renderDishList(result.avoid)}</div>
+          </div>
+        </div>
       `;
-      $("chatBox").appendChild(el);
-      scrollChatToBottom();
     }
 
-    function detectAllergyFromMessage(message) {
-      const text = normalizeText(message);
-      const allergies = getAllergiesFromData();
+    el.innerHTML = `
+      <div class="msgLabel">Kaiser</div>
+      <div class="msgText">${text}</div>
+      ${cards}
+    `;
+    $("chatBox").appendChild(el);
+    scrollChatToBottom();
+  }
 
-      const aliasMap = {
-        "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
-        "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
-        "nødder": ["nødder", "nøddeallergi", "noedder"],
-        "æg": ["æg", "aeg", "ægallergi"],
-        "krebs": ["krebs", "krebsdyr", "rejer", "krabbe", "hummer"],
-        "fisk": ["fisk", "fiskeallergi"],
-        "jordnødder": ["jordnødder", "jordnoedder", "peanuts", "peanut"],
-        "soja": ["soja", "soy"],
-        "selleri": ["selleri"],
-        "sesamfrø": ["sesamfrø", "sesamfro", "sesam"],
-        "lupin": ["lupin"],
-        "sulfiter": ["sulfiter", "sulfit"],
-        "bløddyr": ["bløddyr", "bloeddyr", "muslinger", "østers", "oesters"],
-        "sennep": ["sennep"]
-      };
+  function detectAllergyFromMessage(message) {
+    const text = normalizeText(message);
 
-      for (const allergy of allergies) {
-        const allergyKey = normalizeText(allergy);
+    const aliasMap = {
+      "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
+      "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
+      "nødder": ["nødder", "nøddeallergi", "noedder"],
+      "æg": ["æg", "aeg", "ægallergi"],
+      "krebs": ["krebs", "krebsdyr", "rejer", "krabbe", "hummer"],
+      "fisk": ["fisk", "fiskeallergi"],
+      "jordnødder": ["jordnødder", "jordnoedder", "peanuts", "peanut"],
+      "soja": ["soja", "soy"],
+      "selleri": ["selleri"],
+      "sesamfrø": ["sesamfrø", "sesamfro", "sesam"],
+      "lupin": ["lupin"],
+      "sulfiter": ["sulfiter", "sulfit"],
+      "bløddyr": ["bløddyr", "bloeddyr", "muslinger", "østers", "oesters"],
+      "sennep": ["sennep"]
+    };
 
-        if (text.includes(allergyKey)) return allergy;
-
-        if (aliasMap[allergyKey]) {
-          const found = aliasMap[allergyKey].some(alias => text.includes(normalizeText(alias)));
-          if (found) return allergy;
-        }
+    for (const allergy in aliasMap) {
+      const aliases = aliasMap[allergy];
+      if (aliases.some(alias => text.includes(normalizeText(alias)))) {
+        return allergy;
       }
-
-      return null;
     }
 
-    function getResultsForAllergy(allergy) {
-      const rows = window.ALLERGI_DATA || [];
-      const safe = [];
-      const trace = [];
-      const avoid = [];
+    return null;
+  }
 
-      rows.forEach(row => {
-        const value = normalizeValue(row?.allergener?.[allergy]);
+  function getResultsForAllergy(allergy) {
+    const rows = window.ALLERGI_DATA || [];
+    const safe = [];
+    const trace = [];
+    const avoid = [];
 
-        if (value === "nej") {
-          safe.push(row);
-        } else if (value === "spor af") {
-          trace.push(row);
-        } else if (value === "ja") {
-          avoid.push(row);
-        }
-      });
+    rows.forEach(row => {
+      const value = normalizeValue(row?.allergener?.[allergy]);
 
-      return { safe, trace, avoid };
-    }
-
-    function buildNaturalReply(allergy, result) {
-      const parts = [];
-
-      parts.push(`Jeg har fundet allergien: ${allergy}.`);
-
-      if (result.safe.length) {
-        const safeNames = result.safe.slice(0, 4).map(r => r.ret).filter(Boolean);
-        parts.push(`Disse retter kan som udgangspunkt anbefales: ${safeNames.join(", ")}.`);
-      } else {
-        parts.push(`Jeg kan ikke se nogen registrerede retter, der er sikre for ${allergy}.`);
+      if (value === "nej") {
+        safe.push(row);
+      } else if (value === "spor af") {
+        trace.push(row);
+      } else if (value === "ja") {
+        avoid.push(row);
       }
+    });
 
-      if (result.trace.length) {
-        parts.push(`Der findes også retter med spor af, som kræver ekstra opmærksomhed.`);
-      }
+    return { safe, trace, avoid };
+  }
 
-      if (result.avoid.length) {
-        const avoidNames = result.avoid.slice(0, 4).map(r => r.ret).filter(Boolean);
-        parts.push(`Disse retter bør undgås: ${avoidNames.join(", ")}.`);
-      }
+  function buildNaturalReply(allergy, result) {
+    const parts = [];
 
-      parts.push(`Se den fulde oversigt nedenfor.`);
+    parts.push(`Jeg har fundet allergien: ${allergy}.`);
 
-      return parts.join("\n\n");
+    if (result.safe.length) {
+      const safeNames = result.safe.slice(0, 4).map(r => r.ret).filter(Boolean);
+      parts.push(`Disse retter kan som udgangspunkt anbefales: ${safeNames.join(", ")}.`);
+    } else {
+      parts.push(`Jeg kan ikke se nogen registrerede retter, der er sikre for ${allergy}.`);
     }
 
-    function handleMessage(message) {
-      const text = String(message || "").trim();
-      if (!text) return;
-
-      addUserMessage(text);
-
-      const allergy = detectAllergyFromMessage(text);
-
-      if (!allergy) {
-        addBotMessage(
-          `Jeg kunne ikke genkende allergien i beskeden.\n\nPrøv fx at skrive:\n- Min gæst har glutenallergi\n- Hvad kan en med laktose spise?\n- Har I noget uden nødder?\n- Min gæst tåler ikke fisk`
-        );
-        return;
-      }
-
-      const result = getResultsForAllergy(allergy);
-      const reply = buildNaturalReply(allergy, result);
-      addBotMessage(reply, result);
+    if (result.trace.length) {
+      parts.push(`Der findes også retter med spor af, som kræver ekstra opmærksomhed.`);
     }
 
-    function buildQuickActions() {
-      const wrap = $("quickActions");
-      const allergies = getAllergiesFromData();
-
-      wrap.innerHTML = "";
-
-      allergies.forEach(allergy => {
-        const btn = document.createElement("button");
-        btn.className = "quickBtn";
-        btn.textContent = allergy;
-        btn.addEventListener("click", () => {
-          handleMessage(`Min gæst har ${allergy}`);
-        });
-        wrap.appendChild(btn);
-      });
+    if (result.avoid.length) {
+      const avoidNames = result.avoid.slice(0, 4).map(r => r.ret).filter(Boolean);
+      parts.push(`Disse retter bør undgås: ${avoidNames.join(", ")}.`);
     }
 
-    function bindEvents() {
-      $("sendBtn").addEventListener("click", () => {
-        const input = $("chatInput");
-        const value = input.value;
-        input.value = "";
-        handleMessage(value);
-        input.focus();
-      });
+    parts.push(`Se den fulde oversigt nedenfor.`);
 
-      $("chatInput").addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          $("sendBtn").click();
-        }
-      });
-    }
+    return parts.join("\n\n");
+  }
 
-    function boot() {
-      if (!Array.isArray(window.ALLERGI_DATA)) {
-        addBotMessage("Der blev ikke fundet nogen data. Tjek at allergi-data.js starter med window.ALLERGI_DATA = [...];");
-        return;
-      }
+  function handleMessage(message) {
+    const text = String(message || "").trim();
+    if (!text) return;
 
-      buildQuickActions();
-      bindEvents();
+    addUserMessage(text);
 
+    const allergy = detectAllergyFromMessage(text);
+
+    if (!allergy) {
       addBotMessage(
-        `Hej. Jeg er jeres allergiassistent.\n\nSkriv hvilken allergi gæsten har, så viser jeg hvilke retter der kan anbefales, hvilke der kræver opmærksomhed, og hvilke der bør undgås.`
+        `Jeg kunne ikke genkende allergien i beskeden.\n\nPrøv fx at skrive:\n- Min gæst har glutenallergi\n- Hvad kan en med laktose spise?\n- Har I noget uden nødder?\n- Min gæst tåler ikke fisk`
       );
+      return;
     }
 
-    boot();
-  </script>
+    const result = getResultsForAllergy(allergy);
+    const reply = buildNaturalReply(allergy, result);
+    addBotMessage(reply, result);
+  }
+
+  function buildQuickActions() {
+    const wrap = $("quickActions");
+    const allergies = getAllergiesFromData();
+
+    wrap.innerHTML = "";
+
+    allergies.forEach(allergy => {
+      const btn = document.createElement("button");
+      btn.className = "quickBtn";
+      btn.textContent = allergy;
+      btn.addEventListener("click", () => {
+        handleMessage(`Min gæst har ${allergy}`);
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function bindEvents() {
+    $("sendBtn").addEventListener("click", () => {
+      const input = $("chatInput");
+      const value = input.value;
+      input.value = "";
+      handleMessage(value);
+      input.focus();
+    });
+
+    $("chatInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        $("sendBtn").click();
+      }
+    });
+  }
+
+  function boot() {
+    console.log("ALLERGI_DATA:", window.ALLERGI_DATA);
+    console.log("Allergier fra data:", getAllergiesFromData());
+
+    if (!Array.isArray(window.ALLERGI_DATA)) {
+      addBotMessage("Der blev ikke fundet nogen data. Tjek at allergi-data.js starter med window.ALLERGI_DATA = [...];");
+      return;
+    }
+
+    buildQuickActions();
+    bindEvents();
+
+    addBotMessage(
+      `Hej. Jeg er jeres allergiassistent.\n\nSkriv hvilken allergi gæsten har, så viser jeg hvilke retter der kan anbefales, hvilke der kræver opmærksomhed, og hvilke der bør undgås.`
+    );
+  }
+
+  boot();
+</script>
 </body>
 </html>
