@@ -21,7 +21,6 @@
       --muted:rgba(255,255,255,0.78);
       --muted2:rgba(255,255,255,0.54);
       --gold:#d6b24a;
-      --gold2:#b9921f;
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
@@ -44,7 +43,7 @@
       padding:14px;
     }
 
-    .shell{max-width:1320px;margin:0 auto;}
+    .shell{max-width:1100px;margin:0 auto;}
 
     .hero{
       border-radius:28px;
@@ -53,7 +52,7 @@
         radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:22px 18px 18px;
+      padding:24px 18px 18px;
       text-align:center;
     }
 
@@ -91,7 +90,7 @@
 
     .section{
       margin-top:14px;
-      border-radius:var(--radius);
+      border-radius:24px;
       border:1px solid var(--line);
       background:var(--panel2);
       overflow:hidden;
@@ -133,127 +132,129 @@
 
     .sectionBody{padding:16px;}
 
-    .metaGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
+    .quickRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .quickBtn{
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .quickBtn:hover{
+      border-color:rgba(214,178,74,0.45);
+      background:rgba(214,178,74,0.08);
+      transform:translateY(-1px);
+    }
+
+    .chatWrap{
+      display:flex;
+      flex-direction:column;
       gap:14px;
     }
 
-    @media (max-width: 980px){
-      .metaGrid{grid-template-columns:1fr;}
-    }
-
-    .field{
+    .chatBox{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      min-height:420px;
+      max-height:70vh;
+      overflow:auto;
+      padding:16px;
       display:flex;
       flex-direction:column;
-      gap:8px;
+      gap:14px;
     }
 
-    .label{
+    .msg{
+      max-width:84%;
+      border-radius:20px;
+      padding:14px 16px;
+      line-height:1.55;
+      box-shadow:0 10px 30px rgba(0,0,0,0.16);
+      white-space:pre-line;
+    }
+
+    .msg.user{
+      align-self:flex-end;
+      background:linear-gradient(180deg, rgba(94,167,255,0.22), rgba(94,167,255,0.12));
+      border:1px solid rgba(94,167,255,0.28);
+    }
+
+    .msg.bot{
+      align-self:flex-start;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .msgLabel{
       font-size:11px;
       font-weight:900;
       letter-spacing:.12em;
       text-transform:uppercase;
       color:var(--muted2);
+      margin-bottom:6px;
     }
 
-    .input,
-    .select{
-      width:100%;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      color:var(--text);
-      padding:14px 14px;
-      outline:none;
+    .msgText{
       font-size:14px;
       font-weight:700;
+      color:var(--text);
     }
 
-    .select option{
-      background:#111823;
-      color:#fff;
-    }
-
-    .input:focus,
-    .select:focus{
-      border-color:rgba(214,178,74,0.5);
-      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
-    }
-
-    .assistantCard{
-      border-radius:24px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      padding:20px;
-    }
-
-    .assistantTitle{
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:var(--muted2);
-    }
-
-    .assistantBig{
-      margin-top:14px;
-      font-family:"Playfair Display",serif;
-      font-size:clamp(30px,5vw,48px);
-      line-height:1.06;
-      letter-spacing:-.04em;
-    }
-
-    .assistantText{
+    .replyCards{
       margin-top:12px;
-      font-size:15px;
-      line-height:1.7;
-      color:var(--muted);
-      font-weight:800;
-      max-width:950px;
-    }
-
-    .resultGrid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
-      gap:14px;
+      gap:12px;
     }
 
-    @media (max-width: 980px){
-      .resultGrid{grid-template-columns:1fr;}
+    @media (max-width: 900px){
+      .replyCards{grid-template-columns:1fr;}
+      .msg{max-width:100%;}
     }
 
-    .resultCard{
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:16px;
-      min-height:260px;
+    .replyCard{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.09);
+      background:rgba(255,255,255,0.04);
+      padding:12px;
     }
 
-    .resultHead{
+    .replyHead{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
     }
 
-    .resultName{
-      font-size:17px;
+    .replyTitle{
+      font-size:13px;
       font-weight:900;
+      letter-spacing:.04em;
     }
 
     .badge{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:8px 12px;
+      padding:7px 10px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.14);
-      font-size:11px;
+      font-size:10px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
@@ -278,60 +279,85 @@
       color:#ffd0d0;
     }
 
-    .list{
+    .dishList{
       display:flex;
       flex-direction:column;
-      gap:10px;
-      margin-top:14px;
+      gap:8px;
     }
 
-    .item{
-      border-radius:16px;
+    .dish{
+      border-radius:14px;
       border:1px solid rgba(255,255,255,0.08);
       background:rgba(255,255,255,0.05);
-      padding:12px;
+      padding:10px;
     }
 
-    .itemTitle{
-      font-size:14px;
+    .dishName{
+      font-size:13px;
       font-weight:900;
       line-height:1.35;
     }
 
-    .itemSub{
-      margin-top:6px;
-      font-size:12px;
+    .dishMeta{
+      margin-top:4px;
+      font-size:11px;
       color:var(--muted);
       font-weight:700;
-      line-height:1.45;
+      line-height:1.4;
     }
 
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
+    .inputBar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:stretch;
     }
 
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.10);
+    .chatInput{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);
-      font-size:10px;
+      color:var(--text);
+      padding:16px;
+      outline:none;
+      font-size:15px;
+      font-weight:700;
+    }
+
+    .chatInput:focus{
+      border-color:rgba(214,178,74,0.5);
+      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
+    }
+
+    .sendBtn{
+      border:none;
+      border-radius:18px;
+      padding:0 18px;
+      min-width:120px;
+      background:linear-gradient(135deg, var(--gold), #f3d47c);
+      color:#161616;
+      font-size:13px;
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
-      color:var(--muted);
+      cursor:pointer;
+      box-shadow:0 12px 30px rgba(214,178,74,0.22);
     }
 
-    .empty{
-      padding:18px;
-      text-align:center;
+    .sendBtn:hover{
+      transform:translateY(-1px);
+    }
+
+    @media (max-width: 700px){
+      .inputBar{grid-template-columns:1fr;}
+      .sendBtn{min-height:52px;}
+    }
+
+    .mutedHelp{
+      margin-top:8px;
       color:var(--muted2);
-      font-size:13px;
+      font-size:12px;
       font-weight:700;
     }
   </style>
@@ -343,90 +369,43 @@
       <div class="kicker">KAISER</div>
       <div class="title">Allergiassistent</div>
       <div class="sub">
-        Hurtigt værktøj til tjenere ved spørgsmål om allergener og anbefalinger.<br>
-        Data er baseret på registrerede retter og allergioplysninger.
+        En hurtig chat-assistent til tjenere.<br>
+        Skriv fx: “Min gæst har glutenallergi” og få et klart svar på hvad gæsten kan spise.
       </div>
       <div class="goldline"></div>
     </section>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Forespørgsel</div>
-        <div class="sectionInfo">Vælg allergi og få anbefalinger</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Hurtige forslag</div>
+        <div class="sectionInfo">Tryk på et forslag eller skriv selv</div>
       </div>
       <div class="sectionBody">
-        <div class="metaGrid">
-          <div class="field">
-            <label class="label" for="guestPrompt">Hvad spørger gæsten om?</label>
-            <input id="guestPrompt" class="input" placeholder="Fx Min gæst har gluten allergi" />
-          </div>
-
-          <div class="field">
-            <label class="label" for="allergySelect">Allergi</label>
-            <select id="allergySelect" class="select"></select>
-          </div>
-
-          <div class="field">
-            <label class="label" for="categorySelect">Kategori</label>
-            <select id="categorySelect" class="select">
-              <option value="">Alle kategorier</option>
-            </select>
-          </div>
-        </div>
+        <div class="quickRow" id="quickActions"></div>
       </div>
     </section>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Anbefaling</div>
-        <div class="sectionInfo">Svar baseret på valgte allergi</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Chat</div>
+        <div class="sectionInfo">Spørg om allergi og retter</div>
       </div>
       <div class="sectionBody">
-        <div class="assistantCard">
-          <div class="assistantTitle">Service-svar</div>
-          <div class="assistantBig" id="assistantHeadline">Vælg en allergi</div>
-          <div class="assistantText" id="assistantText">
-            Når du vælger en allergi, får du en tydelig oversigt over retter der kan anbefales, retter med spor af og retter der bør undgås.
-          </div>
-        </div>
-      </div>
-    </section>
+        <div class="chatWrap">
+          <div class="chatBox" id="chatBox"></div>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Resultater</div>
-        <div class="sectionInfo">Fordelt i grøn / gul / rød</div>
-      </div>
-      <div class="sectionBody">
-        <div class="resultGrid">
-          <div class="resultCard">
-            <div class="resultHead">
-              <div class="resultName">Kan anbefales</div>
-              <div class="badge green" id="safeCount">0 retter</div>
-            </div>
-            <div class="list" id="safeList">
-              <div class="empty">Ingen data endnu</div>
-            </div>
+          <div class="inputBar">
+            <input
+              id="chatInput"
+              class="chatInput"
+              placeholder="Skriv fx: Min gæst har glutenallergi"
+              autocomplete="off"
+            />
+            <button id="sendBtn" class="sendBtn">Send</button>
           </div>
 
-          <div class="resultCard">
-            <div class="resultHead">
-              <div class="resultName">Spor af / vær opmærksom</div>
-              <div class="badge warn" id="traceCount">0 retter</div>
-            </div>
-            <div class="list" id="traceList">
-              <div class="empty">Ingen data endnu</div>
-            </div>
-          </div>
-
-          <div class="resultCard">
-            <div class="resultHead">
-              <div class="resultName">Bør undgås</div>
-              <div class="badge red" id="avoidCount">0 retter</div>
-            </div>
-            <div class="list" id="avoidList">
-              <div class="empty">Ingen data endnu</div>
-            </div>
+          <div class="mutedHelp">
+            Eksempler: “Hvad kan en gæst med laktose spise?”, “Har I noget uden nødder?”, “Min gæst tåler ikke skaldyr”.
           </div>
         </div>
       </div>
@@ -438,62 +417,6 @@
   <script>
     const $ = id => document.getElementById(id);
 
-    function normalizeValue(v) {
-      return String(v || "").trim().toLowerCase();
-    }
-
-    function allergyColumnValue(row, allergy) {
-      return normalizeValue(row[allergy]);
-    }
-
-    function titleCaseAllergy(str) {
-      return str || "";
-    }
-
-    function buildCategoryOptions() {
-      const categories = [...new Set((window.ALLERGI_DATA || []).map(r => r.Kategori).filter(Boolean))].sort();
-      const select = $("categorySelect");
-      categories.forEach(cat => {
-        const opt = document.createElement("option");
-        opt.value = cat;
-        opt.textContent = cat;
-        select.appendChild(opt);
-      });
-    }
-
-    function buildAllergyOptions() {
-      const select = $("allergySelect");
-      const allergies = window.ALLERGY_COLUMNS || [];
-
-      select.innerHTML = `<option value="">Vælg allergi...</option>`;
-      allergies.forEach(a => {
-        const opt = document.createElement("option");
-        opt.value = a;
-        opt.textContent = a;
-        select.appendChild(opt);
-      });
-    }
-
-    function renderList(targetId, items, typeLabel) {
-      const wrap = $(targetId);
-
-      if (!items.length) {
-        wrap.innerHTML = `<div class="empty">Ingen retter i denne kategori</div>`;
-        return;
-      }
-
-      wrap.innerHTML = items.map(item => `
-        <div class="item">
-          <div class="itemTitle">${escapeHtml(item.Retter || "Ukendt ret")}</div>
-          <div class="itemSub">${escapeHtml(item.Kategori || "Ukendt kategori")}${item.Info ? " • " + escapeHtml(item.Info) : ""}</div>
-          <div class="chips">
-            <div class="chip">${typeLabel}</div>
-            ${item.Kategori ? `<div class="chip">${escapeHtml(item.Kategori)}</div>` : ""}
-          </div>
-        </div>
-      `).join("");
-    }
-
     function escapeHtml(str) {
       return String(str || "").replace(/[&<>"']/g, c => ({
         "&": "&amp;",
@@ -504,29 +427,131 @@
       }[c]));
     }
 
-    function renderResults() {
-      const allergy = $("allergySelect").value;
-      const category = $("categorySelect").value;
-      const prompt = $("guestPrompt").value.trim();
+    function normalizeValue(v) {
+      return String(v || "").trim().toLowerCase();
+    }
 
-      if (!allergy) {
-        $("assistantHeadline").textContent = "Vælg en allergi";
-        $("assistantText").textContent = "Når du vælger en allergi, får du en tydelig oversigt over hvilke retter der kan anbefales, hvilke der kræver ekstra opmærksomhed, og hvilke der bør undgås.";
-        $("safeCount").textContent = "0 retter";
-        $("traceCount").textContent = "0 retter";
-        $("avoidCount").textContent = "0 retter";
-        $("safeList").innerHTML = '<div class="empty">Ingen data endnu</div>';
-        $("traceList").innerHTML = '<div class="empty">Ingen data endnu</div>';
-        $("avoidList").innerHTML = '<div class="empty">Ingen data endnu</div>';
-        return;
+    function normalizeText(v) {
+      return String(v || "")
+        .toLowerCase()
+        .replace(/[.,!?]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function allergyColumnValue(row, allergy) {
+      return normalizeValue(row[allergy]);
+    }
+
+    function scrollChatToBottom() {
+      const chatBox = $("chatBox");
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function addUserMessage(text) {
+      const chatBox = $("chatBox");
+      const el = document.createElement("div");
+      el.className = "msg user";
+      el.innerHTML = `
+        <div class="msgLabel">Tjener</div>
+        <div class="msgText">${escapeHtml(text)}</div>
+      `;
+      chatBox.appendChild(el);
+      scrollChatToBottom();
+    }
+
+    function renderDishList(items) {
+      if (!items.length) {
+        return `<div class="dish"><div class="dishMeta">Ingen retter fundet</div></div>`;
       }
 
-      let rows = [...(window.ALLERGI_DATA || [])];
+      return items.map(item => `
+        <div class="dish">
+          <div class="dishName">${escapeHtml(item.Retter || "Ukendt ret")}</div>
+          <div class="dishMeta">
+            ${escapeHtml(item.Kategori || "Ukendt kategori")}
+            ${item.Info ? " • " + escapeHtml(item.Info) : ""}
+          </div>
+        </div>
+      `).join("");
+    }
 
-      if (category) {
-        rows = rows.filter(r => String(r.Kategori || "").trim() === category);
+    function addBotMessage(text, result = null) {
+      const chatBox = $("chatBox");
+      const el = document.createElement("div");
+      el.className = "msg bot";
+
+      let cards = "";
+
+      if (result) {
+        cards = `
+          <div class="replyCards">
+            <div class="replyCard">
+              <div class="replyHead">
+                <div class="replyTitle">Kan anbefales</div>
+                <div class="badge green">${result.safe.length} retter</div>
+              </div>
+              <div class="dishList">${renderDishList(result.safe)}</div>
+            </div>
+
+            <div class="replyCard">
+              <div class="replyHead">
+                <div class="replyTitle">Spor af / vær opmærksom</div>
+                <div class="badge warn">${result.trace.length} retter</div>
+              </div>
+              <div class="dishList">${renderDishList(result.trace)}</div>
+            </div>
+
+            <div class="replyCard">
+              <div class="replyHead">
+                <div class="replyTitle">Bør undgås</div>
+                <div class="badge red">${result.avoid.length} retter</div>
+              </div>
+              <div class="dishList">${renderDishList(result.avoid)}</div>
+            </div>
+          </div>
+        `;
       }
 
+      el.innerHTML = `
+        <div class="msgLabel">Kaiser</div>
+        <div class="msgText">${text}</div>
+        ${cards}
+      `;
+
+      chatBox.appendChild(el);
+      scrollChatToBottom();
+    }
+
+    function detectAllergyFromMessage(message) {
+      const text = normalizeText(message);
+      const allergies = window.ALLERGY_COLUMNS || [];
+
+      const aliasMap = {
+        "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
+        "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
+        "nødder": ["nødder", "nøddeallergi", "noedder", "mandler", "hasselnød", "valnød", "pistacie", "cashew"],
+        "skaldyr": ["skaldyr", "skaldyrsallergi", "rejer", "muslinger", "krabbe", "hummer"]
+      };
+
+      for (const allergy of allergies) {
+        const allergyKey = normalizeText(allergy);
+
+        if (text.includes(allergyKey)) {
+          return allergy;
+        }
+
+        if (aliasMap[allergyKey]) {
+          const found = aliasMap[allergyKey].some(alias => text.includes(normalizeText(alias)));
+          if (found) return allergy;
+        }
+      }
+
+      return null;
+    }
+
+    function getResultsForAllergy(allergy) {
+      const rows = [...(window.ALLERGI_DATA || [])];
       const safe = [];
       const trace = [];
       const avoid = [];
@@ -543,34 +568,108 @@
         }
       });
 
-      $("safeCount").textContent = `${safe.length} retter`;
-      $("traceCount").textContent = `${trace.length} retter`;
-      $("avoidCount").textContent = `${avoid.length} retter`;
+      return { safe, trace, avoid };
+    }
 
-      const intro = prompt
-        ? `På baggrund af din forespørgsel “${prompt}” ser det ud til, at gæsten bør styres efter allergien ${titleCaseAllergy(allergy)}.`
-        : `For en gæst med ${titleCaseAllergy(allergy)} kan du bruge oversigten herunder som servicehjælp.`;
+    function buildNaturalReply(allergy, result) {
+      const parts = [];
 
-      $("assistantHeadline").textContent = `Min gæst har ${titleCaseAllergy(allergy)}`;
-      $("assistantText").textContent =
-        `${intro} Du kan anbefale retterne i den grønne kolonne. Retter med spor af kræver ekstra opmærksomhed og bør kommunikeres tydeligt. Retter i den røde kolonne bør undgås.`;
+      parts.push(`Jeg har fundet allergien: ${allergy}.`);
 
-      renderList("safeList", safe, "Kan anbefales");
-      renderList("traceList", trace, "Spor af");
-      renderList("avoidList", avoid, "Bør undgås");
+      if (result.safe.length) {
+        const topSafe = result.safe.slice(0, 4).map(r => r.Retter).filter(Boolean);
+        if (topSafe.length) {
+          parts.push(`Jeg kan anbefale retter som ${topSafe.join(", ")}.`);
+        }
+      } else {
+        parts.push(`Jeg kan ikke se nogen retter, der er registreret som sikre for ${allergy}.`);
+      }
+
+      if (result.trace.length) {
+        parts.push(`Der er også retter med spor af, som kræver ekstra opmærksomhed.`);
+      }
+
+      if (result.avoid.length) {
+        const topAvoid = result.avoid.slice(0, 4).map(r => r.Retter).filter(Boolean);
+        if (topAvoid.length) {
+          parts.push(`Disse retter bør undgås: ${topAvoid.join(", ")}.`);
+        } else {
+          parts.push(`Der er retter, som bør undgås.`);
+        }
+      }
+
+      parts.push(`Se den fulde oversigt nedenfor.`);
+
+      return parts.join("\n\n");
+    }
+
+    function handleMessage(message) {
+      const trimmed = String(message || "").trim();
+      if (!trimmed) return;
+
+      addUserMessage(trimmed);
+
+      const allergy = detectAllergyFromMessage(trimmed);
+
+      if (!allergy) {
+        addBotMessage(
+          `Jeg kunne ikke genkende allergien i beskeden.\n\nPrøv fx at skrive:\n- Min gæst har glutenallergi\n- Hvad kan en med laktose spise?\n- Har I noget uden nødder?\n- Min gæst tåler ikke skaldyr`
+        );
+        return;
+      }
+
+      const result = getResultsForAllergy(allergy);
+      const reply = buildNaturalReply(allergy, result);
+      addBotMessage(reply, result);
+    }
+
+    function buildQuickActions() {
+      const wrap = $("quickActions");
+      const allergies = window.ALLERGY_COLUMNS || [];
+
+      if (!allergies.length) {
+        wrap.innerHTML = `<div class="mutedHelp">Ingen allergier fundet i data.</div>`;
+        return;
+      }
+
+      wrap.innerHTML = "";
+
+      allergies.forEach(allergy => {
+        const btn = document.createElement("button");
+        btn.className = "quickBtn";
+        btn.textContent = allergy;
+        btn.addEventListener("click", () => {
+          handleMessage(`Min gæst har ${allergy}`);
+        });
+        wrap.appendChild(btn);
+      });
     }
 
     function bindEvents() {
-      $("allergySelect").addEventListener("change", renderResults);
-      $("categorySelect").addEventListener("change", renderResults);
-      $("guestPrompt").addEventListener("input", renderResults);
+      $("sendBtn").addEventListener("click", () => {
+        const input = $("chatInput");
+        const value = input.value;
+        input.value = "";
+        handleMessage(value);
+        input.focus();
+      });
+
+      $("chatInput").addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          $("sendBtn").click();
+        }
+      });
     }
 
     function boot() {
-      buildAllergyOptions();
-      buildCategoryOptions();
+      buildQuickActions();
+
+      addBotMessage(
+        `Hej. Jeg er jeres allergiassistent.\n\nSkriv hvilken allergi gæsten har, så viser jeg hvilke retter der kan anbefales, hvilke der kræver opmærksomhed, og hvilke der bør undgås.`
+      );
+
       bindEvents();
-      renderResults();
     }
 
     boot();
