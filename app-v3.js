@@ -1,10 +1,6 @@
-// ==========================
-// KONFIG (Google Apps Script webhook)
-// ==========================
-const WEBHOOK_URL = "INDSÆT_DIN_GAMLE_MAIL_WEBHOOK_URL_HER";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
-// Lokationer
 const LOCATIONS = [
   "Café Kaiser Helsingør",
   "Café Kaiser Hillerød",
@@ -68,9 +64,6 @@ const QUOTES = [
   "Fokus på detaljen. Gæsten mærker det."
 ];
 
-// ==========================
-// STATE
-// ==========================
 const state = {
   screen: "location",
   location: "",
@@ -88,9 +81,6 @@ const state = {
   isSubmitting: false
 };
 
-// ==========================
-// DOM HELPERS
-// ==========================
 const $ = (id) => document.getElementById(id);
 
 const screens = {
@@ -130,9 +120,6 @@ function setHidden(el, hidden) {
   el.classList.toggle("hidden", hidden);
 }
 
-// ==========================
-// SCREEN 1
-// ==========================
 function initLocationSelect() {
   const select = $("locationSelect");
   if (!select) return;
@@ -187,9 +174,6 @@ function updateNextEnabled() {
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-// ==========================
-// SCREEN 2
-// ==========================
 function initDishSelect() {
   const select = $("dishSelect");
   if (!select) return;
@@ -224,9 +208,6 @@ function populateDishSelect() {
   select.value = "";
 }
 
-// ==========================
-// SCREEN 3
-// ==========================
 const ratingLabels = {
   taste: "SMAG",
   presentation: "ANRETNING",
@@ -320,9 +301,6 @@ function updateSubmitEnabled() {
   btn.classList.toggle("btn-disabled", !ok);
 }
 
-// ==========================
-// IMAGE
-// ==========================
 function initImageUpload() {
   const imageBox = $("imageBox");
   const input = $("imageInput");
@@ -343,6 +321,7 @@ function initImageUpload() {
       setHidden(placeholder, true);
 
       state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
+
       updateSubmitEnabled();
     } catch (e) {
       console.error(e);
@@ -380,9 +359,6 @@ function fileToCompressedDataUrl(file, maxW, quality) {
   });
 }
 
-// ==========================
-// SUBMIT -> MAIL WEBHOOK
-// ==========================
 function initCommentAndSubmit() {
   const comment = $("commentInput");
   if (comment) {
@@ -454,9 +430,6 @@ async function submit() {
   }
 }
 
-// ==========================
-// NAV + RESET
-// ==========================
 function initNavButtons() {
   const next = $("btnNextToDish");
   if (next) {
@@ -517,9 +490,6 @@ function resetAll() {
   setError("");
 }
 
-// ==========================
-// BOOT
-// ==========================
 function boot() {
   initLocationSelect();
   initMealRadios();
