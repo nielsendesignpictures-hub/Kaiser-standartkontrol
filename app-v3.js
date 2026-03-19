@@ -1,4 +1,4 @@
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3rRjDxlh3e7QgvQVdY6E0gGQp6bpx1H8NNFtoaXYJd2Uay_IfXT8b2kh53IlptzKW/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby55riURXo6MQE9K_ptLOj3GlXQgven8opLGOB3mdUdSnAPzrnKhZtZPtjSfkTGP8aC/exec";
 const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
 
 const LOCATIONS = [
