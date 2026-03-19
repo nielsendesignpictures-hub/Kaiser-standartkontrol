@@ -11,21 +11,21 @@
 
   <style>
     :root{
-      --bg0:#16120a;
-      --bg1:#21180c;
-      --panel:rgba(255,248,232,0.10);
-      --panel2:rgba(255,248,232,0.08);
-      --line:rgba(255,230,180,0.18);
-      --line2:rgba(255,230,180,0.12);
-      --text:rgba(255,248,236,0.97);
-      --muted:rgba(255,241,214,0.82);
-      --muted2:rgba(255,236,200,0.58);
-      --gold:#e0bc58;
-      --gold2:#c99d27;
-      --green:#7ce58a;
-      --red:#ff8f8f;
-      --blue:#7ab7ff;
-      --warn:#f7b74a;
+      --bg0:#0a0e14;
+      --bg1:#111823;
+      --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.035);
+      --line:rgba(255,255,255,0.10);
+      --line2:rgba(255,255,255,0.07);
+      --text:rgba(255,255,255,0.97);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.54);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
+      --warn:#f59e0b;
       --shadow:0 24px 70px rgba(0,0,0,.42);
       --radius:24px;
     }
@@ -37,56 +37,90 @@
       font-family:Inter,system-ui,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(900px 600px at 10% -10%, rgba(224,188,88,0.16), transparent 55%),
-        radial-gradient(700px 500px at 100% 0%, rgba(255,220,140,0.08), transparent 55%),
-        radial-gradient(700px 500px at 20% 110%, rgba(255,255,255,0.04), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, #130f09);
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
       padding:14px;
     }
 
-    .shell{max-width:1120px;margin:0 auto;}
+    .shell{max-width:1500px;margin:0 auto;}
 
-    .hero{
-      border-radius:28px;
+    .topbar{
       border:1px solid var(--line);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,248,232,0.10), rgba(255,248,232,0.05));
+      border-radius:30px;
+      background:rgba(10,14,20,0.80);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
       box-shadow:var(--shadow);
-      padding:22px 18px 18px;
-      text-align:center;
+      padding:14px;
     }
 
-    .kicker{
-      font-size:10px;
+    .topbarGrid{
+      display:grid;
+      grid-template-columns:1.3fr repeat(5,1fr);
+      gap:10px;
+    }
+
+    @media (max-width: 1280px){
+      .topbarGrid{grid-template-columns:1fr 1fr 1fr;}
+    }
+
+    @media (max-width: 760px){
+      .topbarGrid{grid-template-columns:1fr;}
+    }
+
+    .brandCard,
+    .topStat{
+      min-height:110px;
+      border-radius:24px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:16px;
+    }
+
+    .brandCard{
+      background:
+        radial-gradient(700px 200px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .brandKicker,
+    .topStatLabel{
+      font-size:11px;
       font-weight:900;
-      letter-spacing:.26em;
+      letter-spacing:.14em;
       text-transform:uppercase;
       color:var(--muted2);
     }
 
-    .title{
+    .brandTitle{
       margin-top:8px;
       font-family:"Playfair Display",serif;
-      font-size:clamp(34px,6vw,56px);
+      font-size:34px;
       line-height:1;
       letter-spacing:-.03em;
     }
 
-    .sub{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:14px;
+    .brandSub,
+    .topStatSub{
+      margin-top:8px;
+      font-size:13px;
       font-weight:800;
-      line-height:1.5;
+      color:var(--muted);
+      line-height:1.4;
     }
 
-    .goldline{
-      height:2px;
-      margin:18px auto 0;
-      max-width:760px;
-      border-radius:999px;
-      background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
+    .topStatValue{
+      margin-top:12px;
+      font-size:28px;
+      font-weight:900;
+      line-height:1.06;
+      letter-spacing:-.03em;
+      word-break:break-word;
     }
 
     .section{
@@ -104,7 +138,7 @@
       align-items:center;
       gap:12px;
       padding:14px 18px;
-      background:rgba(255,248,232,0.05);
+      background:rgba(255,255,255,0.03);
       border-bottom:1px solid var(--line2);
       flex-wrap:wrap;
     }
@@ -136,7 +170,7 @@
     .metaGrid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:12px;
+      gap:14px;
     }
 
     @media (max-width: 980px){
@@ -166,8 +200,8 @@
     .textarea{
       width:100%;
       border-radius:16px;
-      border:1px solid rgba(255,230,180,0.16);
-      background:rgba(255,248,232,0.07);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
       color:var(--text);
       padding:14px 14px;
       outline:none;
@@ -176,54 +210,46 @@
     }
 
     .select option{
-      background:#21180c;
+      background:#111823;
       color:#fff;
     }
 
     .textarea{
-      min-height:110px;
+      min-height:120px;
       resize:vertical;
     }
 
     .input:focus,
     .select:focus,
     .textarea:focus{
-      border-color:rgba(224,188,88,0.55);
-      box-shadow:0 0 0 4px rgba(224,188,88,0.12);
+      border-color:rgba(214,178,74,0.5);
+      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
     }
 
-    .summaryBar{
+    .summaryGrid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:12px;
+      gap:14px;
     }
 
-    @media (max-width: 900px){
-      .summaryBar{grid-template-columns:1fr 1fr;}
+    @media (max-width: 980px){
+      .summaryGrid{grid-template-columns:1fr 1fr;}
     }
 
     @media (max-width: 640px){
-      .summaryBar{grid-template-columns:1fr;}
+      .summaryGrid{grid-template-columns:1fr;}
     }
 
     .summaryCard{
-      border-radius:20px;
+      border-radius:22px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,248,232,0.09), rgba(255,248,232,0.05));
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       padding:16px;
-    }
-
-    .summaryLabel{
-      font-size:11px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted2);
     }
 
     .summaryValue{
       margin-top:10px;
-      font-size:30px;
+      font-size:34px;
       font-weight:900;
       line-height:1;
       font-family:"Playfair Display",serif;
@@ -256,25 +282,25 @@
     .toggleWrap input{
       width:18px;
       height:18px;
-      accent-color: var(--gold);
+      accent-color:var(--gold);
     }
 
     .category{
       border-radius:22px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,248,232,0.08), rgba(255,248,232,0.04));
-      padding:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      padding:18px;
       margin-top:14px;
     }
 
     .categoryTitle{
-      font-size:18px;
+      font-size:20px;
       font-weight:900;
       letter-spacing:-.02em;
     }
 
     .categorySub{
-      margin-top:4px;
+      margin-top:6px;
       font-size:13px;
       color:var(--muted);
       font-weight:700;
@@ -289,18 +315,18 @@
 
     .item{
       border-radius:18px;
-      border:1px solid rgba(255,230,180,0.12);
-      background:rgba(255,248,232,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.05);
       padding:14px;
     }
 
-    .item.completed-ok{
+    .item.completed-hidden{
       display:none;
     }
 
-    .show-all .item.completed-ok{
+    .show-all .item.completed-hidden{
       display:block;
-      opacity:.62;
+      opacity:.55;
     }
 
     .itemTop{
@@ -313,8 +339,8 @@
 
     .itemText{
       flex:1;
-      min-width:220px;
-      font-size:14px;
+      min-width:240px;
+      font-size:15px;
       font-weight:800;
       line-height:1.5;
     }
@@ -336,25 +362,25 @@
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
-      min-width:92px;
+      min-width:96px;
     }
 
     .statusBtn.ok.active{
-      background:rgba(124,229,138,0.16);
-      border-color:rgba(124,229,138,0.40);
-      color:#e8ffe7;
+      background:rgba(98,210,111,0.16);
+      border-color:rgba(98,210,111,0.40);
+      color:#e7ffe9;
     }
 
     .statusBtn.warn.active{
-      background:rgba(247,183,74,0.16);
-      border-color:rgba(247,183,74,0.40);
-      color:#fff0c8;
+      background:rgba(245,158,11,0.16);
+      border-color:rgba(245,158,11,0.40);
+      color:#fff0c7;
     }
 
     .statusBtn.na.active{
-      background:rgba(122,183,255,0.16);
-      border-color:rgba(122,183,255,0.40);
-      color:#e3efff;
+      background:rgba(94,167,255,0.16);
+      border-color:rgba(94,167,255,0.40);
+      color:#e4efff;
     }
 
     .itemNote{
@@ -369,7 +395,7 @@
     .reportGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:12px;
+      gap:14px;
     }
 
     @media (max-width: 760px){
@@ -384,8 +410,8 @@
     }
 
     .ratingBtn{
-      width:48px;
-      height:48px;
+      width:50px;
+      height:50px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);
@@ -445,20 +471,50 @@
 <body>
   <div class="shell">
 
-    <section class="hero">
-      <div class="kicker">KAISER</div>
-      <div class="title">Dagsansvarlig Tjekliste</div>
-      <div class="sub">
-        Digital driftstjekliste for Café Kaiser.<br>
-        V2: Godkendte punkter ryddes væk undervejs for et hurtigere overblik.
+    <section class="topbar">
+      <div class="topbarGrid">
+        <div class="brandCard">
+          <div class="brandKicker">KAISER</div>
+          <div class="brandTitle">Dagsansvarlig Tjekliste</div>
+          <div class="brandSub">Digital tjekliste før frokost, før aften og efter aftenryk</div>
+        </div>
+
+        <div class="topStat">
+          <div class="topStatLabel">Lokation</div>
+          <div class="topStatValue" id="topLocation">—</div>
+          <div class="topStatSub">Valgt café</div>
+        </div>
+
+        <div class="topStat">
+          <div class="topStatLabel">Tjektype</div>
+          <div class="topStatValue" id="topCheckType">Frokost</div>
+          <div class="topStatSub">Aktiv sektion</div>
+        </div>
+
+        <div class="topStat">
+          <div class="topStatLabel">Dagsansvarlig</div>
+          <div class="topStatValue" id="topManager">—</div>
+          <div class="topStatSub">Ansvarlig i skiftet</div>
+        </div>
+
+        <div class="topStat">
+          <div class="topStatLabel">Status</div>
+          <div class="topStatValue" id="topStatus">I gang</div>
+          <div class="topStatSub" id="saveStatus">Ikke gemt endnu</div>
+        </div>
+
+        <div class="topStat">
+          <div class="topStatLabel">Åbne punkter</div>
+          <div class="topStatValue" id="topOpen">0</div>
+          <div class="topStatSub">Kræver stadig markering</div>
+        </div>
       </div>
-      <div class="goldline"></div>
     </section>
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Dagens tjek</div>
-        <div class="sectionInfo" id="saveStatus">Ikke gemt endnu</div>
+        <div class="sectionTitle"><span class="sectionDot"></span> Dagens opsætning</div>
+        <div class="sectionInfo">Vælg lokation, skiftleder og tjektype</div>
       </div>
       <div class="sectionBody">
         <div class="metaGrid">
@@ -499,27 +555,30 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Overblik</div>
-        <div class="sectionInfo">Status på aktiv tjekliste</div>
+        <div class="sectionInfo">Tydeligt billede af hvad der mangler</div>
       </div>
       <div class="sectionBody">
-        <div class="summaryBar">
+        <div class="summaryGrid">
           <div class="summaryCard">
-            <div class="summaryLabel">OK</div>
+            <div class="topStatLabel">OK</div>
             <div class="summaryValue" id="okCount">0</div>
             <div class="summarySub">Godkendte punkter</div>
           </div>
+
           <div class="summaryCard">
-            <div class="summaryLabel">Mangler</div>
+            <div class="topStatLabel">Mangler</div>
             <div class="summaryValue" id="missingCount">0</div>
             <div class="summarySub">Kræver handling</div>
           </div>
+
           <div class="summaryCard">
-            <div class="summaryLabel">Ikke relevant</div>
+            <div class="topStatLabel">Ikke relevant</div>
             <div class="summaryValue" id="naCount">0</div>
             <div class="summarySub">Ikke relevante punkter</div>
           </div>
+
           <div class="summaryCard">
-            <div class="summaryLabel">Åbne</div>
+            <div class="topStatLabel">Åbne</div>
             <div class="summaryValue" id="openCount">0</div>
             <div class="summarySub">Ikke markerede punkter</div>
           </div>
@@ -535,7 +594,7 @@
             <input type="checkbox" id="showAllToggle" />
             <label for="showAllToggle">Vis også godkendte punkter</label>
           </div>
-          <div class="sectionInfo" id="checklistInfo">Vælg tjektype</div>
+          <div class="sectionInfo" id="checklistInfo">Før frokostryk</div>
         </div>
       </div>
       <div class="sectionBody">
@@ -546,7 +605,7 @@
     <section class="section hidden" id="reportSection">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Skiftlederrapport</div>
-        <div class="sectionInfo">Udfyldes efter aftenryk</div>
+        <div class="sectionInfo">Kun synlig efter aftenryk</div>
       </div>
       <div class="sectionBody">
         <div class="field">
@@ -576,7 +635,7 @@
           </div>
         </div>
 
-        <div class="field" style="margin-top:12px;">
+        <div class="field" style="margin-top:14px;">
           <label class="label" for="deviationsComment">Mangler / afvigelser / behov for bestilling</label>
           <textarea id="deviationsComment" class="textarea" placeholder="Notér behov for opfølgning eller bestilling..."></textarea>
         </div>
@@ -586,7 +645,7 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Handlinger</div>
-        <div class="sectionInfo">Gem lokalt eller nulstil til ny dag</div>
+        <div class="sectionInfo">Lokal gemning i browseren</div>
       </div>
       <div class="sectionBody">
         <div class="actions">
@@ -600,7 +659,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "kaiser_shiftleader_checklist_v2";
+    const STORAGE_KEY = "kaiser_shiftleader_checklist_v3";
 
     const CHECKLISTS = {
       frokost: [
@@ -715,6 +774,7 @@
       });
       $("saveStatus").textContent = "Gemt lokalt";
       $("lastSavedText").textContent = `Senest gemt: ${now}`;
+      updateTopBar();
     }
 
     function loadState() {
@@ -724,8 +784,7 @@
           state.date = todayISO();
           return;
         }
-        const parsed = JSON.parse(raw);
-        Object.assign(state, parsed || {});
+        Object.assign(state, JSON.parse(raw) || {});
         if (!state.date) state.date = todayISO();
       } catch (err) {
         state.date = todayISO();
@@ -751,6 +810,7 @@
       renderReportSection();
       renderDayRating();
       updateSummary();
+      updateTopBar();
       $("saveStatus").textContent = "Nulstillet";
       $("lastSavedText").textContent = "Ny dag startet";
     }
@@ -795,6 +855,7 @@
       $("incidentsComment").value = state.incidentsComment || "";
       $("teamComment").value = state.teamComment || "";
       $("deviationsComment").value = state.deviationsComment || "";
+
       $("checklistInfo").textContent =
         state.checkType === "frokost" ? "Før frokostryk" :
         state.checkType === "aften" ? "Før aftenryk" :
@@ -811,13 +872,14 @@
         <div class="category">
           <div class="categoryTitle">${section.title}</div>
           <div class="categorySub">${section.subtitle}</div>
+
           <div class="checklist ${state.showAll ? "show-all" : ""}">
             ${section.items.map(item => {
               const value = getItemValue(state.checkType, item);
               const noteVisible = value.status === "mangler";
-              const itemClass = value.status === "ok" ? "completed-ok" : "";
+              const completedHidden = (value.status === "ok" || value.status === "na") && !state.showAll;
               return `
-                <div class="item ${itemClass}">
+                <div class="item ${completedHidden ? "completed-hidden" : ""}">
                   <div class="itemTop">
                     <div class="itemText">${item}</div>
                     <div class="statusGroup">
@@ -829,6 +891,7 @@
                         onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','na')">Ikke relevant</button>
                     </div>
                   </div>
+
                   <div class="itemNote ${noteVisible ? "show" : ""}">
                     <textarea
                       class="textarea"
@@ -886,6 +949,22 @@
       $("missingCount").textContent = missing;
       $("naCount").textContent = na;
       $("openCount").textContent = open;
+      $("topOpen").textContent = open;
+
+      let topStatus = "I gang";
+      if (missing > 0) topStatus = "Opmærksomhed";
+      if (open === 0 && missing === 0) topStatus = "Klar";
+
+      $("topStatus").textContent = topStatus;
+    }
+
+    function updateTopBar() {
+      $("topLocation").textContent = state.location || "—";
+      $("topManager").textContent = state.managerName || "—";
+      $("topCheckType").textContent =
+        state.checkType === "frokost" ? "Frokost" :
+        state.checkType === "aften" ? "Aften" :
+        "Rapport";
     }
 
     function escapeHtml(str) {
@@ -928,6 +1007,7 @@
         syncMetaToUI();
         renderChecklist();
         updateSummary();
+        updateTopBar();
       });
 
       $("showAllToggle").addEventListener("change", e => {
@@ -979,6 +1059,7 @@
       renderReportSection();
       renderDayRating();
       updateSummary();
+      updateTopBar();
     }
 
     function setItemStatusFromUI(type, item, status) {
