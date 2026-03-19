@@ -26,7 +26,6 @@
       --blue:#5ea7ff;
       --warn:#f59e0b;
       --shadow:0 24px 70px rgba(0,0,0,.42);
-      --radius:24px;
     }
 
     *{box-sizing:border-box}
@@ -146,21 +145,7 @@
       border-radius:999px;
       font-size:12px;
       font-weight:900;
-      letter-spacing:.04em;
       cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .quickBtn:hover{
-      border-color:rgba(214,178,74,0.45);
-      background:rgba(214,178,74,0.08);
-      transform:translateY(-1px);
-    }
-
-    .chatWrap{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
     }
 
     .chatBox{
@@ -183,7 +168,6 @@
       border-radius:20px;
       padding:14px 16px;
       line-height:1.55;
-      box-shadow:0 10px 30px rgba(0,0,0,0.16);
       white-space:pre-line;
     }
 
@@ -244,7 +228,6 @@
     .replyTitle{
       font-size:13px;
       font-weight:900;
-      letter-spacing:.04em;
     }
 
     .badge{
@@ -256,7 +239,6 @@
       border:1px solid rgba(255,255,255,0.14);
       font-size:10px;
       font-weight:900;
-      letter-spacing:.08em;
       text-transform:uppercase;
       white-space:nowrap;
     }
@@ -295,7 +277,6 @@
     .dishName{
       font-size:13px;
       font-weight:900;
-      line-height:1.35;
     }
 
     .dishMeta{
@@ -303,14 +284,13 @@
       font-size:11px;
       color:var(--muted);
       font-weight:700;
-      line-height:1.4;
     }
 
     .inputBar{
+      margin-top:14px;
       display:grid;
       grid-template-columns:1fr auto;
       gap:12px;
-      align-items:stretch;
     }
 
     .chatInput{
@@ -325,11 +305,6 @@
       font-weight:700;
     }
 
-    .chatInput:focus{
-      border-color:rgba(214,178,74,0.5);
-      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
-    }
-
     .sendBtn{
       border:none;
       border-radius:18px;
@@ -339,14 +314,8 @@
       color:#161616;
       font-size:13px;
       font-weight:900;
-      letter-spacing:.08em;
       text-transform:uppercase;
       cursor:pointer;
-      box-shadow:0 12px 30px rgba(214,178,74,0.22);
-    }
-
-    .sendBtn:hover{
-      transform:translateY(-1px);
     }
 
     @media (max-width: 700px){
@@ -369,8 +338,8 @@
       <div class="kicker">KAISER</div>
       <div class="title">Allergiassistent</div>
       <div class="sub">
-        En hurtig chat-assistent til tjenere.<br>
-        Skriv fx: “Min gæst har glutenallergi” og få et klart svar på hvad gæsten kan spise.
+        Skriv fx: “Min gæst har glutenallergi”<br>
+        og få et hurtigt svar på hvilke retter der kan anbefales.
       </div>
       <div class="goldline"></div>
     </section>
@@ -378,7 +347,7 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Hurtige forslag</div>
-        <div class="sectionInfo">Tryk på et forslag eller skriv selv</div>
+        <div class="sectionInfo">Tryk eller skriv selv</div>
       </div>
       <div class="sectionBody">
         <div class="quickRow" id="quickActions"></div>
@@ -388,25 +357,18 @@
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> Chat</div>
-        <div class="sectionInfo">Spørg om allergi og retter</div>
+        <div class="sectionInfo">Spørg om allergener og retter</div>
       </div>
       <div class="sectionBody">
-        <div class="chatWrap">
-          <div class="chatBox" id="chatBox"></div>
+        <div class="chatBox" id="chatBox"></div>
 
-          <div class="inputBar">
-            <input
-              id="chatInput"
-              class="chatInput"
-              placeholder="Skriv fx: Min gæst har glutenallergi"
-              autocomplete="off"
-            />
-            <button id="sendBtn" class="sendBtn">Send</button>
-          </div>
+        <div class="inputBar">
+          <input id="chatInput" class="chatInput" placeholder="Skriv fx: Min gæst har glutenallergi" />
+          <button id="sendBtn" class="sendBtn">Send</button>
+        </div>
 
-          <div class="mutedHelp">
-            Eksempler: “Hvad kan en gæst med laktose spise?”, “Har I noget uden nødder?”, “Min gæst tåler ikke skaldyr”.
-          </div>
+        <div class="mutedHelp">
+          Eksempler: “Hvad kan en med laktose spise?”, “Har I noget uden nødder?”, “Min gæst tåler ikke fisk”.
         </div>
       </div>
     </section>
@@ -439,24 +401,25 @@
         .trim();
     }
 
-    function allergyColumnValue(row, allergy) {
-      return normalizeValue(row[allergy]);
+    function getAllergiesFromData() {
+      const first = (window.ALLERGI_DATA || [])[0];
+      if (!first || !first.allergener) return [];
+      return Object.keys(first.allergener);
     }
 
     function scrollChatToBottom() {
-      const chatBox = $("chatBox");
-      chatBox.scrollTop = chatBox.scrollHeight;
+      const box = $("chatBox");
+      box.scrollTop = box.scrollHeight;
     }
 
     function addUserMessage(text) {
-      const chatBox = $("chatBox");
       const el = document.createElement("div");
       el.className = "msg user";
       el.innerHTML = `
         <div class="msgLabel">Tjener</div>
         <div class="msgText">${escapeHtml(text)}</div>
       `;
-      chatBox.appendChild(el);
+      $("chatBox").appendChild(el);
       scrollChatToBottom();
     }
 
@@ -467,17 +430,13 @@
 
       return items.map(item => `
         <div class="dish">
-          <div class="dishName">${escapeHtml(item.Retter || "Ukendt ret")}</div>
-          <div class="dishMeta">
-            ${escapeHtml(item.Kategori || "Ukendt kategori")}
-            ${item.Info ? " • " + escapeHtml(item.Info) : ""}
-          </div>
+          <div class="dishName">${escapeHtml(item.ret || "Ukendt ret")}</div>
+          <div class="dishMeta">${escapeHtml(item.kategori || "Ukendt kategori")}</div>
         </div>
       `).join("");
     }
 
     function addBotMessage(text, result = null) {
-      const chatBox = $("chatBox");
       const el = document.createElement("div");
       el.className = "msg bot";
 
@@ -518,28 +477,35 @@
         <div class="msgText">${text}</div>
         ${cards}
       `;
-
-      chatBox.appendChild(el);
+      $("chatBox").appendChild(el);
       scrollChatToBottom();
     }
 
     function detectAllergyFromMessage(message) {
       const text = normalizeText(message);
-      const allergies = window.ALLERGY_COLUMNS || [];
+      const allergies = getAllergiesFromData();
 
       const aliasMap = {
         "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
         "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
-        "nødder": ["nødder", "nøddeallergi", "noedder", "mandler", "hasselnød", "valnød", "pistacie", "cashew"],
-        "skaldyr": ["skaldyr", "skaldyrsallergi", "rejer", "muslinger", "krabbe", "hummer"]
+        "nødder": ["nødder", "nøddeallergi", "noedder"],
+        "æg": ["æg", "aeg", "ægallergi"],
+        "krebs": ["krebs", "krebsdyr", "rejer", "krabbe", "hummer"],
+        "fisk": ["fisk", "fiskeallergi"],
+        "jordnødder": ["jordnødder", "jordnoedder", "peanuts", "peanut"],
+        "soja": ["soja", "soy"],
+        "selleri": ["selleri"],
+        "sesamfrø": ["sesamfrø", "sesamfro", "sesam"],
+        "lupin": ["lupin"],
+        "sulfiter": ["sulfiter", "sulfit"],
+        "bløddyr": ["bløddyr", "bloeddyr", "muslinger", "østers", "oesters"],
+        "sennep": ["sennep"]
       };
 
       for (const allergy of allergies) {
         const allergyKey = normalizeText(allergy);
 
-        if (text.includes(allergyKey)) {
-          return allergy;
-        }
+        if (text.includes(allergyKey)) return allergy;
 
         if (aliasMap[allergyKey]) {
           const found = aliasMap[allergyKey].some(alias => text.includes(normalizeText(alias)));
@@ -551,13 +517,13 @@
     }
 
     function getResultsForAllergy(allergy) {
-      const rows = [...(window.ALLERGI_DATA || [])];
+      const rows = window.ALLERGI_DATA || [];
       const safe = [];
       const trace = [];
       const avoid = [];
 
       rows.forEach(row => {
-        const value = allergyColumnValue(row, allergy);
+        const value = normalizeValue(row?.allergener?.[allergy]);
 
         if (value === "nej") {
           safe.push(row);
@@ -577,25 +543,19 @@
       parts.push(`Jeg har fundet allergien: ${allergy}.`);
 
       if (result.safe.length) {
-        const topSafe = result.safe.slice(0, 4).map(r => r.Retter).filter(Boolean);
-        if (topSafe.length) {
-          parts.push(`Jeg kan anbefale retter som ${topSafe.join(", ")}.`);
-        }
+        const safeNames = result.safe.slice(0, 4).map(r => r.ret).filter(Boolean);
+        parts.push(`Disse retter kan som udgangspunkt anbefales: ${safeNames.join(", ")}.`);
       } else {
-        parts.push(`Jeg kan ikke se nogen retter, der er registreret som sikre for ${allergy}.`);
+        parts.push(`Jeg kan ikke se nogen registrerede retter, der er sikre for ${allergy}.`);
       }
 
       if (result.trace.length) {
-        parts.push(`Der er også retter med spor af, som kræver ekstra opmærksomhed.`);
+        parts.push(`Der findes også retter med spor af, som kræver ekstra opmærksomhed.`);
       }
 
       if (result.avoid.length) {
-        const topAvoid = result.avoid.slice(0, 4).map(r => r.Retter).filter(Boolean);
-        if (topAvoid.length) {
-          parts.push(`Disse retter bør undgås: ${topAvoid.join(", ")}.`);
-        } else {
-          parts.push(`Der er retter, som bør undgås.`);
-        }
+        const avoidNames = result.avoid.slice(0, 4).map(r => r.ret).filter(Boolean);
+        parts.push(`Disse retter bør undgås: ${avoidNames.join(", ")}.`);
       }
 
       parts.push(`Se den fulde oversigt nedenfor.`);
@@ -604,16 +564,16 @@
     }
 
     function handleMessage(message) {
-      const trimmed = String(message || "").trim();
-      if (!trimmed) return;
+      const text = String(message || "").trim();
+      if (!text) return;
 
-      addUserMessage(trimmed);
+      addUserMessage(text);
 
-      const allergy = detectAllergyFromMessage(trimmed);
+      const allergy = detectAllergyFromMessage(text);
 
       if (!allergy) {
         addBotMessage(
-          `Jeg kunne ikke genkende allergien i beskeden.\n\nPrøv fx at skrive:\n- Min gæst har glutenallergi\n- Hvad kan en med laktose spise?\n- Har I noget uden nødder?\n- Min gæst tåler ikke skaldyr`
+          `Jeg kunne ikke genkende allergien i beskeden.\n\nPrøv fx at skrive:\n- Min gæst har glutenallergi\n- Hvad kan en med laktose spise?\n- Har I noget uden nødder?\n- Min gæst tåler ikke fisk`
         );
         return;
       }
@@ -625,12 +585,7 @@
 
     function buildQuickActions() {
       const wrap = $("quickActions");
-      const allergies = window.ALLERGY_COLUMNS || [];
-
-      if (!allergies.length) {
-        wrap.innerHTML = `<div class="mutedHelp">Ingen allergier fundet i data.</div>`;
-        return;
-      }
+      const allergies = getAllergiesFromData();
 
       wrap.innerHTML = "";
 
@@ -663,13 +618,17 @@
     }
 
     function boot() {
+      if (!Array.isArray(window.ALLERGI_DATA)) {
+        addBotMessage("Der blev ikke fundet nogen data. Tjek at allergi-data.js starter med window.ALLERGI_DATA = [...];");
+        return;
+      }
+
       buildQuickActions();
+      bindEvents();
 
       addBotMessage(
         `Hej. Jeg er jeres allergiassistent.\n\nSkriv hvilken allergi gæsten har, så viser jeg hvilke retter der kan anbefales, hvilke der kræver opmærksomhed, og hvilke der bør undgås.`
       );
-
-      bindEvents();
     }
 
     boot();
