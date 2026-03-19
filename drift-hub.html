@@ -378,6 +378,22 @@
       margin-bottom:10px;
     }
 
+    .toolPill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--text);
+    }
+
     .frame{
       width:100%;
       height:72vh;
@@ -390,115 +406,171 @@
 <body>
   <div class="shell">
 
-    <div class="toolGrid">
-  <div class="toolCard" data-url="./daglige-opgaver.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">✅</div>
-        <div class="badge green">Drift</div>
+    <header class="hero">
+      <div class="heroTop">
+        <div class="kicker">KAISER</div>
+        <div class="title">Drift Hub</div>
+        <div class="sub">Daglig drift, opgaver og rapportering samlet ét sted</div>
+        <div class="goldline"></div>
       </div>
-      <div class="toolName">Daglige opgaver</div>
-      <div class="toolDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Checklist</div>
-        <div class="metaChip">Lokation</div>
+
+      <div class="heroMeta">
+        <div class="metaCard">
+          <div class="metaLabel">Lokation</div>
+          <div class="metaValue" id="locPill">Ikke sat</div>
+          <div class="metaSub">Denne hub følger den valgte afdeling</div>
+        </div>
+
+        <div class="metaCard">
+          <div class="metaLabel">Nu</div>
+          <div class="metaValue" id="timePill">--:--</div>
+          <div class="metaSub">Brug værktøjerne nedenfor til den daglige drift</div>
+        </div>
       </div>
-      <div class="launchText">Åbn →</div>
+
+      <div class="controlRow">
+        <button class="btn" id="clockToggle" type="button">🕐 Vis ur</button>
+        <button class="btn" id="fsBtn" type="button">⛶ Fuldskærm</button>
+        <button class="btn" id="refreshBtn" type="button">↻ Opdater</button>
+      </div>
+
+      <div class="clockWrap" id="clockWrap">
+        <div class="clockTime" id="clockTime">--:--</div>
+        <div class="clockDate" id="clockDate">--</div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
+        <div class="sectionInfo">Åbn moduler direkte</div>
+      </div>
+      <div class="sectionBody">
+        <div class="toolGrid">
+          <div class="toolCard" data-url="./daglige-opgaver.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">✅</div>
+                <div class="badge green">Drift</div>
+              </div>
+              <div class="toolName">Daglige opgaver</div>
+              <div class="toolDesc">Tjenernes daglige tjekliste og faste opgaver.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Checklist</div>
+                <div class="metaChip">Lokation</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <div class="toolCard" data-url="./shiftleader-checklist.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">🧭</div>
+                <div class="badge green">Skiftleder</div>
+              </div>
+              <div class="toolName">Dagsansvarlig tjekliste</div>
+              <div class="toolDesc">Før frokost, før aften og efter aften-rapport samlet i ét værktøj.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Checklist</div>
+                <div class="metaChip">Skift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <div class="toolCard" data-url="./skiftlederrapport1.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">📝</div>
+                <div class="badge blue">Rapport</div>
+              </div>
+              <div class="toolName">Skiftlederrapport</div>
+              <div class="toolDesc">Daglig rapport og overlevering mellem vagter.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Daglig</div>
+                <div class="metaChip">Skift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <div class="toolCard" data-url="./soldout-products.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">🍽️</div>
+                <div class="badge red" id="soldoutBadge">0 udsolgte</div>
+              </div>
+              <div class="toolName">Udsolgte produkter</div>
+              <div class="toolDesc">Registrér hvilke varer der er udsolgt i service.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Live</div>
+                <div class="metaChip">Service</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <div class="toolCard" data-url="./guest-complaints.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">💬</div>
+                <div class="badge red" id="complaintBadge">0 klager</div>
+              </div>
+              <div class="toolName">Gæsteklager</div>
+              <div class="toolDesc">Registrér gæsteklager hurtigt og struktureret.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Quality</div>
+                <div class="metaChip">Service</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <div class="toolCard" data-url="./faults-issues.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">🛠️</div>
+                <div class="badge blue" id="faultBadge">0 fejl</div>
+              </div>
+              <div class="toolName">Fejl & mangler</div>
+              <div class="toolDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Maintenance</div>
+                <div class="metaChip">Drift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="toolViewer" id="toolViewer">
+      <div class="toolBar">
+        <div class="toolPill" id="toolName">—</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" id="closeToolBtn" type="button">← Tilbage</button>
+          <button class="btn" id="newTabBtn" type="button">↗ Nyt faneblad</button>
+        </div>
+      </div>
+      <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
+
   </div>
 
-  <div class="toolCard" data-url="./shiftleader-checklist.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">🧭</div>
-        <div class="badge green">Skiftleder</div>
-      </div>
-      <div class="toolName">Dagsansvarlig tjekliste</div>
-      <div class="toolDesc">Før frokost, før aften og efter aften-rapport samlet i ét værktøj.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Checklist</div>
-        <div class="metaChip">Skift</div>
-      </div>
-      <div class="launchText">Åbn →</div>
-    </div>
-  </div>
-
-  <div class="toolCard" data-url="./skiftlederrapport1.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">📝</div>
-        <div class="badge blue">Rapport</div>
-      </div>
-      <div class="toolName">Skiftlederrapport</div>
-      <div class="toolDesc">Daglig rapport og overlevering mellem vagter.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Daglig</div>
-        <div class="metaChip">Skift</div>
-      </div>
-      <div class="launchText">Åbn →</div>
-    </div>
-  </div>
-
-  <div class="toolCard" data-url="./soldout-products.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">🍽️</div>
-        <div class="badge red" id="soldoutBadge">0 udsolgte</div>
-      </div>
-      <div class="toolName">Udsolgte produkter</div>
-      <div class="toolDesc">Registrér hvilke varer der er udsolgt i service.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Live</div>
-        <div class="metaChip">Service</div>
-      </div>
-      <div class="launchText">Åbn →</div>
-    </div>
-  </div>
-
-  <div class="toolCard" data-url="./guest-complaints.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">💬</div>
-        <div class="badge red" id="complaintBadge">0 klager</div>
-      </div>
-      <div class="toolName">Gæsteklager</div>
-      <div class="toolDesc">Registrér gæsteklager hurtigt og struktureret.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Quality</div>
-        <div class="metaChip">Service</div>
-      </div>
-      <div class="launchText">Åbn →</div>
-    </div>
-  </div>
-
-  <div class="toolCard" data-url="./faults-issues.html">
-    <div>
-      <div class="toolTop">
-        <div class="toolIcon">🛠️</div>
-        <div class="badge blue" id="faultBadge">0 fejl</div>
-      </div>
-      <div class="toolName">Fejl & mangler</div>
-      <div class="toolDesc">Rapportér fejl, manglende udstyr og driftsproblemer.</div>
-    </div>
-    <div class="toolBottom">
-      <div class="toolMeta">
-        <div class="metaChip">Maintenance</div>
-        <div class="metaChip">Drift</div>
-      </div>
-      <div class="launchText">Åbn →</div>
-    </div>
-  </div>
-</div>
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const LOC_KEY = "kaiser_kitchenpct_loc";
@@ -650,6 +722,7 @@
 
       const nameMap = {
         "./daglige-opgaver.html": "Daglige opgaver",
+        "./shiftleader-checklist.html": "Dagsansvarlig tjekliste",
         "./skiftlederrapport1.html": "Skiftlederrapport",
         "./soldout-products.html": "Udsolgte produkter",
         "./guest-complaints.html": "Gæsteklager",
