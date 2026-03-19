@@ -439,11 +439,10 @@ async function submit() {
   setSubmitting(true);
 
   try {
-    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
+    if (!WEBHOOK_URL) throw new Error("WEBHOOK_URL mangler");
     if (!state.imageBase64) throw new Error("Billede mangler (krav).");
 
     const payload = {
-      secret: WEBHOOK_SECRET,
       lokation: state.location,
       maaltid: state.meal,
       ret: state.dish,
@@ -475,22 +474,3 @@ async function submit() {
     setSubmitting(false);
   }
 }
-// ==========================
-// BOOT
-// ==========================
-function boot() {
-  initLocationSelect();
-  initMealRadios();
-  initDishSelect();
-  initTastedToggle();
-  initNavButtons();
-  initImageUpload();
-  initCommentAndSubmit();
-
-  updateNextEnabled();
-  renderRatingBlocks();
-  updateSubmitEnabled();
-  showScreen("location");
-}
-
-document.addEventListener("DOMContentLoaded", boot);
