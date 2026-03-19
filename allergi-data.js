@@ -1699,4 +1699,4 @@ window.ALLERGI_DATA = [
     },
     "kategori": "Snacks"
   }
-]
+];
