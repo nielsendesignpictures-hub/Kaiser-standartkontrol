@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser – Allergiassistent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0a0e14;
+      --bg1:#111823;
+      --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.035);
+      --line:rgba(255,255,255,0.10);
+      --line2:rgba(255,255,255,0.07);
+      --text:rgba(255,255,255,0.97);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.54);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
+      --warn:#f59e0b;
+      --shadow:0 24px 70px rgba(0,0,0,.42);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:14px;
+    }
+
+    .shell{max-width:1320px;margin:0 auto;}
+
+    .hero{
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:22px 18px 18px;
+      text-align:center;
+    }
+
+    .kicker{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .title{
+      margin-top:8px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(34px,6vw,56px);
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .goldline{
+      height:2px;
+      margin:18px auto 0;
+      max-width:760px;
+      border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
+    }
+
+    .section{
+      margin-top:14px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:var(--panel2);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .sectionHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid var(--line2);
+      flex-wrap:wrap;
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .sectionDot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
+    .sectionBody{padding:16px;}
+
+    .metaGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .metaGrid{grid-template-columns:1fr;}
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .label{
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .input,
+    .select{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      padding:14px 14px;
+      outline:none;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .select option{
+      background:#111823;
+      color:#fff;
+    }
+
+    .input:focus,
+    .select:focus{
+      border-color:rgba(214,178,74,0.5);
+      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
+    }
+
+    .assistantCard{
+      border-radius:24px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      padding:20px;
+    }
+
+    .assistantTitle{
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .assistantBig{
+      margin-top:14px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(30px,5vw,48px);
+      line-height:1.06;
+      letter-spacing:-.04em;
+    }
+
+    .assistantText{
+      margin-top:12px;
+      font-size:15px;
+      line-height:1.7;
+      color:var(--muted);
+      font-weight:800;
+      max-width:950px;
+    }
+
+    .resultGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .resultGrid{grid-template-columns:1fr;}
+    }
+
+    .resultCard{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:16px;
+      min-height:260px;
+    }
+
+    .resultHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .resultName{
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .badge.green{
+      background:rgba(98,210,111,0.14);
+      border-color:rgba(98,210,111,0.35);
+      color:#dff7e2;
+    }
+
+    .badge.warn{
+      background:rgba(245,158,11,0.14);
+      border-color:rgba(245,158,11,0.35);
+      color:#ffe9b0;
+    }
+
+    .badge.red{
+      background:rgba(255,107,107,0.14);
+      border-color:rgba(255,107,107,0.35);
+      color:#ffd0d0;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .item{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.05);
+      padding:12px;
+    }
+
+    .itemTitle{
+      font-size:14px;
+      font-weight:900;
+      line-height:1.35;
+    }
+
+    .itemSub{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .empty{
+      padding:18px;
+      text-align:center;
+      color:var(--muted2);
+      font-size:13px;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <section class="hero">
+      <div class="kicker">KAISER</div>
+      <div class="title">Allergiassistent</div>
+      <div class="sub">
+        Hurtigt værktøj til tjenere ved spørgsmål om allergener og anbefalinger.<br>
+        Data er baseret på registrerede retter og allergioplysninger.
+      </div>
+      <div class="goldline"></div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Forespørgsel</div>
+        <div class="sectionInfo">Vælg allergi og få anbefalinger</div>
+      </div>
+      <div class="sectionBody">
+        <div class="metaGrid">
+          <div class="field">
+            <label class="label" for="guestPrompt">Hvad spørger gæsten om?</label>
+            <input id="guestPrompt" class="input" placeholder="Fx Min gæst har gluten allergi" />
+          </div>
+
+          <div class="field">
+            <label class="label" for="allergySelect">Allergi</label>
+            <select id="allergySelect" class="select"></select>
+          </div>
+
+          <div class="field">
+            <label class="label" for="categorySelect">Kategori</label>
+            <select id="categorySelect" class="select">
+              <option value="">Alle kategorier</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Anbefaling</div>
+        <div class="sectionInfo">Svar baseret på valgte allergi</div>
+      </div>
+      <div class="sectionBody">
+        <div class="assistantCard">
+          <div class="assistantTitle">Service-svar</div>
+          <div class="assistantBig" id="assistantHeadline">Vælg en allergi</div>
+          <div class="assistantText" id="assistantText">
+            Når du vælger en allergi, får du en tydelig oversigt over retter der kan anbefales, retter med spor af og retter der bør undgås.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Resultater</div>
+        <div class="sectionInfo">Fordelt i grøn / gul / rød</div>
+      </div>
+      <div class="sectionBody">
+        <div class="resultGrid">
+          <div class="resultCard">
+            <div class="resultHead">
+              <div class="resultName">Kan anbefales</div>
+              <div class="badge green" id="safeCount">0 retter</div>
+            </div>
+            <div class="list" id="safeList">
+              <div class="empty">Ingen data endnu</div>
+            </div>
+          </div>
+
+          <div class="resultCard">
+            <div class="resultHead">
+              <div class="resultName">Spor af / vær opmærksom</div>
+              <div class="badge warn" id="traceCount">0 retter</div>
+            </div>
+            <div class="list" id="traceList">
+              <div class="empty">Ingen data endnu</div>
+            </div>
+          </div>
+
+          <div class="resultCard">
+            <div class="resultHead">
+              <div class="resultName">Bør undgås</div>
+              <div class="badge red" id="avoidCount">0 retter</div>
+            </div>
+            <div class="list" id="avoidList">
+              <div class="empty">Ingen data endnu</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="./allergi-data.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+
+    function normalizeValue(v) {
+      return String(v || "").trim().toLowerCase();
+    }
+
+    function allergyColumnValue(row, allergy) {
+      return normalizeValue(row[allergy]);
+    }
+
+    function titleCaseAllergy(str) {
+      return str || "";
+    }
+
+    function buildCategoryOptions() {
+      const categories = [...new Set((window.ALLERGI_DATA || []).map(r => r.Kategori).filter(Boolean))].sort();
+      const select = $("categorySelect");
+      categories.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+    }
+
+    function buildAllergyOptions() {
+      const select = $("allergySelect");
+      const allergies = window.ALLERGY_COLUMNS || [];
+
+      select.innerHTML = `<option value="">Vælg allergi...</option>`;
+      allergies.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a;
+        opt.textContent = a;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderList(targetId, items, typeLabel) {
+      const wrap = $(targetId);
+
+      if (!items.length) {
+        wrap.innerHTML = `<div class="empty">Ingen retter i denne kategori</div>`;
+        return;
+      }
+
+      wrap.innerHTML = items.map(item => `
+        <div class="item">
+          <div class="itemTitle">${escapeHtml(item.Retter || "Ukendt ret")}</div>
+          <div class="itemSub">${escapeHtml(item.Kategori || "Ukendt kategori")}${item.Info ? " • " + escapeHtml(item.Info) : ""}</div>
+          <div class="chips">
+            <div class="chip">${typeLabel}</div>
+            ${item.Kategori ? `<div class="chip">${escapeHtml(item.Kategori)}</div>` : ""}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[c]));
+    }
+
+    function renderResults() {
+      const allergy = $("allergySelect").value;
+      const category = $("categorySelect").value;
+      const prompt = $("guestPrompt").value.trim();
+
+      if (!allergy) {
+        $("assistantHeadline").textContent = "Vælg en allergi";
+        $("assistantText").textContent = "Når du vælger en allergi, får du en tydelig oversigt over hvilke retter der kan anbefales, hvilke der kræver ekstra opmærksomhed, og hvilke der bør undgås.";
+        $("safeCount").textContent = "0 retter";
+        $("traceCount").textContent = "0 retter";
+        $("avoidCount").textContent = "0 retter";
+        $("safeList").innerHTML = '<div class="empty">Ingen data endnu</div>';
+        $("traceList").innerHTML = '<div class="empty">Ingen data endnu</div>';
+        $("avoidList").innerHTML = '<div class="empty">Ingen data endnu</div>';
+        return;
+      }
+
+      let rows = [...(window.ALLERGI_DATA || [])];
+
+      if (category) {
+        rows = rows.filter(r => String(r.Kategori || "").trim() === category);
+      }
+
+      const safe = [];
+      const trace = [];
+      const avoid = [];
+
+      rows.forEach(row => {
+        const value = allergyColumnValue(row, allergy);
+
+        if (value === "nej") {
+          safe.push(row);
+        } else if (value === "spor af") {
+          trace.push(row);
+        } else if (value === "ja") {
+          avoid.push(row);
+        }
+      });
+
+      $("safeCount").textContent = `${safe.length} retter`;
+      $("traceCount").textContent = `${trace.length} retter`;
+      $("avoidCount").textContent = `${avoid.length} retter`;
+
+      const intro = prompt
+        ? `På baggrund af din forespørgsel “${prompt}” ser det ud til, at gæsten bør styres efter allergien ${titleCaseAllergy(allergy)}.`
+        : `For en gæst med ${titleCaseAllergy(allergy)} kan du bruge oversigten herunder som servicehjælp.`;
+
+      $("assistantHeadline").textContent = `Min gæst har ${titleCaseAllergy(allergy)}`;
+      $("assistantText").textContent =
+        `${intro} Du kan anbefale retterne i den grønne kolonne. Retter med spor af kræver ekstra opmærksomhed og bør kommunikeres tydeligt. Retter i den røde kolonne bør undgås.`;
+
+      renderList("safeList", safe, "Kan anbefales");
+      renderList("traceList", trace, "Spor af");
+      renderList("avoidList", avoid, "Bør undgås");
+    }
+
+    function bindEvents() {
+      $("allergySelect").addEventListener("change", renderResults);
+      $("categorySelect").addEventListener("change", renderResults);
+      $("guestPrompt").addEventListener("input", renderResults);
+    }
+
+    function boot() {
+      buildAllergyOptions();
+      buildCategoryOptions();
+      bindEvents();
+      renderResults();
+    }
+
+    boot();
+  </script>
+</body>
+</html>
