@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser – Dagsansvarlig Tjekliste</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0a0e14;
+      --bg1:#111823;
+      --panel:rgba(255,255,255,0.05);
+      --panel2:rgba(255,255,255,0.035);
+      --line:rgba(255,255,255,0.10);
+      --line2:rgba(255,255,255,0.07);
+      --text:rgba(255,255,255,0.97);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.54);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
+      --warn:#f59e0b;
+      --shadow:0 24px 70px rgba(0,0,0,.42);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:14px;
+    }
+
+    .shell{max-width:1100px;margin:0 auto;}
+
+    .hero{
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:22px 18px 18px;
+      text-align:center;
+    }
+
+    .kicker{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .title{
+      margin-top:8px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(34px,6vw,56px);
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .goldline{
+      height:2px;
+      margin:18px auto 0;
+      max-width:760px;
+      border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
+    }
+
+    .section{
+      margin-top:14px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:var(--panel2);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .sectionHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      background:rgba(255,255,255,0.03);
+      border-bottom:1px solid var(--line2);
+      flex-wrap:wrap;
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .sectionDot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
+    .sectionBody{padding:16px;}
+
+    .metaGrid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    @media (max-width: 980px){
+      .metaGrid{grid-template-columns:1fr 1fr;}
+    }
+
+    @media (max-width: 640px){
+      .metaGrid{grid-template-columns:1fr;}
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .label{
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+    }
+
+    .input,
+    .select,
+    .textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      padding:14px 14px;
+      outline:none;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .select option{
+      background:#111823;
+      color:#fff;
+    }
+
+    .textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus{
+      border-color:rgba(214,178,74,0.5);
+      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
+    }
+
+    .summaryBar{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    @media (max-width: 900px){
+      .summaryBar{grid-template-columns:1fr 1fr;}
+    }
+
+    @media (max-width: 640px){
+      .summaryBar{grid-template-columns:1fr;}
+    }
+
+    .summaryCard{
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:16px;
+    }
+
+    .summaryLabel{
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      color:var(--muted2);
+    }
+
+    .summaryValue{
+      margin-top:10px;
+      font-size:30px;
+      font-weight:900;
+      line-height:1;
+      font-family:"Playfair Display",serif;
+    }
+
+    .summarySub{
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .category{
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      padding:16px;
+      margin-top:14px;
+    }
+
+    .categoryTitle{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .categorySub{
+      margin-top:4px;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .checklist{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .item{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.05);
+      padding:14px;
+    }
+
+    .itemTop{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .itemText{
+      flex:1;
+      min-width:220px;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .statusGroup{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .statusBtn{
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      min-width:92px;
+    }
+
+    .statusBtn.ok.active{
+      background:rgba(98,210,111,0.14);
+      border-color:rgba(98,210,111,0.38);
+      color:#dff7e2;
+    }
+
+    .statusBtn.warn.active{
+      background:rgba(245,158,11,0.14);
+      border-color:rgba(245,158,11,0.38);
+      color:#ffe9b0;
+    }
+
+    .statusBtn.na.active{
+      background:rgba(94,167,255,0.14);
+      border-color:rgba(94,167,255,0.38);
+      color:#d7e8ff;
+    }
+
+    .itemNote{
+      margin-top:10px;
+      display:none;
+    }
+
+    .itemNote.show{
+      display:block;
+    }
+
+    .reportGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    @media (max-width: 760px){
+      .reportGrid{grid-template-columns:1fr;}
+    }
+
+    .dayRatingRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .ratingBtn{
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      color:var(--text);
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .ratingBtn.active{
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0a0e14;
+      border:none;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      min-height:46px;
+      padding:12px 16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0a0e14;
+      border:none;
+    }
+
+    .btn.danger{
+      border-color:rgba(255,107,107,.35);
+      color:#ffd0d0;
+    }
+
+    .statusLine{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted2);
+    }
+
+    .hidden{display:none !important;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <section class="hero">
+      <div class="kicker">KAISER</div>
+      <div class="title">Dagsansvarlig Tjekliste</div>
+      <div class="sub">
+        Digital driftstjekliste for Café Kaiser.<br>
+        Bruges før frokostryk, før aftenryk og efter aftenryk.
+      </div>
+      <div class="goldline"></div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Dagens tjek</div>
+        <div class="sectionInfo" id="saveStatus">Ikke gemt endnu</div>
+      </div>
+      <div class="sectionBody">
+        <div class="metaGrid">
+          <div class="field">
+            <label class="label" for="locationSelect">Lokation</label>
+            <select id="locationSelect" class="select">
+              <option value="">Vælg lokation...</option>
+              <option value="Café Kaiser Helsingør">Café Kaiser Helsingør</option>
+              <option value="Café Kaiser Hillerød">Café Kaiser Hillerød</option>
+              <option value="Café Kaiser Farum">Café Kaiser Farum</option>
+              <option value="Café Kaiser Hørsholm">Café Kaiser Hørsholm</option>
+              <option value="Café Kaiser Vanløse">Café Kaiser Vanløse</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label" for="managerName">Dagsansvarlig</label>
+            <input id="managerName" class="input" placeholder="Navn på skiftleder" />
+          </div>
+
+          <div class="field">
+            <label class="label" for="dateInput">Dato</label>
+            <input id="dateInput" type="date" class="input" />
+          </div>
+
+          <div class="field">
+            <label class="label" for="checkType">Tjektype</label>
+            <select id="checkType" class="select">
+              <option value="frokost">Før frokostryk</option>
+              <option value="aften">Før aftenryk</option>
+              <option value="rapport">Efter aftenryk</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Overblik</div>
+        <div class="sectionInfo">Status på aktiv tjekliste</div>
+      </div>
+      <div class="sectionBody">
+        <div class="summaryBar">
+          <div class="summaryCard">
+            <div class="summaryLabel">OK</div>
+            <div class="summaryValue" id="okCount">0</div>
+            <div class="summarySub">Godkendte punkter</div>
+          </div>
+          <div class="summaryCard">
+            <div class="summaryLabel">Mangler</div>
+            <div class="summaryValue" id="missingCount">0</div>
+            <div class="summarySub">Kræver handling</div>
+          </div>
+          <div class="summaryCard">
+            <div class="summaryLabel">Ikke relevant</div>
+            <div class="summaryValue" id="naCount">0</div>
+            <div class="summarySub">Ikke relevante punkter</div>
+          </div>
+          <div class="summaryCard">
+            <div class="summaryLabel">Åbne</div>
+            <div class="summaryValue" id="openCount">0</div>
+            <div class="summarySub">Ikke markerede punkter</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Tjekliste</div>
+        <div class="sectionInfo" id="checklistInfo">Vælg tjektype</div>
+      </div>
+      <div class="sectionBody">
+        <div id="checklistWrap"></div>
+      </div>
+    </section>
+
+    <section class="section hidden" id="reportSection">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Skiftlederrapport</div>
+        <div class="sectionInfo">Udfyldes efter aftenryk</div>
+      </div>
+      <div class="sectionBody">
+        <div class="field">
+          <label class="label">Rating af dagen (1–5)</label>
+          <div class="dayRatingRow" id="dayRatingRow"></div>
+        </div>
+
+        <div class="reportGrid" style="margin-top:14px;">
+          <div class="field">
+            <label class="label" for="serviceComment">Service, stemning og gæsteoplevelse</label>
+            <textarea id="serviceComment" class="textarea" placeholder="Kort vurdering af service og stemning..."></textarea>
+          </div>
+
+          <div class="field">
+            <label class="label" for="operationsComment">Dagens drift</label>
+            <textarea id="operationsComment" class="textarea" placeholder="Travlhed, flow og udfordringer..."></textarea>
+          </div>
+
+          <div class="field">
+            <label class="label" for="incidentsComment">Klager eller særlige hændelser</label>
+            <textarea id="incidentsComment" class="textarea" placeholder="Notér hændelser eller klager..."></textarea>
+          </div>
+
+          <div class="field">
+            <label class="label" for="teamComment">Teamets præstation</label>
+            <textarea id="teamComment" class="textarea" placeholder="Ros eller udfordringer i teamet..."></textarea>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:12px;">
+          <label class="label" for="deviationsComment">Mangler / afvigelser / behov for bestilling</label>
+          <textarea id="deviationsComment" class="textarea" placeholder="Notér behov for opfølgning eller bestilling..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Handlinger</div>
+        <div class="sectionInfo">Gem lokalt eller nulstil til ny dag</div>
+      </div>
+      <div class="sectionBody">
+        <div class="actions">
+          <div class="statusLine" id="lastSavedText" style="margin-right:auto;">Ingen lokal gemning endnu</div>
+          <button class="btn" id="saveBtn" type="button">Gem lokalt</button>
+          <button class="btn danger" id="resetBtn" type="button">Nulstil ny dag</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const STORAGE_KEY = "kaiser_shiftleader_checklist_v1";
+
+    const CHECKLISTS = {
+      frokost: [
+        {
+          title: "Café og gæsteområder",
+          subtitle: "Renhed, opfyldning og driftssikkerhed",
+          items: [
+            "Bordene tørret af, stole og gulve rene",
+            "Reservationer tjekket i EasyTableBooking og opdækket",
+            "Musik og playliste sat til frokost (Brunch)",
+            "Toiletter rene og fyldt med papir, sæbe og håndklæder",
+            "Temperaturen behagelig ift. gæstens behov",
+            "Sikre at cafeen er ryddelig",
+            "Klude og spritflasker opfyldt",
+            "Sikre at dagens åbningstjekliste er udført og markeret",
+            "Lageret står pænt"
+          ]
+        },
+        {
+          title: "Tjenerstationer og bar",
+          subtitle: "Opfyldning og klargøring",
+          items: [
+            "Tjenerstationer opfyldt og gjort klar",
+            "Bar opfyldt og gjort klar",
+            "Kage-/displaymontrer opfyldt og pænt arrangeret",
+            "Kaffemaskine, kværn, opvaskemaskine og postmix testet"
+          ]
+        },
+        {
+          title: "Drift og økonomi",
+          subtitle: "Teknik, betaling og køkkenflow",
+          items: [
+            "Byttepenge kontrolleret",
+            "Kassesystem og printer testet",
+            "Dankort og terminaler opladt",
+            "Kommunikation med køkken: klar til travlhed?",
+            "Vi er bakket godt op til frokost / mangler de noget"
+          ]
+        }
+      ],
+      aften: [
+        {
+          title: "Opfyldning",
+          subtitle: "Fyld op til aftenservice",
+          items: [
+            "Bar: Fyldt op til aften",
+            "Tjenerstationer: Fyldt op til aften",
+            "Kage-/displaymontrer genopfyldt og pænt arrangeret",
+            "Lager og tørvarer kontrolleret"
+          ]
+        },
+        {
+          title: "Drift og atmosfære",
+          subtitle: "Stemning, teknik og rengøring",
+          items: [
+            "Musik playliste sat til aften",
+            "Toiletter tjekket og fyldt op",
+            "Gulve fejet og baroverflader rene",
+            "Kommunikation med køkken – klar til aftenservice",
+            "Tjek aftenens reservationer og opdækning",
+            "Der er skiftet vand på opvaskemaskine",
+            "Sikre at dagens rengøringsliste er udført. Hvis der er mangler, gøres dette inden aften-ryk.",
+            "Sikre at midt-dagens tjekliste er udført og markeret"
+          ]
+        }
+      ],
+      rapport: [
+        {
+          title: "Afslutning og rapportering",
+          subtitle: "Overblik efter dagens service",
+          items: [
+            "Der er påbegyndt nedlukning af cafeen ved brug af lukke-tjekliste",
+            "Eventuelle fejl/mangler rapporteret",
+            "Skiftlederrapport udfyldt og sendt til Caféchef og HQ via mail"
+          ]
+        }
+      ]
+    };
+
+    const $ = id => document.getElementById(id);
+
+    const state = {
+      location: "",
+      managerName: "",
+      date: "",
+      checkType: "frokost",
+      items: {},
+      dayRating: 0,
+      serviceComment: "",
+      operationsComment: "",
+      incidentsComment: "",
+      teamComment: "",
+      deviationsComment: ""
+    };
+
+    function todayISO() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const now = new Date().toLocaleString("da-DK", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      $("saveStatus").textContent = "Gemt lokalt";
+      $("lastSavedText").textContent = `Senest gemt: ${now}`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          state.date = todayISO();
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        Object.assign(state, parsed || {});
+        if (!state.date) state.date = todayISO();
+      } catch (err) {
+        state.date = todayISO();
+      }
+    }
+
+    function resetStateForNewDay() {
+      state.location = "";
+      state.managerName = "";
+      state.date = todayISO();
+      state.checkType = "frokost";
+      state.items = {};
+      state.dayRating = 0;
+      state.serviceComment = "";
+      state.operationsComment = "";
+      state.incidentsComment = "";
+      state.teamComment = "";
+      state.deviationsComment = "";
+      localStorage.removeItem(STORAGE_KEY);
+      syncMetaToUI();
+      renderChecklist();
+      renderReportSection();
+      renderDayRating();
+      updateSummary();
+      $("saveStatus").textContent = "Nulstillet";
+      $("lastSavedText").textContent = "Ny dag startet";
+    }
+
+    function getFlatItems(type) {
+      return (CHECKLISTS[type] || []).flatMap(cat => cat.items);
+    }
+
+    function getItemKey(type, text) {
+      return `${type}__${text}`;
+    }
+
+    function setItemStatus(type, text, status) {
+      const key = getItemKey(type, text);
+      if (!state.items[key]) state.items[key] = { status: "", note: "" };
+      state.items[key].status = status;
+      saveState();
+      renderChecklist();
+      updateSummary();
+    }
+
+    function setItemNote(type, text, note) {
+      const key = getItemKey(type, text);
+      if (!state.items[key]) state.items[key] = { status: "", note: "" };
+      state.items[key].note = note;
+      saveState();
+    }
+
+    function getItemValue(type, text) {
+      const key = getItemKey(type, text);
+      return state.items[key] || { status: "", note: "" };
+    }
+
+    function syncMetaToUI() {
+      $("locationSelect").value = state.location || "";
+      $("managerName").value = state.managerName || "";
+      $("dateInput").value = state.date || todayISO();
+      $("checkType").value = state.checkType || "frokost";
+      $("serviceComment").value = state.serviceComment || "";
+      $("operationsComment").value = state.operationsComment || "";
+      $("incidentsComment").value = state.incidentsComment || "";
+      $("teamComment").value = state.teamComment || "";
+      $("deviationsComment").value = state.deviationsComment || "";
+      $("checklistInfo").textContent =
+        state.checkType === "frokost" ? "Før frokostryk" :
+        state.checkType === "aften" ? "Før aftenryk" :
+        "Efter aftenryk";
+    }
+
+    function renderChecklist() {
+      const wrap = $("checklistWrap");
+      const sections = CHECKLISTS[state.checkType] || [];
+
+      wrap.innerHTML = sections.map(section => `
+        <div class="category">
+          <div class="categoryTitle">${section.title}</div>
+          <div class="categorySub">${section.subtitle}</div>
+          <div class="checklist">
+            ${section.items.map(item => {
+              const value = getItemValue(state.checkType, item);
+              const noteVisible = value.status === "mangler";
+              return `
+                <div class="item">
+                  <div class="itemTop">
+                    <div class="itemText">${item}</div>
+                    <div class="statusGroup">
+                      <button class="statusBtn ok ${value.status === "ok" ? "active" : ""}" type="button"
+                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','ok')">OK</button>
+                      <button class="statusBtn warn ${value.status === "mangler" ? "active" : ""}" type="button"
+                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','mangler')">Mangler</button>
+                      <button class="statusBtn na ${value.status === "na" ? "active" : ""}" type="button"
+                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','na')">Ikke relevant</button>
+                    </div>
+                  </div>
+                  <div class="itemNote ${noteVisible ? "show" : ""}">
+                    <textarea
+                      class="textarea"
+                      style="min-height:90px;margin-top:10px;"
+                      placeholder="Beskriv hvad der mangler..."
+                      oninput="setItemNoteFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}', this.value)"
+                    >${escapeHtml(value.note || "")}</textarea>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      renderReportSection();
+    }
+
+    function renderReportSection() {
+      const isReport = state.checkType === "rapport";
+      $("reportSection").classList.toggle("hidden", !isReport);
+    }
+
+    function renderDayRating() {
+      const wrap = $("dayRatingRow");
+      wrap.innerHTML = "";
+
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ratingBtn" + (state.dayRating === i ? " active" : "");
+        btn.textContent = i;
+        btn.addEventListener("click", () => {
+          state.dayRating = i;
+          saveState();
+          renderDayRating();
+        });
+        wrap.appendChild(btn);
+      }
+    }
+
+    function updateSummary() {
+      const items = getFlatItems(state.checkType);
+      let ok = 0, missing = 0, na = 0, open = 0;
+
+      items.forEach(item => {
+        const v = getItemValue(state.checkType, item).status;
+        if (v === "ok") ok++;
+        else if (v === "mangler") missing++;
+        else if (v === "na") na++;
+        else open++;
+      });
+
+      $("okCount").textContent = ok;
+      $("missingCount").textContent = missing;
+      $("naCount").textContent = na;
+      $("openCount").textContent = open;
+    }
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[c]));
+    }
+
+    function escapeJs(str) {
+      return String(str || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "");
+    }
+
+    function bindMetaEvents() {
+      $("locationSelect").addEventListener("change", e => {
+        state.location = e.target.value;
+        saveState();
+      });
+
+      $("managerName").addEventListener("input", e => {
+        state.managerName = e.target.value;
+        saveState();
+      });
+
+      $("dateInput").addEventListener("change", e => {
+        state.date = e.target.value;
+        saveState();
+      });
+
+      $("checkType").addEventListener("change", e => {
+        state.checkType = e.target.value;
+        saveState();
+        syncMetaToUI();
+        renderChecklist();
+        updateSummary();
+      });
+
+      $("serviceComment").addEventListener("input", e => {
+        state.serviceComment = e.target.value;
+        saveState();
+      });
+
+      $("operationsComment").addEventListener("input", e => {
+        state.operationsComment = e.target.value;
+        saveState();
+      });
+
+      $("incidentsComment").addEventListener("input", e => {
+        state.incidentsComment = e.target.value;
+        saveState();
+      });
+
+      $("teamComment").addEventListener("input", e => {
+        state.teamComment = e.target.value;
+        saveState();
+      });
+
+      $("deviationsComment").addEventListener("input", e => {
+        state.deviationsComment = e.target.value;
+        saveState();
+      });
+
+      $("saveBtn").addEventListener("click", () => {
+        saveState();
+      });
+
+      $("resetBtn").addEventListener("click", () => {
+        if (!confirm("Vil du nulstille checklisten og starte en ny dag?")) return;
+        resetStateForNewDay();
+      });
+    }
+
+    function boot() {
+      loadState();
+      syncMetaToUI();
+      bindMetaEvents();
+      renderChecklist();
+      renderReportSection();
+      renderDayRating();
+      updateSummary();
+    }
+
+    function setItemStatusFromUI(type, item, status) {
+      setItemStatus(type, item, status);
+    }
+
+    function setItemNoteFromUI(type, item, note) {
+      setItemNote(type, item, note);
+    }
+
+    window.setItemStatusFromUI = setItemStatusFromUI;
+    window.setItemNoteFromUI = setItemNoteFromUI;
+
+    boot();
+  </script>
+</body>
+</html>
