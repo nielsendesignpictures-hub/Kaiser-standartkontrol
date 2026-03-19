@@ -356,6 +356,7 @@ function initImageUpload() {
       const img = $("imagePreview");
       const placeholder = $("imagePlaceholder");
       if (img) img.src = previewUrl;
+    
       setHidden(img, false);
       setHidden(placeholder, true);
 
@@ -438,15 +439,10 @@ async function submit() {
   setSubmitting(true);
 
   try {
-    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) {
-      throw new Error("WEBHOOK_URL mangler i app-v3.js");
-    }
-    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) {
-      throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
-    }
-    if (!state.imageBase64) {
-      throw new Error("Billede mangler (krav).");
-    }
+    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
+    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
+
+    if (!state.imageBase64) throw new Error("Billede mangler (krav).");
 
     const payload = {
       secret: WEBHOOK_SECRET,
@@ -464,32 +460,16 @@ async function submit() {
 
     console.log("Sender payload:", payload);
 
-    const res = await fetch(WEBHOOK_URL, {
+    await fetch(WEBHOOK_URL, {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "text/plain;charset=utf-8"
       },
       body: JSON.stringify(payload)
     });
 
-    const text = await res.text();
-    console.log("Webhook response:", res.status, text);
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}: ${text}`);
-    }
-
-    let data = {};
-    try {
-      data = JSON.parse(text);
-    } catch (_) {}
-
-    if (data && data.ok === false) {
-      throw new Error(data.error || "Apps Script returnerede fejl");
-    }
-
     showScreen("confirmation");
-
   } catch (err) {
     console.error(err);
     setError(err?.message || "Kunne ikke sende. Prøv igen.");
