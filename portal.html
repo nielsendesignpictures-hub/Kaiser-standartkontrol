@@ -32,7 +32,6 @@
       --all:#94a3b8;
 
       --danger:#ff6b6b;
-      --success:#22c55e;
       --shadow:0 26px 75px rgba(0,0,0,.55);
       --shadow2:0 18px 55px rgba(0,0,0,.35);
     }
@@ -64,7 +63,7 @@
     }
 
     .shell{
-      max-width:1320px;
+      max-width:1360px;
       margin:0 auto;
       padding:18px 16px 44px;
     }
@@ -80,7 +79,7 @@
         linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
       overflow:hidden;
-      padding:34px 24px 22px;
+      padding:34px 24px 24px;
     }
 
     .heroTop{
@@ -168,12 +167,88 @@
       color:var(--muted);
     }
 
-    .category{
-      position:relative;
-      margin-top:30px;
+    .controlSection{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
     }
 
-    .categoryTitle{
+    @media (max-width: 980px){
+      .controlSection{grid-template-columns:1fr;}
+    }
+
+    .searchBox,
+    .filterBox{
+      border-radius:22px;
+      border:1px solid var(--border);
+      background:var(--panel);
+      box-shadow:var(--shadow2);
+      padding:16px;
+    }
+
+    .searchLabel{
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      margin-bottom:10px;
+    }
+
+    .searchInput{
+      width:100%;
+      padding:16px 16px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:15px;
+      font-weight:700;
+      outline:none;
+    }
+
+    .searchInput:focus{
+      border-color:rgba(214,178,74,0.38);
+      box-shadow:0 0 0 4px rgba(214,178,74,0.10);
+    }
+
+    .chipRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .chip{
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.04);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .chip:hover{
+      background:rgba(255,255,255,0.07);
+    }
+
+    .chip.active{
+      background:rgba(214,178,74,0.16);
+      color:#f6df97;
+      border-color:rgba(214,178,74,0.28);
+    }
+
+    .section{
+      position:relative;
+      margin-top:32px;
+    }
+
+    .sectionTitle{
       position:relative;
       font-size:13px;
       letter-spacing:.24em;
@@ -189,19 +264,19 @@
       flex-wrap:wrap;
     }
 
-    .categoryTitleLeft{
+    .sectionTitleLeft{
       display:flex;
       align-items:center;
       gap:10px;
     }
 
-    .categoryTitle .dot{
+    .sectionTitle .dot{
       width:8px;
       height:8px;
       border-radius:999px;
     }
 
-    .categoryDesc{
+    .sectionDesc{
       font-size:12px;
       font-weight:700;
       color:var(--muted2);
@@ -236,7 +311,7 @@
       text-decoration:none;
       color:var(--text);
       overflow:hidden;
-      min-height:200px;
+      min-height:210px;
     }
 
     .tool:hover{
@@ -244,6 +319,10 @@
       box-shadow:var(--shadow);
       border-color:rgba(255,255,255,0.16);
       background:rgba(255,255,255,0.07);
+    }
+
+    .tool.hiddenByFilter{
+      display:none;
     }
 
     .toolIcon{
@@ -346,6 +425,51 @@
       border-color:rgba(148,163,184,0.28);
     }
 
+    .favorites{
+      margin-top:28px;
+    }
+
+    .favGrid{
+      display:grid;
+      grid-template-columns:repeat(1,1fr);
+      gap:12px;
+    }
+
+    @media (min-width: 860px){
+      .favGrid{grid-template-columns:repeat(3,1fr);}
+    }
+
+    .miniTool{
+      display:block;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      box-shadow:var(--shadow2);
+      padding:16px;
+      text-decoration:none;
+      color:var(--text);
+      transition:.18s ease;
+    }
+
+    .miniTool:hover{
+      transform:translateY(-3px);
+      background:rgba(255,255,255,0.06);
+    }
+
+    .miniToolTitle{
+      font-size:15px;
+      font-weight:900;
+      margin-top:8px;
+    }
+
+    .miniToolDesc{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
     .hqLocked{
       display:flex;
       justify-content:center;
@@ -427,6 +551,22 @@
       min-height:20px;
     }
 
+    .emptyState{
+      display:none;
+      border:1px dashed rgba(255,255,255,0.14);
+      border-radius:18px;
+      padding:24px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+      margin-top:12px;
+      background:rgba(255,255,255,0.03);
+    }
+
+    .emptyState.show{
+      display:block;
+    }
+
     @keyframes shake{
       0%,100%{transform:translateX(0)}
       20%,60%{transform:translateX(-10px)}
@@ -448,20 +588,20 @@
       <div class="heroStats">
         <div class="heroStat">
           <div class="heroStatLabel">Portaler</div>
-          <div class="heroStatValue">4</div>
+          <div class="heroStatValue">3</div>
           <div class="heroStatSub">Samlede boards og hubs</div>
         </div>
 
         <div class="heroStat">
-          <div class="heroStatLabel">Drift</div>
-          <div class="heroStatValue">7</div>
+          <div class="heroStatLabel">Daglig drift</div>
+          <div class="heroStatValue">6</div>
           <div class="heroStatSub">Tjener- og lokationsværktøjer</div>
         </div>
 
         <div class="heroStat">
           <div class="heroStatLabel">Køkken</div>
           <div class="heroStatValue">4</div>
-          <div class="heroStatSub">Kitchen tools og daglig drift</div>
+          <div class="heroStatSub">Kitchen tools og serviceforberedelse</div>
         </div>
 
         <div class="heroStat">
@@ -472,8 +612,61 @@
       </div>
     </header>
 
+    <section class="favorites">
+      <div class="sectionTitle">
+        <div class="sectionTitleLeft">
+          <span class="dot" style="background:var(--gold);"></span>
+          Hurtig adgang
+        </div>
+        <div class="sectionDesc">Mest brugte værktøjer i den daglige drift</div>
+      </div>
+      <div class="favGrid">
+        <a href="drift-hub.html" class="miniTool">
+          <div class="toolIcon">📋</div>
+          <div class="miniToolTitle">Drift Hub</div>
+          <div class="miniToolDesc">Tjenernes daglige arbejdsflade og hurtige registreringer.</div>
+        </a>
+
+        <a href="kitchen-hub.html" class="miniTool">
+          <div class="toolIcon">👨‍🍳</div>
+          <div class="miniToolTitle">Kitchen Hub</div>
+          <div class="miniToolDesc">Køkkenets centrale arbejdsflade til daglig drift.</div>
+        </a>
+
+        <a href="shiftleader-checklist.html" class="miniTool">
+          <div class="toolIcon">🧭</div>
+          <div class="miniToolTitle">Dagsansvarlig tjekliste</div>
+          <div class="miniToolDesc">Frokost, aften og skiftlederrapport samlet i ét værktøj.</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="controlSection">
+      <div class="searchBox">
+        <div class="searchLabel">Søg i værktøjer</div>
+        <input id="searchInput" class="searchInput" placeholder="Søg efter fx catering, køkken, fejl, rapport..." />
+      </div>
+
+      <div class="filterBox">
+        <div class="searchLabel">Filtrer kategori</div>
+        <div class="chipRow">
+          <button class="chip active" data-filter="all">Alle</button>
+          <button class="chip" data-filter="portal">Portaler</button>
+          <button class="chip" data-filter="drift">Drift</button>
+          <button class="chip" data-filter="kitchen">Køkken</button>
+          <button class="chip" data-filter="quality">Kvalitet</button>
+          <button class="chip" data-filter="hq">HQ</button>
+          <button class="chip" data-filter="legacy">Arkiv</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="emptyState" id="emptyState">
+      Ingen værktøjer matcher din søgning eller filter.
+    </div>
+
     <!-- PORTALER -->
-    <section class="category">
+    <section class="sectionBlock category" data-category="portal">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--gold);"></span>
@@ -482,7 +675,7 @@
         <div class="categoryDesc">Samlede indgange til drift og overblik</div>
       </div>
       <div class="tools">
-        <a href="portal.html" class="tool">
+        <a href="portal.html" class="tool" data-title="portal" data-tags="portal navigation alle">
           <span class="toolIcon">🌐</span>
           <div class="toolTitle">Portal</div>
           <div class="toolDesc">Samlet indgang til alle værktøjer i Kaiser Universe.</div>
@@ -494,7 +687,7 @@
           <span class="toolBadge hub">HUB</span>
         </a>
 
-        <a href="drift-hub.html" class="tool">
+        <a href="drift-hub.html" class="tool" data-title="drift hub" data-tags="tjenere drift hub daglig">
           <span class="toolIcon">📋</span>
           <div class="toolTitle">Drift Hub</div>
           <div class="toolDesc">Central portal for tjenere – daglige opgaver, skiftlederværktøjer og fejlrapportering.</div>
@@ -506,7 +699,7 @@
           <span class="toolBadge hub">HUB</span>
         </a>
 
-        <a href="kitchen-hub.html" class="tool">
+        <a href="kitchen-hub.html" class="tool" data-title="kitchen hub" data-tags="køkken kitchen hub drift">
           <span class="toolIcon">👨‍🍳</span>
           <div class="toolTitle">Kitchen Hub</div>
           <div class="toolDesc">Køkkenets kommandocentral – kitchen %, catering, cleaning og digitale ure.</div>
@@ -517,23 +710,11 @@
           <div class="toolLaunch">Åbn kitchen hub →</div>
           <span class="toolBadge hub">HUB</span>
         </a>
-
-        <a href="F&B.html" class="tool">
-          <span class="toolIcon">📊</span>
-          <div class="toolTitle">F&B Operations Board</div>
-          <div class="toolDesc">Ledelsesoverblik over drift, kitchen %, signaler og fokuslokationer.</div>
-          <div class="toolMeta">
-            <div class="metaChip">HQ</div>
-            <div class="metaChip">Overblik</div>
-          </div>
-          <div class="toolLaunch">Åbn board →</div>
-          <span class="toolBadge hq">HQ</span>
-        </a>
       </div>
     </section>
 
-    <!-- TJENERE / DAGLIG DRIFT -->
-    <section class="category">
+    <!-- DRIFT -->
+    <section class="sectionBlock category" data-category="drift">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--drift);"></span>
@@ -542,7 +723,7 @@
         <div class="categoryDesc">Daglige checklister, rapportering og serviceværktøjer</div>
       </div>
       <div class="tools">
-        <a href="daglige-opgaver.html" class="tool">
+        <a href="daglige-opgaver.html" class="tool" data-title="daglige opgaver" data-tags="daglige opgaver checklist tjenere drift">
           <span class="toolIcon">✅</span>
           <div class="toolTitle">Daglige opgaver</div>
           <div class="toolDesc">Tjenernes daglige tjekliste og faste opgaver i lokationen.</div>
@@ -553,7 +734,7 @@
           <div class="toolLaunch">Åbn værktøj →</div>
         </a>
 
-        <a href="shiftleader-checklist.html" class="tool">
+        <a href="shiftleader-checklist.html" class="tool" data-title="dagsansvarlig tjekliste" data-tags="skiftleder checkliste frokost aften rapport">
           <span class="toolIcon">🧭</span>
           <div class="toolTitle">Dagsansvarlig tjekliste</div>
           <div class="toolDesc">Før frokost, før aften og efter aften-rapport samlet i ét værktøj.</div>
@@ -565,7 +746,7 @@
           <span class="toolBadge new">NY</span>
         </a>
 
-        <a href="skiftlederrapport1.html" class="tool">
+        <a href="skiftlederrapport1.html" class="tool" data-title="skiftlederrapport" data-tags="rapport skiftleder daglig overlevering">
           <span class="toolIcon">📝</span>
           <div class="toolTitle">Skiftlederrapport</div>
           <div class="toolDesc">Daglig rapport og overlevering mellem vagter i den nye version.</div>
@@ -577,7 +758,7 @@
           <span class="toolBadge new">AKTIV</span>
         </a>
 
-        <a href="soldout-products.html" class="tool">
+        <a href="soldout-products.html" class="tool" data-title="udsolgte produkter" data-tags="udsolgte produkter service alle">
           <span class="toolIcon">🍽️</span>
           <div class="toolTitle">Udsolgte produkter</div>
           <div class="toolDesc">Registrér varer der er udsolgt i service og påvirker gæsteoplevelsen.</div>
@@ -589,7 +770,7 @@
           <span class="toolBadge all">ALLE</span>
         </a>
 
-        <a href="guest-complaints.html" class="tool">
+        <a href="guest-complaints.html" class="tool" data-title="gæsteklager" data-tags="gæsteklager service kvalitet klager">
           <span class="toolIcon">💬</span>
           <div class="toolTitle">Gæsteklager</div>
           <div class="toolDesc">Registrér gæsteklager hurtigt og struktureret til drift og opfølgning.</div>
@@ -600,7 +781,7 @@
           <div class="toolLaunch">Åbn registrering →</div>
         </a>
 
-        <a href="faults-issues.html" class="tool">
+        <a href="faults-issues.html" class="tool" data-title="fejl og mangler" data-tags="fejl mangler drift lokation rapportering">
           <span class="toolIcon">🛠️</span>
           <div class="toolTitle">Fejl & mangler</div>
           <div class="toolDesc">Rapportér fejl, manglende udstyr og driftsproblemer i lokationen.</div>
@@ -610,23 +791,11 @@
           </div>
           <div class="toolLaunch">Åbn registrering →</div>
         </a>
-
-        <a href="chef-radar.html" class="tool">
-          <span class="toolIcon">🚨</span>
-          <div class="toolTitle">Chef Radar</div>
-          <div class="toolDesc">Tidligere manager alert-værktøj. Bevares som arkiv og reference.</div>
-          <div class="toolMeta">
-            <div class="metaChip">Arkiv</div>
-            <div class="metaChip">Legacy</div>
-          </div>
-          <div class="toolLaunch">Åbn arkiv →</div>
-          <span class="toolBadge legacy">ARKIV</span>
-        </a>
       </div>
     </section>
 
     <!-- KØKKEN -->
-    <section class="category">
+    <section class="sectionBlock category" data-category="kitchen">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--kitchen);"></span>
@@ -635,7 +804,7 @@
         <div class="categoryDesc">Køkkenstyring, MIS, rengøring og serviceforberedelse</div>
       </div>
       <div class="tools">
-        <a href="MIS.Html" class="tool">
+        <a href="MIS.Html" class="tool" data-title="digital mis" data-tags="digital mis køkken mise en place">
           <span class="toolIcon">🥣</span>
           <div class="toolTitle">Digital MIS</div>
           <div class="toolDesc">Mise en place-værktøj til køkkenet og daglig produktionsstyring.</div>
@@ -646,7 +815,7 @@
           <div class="toolLaunch">Åbn MIS →</div>
         </a>
 
-        <a href="3-timers-regel.html" class="tool">
+        <a href="3-timers-regel.html" class="tool" data-title="3 timers regel" data-tags="3 timers regel køkken ur">
           <span class="toolIcon">⏰</span>
           <div class="toolTitle">3-timers regel</div>
           <div class="toolDesc">Digitale ure til håndtering og styring af 3-timers reglen i køkkenet.</div>
@@ -657,7 +826,7 @@
           <div class="toolLaunch">Åbn ur →</div>
         </a>
 
-        <a href="cleaning-kitchen.html" class="tool">
+        <a href="cleaning-kitchen.html" class="tool" data-title="køkken rengøring" data-tags="køkken rengøring cleaning kitchen">
           <span class="toolIcon">🧽</span>
           <div class="toolTitle">Køkken rengøring</div>
           <div class="toolDesc">Rengøringslister og faste rutiner til køkken og produktion.</div>
@@ -668,7 +837,7 @@
           <div class="toolLaunch">Åbn liste →</div>
         </a>
 
-        <a href="catering-schedule.html" class="tool">
+        <a href="catering-schedule.html" class="tool" data-title="catering kalender" data-tags="catering kalender planlægning køkken">
           <span class="toolIcon">🎉</span>
           <div class="toolTitle">Catering kalender</div>
           <div class="toolDesc">Oversigt over cateringbookinger og planlagte leverancer til køkkenet.</div>
@@ -682,7 +851,7 @@
     </section>
 
     <!-- KVALITET -->
-    <section class="category">
+    <section class="sectionBlock category" data-category="quality">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--quality);"></span>
@@ -691,7 +860,7 @@
         <div class="categoryDesc">Smag, standarder og kvalitetsvurdering</div>
       </div>
       <div class="tools">
-        <a href="index.html" class="tool">
+        <a href="index.html" class="tool" data-title="food rating app" data-tags="food rating gastronomisk eftersyn kvalitet">
           <span class="toolIcon">🎯</span>
           <div class="toolTitle">Food rating app</div>
           <div class="toolDesc">Intern vurdering af retter på tværs af lokationer – gastronomisk eftersyn.</div>
@@ -705,7 +874,7 @@
     </section>
 
     <!-- HQ -->
-    <section class="category" id="hqSection">
+    <section class="sectionBlock category" id="hqSection" data-category="hq">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--hq);"></span>
@@ -727,7 +896,7 @@
       </div>
 
       <div id="hqUnlocked" class="tools" style="display:none;">
-        <a href="F&B.html" class="tool">
+        <a href="F&B.html" class="tool" data-title="f&b operations board" data-tags="hq board ledelse drift overblik">
           <span class="toolIcon">🧠</span>
           <div class="toolTitle">F&B Operations Board</div>
           <div class="toolDesc">Live ledelsesboard for drift, fokuslokationer, kitchen %, signaler og overblik.</div>
@@ -739,7 +908,7 @@
           <span class="toolBadge hq">HQ</span>
         </a>
 
-        <a href="kitchen-percent.html" class="tool">
+        <a href="kitchen-percent.html" class="tool" data-title="kitchen procent modul" data-tags="kitchen procent økonomi hq food cost">
           <span class="toolIcon">📈</span>
           <div class="toolTitle">Kitchen % modul</div>
           <div class="toolDesc">Køkkenprocent og food cost-modul til ledelsesopfølgning.</div>
@@ -751,7 +920,7 @@
           <span class="toolBadge hq">HQ</span>
         </a>
 
-        <a href="catering-manager.html" class="tool">
+        <a href="catering-manager.html" class="tool" data-title="catering manager" data-tags="catering manager hq ordre kontor">
           <span class="toolIcon">📦</span>
           <div class="toolTitle">Catering Manager</div>
           <div class="toolDesc">Indtast og send cateringordrer til afdelingerne fra kontoret.</div>
@@ -763,7 +932,7 @@
           <span class="toolBadge hq">HQ</span>
         </a>
 
-        <a href="https://kaiser-live-dashboard.onrender.com/" target="_blank" rel="noopener noreferrer" class="tool">
+        <a href="https://kaiser-live-dashboard.onrender.com/" target="_blank" rel="noopener noreferrer" class="tool" data-title="live dashboard" data-tags="render dashboard hq live">
           <span class="toolIcon">📺</span>
           <div class="toolTitle">Live Dashboard</div>
           <div class="toolDesc">Eksternt live dashboard hostet på Render til HQ-overblik.</div>
@@ -775,7 +944,7 @@
           <span class="toolBadge hq">HQ</span>
         </a>
 
-        <a href="https://kaiser-live-dashboard.onrender.com/menu-intelligence.html" target="_blank" rel="noopener noreferrer" class="tool">
+        <a href="https://kaiser-live-dashboard.onrender.com/menu-intelligence.html" target="_blank" rel="noopener noreferrer" class="tool" data-title="menu intelligence" data-tags="menu intelligence analyse udvikling hq">
           <span class="toolIcon">🍽️</span>
           <div class="toolTitle">Menu Intelligence</div>
           <div class="toolDesc">Analyse og udvikling af menu, top retter og performance.</div>
@@ -786,23 +955,11 @@
           <div class="toolLaunch">Åbn analyse ↗</div>
           <span class="toolBadge hq">HQ</span>
         </a>
-
-        <a href="#" class="tool">
-          <span class="toolIcon">💰</span>
-          <div class="toolTitle">Live Score</div>
-          <div class="toolDesc">Realtids salgstal fra kassesystemet. Klargjort til senere integration.</div>
-          <div class="toolMeta">
-            <div class="metaChip">HQ</div>
-            <div class="metaChip">Coming soon</div>
-          </div>
-          <div class="toolLaunch">Afventer API</div>
-          <span class="toolBadge legacy">SENERE</span>
-        </a>
       </div>
     </section>
 
     <!-- LEGACY -->
-    <section class="category" style="opacity:.88;">
+    <section class="sectionBlock category" data-category="legacy" style="opacity:.88;">
       <div class="categoryTitle">
         <div class="categoryTitleLeft">
           <span class="dot" style="background:var(--muted2);"></span>
@@ -811,7 +968,7 @@
         <div class="categoryDesc">Tidligere versioner og værktøjer der ikke er i aktiv drift</div>
       </div>
       <div class="tools">
-        <a href="skiftlederrapport.html" class="tool">
+        <a href="skiftlederrapport.html" class="tool" data-title="skiftleder rapport gammel" data-tags="legacy arkiv rapport gammel">
           <span class="toolIcon">📄</span>
           <div class="toolTitle">Skiftleder rapport (gammel)</div>
           <div class="toolDesc">Tidligere version – bevares som reference, men erstattet af ny udgave.</div>
@@ -823,7 +980,7 @@
           <span class="toolBadge legacy">LEGACY</span>
         </a>
 
-        <a href="chef-radar.html" class="tool">
+        <a href="chef-radar.html" class="tool" data-title="chef radar" data-tags="legacy chef radar arkiv">
           <span class="toolIcon">📡</span>
           <div class="toolTitle">Chef Radar</div>
           <div class="toolDesc">Tidligere manager alert-værktøj gemt som reference og historik.</div>
@@ -843,9 +1000,18 @@
     const HQ_PASSWORD = 'Jegergenial1!';
     const HQ_STORAGE_KEY = 'kaiserHQUnlocked';
 
+    const chips = [...document.querySelectorAll('.chip')];
+    const tools = [...document.querySelectorAll('.tool')];
+    const searchInput = document.getElementById('searchInput');
+    const emptyState = document.getElementById('emptyState');
+    const sectionBlocks = [...document.querySelectorAll('.sectionBlock')];
+
+    let activeFilter = 'all';
+
     window.addEventListener('DOMContentLoaded', () => {
       const isUnlocked = sessionStorage.getItem(HQ_STORAGE_KEY) === 'true';
       if (isUnlocked) showHQContent();
+      applyFilters();
     });
 
     function unlockHQ() {
@@ -857,6 +1023,7 @@
         showHQContent();
         input.value = '';
         error.textContent = '';
+        applyFilters();
       } else {
         error.textContent = '❌ Forkert kode - prøv igen';
         input.value = '';
@@ -871,6 +1038,48 @@
     function showHQContent() {
       document.getElementById('hqLocked').style.display = 'none';
       document.getElementById('hqUnlocked').style.display = 'grid';
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+
+    function applyFilters() {
+      const q = (searchInput.value || '').trim().toLowerCase();
+      let visibleCount = 0;
+
+      tools.forEach(tool => {
+        const title = (tool.dataset.title || '').toLowerCase();
+        const tags = (tool.dataset.tags || '').toLowerCase();
+
+        const inFilter =
+          activeFilter === 'all' ||
+          tool.closest('.sectionBlock')?.dataset.category === activeFilter;
+
+        const inSearch =
+          !q ||
+          title.includes(q) ||
+          tags.includes(q) ||
+          tool.textContent.toLowerCase().includes(q);
+
+        const visible = inFilter && inSearch;
+        tool.classList.toggle('hiddenByFilter', !visible);
+        if (visible) visibleCount++;
+      });
+
+      sectionBlocks.forEach(section => {
+        const visibleTools = [...section.querySelectorAll('.tool:not(.hiddenByFilter)')];
+        section.style.display = visibleTools.length ? '' : 'none';
+      });
+
+      emptyState.classList.toggle('show', visibleCount === 0);
     }
   </script>
 </body>
