@@ -11,21 +11,21 @@
 
   <style>
     :root{
-      --bg0:#0a0e14;
-      --bg1:#111823;
-      --panel:rgba(255,255,255,0.05);
-      --panel2:rgba(255,255,255,0.035);
-      --line:rgba(255,255,255,0.10);
-      --line2:rgba(255,255,255,0.07);
-      --text:rgba(255,255,255,0.97);
-      --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.54);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --green:#62d26f;
-      --red:#ff6b6b;
-      --blue:#5ea7ff;
-      --warn:#f59e0b;
+      --bg0:#16120a;
+      --bg1:#21180c;
+      --panel:rgba(255,248,232,0.10);
+      --panel2:rgba(255,248,232,0.08);
+      --line:rgba(255,230,180,0.18);
+      --line2:rgba(255,230,180,0.12);
+      --text:rgba(255,248,236,0.97);
+      --muted:rgba(255,241,214,0.82);
+      --muted2:rgba(255,236,200,0.58);
+      --gold:#e0bc58;
+      --gold2:#c99d27;
+      --green:#7ce58a;
+      --red:#ff8f8f;
+      --blue:#7ab7ff;
+      --warn:#f7b74a;
       --shadow:0 24px 70px rgba(0,0,0,.42);
       --radius:24px;
     }
@@ -37,21 +37,21 @@
       font-family:Inter,system-ui,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+        radial-gradient(900px 600px at 10% -10%, rgba(224,188,88,0.16), transparent 55%),
+        radial-gradient(700px 500px at 100% 0%, rgba(255,220,140,0.08), transparent 55%),
+        radial-gradient(700px 500px at 20% 110%, rgba(255,255,255,0.04), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, #130f09);
       padding:14px;
     }
 
-    .shell{max-width:1100px;margin:0 auto;}
+    .shell{max-width:1120px;margin:0 auto;}
 
     .hero{
       border-radius:28px;
       border:1px solid var(--line);
       background:
         radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+        linear-gradient(180deg, rgba(255,248,232,0.10), rgba(255,248,232,0.05));
       box-shadow:var(--shadow);
       padding:22px 18px 18px;
       text-align:center;
@@ -104,7 +104,7 @@
       align-items:center;
       gap:12px;
       padding:14px 18px;
-      background:rgba(255,255,255,0.03);
+      background:rgba(255,248,232,0.05);
       border-bottom:1px solid var(--line2);
       flex-wrap:wrap;
     }
@@ -166,8 +166,8 @@
     .textarea{
       width:100%;
       border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,230,180,0.16);
+      background:rgba(255,248,232,0.07);
       color:var(--text);
       padding:14px 14px;
       outline:none;
@@ -176,7 +176,7 @@
     }
 
     .select option{
-      background:#111823;
+      background:#21180c;
       color:#fff;
     }
 
@@ -188,8 +188,8 @@
     .input:focus,
     .select:focus,
     .textarea:focus{
-      border-color:rgba(214,178,74,0.5);
-      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
+      border-color:rgba(224,188,88,0.55);
+      box-shadow:0 0 0 4px rgba(224,188,88,0.12);
     }
 
     .summaryBar{
@@ -209,7 +209,7 @@
     .summaryCard{
       border-radius:20px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      background:linear-gradient(180deg, rgba(255,248,232,0.09), rgba(255,248,232,0.05));
       padding:16px;
     }
 
@@ -236,10 +236,33 @@
       font-weight:700;
     }
 
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .toggleWrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+    }
+
+    .toggleWrap input{
+      width:18px;
+      height:18px;
+      accent-color: var(--gold);
+    }
+
     .category{
       border-radius:22px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      background:linear-gradient(180deg, rgba(255,248,232,0.08), rgba(255,248,232,0.04));
       padding:16px;
       margin-top:14px;
     }
@@ -266,9 +289,18 @@
 
     .item{
       border-radius:18px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,230,180,0.12);
+      background:rgba(255,248,232,0.06);
       padding:14px;
+    }
+
+    .item.completed-ok{
+      display:none;
+    }
+
+    .show-all .item.completed-ok{
+      display:block;
+      opacity:.62;
     }
 
     .itemTop{
@@ -308,21 +340,21 @@
     }
 
     .statusBtn.ok.active{
-      background:rgba(98,210,111,0.14);
-      border-color:rgba(98,210,111,0.38);
-      color:#dff7e2;
+      background:rgba(124,229,138,0.16);
+      border-color:rgba(124,229,138,0.40);
+      color:#e8ffe7;
     }
 
     .statusBtn.warn.active{
-      background:rgba(245,158,11,0.14);
-      border-color:rgba(245,158,11,0.38);
-      color:#ffe9b0;
+      background:rgba(247,183,74,0.16);
+      border-color:rgba(247,183,74,0.40);
+      color:#fff0c8;
     }
 
     .statusBtn.na.active{
-      background:rgba(94,167,255,0.14);
-      border-color:rgba(94,167,255,0.38);
-      color:#d7e8ff;
+      background:rgba(122,183,255,0.16);
+      border-color:rgba(122,183,255,0.40);
+      color:#e3efff;
     }
 
     .itemNote{
@@ -418,7 +450,7 @@
       <div class="title">Dagsansvarlig Tjekliste</div>
       <div class="sub">
         Digital driftstjekliste for Café Kaiser.<br>
-        Bruges før frokostryk, før aftenryk og efter aftenryk.
+        V2: Godkendte punkter ryddes væk undervejs for et hurtigere overblik.
       </div>
       <div class="goldline"></div>
     </section>
@@ -497,8 +529,14 @@
 
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Tjekliste</div>
-        <div class="sectionInfo" id="checklistInfo">Vælg tjektype</div>
+        <div class="toolbar" style="width:100%;">
+          <div class="sectionTitle"><span class="sectionDot"></span> Tjekliste</div>
+          <div class="toggleWrap">
+            <input type="checkbox" id="showAllToggle" />
+            <label for="showAllToggle">Vis også godkendte punkter</label>
+          </div>
+          <div class="sectionInfo" id="checklistInfo">Vælg tjektype</div>
+        </div>
       </div>
       <div class="sectionBody">
         <div id="checklistWrap"></div>
@@ -562,7 +600,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "kaiser_shiftleader_checklist_v1";
+    const STORAGE_KEY = "kaiser_shiftleader_checklist_v2";
 
     const CHECKLISTS = {
       frokost: [
@@ -649,6 +687,7 @@
       managerName: "",
       date: "",
       checkType: "frokost",
+      showAll: false,
       items: {},
       dayRating: 0,
       serviceComment: "",
@@ -698,6 +737,7 @@
       state.managerName = "";
       state.date = todayISO();
       state.checkType = "frokost";
+      state.showAll = false;
       state.items = {};
       state.dayRating = 0;
       state.serviceComment = "";
@@ -749,6 +789,7 @@
       $("managerName").value = state.managerName || "";
       $("dateInput").value = state.date || todayISO();
       $("checkType").value = state.checkType || "frokost";
+      $("showAllToggle").checked = !!state.showAll;
       $("serviceComment").value = state.serviceComment || "";
       $("operationsComment").value = state.operationsComment || "";
       $("incidentsComment").value = state.incidentsComment || "";
@@ -764,16 +805,19 @@
       const wrap = $("checklistWrap");
       const sections = CHECKLISTS[state.checkType] || [];
 
+      wrap.classList.toggle("show-all", !!state.showAll);
+
       wrap.innerHTML = sections.map(section => `
         <div class="category">
           <div class="categoryTitle">${section.title}</div>
           <div class="categorySub">${section.subtitle}</div>
-          <div class="checklist">
+          <div class="checklist ${state.showAll ? "show-all" : ""}">
             ${section.items.map(item => {
               const value = getItemValue(state.checkType, item);
               const noteVisible = value.status === "mangler";
+              const itemClass = value.status === "ok" ? "completed-ok" : "";
               return `
-                <div class="item">
+                <div class="item ${itemClass}">
                   <div class="itemTop">
                     <div class="itemText">${item}</div>
                     <div class="statusGroup">
@@ -884,6 +928,12 @@
         syncMetaToUI();
         renderChecklist();
         updateSummary();
+      });
+
+      $("showAllToggle").addEventListener("change", e => {
+        state.showAll = !!e.target.checked;
+        saveState();
+        renderChecklist();
       });
 
       $("serviceComment").addEventListener("input", e => {
