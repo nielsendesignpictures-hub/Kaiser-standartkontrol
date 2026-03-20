@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaiser – Skiftlederrapport</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -268,6 +268,7 @@
       font-size:28px;
       font-weight:900;
       transition:.16s ease;
+      cursor:pointer;
     }
 
     .ratingBtn.selected{
@@ -600,40 +601,9 @@
     </div>
   </div>
 
-  <!-- skjult sender -->
-  <iframe name="hiddenSenderFrame" id="hiddenSenderFrame" style="display:none;"></iframe>
-
-  <form
-    id="sendForm"
-    method="POST"
-    target="hiddenSenderFrame"
-    action=""
-    style="display:none;"
-  >
-    <input type="hidden" name="name" id="post_name">
-    <input type="hidden" name="department" id="post_department">
-    <input type="hidden" name="date" id="post_date">
-
-    <input type="hidden" name="rateDay" id="post_rateDay">
-    <input type="hidden" name="expDay" id="post_expDay">
-    <input type="hidden" name="opsDay" id="post_opsDay">
-    <input type="hidden" name="incDay" id="post_incDay">
-    <input type="hidden" name="teamDay" id="post_teamDay">
-
-    <input type="hidden" name="rateEve" id="post_rateEve">
-    <input type="hidden" name="expEve" id="post_expEve">
-    <input type="hidden" name="opsEve" id="post_opsEve">
-    <input type="hidden" name="incEve" id="post_incEve">
-    <input type="hidden" name="teamEve" id="post_teamEve">
-
-    <input type="hidden" name="needs" id="post_needs">
-  </form>
-
   <script>
     const STORAGE_KEY = "kaiser_skiftlederrapport_touch_v3";
-
-    // Sæt din backend URL her senere
-    const FORM_POST_URL = "";
+    const WORKER_URL = "https://kaiser-mailer.skiftlederrapport.workers.dev/";
 
     function $(id){ return document.getElementById(id); }
 
@@ -795,33 +765,8 @@
       return "";
     }
 
-    function fillHiddenPostFields(){
-      $("post_name").value = val("name");
-      $("post_department").value = val("department");
-      $("post_date").value = val("dateField");
-
-      $("post_rateDay").value = val("rateDay");
-      $("post_expDay").value = val("expDay");
-      $("post_opsDay").value = val("opsDay");
-      $("post_incDay").value = val("incDay");
-      $("post_teamDay").value = val("teamDay");
-
-      $("post_rateEve").value = val("rateEve");
-      $("post_expEve").value = val("expEve");
-      $("post_opsEve").value = val("opsEve");
-      $("post_incEve").value = val("incEve");
-      $("post_teamEve").value = val("teamEve");
-
-      $("post_needs").value = val("needs");
-    }
-
-    function sendReport(){
+    async function sendReport(){
       clearError();
-
-      if(!FORM_POST_URL){
-        showError("Backend URL mangler. Indsæt FORM_POST_URL i koden.");
-        return;
-      }
 
       const err1 = validateStep1();
       if(err1){
@@ -839,16 +784,52 @@
       $("primaryAction").disabled = true;
       $("primaryAction").textContent = "Sender rapport...";
 
-      $("sendForm").action = FORM_POST_URL;
-      fillHiddenPostFields();
-      $("sendForm").submit();
+      const payload = {
+        name: val("name"),
+        department: val("department"),
+        date: val("dateField"),
+        lunch: {
+          rating: val("rateDay"),
+          guestExperience: val("expDay"),
+          operations: val("opsDay"),
+          incidents: val("incDay"),
+          team: val("teamDay")
+        },
+        evening: {
+          rating: val("rateEve"),
+          guestExperience: val("expEve"),
+          operations: val("opsEve"),
+          incidents: val("incEve"),
+          team: val("teamEve")
+        },
+        needs: val("needs")
+      };
 
-      // fallback hvis backend ikke svarer med postMessage
-      setTimeout(function(){
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok || !result.success) {
+          throw new Error(result.message || "Afsendelse fejlede");
+        }
+
+        localStorage.removeItem(STORAGE_KEY);
+        $("formWrap").classList.add("hidden");
+        $("thanksWrap").classList.remove("hidden");
+        $("actionsSticky").classList.add("hidden");
+      } catch (err) {
+        console.error(err);
+        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
         $("primaryAction").disabled = false;
-        if(currentStep() === 2 && !$("thanksWrap").classList.contains("hidden")) return;
         $("primaryAction").textContent = "Send rapport";
-      }, 8000);
+      }
     }
 
     function resetAll(){
@@ -917,23 +898,6 @@
       $("thanksWrap").classList.add("hidden");
       $("formWrap").classList.remove("hidden");
       $("actionsSticky").classList.remove("hidden");
-    });
-
-    window.addEventListener("message", function(event){
-      if(!event.data || !event.data.type) return;
-
-      if(event.data.type === "kaiser-report-sent"){
-        localStorage.removeItem(STORAGE_KEY);
-        $("formWrap").classList.add("hidden");
-        $("thanksWrap").classList.remove("hidden");
-        $("actionsSticky").classList.add("hidden");
-      }
-
-      if(event.data.type === "kaiser-report-error"){
-        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
-        $("primaryAction").disabled = false;
-        $("primaryAction").textContent = "Send rapport";
-      }
     });
 
     bindRatings();
