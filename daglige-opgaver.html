@@ -12,148 +12,302 @@
 
   <style>
     :root{
-      --bg:#17181c;
-      --panel:rgba(28, 30, 36, 0.90);
-      --border:rgba(255,255,255,0.10);
-      --text:rgba(255,255,255,0.93);
-      --muted:rgba(255,255,255,0.70);
-      --muted2:rgba(255,255,255,0.50);
+      --bg:#071019;
+      --panel:rgba(15,22,34,.88);
+      --border:rgba(145,205,255,.14);
+      --text:rgba(255,255,255,.95);
+      --muted:rgba(213,231,248,.72);
+      --muted2:rgba(184,210,234,.48);
+
       --gold:#d6b24a;
       --gold2:#b9921f;
-      --goldGlow:rgba(214,178,74,.22);
-      --danger:#ff6b6b;
-      --ok: rgba(98, 210, 111, 1);
+      --goldGlow:rgba(214,178,74,.18);
+
+      --blue:#9bd3ff;
+      --blue2:#66b7ff;
+      --blueGlow:rgba(102,183,255,.20);
+
+      --danger:#ff8f8f;
+      --ok:rgba(98,210,111,1);
     }
 
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    html,body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
     body{
       background:
-        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
-        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
-        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
-        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+        radial-gradient(1000px 720px at 100% 0%, rgba(102,183,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
+        linear-gradient(180deg, #071019, #0c1625 52%, #071019);
     }
 
     .shell{max-width:980px}
     .topbar{
       border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
-      border-radius:22px;padding:22px 18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025)),
+        linear-gradient(135deg, rgba(155,211,255,.07), rgba(255,255,255,0));
+      border-radius:22px;
+      padding:22px 18px;
       backdrop-filter: blur(10px);
       box-shadow:0 28px 70px rgba(0,0,0,.45);
       text-align:center;
     }
-    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
-    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
-    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
-    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
 
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
-    .divider{height:1px;background:rgba(255,255,255,.10);}
-
-    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select, textarea{
-      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
+    .kicker{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:800;
     }
+
+    .title{
+      font-family:"Playfair Display",serif;
+      font-size:34px;
+      line-height:1.06;
+      letter-spacing:-0.015em;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .subtitle{
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+      margin-top:10px;
+    }
+
+    .goldline{
+      height:2px;
+      margin-top:16px;
+      border-radius:999px;
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), rgba(102,183,255,.65), transparent);
+      opacity:.95;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 26px 72px rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+    }
+
+    .divider{height:1px;background:rgba(145,205,255,.10);}
+
+    .label{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+    }
+
+    .input, select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(145,205,255,.14);
+      background:rgba(255,255,255,0.05);
+      padding:14px 14px;
+      outline:none;
+      color:rgba(255,255,255,0.94);
+    }
+
     select option{color:#0b0c0f;}
+
     .input:focus, select:focus, textarea:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px var(--goldGlow);
+      border-color: rgba(102,183,255,.55);
+      box-shadow: 0 0 0 4px var(--blueGlow);
       background: rgba(255,255,255,0.08);
     }
 
     .btn{
-      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
-      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
+      width:100%;
+      border-radius:16px;
+      font-weight:900;
+      letter-spacing:.02em;
+      padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease;
+      user-select:none;
+      border:none;
     }
+
     .btn:active{transform:translateY(1px);}
-    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow:0 18px 40px rgba(214,178,74,0.18);
+    }
+
     .btn-primary:hover{filter:brightness(1.04);}
-    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+
+    .btn-secondary{
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(145,205,255,0.14);
+      color:rgba(255,255,255,0.90);
+    }
 
     .muted{color:var(--muted);font-weight:600;font-size:13px;}
     .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
 
-    .tabs2{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
-    .tabs3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;}
+    .tabs2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .tabs3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
     .tabBtn{
       border-radius:16px;
       padding:12px 12px;
       font-weight:900;
       letter-spacing:.02em;
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.90);
       cursor:pointer;
     }
+
     .tabBtn.on{
       border-color: rgba(214,178,74,0.38);
-      background: rgba(214,178,74,0.10);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+      background: linear-gradient(135deg, rgba(214,178,74,.10), rgba(102,183,255,.08));
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.08);
     }
 
     .weekRow{
-      display:flex; gap:10px; overflow:auto; padding-bottom:2px;
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding-bottom:2px;
       -webkit-overflow-scrolling: touch;
     }
+
     .weekRow::-webkit-scrollbar{height:8px}
     .weekRow::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.10);border-radius:999px}
+
     .chip{
       flex:0 0 auto;
       border-radius:999px;
       padding:10px 12px;
       font-weight:900;
       letter-spacing:.02em;
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,0.06);
       color:rgba(255,255,255,0.90);
       cursor:pointer;
       font-size:13px;
     }
+
     .chip.on{
       border-color: rgba(214,178,74,0.38);
-      background: rgba(214,178,74,0.10);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
+      background: linear-gradient(135deg, rgba(214,178,74,.10), rgba(102,183,255,.08));
+      box-shadow: 0 0 0 4px rgba(214,178,74,0.08);
     }
 
     .task{
-      display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
-      cursor:pointer;transition: background .18s ease, border-color .18s ease;user-select:none;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(145,205,255,.12);
+      background:rgba(255,255,255,0.03);
+      cursor:pointer;
+      transition: background .18s ease, border-color .18s ease;
+      user-select:none;
     }
-    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
+
+    .task:hover{
+      background:rgba(102,183,255,0.06);
+      border-color:rgba(102,183,255,0.18);
+    }
+
     .task.disabled{opacity:.55; cursor:not-allowed;}
     .taskTitle{font-weight:900; letter-spacing:-0.01em;}
+
     .tag{
       display:inline-block;
       font-size:11px;
       padding:4px 8px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,0.05);
       color:rgba(255,255,255,0.86);
       font-weight:900;
       letter-spacing:.02em;
       margin-top:6px;
     }
-    .tag.overdue{border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.10); color: rgba(255,255,255,0.92);}
-    .tag.due{border-color: rgba(214,178,74,0.30); background: rgba(214,178,74,0.08);}
-    .check{
-      margin-left:auto;width:24px;height:24px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
+
+    .tag.overdue{
+      border-color: rgba(255,107,107,0.35);
+      background: rgba(255,107,107,0.10);
+      color: rgba(255,255,255,0.92);
     }
-    .check.on{border-color: rgba(98, 210, 111, 0.55);background: rgba(98, 210, 111, 0.18);color: rgba(255,255,255,0.92);}
 
-    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
-    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+    .tag.due{
+      border-color: rgba(214,178,74,0.30);
+      background: rgba(214,178,74,0.08);
+    }
 
-    .sectionHead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .tag.doneMeta{
+      border-color: rgba(98,210,111,0.32);
+      background: rgba(98,210,111,0.10);
+      color: rgba(255,255,255,0.92);
+    }
+
+    .check{
+      margin-left:auto;
+      width:24px;
+      height:24px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.05);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      flex:0 0 auto;
+    }
+
+    .check.on{
+      border-color: rgba(98, 210, 111, 0.55);
+      background: rgba(98, 210, 111, 0.18);
+      color: rgba(255,255,255,0.92);
+    }
+
+    .progressWrap{
+      border:1px solid rgba(145,205,255,.10);
+      background: rgba(255,255,255,0.04);
+      border-radius:999px;
+      overflow:hidden;
+      height:10px;
+    }
+
+    .progressBar{
+      height:10px;
+      width:0%;
+      background:linear-gradient(90deg, var(--gold), var(--blue2));
+    }
+
+    .sectionHead{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .performedBox{
+      border:1px solid rgba(102,183,255,.16);
+      background:rgba(102,183,255,.06);
+      border-radius:14px;
+      padding:10px 12px;
+    }
   </style>
 </head>
 
-<!-- FIX: fjern flex fra body for at undgå “2-kolonne/skæv” hvis der nogensinde ligger løs tekst -->
 <body class="min-h-screen p-4">
   <div class="shell w-full mx-auto">
 
@@ -170,11 +324,8 @@
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="box">
         <input type="hidden" name="_subject" id="subjectField" value="Kaiser – Lokation – YYYY-MM-DD – Mangler: X">
-
-        <!-- FIX: nextField tilbage + hardcoded til GitHub Pages (stabil redirect) -->
         <input type="hidden" name="_next" id="nextField"
                value="https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/daglige-opgaver.html?sent=1">
-
         <input type="text" name="_honey" style="display:none">
         <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
@@ -214,8 +365,10 @@
 
             <div class="space-y-2 md:col-span-1">
               <div class="label">Udført af</div>
-              <input id="doneBy" class="input" placeholder="Navn (krav)" />
-              <div class="hint">Kræves for at krydse af + for at sende mail</div>
+              <div class="performedBox">
+                <input id="doneBy" class="input" placeholder="Skriv navn på den der udfører opgaverne" />
+                <div class="hint" style="margin-top:8px;">Navn gemmes på udførte opgaver og kræves for at krydse af + sende mail</div>
+              </div>
             </div>
           </div>
 
@@ -324,7 +477,6 @@
   </div>
 
   <script>
-    // ------------------ SETTINGS ------------------
     const APP_KEY = "kaiser_daily_tasks_v6";
     const OVERRIDE_CODE = "KAISER2026";
     const OVERRIDE_HOURS = 8;
@@ -415,18 +567,15 @@
       el.classList.remove("hidden");
     }
 
-    // ---- ensure correct _next even if you move folder ----
     (function fixNextUrl(){
       const el = $("nextField");
       if (!el) return;
-      // keep hardcoded GitHub URL unless current page is https as well (then use current path)
       if (location.protocol === "http:" || location.protocol === "https:") {
         const base = location.href.split("?")[0].split("#")[0];
         el.value = base + "?sent=1";
       }
     })();
 
-    // ------------------ OVERRIDE ------------------
     function overrideKey(){ return APP_KEY + "_override_until"; }
     function isOverrideOn(){
       const until = Number(localStorage.getItem(overrideKey()) || "0");
@@ -437,7 +586,6 @@
       localStorage.setItem(overrideKey(), String(until));
     }
 
-    // ------------------ TIME WINDOWS (DRIFT) ------------------
     function recommendedShift(){
       const h = new Date().getHours();
       if (h <= 10) return "morning";
@@ -456,7 +604,6 @@
       return "Aften";
     }
 
-    // ------------------ SCHEDULE RULES ------------------
     const D = { mon:1, tue:2, wed:3, thu:4, fri:5, sat:6, sun:7 };
 
     function nthWeekdayOfMonthIso(year, monthIndex, weekday1to7, nth){
@@ -535,7 +682,6 @@
       return null;
     }
 
-    // ------------------ TASK DATABASE ------------------
     const TASKS = [];
     function addDrift(loc, shift, text, rule=null, note=""){
       TASKS.push({ loc, type:"drift", shift, text, rule: rule || { kind:"daily" }, note });
@@ -544,7 +690,6 @@
       TASKS.push({ loc, type:"clean", dept, bucket, text, rule, note });
     }
 
-    // -------- Helsingør --------
     const L_HEL = "Café Kaiser Helsingør";
     addDrift(L_HEL, "morning", "Åben kassen");
     addDrift(L_HEL, "morning", "Få varer på køl og frost");
@@ -601,7 +746,6 @@
     addClean(L_HEL, "Køkken", "daily", "Clean the drains dishwashing area", { kind:"daily" });
     addClean(L_HEL, "Køkken", "daily", "Make sure dishwasher is filled with soap, afspændingsmiddel", { kind:"daily" });
 
-    // -------- Hørsholm --------
     const L_HOR = "Café Kaiser Hørsholm";
 
     addDrift(L_HOR, "morning", "Tælle kassen");
@@ -680,7 +824,6 @@
     addClean(L_HOR, "Lager/Udendørs", "weekly", "Fej gulvet ude ved alle centerborde", { kind:"weekly", days:[D.sun] });
     addClean(L_HOR, "Toilet", "weekly", "GRUNDIG toiletrengøring (nede bag toiletterne, ved listerne, under vasken, panelerne, m.m.)", { kind:"weekly", days:[D.sun] });
 
-    // -------- Hillerød --------
     const L_HIL = "Café Kaiser Hillerød";
     addDrift(L_HIL, "morning", "Tænd varme blæserende");
     addDrift(L_HIL, "morning", "Fej caféen");
@@ -721,7 +864,6 @@
     addDrift(L_HIL, "evening", "Tæl kassen, send kasserapporten til Mathilde og Christian");
     addDrift(L_HIL, "evening", "Støvsuge gulvet", { kind:"weekly", days:[D.mon, D.thu] }, "Mandag/Torsdag");
 
-    // -------- Farum --------
     const L_FAR = "Café Kaiser Farum";
     addDrift(L_FAR, "morning", "Sætte BC vare på plads");
     addDrift(L_FAR, "morning", "Tænde Flatpay og tælle kassen");
@@ -739,7 +881,6 @@
     addDrift(L_FAR, "morning", "Åbne udenfor - Parasoller, tage kæder af, planter på bordene & sofa puder ud");
     addDrift(L_FAR, "morning", "Tag lige et kig på caféen - er den klar til service?");
 
-    // ------------------ STORAGE ------------------
     function doneKey(loc){ return `${APP_KEY}_done_${loc}`; }
     function whoKey(loc){ return `${APP_KEY}_who_${loc}`; }
     function cleanPrefKey(loc){ return `${APP_KEY}_cleanpref_${loc}`; }
@@ -761,58 +902,42 @@
       return slug(t.loc) + "__" + t.type + "__" + slug(scope) + "__" + slug(t.text);
     }
 
-    // ------------------ DOM ------------------
     const tabDrift = $("tabDrift");
     const tabClean = $("tabClean");
-
     const locationSelect = $("locationSelect");
     const deptSelect = $("deptSelect");
     const deptWrap = $("deptWrap");
-
     const doneByInput = $("doneBy");
     const gpsStatus = $("gpsStatus");
-
     const tabMorning = $("tabMorning");
     const tabLunch = $("tabLunch");
     const tabEvening = $("tabEvening");
-
     const driftShiftWrap = $("driftShiftWrap");
     const cleanWeekWrap = $("cleanWeekWrap");
     const weekRow = $("weekRow");
-
     const activeWindowText = $("activeWindowText");
     const overrideBtn = $("overrideBtn");
-
     const listTitle = $("listTitle");
     const scopeHint = $("scopeHint");
-
     const overdueWrap = $("overdueWrap");
     const overdueList = $("overdueList");
     const overdueCountHint = $("overdueCountHint");
-
     const taskList = $("taskList");
     const dueTitle = $("dueTitle");
-
     const emptyState = $("emptyState");
     const emptyText = $("emptyText");
-
     const progressBar = $("progressBar");
     const progressText = $("progressText");
     const missingHint = $("missingHint");
-
     const dayKeyText = $("dayKeyText");
     const timeField = $("timeField");
-
     const submitBtn = $("submitBtn");
     const resetBtn = $("resetBtn");
-
     const doneBox = $("doneBox");
     const doneText = $("doneText");
     const cleanDayHint = $("cleanDayHint");
-
     const form = $("taskForm");
 
-    // ------------------ STATE ------------------
     const state = {
       view: "drift",
       shift: recommendedShift(),
@@ -839,7 +964,6 @@
       return addDaysIso(ws, dow - 1);
     }
 
-    // ------------------ DONE META ------------------
     function getMeta(taskKeyStr){
       return state.doneMap[taskKeyStr] || null;
     }
@@ -865,12 +989,10 @@
       return true;
     }
 
-    // ------------------ FILTERS ------------------
     function allForLoc(){ return TASKS.filter(t => t.loc === state.loc); }
     function driftTasksForScope(){ return allForLoc().filter(t => t.type === "drift" && t.shift === state.shift); }
     function cleanTasksForScope(){ return allForLoc().filter(t => t.type === "clean" && t.dept === state.dept); }
 
-    // ------------------ COMPUTE ------------------
     function overdueForTasks(tasks, todayIso){
       const yesterdayIso = addDaysIso(todayIso, -1);
       const out = [];
@@ -907,7 +1029,6 @@
         .map(t => ({ task:t, due: selIso }));
     }
 
-    // ------------------ RENDER ------------------
     function renderTaskRow(container, item, mode){
       const t = item.task;
       const dueIso = item.due;
@@ -915,14 +1036,20 @@
 
       const todayIso = dayKey();
       const future = dueIso > todayIso;
+      const meta = getMeta(taskKey(t));
 
       const row = document.createElement("div");
       row.className = "task" + (future && !isOverrideOn() ? " disabled" : "");
+
       const note = t.note ? `<div class="tag due">${escapeHtml(t.note)}</div>` : "";
       const dueTag = `<div class="tag ${mode === "overdue" ? "overdue" : "due"}">${mode === "overdue" ? ("Overført: " + dueIso) : ("Dato: " + dueIso)}</div>`;
       const extra = (t.type === "drift")
         ? `<div class="tag">${escapeHtml(windowShiftIdToLabel(t.shift))}</div>`
         : `<div class="tag">${escapeHtml(t.dept)}</div>`;
+
+      const doneMeta = (done && meta)
+        ? `<div class="tag doneMeta">Udført af: ${escapeHtml(meta.doneBy || "-")} • ${escapeHtml(meta.doneAt || "-")}</div>`
+        : "";
 
       row.innerHTML = `
         <div style="flex:1;">
@@ -931,6 +1058,7 @@
             ${extra}
             ${dueTag}
             ${note}
+            ${doneMeta}
             ${future ? `<div class="tag">Planlagt</div>` : ``}
           </div>
         </div>
@@ -1095,7 +1223,6 @@
       setError("");
     }
 
-    // ------------------ GPS ------------------
     function getGPS(){
       return new Promise((resolve) => {
         if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS ikke understøttet" });
@@ -1154,7 +1281,6 @@
       }
     }
 
-    // ------------------ EVENTS ------------------
     tabDrift.addEventListener("click", () => { state.view = "drift"; updateUI(); });
     tabClean.addEventListener("click", () => { state.view = "clean"; updateUI(); });
 
@@ -1331,7 +1457,6 @@
       form.submit();
     });
 
-    // Thanks
     const params = new URLSearchParams(window.location.search);
     if (params.get("sent") === "1") {
       $("formWrap").classList.add("hidden");
@@ -1339,7 +1464,6 @@
       $("quoteText").textContent = "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
     }
 
-    // Init
     state.view = "drift";
     state.shift = recommendedShift();
 
