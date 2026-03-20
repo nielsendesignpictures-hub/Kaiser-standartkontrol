@@ -12,18 +12,22 @@
 
   <style>
     :root{
-      --bg:#07070a;
-      --panel:rgba(16,16,20,.82);
-      --panel2:rgba(255,255,255,.03);
-      --border:rgba(255,255,255,.08);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.62);
-      --muted2:rgba(255,255,255,.42);
+      --bg:#071018;
+      --panel:rgba(16,20,28,.84);
+      --panel2:rgba(255,255,255,.04);
+      --border:rgba(160,210,255,.12);
+      --text:rgba(255,255,255,.94);
+      --muted:rgba(220,235,255,.68);
+      --muted2:rgba(190,215,240,.46);
       --gold:#d6b24a;
       --gold2:#b9921f;
-      --goldGlow:rgba(214,178,74,.22);
+      --blue:#8dc8ff;
+      --blue2:#5baaf5;
+      --blueGlow:rgba(120,190,255,.18);
+      --goldGlow:rgba(214,178,74,.18);
       --green:#38b26d;
-      --greenGlow:rgba(56,178,109,.16);
+      --green2:#25945a;
+      --greenGlow:rgba(56,178,109,.18);
     }
 
     html,body{
@@ -34,10 +38,11 @@
 
     body{
       background:
-        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.14), transparent 55%),
-        radial-gradient(900px 600px at 105% 10%, rgba(65,108,180,0.14), transparent 50%),
-        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
-        linear-gradient(180deg, #07070a, #090a10 55%, #07070a);
+        radial-gradient(1000px 700px at 15% -10%, rgba(214,178,74,.10), transparent 55%),
+        radial-gradient(900px 600px at 100% 0%, rgba(110,185,255,.17), transparent 55%),
+        radial-gradient(1000px 800px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
+        linear-gradient(180deg, #071018, #0b1320 50%, #071018);
+      min-height:100vh;
     }
 
     body:before{
@@ -46,24 +51,26 @@
       inset:0;
       pointer-events:none;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-      opacity:.10;
+      opacity:.08;
       mix-blend-mode:overlay;
     }
 
-    .shell{max-width:920px}
+    .shell{max-width:980px}
 
     .topbar{
       border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-      border-radius:24px;
-      padding:22px 20px;
-      backdrop-filter: blur(12px);
-      box-shadow:0 28px 70px rgba(0,0,0,.55);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)),
+        linear-gradient(135deg, rgba(141,200,255,.07), rgba(255,255,255,0));
+      border-radius:28px;
+      padding:24px 22px;
+      backdrop-filter: blur(14px);
+      box-shadow:0 30px 80px rgba(0,0,0,.45);
       text-align:center;
     }
 
     .brand-kicker{
-      font-size:12px;
+      font-size:13px;
       letter-spacing:.22em;
       text-transform:uppercase;
       color:var(--muted2);
@@ -72,7 +79,7 @@
 
     .brand-title{
       font-family:"Playfair Display",serif;
-      font-size:clamp(34px, 5vw, 56px);
+      font-size:clamp(36px, 5vw, 58px);
       line-height:1.02;
       letter-spacing:-0.02em;
       font-weight:700;
@@ -82,7 +89,7 @@
     .brand-meta{
       color:var(--muted);
       font-weight:600;
-      font-size:14px;
+      font-size:15px;
       margin-top:10px;
     }
 
@@ -90,26 +97,26 @@
       height:2px;
       margin-top:18px;
       border-radius:999px;
-      background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);
-      opacity:.9;
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), rgba(141,200,255,.7), transparent);
+      opacity:.95;
     }
 
     .panel{
       background:var(--panel);
       border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow:0 26px 72px rgba(0,0,0,.58);
-      backdrop-filter: blur(12px);
+      border-radius:24px;
+      box-shadow:0 24px 72px rgba(0,0,0,.45);
+      backdrop-filter: blur(14px);
     }
 
     .subpanel{
       background:var(--panel2);
-      border:1px solid rgba(255,255,255,.06);
+      border:1px solid rgba(160,210,255,.09);
       border-radius:18px;
       padding:18px;
     }
 
-    .divider{height:1px;background:rgba(255,255,255,.08);}
+    .divider{height:1px;background:rgba(160,210,255,.10);}
 
     .label{
       font-size:12px;
@@ -117,33 +124,44 @@
       text-transform:uppercase;
       color:var(--muted2);
       font-weight:900;
+      margin-bottom:8px;
     }
 
     .input, select, textarea{
       width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.11);
-      background:rgba(255,255,255,0.04);
-      padding:14px 14px;
+      min-height:58px;
+      border-radius:16px;
+      border:1px solid rgba(160,210,255,0.12);
+      background:rgba(255,255,255,0.045);
+      padding:16px 16px;
       outline:none;
-      color:rgba(255,255,255,0.92);
+      color:rgba(255,255,255,0.94);
+      font-size:18px;
     }
 
-    select option{color:#0b0c0f;}
+    textarea{
+      min-height:auto;
+      resize:vertical;
+    }
+
+    select option{color:#0b0f14;}
 
     .input:focus, select:focus, textarea:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px var(--goldGlow);
+      border-color: rgba(120,190,255,0.52);
+      box-shadow: 0 0 0 4px var(--blueGlow);
       background: rgba(255,255,255,0.06);
     }
 
     .btn{
-      border-radius:16px;
+      min-height:60px;
+      border-radius:18px;
       font-weight:900;
       letter-spacing:.02em;
-      padding:14px 16px;
-      transition:transform .08s ease,filter .18s ease,background .2s ease;
+      padding:16px 18px;
+      transition:transform .08s ease, filter .18s ease, background .2s ease;
       user-select:none;
+      font-size:18px;
+      width:100%;
     }
 
     .btn:active{transform:translateY(1px);}
@@ -151,40 +169,36 @@
     .btn-primary{
       background:linear-gradient(135deg, var(--gold), var(--gold2));
       color:#0b0c0f;
-      box-shadow:0 18px 40px rgba(214,178,74,0.18);
+      box-shadow:0 20px 42px rgba(214,178,74,0.18);
     }
 
     .btn-primary:hover{filter:brightness(1.04);}
 
     .btn-secondary{
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.88);
+      border:1px solid rgba(160,210,255,0.12);
+      color:rgba(255,255,255,0.9);
     }
-
-    .btn-secondary:hover{background: rgba(255,255,255,0.06);}
 
     .btn-success{
-      background: linear-gradient(135deg, #46c27b, #2f9d61);
-      color: white;
-      box-shadow:0 18px 40px rgba(56,178,109,.18);
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color:#061019;
+      box-shadow:0 20px 42px rgba(120,190,255,.18);
     }
 
-    .btn-success:hover{filter:brightness(1.04);}
-
-    .muted{color:var(--muted);font-weight:600;font-size:13px;}
+    .muted{color:var(--muted);font-weight:600;font-size:14px;}
     .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
-    .blockTitle{font-size:18px;font-weight:900;letter-spacing:-0.01em;}
+    .blockTitle{font-size:21px;font-weight:900;letter-spacing:-0.02em;}
 
     .step-pill{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      border:1px solid rgba(214,178,74,.18);
-      background:rgba(214,178,74,.08);
-      color:#f3d98c;
+      border:1px solid rgba(120,190,255,.18);
+      background:rgba(120,190,255,.08);
+      color:#b9e0ff;
       border-radius:999px;
-      padding:8px 12px;
+      padding:10px 14px;
       font-size:12px;
       font-weight:800;
       letter-spacing:.08em;
@@ -197,9 +211,9 @@
       gap:8px;
       border:1px solid rgba(56,178,109,.18);
       background:rgba(56,178,109,.08);
-      color:#8ce1af;
+      color:#9af0be;
       border-radius:999px;
-      padding:8px 12px;
+      padding:10px 14px;
       font-size:12px;
       font-weight:800;
       letter-spacing:.04em;
@@ -209,40 +223,27 @@
   </style>
 </head>
 
-<body class="min-h-screen flex justify-center p-4">
+<body class="flex justify-center p-4">
   <div class="shell w-full">
 
     <header class="topbar mt-6 mb-5">
       <div class="brand-kicker">KAISER DIGITAL OPERATIONS</div>
-      <div class="brand-title">Skiftlederrapport V2</div>
-      <div class="brand-meta">Gem frokost først. Udfyld aften bagefter. Send samlet til sidst.</div>
+      <div class="brand-title">Skiftlederrapport</div>
+      <div class="brand-meta">Touch-optimeret rapportering for frokost og aften</div>
       <div class="goldline"></div>
     </header>
 
     <section id="formWrap" class="space-y-4">
-      <form
-        id="reportForm"
-        class="space-y-4"
-        method="POST"
-        action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b"
-      >
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_subject" id="subjectField" value="Skiftleder rapport – Afdeling – YYYY-MM-DD">
-        <input type="hidden" name="_next" id="nextField" value="">
-        <input type="text" name="_honey" style="display:none">
-        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
+      <form id="reportForm" class="space-y-4">
 
-        <!-- TOP STATUS -->
         <section class="panel p-5 space-y-4">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div class="step-pill" id="stepPill">Step 1 af 2 · Frokost</div>
-            <div class="status-pill hidden" id="draftPill">Kladde gemt lokalt</div>
+            <div class="status-pill hidden" id="draftPill">Frokost gemt</div>
           </div>
-          <div class="muted">Først udfylder du stamdata og frokost. Derefter gemmer du og går videre til aften. Rapporten sendes først i step 2.</div>
+          <div class="muted">Først udfylder du frokost og gemmer. Derefter går du videre til aften og sender den samlede rapport.</div>
         </section>
 
-        <!-- STAMDATA -->
         <section class="panel p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div class="blockTitle">Stamdata</div>
@@ -251,12 +252,12 @@
           <div class="divider"></div>
 
           <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
+            <div>
               <div class="label">Navn</div>
               <input class="input" id="name" required placeholder="Dit navn">
             </div>
 
-            <div class="space-y-2">
+            <div>
               <div class="label">Afdeling</div>
               <select id="department" required>
                 <option value="">Vælg afdeling...</option>
@@ -270,104 +271,98 @@
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
+            <div>
               <div class="label">Dato</div>
               <input class="input" id="dateField" readonly>
-              <div class="hint">Udfyldes automatisk</div>
             </div>
-
-            <div class="space-y-2">
+            <div>
               <div class="label">Info</div>
-              <div class="muted">Emnet viser afdeling + dato. Kladde gemmes kun lokalt i browseren.</div>
+              <div class="muted pt-4">Rapporten sendes til 3 faste Kaiser-mails samt den valgte afdeling.</div>
             </div>
           </div>
         </section>
 
-        <!-- STEP 1 -->
         <section id="step1" class="space-y-4">
           <section class="panel p-5 space-y-4">
             <div class="blockTitle">Brunch / frokost</div>
             <div class="divider"></div>
 
             <div class="subpanel space-y-4">
-              <div class="space-y-2">
-                <div class="label">En rating af dagen fra 1 – 5</div>
+              <div>
+                <div class="label">Rating af dagen</div>
                 <select id="rateDay" required>
                   <option value="">Vælg...</option>
-                  <option value="1/5">1/5</option>
-                  <option value="2/5">2/5</option>
-                  <option value="3/5">3/5</option>
-                  <option value="4/5">4/5</option>
-                  <option value="5/5">5/5</option>
+                  <option value="1/5">1 / 5</option>
+                  <option value="2/5">2 / 5</option>
+                  <option value="3/5">3 / 5</option>
+                  <option value="4/5">4 / 5</option>
+                  <option value="5/5">5 / 5</option>
                 </select>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Kommentarer til service, stemning og gæsteoplevelse</div>
+              <div>
+                <div class="label">Service, stemning og gæsteoplevelse</div>
                 <textarea id="expDay" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Dagens drift (travlhed, flow, udfordringer)</div>
+              <div>
+                <div class="label">Dagens drift</div>
                 <textarea id="opsDay" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Eventuelle klager eller særlige hændelser</div>
+              <div>
+                <div class="label">Klager eller særlige hændelser</div>
                 <textarea id="incDay" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
+              <div>
                 <div class="label">Teamets præstation</div>
                 <textarea id="teamDay" rows="4"></textarea>
               </div>
             </div>
           </section>
 
-          <section class="panel p-5 space-y-4">
-            <div class="flex flex-col md:flex-row gap-3">
-              <button id="saveStep1Btn" class="btn btn-success w-full" type="button">
-                Gem frokost og fortsæt til aften
-              </button>
-            </div>
+          <section class="panel p-5">
+            <button id="saveStep1Btn" class="btn btn-success" type="button">
+              Gem frokost og fortsæt til aften
+            </button>
           </section>
         </section>
 
-        <!-- STEP 2 -->
         <section id="step2" class="space-y-4 hidden-step">
           <section class="panel p-5 space-y-4">
             <div class="blockTitle">Aften</div>
             <div class="divider"></div>
 
             <div class="subpanel space-y-4">
-              <div class="space-y-2">
-                <div class="label">En rating af dagen fra 1 – 5</div>
+              <div>
+                <div class="label">Rating af dagen</div>
                 <select id="rateEve" required>
                   <option value="">Vælg...</option>
-                  <option value="1/5">1/5</option>
-                  <option value="2/5">2/5</option>
-                  <option value="3/5">3/5</option>
-                  <option value="4/5">4/5</option>
-                  <option value="5/5">5/5</option>
+                  <option value="1/5">1 / 5</option>
+                  <option value="2/5">2 / 5</option>
+                  <option value="3/5">3 / 5</option>
+                  <option value="4/5">4 / 5</option>
+                  <option value="5/5">5 / 5</option>
                 </select>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Kommentarer til service, stemning og gæsteoplevelse</div>
+              <div>
+                <div class="label">Service, stemning og gæsteoplevelse</div>
                 <textarea id="expEve" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Dagens drift (travlhed, flow, udfordringer)</div>
+              <div>
+                <div class="label">Dagens drift</div>
                 <textarea id="opsEve" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
-                <div class="label">Eventuelle klager eller særlige hændelser</div>
+              <div>
+                <div class="label">Klager eller særlige hændelser</div>
                 <textarea id="incEve" rows="4"></textarea>
               </div>
 
-              <div class="space-y-2">
+              <div>
                 <div class="label">Teamets præstation</div>
                 <textarea id="teamEve" rows="4"></textarea>
               </div>
@@ -377,92 +372,56 @@
           <section class="panel p-5 space-y-4">
             <div class="blockTitle">Afsluttende noter</div>
             <div class="divider"></div>
-
-            <div class="space-y-2">
-              <div class="label">Mangler/afvigelser og behov for bestilling</div>
+            <div>
+              <div class="label">Mangler / afvigelser / behov for bestilling</div>
               <textarea id="needs" rows="5"></textarea>
             </div>
           </section>
 
-          <section class="panel p-5 space-y-4">
-            <div class="flex flex-col md:flex-row gap-3">
-              <button id="backToStep1Btn" class="btn btn-secondary w-full" type="button">
-                Tilbage til frokost
-              </button>
-              <button id="submitBtn" class="btn btn-primary w-full" type="submit">
-                Send samlet rapport
-              </button>
+          <section class="panel p-5">
+            <div class="grid md:grid-cols-2 gap-3">
+              <button id="backBtn" class="btn btn-secondary" type="button">Tilbage til frokost</button>
+              <button id="submitBtn" class="btn btn-primary" type="submit">Send rapport</button>
             </div>
           </section>
         </section>
       </form>
     </section>
 
-    <!-- TAKKESIDE -->
     <section id="thanksWrap" class="hidden space-y-4">
       <div class="panel p-6 text-center space-y-4">
         <div class="hint">Indsendt</div>
-        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Tak for rapporten.</div>
-        <div id="quoteText" class="muted" style="margin-top:6px;"></div>
-
-        <div class="pt-2 space-y-3">
-          <a class="btn btn-primary inline-block text-center w-full" href="./skiftlederrapport-v2.html">Ny rapport</a>
-          <button id="btnClose" class="btn btn-secondary w-full" type="button">Luk</button>
-        </div>
+        <div style="font-size:22px; font-weight:900; letter-spacing:-0.01em;">Tak for rapporten.</div>
+        <div class="muted">Rapporten er sendt til Kaiser og den valgte afdeling.</div>
+        <button id="newReportBtn" class="btn btn-primary" type="button">Ny rapport</button>
       </div>
     </section>
-
   </div>
 
   <script>
-    var QUOTES = [
-      "Konsekvens skaber kvalitet.",
-      "Godt overblik giver ro i driften.",
-      "Små forbedringer hver dag giver store resultater.",
-      "Standarder gør det nemt at levere godt – hver gang.",
-      "Tak. Det er detaljen der løfter helheden.",
-      "Det du måler, kan du forbedre."
-    ];
-
-    var STORAGE_KEY = "kaiser_skiftlederrapport_v2";
+    const STORAGE_KEY = "kaiser_skiftlederrapport_v2_touch";
+    const APPS_SCRIPT_URL = "PASTE_DIN_APPS_SCRIPT_WEBAPP_URL_HER";
 
     function val(id){
-      var el = document.getElementById(id);
+      const el = document.getElementById(id);
       return (el && el.value ? el.value : "").trim();
     }
 
     function setVal(id, value){
-      var el = document.getElementById(id);
+      const el = document.getElementById(id);
       if (el) el.value = value || "";
-    }
-
-    function line(label, value){
-      return label + ": " + (value ? value : "-");
-    }
-
-    function localISODate(){
-      var d = new Date();
-      var off = d.getTimezoneOffset();
-      var local = new Date(d.getTime() - off * 60000);
-      return local.toISOString().slice(0,10);
     }
 
     function nowLocalString(){
       return new Date().toLocaleString("da-DK");
     }
 
-    function updateSubject(){
-      var afd = val("department") || "Afdeling";
-      var dato = localISODate();
-      document.getElementById("subjectField").value = "Skiftleder rapport – " + afd + " – " + dato;
-    }
-
     function showStep(step){
-      var step1 = document.getElementById("step1");
-      var step2 = document.getElementById("step2");
-      var stepPill = document.getElementById("stepPill");
+      const step1 = document.getElementById("step1");
+      const step2 = document.getElementById("step2");
+      const stepPill = document.getElementById("stepPill");
 
-      if (step === 1){
+      if(step === 1){
         step1.classList.remove("hidden-step");
         step2.classList.add("hidden-step");
         stepPill.textContent = "Step 1 af 2 · Frokost";
@@ -475,11 +434,11 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function saveDraft(showBadge){
-      var data = {
+    function saveDraft(showPill = false){
+      const data = {
         name: val("name"),
         department: val("department"),
-        dateField: document.getElementById("dateField").value,
+        dateField: val("dateField"),
 
         rateDay: val("rateDay"),
         expDay: val("expDay"),
@@ -494,26 +453,26 @@
         teamEve: val("teamEve"),
 
         needs: val("needs"),
-        currentStep: document.getElementById("step2").classList.contains("hidden-step") ? 1 : 2
+        step: document.getElementById("step2").classList.contains("hidden-step") ? 1 : 2
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
-      if (showBadge){
+      if(showPill){
         document.getElementById("draftPill").classList.remove("hidden");
       }
     }
 
     function loadDraft(){
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
 
       try{
-        var data = JSON.parse(raw);
+        const data = JSON.parse(raw);
 
         setVal("name", data.name);
         setVal("department", data.department);
-        if (data.dateField) setVal("dateField", data.dateField);
+        setVal("dateField", data.dateField);
 
         setVal("rateDay", data.rateDay);
         setVal("expDay", data.expDay);
@@ -529,137 +488,129 @@
 
         setVal("needs", data.needs);
 
-        document.getElementById("draftPill").classList.remove("hidden");
+        if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay){
+          document.getElementById("draftPill").classList.remove("hidden");
+        }
 
-        if (data.currentStep === 2){
+        if(data.step === 2){
           showStep(2);
         }
       } catch(e){}
     }
 
     function validateStep1(){
-      if (!val("name")){
+      if(!val("name")){
         alert("Udfyld navn.");
         return false;
       }
-      if (!val("department")){
+      if(!val("department")){
         alert("Vælg afdeling.");
         return false;
       }
-      if (!val("rateDay")){
-        alert("Vælg en rating for brunch / frokost.");
+      if(!val("rateDay")){
+        alert("Vælg rating for frokost.");
         return false;
       }
       return true;
     }
 
     function validateStep2(){
-      if (!val("rateEve")){
-        alert("Vælg en rating for aften.");
+      if(!val("rateEve")){
+        alert("Vælg rating for aften.");
         return false;
       }
       return true;
     }
 
-    function buildReport(){
-      var navn = val("name");
-      var afdeling = val("department");
-      var dato = document.getElementById("dateField").value;
+    function buildPayload(){
+      return {
+        name: val("name"),
+        department: val("department"),
+        date: val("dateField"),
 
-      return (
-        "Skiftleder rapport – " + (afdeling || "Afdeling") + "\n\n" +
-        "Navn: " + (navn || "-") + "\n" +
-        "Afdeling: " + (afdeling || "-") + "\n" +
-        "Dato: " + (dato || "-") + "\n\n" +
+        lunch: {
+          rating: val("rateDay"),
+          guestExperience: val("expDay"),
+          operations: val("opsDay"),
+          incidents: val("incDay"),
+          team: val("teamDay")
+        },
 
-        "☐ BRUNCH / FROKOST\n" +
-        line("Rating", val("rateDay")) + "\n" +
-        line("Service, stemning og gæsteoplevelse", val("expDay")) + "\n" +
-        line("Dagens drift", val("opsDay")) + "\n" +
-        line("Klager eller særlige hændelser", val("incDay")) + "\n" +
-        line("Teamets præstation", val("teamDay")) + "\n\n" +
+        evening: {
+          rating: val("rateEve"),
+          guestExperience: val("expEve"),
+          operations: val("opsEve"),
+          incidents: val("incEve"),
+          team: val("teamEve")
+        },
 
-        "☐ AFTEN\n" +
-        line("Rating", val("rateEve")) + "\n" +
-        line("Service, stemning og gæsteoplevelse", val("expEve")) + "\n" +
-        line("Dagens drift", val("opsEve")) + "\n" +
-        line("Klager eller særlige hændelser", val("incEve")) + "\n" +
-        line("Teamets præstation", val("teamEve")) + "\n\n" +
-
-        "☐ MANGLER / AFVIGELSER / BESTILLING\n" +
-        (val("needs") || "-") + "\n"
-      );
+        needs: val("needs")
+      };
     }
 
     document.getElementById("dateField").value = nowLocalString();
-
-    document.getElementById("nextField").value =
-      window.location.origin + window.location.pathname + "?sent=1";
-
-    document.getElementById("department").addEventListener("change", function(){
-      updateSubject();
-      saveDraft(false);
-    });
-
-    [
-      "name","rateDay","expDay","opsDay","incDay","teamDay",
-      "rateEve","expEve","opsEve","incEve","teamEve","needs"
-    ].forEach(function(id){
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener("input", function(){ saveDraft(false); });
-      el.addEventListener("change", function(){ saveDraft(false); });
-    });
-
-    updateSubject();
     loadDraft();
 
-    document.getElementById("saveStep1Btn").addEventListener("click", function(){
-      updateSubject();
+    [
+      "name","department",
+      "rateDay","expDay","opsDay","incDay","teamDay",
+      "rateEve","expEve","opsEve","incEve","teamEve","needs"
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("input", () => saveDraft(false));
+      el.addEventListener("change", () => saveDraft(false));
+    });
 
-      if (!validateStep1()) return;
-
+    document.getElementById("saveStep1Btn").addEventListener("click", () => {
+      if(!validateStep1()) return;
       saveDraft(true);
       showStep(2);
     });
 
-    document.getElementById("backToStep1Btn").addEventListener("click", function(){
+    document.getElementById("backBtn").addEventListener("click", () => {
       saveDraft(true);
       showStep(1);
     });
 
-    var form = document.getElementById("reportForm");
-    form.addEventListener("submit", function(e){
-      updateSubject();
+    document.getElementById("reportForm").addEventListener("submit", async function(e){
+      e.preventDefault();
 
-      if (!validateStep1() || !validateStep2()){
-        e.preventDefault();
-        return;
+      if(!validateStep1() || !validateStep2()) return;
+
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.textContent = "Sender...";
+
+      try{
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(buildPayload())
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+          localStorage.removeItem(STORAGE_KEY);
+          document.getElementById("formWrap").classList.add("hidden");
+          document.getElementById("thanksWrap").classList.remove("hidden");
+        } else {
+          throw new Error(result.message || "Ukendt fejl");
+        }
+
+      } catch(err){
+        alert("Der opstod en fejl ved afsendelse. Prøv igen.");
+        btn.disabled = false;
+        btn.textContent = "Send rapport";
       }
-
-      var btn = document.getElementById("submitBtn");
-      if (btn){
-        btn.disabled = true;
-        btn.textContent = "Sender...";
-      }
-
-      document.getElementById("reportPayload").value = buildReport();
-
-      localStorage.removeItem(STORAGE_KEY);
     });
 
-    var params = new URLSearchParams(window.location.search);
-    if (params.get("sent") === "1") {
-      document.getElementById("formWrap").classList.add("hidden");
-      document.getElementById("thanksWrap").classList.remove("hidden");
-      document.getElementById("quoteText").textContent =
-        "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
+    document.getElementById("newReportBtn").addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
-    }
-
-    document.getElementById("btnClose").addEventListener("click", function(){
-      try { window.close(); } catch(e) {}
-      window.location.href = "./skiftlederrapport-v2.html";
+      window.location.reload();
     });
   </script>
 </body>
