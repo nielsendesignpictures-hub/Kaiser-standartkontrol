@@ -29,8 +29,6 @@
       --gold2:#b9921f;
 
       --darkBtn:rgba(255,255,255,.05);
-      --success:#48c987;
-      --danger:#ff8f8f;
     }
 
     html,body{
@@ -401,183 +399,196 @@
     </header>
 
     <section id="formWrap">
-      <div class="panel">
-        <div class="panelHead">
-          <div class="stepBar">
-            <div class="pill pill-blue" id="stepPill">Step 1 af 2 · Frokost</div>
-            <div class="pill pill-green hidden" id="draftPill">Frokost gemt</div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="panelBody">
-          <div class="muted">Først udfyldes frokostdelen. Derefter gemmes den, og aften-delen åbnes. Rapporten sendes samlet til sidst.</div>
-        </div>
-      </div>
+      <form
+        id="reportForm"
+        method="POST"
+        action="https://formsubmit.co/skiftlederrapport@gmail.com"
+      >
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_next" id="nextField" value="">
+        <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
+        <input type="text" name="_honey" style="display:none">
+        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
-      <div id="errorWrap" class="hidden">
-        <div class="errorBox" id="errorText"></div>
-      </div>
-
-      <div class="panel">
-        <div class="panelHead">
-          <div class="blockTitle">Stamdata</div>
-          <div class="hint" style="margin-top:6px;">Obligatorisk</div>
-        </div>
-        <div class="divider"></div>
-        <div class="panelBody">
-          <div class="grid2">
-            <div class="field">
-              <label class="label" for="name">Navn</label>
-              <input class="input" id="name" placeholder="Dit navn">
-            </div>
-
-            <div class="field">
-              <label class="label" for="department">Afdeling</label>
-              <select class="select" id="department">
-                <option value="">Vælg afdeling...</option>
-                <option>Café Kaiser Helsingør</option>
-                <option>Café Kaiser Hillerød</option>
-                <option>Café Kaiser Farum</option>
-                <option>Café Kaiser Hørsholm</option>
-                <option>Café Kaiser Vanløse</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid2" style="margin-top:16px;">
-            <div class="field">
-              <label class="label" for="dateField">Dato</label>
-              <input class="input" id="dateField" readonly>
-            </div>
-
-            <div class="field">
-              <div class="label">Modtagere</div>
-              <div class="muted" style="padding-top:16px;">
-                Rapporten sendes til Stefan, Christian, Casper samt den valgte afdeling.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <section id="step1">
         <div class="panel">
           <div class="panelHead">
-            <div class="blockTitle">Brunch / frokost</div>
+            <div class="stepBar">
+              <div class="pill pill-blue" id="stepPill">Step 1 af 2 · Frokost</div>
+              <div class="pill pill-green hidden" id="draftPill">Frokost gemt</div>
+            </div>
           </div>
           <div class="divider"></div>
-          <div class="panelBody grid1">
-
-            <div class="sectionCard">
-              <div class="label">Rating af dagen</div>
-              <div class="ratingWrap">
-                <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
-                <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
-                <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
-                <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">4</button>
-                <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">5</button>
-              </div>
-              <div class="ratingLegend">
-                <span>Lav</span>
-                <span>Høj</span>
-              </div>
-              <input type="hidden" id="rateDay">
-            </div>
-
-            <div class="sectionCard">
-              <div class="field">
-                <label class="label" for="expDay">Service, stemning og gæsteoplevelse</label>
-                <textarea class="textarea" id="expDay"></textarea>
-              </div>
-            </div>
-
-            <div class="sectionCard">
-              <div class="field">
-                <label class="label" for="opsDay">Dagens drift</label>
-                <textarea class="textarea" id="opsDay"></textarea>
-              </div>
-            </div>
-
-            <div class="sectionCard">
-              <div class="field">
-                <label class="label" for="incDay">Klager eller særlige hændelser</label>
-                <textarea class="textarea" id="incDay"></textarea>
-              </div>
-            </div>
-
-            <div class="sectionCard">
-              <div class="field">
-                <label class="label" for="teamDay">Teamets præstation</label>
-                <textarea class="textarea" id="teamDay"></textarea>
-              </div>
-            </div>
-
+          <div class="panelBody">
+            <div class="muted">Først udfyldes frokostdelen. Derefter gemmes den, og aften-delen åbnes. Rapporten sendes samlet til sidst.</div>
           </div>
         </div>
-      </section>
 
-      <section id="step2" class="hidden">
+        <div id="errorWrap" class="hidden">
+          <div class="errorBox" id="errorText"></div>
+        </div>
+
         <div class="panel">
           <div class="panelHead">
-            <div class="blockTitle">Aften</div>
+            <div class="blockTitle">Stamdata</div>
+            <div class="hint" style="margin-top:6px;">Obligatorisk</div>
           </div>
           <div class="divider"></div>
-          <div class="panelBody grid1">
-
-            <div class="sectionCard">
-              <div class="label">Rating af dagen</div>
-              <div class="ratingWrap">
-                <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
-                <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
-                <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
-                <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">4</button>
-                <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">5</button>
-              </div>
-              <div class="ratingLegend">
-                <span>Lav</span>
-                <span>Høj</span>
-              </div>
-              <input type="hidden" id="rateEve">
-            </div>
-
-            <div class="sectionCard">
+          <div class="panelBody">
+            <div class="grid2">
               <div class="field">
-                <label class="label" for="expEve">Service, stemning og gæsteoplevelse</label>
-                <textarea class="textarea" id="expEve"></textarea>
+                <label class="label" for="name">Navn</label>
+                <input class="input" id="name" placeholder="Dit navn">
               </div>
-            </div>
 
-            <div class="sectionCard">
               <div class="field">
-                <label class="label" for="opsEve">Dagens drift</label>
-                <textarea class="textarea" id="opsEve"></textarea>
+                <label class="label" for="department">Afdeling</label>
+                <select class="select" id="department">
+                  <option value="">Vælg afdeling...</option>
+                  <option>Café Kaiser Helsingør</option>
+                  <option>Café Kaiser Hillerød</option>
+                  <option>Café Kaiser Farum</option>
+                  <option>Café Kaiser Hørsholm</option>
+                  <option>Café Kaiser Vanløse</option>
+                </select>
               </div>
             </div>
 
-            <div class="sectionCard">
+            <div class="grid2" style="margin-top:16px;">
               <div class="field">
-                <label class="label" for="incEve">Klager eller særlige hændelser</label>
-                <textarea class="textarea" id="incEve"></textarea>
+                <label class="label" for="dateField">Dato</label>
+                <input class="input" id="dateField" readonly>
               </div>
-            </div>
 
-            <div class="sectionCard">
               <div class="field">
-                <label class="label" for="teamEve">Teamets præstation</label>
-                <textarea class="textarea" id="teamEve"></textarea>
+                <div class="label">Modtagelse</div>
+                <div class="muted" style="padding-top:16px;">
+                  Rapporten sendes til central indbakke og fordeles via Gmail filtre.
+                </div>
               </div>
             </div>
-
-            <div class="sectionCard">
-              <div class="field">
-                <label class="label" for="needs">Mangler / afvigelser / behov for bestilling</label>
-                <textarea class="textarea" id="needs"></textarea>
-              </div>
-            </div>
-
           </div>
         </div>
-      </section>
+
+        <section id="step1">
+          <div class="panel">
+            <div class="panelHead">
+              <div class="blockTitle">Brunch / frokost</div>
+            </div>
+            <div class="divider"></div>
+            <div class="panelBody grid1">
+
+              <div class="sectionCard">
+                <div class="label">Rating af dagen</div>
+                <div class="ratingWrap">
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">4</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">5</button>
+                </div>
+                <div class="ratingLegend">
+                  <span>Lav</span>
+                  <span>Høj</span>
+                </div>
+                <input type="hidden" id="rateDay">
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="expDay">Service, stemning og gæsteoplevelse</label>
+                  <textarea class="textarea" id="expDay"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="opsDay">Dagens drift</label>
+                  <textarea class="textarea" id="opsDay"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="incDay">Klager eller særlige hændelser</label>
+                  <textarea class="textarea" id="incDay"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="teamDay">Teamets præstation</label>
+                  <textarea class="textarea" id="teamDay"></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <section id="step2" class="hidden">
+          <div class="panel">
+            <div class="panelHead">
+              <div class="blockTitle">Aften</div>
+            </div>
+            <div class="divider"></div>
+            <div class="panelBody grid1">
+
+              <div class="sectionCard">
+                <div class="label">Rating af dagen</div>
+                <div class="ratingWrap">
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">4</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">5</button>
+                </div>
+                <div class="ratingLegend">
+                  <span>Lav</span>
+                  <span>Høj</span>
+                </div>
+                <input type="hidden" id="rateEve">
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="expEve">Service, stemning og gæsteoplevelse</label>
+                  <textarea class="textarea" id="expEve"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="opsEve">Dagens drift</label>
+                  <textarea class="textarea" id="opsEve"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="incEve">Klager eller særlige hændelser</label>
+                  <textarea class="textarea" id="incEve"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="teamEve">Teamets præstation</label>
+                  <textarea class="textarea" id="teamEve"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="needs">Mangler / afvigelser / behov for bestilling</label>
+                  <textarea class="textarea" id="needs"></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </form>
     </section>
 
     <section id="thanksWrap" class="hidden">
@@ -602,8 +613,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "kaiser_skiftlederrapport_touch_v3";
-    const WORKER_URL = "https://kaiser-mailer.skiftlederrapport.workers.dev/";
+    const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v1";
 
     function $(id){ return document.getElementById(id); }
 
@@ -621,6 +631,13 @@
       return new Date().toLocaleString("da-DK");
     }
 
+    function localISODate(){
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
     function clearError(){
       $("errorWrap").classList.add("hidden");
       $("errorText").textContent = "";
@@ -634,6 +651,11 @@
 
     function currentStep(){
       return $("step2").classList.contains("hidden") ? 1 : 2;
+    }
+
+    function updateSubject(){
+      const afd = val("department") || "Afdeling";
+      $("subjectField").value = `Skiftlederrapport – ${afd} – ${localISODate()}`;
     }
 
     function setStep(step){
@@ -712,6 +734,7 @@
 
       if(!raw){
         $("dateField").value = nowLocalString();
+        updateSubject();
         return;
       }
 
@@ -738,6 +761,7 @@
 
         updateRatingUI("rateDay");
         updateRatingUI("rateEve");
+        updateSubject();
 
         if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay){
           $("draftPill").classList.remove("hidden");
@@ -750,6 +774,7 @@
         }
       } catch(e){
         $("dateField").value = nowLocalString();
+        updateSubject();
       }
     }
 
@@ -765,71 +790,31 @@
       return "";
     }
 
-    async function sendReport(){
-      clearError();
-
-      const err1 = validateStep1();
-      if(err1){
-        showError(err1);
-        setStep(1);
-        return;
-      }
-
-      const err2 = validateStep2();
-      if(err2){
-        showError(err2);
-        return;
-      }
-
-      $("primaryAction").disabled = true;
-      $("primaryAction").textContent = "Sender rapport...";
-
-      const payload = {
-        name: val("name"),
-        department: val("department"),
-        date: val("dateField"),
-        lunch: {
-          rating: val("rateDay"),
-          guestExperience: val("expDay"),
-          operations: val("opsDay"),
-          incidents: val("incDay"),
-          team: val("teamDay")
-        },
-        evening: {
-          rating: val("rateEve"),
-          guestExperience: val("expEve"),
-          operations: val("opsEve"),
-          incidents: val("incEve"),
-          team: val("teamEve")
-        },
-        needs: val("needs")
-      };
-
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await res.json();
-
-        if (!res.ok || !result.success) {
-          throw new Error(result.message || "Afsendelse fejlede");
-        }
-
-        localStorage.removeItem(STORAGE_KEY);
-        $("formWrap").classList.add("hidden");
-        $("thanksWrap").classList.remove("hidden");
-        $("actionsSticky").classList.add("hidden");
-      } catch (err) {
-        console.error(err);
-        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
-        $("primaryAction").disabled = false;
-        $("primaryAction").textContent = "Send rapport";
-      }
+    function buildReportText(){
+      return [
+        "Skiftlederrapport",
+        "",
+        "Navn: " + (val("name") || "-"),
+        "Afdeling: " + (val("department") || "-"),
+        "Dato: " + (val("dateField") || "-"),
+        "",
+        "BRUNCH / FROKOST",
+        "Rating: " + (val("rateDay") || "-"),
+        "Service, stemning og gæsteoplevelse: " + (val("expDay") || "-"),
+        "Dagens drift: " + (val("opsDay") || "-"),
+        "Klager eller særlige hændelser: " + (val("incDay") || "-"),
+        "Teamets præstation: " + (val("teamDay") || "-"),
+        "",
+        "AFTEN",
+        "Rating: " + (val("rateEve") || "-"),
+        "Service, stemning og gæsteoplevelse: " + (val("expEve") || "-"),
+        "Dagens drift: " + (val("opsEve") || "-"),
+        "Klager eller særlige hændelser: " + (val("incEve") || "-"),
+        "Teamets præstation: " + (val("teamEve") || "-"),
+        "",
+        "MANGLER / AFVIGELSER / BEHOV FOR BESTILLING",
+        (val("needs") || "-")
+      ].join("\n");
     }
 
     function resetAll(){
@@ -844,6 +829,7 @@
       $("draftPill").classList.add("hidden");
       updateRatingUI("rateDay");
       updateRatingUI("rateEve");
+      updateSubject();
       setStep(1);
       clearError();
     }
@@ -856,9 +842,17 @@
       ].forEach(id => {
         const el = $(id);
         if(!el) return;
-        el.addEventListener("input", () => saveDraft(false));
-        el.addEventListener("change", () => saveDraft(false));
+        el.addEventListener("input", () => {
+          saveDraft(false);
+          if(id === "department") updateSubject();
+        });
+        el.addEventListener("change", () => {
+          saveDraft(false);
+          if(id === "department") updateSubject();
+        });
       });
+
+      $("department").addEventListener("change", updateSubject);
     }
 
     $("primaryAction").addEventListener("click", function(){
@@ -871,12 +865,33 @@
           return;
         }
 
+        updateSubject();
         saveDraft(true);
         setStep(2);
         return;
       }
 
-      sendReport();
+      const err1 = validateStep1();
+      if(err1){
+        showError(err1);
+        setStep(1);
+        return;
+      }
+
+      const err2 = validateStep2();
+      if(err2){
+        showError(err2);
+        return;
+      }
+
+      updateSubject();
+      $("reportPayload").value = buildReportText();
+      localStorage.removeItem(STORAGE_KEY);
+
+      $("primaryAction").disabled = true;
+      $("primaryAction").textContent = "Sender...";
+
+      $("reportForm").submit();
     });
 
     $("secondaryAction").addEventListener("click", function(){
@@ -899,6 +914,17 @@
       $("formWrap").classList.remove("hidden");
       $("actionsSticky").classList.remove("hidden");
     });
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sent") === "1") {
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("actionsSticky").classList.add("hidden");
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    $("dateField").value = nowLocalString();
+    $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
 
     bindRatings();
     bindAutosave();
