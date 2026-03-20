@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Skiftlederrapport V2</title>
+  <title>Kaiser – Skiftlederrapport Touch V2.1</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,37 +12,45 @@
 
   <style>
     :root{
-      --bg:#071018;
-      --panel:rgba(16,20,28,.84);
+      --bg:#071019;
+      --bg2:#0b1522;
+      --panel:rgba(15,21,31,.88);
       --panel2:rgba(255,255,255,.04);
-      --border:rgba(160,210,255,.12);
-      --text:rgba(255,255,255,.94);
-      --muted:rgba(220,235,255,.68);
-      --muted2:rgba(190,215,240,.46);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --blue:#8dc8ff;
-      --blue2:#5baaf5;
-      --blueGlow:rgba(120,190,255,.18);
-      --goldGlow:rgba(214,178,74,.18);
-      --green:#38b26d;
-      --green2:#25945a;
-      --greenGlow:rgba(56,178,109,.18);
+      --border:rgba(149,205,255,.14);
+      --text:rgba(255,255,255,.95);
+      --muted:rgba(214,231,248,.70);
+      --muted2:rgba(184,211,235,.48);
+
+      --gold:#d7b24c;
+      --gold2:#b88f1f;
+
+      --blue:#9bd2ff;
+      --blue2:#67b7ff;
+      --blue3:#2f87d8;
+      --blueGlow:rgba(103,183,255,.22);
+
+      --green:#4bd08a;
+      --green2:#2ca86a;
+
+      --danger:#ff7a7a;
+      --dangerGlow:rgba(255,122,122,.16);
     }
 
     html,body{
+      margin:0;
+      padding:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:var(--bg);
     }
 
     body{
-      background:
-        radial-gradient(1000px 700px at 15% -10%, rgba(214,178,74,.10), transparent 55%),
-        radial-gradient(900px 600px at 100% 0%, rgba(110,185,255,.17), transparent 55%),
-        radial-gradient(1000px 800px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
-        linear-gradient(180deg, #071018, #0b1320 50%, #071018);
       min-height:100vh;
+      background:
+        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.10), transparent 55%),
+        radial-gradient(1000px 700px at 100% 0%, rgba(120,190,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
+        linear-gradient(180deg, #071019, #0b1522 52%, #071019);
     }
 
     body:before{
@@ -51,72 +59,126 @@
       inset:0;
       pointer-events:none;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-      opacity:.08;
+      opacity:.07;
       mix-blend-mode:overlay;
     }
 
-    .shell{max-width:980px}
+    .shell{
+      max-width:1080px;
+      margin:0 auto;
+      padding:20px;
+      padding-bottom:120px;
+    }
 
-    .topbar{
+    .hero{
       border:1px solid var(--border);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)),
-        linear-gradient(135deg, rgba(141,200,255,.07), rgba(255,255,255,0));
       border-radius:28px;
-      padding:24px 22px;
-      backdrop-filter: blur(14px);
-      box-shadow:0 30px 80px rgba(0,0,0,.45);
+      padding:28px 24px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(155,210,255,.08), rgba(255,255,255,0));
+      backdrop-filter:blur(14px);
+      box-shadow:0 30px 80px rgba(0,0,0,.38);
       text-align:center;
     }
 
-    .brand-kicker{
-      font-size:13px;
-      letter-spacing:.22em;
+    .kicker{
+      font-size:14px;
+      letter-spacing:.24em;
       text-transform:uppercase;
       color:var(--muted2);
       font-weight:800;
     }
 
-    .brand-title{
-      font-family:"Playfair Display",serif;
-      font-size:clamp(36px, 5vw, 58px);
-      line-height:1.02;
-      letter-spacing:-0.02em;
-      font-weight:700;
-      margin-top:8px;
-    }
-
-    .brand-meta{
-      color:var(--muted);
-      font-weight:600;
-      font-size:15px;
+    .title{
       margin-top:10px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(38px,5vw,64px);
+      line-height:1.02;
+      letter-spacing:-0.025em;
+      font-weight:700;
     }
 
-    .goldline{
+    .subtitle{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:18px;
+      font-weight:600;
+    }
+
+    .heroLine{
       height:2px;
       margin-top:18px;
       border-radius:999px;
-      background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), rgba(141,200,255,.7), transparent);
-      opacity:.95;
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,.9), rgba(123,191,255,.85), transparent);
     }
 
     .panel{
-      background:var(--panel);
+      margin-top:16px;
       border:1px solid var(--border);
       border-radius:24px;
-      box-shadow:0 24px 72px rgba(0,0,0,.45);
-      backdrop-filter: blur(14px);
+      background:var(--panel);
+      backdrop-filter:blur(14px);
+      box-shadow:0 22px 60px rgba(0,0,0,.34);
+      overflow:hidden;
     }
 
-    .subpanel{
-      background:var(--panel2);
-      border:1px solid rgba(160,210,255,.09);
-      border-radius:18px;
-      padding:18px;
+    .panelHead{
+      padding:20px 22px 14px;
     }
 
-    .divider{height:1px;background:rgba(160,210,255,.10);}
+    .panelBody{
+      padding:20px 22px 22px;
+    }
+
+    .divider{
+      height:1px;
+      background:rgba(149,205,255,.10);
+    }
+
+    .blockTitle{
+      font-size:24px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+    }
+
+    .hint{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .grid1{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
+    @media (max-width: 840px){
+      .grid2{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
 
     .label{
       font-size:12px;
@@ -124,142 +186,284 @@
       text-transform:uppercase;
       color:var(--muted2);
       font-weight:900;
-      margin-bottom:8px;
     }
 
-    .input, select, textarea{
+    .input, .select, .textarea{
       width:100%;
-      min-height:58px;
-      border-radius:16px;
-      border:1px solid rgba(160,210,255,0.12);
-      background:rgba(255,255,255,0.045);
-      padding:16px 16px;
-      outline:none;
-      color:rgba(255,255,255,0.94);
-      font-size:18px;
-    }
-
-    textarea{
-      min-height:auto;
-      resize:vertical;
-    }
-
-    select option{color:#0b0f14;}
-
-    .input:focus, select:focus, textarea:focus{
-      border-color: rgba(120,190,255,0.52);
-      box-shadow: 0 0 0 4px var(--blueGlow);
-      background: rgba(255,255,255,0.06);
-    }
-
-    .btn{
-      min-height:60px;
       border-radius:18px;
-      font-weight:900;
-      letter-spacing:.02em;
-      padding:16px 18px;
-      transition:transform .08s ease, filter .18s ease, background .2s ease;
-      user-select:none;
-      font-size:18px;
-      width:100%;
+      border:1px solid rgba(149,205,255,.14);
+      background:rgba(255,255,255,.045);
+      color:var(--text);
+      outline:none;
+      font-size:22px;
+      padding:18px 18px;
+      min-height:64px;
     }
 
-    .btn:active{transform:translateY(1px);}
-
-    .btn-primary{
-      background:linear-gradient(135deg, var(--gold), var(--gold2));
-      color:#0b0c0f;
-      box-shadow:0 20px 42px rgba(214,178,74,0.18);
+    .textarea{
+      min-height:136px;
+      resize:vertical;
+      font-size:19px;
+      line-height:1.45;
     }
 
-    .btn-primary:hover{filter:brightness(1.04);}
-
-    .btn-secondary{
-      background: rgba(255,255,255,0.04);
-      border:1px solid rgba(160,210,255,0.12);
-      color:rgba(255,255,255,0.9);
+    .input:focus, .select:focus, .textarea:focus{
+      border-color:rgba(103,183,255,.55);
+      box-shadow:0 0 0 5px var(--blueGlow);
+      background:rgba(255,255,255,.06);
     }
 
-    .btn-success{
-      background: linear-gradient(135deg, var(--blue), var(--blue2));
-      color:#061019;
-      box-shadow:0 20px 42px rgba(120,190,255,.18);
+    .select option{
+      color:#0b1016;
     }
 
-    .muted{color:var(--muted);font-weight:600;font-size:14px;}
-    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
-    .blockTitle{font-size:21px;font-weight:900;letter-spacing:-0.02em;}
+    .stepBar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
 
-    .step-pill{
+    .pill{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      border:1px solid rgba(120,190,255,.18);
-      background:rgba(120,190,255,.08);
-      color:#b9e0ff;
-      border-radius:999px;
       padding:10px 14px;
-      font-size:12px;
-      font-weight:800;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
     }
 
-    .status-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid rgba(56,178,109,.18);
-      background:rgba(56,178,109,.08);
-      color:#9af0be;
-      border-radius:999px;
-      padding:10px 14px;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.04em;
+    .pill-blue{
+      border:1px solid rgba(103,183,255,.20);
+      background:rgba(103,183,255,.10);
+      color:#c6e7ff;
     }
 
-    .hidden-step{display:none;}
+    .pill-green{
+      border:1px solid rgba(75,208,138,.20);
+      background:rgba(75,208,138,.10);
+      color:#a9f1c9;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .sectionCard{
+      border:1px solid rgba(149,205,255,.09);
+      background:rgba(255,255,255,.03);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .ratingWrap{
+      display:grid;
+      grid-template-columns:repeat(5, 1fr);
+      gap:12px;
+      margin-top:6px;
+    }
+
+    .ratingBtn{
+      min-height:84px;
+      border-radius:20px;
+      border:1px solid rgba(149,205,255,.14);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:28px;
+      font-weight:900;
+      transition:.16s ease;
+      box-shadow:none;
+    }
+
+    .ratingBtn:active{
+      transform:translateY(1px);
+    }
+
+    .ratingBtn.selected{
+      border-color:rgba(103,183,255,.55);
+      background:linear-gradient(135deg, rgba(155,210,255,.25), rgba(78,147,214,.18));
+      box-shadow:0 0 0 4px rgba(103,183,255,.12);
+      color:white;
+    }
+
+    .ratingLegend{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--muted2);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .actionsSticky{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      padding:14px 18px 18px;
+      background:linear-gradient(180deg, rgba(7,16,25,0), rgba(7,16,25,.82) 25%, rgba(7,16,25,.95));
+      backdrop-filter:blur(10px);
+      z-index:20;
+    }
+
+    .actionsInner{
+      max-width:1080px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .btn{
+      width:100%;
+      min-height:72px;
+      border:none;
+      border-radius:20px;
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-0.01em;
+      padding:18px 20px;
+      transition:filter .16s ease, transform .06s ease;
+    }
+
+    .btn:active{
+      transform:translateY(1px);
+    }
+
+    .btn-blue{
+      color:#071019;
+      background:linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow:0 20px 42px rgba(103,183,255,.22);
+    }
+
+    .btn-gold{
+      color:#081018;
+      background:linear-gradient(135deg, var(--gold), var(--gold2));
+      box-shadow:0 20px 42px rgba(214,178,74,.20);
+    }
+
+    .btn-dark{
+      color:var(--text);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(149,205,255,.12);
+    }
+
+    .btn:hover{
+      filter:brightness(1.04);
+    }
+
+    .errorBox{
+      border:1px solid rgba(255,122,122,.20);
+      background:rgba(255,122,122,.08);
+      color:#ffd0d0;
+      border-radius:18px;
+      padding:16px 18px;
+      font-weight:700;
+      font-size:16px;
+    }
+
+    .successScreen{
+      text-align:center;
+      padding:30px 24px;
+    }
+
+    .successIcon{
+      width:84px;
+      height:84px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      background:linear-gradient(135deg, rgba(155,210,255,.22), rgba(103,183,255,.12));
+      border:1px solid rgba(149,205,255,.16);
+      margin-bottom:16px;
+    }
+
+    .successTitle{
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+    }
+
+    .successText{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:600;
+    }
+
+    @media (max-width: 700px){
+      .ratingWrap{
+        grid-template-columns:repeat(5, 1fr);
+        gap:10px;
+      }
+
+      .ratingBtn{
+        min-height:72px;
+        font-size:24px;
+      }
+
+      .actionsInner{
+        grid-template-columns:1fr;
+      }
+
+      .btn{
+        min-height:64px;
+        font-size:20px;
+      }
+    }
   </style>
 </head>
+<body>
+  <div class="shell">
 
-<body class="flex justify-center p-4">
-  <div class="shell w-full">
-
-    <header class="topbar mt-6 mb-5">
-      <div class="brand-kicker">KAISER DIGITAL OPERATIONS</div>
-      <div class="brand-title">Skiftlederrapport</div>
-      <div class="brand-meta">Touch-optimeret rapportering for frokost og aften</div>
-      <div class="goldline"></div>
+    <header class="hero">
+      <div class="kicker">Kaiser Digital Operations</div>
+      <div class="title">Skiftlederrapport</div>
+      <div class="subtitle">Touch-optimeret rapport til frokost og aften</div>
+      <div class="heroLine"></div>
     </header>
 
-    <section id="formWrap" class="space-y-4">
-      <form id="reportForm" class="space-y-4">
-
-        <section class="panel p-5 space-y-4">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div class="step-pill" id="stepPill">Step 1 af 2 · Frokost</div>
-            <div class="status-pill hidden" id="draftPill">Frokost gemt</div>
+    <section id="formWrap">
+      <div class="panel">
+        <div class="panelHead">
+          <div class="stepBar">
+            <div class="pill pill-blue" id="stepPill">Step 1 af 2 · Frokost</div>
+            <div class="pill pill-green hidden" id="draftPill">Frokost gemt</div>
           </div>
-          <div class="muted">Først udfylder du frokost og gemmer. Derefter går du videre til aften og sender den samlede rapport.</div>
-        </section>
+        </div>
+        <div class="divider"></div>
+        <div class="panelBody">
+          <div class="muted">Først udfyldes frokostdelen. Derefter gemmes den, og aften-delen åbnes. Rapporten sendes samlet til sidst.</div>
+        </div>
+      </div>
 
-        <section class="panel p-5 space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="blockTitle">Stamdata</div>
-            <div class="hint">Obligatorisk</div>
-          </div>
-          <div class="divider"></div>
+      <div id="errorWrap" class="hidden" style="margin-top:16px;">
+        <div class="errorBox" id="errorText">Der mangler nogle felter.</div>
+      </div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <div class="label">Navn</div>
-              <input class="input" id="name" required placeholder="Dit navn">
+      <div class="panel">
+        <div class="panelHead">
+          <div class="blockTitle">Stamdata</div>
+          <div class="hint" style="margin-top:6px;">Obligatorisk</div>
+        </div>
+        <div class="divider"></div>
+        <div class="panelBody">
+          <div class="grid2">
+            <div class="field">
+              <label class="label" for="name">Navn</label>
+              <input class="input" id="name" placeholder="Dit navn" />
             </div>
 
-            <div>
-              <div class="label">Afdeling</div>
-              <select id="department" required>
+            <div class="field">
+              <label class="label" for="department">Afdeling</label>
+              <select class="select" id="department">
                 <option value="">Vælg afdeling...</option>
                 <option>Café Kaiser Helsingør</option>
                 <option>Café Kaiser Hillerød</option>
@@ -270,171 +474,266 @@
             </div>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <div class="label">Dato</div>
-              <input class="input" id="dateField" readonly>
+          <div class="grid2" style="margin-top:16px;">
+            <div class="field">
+              <label class="label" for="dateField">Dato</label>
+              <input class="input" id="dateField" readonly />
             </div>
-            <div>
-              <div class="label">Info</div>
-              <div class="muted pt-4">Rapporten sendes til 3 faste Kaiser-mails samt den valgte afdeling.</div>
+
+            <div class="field">
+              <div class="label">Modtagere</div>
+              <div class="muted" style="padding-top:16px;">
+                Rapporten sendes til Stefan, Christian, Casper samt den valgte afdeling.
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
 
-        <section id="step1" class="space-y-4">
-          <section class="panel p-5 space-y-4">
+      <!-- STEP 1 -->
+      <section id="step1">
+        <div class="panel">
+          <div class="panelHead">
             <div class="blockTitle">Brunch / frokost</div>
-            <div class="divider"></div>
+          </div>
+          <div class="divider"></div>
+          <div class="panelBody grid1">
 
-            <div class="subpanel space-y-4">
-              <div>
-                <div class="label">Rating af dagen</div>
-                <select id="rateDay" required>
-                  <option value="">Vælg...</option>
-                  <option value="1/5">1 / 5</option>
-                  <option value="2/5">2 / 5</option>
-                  <option value="3/5">3 / 5</option>
-                  <option value="4/5">4 / 5</option>
-                  <option value="5/5">5 / 5</option>
-                </select>
+            <div class="sectionCard">
+              <div class="label">Rating af dagen</div>
+              <div class="ratingWrap" data-rating-group="rateDay">
+                <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
+                <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
+                <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
+                <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">4</button>
+                <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">5</button>
               </div>
-
-              <div>
-                <div class="label">Service, stemning og gæsteoplevelse</div>
-                <textarea id="expDay" rows="4"></textarea>
+              <div class="ratingLegend">
+                <span>Lav</span>
+                <span>Høj</span>
               </div>
+              <input type="hidden" id="rateDay">
+            </div>
 
-              <div>
-                <div class="label">Dagens drift</div>
-                <textarea id="opsDay" rows="4"></textarea>
-              </div>
-
-              <div>
-                <div class="label">Klager eller særlige hændelser</div>
-                <textarea id="incDay" rows="4"></textarea>
-              </div>
-
-              <div>
-                <div class="label">Teamets præstation</div>
-                <textarea id="teamDay" rows="4"></textarea>
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="expDay">Service, stemning og gæsteoplevelse</label>
+                <textarea class="textarea" id="expDay"></textarea>
               </div>
             </div>
-          </section>
 
-          <section class="panel p-5">
-            <button id="saveStep1Btn" class="btn btn-success" type="button">
-              Gem frokost og fortsæt til aften
-            </button>
-          </section>
-        </section>
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="opsDay">Dagens drift</label>
+                <textarea class="textarea" id="opsDay"></textarea>
+              </div>
+            </div>
 
-        <section id="step2" class="space-y-4 hidden-step">
-          <section class="panel p-5 space-y-4">
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="incDay">Klager eller særlige hændelser</label>
+                <textarea class="textarea" id="incDay"></textarea>
+              </div>
+            </div>
+
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="teamDay">Teamets præstation</label>
+                <textarea class="textarea" id="teamDay"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section id="step2" class="hidden">
+        <div class="panel">
+          <div class="panelHead">
             <div class="blockTitle">Aften</div>
-            <div class="divider"></div>
+          </div>
+          <div class="divider"></div>
+          <div class="panelBody grid1">
 
-            <div class="subpanel space-y-4">
-              <div>
-                <div class="label">Rating af dagen</div>
-                <select id="rateEve" required>
-                  <option value="">Vælg...</option>
-                  <option value="1/5">1 / 5</option>
-                  <option value="2/5">2 / 5</option>
-                  <option value="3/5">3 / 5</option>
-                  <option value="4/5">4 / 5</option>
-                  <option value="5/5">5 / 5</option>
-                </select>
+            <div class="sectionCard">
+              <div class="label">Rating af dagen</div>
+              <div class="ratingWrap" data-rating-group="rateEve">
+                <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
+                <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
+                <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
+                <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">4</button>
+                <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">5</button>
               </div>
-
-              <div>
-                <div class="label">Service, stemning og gæsteoplevelse</div>
-                <textarea id="expEve" rows="4"></textarea>
+              <div class="ratingLegend">
+                <span>Lav</span>
+                <span>Høj</span>
               </div>
+              <input type="hidden" id="rateEve">
+            </div>
 
-              <div>
-                <div class="label">Dagens drift</div>
-                <textarea id="opsEve" rows="4"></textarea>
-              </div>
-
-              <div>
-                <div class="label">Klager eller særlige hændelser</div>
-                <textarea id="incEve" rows="4"></textarea>
-              </div>
-
-              <div>
-                <div class="label">Teamets præstation</div>
-                <textarea id="teamEve" rows="4"></textarea>
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="expEve">Service, stemning og gæsteoplevelse</label>
+                <textarea class="textarea" id="expEve"></textarea>
               </div>
             </div>
-          </section>
 
-          <section class="panel p-5 space-y-4">
-            <div class="blockTitle">Afsluttende noter</div>
-            <div class="divider"></div>
-            <div>
-              <div class="label">Mangler / afvigelser / behov for bestilling</div>
-              <textarea id="needs" rows="5"></textarea>
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="opsEve">Dagens drift</label>
+                <textarea class="textarea" id="opsEve"></textarea>
+              </div>
             </div>
-          </section>
 
-          <section class="panel p-5">
-            <div class="grid md:grid-cols-2 gap-3">
-              <button id="backBtn" class="btn btn-secondary" type="button">Tilbage til frokost</button>
-              <button id="submitBtn" class="btn btn-primary" type="submit">Send rapport</button>
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="incEve">Klager eller særlige hændelser</label>
+                <textarea class="textarea" id="incEve"></textarea>
+              </div>
             </div>
-          </section>
-        </section>
-      </form>
+
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="teamEve">Teamets præstation</label>
+                <textarea class="textarea" id="teamEve"></textarea>
+              </div>
+            </div>
+
+            <div class="sectionCard">
+              <div class="field">
+                <label class="label" for="needs">Mangler / afvigelser / behov for bestilling</label>
+                <textarea class="textarea" id="needs"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
     </section>
 
-    <section id="thanksWrap" class="hidden space-y-4">
-      <div class="panel p-6 text-center space-y-4">
-        <div class="hint">Indsendt</div>
-        <div style="font-size:22px; font-weight:900; letter-spacing:-0.01em;">Tak for rapporten.</div>
-        <div class="muted">Rapporten er sendt til Kaiser og den valgte afdeling.</div>
-        <button id="newReportBtn" class="btn btn-primary" type="button">Ny rapport</button>
+    <section id="thanksWrap" class="hidden">
+      <div class="panel">
+        <div class="panelBody successScreen">
+          <div class="successIcon">✓</div>
+          <div class="successTitle">Tak for rapporten</div>
+          <div class="successText">Rapporten er sendt til Kaiser samt den valgte afdeling.</div>
+          <div style="max-width:420px;margin:22px auto 0;">
+            <button id="newReportBtn" class="btn btn-gold" type="button">Start ny rapport</button>
+          </div>
+        </div>
       </div>
     </section>
+
+  </div>
+
+  <div class="actionsSticky" id="actionsSticky">
+    <div class="actionsInner" id="actionsInner">
+      <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
+      <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
+    </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "kaiser_skiftlederrapport_v2_touch";
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlWXr5lHnxwCsD0piPO-YJ7FLqrHOxkRhC9HlXmjf89svFt9BKTeA8wJvormRPwOYBjQ/exec";
+    const STORAGE_KEY = "kaiser_skiftlederrapport_touch_v21";
+    const APPS_SCRIPT_URL = "INDSÆT_DIN_APPS_SCRIPT_URL_HER";
+
+    function $(id){
+      return document.getElementById(id);
+    }
 
     function val(id){
-      const el = document.getElementById(id);
-      return (el && el.value ? el.value : "").trim();
+      const el = $(id);
+      return el ? (el.value || "").trim() : "";
     }
 
     function setVal(id, value){
-      const el = document.getElementById(id);
-      if (el) el.value = value || "";
+      const el = $(id);
+      if(el) el.value = value || "";
     }
 
     function nowLocalString(){
       return new Date().toLocaleString("da-DK");
     }
 
-    function showStep(step){
-      const step1 = document.getElementById("step1");
-      const step2 = document.getElementById("step2");
-      const stepPill = document.getElementById("stepPill");
-
-      if(step === 1){
-        step1.classList.remove("hidden-step");
-        step2.classList.add("hidden-step");
-        stepPill.textContent = "Step 1 af 2 · Frokost";
-      } else {
-        step1.classList.add("hidden-step");
-        step2.classList.remove("hidden-step");
-        stepPill.textContent = "Step 2 af 2 · Aften";
-      }
-
+    function showError(msg){
+      $("errorText").textContent = msg;
+      $("errorWrap").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function saveDraft(showPill = false){
+    function clearError(){
+      $("errorWrap").classList.add("hidden");
+      $("errorText").textContent = "";
+    }
+
+    function currentStep(){
+      return $("step2").classList.contains("hidden") ? 1 : 2;
+    }
+
+    function setStep(step){
+      clearError();
+
+      if(step === 1){
+        $("step1").classList.remove("hidden");
+        $("step2").classList.add("hidden");
+        $("stepPill").textContent = "Step 1 af 2 · Frokost";
+
+        $("secondaryAction").textContent = "Nulstil";
+        $("secondaryAction").className = "btn btn-dark";
+        $("primaryAction").textContent = "Gem frokost og fortsæt";
+        $("primaryAction").className = "btn btn-blue";
+      } else {
+        $("step1").classList.add("hidden");
+        $("step2").classList.remove("hidden");
+        $("stepPill").textContent = "Step 2 af 2 · Aften";
+
+        $("secondaryAction").textContent = "Tilbage til frokost";
+        $("secondaryAction").className = "btn btn-dark";
+        $("primaryAction").textContent = "Send rapport";
+        $("primaryAction").className = "btn btn-gold";
+      }
+
+      saveDraft(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateRatingUI(targetId){
+      document.querySelectorAll('.ratingBtn[data-target="' + targetId + '"]').forEach(btn => {
+        const selected = btn.getAttribute("data-value") === val(targetId);
+        btn.classList.toggle("selected", selected);
+      });
+    }
+
+    function bindRatings(){
+      document.querySelectorAll(".ratingBtn").forEach(btn => {
+        btn.addEventListener("click", function(){
+          const target = btn.getAttribute("data-target");
+          const value = btn.getAttribute("data-value");
+          setVal(target, value);
+          updateRatingUI(target);
+          saveDraft(false);
+          clearError();
+        });
+      });
+    }
+
+    function resetFormAll(){
+      [
+        "name","department","dateField",
+        "rateDay","expDay","opsDay","incDay","teamDay",
+        "rateEve","expEve","opsEve","incEve","teamEve","needs"
+      ].forEach(id => setVal(id, ""));
+
+      $("dateField").value = nowLocalString();
+      localStorage.removeItem(STORAGE_KEY);
+      $("draftPill").classList.add("hidden");
+      updateRatingUI("rateDay");
+      updateRatingUI("rateEve");
+      setStep(1);
+    }
+
+    function saveDraft(showSavedPill){
       const data = {
         name: val("name"),
         department: val("department"),
@@ -453,26 +752,29 @@
         teamEve: val("teamEve"),
 
         needs: val("needs"),
-        step: document.getElementById("step2").classList.contains("hidden-step") ? 1 : 2
+        step: currentStep()
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
-      if(showPill){
-        document.getElementById("draftPill").classList.remove("hidden");
+      if(showSavedPill){
+        $("draftPill").classList.remove("hidden");
       }
     }
 
     function loadDraft(){
       const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
+      if(!raw){
+        $("dateField").value = nowLocalString();
+        return;
+      }
 
       try{
         const data = JSON.parse(raw);
 
         setVal("name", data.name);
         setVal("department", data.department);
-        setVal("dateField", data.dateField);
+        setVal("dateField", data.dateField || nowLocalString());
 
         setVal("rateDay", data.rateDay);
         setVal("expDay", data.expDay);
@@ -488,38 +790,33 @@
 
         setVal("needs", data.needs);
 
+        updateRatingUI("rateDay");
+        updateRatingUI("rateEve");
+
         if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay){
-          document.getElementById("draftPill").classList.remove("hidden");
+          $("draftPill").classList.remove("hidden");
         }
 
         if(data.step === 2){
-          showStep(2);
+          setStep(2);
+        } else {
+          setStep(1);
         }
-      } catch(e){}
+      } catch(e){
+        $("dateField").value = nowLocalString();
+      }
     }
 
     function validateStep1(){
-      if(!val("name")){
-        alert("Udfyld navn.");
-        return false;
-      }
-      if(!val("department")){
-        alert("Vælg afdeling.");
-        return false;
-      }
-      if(!val("rateDay")){
-        alert("Vælg rating for frokost.");
-        return false;
-      }
-      return true;
+      if(!val("name")) return "Udfyld navn.";
+      if(!val("department")) return "Vælg afdeling.";
+      if(!val("rateDay")) return "Vælg rating for frokost.";
+      return "";
     }
 
     function validateStep2(){
-      if(!val("rateEve")){
-        alert("Vælg rating for aften.");
-        return false;
-      }
-      return true;
+      if(!val("rateEve")) return "Vælg rating for aften.";
+      return "";
     }
 
     function buildPayload(){
@@ -527,7 +824,6 @@
         name: val("name"),
         department: val("department"),
         date: val("dateField"),
-
         lunch: {
           rating: val("rateDay"),
           guestExperience: val("expDay"),
@@ -535,7 +831,6 @@
           incidents: val("incDay"),
           team: val("teamDay")
         },
-
         evening: {
           rating: val("rateEve"),
           guestExperience: val("expEve"),
@@ -543,44 +838,30 @@
           incidents: val("incEve"),
           team: val("teamEve")
         },
-
         needs: val("needs")
       };
     }
 
-    document.getElementById("dateField").value = nowLocalString();
-    loadDraft();
+    async function sendReport(){
+      clearError();
 
-    [
-      "name","department",
-      "rateDay","expDay","opsDay","incDay","teamDay",
-      "rateEve","expEve","opsEve","incEve","teamEve","needs"
-    ].forEach(id => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener("input", () => saveDraft(false));
-      el.addEventListener("change", () => saveDraft(false));
-    });
+      const err1 = validateStep1();
+      if(err1){
+        showError(err1);
+        setStep(1);
+        return;
+      }
 
-    document.getElementById("saveStep1Btn").addEventListener("click", () => {
-      if(!validateStep1()) return;
-      saveDraft(true);
-      showStep(2);
-    });
+      const err2 = validateStep2();
+      if(err2){
+        showError(err2);
+        return;
+      }
 
-    document.getElementById("backBtn").addEventListener("click", () => {
-      saveDraft(true);
-      showStep(1);
-    });
-
-    document.getElementById("reportForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-
-      if(!validateStep1() || !validateStep2()) return;
-
-      const btn = document.getElementById("submitBtn");
+      const btn = $("primaryAction");
+      const prevText = btn.textContent;
       btn.disabled = true;
-      btn.textContent = "Sender...";
+      btn.textContent = "Sender rapport...";
 
       try{
         const response = await fetch(APPS_SCRIPT_URL, {
@@ -593,25 +874,77 @@
 
         const result = await response.json();
 
-        if(result.success){
-          localStorage.removeItem(STORAGE_KEY);
-          document.getElementById("formWrap").classList.add("hidden");
-          document.getElementById("thanksWrap").classList.remove("hidden");
-        } else {
+        if(!result.success){
           throw new Error(result.message || "Ukendt fejl");
         }
 
+        localStorage.removeItem(STORAGE_KEY);
+        $("formWrap").classList.add("hidden");
+        $("thanksWrap").classList.remove("hidden");
+        $("actionsSticky").classList.add("hidden");
+
       } catch(err){
-        alert("Der opstod en fejl ved afsendelse. Prøv igen.");
+        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
         btn.disabled = false;
-        btn.textContent = "Send rapport";
+        btn.textContent = prevText;
       }
+    }
+
+    function bindAutosave(){
+      [
+        "name","department",
+        "expDay","opsDay","incDay","teamDay",
+        "expEve","opsEve","incEve","teamEve","needs"
+      ].forEach(id => {
+        const el = $(id);
+        if(!el) return;
+        el.addEventListener("input", () => saveDraft(false));
+        el.addEventListener("change", () => saveDraft(false));
+      });
+    }
+
+    $("primaryAction").addEventListener("click", function(){
+      clearError();
+
+      if(currentStep() === 1){
+        const err = validateStep1();
+        if(err){
+          showError(err);
+          return;
+        }
+
+        saveDraft(true);
+        setStep(2);
+        return;
+      }
+
+      sendReport();
     });
 
-    document.getElementById("newReportBtn").addEventListener("click", () => {
-      localStorage.removeItem(STORAGE_KEY);
-      window.location.reload();
+    $("secondaryAction").addEventListener("click", function(){
+      clearError();
+
+      if(currentStep() === 1){
+        if(confirm("Vil du nulstille rapporten?")){
+          resetFormAll();
+        }
+        return;
+      }
+
+      saveDraft(true);
+      setStep(1);
     });
+
+    $("newReportBtn").addEventListener("click", function(){
+      resetFormAll();
+      $("thanksWrap").classList.add("hidden");
+      $("formWrap").classList.remove("hidden");
+      $("actionsSticky").classList.remove("hidden");
+    });
+
+    bindRatings();
+    bindAutosave();
+    loadDraft();
   </script>
 </body>
 </html>
