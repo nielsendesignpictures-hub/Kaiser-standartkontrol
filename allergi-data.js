@@ -161,3 +161,31 @@ window.ALLERGI_DATA = [
   ],
   "note": ""
 }
+
+{
+  "ret": "Ostemad",
+  "kategori": "Morgrnmad",
+  "station": "",
+  "buffet": false,
+  "dataKomplet": true,
+  "køkkenRisiko": false,
+  "allergener": {
+    "gluten": true,
+    "laktose": true,
+    "nødder": false,
+    "æg": false,
+    "krebs": false,
+    "fisk": false,
+    "jordnødder": false,
+    "soja": false,
+    "selleri": false,
+    "sesamfrø": false,
+    "lupin": false,
+    "sulfiter": false,
+    "bløddyr": false,
+    "sennep": false
+  },
+  "sporAf": [true],
+  "tilpasninger": [],
+  "note": "Laktose i ost, gluten i brødet"
+}
