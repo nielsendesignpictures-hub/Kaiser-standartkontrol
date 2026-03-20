@@ -124,3 +124,41 @@ window.ALLERGI_DATA = [
     note: ""
   }
 ];
+
+{
+  "ret": "Cæsar salat",
+  "kategori": "Salater",
+  "station": "",
+  "buffet": false,
+  "dataKomplet": true,
+  "køkkenRisiko": false,
+  "allergener": {
+    "gluten": True,
+    "laktose": true,
+    "nødder": false,
+    "æg": true,
+    "krebs": false,
+    "fisk": true,
+    "jordnødder": false,
+    "soja": false,
+    "selleri": false,
+    "sesamfrø": false,
+    "lupin": false,
+    "sulfiter": false,
+    "bløddyr": false,
+    "sennep": false
+  },
+  "sporAf": [],
+  "tilpasninger": [
+    {
+      "fjerner": ["Gluten"],
+      "tekst": "Kan bestilles uden croutoner"
+    },
+    {
+      "fjerner": ["Laktose"],
+      "tekst": "Kan bestilles uden dressing"
+    }
+    }
+  ],
+  "note": ""
+}
