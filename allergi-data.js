@@ -133,7 +133,7 @@ window.ALLERGI_DATA = [
   "dataKomplet": true,
   "køkkenRisiko": false,
   "allergener": {
-    "gluten": True,
+    "gluten": true,
     "laktose": true,
     "nødder": false,
     "æg": true,
@@ -151,13 +151,12 @@ window.ALLERGI_DATA = [
   "sporAf": [],
   "tilpasninger": [
     {
-      "fjerner": ["Gluten"],
+      "fjerner": ["gluten"],
       "tekst": "Kan bestilles uden croutoner"
     },
     {
-      "fjerner": ["Laktose"],
-      "tekst": "Kan bestilles uden dressing"
-    }
+      "fjerner": ["laktose"],
+      "tekst": "Kan bestilles uden dressing & parmesan"
     }
   ],
   "note": ""
