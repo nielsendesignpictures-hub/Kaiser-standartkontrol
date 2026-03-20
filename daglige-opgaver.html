@@ -364,10 +364,10 @@
             </div>
 
             <div class="space-y-2 md:col-span-1">
-              <div class="label">Udført af</div>
+              <div class="label">Standardnavn (valgfrit)</div>
               <div class="performedBox">
-                <input id="doneBy" class="input" placeholder="Skriv navn på den der udfører opgaverne" />
-                <div class="hint" style="margin-top:8px;">Navn gemmes på udførte opgaver og kræves for at krydse af + sende mail</div>
+                <input id="doneBy" class="input" placeholder="Valgfrit standardnavn" />
+                <div class="hint" style="margin-top:8px;">Hvis feltet er tomt, spørges der om navn ved afkrydsning.</div>
               </div>
             </div>
           </div>
@@ -972,19 +972,40 @@
       if (!meta || !meta.lastDoneDate) return false;
       return meta.lastDoneDate >= dueIso;
     }
+
     function setDone(task, val){
       const key = taskKey(task);
+
       if (!val) {
         delete state.doneMap[key];
-      } else {
-        const who = (doneByInput.value || "").trim();
+        saveDoneMap(state.loc, state.doneMap);
+        return true;
+      }
+
+      let who = (doneByInput.value || "").trim();
+
+      if (!who) {
+        who = prompt("Hvem udførte denne opgave?");
         if (!who) {
-          setError("Udført af er påkrævet for at krydse af.");
+          setError("Navn kræves for at krydse opgaven af.");
           return false;
         }
-        const todayIso = dayKey();
-        state.doneMap[key] = { lastDoneDate: todayIso, doneAt: nowDK(), doneBy: who };
+        who = who.trim();
+        if (!who) {
+          setError("Navn kræves for at krydse opgaven af.");
+          return false;
+        }
       }
+
+      setError("");
+
+      const todayIso = dayKey();
+      state.doneMap[key] = {
+        lastDoneDate: todayIso,
+        doneAt: nowDK(),
+        doneBy: who
+      };
+
       saveDoneMap(state.loc, state.doneMap);
       return true;
     }
@@ -1212,8 +1233,7 @@
           : ("Dato: " + (state.cleanDay === "daily" ? todayIso : selIso) + " • Overførte vises øverst");
       }
 
-      const who = (doneByInput.value || "").trim();
-      const canSend = !!state.loc && !!who && missMail > 0;
+      const canSend = !!state.loc && missMail > 0;
 
       submitBtn.disabled = !canSend;
       submitBtn.style.opacity = canSend ? "1" : "0.55";
@@ -1373,7 +1393,6 @@
 
       if (!state.loc) return setError("Vælg lokation.");
       const who = (doneByInput.value || "").trim();
-      if (!who) return setError("Udført af er påkrævet.");
 
       const todayIso = dayKey();
       let scopeTitle = "";
@@ -1440,7 +1459,7 @@
       lines.push("Lokation: " + state.loc);
       lines.push("Dato: " + todayIso);
       lines.push("Tid: " + nowDK());
-      lines.push("Udført af: " + who);
+      lines.push("Standardnavn i felt: " + (who || "-"));
       lines.push(gpsBlock);
       lines.push("");
       lines.push("Overførte + i dag (" + combined.length + "):");
