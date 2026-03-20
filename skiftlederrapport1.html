@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Skiftlederrapport Touch V2.1</title>
+  <title>Kaiser – Skiftlederrapport</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,27 +13,24 @@
   <style>
     :root{
       --bg:#071019;
-      --bg2:#0b1522;
-      --panel:rgba(15,21,31,.88);
+      --bg2:#0c1625;
+      --panel:rgba(15,22,34,.88);
       --panel2:rgba(255,255,255,.04);
-      --border:rgba(149,205,255,.14);
+      --border:rgba(145,205,255,.14);
       --text:rgba(255,255,255,.95);
-      --muted:rgba(214,231,248,.70);
-      --muted2:rgba(184,211,235,.48);
+      --muted:rgba(213,231,248,.72);
+      --muted2:rgba(184,210,234,.48);
+
+      --blue:#9bd3ff;
+      --blue2:#66b7ff;
+      --blueGlow:rgba(102,183,255,.20);
 
       --gold:#d7b24c;
-      --gold2:#b88f1f;
+      --gold2:#b9921f;
 
-      --blue:#9bd2ff;
-      --blue2:#67b7ff;
-      --blue3:#2f87d8;
-      --blueGlow:rgba(103,183,255,.22);
-
-      --green:#4bd08a;
-      --green2:#2ca86a;
-
-      --danger:#ff7a7a;
-      --dangerGlow:rgba(255,122,122,.16);
+      --darkBtn:rgba(255,255,255,.05);
+      --success:#48c987;
+      --danger:#ff8f8f;
     }
 
     html,body{
@@ -47,10 +44,10 @@
     body{
       min-height:100vh;
       background:
-        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.10), transparent 55%),
-        radial-gradient(1000px 700px at 100% 0%, rgba(120,190,255,.18), transparent 52%),
+        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+        radial-gradient(1000px 720px at 100% 0%, rgba(102,183,255,.18), transparent 52%),
         radial-gradient(900px 700px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
-        linear-gradient(180deg, #071019, #0b1522 52%, #071019);
+        linear-gradient(180deg, #071019, #0c1625 52%, #071019);
     }
 
     body:before{
@@ -58,25 +55,25 @@
       position:fixed;
       inset:0;
       pointer-events:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
       opacity:.07;
       mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
     }
 
     .shell{
       max-width:1080px;
       margin:0 auto;
       padding:20px;
-      padding-bottom:120px;
+      padding-bottom:130px;
     }
 
     .hero{
       border:1px solid var(--border);
-      border-radius:28px;
+      border-radius:30px;
       padding:28px 24px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
-        linear-gradient(135deg, rgba(155,210,255,.08), rgba(255,255,255,0));
+        linear-gradient(135deg, rgba(155,211,255,.08), rgba(255,255,255,0));
       backdrop-filter:blur(14px);
       box-shadow:0 30px 80px rgba(0,0,0,.38);
       text-align:center;
@@ -110,7 +107,7 @@
       height:2px;
       margin-top:18px;
       border-radius:999px;
-      background:linear-gradient(90deg, transparent, rgba(214,178,74,.9), rgba(123,191,255,.85), transparent);
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,.9), rgba(102,183,255,.85), transparent);
     }
 
     .panel{
@@ -133,7 +130,7 @@
 
     .divider{
       height:1px;
-      background:rgba(149,205,255,.10);
+      background:rgba(145,205,255,.10);
     }
 
     .blockTitle{
@@ -168,10 +165,8 @@
       gap:16px;
     }
 
-    @media (max-width: 840px){
-      .grid2{
-        grid-template-columns:1fr;
-      }
+    @media (max-width: 860px){
+      .grid2{ grid-template-columns:1fr; }
     }
 
     .field{
@@ -191,13 +186,14 @@
     .input, .select, .textarea{
       width:100%;
       border-radius:18px;
-      border:1px solid rgba(149,205,255,.14);
+      border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,.045);
       color:var(--text);
       outline:none;
       font-size:22px;
       padding:18px 18px;
       min-height:64px;
+      box-sizing:border-box;
     }
 
     .textarea{
@@ -208,21 +204,19 @@
     }
 
     .input:focus, .select:focus, .textarea:focus{
-      border-color:rgba(103,183,255,.55);
+      border-color:rgba(102,183,255,.55);
       box-shadow:0 0 0 5px var(--blueGlow);
       background:rgba(255,255,255,.06);
     }
 
-    .select option{
-      color:#0b1016;
-    }
+    .select option{ color:#0b1016; }
 
     .stepBar{
       display:flex;
       gap:12px;
-      flex-wrap:wrap;
       align-items:center;
       justify-content:space-between;
+      flex-wrap:wrap;
     }
 
     .pill{
@@ -238,23 +232,21 @@
     }
 
     .pill-blue{
-      border:1px solid rgba(103,183,255,.20);
-      background:rgba(103,183,255,.10);
-      color:#c6e7ff;
+      border:1px solid rgba(102,183,255,.20);
+      background:rgba(102,183,255,.10);
+      color:#c5e7ff;
     }
 
     .pill-green{
-      border:1px solid rgba(75,208,138,.20);
-      background:rgba(75,208,138,.10);
-      color:#a9f1c9;
+      border:1px solid rgba(72,201,135,.20);
+      background:rgba(72,201,135,.10);
+      color:#a8efc8;
     }
 
-    .hidden{
-      display:none !important;
-    }
+    .hidden{ display:none !important; }
 
     .sectionCard{
-      border:1px solid rgba(149,205,255,.09);
+      border:1px solid rgba(145,205,255,.09);
       background:rgba(255,255,255,.03);
       border-radius:20px;
       padding:18px;
@@ -270,23 +262,18 @@
     .ratingBtn{
       min-height:84px;
       border-radius:20px;
-      border:1px solid rgba(149,205,255,.14);
+      border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,.04);
       color:var(--text);
       font-size:28px;
       font-weight:900;
       transition:.16s ease;
-      box-shadow:none;
-    }
-
-    .ratingBtn:active{
-      transform:translateY(1px);
     }
 
     .ratingBtn.selected{
-      border-color:rgba(103,183,255,.55);
-      background:linear-gradient(135deg, rgba(155,210,255,.25), rgba(78,147,214,.18));
-      box-shadow:0 0 0 4px rgba(103,183,255,.12);
+      border-color:rgba(102,183,255,.55);
+      background:linear-gradient(135deg, rgba(155,211,255,.24), rgba(79,145,210,.18));
+      box-shadow:0 0 0 4px rgba(102,183,255,.12);
       color:white;
     }
 
@@ -300,6 +287,17 @@
       font-weight:800;
     }
 
+    .errorBox{
+      margin-top:16px;
+      border:1px solid rgba(255,143,143,.20);
+      background:rgba(255,143,143,.08);
+      color:#ffd7d7;
+      border-radius:18px;
+      padding:16px 18px;
+      font-weight:700;
+      font-size:16px;
+    }
+
     .actionsSticky{
       position:fixed;
       left:0;
@@ -308,7 +306,7 @@
       padding:14px 18px 18px;
       background:linear-gradient(180deg, rgba(7,16,25,0), rgba(7,16,25,.82) 25%, rgba(7,16,25,.95));
       backdrop-filter:blur(10px);
-      z-index:20;
+      z-index:30;
     }
 
     .actionsInner{
@@ -329,16 +327,16 @@
       letter-spacing:-0.01em;
       padding:18px 20px;
       transition:filter .16s ease, transform .06s ease;
+      cursor:pointer;
     }
 
-    .btn:active{
-      transform:translateY(1px);
-    }
+    .btn:active{ transform:translateY(1px); }
+    .btn:hover{ filter:brightness(1.04); }
 
     .btn-blue{
       color:#071019;
       background:linear-gradient(135deg, var(--blue), var(--blue2));
-      box-shadow:0 20px 42px rgba(103,183,255,.22);
+      box-shadow:0 20px 42px rgba(102,183,255,.22);
     }
 
     .btn-gold{
@@ -349,22 +347,8 @@
 
     .btn-dark{
       color:var(--text);
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(149,205,255,.12);
-    }
-
-    .btn:hover{
-      filter:brightness(1.04);
-    }
-
-    .errorBox{
-      border:1px solid rgba(255,122,122,.20);
-      background:rgba(255,122,122,.08);
-      color:#ffd0d0;
-      border-radius:18px;
-      padding:16px 18px;
-      font-weight:700;
-      font-size:16px;
+      background:var(--darkBtn);
+      border:1px solid rgba(145,205,255,.12);
     }
 
     .successScreen{
@@ -380,8 +364,8 @@
       align-items:center;
       justify-content:center;
       font-size:34px;
-      background:linear-gradient(135deg, rgba(155,210,255,.22), rgba(103,183,255,.12));
-      border:1px solid rgba(149,205,255,.16);
+      background:linear-gradient(135deg, rgba(155,211,255,.22), rgba(102,183,255,.12));
+      border:1px solid rgba(145,205,255,.16);
       margin-bottom:16px;
     }
 
@@ -399,24 +383,9 @@
     }
 
     @media (max-width: 700px){
-      .ratingWrap{
-        grid-template-columns:repeat(5, 1fr);
-        gap:10px;
-      }
-
-      .ratingBtn{
-        min-height:72px;
-        font-size:24px;
-      }
-
-      .actionsInner{
-        grid-template-columns:1fr;
-      }
-
-      .btn{
-        min-height:64px;
-        font-size:20px;
-      }
+      .actionsInner{ grid-template-columns:1fr; }
+      .btn{ min-height:64px; font-size:20px; }
+      .ratingBtn{ min-height:72px; font-size:24px; }
     }
   </style>
 </head>
@@ -444,8 +413,8 @@
         </div>
       </div>
 
-      <div id="errorWrap" class="hidden" style="margin-top:16px;">
-        <div class="errorBox" id="errorText">Der mangler nogle felter.</div>
+      <div id="errorWrap" class="hidden">
+        <div class="errorBox" id="errorText"></div>
       </div>
 
       <div class="panel">
@@ -458,7 +427,7 @@
           <div class="grid2">
             <div class="field">
               <label class="label" for="name">Navn</label>
-              <input class="input" id="name" placeholder="Dit navn" />
+              <input class="input" id="name" placeholder="Dit navn">
             </div>
 
             <div class="field">
@@ -477,7 +446,7 @@
           <div class="grid2" style="margin-top:16px;">
             <div class="field">
               <label class="label" for="dateField">Dato</label>
-              <input class="input" id="dateField" readonly />
+              <input class="input" id="dateField" readonly>
             </div>
 
             <div class="field">
@@ -490,7 +459,6 @@
         </div>
       </div>
 
-      <!-- STEP 1 -->
       <section id="step1">
         <div class="panel">
           <div class="panelHead">
@@ -501,7 +469,7 @@
 
             <div class="sectionCard">
               <div class="label">Rating af dagen</div>
-              <div class="ratingWrap" data-rating-group="rateDay">
+              <div class="ratingWrap">
                 <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
                 <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
                 <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
@@ -547,7 +515,6 @@
         </div>
       </section>
 
-      <!-- STEP 2 -->
       <section id="step2" class="hidden">
         <div class="panel">
           <div class="panelHead">
@@ -558,7 +525,7 @@
 
             <div class="sectionCard">
               <div class="label">Rating af dagen</div>
-              <div class="ratingWrap" data-rating-group="rateEve">
+              <div class="ratingWrap">
                 <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
                 <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
                 <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
@@ -617,30 +584,58 @@
         <div class="panelBody successScreen">
           <div class="successIcon">✓</div>
           <div class="successTitle">Tak for rapporten</div>
-          <div class="successText">Rapporten er sendt til Kaiser samt den valgte afdeling.</div>
+          <div class="successText">Rapporten er sendt.</div>
           <div style="max-width:420px;margin:22px auto 0;">
             <button id="newReportBtn" class="btn btn-gold" type="button">Start ny rapport</button>
           </div>
         </div>
       </div>
     </section>
-
   </div>
 
   <div class="actionsSticky" id="actionsSticky">
-    <div class="actionsInner" id="actionsInner">
+    <div class="actionsInner">
       <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
       <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
     </div>
   </div>
 
-  <script>
-    const STORAGE_KEY = "kaiser_skiftlederrapport_touch_v21";
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlWXr5lHnxwCsD0piPO-YJ7FLqrHOxkRhC9HlXmjf89svFt9BKTeA8wJvormRPwOYBjQ/exec";
+  <!-- skjult sender -->
+  <iframe name="hiddenSenderFrame" id="hiddenSenderFrame" style="display:none;"></iframe>
 
-    function $(id){
-      return document.getElementById(id);
-    }
+  <form
+    id="sendForm"
+    method="POST"
+    target="hiddenSenderFrame"
+    action=""
+    style="display:none;"
+  >
+    <input type="hidden" name="name" id="post_name">
+    <input type="hidden" name="department" id="post_department">
+    <input type="hidden" name="date" id="post_date">
+
+    <input type="hidden" name="rateDay" id="post_rateDay">
+    <input type="hidden" name="expDay" id="post_expDay">
+    <input type="hidden" name="opsDay" id="post_opsDay">
+    <input type="hidden" name="incDay" id="post_incDay">
+    <input type="hidden" name="teamDay" id="post_teamDay">
+
+    <input type="hidden" name="rateEve" id="post_rateEve">
+    <input type="hidden" name="expEve" id="post_expEve">
+    <input type="hidden" name="opsEve" id="post_opsEve">
+    <input type="hidden" name="incEve" id="post_incEve">
+    <input type="hidden" name="teamEve" id="post_teamEve">
+
+    <input type="hidden" name="needs" id="post_needs">
+  </form>
+
+  <script>
+    const STORAGE_KEY = "kaiser_skiftlederrapport_touch_v3";
+
+    // Sæt din backend URL her senere
+    const FORM_POST_URL = "";
+
+    function $(id){ return document.getElementById(id); }
 
     function val(id){
       const el = $(id);
@@ -656,15 +651,15 @@
       return new Date().toLocaleString("da-DK");
     }
 
-    function showError(msg){
-      $("errorText").textContent = msg;
-      $("errorWrap").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
     function clearError(){
       $("errorWrap").classList.add("hidden");
       $("errorText").textContent = "";
+    }
+
+    function showError(message){
+      $("errorText").textContent = message;
+      $("errorWrap").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function currentStep(){
@@ -678,18 +673,14 @@
         $("step1").classList.remove("hidden");
         $("step2").classList.add("hidden");
         $("stepPill").textContent = "Step 1 af 2 · Frokost";
-
         $("secondaryAction").textContent = "Nulstil";
-        $("secondaryAction").className = "btn btn-dark";
         $("primaryAction").textContent = "Gem frokost og fortsæt";
         $("primaryAction").className = "btn btn-blue";
       } else {
         $("step1").classList.add("hidden");
         $("step2").classList.remove("hidden");
         $("stepPill").textContent = "Step 2 af 2 · Aften";
-
         $("secondaryAction").textContent = "Tilbage til frokost";
-        $("secondaryAction").className = "btn btn-dark";
         $("primaryAction").textContent = "Send rapport";
         $("primaryAction").className = "btn btn-gold";
       }
@@ -700,37 +691,21 @@
 
     function updateRatingUI(targetId){
       document.querySelectorAll('.ratingBtn[data-target="' + targetId + '"]').forEach(btn => {
-        const selected = btn.getAttribute("data-value") === val(targetId);
-        btn.classList.toggle("selected", selected);
+        btn.classList.toggle("selected", btn.dataset.value === val(targetId));
       });
     }
 
     function bindRatings(){
       document.querySelectorAll(".ratingBtn").forEach(btn => {
         btn.addEventListener("click", function(){
-          const target = btn.getAttribute("data-target");
-          const value = btn.getAttribute("data-value");
+          const target = btn.dataset.target;
+          const value = btn.dataset.value;
           setVal(target, value);
           updateRatingUI(target);
           saveDraft(false);
           clearError();
         });
       });
-    }
-
-    function resetFormAll(){
-      [
-        "name","department","dateField",
-        "rateDay","expDay","opsDay","incDay","teamDay",
-        "rateEve","expEve","opsEve","incEve","teamEve","needs"
-      ].forEach(id => setVal(id, ""));
-
-      $("dateField").value = nowLocalString();
-      localStorage.removeItem(STORAGE_KEY);
-      $("draftPill").classList.add("hidden");
-      updateRatingUI("rateDay");
-      updateRatingUI("rateEve");
-      setStep(1);
     }
 
     function saveDraft(showSavedPill){
@@ -764,6 +739,7 @@
 
     function loadDraft(){
       const raw = localStorage.getItem(STORAGE_KEY);
+
       if(!raw){
         $("dateField").value = nowLocalString();
         return;
@@ -819,31 +795,33 @@
       return "";
     }
 
-    function buildPayload(){
-      return {
-        name: val("name"),
-        department: val("department"),
-        date: val("dateField"),
-        lunch: {
-          rating: val("rateDay"),
-          guestExperience: val("expDay"),
-          operations: val("opsDay"),
-          incidents: val("incDay"),
-          team: val("teamDay")
-        },
-        evening: {
-          rating: val("rateEve"),
-          guestExperience: val("expEve"),
-          operations: val("opsEve"),
-          incidents: val("incEve"),
-          team: val("teamEve")
-        },
-        needs: val("needs")
-      };
+    function fillHiddenPostFields(){
+      $("post_name").value = val("name");
+      $("post_department").value = val("department");
+      $("post_date").value = val("dateField");
+
+      $("post_rateDay").value = val("rateDay");
+      $("post_expDay").value = val("expDay");
+      $("post_opsDay").value = val("opsDay");
+      $("post_incDay").value = val("incDay");
+      $("post_teamDay").value = val("teamDay");
+
+      $("post_rateEve").value = val("rateEve");
+      $("post_expEve").value = val("expEve");
+      $("post_opsEve").value = val("opsEve");
+      $("post_incEve").value = val("incEve");
+      $("post_teamEve").value = val("teamEve");
+
+      $("post_needs").value = val("needs");
     }
 
-    async function sendReport(){
+    function sendReport(){
       clearError();
+
+      if(!FORM_POST_URL){
+        showError("Backend URL mangler. Indsæt FORM_POST_URL i koden.");
+        return;
+      }
 
       const err1 = validateStep1();
       if(err1){
@@ -858,36 +836,35 @@
         return;
       }
 
-      const btn = $("primaryAction");
-      const prevText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = "Sender rapport...";
+      $("primaryAction").disabled = true;
+      $("primaryAction").textContent = "Sender rapport...";
 
-      try{
-        const response = await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(buildPayload())
-        });
+      $("sendForm").action = FORM_POST_URL;
+      fillHiddenPostFields();
+      $("sendForm").submit();
 
-        const result = await response.json();
+      // fallback hvis backend ikke svarer med postMessage
+      setTimeout(function(){
+        $("primaryAction").disabled = false;
+        if(currentStep() === 2 && !$("thanksWrap").classList.contains("hidden")) return;
+        $("primaryAction").textContent = "Send rapport";
+      }, 8000);
+    }
 
-        if(!result.success){
-          throw new Error(result.message || "Ukendt fejl");
-        }
+    function resetAll(){
+      [
+        "name","department","dateField",
+        "rateDay","expDay","opsDay","incDay","teamDay",
+        "rateEve","expEve","opsEve","incEve","teamEve","needs"
+      ].forEach(id => setVal(id, ""));
 
-        localStorage.removeItem(STORAGE_KEY);
-        $("formWrap").classList.add("hidden");
-        $("thanksWrap").classList.remove("hidden");
-        $("actionsSticky").classList.add("hidden");
-
-      } catch(err){
-        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
-        btn.disabled = false;
-        btn.textContent = prevText;
-      }
+      $("dateField").value = nowLocalString();
+      localStorage.removeItem(STORAGE_KEY);
+      $("draftPill").classList.add("hidden");
+      updateRatingUI("rateDay");
+      updateRatingUI("rateEve");
+      setStep(1);
+      clearError();
     }
 
     function bindAutosave(){
@@ -926,7 +903,7 @@
 
       if(currentStep() === 1){
         if(confirm("Vil du nulstille rapporten?")){
-          resetFormAll();
+          resetAll();
         }
         return;
       }
@@ -936,10 +913,27 @@
     });
 
     $("newReportBtn").addEventListener("click", function(){
-      resetFormAll();
+      resetAll();
       $("thanksWrap").classList.add("hidden");
       $("formWrap").classList.remove("hidden");
       $("actionsSticky").classList.remove("hidden");
+    });
+
+    window.addEventListener("message", function(event){
+      if(!event.data || !event.data.type) return;
+
+      if(event.data.type === "kaiser-report-sent"){
+        localStorage.removeItem(STORAGE_KEY);
+        $("formWrap").classList.add("hidden");
+        $("thanksWrap").classList.remove("hidden");
+        $("actionsSticky").classList.add("hidden");
+      }
+
+      if(event.data.type === "kaiser-report-error"){
+        showError("Der opstod en fejl ved afsendelse. Prøv igen.");
+        $("primaryAction").disabled = false;
+        $("primaryAction").textContent = "Send rapport";
+      }
     });
 
     bindRatings();
