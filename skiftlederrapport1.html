@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Skiftlederrapport</title>
+  <title>Kaiser – Skiftlederrapport V2</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +14,7 @@
     :root{
       --bg:#07070a;
       --panel:rgba(16,16,20,.82);
+      --panel2:rgba(255,255,255,.03);
       --border:rgba(255,255,255,.08);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.62);
@@ -21,62 +22,190 @@
       --gold:#d6b24a;
       --gold2:#b9921f;
       --goldGlow:rgba(214,178,74,.22);
+      --green:#38b26d;
+      --greenGlow:rgba(56,178,109,.16);
     }
 
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    html,body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
     body{
       background:
         radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.14), transparent 55%),
-        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
-        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.06), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(65,108,180,0.14), transparent 50%),
+        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
         linear-gradient(180deg, #07070a, #090a10 55%, #07070a);
     }
+
     body:before{
-      content:"";position:fixed;inset:0;pointer-events:none;
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-      opacity:.10;mix-blend-mode:overlay;
+      opacity:.10;
+      mix-blend-mode:overlay;
     }
 
-    .shell{max-width:820px}
+    .shell{max-width:920px}
+
     .topbar{
       border:1px solid var(--border);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-      border-radius:20px;padding:18px 18px;backdrop-filter: blur(10px);
-      box-shadow:0 28px 70px rgba(0,0,0,.55);text-align:center;
+      border-radius:24px;
+      padding:22px 20px;
+      backdrop-filter: blur(12px);
+      box-shadow:0 28px 70px rgba(0,0,0,.55);
+      text-align:center;
     }
-    .brand-kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
-    .brand-title{font-family:"Playfair Display",serif;font-size:30px;line-height:1.08;letter-spacing:-0.015em;font-weight:700;margin-top:6px;}
-    .brand-meta{color:var(--muted);font-weight:600;font-size:13px;margin-top:8px;}
-    .goldline{height:2px;margin-top:14px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+
+    .brand-kicker{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:800;
+    }
+
+    .brand-title{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(34px, 5vw, 56px);
+      line-height:1.02;
+      letter-spacing:-0.02em;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .brand-meta{
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+      margin-top:10px;
+    }
+
+    .goldline{
+      height:2px;
+      margin-top:18px;
+      border-radius:999px;
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);
+      opacity:.9;
+    }
 
     .panel{
-      background:var(--panel);border:1px solid var(--border);border-radius:20px;
-      box-shadow:0 26px 72px rgba(0,0,0,.58);backdrop-filter: blur(12px);
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:0 26px 72px rgba(0,0,0,.58);
+      backdrop-filter: blur(12px);
     }
+
+    .subpanel{
+      background:var(--panel2);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:18px;
+      padding:18px;
+    }
+
     .divider{height:1px;background:rgba(255,255,255,.08);}
 
-    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select, textarea{
-      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.11);
-      background:rgba(255,255,255,0.04);padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
+    .label{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
     }
+
+    .input, select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.11);
+      background:rgba(255,255,255,0.04);
+      padding:14px 14px;
+      outline:none;
+      color:rgba(255,255,255,0.92);
+    }
+
     select option{color:#0b0c0f;}
+
     .input:focus, select:focus, textarea:focus{
       border-color: rgba(214,178,74,0.55);
       box-shadow: 0 0 0 4px var(--goldGlow);
       background: rgba(255,255,255,0.06);
     }
 
-    .btn{width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;transition:transform .08s ease,filter .18s ease;user-select:none;}
+    .btn{
+      border-radius:16px;
+      font-weight:900;
+      letter-spacing:.02em;
+      padding:14px 16px;
+      transition:transform .08s ease,filter .18s ease,background .2s ease;
+      user-select:none;
+    }
+
     .btn:active{transform:translateY(1px);}
-    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow:0 18px 40px rgba(214,178,74,0.18);
+    }
+
     .btn-primary:hover{filter:brightness(1.04);}
-    .btn-secondary{background: rgba(255,255,255,0.04);border: 1px solid rgba(255,255,255,0.12);color: rgba(255,255,255,0.88);}
-    .btn-secondary:hover{ background: rgba(255,255,255,0.06); }
+
+    .btn-secondary{
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.88);
+    }
+
+    .btn-secondary:hover{background: rgba(255,255,255,0.06);}
+
+    .btn-success{
+      background: linear-gradient(135deg, #46c27b, #2f9d61);
+      color: white;
+      box-shadow:0 18px 40px rgba(56,178,109,.18);
+    }
+
+    .btn-success:hover{filter:brightness(1.04);}
 
     .muted{color:var(--muted);font-weight:600;font-size:13px;}
     .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
-    .blockTitle{font-size:16px;font-weight:900;letter-spacing:-0.01em;}
+    .blockTitle{font-size:18px;font-weight:900;letter-spacing:-0.01em;}
+
+    .step-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid rgba(214,178,74,.18);
+      background:rgba(214,178,74,.08);
+      color:#f3d98c;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(56,178,109,.18);
+      background:rgba(56,178,109,.08);
+      color:#8ce1af;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+
+    .hidden-step{display:none;}
   </style>
 </head>
 
@@ -84,13 +213,12 @@
   <div class="shell w-full">
 
     <header class="topbar mt-6 mb-5">
-      <div class="brand-kicker">KAISER</div>
-      <div class="brand-title">Skiftlederrapport</div>
-      <div class="brand-meta">Daglig drift og kvalitet – pr. afdeling</div>
+      <div class="brand-kicker">KAISER DIGITAL OPERATIONS</div>
+      <div class="brand-title">Skiftlederrapport V2</div>
+      <div class="brand-meta">Gem frokost først. Udfyld aften bagefter. Send samlet til sidst.</div>
       <div class="goldline"></div>
     </header>
 
-    <!-- FORM -->
     <section id="formWrap" class="space-y-4">
       <form
         id="reportForm"
@@ -98,17 +226,23 @@
         method="POST"
         action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b"
       >
-        <!-- FormSubmit settings -->
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="box">
         <input type="hidden" name="_subject" id="subjectField" value="Skiftleder rapport – Afdeling – YYYY-MM-DD">
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="text" name="_honey" style="display:none">
-
-        <!-- Kun dette felt sendes => mailen er ens hver gang -->
         <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
-        <!-- Stamdata -->
+        <!-- TOP STATUS -->
+        <section class="panel p-5 space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div class="step-pill" id="stepPill">Step 1 af 2 · Frokost</div>
+            <div class="status-pill hidden" id="draftPill">Kladde gemt lokalt</div>
+          </div>
+          <div class="muted">Først udfylder du stamdata og frokost. Derefter gemmer du og går videre til aften. Rapporten sendes først i step 2.</div>
+        </section>
+
+        <!-- STAMDATA -->
         <section class="panel p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div class="blockTitle">Stamdata</div>
@@ -144,113 +278,123 @@
 
             <div class="space-y-2">
               <div class="label">Info</div>
-              <div class="muted">Emne viser afdeling + dato.</div>
+              <div class="muted">Emnet viser afdeling + dato. Kladde gemmes kun lokalt i browseren.</div>
             </div>
           </div>
         </section>
 
-        <!-- Rating -->
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ En rating af dagen fra 1 – 5</div>
-          <div class="divider"></div>
+        <!-- STEP 1 -->
+        <section id="step1" class="space-y-4">
+          <section class="panel p-5 space-y-4">
+            <div class="blockTitle">Brunch / frokost</div>
+            <div class="divider"></div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <select id="rateDay" required>
-                <option value="">Vælg...</option>
-                <option value="1/5">1/5</option>
-                <option value="2/5">2/5</option>
-                <option value="3/5">3/5</option>
-                <option value="4/5">4/5</option>
-                <option value="5/5">5/5</option>
-              </select>
-            </div>
+            <div class="subpanel space-y-4">
+              <div class="space-y-2">
+                <div class="label">En rating af dagen fra 1 – 5</div>
+                <select id="rateDay" required>
+                  <option value="">Vælg...</option>
+                  <option value="1/5">1/5</option>
+                  <option value="2/5">2/5</option>
+                  <option value="3/5">3/5</option>
+                  <option value="4/5">4/5</option>
+                  <option value="5/5">5/5</option>
+                </select>
+              </div>
 
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <select id="rateEve" required>
-                <option value="">Vælg...</option>
-                <option value="1/5">1/5</option>
-                <option value="2/5">2/5</option>
-                <option value="3/5">3/5</option>
-                <option value="4/5">4/5</option>
-                <option value="5/5">5/5</option>
-              </select>
+              <div class="space-y-2">
+                <div class="label">Kommentarer til service, stemning og gæsteoplevelse</div>
+                <textarea id="expDay" rows="4"></textarea>
+              </div>
+
+              <div class="space-y-2">
+                <div class="label">Dagens drift (travlhed, flow, udfordringer)</div>
+                <textarea id="opsDay" rows="4"></textarea>
+              </div>
+
+              <div class="space-y-2">
+                <div class="label">Eventuelle klager eller særlige hændelser</div>
+                <textarea id="incDay" rows="4"></textarea>
+              </div>
+
+              <div class="space-y-2">
+                <div class="label">Teamets præstation</div>
+                <textarea id="teamDay" rows="4"></textarea>
+              </div>
             </div>
-          </div>
+          </section>
+
+          <section class="panel p-5 space-y-4">
+            <div class="flex flex-col md:flex-row gap-3">
+              <button id="saveStep1Btn" class="btn btn-success w-full" type="button">
+                Gem frokost og fortsæt til aften
+              </button>
+            </div>
+          </section>
         </section>
 
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Kommentarer til service, stemning og gæsteoplevelse</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="expDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="expEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
+        <!-- STEP 2 -->
+        <section id="step2" class="space-y-4 hidden-step">
+          <section class="panel p-5 space-y-4">
+            <div class="blockTitle">Aften</div>
+            <div class="divider"></div>
 
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Dagens drift (travlhed, flow, udfordringer)</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="opsDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="opsEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
+            <div class="subpanel space-y-4">
+              <div class="space-y-2">
+                <div class="label">En rating af dagen fra 1 – 5</div>
+                <select id="rateEve" required>
+                  <option value="">Vælg...</option>
+                  <option value="1/5">1/5</option>
+                  <option value="2/5">2/5</option>
+                  <option value="3/5">3/5</option>
+                  <option value="4/5">4/5</option>
+                  <option value="5/5">5/5</option>
+                </select>
+              </div>
 
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Eventuelle klager eller særlige hændelser</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="incDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="incEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
+              <div class="space-y-2">
+                <div class="label">Kommentarer til service, stemning og gæsteoplevelse</div>
+                <textarea id="expEve" rows="4"></textarea>
+              </div>
 
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Teamets præstation (ros eller udfordringer i det samlet team)</div>
-          <div class="divider"></div>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Brunch / frokost</div>
-              <textarea id="teamDay" rows="4"></textarea>
-            </div>
-            <div class="space-y-2">
-              <div class="label">Aften</div>
-              <textarea id="teamEve" rows="4"></textarea>
-            </div>
-          </div>
-        </section>
+              <div class="space-y-2">
+                <div class="label">Dagens drift (travlhed, flow, udfordringer)</div>
+                <textarea id="opsEve" rows="4"></textarea>
+              </div>
 
-        <section class="panel p-5 space-y-4">
-          <div class="blockTitle">☐ Mangler/afvigelser og behov for bestilling</div>
-          <div class="divider"></div>
-          <div class="space-y-2">
-            <div class="label">Noter</div>
-            <textarea id="needs" rows="5"></textarea>
-          </div>
-        </section>
+              <div class="space-y-2">
+                <div class="label">Eventuelle klager eller særlige hændelser</div>
+                <textarea id="incEve" rows="4"></textarea>
+              </div>
 
-        <button id="submitBtn" class="btn btn-primary" type="submit">Send rapport</button>
+              <div class="space-y-2">
+                <div class="label">Teamets præstation</div>
+                <textarea id="teamEve" rows="4"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel p-5 space-y-4">
+            <div class="blockTitle">Afsluttende noter</div>
+            <div class="divider"></div>
+
+            <div class="space-y-2">
+              <div class="label">Mangler/afvigelser og behov for bestilling</div>
+              <textarea id="needs" rows="5"></textarea>
+            </div>
+          </section>
+
+          <section class="panel p-5 space-y-4">
+            <div class="flex flex-col md:flex-row gap-3">
+              <button id="backToStep1Btn" class="btn btn-secondary w-full" type="button">
+                Tilbage til frokost
+              </button>
+              <button id="submitBtn" class="btn btn-primary w-full" type="submit">
+                Send samlet rapport
+              </button>
+            </div>
+          </section>
+        </section>
       </form>
     </section>
 
@@ -262,8 +406,8 @@
         <div id="quoteText" class="muted" style="margin-top:6px;"></div>
 
         <div class="pt-2 space-y-3">
-          <a class="btn btn-primary inline-block text-center" href="./skiftlederrapport1.html">Ny rapport</a>
-          <button id="btnClose" class="btn btn-secondary" type="button">Luk</button>
+          <a class="btn btn-primary inline-block text-center w-full" href="./skiftlederrapport-v2.html">Ny rapport</a>
+          <button id="btnClose" class="btn btn-secondary w-full" type="button">Luk</button>
         </div>
       </div>
     </section>
@@ -280,10 +424,18 @@
       "Det du måler, kan du forbedre."
     ];
 
+    var STORAGE_KEY = "kaiser_skiftlederrapport_v2";
+
     function val(id){
       var el = document.getElementById(id);
       return (el && el.value ? el.value : "").trim();
     }
+
+    function setVal(id, value){
+      var el = document.getElementById(id);
+      if (el) el.value = value || "";
+    }
+
     function line(label, value){
       return label + ": " + (value ? value : "-");
     }
@@ -295,78 +447,219 @@
       return local.toISOString().slice(0,10);
     }
 
-    // auto dato
-    document.getElementById("dateField").value = new Date().toLocaleString("da-DK");
+    function nowLocalString(){
+      return new Date().toLocaleString("da-DK");
+    }
 
-    // redirect -> samme fil
-    document.getElementById("nextField").value =
-      window.location.origin + window.location.pathname + "?sent=1";
-
-    // subject med afdeling + dato
-    var subjectField = document.getElementById("subjectField");
     function updateSubject(){
       var afd = val("department") || "Afdeling";
       var dato = localISODate();
-      subjectField.value = "Skiftleder rapport – " + afd + " – " + dato;
+      document.getElementById("subjectField").value = "Skiftleder rapport – " + afd + " – " + dato;
     }
-    document.getElementById("department").addEventListener("change", updateSubject);
-    updateSubject();
 
-    // build rapport-tekst + disable submit (undgå dobbeltklik)
-    var form = document.getElementById("reportForm");
-    form.addEventListener("submit", function(){
-      updateSubject();
-      var btn = document.getElementById("submitBtn");
-      if (btn) { btn.disabled = true; btn.textContent = "Sender..."; }
+    function showStep(step){
+      var step1 = document.getElementById("step1");
+      var step2 = document.getElementById("step2");
+      var stepPill = document.getElementById("stepPill");
 
+      if (step === 1){
+        step1.classList.remove("hidden-step");
+        step2.classList.add("hidden-step");
+        stepPill.textContent = "Step 1 af 2 · Frokost";
+      } else {
+        step1.classList.add("hidden-step");
+        step2.classList.remove("hidden-step");
+        stepPill.textContent = "Step 2 af 2 · Aften";
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function saveDraft(showBadge){
+      var data = {
+        name: val("name"),
+        department: val("department"),
+        dateField: document.getElementById("dateField").value,
+
+        rateDay: val("rateDay"),
+        expDay: val("expDay"),
+        opsDay: val("opsDay"),
+        incDay: val("incDay"),
+        teamDay: val("teamDay"),
+
+        rateEve: val("rateEve"),
+        expEve: val("expEve"),
+        opsEve: val("opsEve"),
+        incEve: val("incEve"),
+        teamEve: val("teamEve"),
+
+        needs: val("needs"),
+        currentStep: document.getElementById("step2").classList.contains("hidden-step") ? 1 : 2
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+      if (showBadge){
+        document.getElementById("draftPill").classList.remove("hidden");
+      }
+    }
+
+    function loadDraft(){
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+
+      try{
+        var data = JSON.parse(raw);
+
+        setVal("name", data.name);
+        setVal("department", data.department);
+        if (data.dateField) setVal("dateField", data.dateField);
+
+        setVal("rateDay", data.rateDay);
+        setVal("expDay", data.expDay);
+        setVal("opsDay", data.opsDay);
+        setVal("incDay", data.incDay);
+        setVal("teamDay", data.teamDay);
+
+        setVal("rateEve", data.rateEve);
+        setVal("expEve", data.expEve);
+        setVal("opsEve", data.opsEve);
+        setVal("incEve", data.incEve);
+        setVal("teamEve", data.teamEve);
+
+        setVal("needs", data.needs);
+
+        document.getElementById("draftPill").classList.remove("hidden");
+
+        if (data.currentStep === 2){
+          showStep(2);
+        }
+      } catch(e){}
+    }
+
+    function validateStep1(){
+      if (!val("name")){
+        alert("Udfyld navn.");
+        return false;
+      }
+      if (!val("department")){
+        alert("Vælg afdeling.");
+        return false;
+      }
+      if (!val("rateDay")){
+        alert("Vælg en rating for brunch / frokost.");
+        return false;
+      }
+      return true;
+    }
+
+    function validateStep2(){
+      if (!val("rateEve")){
+        alert("Vælg en rating for aften.");
+        return false;
+      }
+      return true;
+    }
+
+    function buildReport(){
       var navn = val("name");
       var afdeling = val("department");
       var dato = document.getElementById("dateField").value;
 
-      var report =
+      return (
         "Skiftleder rapport – " + (afdeling || "Afdeling") + "\n\n" +
         "Navn: " + (navn || "-") + "\n" +
         "Afdeling: " + (afdeling || "-") + "\n" +
         "Dato: " + (dato || "-") + "\n\n" +
 
-        "☐ En rating af dagen fra 1 – 5\n" +
-        line("Brunch/frokost", val("rateDay")) + "\n" +
-        line("Aften", val("rateEve")) + "\n\n" +
+        "☐ BRUNCH / FROKOST\n" +
+        line("Rating", val("rateDay")) + "\n" +
+        line("Service, stemning og gæsteoplevelse", val("expDay")) + "\n" +
+        line("Dagens drift", val("opsDay")) + "\n" +
+        line("Klager eller særlige hændelser", val("incDay")) + "\n" +
+        line("Teamets præstation", val("teamDay")) + "\n\n" +
 
-        "☐ Kommentarer til service, stemning og gæsteoplevelse\n" +
-        line("Brunch/frokost", val("expDay")) + "\n" +
-        line("Aften", val("expEve")) + "\n\n" +
+        "☐ AFTEN\n" +
+        line("Rating", val("rateEve")) + "\n" +
+        line("Service, stemning og gæsteoplevelse", val("expEve")) + "\n" +
+        line("Dagens drift", val("opsEve")) + "\n" +
+        line("Klager eller særlige hændelser", val("incEve")) + "\n" +
+        line("Teamets præstation", val("teamEve")) + "\n\n" +
 
-        "☐ Dagens drift (travlhed, flow, udfordringer)\n" +
-        line("Brunch/frokost", val("opsDay")) + "\n" +
-        line("Aften", val("opsEve")) + "\n\n" +
+        "☐ MANGLER / AFVIGELSER / BESTILLING\n" +
+        (val("needs") || "-") + "\n"
+      );
+    }
 
-        "☐ Eventuelle klager eller særlige hændelser\n" +
-        line("Brunch/frokost", val("incDay")) + "\n" +
-        line("Aften", val("incEve")) + "\n\n" +
+    document.getElementById("dateField").value = nowLocalString();
 
-        "☐ Teamets præstation (ros eller udfordringer i det samlet team)\n" +
-        line("Brunch/frokost", val("teamDay")) + "\n" +
-        line("Aften", val("teamEve")) + "\n\n" +
+    document.getElementById("nextField").value =
+      window.location.origin + window.location.pathname + "?sent=1";
 
-        "☐ Mangler/afvigelser og behov for bestilling\n" +
-        (val("needs") || "-") + "\n";
-
-      document.getElementById("reportPayload").value = report;
+    document.getElementById("department").addEventListener("change", function(){
+      updateSubject();
+      saveDraft(false);
     });
 
-    // Takkevisning
+    [
+      "name","rateDay","expDay","opsDay","incDay","teamDay",
+      "rateEve","expEve","opsEve","incEve","teamEve","needs"
+    ].forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", function(){ saveDraft(false); });
+      el.addEventListener("change", function(){ saveDraft(false); });
+    });
+
+    updateSubject();
+    loadDraft();
+
+    document.getElementById("saveStep1Btn").addEventListener("click", function(){
+      updateSubject();
+
+      if (!validateStep1()) return;
+
+      saveDraft(true);
+      showStep(2);
+    });
+
+    document.getElementById("backToStep1Btn").addEventListener("click", function(){
+      saveDraft(true);
+      showStep(1);
+    });
+
+    var form = document.getElementById("reportForm");
+    form.addEventListener("submit", function(e){
+      updateSubject();
+
+      if (!validateStep1() || !validateStep2()){
+        e.preventDefault();
+        return;
+      }
+
+      var btn = document.getElementById("submitBtn");
+      if (btn){
+        btn.disabled = true;
+        btn.textContent = "Sender...";
+      }
+
+      document.getElementById("reportPayload").value = buildReport();
+
+      localStorage.removeItem(STORAGE_KEY);
+    });
+
     var params = new URLSearchParams(window.location.search);
     if (params.get("sent") === "1") {
       document.getElementById("formWrap").classList.add("hidden");
       document.getElementById("thanksWrap").classList.remove("hidden");
       document.getElementById("quoteText").textContent =
         "“" + QUOTES[Math.floor(Math.random() * QUOTES.length)] + "”";
+      localStorage.removeItem(STORAGE_KEY);
     }
 
     document.getElementById("btnClose").addEventListener("click", function(){
       try { window.close(); } catch(e) {}
-      window.location.href = "./skiftlederrapport1.html";
+      window.location.href = "./skiftlederrapport-v2.html";
     });
   </script>
 </body>
