@@ -3,756 +3,420 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Kaiser – Allergiassistent</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <title>Allergiassistent</title>
 
   <style>
-    :root{
-      --bg0:#0a0e14;
-      --bg1:#111823;
-      --panel:rgba(255,255,255,0.05);
-      --panel2:rgba(255,255,255,0.035);
-      --line:rgba(255,255,255,0.10);
-      --line2:rgba(255,255,255,0.07);
-      --text:rgba(255,255,255,0.97);
-      --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.54);
-      --gold:#d6b24a;
-      --green:#62d26f;
-      --red:#ff6b6b;
-      --blue:#5ea7ff;
-      --warn:#f59e0b;
-      --shadow:0 24px 70px rgba(0,0,0,.42);
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #0b0f1a, #111827);
+      color: white;
     }
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{
-      min-height:100vh;
-      font-family:Inter,system-ui,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.11), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.08), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
-      padding:14px;
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255,255,255,0.02);
     }
 
-    .shell{max-width:1100px;margin:0 auto;}
-
-    .hero{
-      border-radius:28px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow:var(--shadow);
-      padding:24px 18px 18px;
-      text-align:center;
+    .header {
+      padding: 18px 16px 10px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 0;
+      background: rgba(11,15,26,0.92);
+      backdrop-filter: blur(14px);
+      z-index: 5;
     }
 
-    .kicker{
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.26em;
-      text-transform:uppercase;
-      color:var(--muted2);
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
     }
 
-    .title{
-      margin-top:8px;
-      font-family:"Playfair Display",serif;
-      font-size:clamp(34px,6vw,56px);
-      line-height:1;
-      letter-spacing:-.03em;
+    .sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
     }
 
-    .sub{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:14px;
-      font-weight:800;
-      line-height:1.5;
+    .toolbar {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(255,255,255,0.02);
     }
 
-    .goldline{
-      height:2px;
-      margin:18px auto 0;
-      max-width:760px;
-      border-radius:999px;
-      background:linear-gradient(90deg,transparent,var(--gold),var(--blue),transparent);
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
     }
 
-    .section{
-      margin-top:14px;
-      border-radius:24px;
-      border:1px solid var(--line);
-      background:var(--panel2);
-      overflow:hidden;
-      box-shadow:var(--shadow);
+    .quick-actions button {
+      background: #1c2233;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 20px;
+      color: white;
+      white-space: nowrap;
+      font-size: 14px;
+      cursor: pointer;
     }
 
-    .sectionHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:14px 18px;
-      background:rgba(255,255,255,0.03);
-      border-bottom:1px solid var(--line2);
-      flex-wrap:wrap;
+    .quick-actions button:hover {
+      background: #27314a;
     }
 
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:var(--muted);
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
     }
 
-    .sectionDot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--gold);
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .sectionInfo{
-      font-size:12px;
-      font-weight:800;
-      color:var(--muted2);
+    .msg {
+      padding: 12px 14px;
+      border-radius: 16px;
+      max-width: 86%;
+      white-space: pre-line;
+      line-height: 1.45;
+      font-size: 14px;
     }
 
-    .sectionBody{padding:16px;}
-
-    .quickRow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
+    .user {
+      background: #2a6df4;
+      margin-left: auto;
     }
 
-    .quickBtn{
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      cursor:pointer;
+    .bot {
+      background: #1c2233;
+      margin-right: auto;
     }
 
-    .chatBox{
-      border-radius:22px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      min-height:420px;
-      max-height:70vh;
-      overflow:auto;
-      padding:16px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
+    .input-bar {
+      display: flex;
+      padding: 10px;
+      gap: 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(11,15,26,0.96);
     }
 
-    .msg{
-      max-width:84%;
-      border-radius:20px;
-      padding:14px 16px;
-      line-height:1.55;
-      white-space:pre-line;
+    .input-bar input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      background: white;
+      color: black;
     }
 
-    .msg.user{
-      align-self:flex-end;
-      background:linear-gradient(180deg, rgba(94,167,255,0.22), rgba(94,167,255,0.12));
-      border:1px solid rgba(94,167,255,0.28);
+    .input-bar button {
+      background: #f5c542;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    .msg.bot{
-      align-self:flex-start;
-      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      border:1px solid rgba(255,255,255,0.10);
-    }
-
-    .msgLabel{
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      margin-bottom:6px;
-    }
-
-    .msgText{
-      font-size:14px;
-      font-weight:700;
-      color:var(--text);
-    }
-
-    .replyCards{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-
-    @media (max-width: 900px){
-      .replyCards{grid-template-columns:1fr;}
-      .msg{max-width:100%;}
-    }
-
-    .replyCard{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.09);
-      background:rgba(255,255,255,0.04);
-      padding:12px;
-    }
-
-    .replyHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:10px;
-    }
-
-    .replyTitle{
-      font-size:13px;
-      font-weight:900;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      font-size:10px;
-      font-weight:900;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-
-    .badge.green{
-      background:rgba(98,210,111,0.14);
-      border-color:rgba(98,210,111,0.35);
-      color:#dff7e2;
-    }
-
-    .badge.warn{
-      background:rgba(245,158,11,0.14);
-      border-color:rgba(245,158,11,0.35);
-      color:#ffe9b0;
-    }
-
-    .badge.red{
-      background:rgba(255,107,107,0.14);
-      border-color:rgba(255,107,107,0.35);
-      color:#ffd0d0;
-    }
-
-    .dishList{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .dish{
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:rgba(255,255,255,0.05);
-      padding:10px;
-    }
-
-    .dishName{
-      font-size:13px;
-      font-weight:900;
-    }
-
-    .dishMeta{
-      margin-top:4px;
-      font-size:11px;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    .inputBar{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:12px;
-    }
-
-    .chatInput{
-      width:100%;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      color:var(--text);
-      padding:16px;
-      outline:none;
-      font-size:15px;
-      font-weight:700;
-    }
-
-    .sendBtn{
-      border:none;
-      border-radius:18px;
-      padding:0 18px;
-      min-width:120px;
-      background:linear-gradient(135deg, var(--gold), #f3d47c);
-      color:#161616;
-      font-size:13px;
-      font-weight:900;
-      text-transform:uppercase;
-      cursor:pointer;
-    }
-
-    @media (max-width: 700px){
-      .inputBar{grid-template-columns:1fr;}
-      .sendBtn{min-height:52px;}
-    }
-
-    .mutedHelp{
-      margin-top:8px;
-      color:var(--muted2);
-      font-size:12px;
-      font-weight:700;
+    .footer-note {
+      padding: 8px 12px 12px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="shell">
+  <div class="app">
+    <div class="header">
+      <h1>Allergiassistent</h1>
+      <div class="sub">Hurtigt svar til service og buffet</div>
+    </div>
 
-    <section class="hero">
-      <div class="kicker">KAISER</div>
-      <div class="title">Allergiassistent</div>
-      <div class="sub">
-        Skriv fx: “Min gæst har glutenallergi”<br>
-        og få et hurtigt svar på hvilke retter der kan anbefales.
-      </div>
-      <div class="goldline"></div>
-    </section>
+    <div class="toolbar">
+      <div class="quick-actions" id="allergi-knapper"></div>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Hurtige forslag</div>
-        <div class="sectionInfo">Tryk eller skriv selv</div>
-      </div>
-      <div class="sectionBody">
-        <div class="quickRow" id="quickActions"></div>
-      </div>
-    </section>
+      <label class="toggle">
+        <input type="checkbox" id="sikkerMode">
+        🔒 Kun 100% sikre
+      </label>
+    </div>
 
-    <section class="section">
-      <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Chat</div>
-        <div class="sectionInfo">Spørg om allergener og retter</div>
-      </div>
-      <div class="sectionBody">
-        <div class="chatBox" id="chatBox"></div>
+    <div id="chat" class="chat"></div>
 
-        <div class="inputBar">
-          <input id="chatInput" class="chatInput" placeholder="Skriv fx: Min gæst har glutenallergi" />
-          <button id="sendBtn" class="sendBtn">Send</button>
-        </div>
+    <div class="input-bar">
+      <input id="input" placeholder="Skriv fx: gluten og laktose" />
+      <button id="sendBtn">Send</button>
+    </div>
 
-        <div class="mutedHelp">
-          Eksempler: “Hvad kan en med laktose spise?”, “Har I noget uden nødder?”, “Min gæst tåler ikke fisk”.
-        </div>
-      </div>
-    </section>
-
+    <div class="footer-note">
+      Kun vejledende. Bekræft altid med køkken ved alvorlig allergi.
+    </div>
   </div>
 
-<script src="./allergi-data.js"></script>
-<script>
-  const $ = id => document.getElementById(id);
+  <script src="./allergi-data.js"></script>
+  <script>
+    const ALLERGENER = [
+      "gluten", "laktose", "æg", "nødder", "jordnødder",
+      "soja", "selleri", "sesamfrø", "lupin", "sulfiter",
+      "bløddyr", "sennep", "fisk", "krebs"
+    ];
 
-  const state = {
-    lastAllergies: [],
-    lastResult: null,
-    lastDish: null
-  };
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+    const quickWrap = document.getElementById("allergi-knapper");
 
-  function escapeHtml(str) {
-    return String(str || "").replace(/[&<>"']/g, c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[c]));
-  }
+    function addMsg(text, type = "bot") {
+      const div = document.createElement("div");
+      div.className = `msg ${type}`;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-  function normalizeValue(v) {
-    return String(v || "").trim().toLowerCase();
-  }
+    function erSikkerMode() {
+      return document.getElementById("sikkerMode").checked;
+    }
 
-  function normalizeText(v) {
-    return String(v || "")
-      .toLowerCase()
-      .replace(/[.,!?]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
+    function findAllergier(text) {
+      const t = String(text || "").toLowerCase();
+      return ALLERGENER.filter(a => t.includes(a));
+    }
 
-  function capitalize(str) {
-    str = String(str || "");
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+    function erBuffetSpørgsmål(text) {
+      const t = String(text || "").toLowerCase();
+      return t.includes("buffet") || t.includes("brunch") || t.includes("station");
+    }
 
-  function getAllergiesFromData() {
-    const rows = window.ALLERGI_DATA || [];
-    const set = new Set();
+    function erSikkerMulti(ret, allergier) {
+      if (!ret.dataKomplet) return false;
 
-    rows.forEach(row => {
-      const allergener = row?.allergener || {};
-      Object.keys(allergener).forEach(key => set.add(key));
-    });
-
-    return [...set];
-  }
-
-  function scrollChatToBottom() {
-    const box = $("chatBox");
-    box.scrollTop = box.scrollHeight;
-  }
-
-  function addUserMessage(text) {
-    const el = document.createElement("div");
-    el.className = "msg user";
-    el.innerHTML = `
-      <div class="msgLabel">Tjener</div>
-      <div class="msgText">${escapeHtml(text)}</div>
-    `;
-    $("chatBox").appendChild(el);
-    scrollChatToBottom();
-  }
-
-  function addBotMessage(text) {
-    const el = document.createElement("div");
-    el.className = "msg bot";
-    el.innerHTML = `
-      <div class="msgLabel">Kaiser</div>
-      <div class="msgText">${text}</div>
-    `;
-    $("chatBox").appendChild(el);
-    scrollChatToBottom();
-  }
-
-  function allergyAliasMap() {
-    return {
-      "gluten": ["gluten", "glutenallergi", "cøliaki", "coeliaki"],
-      "laktose": ["laktose", "laktoseallergi", "laktoseintolerans", "mælk", "mejeri"],
-      "nødder": ["nødder", "nøddeallergi", "noedder"],
-      "æg": ["æg", "aeg", "ægallergi"],
-      "krebs": ["krebs", "krebsdyr", "rejer", "krabbe", "hummer"],
-      "fisk": ["fisk", "fiskeallergi"],
-      "jordnødder": ["jordnødder", "jordnoedder", "peanuts", "peanut"],
-      "soja": ["soja", "soy"],
-      "selleri": ["selleri"],
-      "sesamfrø": ["sesamfrø", "sesamfro", "sesam"],
-      "lupin": ["lupin"],
-      "sulfiter": ["sulfiter", "sulfit"],
-      "bløddyr": ["bløddyr", "bloeddyr", "muslinger", "østers", "oesters"],
-      "sennep": ["sennep"]
-    };
-  }
-
-  function detectAllergiesFromMessage(message) {
-    const text = normalizeText(message);
-    const aliasMap = allergyAliasMap();
-    const found = [];
-
-    Object.keys(aliasMap).forEach(allergy => {
-      const aliases = aliasMap[allergy];
-      if (aliases.some(alias => text.includes(normalizeText(alias)))) {
-        found.push(allergy);
-      }
-    });
-
-    return [...new Set(found)];
-  }
-
-  function findDishByMessage(message) {
-    const text = normalizeText(message);
-    const rows = window.ALLERGI_DATA || [];
-
-    let bestMatch = null;
-    let bestLength = 0;
-
-    rows.forEach(row => {
-      const dish = normalizeText(row.ret);
-      if (!dish) return;
-
-      if (text.includes(dish) && dish.length > bestLength) {
-        bestMatch = row;
-        bestLength = dish.length;
-      }
-    });
-
-    return bestMatch;
-  }
-
-  function getDishStatusForAllergy(row, allergy) {
-    return normalizeValue(row?.allergener?.[allergy]);
-  }
-
-  function getResultsForAllergies(allergies) {
-    const rows = window.ALLERGI_DATA || [];
-    const safe = [];
-    const trace = [];
-    const avoid = [];
-
-    rows.forEach(row => {
-      const values = allergies.map(allergy => getDishStatusForAllergy(row, allergy));
-
-      if (values.some(v => v === "ja")) {
-        avoid.push(row);
-      } else if (values.some(v => v === "spor af")) {
-        trace.push(row);
-      } else if (values.every(v => v === "nej")) {
-        safe.push(row);
-      }
-    });
-
-    return { safe, trace, avoid };
-  }
-
-  function formatDishList(items, limit = 5, withSuggestions = false, allergies = []) {
-    if (!items.length) return "Ingen fundet.";
-
-    return items.slice(0, limit).map((item, index) => {
-      let line = `${index + 1}. ${item.ret}`;
-
-      if (withSuggestions) {
-        const suggestion = getModificationSuggestion(item, allergies);
-        if (suggestion) line += ` (${suggestion})`;
+      for (let allergi of allergier) {
+        if (ret.allergener?.[allergi]) return false;
+        if (ret.sporAf?.includes(allergi)) return false;
       }
 
-      return line;
-    }).join("\n");
-  }
+      if (ret.køkkenRisiko) return false;
 
-  function getModificationSuggestion(row, allergies) {
-    const name = normalizeText(row?.ret || "");
-    const suggestions = [];
+      return true;
+    }
 
-    allergies.forEach(allergy => {
-      const status = getDishStatusForAllergy(row, allergy);
+    function erBuffetSikkerMulti(ret, allergier) {
+      if (!ret.dataKomplet) return false;
+      if (!ret.buffet) return false;
 
-      if (status !== "ja") return;
-
-      if (allergy === "gluten") {
-        if (name.includes("cæsar") || name.includes("caesar")) suggestions.push("muligvis uden croutoner");
-        else if (name.includes("burger")) suggestions.push("muligvis uden bolle");
-        else if (name.includes("sandwich")) suggestions.push("muligvis uden brød");
-        else if (name.includes("salat")) suggestions.push("muligvis uden croutoner eller topping");
+      for (let allergi of allergier) {
+        if (ret.allergener?.[allergi]) return false;
+        if (ret.sporAf?.includes(allergi)) return false;
       }
 
-      if (allergy === "laktose") {
-        if (name.includes("salat")) suggestions.push("muligvis uden dressing eller ost");
-        else if (name.includes("burger")) suggestions.push("muligvis uden ost");
-        else if (name.includes("pasta")) suggestions.push("muligvis uden ost eller flødesauce");
+      if (ret.buffet && ret.køkkenRisiko) return false;
+
+      return true;
+    }
+
+    function findRetterMulti(allergier, sikkerMode = false) {
+      const sikre = [];
+      const tilpas = [];
+      const undgå = [];
+
+      (window.ALLERGI_DATA || []).forEach(ret => {
+        if (sikkerMode) {
+          if (erSikkerMulti(ret, allergier)) {
+            sikre.push(ret.ret);
+          }
+          return;
+        }
+
+        let harAllergi = false;
+
+        for (let allergi of allergier) {
+          if (ret.allergener?.[allergi]) {
+            harAllergi = true;
+          }
+          if (ret.sporAf?.includes(allergi)) {
+            harAllergi = true;
+          }
+        }
+
+        if (!harAllergi) {
+          sikre.push(ret.ret);
+          return;
+        }
+
+        const fixes = (ret.tilpasninger || []).filter(t =>
+          (t.fjerner || []).some(a => allergier.includes(a))
+        );
+
+        if (fixes.length > 0) {
+          tilpas.push({
+            ret: ret.ret,
+            fixes: fixes.map(f => f.tekst)
+          });
+        } else {
+          undgå.push(ret.ret);
+        }
+      });
+
+      return { sikre, tilpas, undgå };
+    }
+
+    function findBuffetMulti(allergier) {
+      const sikre = [];
+
+      (window.ALLERGI_DATA || []).forEach(ret => {
+        if (erBuffetSikkerMulti(ret, allergier)) {
+          sikre.push({
+            ret: ret.ret,
+            station: ret.station || "Ukendt station"
+          });
+        }
+      });
+
+      return sikre;
+    }
+
+    function genererMultiSvar(allergier, data, sikkerMode) {
+      let titel = allergier.join(" + ").toUpperCase();
+      let svar = `${titel}\n\n`;
+
+      if (sikkerMode) {
+        svar += "🔒 100% sikre retter:\n";
+
+        if (data.sikre.length === 0) {
+          svar += "- Ingen sikre retter\n";
+          svar += "\n👉 Anbefaling: Kontakt køkkenet";
+        } else {
+          data.sikre.forEach(r => svar += `- ${r}\n`);
+        }
+
+        return svar;
       }
 
-      if (allergy === "æg") {
-        if (name.includes("burger")) suggestions.push("spørg om mayo kan undlades");
-        if (name.includes("salat")) suggestions.push("spørg om dressing kan serveres ved siden af");
+      if (data.sikre.length) {
+        svar += "✅ Du kan spise:\n";
+        data.sikre.forEach(r => svar += `- ${r}\n`);
+        svar += "\n";
       }
-    });
 
-    return suggestions.length ? suggestions.join(" / ") : "";
-  }
+      if (data.tilpas.length) {
+        svar += "🛠 Kan tilpasses:\n";
+        data.tilpas.forEach(t => {
+          svar += `- ${t.ret} → ${t.fixes.join(", ")}\n`;
+        });
+        svar += "\n";
+      }
 
-  function formatAllergyReply(allergies, result) {
-    const label = allergies.map(capitalize).join(" + ");
+      if (data.undgå.length) {
+        svar += "⛔ Undgå:\n";
+        data.undgå.forEach(r => svar += `- ${r}\n`);
+      }
 
-    return `
-<b>${escapeHtml(label)}</b>
+      if (!data.sikre.length && !data.tilpas.length && !data.undgå.length) {
+        svar += "Ingen retter fundet.";
+      }
 
-Du kan spise:
-${escapeHtml(formatDishList(result.safe, 5, false, allergies))}
+      return svar;
+    }
 
-Mulige tilpasninger:
-${escapeHtml(formatDishList(result.avoid.filter(r => getModificationSuggestion(r, allergies)).slice(0, 3), 3, true, allergies))}
+    function visBuffetSvarMulti(allergier, resultater) {
+      let titel = allergier.join(" + ").toUpperCase();
+      let svar = `${titel} – BUFFET\n\n`;
+      svar += "⚠️ Risiko for krydskontaminering på buffet.\n\n";
+      svar += "🔒 100% sikre buffetretter:\n";
 
-Vil du også have retter med spor af eller retter der bør undgås?
-    `.trim();
-  }
-
-  function formatTraceReply(allergies, result) {
-    const label = allergies.map(capitalize).join(" + ");
-
-    return `
-<b>${escapeHtml(label)}</b>
-
-Retter med spor af:
-${escapeHtml(formatDishList(result.trace, 10, false, allergies))}
-    `.trim();
-  }
-
-  function formatAvoidReply(allergies, result) {
-    const label = allergies.map(capitalize).join(" + ");
-
-    return `
-<b>${escapeHtml(label)}</b>
-
-Bør undgås:
-${escapeHtml(formatDishList(result.avoid, 10, false, allergies))}
-    `.trim();
-  }
-
-  function formatDishReply(row, allergies) {
-    const dishName = row.ret;
-    const lines = [`<b>${escapeHtml(dishName)}</b>`];
-
-    allergies.forEach(allergy => {
-      const status = getDishStatusForAllergy(row, allergy);
-
-      if (status === "ja") {
-        lines.push(`${capitalize(allergy)}: Indeholder`);
-      } else if (status === "nej") {
-        lines.push(`${capitalize(allergy)}: Nej`);
-      } else if (status === "spor af") {
-        lines.push(`${capitalize(allergy)}: Spor af`);
+      if (!resultater.length) {
+        svar += "- Ingen sikre buffetretter fundet\n";
+        svar += "\n👉 Anbefaling: Kontakt køkkenet";
       } else {
-        lines.push(`${capitalize(allergy)}: Ukendt`);
+        resultater.forEach(r => {
+          svar += `- ${r.ret} (${r.station})\n`;
+        });
       }
 
-      const suggestion = getModificationSuggestion(row, [allergy]);
-      if (suggestion) {
-        lines.push(`Forslag: ${suggestion}`);
+      addMsg(svar, "bot");
+    }
+
+    function sendSvar(text) {
+      const allergier = findAllergier(text);
+
+      if (allergier.length === 0) {
+        addMsg("⚠️ Kunne ikke finde allergi", "bot");
+        return;
       }
-    });
 
-    lines.push(`Kategori: ${escapeHtml(row.kategori || "Ukendt")}`);
-    lines.push(`Bekræft altid med køkkenet ved ændringer.`);
+      const sikkerMode = erSikkerMode();
 
-    return lines.join("\n");
-  }
+      if (erBuffetSpørgsmål(text)) {
+        const resultater = findBuffetMulti(allergier);
+        visBuffetSvarMulti(allergier, resultater);
+        return;
+      }
 
-  function wantsTrace(message) {
-    const text = normalizeText(message);
-    return text.includes("spor af") || text === "ja" || text === "ja tak";
-  }
-
-  function wantsAvoid(message) {
-    const text = normalizeText(message);
-    return text.includes("undgå") || text.includes("undga") || text.includes("må ikke");
-  }
-
-  function handleFollowUp(message) {
-    if (!state.lastAllergies.length || !state.lastResult) return false;
-
-    if (wantsTrace(message)) {
-      addBotMessage(formatTraceReply(state.lastAllergies, state.lastResult));
-      return true;
+      const data = findRetterMulti(allergier, sikkerMode);
+      const svar = genererMultiSvar(allergier, data, sikkerMode);
+      addMsg(svar, "bot");
     }
 
-    if (wantsAvoid(message)) {
-      addBotMessage(formatAvoidReply(state.lastAllergies, state.lastResult));
-      return true;
-    }
+    function handleSend() {
+      const value = input.value.trim();
+      if (!value) return;
 
-    return false;
-  }
-
-  function handleMessage(message) {
-    const text = String(message || "").trim();
-    if (!text) return;
-
-    addUserMessage(text);
-
-    if (handleFollowUp(text)) return;
-
-    const allergies = detectAllergiesFromMessage(text);
-    const dish = findDishByMessage(text);
-
-    if (dish && allergies.length) {
-      state.lastDish = dish;
-      addBotMessage(formatDishReply(dish, allergies));
-      return;
-    }
-
-    if (allergies.length) {
-      const result = getResultsForAllergies(allergies);
-      state.lastAllergies = allergies;
-      state.lastResult = result;
-      addBotMessage(formatAllergyReply(allergies, result));
-      return;
-    }
-
-    if (dish) {
-      addBotMessage(
-        `<b>${escapeHtml(dish.ret)}</b>\n\nJeg fandt retten, men ikke allergien i beskeden.\n\nPrøv fx:\n- Indeholder ${escapeHtml(dish.ret)} gluten?\n- Kan ${escapeHtml(dish.ret)} laves uden laktose?`
-      );
-      return;
-    }
-
-    addBotMessage(
-      `Jeg kunne ikke forstå spørgsmålet.\n\nPrøv fx:\n- Gluten\n- Gluten og laktose\n- Indeholder Cæsar salat gluten?\n- Kan burger laves uden laktose?`
-    );
-  }
-
-  function buildQuickActions() {
-    const wrap = $("quickActions");
-    const allergies = getAllergiesFromData();
-
-    wrap.innerHTML = "";
-
-    allergies.forEach(allergy => {
-      const btn = document.createElement("button");
-      btn.className = "quickBtn";
-      btn.textContent = capitalize(allergy);
-      btn.addEventListener("click", () => handleMessage(allergy));
-      wrap.appendChild(btn);
-    });
-  }
-
-  function bindEvents() {
-    $("sendBtn").addEventListener("click", () => {
-      const input = $("chatInput");
-      const value = input.value;
+      addMsg(value, "user");
       input.value = "";
-      handleMessage(value);
-      input.focus();
-    });
-
-    $("chatInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        $("sendBtn").click();
-      }
-    });
-  }
-
-  function boot() {
-    if (!Array.isArray(window.ALLERGI_DATA)) {
-      addBotMessage("Data blev ikke fundet. Tjek at allergi-data.js starter med window.ALLERGI_DATA = [...];");
-      return;
+      sendSvar(value);
     }
 
-    buildQuickActions();
-    bindEvents();
+    function buildQuickButtons() {
+      quickWrap.innerHTML = "";
+      ALLERGENER.forEach(allergi => {
+        const btn = document.createElement("button");
+        btn.textContent = allergi.charAt(0).toUpperCase() + allergi.slice(1);
+        btn.dataset.allergi = allergi;
+        btn.addEventListener("click", () => {
+          addMsg(allergi, "user");
+          sendSvar(allergi);
+        });
+        quickWrap.appendChild(btn);
+      });
+    }
 
-    addBotMessage(
-      `Hej.\n\nSkriv fx:\n- Gluten\n- Gluten og laktose\n- Indeholder Cæsar salat gluten?\n- Kan burger laves uden laktose?\n\nSå giver jeg et hurtigt serversvar.`
+    sendBtn.addEventListener("click", handleSend);
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") handleSend();
+    });
+
+    buildQuickButtons();
+
+    addMsg(
+      "Hej.\n\nSkriv fx:\n- gluten\n- gluten og laktose\n- buffet gluten\n\nBrug 🔒 hvis du kun vil se 100% sikre retter.",
+      "bot"
     );
-  }
-
-  boot();
-</script>
+  </script>
 </body>
 </html>
