@@ -546,3 +546,11 @@ function boot() {
 }
 
 document.addEventListener("DOMContentLoaded", boot);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Service worker registreret"))
+      .catch((err) => console.error("SW fejl:", err));
+  });
+}
