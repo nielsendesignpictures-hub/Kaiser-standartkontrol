@@ -1,5 +1,4 @@
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby55riURXo6MQE9K_ptLOj3GlXQgven8opLGOB3mdUdSnAPzrnKhZtZPtjSfkTGP8aC/exec";
-const WEBHOOK_SECRET = "Kaiser-StdKontrol-20260306-a8k3m9q2x1";
+const FORMSUBMIT_EMAIL = "dinmail@eksempel.dk";
 
 const LOCATIONS = [
   "Café Kaiser Helsingør",
@@ -69,7 +68,7 @@ const state = {
   location: "",
   meal: "",
   dish: "",
-  imageBase64: "",
+  imageFile: null,
   tasted: false,
   ratings: {
     taste: 0,
@@ -197,8 +196,8 @@ function populateDishSelect() {
 
   select.innerHTML = `<option value="">Vælg ret...</option>`;
 
-  const filtered = DISHES.filter(d => !state.meal || d.meals.includes(state.meal));
-  filtered.forEach(d => {
+  const filtered = DISHES.filter((d) => !state.meal || d.meals.includes(state.meal));
+  filtered.forEach((d) => {
     const opt = document.createElement("option");
     opt.value = d.name;
     opt.textContent = d.name;
@@ -279,6 +278,7 @@ function initTastedToggle() {
       state.ratings.temperature = 0;
       paintStars();
     }
+
     updateSubmitEnabled();
   });
 }
@@ -287,7 +287,7 @@ function updateSubmitEnabled() {
   const btn = $("btnSubmit");
   if (!btn) return;
 
-  const hasImage = !!state.imageBase64;
+  const hasImage = !!state.imageFile;
   const allRated =
     state.ratings.presentation > 0 &&
     state.ratings.portion > 0 &&
@@ -308,54 +308,21 @@ function initImageUpload() {
 
   imageBox.addEventListener("click", () => input.click());
 
-  input.addEventListener("change", async () => {
+  input.addEventListener("change", () => {
     const file = input.files && input.files[0];
     if (!file) return;
 
-    try {
-      const previewUrl = URL.createObjectURL(file);
-      const img = $("imagePreview");
-      const placeholder = $("imagePlaceholder");
-      if (img) img.src = previewUrl;
-      setHidden(img, false);
-      setHidden(placeholder, true);
+    state.imageFile = file;
 
-      state.imageBase64 = await fileToCompressedDataUrl(file, 900, 0.60);
+    const previewUrl = URL.createObjectURL(file);
+    const img = $("imagePreview");
+    const placeholder = $("imagePlaceholder");
 
-      updateSubmitEnabled();
-    } catch (e) {
-      console.error(e);
-      state.imageBase64 = "";
-      alert("Kunne ikke læse billedet. Prøv igen.");
-      updateSubmitEnabled();
-    }
-  });
-}
+    if (img) img.src = previewUrl;
+    setHidden(img, false);
+    setHidden(placeholder, true);
 
-function fileToCompressedDataUrl(file, maxW, quality) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = reject;
-      img.onload = () => {
-        const ratio = Math.min(1, maxW / img.width);
-        const w = Math.round(img.width * ratio);
-        const h = Math.round(img.height * ratio);
-
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, w, h);
-
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+    updateSubmitEnabled();
   });
 }
 
@@ -381,52 +348,97 @@ function setSubmitting(submitting) {
 function setError(msg) {
   const el = $("submitError");
   if (!el) return;
+
   if (!msg) {
     setHidden(el, true);
     el.textContent = "";
     return;
   }
+
   el.textContent = msg;
   setHidden(el, false);
 }
 
-async function submit() {
+function createHiddenInput(name, value) {
+  const input = document.createElement("input");
+  input.type = "hidden";
+  input.name = name;
+  input.value = value;
+  return input;
+}
+
+function submit() {
   setError("");
-  setSubmitting(true);
 
   try {
-    if (!WEBHOOK_URL || WEBHOOK_URL.includes("INDSAET")) throw new Error("WEBHOOK_URL mangler i app-v3.js");
-    if (!WEBHOOK_SECRET || WEBHOOK_SECRET.includes("INDSAET")) throw new Error("WEBHOOK_SECRET mangler i app-v3.js");
-    if (!state.imageBase64) throw new Error("Billede mangler (krav).");
+    if (!FORMSUBMIT_EMAIL || FORMSUBMIT_EMAIL.includes("dinmail")) {
+      throw new Error("FORMSUBMIT_EMAIL mangler i app-v3.js");
+    }
 
-    const payload = {
-      secret: WEBHOOK_SECRET,
-      lokation: state.location,
-      maaltid: state.meal,
-      ret: state.dish,
-      scoreSmag: state.ratings.taste,
-      scoreAnretning: state.ratings.presentation,
-      scoreTemperatur: state.ratings.temperature,
-      scorePortion: state.ratings.portion,
-      kommentar: state.comment || "",
-      dato: new Date().toLocaleString("da-DK"),
-      billedeBase64: state.imageBase64
-    };
+    if (!state.location) throw new Error("Lokation mangler.");
+    if (!state.meal) throw new Error("Måltid mangler.");
+    if (!state.dish) throw new Error("Ret mangler.");
+    if (!state.imageFile) throw new Error("Billede mangler (krav).");
 
-    console.log("Sender payload:", payload);
+    const allRated =
+      state.ratings.presentation > 0 &&
+      state.ratings.portion > 0 &&
+      state.tasted &&
+      state.ratings.taste > 0 &&
+      state.ratings.temperature > 0;
 
-    await fetch(WEBHOOK_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    });
+    if (!allRated) {
+      throw new Error("Udfyld alle vurderinger før du sender.");
+    }
 
-    showScreen("confirmation");
+    const form = $("hiddenSubmitForm");
+    const originalFileInput = $("imageInput");
+
+    if (!form) {
+      throw new Error("hiddenSubmitForm mangler i HTML.");
+    }
+
+    if (!originalFileInput || !originalFileInput.files || !originalFileInput.files[0]) {
+      throw new Error("Bildefilen kunne ikke findes.");
+    }
+
+    setSubmitting(true);
+
+    form.innerHTML = "";
+    form.action = `https://formsubmit.co/${FORMSUBMIT_EMAIL}`;
+    form.method = "POST";
+    form.enctype = "multipart/form-data";
+
+    form.appendChild(createHiddenInput("_subject", `Ny rating – ${state.location} – ${state.dish}`));
+    form.appendChild(createHiddenInput("_captcha", "false"));
+    form.appendChild(createHiddenInput("_template", "table"));
+    form.appendChild(createHiddenInput("_next", window.location.href));
+
+    form.appendChild(createHiddenInput("Lokation", state.location));
+    form.appendChild(createHiddenInput("Måltid", state.meal));
+    form.appendChild(createHiddenInput("Ret", state.dish));
+    form.appendChild(createHiddenInput("Smag", String(state.ratings.taste)));
+    form.appendChild(createHiddenInput("Anretning", String(state.ratings.presentation)));
+    form.appendChild(createHiddenInput("Temperatur", String(state.ratings.temperature)));
+    form.appendChild(createHiddenInput("Portion", String(state.ratings.portion)));
+    form.appendChild(createHiddenInput("Kommentar", state.comment || ""));
+    form.appendChild(createHiddenInput("Dato", new Date().toLocaleString("da-DK")));
+
+    const fileClone = originalFileInput.cloneNode();
+    fileClone.name = "attachment";
+    fileClone.className = "hidden";
+    form.appendChild(fileClone);
+
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(originalFileInput.files[0]);
+    fileClone.files = dataTransfer.files;
+
+    sessionStorage.setItem("kaiser_formsubmitted", "1");
+    form.submit();
   } catch (err) {
     console.error(err);
-    setError(err?.message || "Kunne ikke sende. Prøv igen.");
-  } finally {
     setSubmitting(false);
+    setError(err?.message || "Kunne ikke sende. Prøv igen.");
   }
 }
 
@@ -446,16 +458,26 @@ function initNavButtons() {
   if (back2) back2.addEventListener("click", () => showScreen("dish"));
 
   const reset = $("btnReset");
-  if (reset) reset.addEventListener("click", () => { resetAll(); showScreen("location"); });
+  if (reset) {
+    reset.addEventListener("click", () => {
+      resetAll();
+      showScreen("location");
+    });
+  }
 
   const close = $("btnClose");
   if (close) close.addEventListener("click", () => window.location.reload());
 }
 
 function resetRatingScreenState() {
-  state.imageBase64 = "";
+  state.imageFile = null;
   state.tasted = false;
-  state.ratings = { taste: 0, presentation: 0, temperature: 0, portion: 0 };
+  state.ratings = {
+    taste: 0,
+    presentation: 0,
+    temperature: 0,
+    portion: 0
+  };
   state.comment = "";
 
   const check = $("tastedCheck");
@@ -465,6 +487,7 @@ function resetRatingScreenState() {
 
   const img = $("imagePreview");
   const placeholder = $("imagePlaceholder");
+  if (img) img.src = "";
   setHidden(img, true);
   setHidden(placeholder, false);
 
@@ -473,6 +496,9 @@ function resetRatingScreenState() {
 
   const comment = $("commentInput");
   if (comment) comment.value = "";
+
+  setError("");
+  updateSubmitEnabled();
 }
 
 function resetAll() {
@@ -484,10 +510,23 @@ function resetAll() {
   const locationSelect = $("locationSelect");
   if (locationSelect) locationSelect.value = "";
 
-  document.querySelectorAll('input[name="meal"]').forEach((i) => (i.checked = false));
+  document.querySelectorAll('input[name="meal"]').forEach((i) => {
+    i.checked = false;
+  });
+
+  const dishSelect = $("dishSelect");
+  if (dishSelect) dishSelect.value = "";
 
   updateNextEnabled();
   setError("");
+}
+
+function handleReturnFromFormSubmit() {
+  const submitted = sessionStorage.getItem("kaiser_formsubmitted");
+  if (submitted === "1") {
+    sessionStorage.removeItem("kaiser_formsubmitted");
+    showScreen("confirmation");
+  }
 }
 
 function boot() {
@@ -503,6 +542,7 @@ function boot() {
   renderRatingBlocks();
   updateSubmitEnabled();
   showScreen("location");
+  handleReturnFromFormSubmit();
 }
 
 document.addEventListener("DOMContentLoaded", boot);
