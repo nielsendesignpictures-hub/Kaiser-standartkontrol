@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brigade – Drift og køkken samlet i ét system</title>
+  <meta name="description" content="Brigade hjælper caféer og restauranter med at samle daglig drift, køkkenstyring, rapportering og kvalitetskontrol på tværs af lokationer." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:rgba(16,16,20,0.82);
+      --border:rgba(255,255,255,0.08);
+      --text:rgba(255,255,255,0.92);
+      --muted:rgba(255,255,255,0.66);
+      --muted2:rgba(255,255,255,0.42);
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+      --goldGlow:rgba(214,178,74,0.18);
+    }
+
+    html,body{
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body{
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.10), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
+        linear-gradient(180deg, #07070a, #090a10 55%, #07070a);
+    }
+
+    .serif{ font-family: "Playfair Display", serif; }
+
+    .panel{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:16px;
+      padding:14px 20px;
+      font-weight:800;
+      transition:.18s ease;
+    }
+
+    .btn-primary{
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color:#0b0c0f;
+      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+    }
+
+    .btn-primary:hover{ filter: brightness(1.04); }
+
+    .btn-secondary{
+      background: rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover{ background: rgba(255,255,255,0.06); }
+
+    .eyebrow{
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:800;
+    }
+
+    .goldline{
+      height:2px;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);
+    }
+
+    .card{
+      background: rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:20px;
+    }
+
+    .muted{ color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+    <!-- NAV -->
+    <header class="flex items-center justify-between mb-8 sm:mb-12">
+      <div>
+        <div class="eyebrow">Hospitality Operations</div>
+        <div class="serif text-3xl sm:text-4xl font-bold tracking-tight">Brigade</div>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-3">
+        <a href="#produkt" class="muted hover:text-white">Produkt</a>
+        <a href="#moduler" class="muted hover:text-white">Moduler</a>
+        <a href="#kontakt" class="btn btn-secondary">Kontakt</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="panel p-6 sm:p-10 lg:p-14">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Drift og køkken samlet ét sted</div>
+
+        <h1 class="serif text-5xl sm:text-6xl lg:text-7xl leading-[0.95] font-bold tracking-tight">
+          Et driftsystem bygget til hospitality.
+        </h1>
+
+        <p class="mt-6 text-lg sm:text-xl leading-relaxed muted max-w-3xl">
+          Brigade hjælper caféer og restauranter med at samle daglige opgaver,
+          køkkenstyring, rapportering og kvalitetskontrol i én samlet platform.
+          Skabt til drift på tværs af lokationer – med mindre friktion i hverdagen
+          og bedre overblik for ledelsen.
+        </p>
+
+        <div class="goldline mt-8 mb-8"></div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#kontakt" class="btn btn-primary">Book en demo</a>
+          <a href="#produkt" class="btn btn-secondary">Se hvad Brigade samler</a>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="card p-5">
+            <div class="text-3xl font-extrabold">1</div>
+            <div class="mt-2 font-bold">Samlet arbejdsflade</div>
+            <div class="mt-1 muted text-sm">Drift, køkken og opfølgning i ét system.</div>
+          </div>
+
+          <div class="card p-5">
+            <div class="text-3xl font-extrabold">Færre</div>
+            <div class="mt-2 font-bold">blinde vinkler</div>
+            <div class="mt-1 muted text-sm">Tjeklister, rapporter og afvigelser samlet ét sted.</div>
+          </div>
+
+          <div class="card p-5">
+            <div class="text-3xl font-extrabold">Bedre</div>
+            <div class="mt-2 font-bold">ensartet drift</div>
+            <div class="mt-1 muted text-sm">Standarder på tværs af teams og lokationer.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUE -->
+    <section id="produkt" class="mt-16 grid lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <div class="eyebrow mb-3">Hvorfor Brigade</div>
+        <h2 class="serif text-3xl sm:text-4xl font-bold tracking-tight">
+          Når drift og køkken lever i forskellige værktøjer, bliver standarder personafhængige.
+        </h2>
+      </div>
+
+      <div class="space-y-4 text-lg leading-relaxed muted">
+        <p>
+          Brigade er udviklet til hospitality-virksomheder, der vil skabe mere
+          struktur i hverdagen og mere ensartet drift på tværs af lokationer.
+        </p>
+        <p>
+          Platformen samler daglige opgaver, skiftlederrapportering, fejlregistrering,
+          udsolgte varer, gæsteklager, køkkenrutiner og kvalitetskontrol i én løsning.
+        </p>
+        <p>
+          Resultatet er mindre personafhængighed, bedre overlevering mellem vagter
+          og stærkere indsigt for ledelsen.
+        </p>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section id="moduler" class="mt-16">
+      <div class="mb-8">
+        <div class="eyebrow mb-3">Moduler</div>
+        <h2 class="serif text-3xl sm:text-4xl font-bold tracking-tight">
+          Brigade samler den daglige drift i moduler, der passer til virkeligheden i hospitality.
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        <article class="card p-6">
+          <div class="text-3xl mb-4">✅</div>
+          <h3 class="text-2xl font-extrabold">Brigade Core</h3>
+          <p class="mt-3 muted leading-relaxed">
+            Daglige opgaver, tjeklister, skiftlederrapport, udsolgte produkter,
+            gæsteklager og fejlregistrering samlet ét sted.
+          </p>
+        </article>
+
+        <article class="card p-6">
+          <div class="text-3xl mb-4">👨‍🍳</div>
+          <h3 class="text-2xl font-extrabold">Brigade Kitchen</h3>
+          <p class="mt-3 muted leading-relaxed">
+            Digital MIS, 3-timers regel, køkkenrengøring, cateringoverblik
+            og faste rutiner til den daglige køkkendrift.
+          </p>
+        </article>
+
+        <article class="card p-6">
+          <div class="text-3xl mb-4">🎯</div>
+          <h3 class="text-2xl font-extrabold">Brigade Control</h3>
+          <p class="mt-3 muted leading-relaxed">
+            Kvalitetsvurdering, foto-dokumentation og opfølgning på tværs
+            af lokationer for bedre standardkontrol.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- FOR WHO -->
+    <section class="mt-16 grid lg:grid-cols-2 gap-8">
+      <div class="panel p-7">
+        <div class="eyebrow mb-3">Til hvem</div>
+        <h3 class="text-2xl font-extrabold">Bygget til caféer, restauranter og hospitality-kæder</h3>
+        <p class="mt-4 muted leading-relaxed">
+          Brigade er relevant for virksomheder med flere lokationer, mange daglige
+          rutiner og behov for bedre struktur mellem service, køkken og ledelse.
+        </p>
+      </div>
+
+      <div class="panel p-7">
+        <div class="eyebrow mb-3">Skabt fra driften</div>
+        <h3 class="text-2xl font-extrabold">Udviklet af folk der kender virkeligheden i køkken og service</h3>
+        <p class="mt-4 muted leading-relaxed">
+          Brigade er ikke bygget som generisk software. Løsningen er udviklet ud fra
+          konkrete behov i den daglige drift og med forståelse for, hvordan teams
+          faktisk arbejder i hospitality.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="kontakt" class="mt-16 panel p-8 sm:p-12 text-center">
+      <div class="eyebrow mb-3">Klar til næste skridt</div>
+      <h2 class="serif text-3xl sm:text-5xl font-bold tracking-tight">
+        Vil du se hvordan Brigade kan bruges i din drift?
+      </h2>
+      <p class="mt-5 text-lg muted max-w-2xl mx-auto">
+        Vi viser gerne, hvordan Brigade kan samle daglig drift, køkkenstyring og
+        rapportering i én løsning tilpasset jeres lokationer og arbejdsgange.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+        <a href="mailto:kontakt@brigade.dk" class="btn btn-primary">Book en demo</a>
+        <a href="mailto:kontakt@brigade.dk?subject=Jeg vil høre mere om Brigade" class="btn btn-secondary">Skriv til os</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-10 text-center muted text-sm">
+      Brigade · Hospitality operations software til drift, køkken og kontrol
+    </footer>
+
+  </main>
+
+</body>
+</html>
