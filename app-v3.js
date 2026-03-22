@@ -1,4 +1,4 @@
-const FORMSUBMIT_EMAIL = "dinmail@eksempel.dk";
+const FORMSUBMIT_EMAIL = "Stefan@cafekaiser.dk";
 
 const LOCATIONS = [
   "Café Kaiser Helsingør",
