@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brigade – Hospitality operations software</title>
-  <meta name="description" content="Brigade samler daglig drift, køkkenstyring, skiftlederrapportering og kvalitetskontrol i én platform til caféer og restauranter med flere lokationer." />
+  <title>Brigade – Drift og køkkenstyring til hospitality</title>
+  <meta name="description" content="Brigade samler daglig drift, køkkenstyring, skiftrapportering og kvalitetsvurdering i én platform til caféer og restauranter med flere lokationer." />
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -14,22 +14,23 @@
 
   <style>
     :root{
-      --bg:#06070b;
-      --bg2:#0a0d14;
-      --panel:rgba(15,18,27,0.74);
-      --panel-strong:rgba(16,19,28,0.93);
-      --card:rgba(255,255,255,0.035);
-      --border:rgba(255,255,255,0.08);
-      --border-strong:rgba(255,255,255,0.12);
-      --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.68);
-      --muted2:rgba(255,255,255,0.42);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --gold3:#f1d77f;
-      --goldGlow:rgba(214,178,74,0.16);
-      --shadow:0 32px 90px rgba(0,0,0,0.50);
-      --radius:30px;
+      --bg:#f5efe5;
+      --bg2:#efe6d8;
+      --panel:#fbf7f0;
+      --panel-2:#f7f1e7;
+      --card:#fffaf3;
+      --line:#dbcdb7;
+      --line-soft:#e7dccb;
+      --text:#1d1a17;
+      --muted:#6d6357;
+      --muted2:#8d8274;
+
+      --accent:#b6904b;
+      --accent-2:#8f6b2d;
+      --accent-soft:#efe0bf;
+
+      --shadow:0 24px 60px rgba(75, 55, 25, 0.08);
+      --radius:28px;
     }
 
     *{ box-sizing:border-box; }
@@ -43,10 +44,9 @@
 
     body{
       background:
-        radial-gradient(1000px 700px at 8% -5%, rgba(214,178,74,0.12), transparent 55%),
-        radial-gradient(1000px 700px at 100% 5%, rgba(88,104,180,0.12), transparent 55%),
-        radial-gradient(1000px 700px at 50% 100%, rgba(214,178,74,0.08), transparent 60%),
-        linear-gradient(180deg, #06070b 0%, #080a11 38%, #06070b 100%);
+        radial-gradient(900px 500px at 10% -10%, rgba(182,144,75,0.10), transparent 55%),
+        radial-gradient(700px 500px at 100% 0%, rgba(202,181,141,0.16), transparent 50%),
+        linear-gradient(180deg, #f7f2e9 0%, #f3ecdf 42%, #f6f1e8 100%);
     }
 
     body::before{
@@ -54,53 +54,58 @@
       position:fixed;
       inset:0;
       pointer-events:none;
-      opacity:.07;
-      mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+      opacity:.05;
+      mix-blend-mode:multiply;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
     }
 
-    .serif{ font-family:"Playfair Display", serif; }
-    .shell{ max-width: 1280px; }
+    .serif{
+      font-family:"Playfair Display", serif;
+    }
+
+    .shell{
+      max-width:1280px;
+    }
 
     .glass{
-      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
-      border:1px solid var(--border);
-      border-radius: 24px;
+      background: rgba(255,250,243,0.75);
+      border:1px solid rgba(156,128,78,0.14);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
     }
 
     .panel{
-      background: var(--panel);
-      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,251,245,0.96), rgba(247,240,230,0.98));
+      border:1px solid var(--line-soft);
       border-radius: 26px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow);
     }
 
-    .panel-strong{
-      background: linear-gradient(180deg, rgba(20,24,35,0.96), rgba(13,16,24,0.94));
-      border:1px solid var(--border-strong);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+    .panel-soft{
+      background: linear-gradient(180deg, rgba(255,249,240,0.88), rgba(249,242,231,0.95));
+      border:1px solid var(--line-soft);
+      border-radius: 24px;
     }
 
     .eyebrow{
       font-size:12px;
       letter-spacing:.24em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      font-weight:900;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 900;
     }
 
     .top-link{
-      color:var(--muted);
+      color: var(--muted);
       text-decoration:none;
       font-weight:700;
       font-size:15px;
     }
-    .top-link:hover{ color:var(--text); }
+
+    .top-link:hover{
+      color: var(--text);
+    }
 
     .btn{
       display:inline-flex;
@@ -110,59 +115,57 @@
       text-decoration:none;
       border-radius:18px;
       padding:15px 22px;
-      font-weight:900;
+      font-weight:800;
       transition: transform .08s ease, filter .18s ease, background .18s ease, border-color .18s ease;
     }
+
     .btn:active{ transform: translateY(1px); }
 
     .btn-primary{
-      color:#0b0c0f;
-      background: linear-gradient(135deg, var(--gold3), var(--gold), var(--gold2));
-      box-shadow: 0 18px 40px rgba(214,178,74,0.18);
+      color: #fffdf8;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 16px 34px rgba(143,107,45,0.16);
     }
-    .btn-primary:hover{ filter: brightness(1.04); }
+
+    .btn-primary:hover{
+      filter: brightness(1.03);
+    }
 
     .btn-secondary{
-      color:var(--text);
-      background: rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      background: rgba(255,255,255,0.36);
+      border:1px solid rgba(156,128,78,0.16);
     }
+
     .btn-secondary:hover{
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.56);
+      border-color: rgba(156,128,78,0.24);
     }
 
     .chip{
       display:inline-flex;
       align-items:center;
-      gap:8px;
       padding:10px 14px;
       border-radius:999px;
-      background: rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(182,144,75,0.08);
+      border:1px solid rgba(182,144,75,0.16);
+      color: #5b4a30;
       font-size:14px;
       font-weight:700;
-      color:var(--text);
     }
 
     .goldline{
       height:2px;
       border-radius:999px;
-      background: linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);
+      background: linear-gradient(90deg, transparent, rgba(182,144,75,0.8), transparent);
       opacity:.95;
     }
 
     .hero-title{
-      font-size: clamp(3.3rem, 8vw, 6.6rem);
+      font-size: clamp(3.2rem, 8vw, 6.2rem);
       line-height:.92;
       letter-spacing:-0.05em;
       font-weight:700;
-    }
-
-    .lead{
-      font-size: clamp(1.05rem, 1.35vw, 1.18rem);
-      line-height:1.8;
-      color:var(--muted);
     }
 
     .section-title{
@@ -172,35 +175,42 @@
       font-weight:700;
     }
 
+    .lead{
+      font-size: clamp(1.05rem, 1.35vw, 1.17rem);
+      line-height:1.85;
+      color: var(--muted);
+    }
+
     .kpi{
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:24px;
+      background: linear-gradient(180deg, rgba(255,252,247,0.95), rgba(247,240,229,0.95));
+      border:1px solid var(--line-soft);
+      border-radius:22px;
       padding:22px;
+      box-shadow: 0 14px 28px rgba(75,55,25,0.04);
     }
+
     .kpi-num{
-      font-size:32px;
+      font-size:34px;
       line-height:1;
-      font-weight:900;
       letter-spacing:-0.04em;
+      font-weight:900;
+      color: #3b3126;
     }
+
     .kpi-label{
       margin-top:10px;
-      color:var(--muted);
       font-size:15px;
-      line-height:1.55;
+      line-height:1.6;
+      color: var(--muted);
       font-weight:700;
     }
 
     .mock-shell{
-      position:relative;
       border-radius:28px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.09);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
-        radial-gradient(600px 260px at 20% 0%, rgba(214,178,74,0.08), transparent 60%);
-      box-shadow: 0 28px 70px rgba(0,0,0,0.44);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, #fffaf3, #f7f0e5);
+      box-shadow: 0 28px 60px rgba(75,55,25,0.08);
     }
 
     .mock-top{
@@ -208,31 +218,32 @@
       align-items:center;
       justify-content:space-between;
       padding:14px 18px;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
+      border-bottom:1px solid var(--line-soft);
+      background: rgba(255,255,255,0.45);
     }
 
     .dots{
       display:flex;
       gap:7px;
     }
+
     .dots span{
       width:10px;
       height:10px;
       border-radius:999px;
-      background: rgba(255,255,255,0.18);
+      background: rgba(123,102,71,0.24);
     }
 
-    .screenshot-frame{
+    .shot-frame{
       position:relative;
       border-radius:22px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
-      min-height: 340px;
+      border:1px solid var(--line-soft);
+      background: linear-gradient(180deg, #fffaf3, #f6eee2);
+      min-height: 320px;
     }
 
-    .screenshot-frame img{
+    .shot-frame img{
       width:100%;
       height:100%;
       object-fit:cover;
@@ -244,13 +255,13 @@
       inset:0;
       display:flex;
       flex-direction:column;
-      align-items:center;
       justify-content:center;
+      align-items:center;
       text-align:center;
       padding:28px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
-        radial-gradient(500px 200px at 20% 0%, rgba(214,178,74,0.08), transparent 60%);
+        linear-gradient(180deg, rgba(255,250,243,0.9), rgba(247,239,228,0.92)),
+        radial-gradient(500px 220px at 20% 0%, rgba(182,144,75,0.08), transparent 60%);
     }
 
     .shot-placeholder .big{
@@ -258,56 +269,62 @@
       line-height:1.1;
       font-weight:900;
       letter-spacing:-0.03em;
+      color:#352d24;
     }
 
     .shot-placeholder .small{
       margin-top:10px;
-      color:var(--muted);
       max-width:420px;
+      color: var(--muted);
       line-height:1.7;
     }
 
     .feature-card{
-      position:relative;
-      overflow:hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,251,245,0.98), rgba(247,240,230,0.98));
+      border:1px solid var(--line-soft);
       border-radius:24px;
-      padding:26px;
-      min-height:280px;
+      padding:28px;
+      min-height: 250px;
+      box-shadow: 0 14px 34px rgba(75,55,25,0.04);
     }
 
-    .feature-card::after{
-      content:"";
-      position:absolute;
-      inset:auto -8% -35% auto;
-      width:180px;
-      height:180px;
+    .feature-kicker{
+      display:inline-block;
+      padding:8px 12px;
       border-radius:999px;
-      background: radial-gradient(circle, rgba(214,178,74,0.12), transparent 70%);
-      pointer-events:none;
+      background: rgba(182,144,75,0.08);
+      border:1px solid rgba(182,144,75,0.16);
+      color:#6a5636;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:900;
     }
 
     .feature-title{
-      font-size:28px;
-      line-height:1.04;
-      font-weight:900;
+      font-size:30px;
+      line-height:1.05;
       letter-spacing:-0.025em;
+      font-weight:900;
+      margin-top:18px;
+      color:#241f1a;
     }
 
     .split-card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,251,245,0.98), rgba(247,240,230,0.98));
+      border:1px solid var(--line-soft);
       border-radius:26px;
       padding:28px;
+      box-shadow: 0 14px 34px rgba(75,55,25,0.04);
     }
 
     .quote{
       position:relative;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,250,243,0.98), rgba(248,241,231,0.98));
+      border:1px solid var(--line-soft);
       border-radius:26px;
       padding:30px;
+      box-shadow: 0 14px 34px rgba(75,55,25,0.04);
     }
 
     .quote::before{
@@ -318,22 +335,22 @@
       font-family:"Playfair Display", serif;
       font-size:74px;
       line-height:1;
-      color: rgba(214,178,74,0.18);
+      color: rgba(182,144,75,0.18);
     }
 
     .pricing{
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,251,245,0.98), rgba(247,240,230,0.98));
+      border:1px solid var(--line-soft);
       border-radius:26px;
       padding:28px;
+      box-shadow: 0 14px 34px rgba(75,55,25,0.04);
     }
 
     .pricing.highlight{
-      border-color: rgba(214,178,74,0.34);
-      box-shadow: 0 0 0 1px rgba(214,178,74,0.10), 0 24px 60px rgba(0,0,0,0.35);
+      border-color: rgba(182,144,75,0.30);
+      box-shadow: 0 0 0 1px rgba(182,144,75,0.08), 0 20px 46px rgba(75,55,25,0.06);
       background:
-        linear-gradient(180deg, rgba(214,178,74,0.07), rgba(255,255,255,0.03)),
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+        linear-gradient(180deg, rgba(255,248,237,1), rgba(246,237,224,0.98));
     }
 
     .badge{
@@ -345,24 +362,27 @@
       font-weight:900;
       letter-spacing:.12em;
       text-transform:uppercase;
-      background: rgba(214,178,74,0.10);
-      color: #f0d77f;
-      border:1px solid rgba(214,178,74,0.22);
+      background: rgba(182,144,75,0.12);
+      color:#7a5f2c;
+      border:1px solid rgba(182,144,75,0.20);
+    }
+
+    .footer-link{
+      color: var(--muted);
+      text-decoration:none;
+    }
+
+    .footer-link:hover{
+      color: var(--text);
     }
 
     .orb{
       position:absolute;
       border-radius:999px;
-      filter: blur(42px);
+      filter: blur(38px);
       opacity:.55;
       pointer-events:none;
     }
-
-    .footer-link{
-      color:var(--muted);
-      text-decoration:none;
-    }
-    .footer-link:hover{ color:var(--text); }
   </style>
 </head>
 <body>
@@ -371,7 +391,7 @@
     <!-- NAV -->
     <header class="glass px-5 sm:px-7 py-4 sm:py-5 flex items-center justify-between sticky top-4 z-40">
       <div class="flex items-center gap-4">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#E3C86A] via-[#D6B24A] to-[#B9921F] text-black font-black text-xl flex items-center justify-center shadow-lg">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#caa668] to-[#8f6b2d] text-white font-black text-xl flex items-center justify-center shadow-md">
           B
         </div>
         <div>
@@ -382,30 +402,30 @@
 
       <nav class="hidden md:flex items-center gap-6">
         <a href="#platform" class="top-link">Platform</a>
-        <a href="#screens" class="top-link">Screens</a>
-        <a href="#value" class="top-link">Værdi</a>
+        <a href="#modules" class="top-link">Moduler</a>
+        <a href="#screens" class="top-link">Platformen</a>
         <a href="#pricing" class="top-link">Pakker</a>
         <a href="#kontakt" class="btn btn-secondary !py-3 !px-4">Book demo</a>
       </nav>
     </header>
 
     <!-- HERO -->
-    <section class="relative mt-6 sm:mt-8 panel-strong overflow-hidden">
-      <div class="orb w-[280px] h-[280px] bg-[rgba(214,178,74,0.14)] top-[-70px] left-[-50px]"></div>
-      <div class="orb w-[360px] h-[360px] bg-[rgba(88,104,180,0.12)] top-[20px] right-[-100px]"></div>
+    <section class="relative mt-6 sm:mt-8 panel overflow-hidden">
+      <div class="orb w-[260px] h-[260px] bg-[rgba(182,144,75,0.10)] top-[-60px] left-[-50px]"></div>
+      <div class="orb w-[320px] h-[320px] bg-[rgba(206,186,146,0.16)] top-[10px] right-[-90px]"></div>
 
-      <div class="grid lg:grid-cols-[1.02fr_.98fr] gap-10 items-center p-6 sm:p-10 lg:p-14">
-        <div class="relative z-10">
-          <div class="eyebrow mb-4">Drift og køkken samlet i ét system</div>
+      <div class="grid lg:grid-cols-[1.02fr_.98fr] gap-10 items-center p-6 sm:p-10 lg:p-14 relative z-10">
+        <div>
+          <div class="eyebrow mb-4">Drift og køkkenstyring samlet ét sted</div>
 
           <h1 class="serif hero-title max-w-5xl">
-            Den operative platform til hospitality med flere lokationer.
+            Den operative platform til moderne hospitality.
           </h1>
 
           <p class="mt-7 lead max-w-2xl">
-            Brigade samler daglige opgaver, skiftlederrapportering, køkkenstyring,
-            fejlregistrering og kvalitetskontrol i én platform. Skabt til virkeligheden i caféer,
-            restauranter og driftsteams, hvor standarder skal holde – også når tempoet er højt.
+            Brigade samler daglig drift, køkkenstyring, skiftrapportering og kvalitetsvurdering
+            i én platform til caféer og restauranter med flere lokationer.
+            Skabt til teams, der vil arbejde mere ens, få bedre overblik og reducere friktion i hverdagen.
           </p>
 
           <div class="goldline mt-8 mb-8 max-w-xl"></div>
@@ -416,56 +436,52 @@
           </div>
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <span class="chip">✅ Daglig drift</span>
-            <span class="chip">📝 Skiftlederrapport</span>
-            <span class="chip">👨‍🍳 Kitchen Hub</span>
-            <span class="chip">🎯 Kvalitetskontrol</span>
+            <span class="chip">Daglig drift</span>
+            <span class="chip">Operations Hub</span>
+            <span class="chip">Kitchen Operations</span>
+            <span class="chip">Kvalitetsvurdering</span>
           </div>
         </div>
 
-        <div class="relative z-10">
+        <div>
           <div class="mock-shell">
             <div class="mock-top">
-              <div class="dots">
-                <span></span><span></span><span></span>
-              </div>
-              <div class="text-sm font-bold tracking-[0.16em] uppercase text-white/40">Brigade Overview</div>
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="text-sm font-bold tracking-[0.16em] uppercase text-[#8d8274]">Brigade Overview</div>
             </div>
 
             <div class="p-5 sm:p-6">
-              <!-- Her kan du senere sætte et rigtigt screenshot ind -->
-              <div class="screenshot-frame">
-                <!-- 
-                INDSÆT DIT SCREENSHOT HER:
-                <img src="./images/brigade-dashboard.png" alt="Brigade dashboard" />
-                -->
+              <div class="shot-frame">
+                <!-- INDSÆT SCREENSHOT HER -->
+                <!-- <img src="./images/brigade-dashboard.png" alt="Brigade dashboard" /> -->
                 <div class="shot-placeholder">
-                  <div class="eyebrow mb-3">Screenshot placeholder</div>
-                  <div class="big">Indsæt dit rigtige Brigade dashboard her</div>
+                  <div class="eyebrow mb-3">Platform preview</div>
+                  <div class="big">Indsæt dit hoveddashboard her</div>
                   <div class="small">
-                    Brug et screenshot fra din platform for at skabe den rigtige SaaS-følelse.
-                    Den her blok er lavet til at blive erstattet af et ægte produktbillede.
+                    Brug et rigtigt screenshot fra Brigade for at skabe den stærke produktfølelse.
+                    Den her blok er lavet som placeholder til din platform.
                   </div>
                 </div>
               </div>
 
               <div class="grid grid-cols-3 gap-3 mt-4">
-                <div class="panel p-4">
-                  <div class="text-xs uppercase tracking-[0.16em] text-white/40 font-extrabold">Lokationer</div>
-                  <div class="mt-2 text-3xl font-black">6</div>
+                <div class="panel-soft p-4">
+                  <div class="text-xs uppercase tracking-[0.16em] text-[#8d8274] font-extrabold">Lokationer</div>
+                  <div class="mt-2 text-3xl font-black text-[#2f2923]">6</div>
                 </div>
-                <div class="panel p-4">
-                  <div class="text-xs uppercase tracking-[0.16em] text-white/40 font-extrabold">Hubs</div>
-                  <div class="mt-2 text-3xl font-black">3</div>
+                <div class="panel-soft p-4">
+                  <div class="text-xs uppercase tracking-[0.16em] text-[#8d8274] font-extrabold">Moduler</div>
+                  <div class="mt-2 text-3xl font-black text-[#2f2923]">12</div>
                 </div>
-                <div class="panel p-4">
-                  <div class="text-xs uppercase tracking-[0.16em] text-white/40 font-extrabold">Daglig drift</div>
-                  <div class="mt-2 text-3xl font-black">Live</div>
+                <div class="panel-soft p-4">
+                  <div class="text-xs uppercase tracking-[0.16em] text-[#8d8274] font-extrabold">Drift</div>
+                  <div class="mt-2 text-3xl font-black text-[#2f2923]">Live</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -477,97 +493,138 @@
       </div>
       <div class="kpi">
         <div class="kpi-num">Mindre</div>
-        <div class="kpi-label">personafhængighed i daglige rutiner og overlevering</div>
+        <div class="kpi-label">personafhængighed i daglige rutiner og skifteoverlevering</div>
       </div>
       <div class="kpi">
         <div class="kpi-num">Bedre</div>
-        <div class="kpi-label">ensartethed på tværs af teams og lokationer</div>
+        <div class="kpi-label">ensartethed på tværs af teams, lokationer og standarder</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num">Hurtigere</div>
-        <div class="kpi-label">indsigt og opfølgning for driftsansvarlige og ledelse</div>
+        <div class="kpi-num">Stærkere</div>
+        <div class="kpi-label">indsigt for ledelse, driftsansvarlige og køkkenledelse</div>
       </div>
     </section>
 
     <!-- WHY -->
-    <section id="value" class="mt-20 grid lg:grid-cols-[.95fr_1.05fr] gap-8 items-start">
+    <section class="mt-20 grid lg:grid-cols-[.95fr_1.05fr] gap-8 items-start">
       <div>
         <div class="eyebrow mb-4">Hvorfor Brigade</div>
         <h2 class="section-title serif">
-          Når drift, køkken og rapportering lever i hvert sit system, mister man standarden mellem hænderne.
+          Når drift, køkken og opfølgning er spredt, bliver standarder afhængige af enkeltpersoner.
         </h2>
       </div>
 
       <div class="space-y-5 lead">
         <p>
-          I mange hospitality-virksomheder ligger opgaver, overlevering, afvigelser,
-          køkkenrutiner og kvalitetsopfølgning spredt mellem papir, beskeder, noter og vaner.
+          I mange hospitality-virksomheder lever den daglige drift på tværs af papir,
+          beskeder, løse systemer og mundtlige vaner. Det gør det svært at skabe ensartethed.
         </p>
         <p>
-          Brigade samler de operative arbejdsgange i én platform, så teams arbejder mere ens,
-          lokationer følger samme standarder, og ledelsen får et stærkere grundlag for handling.
+          Brigade samler de vigtigste operative arbejdsgange i én platform, så teams arbejder mere struktureret,
+          lokationer følger samme retning, og ledelsen får et tydeligere grundlag for handling.
         </p>
         <p>
-          Resultatet er færre blinde vinkler, tydeligere ansvar og en hverdag, hvor drift faktisk kan styres samlet.
+          Resultatet er færre blinde vinkler, bedre overlevering og en drift, der er lettere at styre i praksis.
         </p>
       </div>
     </section>
 
-    <!-- PLATFORM -->
-    <section id="platform" class="mt-20">
+    <!-- MODULES -->
+    <section id="modules" class="mt-20">
       <div class="mb-8 sm:mb-10">
-        <div class="eyebrow mb-4">Platform</div>
+        <div class="eyebrow mb-4">Moduler</div>
         <h2 class="section-title serif max-w-4xl">
-          Alt det operationelle lag – samlet i moduler bygget til hospitality.
+          En platform bygget omkring den måde hospitality faktisk arbejder på.
         </h2>
       </div>
 
       <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
         <article class="feature-card">
-          <div class="text-4xl">✅</div>
-          <h3 class="feature-title mt-5">Daglig drift</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            Daglige opgaver, faste rutiner og strukturerede registreringer, så teams ved hvad der skal ske – hver dag.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Daglig drift</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Samler daglige rutiner, opgaver og ansvar i én arbejdsflade for service og drift.
           </p>
         </article>
 
         <article class="feature-card">
-          <div class="text-4xl">📝</div>
-          <h3 class="feature-title mt-5">Skiftlederrapportering</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            Overlevering mellem vagter samlet ét sted med mindre risiko for tabt information og utydelige ansvarsskift.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Skifttjekliste</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Strukturerer åbning, serviceforberedelse og de vigtigste kontrolpunkter i skiftet.
           </p>
         </article>
 
         <article class="feature-card">
-          <div class="text-4xl">⚠️</div>
-          <h3 class="feature-title mt-5">Fejl, mangler og klager</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            Gæsteklager, driftsproblemer og mangler registreres struktureret, så opfølgning bliver en del af hverdagen.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Skiftrapport</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Gør overlevering mellem vagter tydeligere og sikrer bedre opfølgning i den daglige drift.
           </p>
         </article>
 
         <article class="feature-card">
-          <div class="text-4xl">👨‍🍳</div>
-          <h3 class="feature-title mt-5">Kitchen Hub</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            Køkkenets arbejdsflade med MIS, faste rutiner, produktionsflow og værktøjer til den daglige struktur.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Varestatus</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Giver synlighed på udsolgte varer og produktstatus, så service og køkken arbejder mere samlet.
           </p>
         </article>
 
         <article class="feature-card">
-          <div class="text-4xl">🧽</div>
-          <h3 class="feature-title mt-5">Kontrol og faste rutiner</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            3-timers regel, rengøring og andre vigtige kontroller samlet digitalt, så standarder bliver lettere at holde.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Gæstefeedback</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Registrerer gæstefeedback struktureret, så oplevelser kan følges op og bruges aktivt i driften.
           </p>
         </article>
 
         <article class="feature-card">
-          <div class="text-4xl">🎯</div>
-          <h3 class="feature-title mt-5">Kvalitet på tværs</h3>
-          <p class="mt-4 text-[16px] leading-7 text-white/70">
-            Interne kvalitetsvurderinger med dokumentation og foto – så standarder kan følges og udvikles på tværs af lokationer.
+          <div class="feature-kicker">Operations Hub</div>
+          <h3 class="feature-title">Driftsafvigelser</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Samler fejl, mangler og driftsproblemer i et tydeligt spor med bedre ansvar og opfølgning.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-kicker">Kitchen Operations</div>
+          <h3 class="feature-title">Mise en Place</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Giver køkkenet overblik over forberedelse, produktion og daglig struktur før service.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-kicker">Kitchen Operations</div>
+          <h3 class="feature-title">3-timers kontrol</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Understøtter faste produkt- og tidskontroller, så standarder bliver lettere at fastholde.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-kicker">Kitchen Operations</div>
+          <h3 class="feature-title">Hygiejnerutiner</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Samler rengøring og faste rutiner i køkkenet med tydelig struktur og bedre efterlevelse.
+          </p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-kicker">Kitchen Operations</div>
+          <h3 class="feature-title">Cateringoversigt</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357]">
+            Giver bedre koordinering omkring planlagte leverancer, events og produktion på tværs af dage.
+          </p>
+        </article>
+
+        <article class="feature-card md:col-span-2 xl:col-span-2">
+          <div class="feature-kicker">Quality</div>
+          <h3 class="feature-title">Kvalitetsvurdering</h3>
+          <p class="mt-4 text-[16px] leading-7 text-[#6d6357] max-w-2xl">
+            Understøtter intern kvalitetskontrol med dokumentation og vurdering på tværs af lokationer,
+            så standard og udvikling kan følges mere systematisk.
           </p>
         </article>
       </div>
@@ -576,56 +633,55 @@
     <!-- SCREENSHOTS -->
     <section id="screens" class="mt-20">
       <div class="mb-8 sm:mb-10">
-        <div class="eyebrow mb-4">Platform i praksis</div>
+        <div class="eyebrow mb-4">Platformen</div>
         <h2 class="section-title serif max-w-4xl">
-          Vis produktet. Det er her wow-effekten for alvor kommer.
+          Platformen skal ses. Det er her produktet begynder at sælge sig selv.
         </h2>
         <p class="lead mt-4 max-w-3xl">
-          De næste tre felter er lavet specifikt til dine egne screenshots.
-          Når du sætter rigtige billeder ind fra Brigade, løfter siden sig markant.
+          Brug rigtige screenshots fra Brigade i felterne herunder for at løfte siden fra præsentation til reel produktoplevelse.
         </p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-6">
         <div class="split-card">
-          <div class="badge mb-4">Drift Hub</div>
-          <div class="screenshot-frame min-h-[280px]">
-            <!-- <img src="./images/drift-hub.png" alt="Brigade Drift Hub" /> -->
+          <div class="badge mb-4">Operations Hub</div>
+          <div class="shot-frame min-h-[280px]">
+            <!-- <img src="./images/operations-hub.png" alt="Brigade Operations Hub" /> -->
             <div class="shot-placeholder">
-              <div class="big">Drift Hub screenshot</div>
-              <div class="small">Brug dit screenshot af servicefladen med opgaver, rapporter og fejlregistrering.</div>
+              <div class="big">Operations Hub</div>
+              <div class="small">Indsæt screenshot af daglig drift, skiftrapportering og driftsmoduler.</div>
             </div>
           </div>
-          <p class="mt-4 text-white/70 leading-7">
-            Fremhæv daglige opgaver, skiftlederrapport og de vigtigste registreringer i driften.
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Vis hvordan service og drift samles i én rolig, tydelig arbejdsflade.
           </p>
         </div>
 
         <div class="split-card">
-          <div class="badge mb-4">Kitchen Hub</div>
-          <div class="screenshot-frame min-h-[280px]">
-            <!-- <img src="./images/kitchen-hub.png" alt="Brigade Kitchen Hub" /> -->
+          <div class="badge mb-4">Kitchen Operations</div>
+          <div class="shot-frame min-h-[280px]">
+            <!-- <img src="./images/kitchen-operations.png" alt="Brigade Kitchen Operations" /> -->
             <div class="shot-placeholder">
-              <div class="big">Kitchen Hub screenshot</div>
-              <div class="small">Brug dit screenshot af køkkenstyring, MIS, rengøring og produktionsværktøjer.</div>
+              <div class="big">Kitchen Operations</div>
+              <div class="small">Indsæt screenshot af køkkenets styring, mise en place og faste rutiner.</div>
             </div>
           </div>
-          <p class="mt-4 text-white/70 leading-7">
-            Vis hvordan køkkenet får én arbejdsflade til struktur, kontrol og forberedelse.
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Vis hvordan køkkenledelse og produktion får mere struktur uden ekstra kompleksitet.
           </p>
         </div>
 
         <div class="split-card">
-          <div class="badge mb-4">Control</div>
-          <div class="screenshot-frame min-h-[280px]">
-            <!-- <img src="./images/quality-control.png" alt="Brigade Quality Control" /> -->
+          <div class="badge mb-4">Quality</div>
+          <div class="shot-frame min-h-[280px]">
+            <!-- <img src="./images/quality-review.png" alt="Brigade Kvalitetsvurdering" /> -->
             <div class="shot-placeholder">
-              <div class="big">Quality screenshot</div>
-              <div class="small">Brug dit screenshot af food rating eller kvalitetskontrol med foto og scoring.</div>
+              <div class="big">Kvalitetsvurdering</div>
+              <div class="small">Indsæt screenshot af vurdering, dokumentation og kvalitetsopfølgning.</div>
             </div>
           </div>
-          <p class="mt-4 text-white/70 leading-7">
-            Vis hvordan kvalitet bliver dokumenteret og sammenlignet på tværs af lokationer.
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Vis hvordan kvalitet bliver dokumenteret og fulgt mere systematisk på tværs af lokationer.
           </p>
         </div>
       </div>
@@ -633,28 +689,28 @@
 
     <!-- STORY -->
     <section class="mt-20 grid lg:grid-cols-2 gap-8 items-stretch">
-      <div class="panel p-7 sm:p-8">
+      <div class="panel-soft p-7 sm:p-8">
         <div class="eyebrow mb-3">Skabt fra driften</div>
-        <h3 class="text-3xl font-black tracking-[-0.03em]">
-          Brigade er bygget ud fra virkelige problemer i hospitality – ikke ud fra generiske softwaremodeller.
+        <h3 class="text-3xl font-black tracking-[-0.03em] text-[#241f1a]">
+          Brigade er bygget ud fra virkelige arbejdsgange i hospitality – ikke ud fra generisk softwarelogik.
         </h3>
         <p class="mt-5 lead">
-          Løsningen er udviklet med forståelse for hverdagen i både service og køkken,
-          hvor struktur, overblik og opfølgning skal fungere midt i drift – ikke kun i teorien.
+          Platformen er udviklet med forståelse for den faktiske hverdag i service og køkken,
+          hvor struktur og overblik skal fungere midt i drift – ikke kun i teorien.
         </p>
         <p class="mt-4 lead">
-          Det gør Brigade relevant for kæder og virksomheder, der vil skabe mere ensartet drift
-          uden at drukne teams i tunge systemer.
+          Derfor er Brigade ikke tænkt som endnu et værktøj, men som et operationelt lag,
+          der gør standarder lettere at leve efter i praksis.
         </p>
       </div>
 
       <div class="quote flex flex-col justify-center">
-        <p class="relative z-10 text-2xl sm:text-3xl leading-snug font-extrabold tracking-[-0.03em] pl-4">
+        <p class="relative z-10 text-2xl sm:text-3xl leading-snug font-extrabold tracking-[-0.03em] pl-4 text-[#2a241e]">
           Brigade samler den operative virkelighed i hospitality:
-          <span class="text-[#E3C86A]">drift, køkken, overlevering og kontrol.</span>
+          <span style="color:#8f6b2d;">drift, køkken, overlevering og kvalitetsopfølgning.</span>
         </p>
-        <p class="relative z-10 mt-5 pl-4 text-white/65 leading-7">
-          Det er ikke bare et dashboard. Det er et system til at få standarder til at leve i hverdagen.
+        <p class="relative z-10 mt-5 pl-4 text-[#6d6357] leading-7">
+          Målet er ikke flere systemer. Målet er mere ensartet drift og tydeligere ledelse.
         </p>
       </div>
     </section>
@@ -671,48 +727,48 @@
       <div class="grid lg:grid-cols-3 gap-6">
         <div class="pricing">
           <div class="eyebrow mb-3">Pakke 1</div>
-          <h3 class="text-3xl font-black tracking-[-0.03em]">Brigade Core</h3>
-          <p class="mt-4 text-white/70 leading-7">
-            Til virksomheder der vil samle daglig drift, opgaver og overlevering.
+          <h3 class="text-3xl font-black tracking-[-0.03em] text-[#241f1a]">Brigade Core</h3>
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Til virksomheder der vil samle daglig drift, ansvar og skifteoverlevering.
           </p>
-          <ul class="mt-6 space-y-3 text-white/82">
-            <li>• Daglige opgaver</li>
-            <li>• Dagsansvarlig tjekliste</li>
-            <li>• Skiftlederrapport</li>
-            <li>• Udsolgte produkter</li>
-            <li>• Fejl & mangler</li>
-            <li>• Gæsteklager</li>
+          <ul class="mt-6 space-y-3 text-[#3d342b]">
+            <li>• Daglig drift</li>
+            <li>• Skifttjekliste</li>
+            <li>• Skiftrapport</li>
+            <li>• Varestatus</li>
+            <li>• Gæstefeedback</li>
+            <li>• Driftsafvigelser</li>
           </ul>
         </div>
 
         <div class="pricing highlight">
           <div class="badge mb-4">Mest relevant</div>
-          <h3 class="text-3xl font-black tracking-[-0.03em]">Brigade Ops</h3>
-          <p class="mt-4 text-white/75 leading-7">
-            Den stærkeste startpakke – samler service, daglig drift og køkken i én platform.
+          <h3 class="text-3xl font-black tracking-[-0.03em] text-[#241f1a]">Brigade Ops</h3>
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Den stærkeste startpakke – samler service, daglig drift og køkkenstyring i én platform.
           </p>
-          <ul class="mt-6 space-y-3 text-white/86">
+          <ul class="mt-6 space-y-3 text-[#3d342b]">
             <li>• Alt i Brigade Core</li>
-            <li>• Kitchen Hub</li>
-            <li>• Digital MIS</li>
-            <li>• 3-timers regel</li>
-            <li>• Køkkenrengøring</li>
-            <li>• Catering kalender</li>
+            <li>• Kitchen Operations</li>
+            <li>• Mise en Place</li>
+            <li>• 3-timers kontrol</li>
+            <li>• Hygiejnerutiner</li>
+            <li>• Cateringoversigt</li>
           </ul>
         </div>
 
         <div class="pricing">
           <div class="eyebrow mb-3">Pakke 3</div>
-          <h3 class="text-3xl font-black tracking-[-0.03em]">Brigade Control</h3>
-          <p class="mt-4 text-white/70 leading-7">
-            Til virksomheder der vil arbejde systematisk med kvalitetskontrol og ledelsesopfølgning.
+          <h3 class="text-3xl font-black tracking-[-0.03em] text-[#241f1a]">Brigade Control</h3>
+          <p class="mt-4 text-[#6d6357] leading-7">
+            Til virksomheder der vil arbejde mere systematisk med kvalitet og opfølgning på tværs af lokationer.
           </p>
-          <ul class="mt-6 space-y-3 text-white/82">
+          <ul class="mt-6 space-y-3 text-[#3d342b]">
             <li>• Alt i Brigade Ops</li>
-            <li>• Food rating</li>
-            <li>• Foto-dokumentation</li>
             <li>• Kvalitetsvurdering</li>
-            <li>• Tværlokationskontrol</li>
+            <li>• Dokumentation med foto</li>
+            <li>• Tværgående opfølgning</li>
+            <li>• Lokationssammenligning</li>
             <li>• Ledelsesoverblik</li>
           </ul>
         </div>
@@ -720,19 +776,19 @@
     </section>
 
     <!-- CTA -->
-    <section id="kontakt" class="mt-20 panel-strong overflow-hidden relative">
-      <div class="orb w-[280px] h-[280px] bg-[rgba(214,178,74,0.14)] bottom-[-90px] left-[-20px]"></div>
-      <div class="orb w-[320px] h-[320px] bg-[rgba(94,115,210,0.10)] top-[-70px] right-[-120px]"></div>
+    <section id="kontakt" class="mt-20 panel overflow-hidden relative">
+      <div class="orb w-[260px] h-[260px] bg-[rgba(182,144,75,0.10)] bottom-[-80px] left-[-10px]"></div>
+      <div class="orb w-[300px] h-[300px] bg-[rgba(210,193,164,0.16)] top-[-70px] right-[-110px]"></div>
 
       <div class="relative z-10 p-8 sm:p-12 lg:p-14 text-center">
         <div class="eyebrow mb-4">Book en demo</div>
-        <h2 class="serif text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-[-0.04em] font-bold max-w-4xl mx-auto">
+        <h2 class="serif text-4xl sm:text-5xl lg:text-6xl leading-[0.95] tracking-[-0.04em] font-bold max-w-4xl mx-auto text-[#241f1a]">
           Hvis det her ligner jeres virkelighed, så er næste skridt at se Brigade i praksis.
         </h2>
 
         <p class="mt-6 lead max-w-2xl mx-auto">
-          Vi viser gerne, hvordan Brigade kan samle jeres daglige drift, køkkenarbejdsgange
-          og rapportering i én løsning tilpasset jeres lokationer og setup.
+          Vi viser gerne, hvordan Brigade kan samles omkring jeres drift, køkkenarbejdsgange
+          og rapportering – tilpasset jeres lokationer og setup.
         </p>
 
         <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
@@ -744,10 +800,10 @@
 
     <!-- FOOTER -->
     <footer class="pt-10 pb-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-      <div class="text-white/46">Brigade · Hospitality operations software til drift, køkken og kontrol</div>
+      <div class="text-[#8d8274]">Brigade · Operations platform til hospitality</div>
       <div class="flex items-center gap-5">
         <a href="#platform" class="footer-link">Platform</a>
-        <a href="#screens" class="footer-link">Screens</a>
+        <a href="#modules" class="footer-link">Moduler</a>
         <a href="#pricing" class="footer-link">Pakker</a>
         <a href="#kontakt" class="footer-link">Kontakt</a>
       </div>
