@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaiser – Rabatguidelines</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#071019;
+      --panel:rgba(15,22,34,.88);
+      --panel2:rgba(255,255,255,.04);
+      --border:rgba(145,205,255,.14);
+      --text:rgba(255,255,255,.95);
+      --muted:rgba(213,231,248,.72);
+      --muted2:rgba(184,210,234,.48);
+
+      --blue:#9bd3ff;
+      --blue2:#66b7ff;
+      --blueGlow:rgba(102,183,255,.20);
+
+      --gold:#d6b24a;
+      --gold2:#b9921f;
+
+      --red:#ff8f8f;
+      --redBg:rgba(255,143,143,.08);
+      --green:#88e0a8;
+      --greenBg:rgba(136,224,168,.08);
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+        radial-gradient(1000px 720px at 100% 0%, rgba(102,183,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
+        linear-gradient(180deg, #071019, #0c1625 52%, #071019);
+    }
+
+    .shell{
+      max-width:1100px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .hero{
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:28px 24px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(155,211,255,.08), rgba(255,255,255,0));
+      backdrop-filter:blur(14px);
+      box-shadow:0 30px 80px rgba(0,0,0,.38);
+      text-align:center;
+    }
+
+    .kicker{
+      font-size:13px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:800;
+    }
+
+    .title{
+      margin-top:10px;
+      font-family:"Playfair Display",serif;
+      font-size:clamp(38px,5vw,60px);
+      line-height:1.02;
+      letter-spacing:-0.025em;
+      font-weight:700;
+    }
+
+    .subtitle{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:18px;
+      font-weight:600;
+    }
+
+    .heroLine{
+      height:2px;
+      margin-top:18px;
+      border-radius:999px;
+      background:linear-gradient(90deg, transparent, rgba(214,178,74,.9), rgba(102,183,255,.85), transparent);
+    }
+
+    .panel{
+      margin-top:18px;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:var(--panel);
+      backdrop-filter:blur(14px);
+      box-shadow:0 22px 60px rgba(0,0,0,.34);
+      overflow:hidden;
+    }
+
+    .panelHead{
+      padding:20px 22px 14px;
+    }
+
+    .panelBody{
+      padding:20px 22px 22px;
+    }
+
+    .divider{
+      height:1px;
+      background:rgba(145,205,255,.10);
+    }
+
+    .blockTitle{
+      font-size:24px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .label{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted2);
+      font-weight:900;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    @media (max-width: 860px){
+      .grid2{grid-template-columns:1fr;}
+    }
+
+    .card{
+      border:1px solid rgba(145,205,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .ruleRow{
+      display:grid;
+      grid-template-columns:1.2fr .7fr 1fr;
+      gap:14px;
+      padding:16px 14px;
+      border-radius:18px;
+      border:1px solid rgba(145,205,255,.10);
+      background:rgba(255,255,255,.03);
+      align-items:center;
+    }
+
+    @media (max-width: 760px){
+      .ruleRow{
+        grid-template-columns:1fr;
+        gap:8px;
+      }
+    }
+
+    .big{
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-0.02em;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+
+    .badge-gold{
+      background:rgba(214,178,74,.12);
+      border:1px solid rgba(214,178,74,.24);
+      color:#f1d78a;
+    }
+
+    .badge-blue{
+      background:rgba(102,183,255,.10);
+      border:1px solid rgba(102,183,255,.22);
+      color:#c7e8ff;
+    }
+
+    .badge-red{
+      background:var(--redBg);
+      border:1px solid rgba(255,143,143,.20);
+      color:#ffd1d1;
+    }
+
+    .badge-green{
+      background:var(--greenBg);
+      border:1px solid rgba(136,224,168,.20);
+      color:#c7ffd9;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+    }
+
+    .listItem{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      margin-top:8px;
+      flex:0 0 auto;
+    }
+
+    .dot-red{background:#ff8f8f;}
+    .dot-green{background:#88e0a8;}
+    .dot-blue{background:#66b7ff;}
+
+    .smallMuted{
+      color:var(--muted2);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .footerNote{
+      text-align:center;
+      color:var(--muted2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-top:18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <header class="hero">
+      <div class="kicker">KAISER DRIFT HUB</div>
+      <div class="title">Rabatguidelines</div>
+      <div class="subtitle">Hurtig oversigt over Ældresagen og personalerabat</div>
+      <div class="heroLine"></div>
+    </header>
+
+    <section class="panel">
+      <div class="panelHead">
+        <div class="blockTitle">Ældresagen – Kaisers flex-model</div>
+        <div class="muted" style="margin-top:8px;">
+          Når et selskab overstiger de officielle 8 personer, må Cafechefen eller Floormanageren / Overtjeneren tilbyde følgende interne satser på mad <strong>(mandag–torsdag)</strong>.
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="panelBody">
+        <div class="list">
+          <div class="ruleRow">
+            <div>
+              <div class="label">Antal gæster</div>
+              <div class="big">1 – 8 gæster</div>
+            </div>
+            <div>
+              <div class="label">Rabat</div>
+              <div class="big">25%</div>
+            </div>
+            <div>
+              <span class="badge badge-gold">Officiel regel</span>
+            </div>
+          </div>
+
+          <div class="ruleRow">
+            <div>
+              <div class="label">Antal gæster</div>
+              <div class="big">9 – 12 gæster</div>
+            </div>
+            <div>
+              <div class="label">Rabat</div>
+              <div class="big">20%</div>
+            </div>
+            <div>
+              <span class="badge badge-blue">Intern flex-rabat</span>
+            </div>
+          </div>
+
+          <div class="ruleRow">
+            <div>
+              <div class="label">Antal gæster</div>
+              <div class="big">13 – 16 gæster</div>
+            </div>
+            <div>
+              <div class="label">Rabat</div>
+              <div class="big">15%</div>
+            </div>
+            <div>
+              <span class="badge badge-blue">Intern flex-rabat</span>
+            </div>
+          </div>
+
+          <div class="ruleRow">
+            <div>
+              <div class="label">Antal gæster</div>
+              <div class="big">17 – 24 gæster</div>
+            </div>
+            <div>
+              <div class="label">Rabat</div>
+              <div class="big">10%</div>
+            </div>
+            <div>
+              <span class="badge badge-blue">Intern flex-rabat</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section class="panel">
+        <div class="panelHead">
+          <div class="blockTitle">Hvornår kan Ældresagen ikke bruges?</div>
+          <div class="muted" style="margin-top:8px;">
+            Ældresagen kan <strong>ikke</strong> kombineres med andre tilbud, rabatter eller kampagner.
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="panelBody">
+          <div class="list">
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div>
+                <div><strong>Ingen rabat fredag, lørdag og søndag</strong></div>
+              </div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div><strong>Ingen rabat på drikkevarer</strong></div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div><strong>Ingen rabat på takeaway</strong></div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div><strong>Ingen rabat på catering</strong></div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div><strong>Ingen rabat på køb af vores egne gavekort</strong></div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div>
+                <strong>Go Dream kan ikke kombineres med Ældresagen</strong><br>
+                <span class="smallMuted">Det er enten eller.</span>
+              </div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div>
+                <strong>Fødselsdagsburger kan ikke kombineres med Ældresagen</strong><br>
+                <span class="smallMuted">Hvis én gæst ved bordet får gratis fødselsdagsburger, kan resten af bordet ikke bruge Ældresagen.</span>
+              </div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div>
+                <strong>Gratis pandekager ved nyhedsbrev kan ikke kombineres med Ældresagen</strong>
+              </div>
+            </div>
+
+            <div class="listItem">
+              <div class="dot dot-red"></div>
+              <div>
+                <strong>Tidsbestemte kampagner kan ikke kombineres med Ældresagen</strong><br>
+                <span class="smallMuted">Fx gratis dessert ved køb af hovedret.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panelHead">
+          <div class="blockTitle">Personalerabat</div>
+          <div class="muted" style="margin-top:8px;">
+            Hurtig oversigt over personalevilkår.
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="panelBody">
+          <div class="list">
+            <div class="ruleRow">
+              <div>
+                <div class="label">Til dig selv</div>
+                <div class="big">50%</div>
+              </div>
+              <div>
+                <span class="badge badge-green">Personalerabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">Gælder medarbejderen selv</div>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Til dig & din familie</div>
+                <div class="big">25%</div>
+              </div>
+              <div>
+                <span class="badge badge-green">Personalerabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">Gælder dig og din familie</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panelHead">
+        <div class="blockTitle">Husk</div>
+      </div>
+      <div class="divider"></div>
+      <div class="panelBody">
+        <div class="list">
+          <div class="listItem">
+            <div class="dot dot-blue"></div>
+            <div>
+              <strong>Ældresagen gælder kun på mad</strong><br>
+              <span class="smallMuted">Ikke på drikkevarer, takeaway, catering eller gavekort.</span>
+            </div>
+          </div>
+
+          <div class="listItem">
+            <div class="dot dot-blue"></div>
+            <div>
+              <strong>Mandag–torsdag for flex-modellen</strong><br>
+              <span class="smallMuted">Fredag, lørdag og søndag er ikke omfattet.</span>
+            </div>
+          </div>
+
+          <div class="listItem">
+            <div class="dot dot-blue"></div>
+            <div>
+              <strong>Ingen dobbelt-rabatter</strong><br>
+              <span class="smallMuted">Hvis der allerede bruges et andet tilbud eller en kampagne, kan Ældresagen ikke bruges samtidig.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footerNote">Kaiser Drift Hub · Rabatguide V1</div>
+  </div>
+</body>
+</html>
