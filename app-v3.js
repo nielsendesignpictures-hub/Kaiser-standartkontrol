@@ -53,7 +53,7 @@ const DISHES = [
 ];
 
 const DISH_REFERENCE_IMAGES = {
-  "Fiskefilet smørrebrød": "./images/fiskefilet-smorrebrod.jpg"
+  "Fiskefilet smørrebrød": "/Kaiser-standartkontrol/images/fiskefilet-smorrebrod.jpg"
 };
 
 const QUOTES = [
