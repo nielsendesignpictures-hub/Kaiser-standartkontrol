@@ -14,7 +14,6 @@
     :root{
       --bg:#071019;
       --panel:rgba(15,22,34,.88);
-      --panel2:rgba(255,255,255,.04);
       --border:rgba(145,205,255,.14);
       --text:rgba(255,255,255,.95);
       --muted:rgba(213,231,248,.72);
@@ -22,15 +21,10 @@
 
       --blue:#9bd3ff;
       --blue2:#66b7ff;
-      --blueGlow:rgba(102,183,255,.20);
-
       --gold:#d6b24a;
       --gold2:#b9921f;
-
       --red:#ff8f8f;
-      --redBg:rgba(255,143,143,.08);
       --green:#88e0a8;
-      --greenBg:rgba(136,224,168,.08);
     }
 
     html,body{
@@ -51,7 +45,7 @@
     }
 
     .shell{
-      max-width:1100px;
+      max-width:1050px;
       margin:0 auto;
       padding:20px;
     }
@@ -142,16 +136,6 @@
       font-weight:900;
     }
 
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-
-    @media (max-width: 860px){
-      .grid2{grid-template-columns:1fr;}
-    }
-
     .card{
       border:1px solid rgba(145,205,255,.10);
       background:rgba(255,255,255,.03);
@@ -206,13 +190,13 @@
     }
 
     .badge-red{
-      background:var(--redBg);
+      background:rgba(255,143,143,.08);
       border:1px solid rgba(255,143,143,.20);
       color:#ffd1d1;
     }
 
     .badge-green{
-      background:var(--greenBg);
+      background:rgba(136,224,168,.08);
       border:1px solid rgba(136,224,168,.20);
       color:#c7ffd9;
     }
@@ -241,13 +225,48 @@
     }
 
     .dot-red{background:#ff8f8f;}
-    .dot-green{background:#88e0a8;}
     .dot-blue{background:#66b7ff;}
 
     .smallMuted{
       color:var(--muted2);
       font-size:13px;
       font-weight:700;
+    }
+
+    .accordionBtn{
+      width:100%;
+      text-align:left;
+      background:none;
+      border:none;
+      color:inherit;
+      padding:20px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      cursor:pointer;
+    }
+
+    .accordionBtn:hover{
+      background:rgba(255,255,255,.02);
+    }
+
+    .accordionArrow{
+      font-size:24px;
+      transition:transform .2s ease;
+      color:var(--muted2);
+    }
+
+    .accordion.open .accordionArrow{
+      transform:rotate(180deg);
+    }
+
+    .accordionContent{
+      display:none;
+    }
+
+    .accordion.open .accordionContent{
+      display:block;
     }
 
     .footerNote{
@@ -271,222 +290,154 @@
       <div class="heroLine"></div>
     </header>
 
-    <section class="panel">
-      <div class="panelHead">
-        <div class="blockTitle">Ældresagen – Kaisers flex-model</div>
-        <div class="muted" style="margin-top:8px;">
-          Når et selskab overstiger de officielle 8 personer, må Cafechefen eller Floormanageren / Overtjeneren tilbyde følgende interne satser på mad <strong>(mandag–torsdag)</strong>.
+    <section class="panel accordion open" id="eldresagenBox">
+      <button class="accordionBtn" type="button" id="eldresagenBtn">
+        <div>
+          <div class="blockTitle">Ældresagen</div>
+          <div class="muted" style="margin-top:8px;">
+            Flex-model, regler og undtagelser samlet ét sted
+          </div>
         </div>
-      </div>
+        <div class="accordionArrow">⌄</div>
+      </button>
+
       <div class="divider"></div>
-      <div class="panelBody">
-        <div class="list">
-          <div class="ruleRow">
-            <div>
-              <div class="label">Antal gæster</div>
-              <div class="big">1 – 8 gæster</div>
-            </div>
-            <div>
-              <div class="label">Rabat</div>
-              <div class="big">25%</div>
-            </div>
-            <div>
-              <span class="badge badge-gold">Officiel regel</span>
-            </div>
-          </div>
 
-          <div class="ruleRow">
-            <div>
-              <div class="label">Antal gæster</div>
-              <div class="big">9 – 12 gæster</div>
-            </div>
-            <div>
-              <div class="label">Rabat</div>
-              <div class="big">20%</div>
-            </div>
-            <div>
-              <span class="badge badge-blue">Intern flex-rabat</span>
-            </div>
-          </div>
-
-          <div class="ruleRow">
-            <div>
-              <div class="label">Antal gæster</div>
-              <div class="big">13 – 16 gæster</div>
-            </div>
-            <div>
-              <div class="label">Rabat</div>
-              <div class="big">15%</div>
-            </div>
-            <div>
-              <span class="badge badge-blue">Intern flex-rabat</span>
-            </div>
-          </div>
-
-          <div class="ruleRow">
-            <div>
-              <div class="label">Antal gæster</div>
-              <div class="big">17 – 24 gæster</div>
-            </div>
-            <div>
-              <div class="label">Rabat</div>
-              <div class="big">10%</div>
-            </div>
-            <div>
-              <span class="badge badge-blue">Intern flex-rabat</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="grid2">
-      <section class="panel">
-        <div class="panelHead">
-          <div class="blockTitle">Hvornår kan Ældresagen ikke bruges?</div>
-          <div class="muted" style="margin-top:8px;">
-            Ældresagen kan <strong>ikke</strong> kombineres med andre tilbud, rabatter eller kampagner.
-          </div>
-        </div>
-        <div class="divider"></div>
+      <div class="accordionContent">
         <div class="panelBody">
-          <div class="list">
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div>
-                <div><strong>Ingen rabat fredag, lørdag og søndag</strong></div>
-              </div>
-            </div>
+          <div class="label" style="margin-bottom:12px;">Kaisers flex-model (mandag–torsdag)</div>
 
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div><strong>Ingen rabat på drikkevarer</strong></div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div><strong>Ingen rabat på takeaway</strong></div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div><strong>Ingen rabat på catering</strong></div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div><strong>Ingen rabat på køb af vores egne gavekort</strong></div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div>
-                <strong>Go Dream kan ikke kombineres med Ældresagen</strong><br>
-                <span class="smallMuted">Det er enten eller.</span>
-              </div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div>
-                <strong>Fødselsdagsburger kan ikke kombineres med Ældresagen</strong><br>
-                <span class="smallMuted">Hvis én gæst ved bordet får gratis fødselsdagsburger, kan resten af bordet ikke bruge Ældresagen.</span>
-              </div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div>
-                <strong>Gratis pandekager ved nyhedsbrev kan ikke kombineres med Ældresagen</strong>
-              </div>
-            </div>
-
-            <div class="listItem">
-              <div class="dot dot-red"></div>
-              <div>
-                <strong>Tidsbestemte kampagner kan ikke kombineres med Ældresagen</strong><br>
-                <span class="smallMuted">Fx gratis dessert ved køb af hovedret.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panelHead">
-          <div class="blockTitle">Personalerabat</div>
-          <div class="muted" style="margin-top:8px;">
-            Hurtig oversigt over personalevilkår.
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="panelBody">
-          <div class="list">
+          <div class="list" style="margin-bottom:22px;">
             <div class="ruleRow">
               <div>
-                <div class="label">Til dig selv</div>
-                <div class="big">50%</div>
+                <div class="label">Antal gæster</div>
+                <div class="big">1 – 8 gæster</div>
               </div>
               <div>
-                <span class="badge badge-green">Personalerabat</span>
-              </div>
-              <div>
-                <div class="smallMuted">Gælder medarbejderen selv</div>
-              </div>
-            </div>
-
-            <div class="ruleRow">
-              <div>
-                <div class="label">Til dig & din familie</div>
+                <div class="label">Rabat</div>
                 <div class="big">25%</div>
               </div>
               <div>
-                <span class="badge badge-green">Personalerabat</span>
+                <span class="badge badge-gold">Officiel regel</span>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Antal gæster</div>
+                <div class="big">9 – 12 gæster</div>
               </div>
               <div>
-                <div class="smallMuted">Gælder dig og din familie</div>
+                <div class="label">Rabat</div>
+                <div class="big">20%</div>
+              </div>
+              <div>
+                <span class="badge badge-blue">Intern flex-rabat</span>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Antal gæster</div>
+                <div class="big">13 – 16 gæster</div>
+              </div>
+              <div>
+                <div class="label">Rabat</div>
+                <div class="big">15%</div>
+              </div>
+              <div>
+                <span class="badge badge-blue">Intern flex-rabat</span>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Antal gæster</div>
+                <div class="big">17 – 24 gæster</div>
+              </div>
+              <div>
+                <div class="label">Rabat</div>
+                <div class="big">10%</div>
+              </div>
+              <div>
+                <span class="badge badge-blue">Intern flex-rabat</span>
               </div>
             </div>
           </div>
+
+          <div class="label" style="margin-bottom:12px;">Hvornår kan man ikke bruge Ældresagen?</div>
+          <div class="list" style="margin-bottom:22px;">
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ældresagen kan ikke kombineres med andre tilbud, rabatter eller kampagner</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ingen rabat fredag, lørdag og søndag</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ingen rabat på drikkevarer</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ingen rabat på takeaway</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ingen rabat på catering</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Ingen rabat på køb af vores egne gavekort</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Go Dream kan ikke kombineres med Ældresagen</strong><br><span class="smallMuted">Det er enten eller.</span></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Fødselsdagsburger kan ikke kombineres med Ældresagen</strong><br><span class="smallMuted">Hvis én gæst ved bordet får gratis fødselsdagsburger, kan resten ikke bruge Ældresagen.</span></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Gratis pandekager ved nyhedsbrev kan ikke kombineres med Ældresagen</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Tidsbestemte kampagner kan ikke kombineres med Ældresagen</strong><br><span class="smallMuted">Fx gratis dessert ved køb af hovedret.</span></div></div>
+          </div>
+
+          <div class="label" style="margin-bottom:12px;">Husk</div>
+          <div class="list">
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Ældresagen gælder kun på mad</strong><br><span class="smallMuted">Ikke på drikkevarer, takeaway, catering eller gavekort.</span></div></div>
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Flex-modellen gælder mandag–torsdag</strong></div></div>
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Ingen dobbelt-rabatter</strong><br><span class="smallMuted">Hvis der allerede bruges et andet tilbud eller en kampagne, kan Ældresagen ikke bruges samtidig.</span></div></div>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
     <section class="panel">
       <div class="panelHead">
-        <div class="blockTitle">Husk</div>
+        <div class="blockTitle">Personalerabat</div>
+        <div class="muted" style="margin-top:8px;">
+          Hurtig oversigt over personalevilkår
+        </div>
       </div>
       <div class="divider"></div>
       <div class="panelBody">
         <div class="list">
-          <div class="listItem">
-            <div class="dot dot-blue"></div>
+          <div class="ruleRow">
             <div>
-              <strong>Ældresagen gælder kun på mad</strong><br>
-              <span class="smallMuted">Ikke på drikkevarer, takeaway, catering eller gavekort.</span>
+              <div class="label">Til dig selv</div>
+              <div class="big">50%</div>
+            </div>
+            <div>
+              <span class="badge badge-green">Personalerabat</span>
+            </div>
+            <div>
+              <div class="smallMuted">Gælder medarbejderen selv</div>
             </div>
           </div>
 
-          <div class="listItem">
-            <div class="dot dot-blue"></div>
+          <div class="ruleRow">
             <div>
-              <strong>Mandag–torsdag for flex-modellen</strong><br>
-              <span class="smallMuted">Fredag, lørdag og søndag er ikke omfattet.</span>
+              <div class="label">Til dig & din familie</div>
+              <div class="big">25%</div>
             </div>
-          </div>
-
-          <div class="listItem">
-            <div class="dot dot-blue"></div>
             <div>
-              <strong>Ingen dobbelt-rabatter</strong><br>
-              <span class="smallMuted">Hvis der allerede bruges et andet tilbud eller en kampagne, kan Ældresagen ikke bruges samtidig.</span>
+              <span class="badge badge-green">Personalerabat</span>
+            </div>
+            <div>
+              <div class="smallMuted">Gælder dig og din familie</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="footerNote">Kaiser Drift Hub · Rabatguide V1</div>
+    <div class="footerNote">Kaiser Drift Hub · Rabatguide V2</div>
   </div>
+
+  <script>
+    const eldresagenBox = document.getElementById("eldresagenBox");
+    const eldresagenBtn = document.getElementById("eldresagenBtn");
+
+    eldresagenBtn.addEventListener("click", () => {
+      eldresagenBox.classList.toggle("open");
+    });
+  </script>
 </body>
 </html>
