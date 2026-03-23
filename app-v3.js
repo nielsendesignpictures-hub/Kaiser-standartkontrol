@@ -51,6 +51,7 @@ const DISHES = [
   { name: "Æble-Karameltærte", meals: ["Frokost", "Aften"] },
   { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
 ];
+
 const DISH_REFERENCE_IMAGES = {
   "Fiskefilet smørrebrød": "./images/fiskefilet-smorrebrod.jpg"
 };
@@ -122,6 +123,28 @@ function setHidden(el, hidden) {
   el.classList.toggle("hidden", hidden);
 }
 
+function updateReferenceImage() {
+  const img = $("referenceImage");
+  const wrap = $("referenceWrap");
+  const empty = $("referenceEmpty");
+
+  if (!img || !wrap || !empty) return;
+
+  const src = DISH_REFERENCE_IMAGES[state.dish];
+
+  if (src) {
+    img.src = src;
+    img.alt = `Referencebillede af ${state.dish}`;
+    setHidden(wrap, false);
+    setHidden(empty, true);
+  } else {
+    img.src = "";
+    img.alt = "";
+    setHidden(wrap, true);
+    setHidden(empty, false);
+  }
+}
+
 function initLocationSelect() {
   const select = $("locationSelect");
   if (!select) return;
@@ -188,6 +211,7 @@ function initDishSelect() {
 
     resetRatingScreenState();
     renderRatingBlocks();
+    updateReferenceImage();
     updateSubmitEnabled();
     showScreen("rating");
   });
@@ -499,6 +523,9 @@ function resetRatingScreenState() {
 
   const comment = $("commentInput");
   if (comment) comment.value = "";
+
+  const refImg = $("referenceImage");
+  if (refImg) refImg.alt = "";
 
   setError("");
   updateSubmitEnabled();
