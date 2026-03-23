@@ -51,6 +51,9 @@ const DISHES = [
   { name: "Æble-Karameltærte", meals: ["Frokost", "Aften"] },
   { name: "Trøffelkugle med salt karamel", meals: ["Frokost", "Aften"] }
 ];
+const DISH_REFERENCE_IMAGES = {
+  "Fiskefilet smørrebrød": "./images/fiskefilet-smorrebrod.jpg"
+};
 
 const QUOTES = [
   "Små forbedringer hver dag bliver til store resultater.",
