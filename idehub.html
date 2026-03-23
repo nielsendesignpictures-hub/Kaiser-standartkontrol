@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kaiser – Idéhub</title>
+  <title>Kaiser – Idéhub V2</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +25,9 @@
 
       --gold:#d6b24a;
       --gold2:#b9921f;
+
+      --green:#88e0a8;
+      --red:#ff8f8f;
     }
 
     html,body{
@@ -45,9 +48,10 @@
     }
 
     .shell{
-      max-width:980px;
+      max-width:1000px;
       margin:0 auto;
       padding:20px;
+      padding-bottom:80px;
     }
 
     .hero{
@@ -174,6 +178,40 @@
 
     .select option{color:#0b1016;}
 
+    .chipGrid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+    }
+
+    @media (max-width: 760px){
+      .chipGrid{grid-template-columns:1fr 1fr;}
+    }
+
+    .chipBtn{
+      min-height:58px;
+      border-radius:16px;
+      border:1px solid rgba(145,205,255,.14);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      font-size:14px;
+      font-weight:900;
+      padding:12px;
+      cursor:pointer;
+      transition:.15s ease;
+      text-align:center;
+    }
+
+    .chipBtn:hover{
+      background:rgba(255,255,255,.08);
+    }
+
+    .chipBtn.active{
+      border-color:rgba(214,178,74,.36);
+      background:linear-gradient(135deg, rgba(214,178,74,.10), rgba(102,183,255,.08));
+      box-shadow:0 0 0 4px rgba(214,178,74,.08);
+    }
+
     .btn{
       width:100%;
       min-height:62px;
@@ -194,12 +232,6 @@
       color:#081018;
       background:linear-gradient(135deg, var(--gold), var(--gold2));
       box-shadow:0 20px 42px rgba(214,178,74,.20);
-    }
-
-    .btn-secondary{
-      color:var(--text);
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(145,205,255,.12);
     }
 
     .hint{
@@ -259,7 +291,7 @@
     <header class="hero">
       <div class="kicker">KAISER DRIFT HUB</div>
       <div class="title">Idéhub</div>
-      <div class="subtitle">Send idéer, fejl, feedback og tips direkte til os</div>
+      <div class="subtitle">Send idéer, fejl, forbedringer og tips direkte til os</div>
       <div class="heroLine"></div>
     </header>
 
@@ -274,13 +306,15 @@
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="hidden" name="_subject" id="subjectField" value="Idéhub – Lokation – Type">
         <input type="text" name="_honey" style="display:none">
+        <input type="hidden" id="typeField" value="">
+        <input type="hidden" id="priorityField" value="">
         <textarea name="Feedback" id="payloadField" style="display:none"></textarea>
 
         <section class="panel">
           <div class="panelHead">
             <div class="blockTitle">Ny feedback</div>
             <div class="muted" style="margin-top:8px;">
-              Brug boksen til idéer, forbedringer, fejl og tips & tricks fra hverdagen.
+              Hjælp os med at gøre værktøjerne bedre i hverdagen.
             </div>
           </div>
           <div class="divider"></div>
@@ -301,47 +335,53 @@
 
               <div>
                 <div class="label">Navn</div>
-                <input class="input" id="name" placeholder="Dit navn">
+                <input class="input" id="name" placeholder="Valgfrit navn">
               </div>
             </div>
 
-            <div class="grid2" style="margin-top:16px;">
-              <div>
-                <div class="label">Type</div>
-                <select class="select" id="type">
-                  <option value="">Vælg type...</option>
-                  <option>Idé</option>
-                  <option>Fejl</option>
-                  <option>Tips & tricks</option>
-                  <option>Noget der fungerer godt</option>
-                  <option>Noget der ikke fungerer</option>
-                  <option>Forbedringsforslag</option>
-                </select>
+            <div style="margin-top:16px;">
+              <div class="label">Type</div>
+              <div class="chipGrid" id="typeGrid">
+                <button type="button" class="chipBtn" data-type="Idé">Idé</button>
+                <button type="button" class="chipBtn" data-type="Fejl">Fejl</button>
+                <button type="button" class="chipBtn" data-type="Tips & tricks">Tips & tricks</button>
+                <button type="button" class="chipBtn" data-type="Noget der fungerer godt">Noget der fungerer godt</button>
+                <button type="button" class="chipBtn" data-type="Noget der ikke fungerer">Noget der ikke fungerer</button>
+                <button type="button" class="chipBtn" data-type="Forbedringsforslag">Forbedringsforslag</button>
               </div>
+            </div>
 
-              <div>
-                <div class="label">Værktøj</div>
-                <select class="select" id="tool">
-                  <option value="">Vælg værktøj...</option>
-                  <option>Drift Hub</option>
-                  <option>Daglige opgaver</option>
-                  <option>Dagsansvarlig tjekliste</option>
-                  <option>Skiftlederrapport</option>
-                  <option>Kitchen Hub</option>
-                  <option>Rabat & tilbud</option>
-                  <option>Kontaktliste</option>
-                  <option>Udsolgte produkter</option>
-                  <option>Gæsteklager</option>
-                  <option>Fejl & mangler</option>
-                  <option>Andet</option>
-                </select>
+            <div style="margin-top:16px;">
+              <div class="label">Prioritet</div>
+              <div class="chipGrid" id="priorityGrid" style="grid-template-columns:repeat(3,1fr);">
+                <button type="button" class="chipBtn" data-priority="Lav">Lav</button>
+                <button type="button" class="chipBtn active" data-priority="Normal">Normal</button>
+                <button type="button" class="chipBtn" data-priority="Høj">Høj</button>
               </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <div class="label">Værktøj</div>
+              <select class="select" id="tool">
+                <option value="">Vælg værktøj...</option>
+                <option>Drift Hub</option>
+                <option>Daglige opgaver</option>
+                <option>Dagsansvarlig tjekliste</option>
+                <option>Skiftlederrapport</option>
+                <option>Kitchen Hub</option>
+                <option>Rabat & tilbud</option>
+                <option>Kontaktliste</option>
+                <option>Udsolgte produkter</option>
+                <option>Gæsteklager</option>
+                <option>Fejl & mangler</option>
+                <option>Andet</option>
+              </select>
             </div>
 
             <div style="margin-top:16px;">
               <div class="label">Besked</div>
               <textarea class="textarea" id="message" placeholder="Skriv hvad der fungerer, hvad der ikke fungerer, eller hvilke idéer du har..."></textarea>
-              <div class="hint">Jo mere konkret du er, jo lettere er det at forbedre værktøjerne</div>
+              <div class="hint">Vær gerne konkret – det gør det lettere at forbedre værktøjerne</div>
             </div>
 
             <div style="margin-top:18px;">
@@ -365,7 +405,7 @@
       </div>
     </section>
 
-    <div class="footerNote">Kaiser Drift Hub · Idéhub V1</div>
+    <div class="footerNote">Kaiser Drift Hub · Idéhub V2</div>
   </div>
 
   <script>
@@ -375,10 +415,12 @@
 
     const locationField = document.getElementById("location");
     const nameField = document.getElementById("name");
-    const typeField = document.getElementById("type");
     const toolField = document.getElementById("tool");
     const messageField = document.getElementById("message");
     const submitBtn = document.getElementById("submitBtn");
+
+    const typeField = document.getElementById("typeField");
+    const priorityField = document.getElementById("priorityField");
 
     function getQueryLoc() {
       const qs = new URLSearchParams(window.location.search);
@@ -396,10 +438,17 @@
       return "";
     }
 
+    function setActiveChip(groupSelector, attrName, value) {
+      document.querySelectorAll(groupSelector + " .chipBtn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute(attrName) === value);
+      });
+    }
+
     function updateSubject() {
       const loc = locationField.value || "Lokation";
       const type = typeField.value || "Feedback";
-      subjectField.value = `Idéhub – ${loc} – ${type}`;
+      const prio = priorityField.value || "Normal";
+      subjectField.value = `Idéhub – ${loc} – ${type} – ${prio}`;
     }
 
     function buildPayload() {
@@ -409,6 +458,7 @@
         "Lokation: " + (locationField.value || "-"),
         "Navn: " + (nameField.value || "-"),
         "Type: " + (typeField.value || "-"),
+        "Prioritet: " + (priorityField.value || "-"),
         "Værktøj: " + (toolField.value || "-"),
         "",
         "Besked:",
@@ -424,8 +474,23 @@
       updateSubject();
     }
 
+    document.querySelectorAll("#typeGrid .chipBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        typeField.value = btn.getAttribute("data-type");
+        setActiveChip("#typeGrid", "data-type", typeField.value);
+        updateSubject();
+      });
+    });
+
+    document.querySelectorAll("#priorityGrid .chipBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        priorityField.value = btn.getAttribute("data-priority");
+        setActiveChip("#priorityGrid", "data-priority", priorityField.value);
+        updateSubject();
+      });
+    });
+
     locationField.addEventListener("change", updateSubject);
-    typeField.addEventListener("change", updateSubject);
 
     document.getElementById("ideaForm").addEventListener("submit", function(e){
       if (!locationField.value) {
@@ -437,6 +502,12 @@
       if (!typeField.value) {
         e.preventDefault();
         alert("Vælg type.");
+        return;
+      }
+
+      if (!priorityField.value) {
+        e.preventDefault();
+        alert("Vælg prioritet.");
         return;
       }
 
@@ -460,6 +531,8 @@
     }
 
     nextField.value = window.location.origin + window.location.pathname + "?sent=1";
+    priorityField.value = "Normal";
+    setActiveChip("#priorityGrid", "data-priority", "Normal");
     prefillLocation();
   </script>
 </body>
