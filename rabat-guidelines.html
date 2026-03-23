@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kaiser – Rabatguidelines</title>
+  <title>Kaiser – Rabat & tilbud</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,10 +103,6 @@
       overflow:hidden;
     }
 
-    .panelHead{
-      padding:20px 22px 14px;
-    }
-
     .panelBody{
       padding:20px 22px 22px;
     }
@@ -134,13 +130,6 @@
       text-transform:uppercase;
       color:var(--muted2);
       font-weight:900;
-    }
-
-    .card{
-      border:1px solid rgba(145,205,255,.10);
-      background:rgba(255,255,255,.03);
-      border-radius:20px;
-      padding:18px;
     }
 
     .ruleRow{
@@ -226,6 +215,7 @@
 
     .dot-red{background:#ff8f8f;}
     .dot-blue{background:#66b7ff;}
+    .dot-green{background:#88e0a8;}
 
     .smallMuted{
       color:var(--muted2);
@@ -285,18 +275,17 @@
 
     <header class="hero">
       <div class="kicker">KAISER DRIFT HUB</div>
-      <div class="title">Rabatguidelines</div>
-      <div class="subtitle">Hurtig oversigt over Ældresagen og personalerabat</div>
+      <div class="title">Rabat & tilbud</div>
+      <div class="subtitle">Hurtig oversigt over Ældresagen, personalerabat, fødselsdagsburger og rabatkoder</div>
       <div class="heroLine"></div>
     </header>
 
+    <!-- ÆLDRESAGEN -->
     <section class="panel accordion open" id="eldresagenBox">
-      <button class="accordionBtn" type="button" id="eldresagenBtn">
+      <button class="accordionBtn" type="button" data-target="eldresagenBox">
         <div>
           <div class="blockTitle">Ældresagen</div>
-          <div class="muted" style="margin-top:8px;">
-            Flex-model, regler og undtagelser samlet ét sted
-          </div>
+          <div class="muted" style="margin-top:8px;">Flex-model, regler og undtagelser samlet ét sted</div>
         </div>
         <div class="accordionArrow">⌄</div>
       </button>
@@ -309,59 +298,27 @@
 
           <div class="list" style="margin-bottom:22px;">
             <div class="ruleRow">
-              <div>
-                <div class="label">Antal gæster</div>
-                <div class="big">1 – 8 gæster</div>
-              </div>
-              <div>
-                <div class="label">Rabat</div>
-                <div class="big">25%</div>
-              </div>
-              <div>
-                <span class="badge badge-gold">Officiel regel</span>
-              </div>
+              <div><div class="label">Antal gæster</div><div class="big">1 – 8 gæster</div></div>
+              <div><div class="label">Rabat</div><div class="big">25%</div></div>
+              <div><span class="badge badge-gold">Officiel regel</span></div>
             </div>
 
             <div class="ruleRow">
-              <div>
-                <div class="label">Antal gæster</div>
-                <div class="big">9 – 12 gæster</div>
-              </div>
-              <div>
-                <div class="label">Rabat</div>
-                <div class="big">20%</div>
-              </div>
-              <div>
-                <span class="badge badge-blue">Intern flex-rabat</span>
-              </div>
+              <div><div class="label">Antal gæster</div><div class="big">9 – 12 gæster</div></div>
+              <div><div class="label">Rabat</div><div class="big">20%</div></div>
+              <div><span class="badge badge-blue">Intern flex-rabat</span></div>
             </div>
 
             <div class="ruleRow">
-              <div>
-                <div class="label">Antal gæster</div>
-                <div class="big">13 – 16 gæster</div>
-              </div>
-              <div>
-                <div class="label">Rabat</div>
-                <div class="big">15%</div>
-              </div>
-              <div>
-                <span class="badge badge-blue">Intern flex-rabat</span>
-              </div>
+              <div><div class="label">Antal gæster</div><div class="big">13 – 16 gæster</div></div>
+              <div><div class="label">Rabat</div><div class="big">15%</div></div>
+              <div><span class="badge badge-blue">Intern flex-rabat</span></div>
             </div>
 
             <div class="ruleRow">
-              <div>
-                <div class="label">Antal gæster</div>
-                <div class="big">17 – 24 gæster</div>
-              </div>
-              <div>
-                <div class="label">Rabat</div>
-                <div class="big">10%</div>
-              </div>
-              <div>
-                <span class="badge badge-blue">Intern flex-rabat</span>
-              </div>
+              <div><div class="label">Antal gæster</div><div class="big">17 – 24 gæster</div></div>
+              <div><div class="label">Rabat</div><div class="big">10%</div></div>
+              <div><span class="badge badge-blue">Intern flex-rabat</span></div>
             </div>
           </div>
 
@@ -389,54 +346,189 @@
       </div>
     </section>
 
-    <section class="panel">
-      <div class="panelHead">
-        <div class="blockTitle">Personalerabat</div>
-        <div class="muted" style="margin-top:8px;">
-          Hurtig oversigt over personalevilkår
+    <!-- PERSONALERABAT -->
+    <section class="panel accordion" id="personaleBox">
+      <button class="accordionBtn" type="button" data-target="personaleBox">
+        <div>
+          <div class="blockTitle">Personalerabat</div>
+          <div class="muted" style="margin-top:8px;">Hurtig oversigt over personalevilkår</div>
         </div>
-      </div>
-      <div class="divider"></div>
-      <div class="panelBody">
-        <div class="list">
-          <div class="ruleRow">
-            <div>
-              <div class="label">Til dig selv</div>
-              <div class="big">50%</div>
-            </div>
-            <div>
-              <span class="badge badge-green">Personalerabat</span>
-            </div>
-            <div>
-              <div class="smallMuted">Gælder medarbejderen selv</div>
-            </div>
-          </div>
+        <div class="accordionArrow">⌄</div>
+      </button>
 
-          <div class="ruleRow">
-            <div>
-              <div class="label">Til dig & din familie</div>
-              <div class="big">25%</div>
+      <div class="divider"></div>
+
+      <div class="accordionContent">
+        <div class="panelBody">
+          <div class="list">
+            <div class="ruleRow">
+              <div>
+                <div class="label">Til dig selv</div>
+                <div class="big">50%</div>
+              </div>
+              <div>
+                <span class="badge badge-green">Personalerabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">Gælder medarbejderen selv</div>
+              </div>
             </div>
-            <div>
-              <span class="badge badge-green">Personalerabat</span>
-            </div>
-            <div>
-              <div class="smallMuted">Gælder dig og din familie</div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Til dig + gæster</div>
+                <div class="big">25%</div>
+              </div>
+              <div>
+                <span class="badge badge-green">Personalerabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">Gælder dig + op til 4 personer</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="footerNote">Kaiser Drift Hub · Rabatguide V2</div>
+    <!-- FØDSELSDAGSBURGER -->
+    <section class="panel accordion" id="birthdayBox">
+      <button class="accordionBtn" type="button" data-target="birthdayBox">
+        <div>
+          <div class="blockTitle">Fødselsdagsburger</div>
+          <div class="muted" style="margin-top:8px;">Tilbud til fødselarer på selve fødselsdagen</div>
+        </div>
+        <div class="accordionArrow">⌄</div>
+      </button>
+
+      <div class="divider"></div>
+
+      <div class="accordionContent">
+        <div class="panelBody">
+          <div class="list" style="margin-bottom:22px;">
+            <div class="listItem">
+              <div class="dot dot-green"></div>
+              <div>
+                <strong>Det får gæsten</strong><br>
+                <span class="smallMuted">En valgfri gratis burgermenu, når gæsten spiser hos os efter kl. 16 på selve fødselsdagen. Drikkevarer er ikke inkluderet.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="label" style="margin-bottom:12px;">For at få tilbuddet skal gæsten</div>
+          <div class="list" style="margin-bottom:22px;">
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Have gyldigt billede-ID med</strong></div></div>
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Besøge jer efter kl. 16 på selve fødselsdagen</strong></div></div>
+            <div class="listItem"><div class="dot dot-blue"></div><div><strong>Informere tjeneren ved bestilling</strong></div></div>
+          </div>
+
+          <div class="label" style="margin-bottom:12px;">Bemærk</div>
+          <div class="list" style="margin-bottom:22px;">
+            <div class="listItem"><div class="dot dot-green"></div><div><strong>Der er ingen minimumskrav til antal gæster i selskabet</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Gælder ikke takeaway</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Gælder kun fødselaren selv</strong><br><span class="smallMuted">Andre gæster i selskabet kan ikke benytte tilbuddet.</span></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Kan ikke ombyttes til kontanter</strong></div></div>
+            <div class="listItem"><div class="dot dot-red"></div><div><strong>Kan ikke kombineres med Ældresagen eller andre tilbud og rabatter</strong></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RABATKODER -->
+    <section class="panel accordion" id="codesBox">
+      <button class="accordionBtn" type="button" data-target="codesBox">
+        <div>
+          <div class="blockTitle">Rabatkoder</div>
+          <div class="muted" style="margin-top:8px;">Interne rabatkoder og deres formål</div>
+        </div>
+        <div class="accordionArrow">⌄</div>
+      </button>
+
+      <div class="divider"></div>
+
+      <div class="accordionContent">
+        <div class="panelBody">
+          <div class="list">
+            <div class="ruleRow">
+              <div>
+                <div class="label">Kode</div>
+                <div class="big">123456</div>
+              </div>
+              <div>
+                <span class="badge badge-blue">Centerabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">Intern center-rabat</div>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Kode</div>
+                <div class="big">100614</div>
+              </div>
+              <div>
+                <span class="badge badge-green">HQ rabat</span>
+              </div>
+              <div>
+                <div class="smallMuted">HQ rabat op til 5 personer</div>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Kode</div>
+                <div class="big">251244</div>
+              </div>
+              <div>
+                <span class="badge badge-gold">Hanne HQ</span>
+              </div>
+              <div>
+                <div class="smallMuted">Intern kode</div>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Kode</div>
+                <div class="big">484814</div>
+              </div>
+              <div>
+                <span class="badge badge-gold">Christians venner af huset</span>
+              </div>
+              <div>
+                <div class="smallMuted">Intern kode</div>
+              </div>
+            </div>
+
+            <div class="ruleRow">
+              <div>
+                <div class="label">Kode</div>
+                <div class="big">302593</div>
+              </div>
+              <div>
+                <span class="badge badge-gold">Christians familie</span>
+              </div>
+              <div>
+                <div class="smallMuted">Intern kode</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footerNote">Kaiser Drift Hub · Rabat & tilbud V4</div>
   </div>
 
   <script>
-    const eldresagenBox = document.getElementById("eldresagenBox");
-    const eldresagenBtn = document.getElementById("eldresagenBtn");
-
-    eldresagenBtn.addEventListener("click", () => {
-      eldresagenBox.classList.toggle("open");
+    document.querySelectorAll(".accordionBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const box = document.getElementById(targetId);
+        if (!box) return;
+        box.classList.toggle("open");
+      });
     });
   </script>
 </body>
