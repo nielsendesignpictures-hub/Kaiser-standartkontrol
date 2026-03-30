@@ -61,7 +61,7 @@
 
     .boardTopGrid{
       display:grid;
-      grid-template-columns:1.3fr repeat(5,1fr);
+      grid-template-columns:1.3fr repeat(6,1fr);
       gap:10px;
     }
 
@@ -546,6 +546,133 @@
       color:var(--muted2);
       font-size:13px;
     }
+
+    .alertPulse{
+      animation: alertPulse 1.6s infinite;
+      border-color: rgba(255,107,107,.55) !important;
+      box-shadow: 0 0 0 0 rgba(255,107,107,.35);
+    }
+
+    @keyframes alertPulse{
+      0%{ box-shadow:0 0 0 0 rgba(255,107,107,.34); }
+      70%{ box-shadow:0 0 0 16px rgba(255,107,107,0); }
+      100%{ box-shadow:0 0 0 0 rgba(255,107,107,0); }
+    }
+
+    .notifSectionUrgent .sectionDot{
+      background:var(--red);
+      animation: dotBlink 1.2s infinite;
+    }
+
+    @keyframes dotBlink{
+      0%,100%{opacity:1}
+      50%{opacity:.35}
+    }
+
+    .notifCard{
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.05);
+      padding:14px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .notifCard + .notifCard{
+      margin-top:12px;
+    }
+
+    .notifBar{
+      width:6px;
+      min-height:88px;
+      border-radius:999px;
+      flex:0 0 auto;
+      background:var(--red);
+    }
+
+    .notifBar.complaint{background:var(--red);}
+    .notifBar.soldout{background:var(--gold);}
+    .notifBar.fault{background:var(--blue);}
+    .notifBar.supplier{background:var(--warn);}
+
+    .notifContent{flex:1;min-width:0;}
+    .notifTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .notifTitle{
+      font-size:15px;
+      font-weight:900;
+      line-height:1.35;
+    }
+
+    .notifMeta{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .notifTime{
+      margin-top:8px;
+      font-size:11px;
+      color:var(--muted2);
+      font-weight:900;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .notifActions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+
+    .notifBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid rgba(98,210,111,.35);
+      background:rgba(98,210,111,.10);
+      color:#dff7e2;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .notifBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .notifBadge.new{
+      color:#ffd0d0;
+      border-color:rgba(255,107,107,.35);
+    }
   </style>
 </head>
 <body>
@@ -587,6 +714,24 @@
           <div class="topStatLabel">Åbne signaler</div>
           <div class="topStatValue" id="topSignalsTotal">0</div>
           <div class="topStatSub">Klager, udsolgt, fejl, leverandør</div>
+        </div>
+
+        <div class="topStat" id="topNotificationCard">
+          <div class="topStatLabel">Notifikationer</div>
+          <div class="topStatValue errText" id="topNotificationCount">0</div>
+          <div class="topStatSub" id="topNotificationSub">Ingen nye fejl kræver godkendelse</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="notificationSection">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Notifikationscenter</div>
+        <div class="sectionInfo" id="notificationSectionInfo">Nye fejl som skal kvitteres manuelt</div>
+      </div>
+      <div class="sectionBody">
+        <div id="notificationList">
+          <div class="empty">Ingen nye notifikationer</div>
         </div>
       </div>
     </section>
@@ -747,6 +892,9 @@
     const OPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const $ = id => document.getElementById(id);
 
+    const NOTIF_STORAGE_KEY = "kaiser_fb_notifications_v1";
+    const SEEN_STORAGE_KEY = "kaiser_fb_seen_signals_v1";
+
     function esc(s) {
       return String(s || "").replace(/[&<>"']/g, c =>
         ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
@@ -892,6 +1040,159 @@
           </div>
         </div>
       `).join("");
+    }
+
+    function loadStoredNotifications() {
+      try {
+        return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY) || "[]");
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function saveStoredNotifications(items) {
+      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function loadSeenSignals() {
+      try {
+        const arr = JSON.parse(localStorage.getItem(SEEN_STORAGE_KEY) || "[]");
+        return new Set(Array.isArray(arr) ? arr : []);
+      } catch (_) {
+        return new Set();
+      }
+    }
+
+    function saveSeenSignals(setObj) {
+      localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify(Array.from(setObj)));
+    }
+
+    function makeSignalKey(type, ev) {
+      return [
+        type,
+        ev.location || "",
+        ev.category || "",
+        ev.productName || "",
+        ev.issueType || "",
+        ev.area || "",
+        ev.description || "",
+        ev.createdAt || ev.updatedAt || ev.date || ""
+      ].join("||");
+    }
+
+    function makeNotificationTitle(type, ev) {
+      if (type === "complaint") return `${ev.location || "Ukendt"} • Klage`;
+      if (type === "soldout") return `${ev.location || "Ukendt"} • Udsolgt vare`;
+      if (type === "fault") return `${ev.location || "Ukendt"} • Driftsfejl`;
+      if (type === "supplier") return `${ev.location || "Ukendt"} • Leverandørfejl`;
+      return `${ev.location || "Ukendt"} • Signal`;
+    }
+
+    function makeNotificationText(type, ev) {
+      if (type === "complaint") return ev.description || ev.category || "Ny gæsteklage registreret";
+      if (type === "soldout") return [ev.productName, ev.category].filter(Boolean).join(" • ") || "Ny udsolgt vare registreret";
+      if (type === "fault") return ev.description || ev.issueType || ev.area || "Ny driftsfejl registreret";
+      if (type === "supplier") return ev.description || ev.productName || ev.issueType || "Ny leverandørfejl registreret";
+      return "Nyt signal registreret";
+    }
+
+    function createNotificationsFromBundle(bundle) {
+      const seen = loadSeenSignals();
+      const existing = loadStoredNotifications();
+      const existingIds = new Set(existing.map(x => x.id));
+      const additions = [];
+
+      const sources = [
+        { type: "complaint", items: bundle.complaints || [] },
+        { type: "soldout", items: bundle.soldout || [] },
+        { type: "fault", items: bundle.faults || [] },
+        { type: "supplier", items: bundle.supplier || [] }
+      ];
+
+      for (const source of sources) {
+        for (const ev of source.items) {
+          const key = makeSignalKey(source.type, ev);
+          if (!seen.has(key)) {
+            seen.add(key);
+
+            const id = "notif_" + btoa(unescape(encodeURIComponent(key))).replace(/[^a-zA-Z0-9]/g, "").slice(0, 80);
+            if (!existingIds.has(id)) {
+              additions.push({
+                id,
+                key,
+                type: source.type,
+                title: makeNotificationTitle(source.type, ev),
+                text: makeNotificationText(source.type, ev),
+                location: ev.location || "Ukendt",
+                createdAt: ev.createdAt || ev.updatedAt || ev.date || new Date().toISOString(),
+                acknowledged: false
+              });
+            }
+          }
+        }
+      }
+
+      if (additions.length) {
+        const merged = [...additions, ...existing];
+        saveStoredNotifications(merged);
+      }
+
+      saveSeenSignals(seen);
+    }
+
+    function acknowledgeNotification(id) {
+      const items = loadStoredNotifications().map(n =>
+        n.id === id ? { ...n, acknowledged: true, acknowledgedAt: new Date().toISOString() } : n
+      );
+      saveStoredNotifications(items);
+      renderNotifications();
+    }
+
+    function renderNotifications() {
+      const list = $("notificationList");
+      const topCard = $("topNotificationCard");
+      const section = $("notificationSection");
+      const sectionInfo = $("notificationSectionInfo");
+      const items = loadStoredNotifications();
+      const open = items.filter(n => !n.acknowledged);
+
+      $("topNotificationCount").textContent = String(open.length);
+
+      if (!open.length) {
+        $("topNotificationSub").textContent = "Ingen nye fejl kræver godkendelse";
+        sectionInfo.textContent = "Ingen åbne notifikationer";
+        topCard.classList.remove("alertPulse");
+        section.classList.remove("notifSectionUrgent");
+
+        list.innerHTML = '<div class="empty">Ingen nye notifikationer</div>';
+        return;
+      }
+
+      $("topNotificationSub").textContent = `${open.length} nye fejl venter på kvittering`;
+      sectionInfo.textContent = `Du skal selv kvittere ${open.length} notifikation${open.length === 1 ? "" : "er"}`;
+      topCard.classList.add("alertPulse");
+      section.classList.add("notifSectionUrgent");
+
+      list.innerHTML = open
+        .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .map(n => `
+          <div class="notifCard">
+            <div class="notifBar ${esc(n.type)}"></div>
+            <div class="notifContent">
+              <div class="notifTop">
+                <div>
+                  <div class="notifTitle">${esc(n.title)}</div>
+                  <div class="notifMeta">${esc(n.text)}</div>
+                </div>
+                <div class="notifBadge new">Ny fejl</div>
+              </div>
+              <div class="notifTime">${esc(fmtDateTime(n.createdAt))}</div>
+              <div class="notifActions">
+                <button class="notifBtn" type="button" onclick="acknowledgeNotification('${esc(n.id)}')">Kvitter</button>
+              </div>
+            </div>
+          </div>
+        `).join("");
     }
 
     async function loadCateringData() {
@@ -1188,6 +1489,9 @@
           throw new Error(data && data.error ? data.error : "Bundle load failed");
         }
 
+        createNotificationsFromBundle(data);
+        renderNotifications();
+
         buildLeadershipArea(data);
         renderCategoryBoxes(data);
         renderLocationFocus(data);
@@ -1214,6 +1518,7 @@
 
     async function boot() {
       updateClock();
+      renderNotifications();
       await Promise.allSettled([
         loadPortalBundle(),
         loadCateringData()
