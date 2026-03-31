@@ -1,44 +1,23 @@
-Her er **Version 2 – Premium, færdig og produktionsklar**.
-
-Én fil. Kopier direkte ind i `index.html`, smid på GitHub Pages, og du har en professionel catering-bestillingsside i sort, antracit og ægte guld-accenter.
-
-```html
 <!DOCTYPE html>
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Café Kaiser Catering | Premium Sæsonbuffeter</title>
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <title>Café Kaiser Catering | Sæsonbuffeter & Selskabsmad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: #111111;
-      --bg-card: #1a1a1a;
-      --bg-hover: #252525;
-      --text-primary: #ffffff;
-      --text-secondary: #a0a0a0;
-      --text-muted: #666666;
-      --gold: #d4af37;
-      --gold-light: #e5c158;
-      --gold-dark: #b8941f;
-      --border: #2a2a2a;
-      --border-light: #333333;
-      --success: #2d5a3d;
-      --error: #5a2d2d;
-      --radius: 16px;
-      --radius-sm: 8px;
-      --shadow: 0 20px 60px rgba(0,0,0,0.6);
-      --shadow-gold: 0 10px 40px rgba(212,175,55,0.15);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gold-primary: #C9A962;
+      --gold-secondary: #E8D5B0;
+      --gold-dark: #8B6F3A;
+      --black-primary: #1a1a1a;
+      --black-secondary: #2d2d2d;
+      --gray-light: #f5f3ee;
+      --white: #ffffff;
+      --shadow-sm: 0 4px 15px rgba(0,0,0,0.05);
+      --shadow-md: 0 12px 40px rgba(0,0,0,0.08);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -52,1019 +31,1182 @@ Her er **Version 2 – Premium, færdig og produktionsklar**.
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
+      font-family: 'Montserrat', sans-serif;
+      background: var(--gray-light);
+      color: var(--black-primary);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    h1, h2, h3, h4 {
-      font-family: 'Playfair Display', serif;
+    h1, h2, h3, h4, h5 {
+      font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
-      letter-spacing: -0.02em;
+      color: var(--black-primary);
     }
 
-    /* Navigation */
-    nav {
-      position: fixed;
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* HEADER / HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--black-primary) 0%, var(--black-secondary) 100%);
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 20px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 1000;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.2rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .logo i {
-      font-size: 1.4rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--gold);
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--gold);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    /* Hero */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: 
-        linear-gradient(to bottom, rgba(10,10,10,0.3), rgba(10,10,10,0.95)),
-        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      position: relative;
-      padding: 8rem 2rem 4rem;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%23C9A962" fill-opacity="0.03"/></svg>');
+      opacity: 0.5;
     }
 
     .hero-content {
+      position: relative;
+      z-index: 2;
       max-width: 900px;
-      text-align: center;
-      animation: fadeUp 1s ease-out;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-subtitle {
-      color: var(--gold);
-      font-size: 0.95rem;
-      text-transform: uppercase;
+    .brand-label {
+      display: inline-block;
+      font-size: 0.85rem;
       letter-spacing: 4px;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      margin-bottom: 20px;
+      animation: fadeInUp 1s ease forwards;
     }
 
     .hero h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
+      font-size: 4.5rem;
       line-height: 1.1;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      margin-bottom: 25px;
+      color: var(--white);
+      animation: fadeInUp 1s ease 0.2s forwards;
+      opacity: 0;
     }
 
-    .hero p {
-      color: var(--text-secondary);
+    .hero-subtitle {
       font-size: 1.25rem;
-      max-width: 600px;
-      margin: 0 auto 3rem;
-      font-weight: 300;
+      color: var(--gold-secondary);
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease 0.4s forwards;
+      opacity: 0;
     }
 
-    .hero-stats {
+    .cta-buttons {
       display: flex;
+      gap: 20px;
       justify-content: center;
-      gap: 4rem;
-      margin-top: 4rem;
-      padding-top: 3rem;
-      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease 0.6s forwards;
+      opacity: 0;
     }
 
-    .stat {
-      text-align: center;
+    .btn {
+      padding: 18px 42px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-block;
+      border: none;
     }
 
-    .stat-number {
-      display: block;
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--gold);
-      font-weight: 700;
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      color: var(--white);
+      box-shadow: 0 8px 30px rgba(201, 169, 98, 0.3);
     }
 
-    .stat-label {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+    .btn-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(201, 169, 98, 0.4);
     }
 
-    /* Sections */
-    section {
-      padding: 6rem 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-primary);
+      border: 2px solid var(--gold-primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--gold-primary);
+      color: var(--white);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold-secondary);
+      font-size: 2rem;
+      animation: bounce 2s infinite;
+    }
+
+    /* FEATURES SECTION */
+    .features {
+      padding: 100px 0;
+      background: var(--white);
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 4rem;
-    }
-
-    .section-tag {
-      color: var(--gold);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      display: block;
+      margin-bottom: 60px;
     }
 
     .section-title {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin-bottom: 1rem;
-      color: var(--text-primary);
+      font-size: 3rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: var(--gold-primary);
+      margin: 15px auto 0;
     }
 
     .section-subtitle {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
+      color: #666;
       max-width: 600px;
       margin: 0 auto;
     }
 
-    /* Buffet Cards */
-    .buffet-grid {
+    .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 2rem;
-      margin-bottom: 4rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
     }
 
-    .buffet-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
+    .feature-card {
+      background: var(--gray-light);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
       transition: var(--transition);
-      cursor: pointer;
-      position: relative;
-      group: buffet;
+      border: 1px solid transparent;
     }
 
-    .buffet-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 0%, rgba(212,175,55,0.05) 100%);
-      opacity: 0;
-      transition: var(--transition);
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-md);
     }
 
-    .buffet-card:hover::before {
-      opacity: 1;
-    }
-
-    .buffet-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--gold-dark);
-      box-shadow: var(--shadow-gold);
-    }
-
-    .buffet-card.selected {
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 0 4px rgba(212,175,55,0.1), var(--shadow-gold);
-    }
-
-    .buffet-card.selected::after {
-      content: '\f00c';
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--gold);
-      color: var(--bg-primary);
-      width: 36px;
-      height: 36px;
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      z-index: 10;
+      margin: 0 auto 25px;
+      color: var(--white);
+      font-size: 2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: #666;
+    }
+
+    /* BUFFET CARDS SECTION */
+    .buffets {
+      padding: 100px 0;
+      background: var(--gray-light);
+    }
+
+    .buffet-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 60px;
+      margin-top: 50px;
+    }
+
+    .buffet-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .buffet-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      cursor: pointer;
+      border: 3px solid transparent;
+      position: relative;
+    }
+
+    .buffet-card:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .buffet-card.active {
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-lg);
     }
 
     .buffet-image {
-      height: 280px;
+      height: 250px;
       background-size: cover;
       background-position: center;
       position: relative;
     }
 
-    .buffet-image::after {
-      content: '';
+    .buffet-overlay {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, var(--bg-card) 0%, transparent 50%);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+    }
+
+    .buffet-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--gold-primary);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
     .buffet-content {
-      padding: 2rem;
-      position: relative;
-    }
-
-    .buffet-season {
-      color: var(--gold);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+      padding: 30px;
     }
 
     .buffet-title {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      color: var(--text-primary);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: var(--black-primary);
     }
 
-    .buffet-desc {
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
-      line-height: 1.7;
+    .buffet-description {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.8;
     }
 
-    .buffet-price {
-      font-size: 1.25rem;
-      color: var(--gold-light);
-      font-weight: 600;
-      font-family: 'Playfair Display', serif;
+    .buffet-ingredients {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
-    .buffet-price span {
+    .buffet-ingredients li {
+      background: var(--gray-light);
+      padding: 8px 16px;
+      border-radius: 50px;
       font-size: 0.9rem;
-      color: var(--text-muted);
-      font-family: 'Inter', sans-serif;
-      font-weight: 400;
+      color: var(--black-primary);
     }
 
-    /* Order Section */
-    .order-section {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      overflow: hidden;
+    .buffet-prices {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      min-height: 700px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-light);
     }
 
-    .order-form {
-      padding: 3rem;
-      border-right: 1px solid var(--border);
+    .price-item {
+      text-align: center;
+    }
+
+    .price-min {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .price-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold-primary);
+    }
+
+    /* CALCULATOR SECTION */
+    .calculator-section {
+      background: var(--white);
+      padding: 80px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .calculator-container {
+      display: flex;
+      background: var(--white);
+      border-radius: 30px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      margin: 0 20px;
+    }
+
+    .calc-info {
+      flex: 1;
+      padding: 50px;
+      background: linear-gradient(135deg, var(--black-primary), var(--black-secondary));
+      color: var(--white);
+    }
+
+    .calc-info h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .calc-info p {
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 30px;
+    }
+
+    .calc-details {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .calc-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .calc-detail-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(201, 169, 98, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+    }
+
+    .calc-form {
+      flex: 1;
+      padding: 50px;
+      background: var(--white);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
     }
 
     .form-group {
-      margin-bottom: 1.75rem;
+      margin-bottom: 20px;
     }
 
-    .form-label {
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-group label {
       display: block;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--black-primary);
     }
 
-    .form-control {
+    .form-input, .form-select {
       width: 100%;
-      padding: 1rem 1.25rem;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-primary);
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
       font-size: 1rem;
       transition: var(--transition);
-      font-family: 'Inter', sans-serif;
     }
 
-    .form-control:focus {
+    .form-input:focus, .form-select:focus {
       outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+      border-color: var(--gold-primary);
     }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+    .addons-group {
+      margin: 30px 0;
     }
 
-    .guest-input-wrapper {
-      position: relative;
-    }
-
-    .guest-hint {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* Addons */
-    .addons-grid {
-      display: grid;
-      gap: 0.75rem;
+    .addons-group label {
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: block;
     }
 
     .addon-item {
       display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 12px;
       transition: var(--transition);
+      cursor: pointer;
     }
 
     .addon-item:hover {
-      border-color: var(--border-light);
-      background: var(--bg-hover);
+      border-color: var(--gold-primary);
+      background: var(--gray-light);
     }
 
     .addon-item input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      accent-color: var(--gold);
-      cursor: pointer;
+      margin-top: 5px;
+      width: 20px;
+      height: 20px;
+      accent-color: var(--gold-primary);
     }
 
-    .addon-info {
-      flex: 1;
-    }
-
-    .addon-name {
+    .addon-text strong {
       display: block;
-      color: var(--text-primary);
-      font-weight: 500;
-      margin-bottom: 0.25rem;
+      color: var(--black-primary);
+      margin-bottom: 5px;
     }
 
-    .addon-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .addon-text span {
+      color: #666;
+      font-size: 0.9rem;
     }
 
-    .addon-price {
-      color: var(--gold);
-      font-weight: 600;
-      font-family: 'Playfair Display', serif;
+    .total-section {
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      padding: 30px;
+      border-radius: 20px;
+      margin-top: 30px;
     }
 
-    /* Summary Sidebar */
-    .order-summary {
-      background: var(--bg-card);
-      padding: 3rem;
-      display: flex;
-      flex-direction: column;
-      position: sticky;
-      top: 100px;
-      height: fit-content;
-    }
-
-    .summary-title {
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
-    }
-
-    .summary-row {
+    .total-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1rem;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
+      margin-bottom: 15px;
     }
 
-    .summary-row.highlight {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .summary-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 1.5rem 0;
-    }
-
-    .summary-total {
-      background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: var(--radius-sm);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      text-align: center;
+    .total-row:last-child {
+      margin-bottom: 0;
+      padding-top: 15px;
+      border-top: 2px dashed rgba(255,255,255,0.3);
     }
 
     .total-label {
-      display: block;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 0.5rem;
+      color: var(--white);
     }
 
-    .total-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      color: var(--gold);
+    .total-value {
+      color: var(--white);
       font-weight: 700;
-      line-height: 1;
+      font-size: 1.2rem;
     }
 
-    .total-note {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.5rem;
+    .grand-total {
+      font-size: 2rem;
+      color: var(--white);
     }
 
-    .btn {
+    .submit-btn {
       width: 100%;
-      padding: 1.25rem;
+      padding: 20px;
+      background: var(--gold-primary);
+      color: var(--white);
       border: none;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 600;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      margin-top: 20px;
     }
 
-    .btn-primary {
-      background: var(--gold);
-      color: var(--bg-primary);
-      margin-bottom: 1rem;
-    }
-
-    .btn-primary:hover {
-      background: var(--gold-light);
+    .submit-btn:hover {
+      background: var(--gold-dark);
       transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(212,175,55,0.3);
     }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .price-tier-table {
-      margin-top: 2rem;
-      background: var(--bg-primary);
-      border-radius: var(--radius-sm);
+    /* PRICING TABLE */
+    .pricing-table {
+      margin-top: 50px;
+      background: var(--white);
+      border-radius: 20px;
       overflow: hidden;
-      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
     }
 
-    .tier-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
+    .pricing-header {
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr 2fr;
+      background: var(--black-primary);
+      color: var(--white);
+      padding: 20px;
+      font-weight: 700;
     }
 
-    .tier-row:last-child {
-      border-bottom: none;
+    .pricing-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr 2fr;
+      padding: 18px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      align-items: center;
     }
 
-    .tier-row.active {
-      background: rgba(212,175,55,0.1);
-      color: var(--gold);
+    .pricing-row:nth-child(even) {
+      background: var(--gray-light);
     }
 
-    /* Modal */
+    .footer-note {
+      text-align: center;
+      margin-top: 50px;
+      color: #666;
+      padding: 40px 20px;
+      background: var(--black-primary);
+    }
+
+    .footer-note p {
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* MODAL */
     .modal {
       display: none;
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 2000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
     }
 
     .modal.active {
       display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     .modal-content {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      max-width: 600px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
+      background: var(--white);
+      padding: 50px;
+      border-radius: 30px;
+      max-width: 700px;
       position: relative;
-      box-shadow: var(--shadow);
     }
 
-    .modal-header {
-      padding: 2rem;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, transparent 100%);
-    }
-
-    .modal-title {
-      font-size: 1.75rem;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-subtitle {
-      color: var(--text-secondary);
-    }
-
-    .modal-body {
-      padding: 2rem;
-    }
-
-    .receipt-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .receipt-label {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.25rem;
-    }
-
-    .receipt-value {
-      color: var(--text-primary);
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .receipt-value.gold {
-      color: var(--gold);
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-    }
-
-    .receipt-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      background: var(--bg-primary);
-      padding: 1.5rem;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
-
-    .receipt-total {
-      background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: var(--radius-sm);
-      padding: 1.5rem;
-      text-align: center;
-      margin: 2rem 0;
-    }
-
-    .receipt-total-label {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 0.5rem;
-    }
-
-    .receipt-total-amount {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .modal-footer {
-      padding: 2rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 1rem;
-    }
-
-    .close-modal {
+    .modal-close {
       position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
+      top: 20px;
+      right: 20px;
       background: none;
       border: none;
-      color: var(--text-muted);
-      font-size: 1.5rem;
+      font-size: 2rem;
       cursor: pointer;
-      transition: var(--transition);
-      width: 40px;
-      height: 40px;
+      color: var(--black-primary);
+    }
+
+    .modal-success {
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gold-primary);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
+      color: var(--white);
+      font-size: 3rem;
+      margin: 0 auto 30px;
     }
 
-    .close-modal:hover {
-      background: var(--bg-hover);
-      color: var(--text-primary);
+    .summary-box {
+      background: var(--gray-light);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 25px 0;
+      font-size: 0.95rem;
     }
 
-    /* Footer */
-    footer {
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border);
-      padding: 4rem 2rem 2rem;
-      margin-top: 4rem;
-    }
-
-    .footer-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 4rem;
-      margin-bottom: 4rem;
-    }
-
-    .footer-brand {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .footer-desc {
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    .footer-title {
-      color: var(--text-primary);
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 0.9rem;
-    }
-
-    .footer-links {
-      list-style: none;
-    }
-
-    .footer-links li {
-      margin-bottom: 0.75rem;
-    }
-
-    .footer-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--gold);
-    }
-
-    .footer-bottom {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
+    .summary-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
     }
 
-    .social-links {
-      display: flex;
-      gap: 1.5rem;
+    .summary-item:last-child {
+      border-bottom: none;
     }
 
-    .social-links a {
-      color: var(--text-muted);
-      font-size: 1.25rem;
-      transition: var(--transition);
+    /* ANIMATIONS */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .social-links a:hover {
-      color: var(--gold);
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%) rotate(0deg);
+      }
+      40% {
+        transform: translateY(-10px) translateX(-50%) rotate(-5deg);
+      }
+      60% {
+        transform: translateY(-5px) translateX(-50%) rotate(5deg);
+      }
     }
 
-    /* Mobile */
-    @media (max-width: 1024px) {
-      .order-section {
+    /* RESPONSIVE */
+    @media (max-width: 1050px) {
+      .buffet-container {
         grid-template-columns: 1fr;
       }
 
-      .order-form {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
+      .form-grid {
+        grid-template-columns: 1fr;
       }
 
-      .footer-content {
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
+      .form-group.full-width {
+        grid-column: span 1;
       }
 
-      .hero-stats {
+      .calculator-container {
         flex-direction: column;
-        gap: 2rem;
       }
 
-      .buffet-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-content {
+      .pricing-header, .pricing-row {
         grid-template-columns: 1fr;
         text-align: center;
+        padding: 15px;
       }
 
-      .footer-bottom {
+      .hero h1 {
+        font-size: 3rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        min-height: 80vh;
+        padding: 80px 20px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .feature-card {
+        padding: 30px;
+      }
+
+      .buffet-card {
+        margin: 0 15px;
+      }
+
+      .calc-info, .calc-form {
+        padding: 30px;
+      }
+
+      .cta-buttons {
         flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+        align-items: center;
       }
 
-      .receipt-grid {
-        grid-template-columns: 1fr;
+      .btn {
+        width: 100%;
+        max-width: 300px;
       }
-    }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-primary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-light);
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--gold-dark);
     }
   </style>
 </head>
 <body>
-
-  <!-- Navigation -->
-  <nav>
-    <div class="nav-container">
-      <a href="#" class="logo">
-        <i class="fas fa-crown"></i>
-        Café Kaiser
-      </a>
-      <ul class="nav-links">
-        <li><a href="#buffeter" class="active">Buffeter</a></li>
-        <li><a href="#bestilling">Bestilling</a></li>
-        <li><a href="#kontakt">Kontakt</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <section class="hero">
+  <header class="hero">
     <div class="hero-content">
-      <span class="hero-subtitle">Catering & Sæsonbuffeter</span>
-      <h1>Smagfulde oplevelser til dit selskab</h1>
-      <p>Luksuriøse buffeter til påske, jul og konfirmation. Udviklet med passion, serveret med elegance. Vi bringer Café Kaisers klassikere direkte til dit arrangement.</p>
+      <span class="brand-label">Café Kaiser</span>
+      <h1>Lækre Sæsonbuffeter til Uden for Dørene</h1>
+      <p class="hero-subtitle">
+        Fra Påske og Jul til Konfirmation — vores professionelle catering skaber 
+        mindeværdige øjeblikke med kvalitetssmag og elegance.
+      </p>
+      <div class="cta-buttons">
+        <a href="#bestilling" class="btn btn-gold">Bestil Nu</a>
+        <a href="#buffetter" class="btn btn-outline">Se Vores Menuer</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">↓</div>
+  </header>
+
+  <main id="buffetter" class="container">
+    <!-- FEATURES -->
+    <section class="features">
+      <div class="section-header">
+        <h2 class="section-title">Hvorfor vælge os?</h2>
+        <p class="section-subtitle">Café Kaiser har 5 lokationer i Nordsjælland og over 20 års erfaring.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌟</div>
+          <h3>Kvalitetshøje Råvarer</h3>
+          <p>Hjemmelavede dressinger, Meyers-brød og friske ingredienser fra lokale producenter.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>Forkrævende Præsentation</h3>
+          <p>Buffetter der ser lige så godt ud, som de smager – perfekt til fester og selskaber.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+          <h3>Fleksibel Levering</h3>
+          <p>Afhentning eller levering efter aftale – vi passer på maden hele vejen frem til dig.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUFFETS -->
+    <section class="buffets">
+      <div class="section-header">
+        <h2 class="section-title">Vore Buffettilbud</h2>
+        <p class="section-subtitle">Tre forskellige buffeter, alle lavet med kærlighed til det klassiske danske køkken.</p>
+      </div>
       
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-number">20+</span>
-          <span class="stat-label">Års erfaring</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">5</span>
-          <span class="stat-label">Caféer</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">8+</span>
-          <span class="stat-label">Kuverter minimum</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Buffet Selection -->
-  <section id="buffeter">
-    <div class="section-header">
-      <span class="section-tag">Vores Udvalg</span>
-      <h2 class="section-title">Vælg din buffet</h2>
-      <p class="section-subtitle">Tre nøje sammensatte menuer, der kombinerer klassiske smagsoplevelser med moderne præsentation.</p>
-    </div>
-
-    <div class="buffet-grid">
-      <!-- Påske -->
-      <div class="buffet-card selected" data-buffet="paaske" onclick="selectBuffet('paaske')">
-        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop')"></div>
-        <div class="buffet-content">
-          <div class="buffet-season">Sæson: Forår</div>
-          <h3 class="buffet-title">Påskefrokost</h3>
-          <p class="buffet-desc">
-            En klassisk påskefrokost med marinerede sild, æg og håndpillede rejer, paneret fiskefilet, hjemmelavet hønsesalat, varmrøget laks og roastbeef. Serveres med Meyers økologiske rugbrød, frisk brød og smør.
-          </p>
-          <div class="buffet-price">Fra 239 kr. <span>pr. kuvert</span></div>
-        </div>
-      </div>
-
-      <!-- Jul -->
-      <div class="buffet-card" data-buffet="jul" onclick="selectBuffet('jul')">
-        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=1974&auto=format&fit=crop')"></div>
-        <div class="buffet-content">
-          <div class="buffet-season">Sæson: Vinter</div>
-          <h3 class="buffet-title">Julefrokost</h3>
-          <p class="buffet-desc">
-            Komplet julefrokost med sild, æg og rejer, laks, fiskefilet, lun leverpostej med bacon, frikadeller med rødkål, julesalat og selvfølgelig risalamande med kirsebærsauce. Alt hvad hjertet begærer til jul.
-          </p>
-          <div class="buffet-price">Fra 239 kr. <span>pr. kuvert</span></div>
-        </div>
-      </div>
-
-      <!-- Konfirmation -->
-      <div class="buffet-card" data-buffet="konfirmation" onclick="selectBuffet('konfirmation')">
-        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1974&auto=format&fit=crop')"></div>
-        <div class="buffet-content">
-          <div class="buffet-season">Anledning: Fest</div>
-          <h3 class="buffet-title">Konfirmationsbuffet</h3>
-          <p class="buffet-desc">
-            Elegant selskabsbuffet med marineret kyllingebryst, roastbeef af okseinderlår, varmrøget laks, flødekartofler, Cæsarsalat og friske salater. Perfekt til den store dag med noget for enhver smag.
-          </p>
-          <div class="buffet-price">Fra 249 kr. <span>pr. kuvert</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Order Section -->
-  <section id="bestilling" style="max-width: 1200px;">
-    <div class="section-header">
-      <span class="section-tag">Bestilling</span>
-      <h2 class="section-title">Skræddersy din bestilling</h2>
-      <p class="section-subtitle">Udfyld formularen for at se prisen øjeblikkeligt. Vi kontakter dig inden for 24 timer for at bekræfte din bestilling.</p>
-    </div>
-
-    <div class="order-section">
-      <div class="order-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Navn</label>
-            <input type="text" class="form-control" id="name" placeholder="Dit fulde navn">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Telefon</label>
-            <input type="tel" class="form-control" id="phone" placeholder="Dit telefonnummer">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">E-mail</label>
-            <input type="email" class="form-control" id="email" placeholder="Din e-mailadresse">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Dato for arrangement</label>
-            <input type="date" class="form-control" id="date">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Antal kuverter</label>
-            <div class="guest-input-wrapper">
-              <input type="number" class="form-control" id="guests" min="8" value="8" onchange="updateCalculation()">
-              <span class="guest-hint">Min. 8</span>
+      <div class="buffet-container">
+        <div class="buffet-grid">
+          <!-- PÅSKE -->
+          <div class="buffet-card active" data-type="paaske">
+            <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80');">
+              <div class="buffet-overlay"></div>
+              <span class="buffet-badge">Populært</span>
+            </div>
+            <div class="buffet-content">
+              <h3 class="buffet-title">Påskefrokost</h3>
+              <p class="buffet-description">
+                Klassisk påskebuffet med fokus på de gode traditioner. Perfekt til familiehygge og påskenes første samling.
+              </p>
+              <ul class="buffet-ingredients">
+                <li>Sild med karry</li>
+                <li>Æg & rejer</li>
+                <li>Fiskefilet</li>
+                <li>Risalamande</li>
+              </ul>
+              <div class="buffet-prices">
+                <div class="price-item">
+                  <div class="price-min">8–14 pers</div>
+                  <div class="price-value">279 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">15–29 pers</div>
+                  <div class="price-value">259 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">30+ pers</div>
+                  <div class="price-value">239 kr.</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Levering</label>
-            <select class="form-control" id="delivery" onchange="updateCalculation()">
-              <option value="0">Afhentning (0 kr.)</option>
-              <option value="199">Levering lokalområde (+199 kr.)</option>
-              <option value="299">Levering udvidet område (+299 kr.)</option>
-            </select>
+
+          <!-- JUL -->
+          <div class="buffet-card" data-type="jul">
+            <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1200&q=80');">
+              <div class="buffet-overlay"></div>
+              <span class="buffet-badge">Sæson</span>
+            </div>
+            <div class="buffet-content">
+              <h3 class="buffet-title">Julefrokost</h3>
+              <p class="buffet-description">
+                Den rette julestemning med alle favoritterne. Fra sild til frikadeller – en julefest uden kompromiser.
+              </p>
+              <ul class="buffet-ingredients">
+                <li>Sild & karry</li>
+                <li>Laks & æg/rejer</li>
+                <li>Frikadeller</li>
+                <li>Julesalat</li>
+              </ul>
+              <div class="buffet-prices">
+                <div class="price-item">
+                  <div class="price-min">8–14 pers</div>
+                  <div class="price-value">279 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">15–29 pers</div>
+                  <div class="price-value">259 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">30+ pers</div>
+                  <div class="price-value">239 kr.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KONFIRMATION -->
+          <div class="buffet-card" data-type="konfirmation">
+            <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1528605105345-5344ea20e269?auto=format&fit=crop&w=1200&q=80');">
+              <div class="buffet-overlay"></div>
+              <span class="buffet-badge">Premium</span>
+            </div>
+            <div class="buffet-content">
+              <h3 class="buffet-title">Konfirmationsbuffet</h3>
+              <p class="buffet-description">
+                En festlig buffet som rammer både unge og gamle. Moderne twist på de klassiske favoritter.
+              </p>
+              <ul class="buffet-ingredients">
+                <li>Roastbeef</li>
+                <li>Kylling & laks</li>
+                <li>Cæsarsalat</li>
+                <li>Gourmet tilbehør</li>
+              </ul>
+              <div class="buffet-prices">
+                <div class="price-item">
+                  <div class="price-min">8–14 pers</div>
+                  <div class="price-value">289 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">15–29 pers</div>
+                  <div class="price-value">269 kr.</div>
+                </div>
+                <div class="price-item">
+                  <div class="price-min">30+ pers</div>
+                  <div class="price-value">249 kr.</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Tilkøb & Ekstra</label>
-          <div class="addons-grid">
-            <label class="addon-item">
-              <input type="checkbox
+        <!-- CALCULATOR -->
+        <aside class="calculator-section" id="bestilling">
+          <div class="calculator-container">
+            <div class="calc-info">
+              <h2>Bestil Din Buffet</h2>
+              <p>Vælg antal personer og se prisen i realtid. Tilføj ekstra elementer for at gøre din buffet endnu mere speciel.</p>
+              <div class="calc-details">
+                <div class="calc-detail-item">
+                  <div class="calc-detail-icon">✓</div>
+                  <div><strong>Minimum</strong><br/>8 personer</div>
+                </div>
+                <div class="calc-detail-item">
+                  <div class="calc-detail-icon">✓</div>
+                  <div><strong>Afhentning</strong><br/>Inkluderet</div>
+                </div>
+                <div class="calc-detail-item">
+                  <div class="calc-detail-icon">✓</div>
+                  <div><strong>Levering</strong><br/>Ekstra tilvalg</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="calc-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Navn</label>
+                  <input type="text" class="form-input" id="name" placeholder="Dit navn" />
+                </div>
+                <div class="form-group">
+                  <label>Telefon</label>
+                  <input type="tel" class="form-input" id="phone" placeholder="Dit nummer" />
+                </div>
+                <div class="form-group">
+                  <label>E-mail</label>
+                  <input type="email" class="form-input" id="email" placeholder="din@email.dk" />
+                </div>
+                <div class="form-group">
+                  <label>Dato</label>
+                  <input type="date" class="form-input" id="date" />
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Antal kuverter</label>
+                  <select class="form-select" id="guests">
+                    <option value="8">8 personer</option>
+                    <option value="10">10 personer</option>
+                    <option value="12">12 personer</option>
+                    <option value="14">14 personer</option>
+                    <option value="15">15 personer</option>
+                    <option value="20">20 personer</option>
+                    <option value="25">25 personer</option>
+                    <option value="29">29 personer</option>
+                    <option value="30">30 personer</option>
+                    <option value="35">35 personer</option>
+                    <option value="40">40 personer</option>
+                    <option value="50">50 personer</option>
+                    <option value="60">60 personer</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Buffettype</label>
+                  <select class="form-select" id="buffetType">
+                    <option value="paaske">Påskefrokost</option>
+                    <option value="jul">Julefrokost</option>
+                    <option value="konfirmation">Konfirmationsbuffet</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="add-ons-section form-group full-width">
+                <label>Tilkøb</label>
+                <div class="addon-item">
+                  <input type="checkbox" id="addon-brownie" />
+                  <div class="addon-text">
+                    <strong>Brownie med skovbærkompot (+49 kr./pers.)</strong>
+                    <span>Populær dessert til konfirmation og højtider</span>
+                  </div>
+                </div>
+                <div class="addon-item">
+                  <input type="checkbox" id="addon-ost" />
+                  <div class="addon-text">
+                    <strong>Osteanretning (+59 kr./pers.)</strong>
+                    <span>Udvalgte oste med tilbehør</span>
+                  </div>
+                </div>
+                <div class="addon-item">
+                  <input type="checkbox" id="addon-laks" />
+                  <div class="addon-text">
+                    <strong>Ekstra varmrøget laks (+39 kr./pers.)</strong>
+                    <span>Premium tilvalg for gæster</span>
+                  </div>
+                </div>
+                <div class="addon-item">
+                  <input type="checkbox" id="addon-levering" />
+                  <div class="addon-text">
+                    <strong>Levering lokalområde (+199 kr.)</strong>
+                    <span>Levering afhængigt af distancen</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="total-section">
+                <div class="total-row">
+                  <span class="total-label">Pris pr. kuvert:</span>
+                  <span class="total-value" id="kuvertPrice">279 kr.</span>
+                </div>
+                <div class="total-row">
+                  <span class="total-label">Buffet subtotal:</span>
+                  <span class="total-value" id="subtotal">2.232 kr.</span>
+                </div>
+                <div class="total-row">
+                  <span class="total-label">Tilkøb:</span>
+                  <span class="total-value" id="addonsTotal">0 kr.</span>
+                </div>
+                <div class="total-row">
+                  <span class="total-label">Levering:</span>
+                  <span class="total-value" id="deliveryTotal">0 kr.</span>
+                </div>
+                <div class="total-row">
+                  <span class="total-label grand-total">SAMLET PRIS:</span>
+                  <span class="total-value grand-total" id="grandTotal">2.232 kr.</span>
+                </div>
+              </div>
+
+              <button class="submit-btn" onclick="generateSummary()">BESTIL NU</button>
+            </div>
+          </div>
+
+          <div class="pricing-table">
+            <div class="pricing-header">
+              <span>Type</span>
+              <span>8–14 pers.</span>
+              <span>15–29 pers.</span>
+              <span>30+ pers.</span>
+            </div>
+            <div class="pricing-row">
+              <span><strong>Påskefrokost</strong></span>
+              <span>279 kr.</span>
+              <span>259 kr.</span>
+              <span>239 kr.</span>
+            </div>
+            <div class="pricing-row">
+              <span><strong>Julefrokost</strong></span>
+              <span>279 kr.</span>
+              <span>259 kr.</span>
+              <span>239 kr.</span>
+            </div>
+            <div class="pricing-row">
+              <span><strong>Konfirmation</strong></span>
+              <span>289 kr.</span>
+              <span>269 kr.</span>
+              <span>249 kr.</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-note">
+    <p>© 2024 Café Kaiser | Alle rettigheder forbeholdes | Minimum 8 kuverter | Afhentning eller levering efter aftale</p>
+    <p style="margin-top: 15px;">Alle priser er inkl. moms. Eventuel leveringspris kan variere.</p>
+  </footer>
+
+  <!-- SUMMARY MODAL -->
+  <div class="modal" id="summaryModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-success">
+        <div class="success-icon">✓</div>
+        <h2>Bestilling Modtaget!</h2>
+        <p>Tak for din bestilling. Vi kontakter dig snart for at bekræfte.</p>
+        
+        <div class="summary-box">
+          <div class="summary-item">
+            <span>Navn:</span>
+            <strong id="sumName">-</strong>
+          </div>
+          <div class="summary-item">
+            <span>Buffet:</span>
+            <strong id="sumBuffet">-</strong>
+          </div>
+          <div class="summary-item">
+            <span>Pers:</span>
+            <strong id="sumGuests">-</strong>
+          </div>
+          <div class="summary-item">
+            <span>Dato:</span>
+            <strong id="sumDate">-</strong>
+          </div>
+          <div class="summary-item">
+            <span>Samlet:</span>
+            <strong id="sumTotal">-</strong>
+          </div>
+        </div>
+
+        <button class="btn btn-gold" onclick="closeModal()">Kontakt Support</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const prices = {
+      paaske: [279, 259, 239],
+      jul: [279, 259, 239],
+      konfirmation: [289, 269, 249]
+    };
+
+    function getPrice(type, guests) {
+      if (guests <= 14) return prices[type][0];
+      if (guests <= 29) return prices[type][1];
+      return prices[type][2];
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('da-DK').format(Math.round(value)) + ' kr.';
+    }
+
+    function calculate() {
+      const type = document.getElementById('buffetType').value;
+      const guests = parseInt(document.getElementById('guests').value);
+      let total = getPrice(type, guests) * guests;
+      
+      // Addons
+      if (document.getElementById('addon-brownie').checked) total += 49 * guests;
+      if (document.getElementById('addon-ost').checked) total += 59 * guests;
+      if (document.getElementById('addon-laks').checked) total += 39 * guests;
+      if (document.getElementById('addon-levering').checked) total += 199;
+
+      document.getElementById('kuvertPrice').textContent = getPrice(type, guests) + ' kr.';
+      document.getElementById('subtotal').textContent = formatCurrency(getPrice(type, guests) * guests);
+      document.getElementById('addonsTotal').textContent = formatCurrency(total - getPrice(type, guests) * guests);
+      document.getElementById('deliveryTotal').textContent = document.getElementById('addon-levering').checked ? '199 kr.' : '0 kr.';
+      document.getElementById('grandTotal').textContent = formatCurrency(total);
+    }
+
+    function generateSummary() {
+      const modal = document.getElementById('summaryModal');
+      const type = document.getElementById('buffetType').options[document.getElementById('buffetType').selectedIndex].text;
+      const guests = document.getElementById('guests').value;
+      const date = document.getElementById('date').value || '-';
+      const total = document.getElementById('grandTotal').textContent;
+
+      document.getElementById('sumName').textContent = document.getElementById('name').value || '-';
+      document.getElementById('sumBuffet').textContent = type;
+      document.getElementById('sumGuests').textContent = guests + ' personer';
+      document.getElementById('sumDate').textContent = date;
+      document.getElementById('sumTotal').textContent = total;
+
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('summaryModal').classList.remove('active');
+    }
+
+    document.querySelectorAll('.buffet-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.buffet-card').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const type = this.dataset.type;
+        document.getElementById('buffetType').value = type;
+        calculate();
+      });
+    });
+
+    ['buffetType', 'guests'].forEach(id => {
+      document.getElementById(id).addEventListener('change', calculate);
+    });
+
+    ['addon-brownie', 'addon-ost', 'addon-laks', 'addon-levering'].forEach(id => {
+      document.getElementById(id).addEventListener('change', calculate);
+    });
+
+    document.querySelectorAll('.buffet-card').forEach(card => {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.buffet-card').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        calculate();
+      });
+    });
+
+    calculate();
+  </script>
+</body>
+</html>
