@@ -1,0 +1,1070 @@
+Her er **Version 2 – Premium, færdig og produktionsklar**.
+
+Én fil. Kopier direkte ind i `index.html`, smid på GitHub Pages, og du har en professionel catering-bestillingsside i sort, antracit og ægte guld-accenter.
+
+```html
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Café Kaiser Catering | Premium Sæsonbuffeter</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-card: #1a1a1a;
+      --bg-hover: #252525;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666666;
+      --gold: #d4af37;
+      --gold-light: #e5c158;
+      --gold-dark: #b8941f;
+      --border: #2a2a2a;
+      --border-light: #333333;
+      --success: #2d5a3d;
+      --error: #5a2d2d;
+      --radius: 16px;
+      --radius-sm: 8px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.6);
+      --shadow-gold: 0 10px 40px rgba(212,175,55,0.15);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 1.4rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: 
+        linear-gradient(to bottom, rgba(10,10,10,0.3), rgba(10,10,10,0.95)),
+        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
+      padding: 8rem 2rem 4rem;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      text-align: center;
+      animation: fadeUp 1s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-subtitle {
+      color: var(--gold);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Sections */
+    section {
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      color: var(--gold);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Buffet Cards */
+    .buffet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .buffet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      group: buffet;
+    }
+
+    .buffet-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(212,175,55,0.05) 100%);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .buffet-card:hover::before {
+      opacity: 1;
+    }
+
+    .buffet-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold-dark);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .buffet-card.selected {
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0 4px rgba(212,175,55,0.1), var(--shadow-gold);
+    }
+
+    .buffet-card.selected::after {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--gold);
+      color: var(--bg-primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 10;
+    }
+
+    .buffet-image {
+      height: 280px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .buffet-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg-card) 0%, transparent 50%);
+    }
+
+    .buffet-content {
+      padding: 2rem;
+      position: relative;
+    }
+
+    .buffet-season {
+      color: var(--gold);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .buffet-title {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .buffet-desc {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .buffet-price {
+      font-size: 1.25rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .buffet-price span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+    /* Order Section */
+    .order-section {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 700px;
+    }
+
+    .order-form {
+      padding: 3rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .form-label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .guest-input-wrapper {
+      position: relative;
+    }
+
+    .guest-hint {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Addons */
+    .addons-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .addon-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .addon-item:hover {
+      border-color: var(--border-light);
+      background: var(--bg-hover);
+    }
+
+    .addon-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    .addon-info {
+      flex: 1;
+    }
+
+    .addon-name {
+      display: block;
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .addon-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .addon-price {
+      color: var(--gold);
+      font-weight: 600;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Summary Sidebar */
+    .order-summary {
+      background: var(--bg-card);
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .summary-title {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .summary-row.highlight {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .summary-total {
+      background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .total-label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .total-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .total-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1.25rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg-primary);
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .price-tier-table {
+      margin-top: 2rem;
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .tier-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .tier-row:last-child {
+      border-bottom: none;
+    }
+
+    .tier-row.active {
+      background: rgba(212,175,55,0.1);
+      color: var(--gold);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, transparent 100%);
+    }
+
+    .modal-title {
+      font-size: 1.75rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-subtitle {
+      color: var(--text-secondary);
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .receipt-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .receipt-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+
+    .receipt-value {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .receipt-value.gold {
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+    }
+
+    .receipt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      background: var(--bg-primary);
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .receipt-total {
+      background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.05) 100%);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .receipt-total-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .receipt-total-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .modal-footer {
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1rem;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .close-modal:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 4rem 2rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .footer-desc {
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .footer-title {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--gold);
+    }
+
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .order-section {
+        grid-template-columns: 1fr;
+      }
+
+      .order-form {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .buffet-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .receipt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <i class="fas fa-crown"></i>
+        Café Kaiser
+      </a>
+      <ul class="nav-links">
+        <li><a href="#buffeter" class="active">Buffeter</a></li>
+        <li><a href="#bestilling">Bestilling</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-subtitle">Catering & Sæsonbuffeter</span>
+      <h1>Smagfulde oplevelser til dit selskab</h1>
+      <p>Luksuriøse buffeter til påske, jul og konfirmation. Udviklet med passion, serveret med elegance. Vi bringer Café Kaisers klassikere direkte til dit arrangement.</p>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">20+</span>
+          <span class="stat-label">Års erfaring</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5</span>
+          <span class="stat-label">Caféer</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">8+</span>
+          <span class="stat-label">Kuverter minimum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buffet Selection -->
+  <section id="buffeter">
+    <div class="section-header">
+      <span class="section-tag">Vores Udvalg</span>
+      <h2 class="section-title">Vælg din buffet</h2>
+      <p class="section-subtitle">Tre nøje sammensatte menuer, der kombinerer klassiske smagsoplevelser med moderne præsentation.</p>
+    </div>
+
+    <div class="buffet-grid">
+      <!-- Påske -->
+      <div class="buffet-card selected" data-buffet="paaske" onclick="selectBuffet('paaske')">
+        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop')"></div>
+        <div class="buffet-content">
+          <div class="buffet-season">Sæson: Forår</div>
+          <h3 class="buffet-title">Påskefrokost</h3>
+          <p class="buffet-desc">
+            En klassisk påskefrokost med marinerede sild, æg og håndpillede rejer, paneret fiskefilet, hjemmelavet hønsesalat, varmrøget laks og roastbeef. Serveres med Meyers økologiske rugbrød, frisk brød og smør.
+          </p>
+          <div class="buffet-price">Fra 239 kr. <span>pr. kuvert</span></div>
+        </div>
+      </div>
+
+      <!-- Jul -->
+      <div class="buffet-card" data-buffet="jul" onclick="selectBuffet('jul')">
+        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=1974&auto=format&fit=crop')"></div>
+        <div class="buffet-content">
+          <div class="buffet-season">Sæson: Vinter</div>
+          <h3 class="buffet-title">Julefrokost</h3>
+          <p class="buffet-desc">
+            Komplet julefrokost med sild, æg og rejer, laks, fiskefilet, lun leverpostej med bacon, frikadeller med rødkål, julesalat og selvfølgelig risalamande med kirsebærsauce. Alt hvad hjertet begærer til jul.
+          </p>
+          <div class="buffet-price">Fra 239 kr. <span>pr. kuvert</span></div>
+        </div>
+      </div>
+
+      <!-- Konfirmation -->
+      <div class="buffet-card" data-buffet="konfirmation" onclick="selectBuffet('konfirmation')">
+        <div class="buffet-image" style="background-image: url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1974&auto=format&fit=crop')"></div>
+        <div class="buffet-content">
+          <div class="buffet-season">Anledning: Fest</div>
+          <h3 class="buffet-title">Konfirmationsbuffet</h3>
+          <p class="buffet-desc">
+            Elegant selskabsbuffet med marineret kyllingebryst, roastbeef af okseinderlår, varmrøget laks, flødekartofler, Cæsarsalat og friske salater. Perfekt til den store dag med noget for enhver smag.
+          </p>
+          <div class="buffet-price">Fra 249 kr. <span>pr. kuvert</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order Section -->
+  <section id="bestilling" style="max-width: 1200px;">
+    <div class="section-header">
+      <span class="section-tag">Bestilling</span>
+      <h2 class="section-title">Skræddersy din bestilling</h2>
+      <p class="section-subtitle">Udfyld formularen for at se prisen øjeblikkeligt. Vi kontakter dig inden for 24 timer for at bekræfte din bestilling.</p>
+    </div>
+
+    <div class="order-section">
+      <div class="order-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Navn</label>
+            <input type="text" class="form-control" id="name" placeholder="Dit fulde navn">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefon</label>
+            <input type="tel" class="form-control" id="phone" placeholder="Dit telefonnummer">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" placeholder="Din e-mailadresse">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dato for arrangement</label>
+            <input type="date" class="form-control" id="date">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Antal kuverter</label>
+            <div class="guest-input-wrapper">
+              <input type="number" class="form-control" id="guests" min="8" value="8" onchange="updateCalculation()">
+              <span class="guest-hint">Min. 8</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Levering</label>
+            <select class="form-control" id="delivery" onchange="updateCalculation()">
+              <option value="0">Afhentning (0 kr.)</option>
+              <option value="199">Levering lokalområde (+199 kr.)</option>
+              <option value="299">Levering udvidet område (+299 kr.)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tilkøb & Ekstra</label>
+          <div class="addons-grid">
+            <label class="addon-item">
+              <input type="checkbox
