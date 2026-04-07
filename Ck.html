@@ -10,28 +10,28 @@
 
   <style>
     :root{
-      --bg:#e7e0d4;
-      --bg-deep:#d9cfbe;
-      --bg-soft:#f0e8dc;
-      --card:#faf6ef;
-      --card-2:#fffaf3;
-      --line:#d8ccbb;
-      --line-soft:#e6ddcf;
-      --text:#221d17;
-      --muted:#6d6254;
-      --muted-2:#8a7d6d;
-      --gold:#c7a24a;
-      --gold-light:#e1c97f;
-      --gold-dark:#9a7730;
-      --brown:#4f3f2c;
-      --brown-2:#6a5741;
+      --bg:#cfc3b1;
+      --bg-deep:#bba98f;
+      --bg-soft:#e2d6c6;
+      --card:#f8f1e7;
+      --card-2:#fbf6ee;
+      --line:#cfbea8;
+      --line-soft:#dfd2c0;
+      --text:#1f1914;
+      --muted:#665b4e;
+      --muted-2:#837769;
+      --gold:#c19a3c;
+      --gold-light:#dfc172;
+      --gold-dark:#916c20;
+      --brown:#463626;
+      --brown-2:#5b4734;
       --success:#2f7d55;
-      --warning:#a77712;
+      --warning:#9b7015;
       --danger:#a54b4b;
       --radius:22px;
       --radius-sm:14px;
-      --shadow:0 20px 50px rgba(61,47,28,.12);
-      --shadow-soft:0 10px 24px rgba(61,47,28,.08);
+      --shadow:0 24px 60px rgba(42,28,10,.16);
+      --shadow-soft:0 10px 24px rgba(42,28,10,.10);
       --max:1380px;
       --transition:all .25s ease;
     }
@@ -43,8 +43,8 @@
       font-family:'Inter',sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top right, rgba(199,162,74,.08), transparent 28%),
-        linear-gradient(180deg, #ddd3c4 0%, #e9e1d5 20%, #e7e0d4 100%);
+        radial-gradient(circle at top right, rgba(193,154,60,.10), transparent 28%),
+        linear-gradient(180deg, #bca88d 0%, #cabba7 18%, #cfc3b1 100%);
       line-height:1.6;
     }
 
@@ -63,9 +63,9 @@
     .nav{
       position:fixed;top:0;left:0;right:0;z-index:999;
       backdrop-filter:blur(14px);
-      background:rgba(221,211,196,.88);
-      border-bottom:1px solid rgba(79,63,44,.08);
-      box-shadow:0 6px 18px rgba(61,47,28,.05);
+      background:rgba(191,174,151,.86);
+      border-bottom:1px solid rgba(70,54,38,.10);
+      box-shadow:0 8px 20px rgba(42,28,10,.08);
     }
 
     .nav-inner{
@@ -138,7 +138,7 @@
       display:grid;place-items:center;
       position:relative;overflow:hidden;
       background:
-        linear-gradient(to bottom, rgba(30,22,13,.28), rgba(54,40,23,.18)),
+        linear-gradient(to bottom, rgba(20,14,9,.42), rgba(42,30,16,.28)),
         url('images/hero.jpg') center/cover no-repeat;
     }
 
@@ -190,10 +190,10 @@
     }
 
     .btn-primary{
-      background:linear-gradient(135deg, var(--gold-light), var(--gold));
+      background:linear-gradient(135deg, #e3c777, #c19a3c);
       color:#4b3810;
       padding:15px 24px;border-radius:999px;
-      box-shadow:var(--shadow-soft);
+      box-shadow:0 10px 24px rgba(145,108,32,.18);
     }
 
     .btn-primary:hover{transform:translateY(-2px)}
@@ -275,36 +275,49 @@
     }
 
     .card{
-      background:linear-gradient(180deg, rgba(255,251,246,.95), rgba(248,242,232,.94));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(252,247,239,.94), rgba(245,236,223,.94));
+      border:1px solid rgba(145,108,32,.30);
+      border-radius:30px;
       overflow:hidden;
-      box-shadow:var(--shadow);
+      box-shadow:0 24px 50px rgba(67,49,24,.12);
       transition:var(--transition);
       cursor:pointer;
       position:relative;
     }
 
-    .card::after{
-      content:"";
-      position:absolute;inset:0;
-      background:linear-gradient(135deg, rgba(199,162,74,.03), transparent 35%);
-      pointer-events:none;
-    }
-
     .card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 20px 40px rgba(61,47,28,.16);
-      border-color:#cfb57f;
+      transform:translateY(-8px);
+      box-shadow:0 28px 55px rgba(67,49,24,.18);
+      border-color:rgba(193,154,60,.55);
     }
 
     .card.selected{
       border:2px solid var(--gold);
-      box-shadow:0 0 0 4px rgba(199,162,74,.12), 0 20px 40px rgba(61,47,28,.14);
+      box-shadow:0 0 0 5px rgba(193,154,60,.10), 0 28px 55px rgba(67,49,24,.18);
     }
 
-    .card img{
-      width:100%;height:250px;object-fit:cover;
+    .card-media{
+      position:relative;
+      width:100%;
+      height:260px;
+      overflow:hidden;
+    }
+
+    .card-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+      transform:scale(1.01);
+    }
+
+    .card-media::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,.04), transparent 40%);
+      pointer-events:none;
     }
 
     .card-body{padding:24px}
@@ -603,9 +616,9 @@
     }
 
     .summary-top{
-      padding:26px 28px;
+      padding:28px 30px;
       border-bottom:1px solid var(--line);
-      background:linear-gradient(180deg, #f7ecd1, #fff8ea);
+      background:linear-gradient(180deg, #f2deb0, #f8ecd0);
     }
 
     .summary-top h3{font-size:1.7rem}
@@ -639,10 +652,10 @@
 
     .total-box{
       margin-top:18px;
-      padding:22px;
-      border-radius:18px;
-      background:linear-gradient(135deg, #f5e5b8, #ebd59c);
-      border:1px solid #dfc277;
+      padding:24px;
+      border-radius:22px;
+      background:linear-gradient(135deg, #ecd28d, #d9b55a);
+      border:1px solid #c79f40;
       text-align:center;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
     }
@@ -762,7 +775,7 @@
       padding:120px 0 60px;
       background:
         radial-gradient(circle at top right, rgba(199,162,74,.08), transparent 25%),
-        linear-gradient(180deg, #ddd3c4 0%, #e9e1d5 20%, #e7e0d4 100%);
+        linear-gradient(180deg, #bca88d 0%, #cabba7 18%, #cfc3b1 100%);
     }
 
     .confirmation-page.active{display:block}
@@ -879,7 +892,7 @@
     footer{
       padding:46px 0 26px;
       border-top:1px solid rgba(79,63,44,.08);
-      background:rgba(239,232,220,.7);
+      background:rgba(226,214,198,.7);
       margin-top:20px;
     }
 
@@ -1038,7 +1051,9 @@
 
       <div class="cards">
         <article class="card selected" data-buffet="brunch" onclick="selectBuffet('brunch')">
-          <img src="images/brunch.jpg" alt="Brunchbuffet">
+          <div class="card-media">
+            <img src="images/brunch.jpg" alt="Brunchbuffet">
+          </div>
           <div class="card-body">
             <div class="card-tag">Signatur</div>
             <h3>Brunchbuffet</h3>
@@ -1051,7 +1066,9 @@
         </article>
 
         <article class="card" data-buffet="smorrebrod" onclick="selectBuffet('smorrebrod')">
-          <img src="images/smorrebrod.jpg" alt="Smørrebrødsmenu">
+          <div class="card-media">
+            <img src="images/smorrebrod.jpg" alt="Smørrebrødsmenu">
+          </div>
           <div class="card-body">
             <div class="card-tag">Dansk klassiker</div>
             <h3>Smørrebrødsmenu</h3>
@@ -1064,7 +1081,9 @@
         </article>
 
         <article class="card" data-buffet="bygselv" onclick="selectBuffet('bygselv')">
-          <img src="images/bygselv.jpg" alt="Byg selv menu">
+          <div class="card-media">
+            <img src="images/bygselv.jpg" alt="Byg selv menu">
+          </div>
           <div class="card-body">
             <div class="card-tag">Fleksibel favorit</div>
             <h3>Byg selv menu</h3>
@@ -1077,7 +1096,9 @@
         </article>
 
         <article class="card" data-buffet="paaske" onclick="selectBuffet('paaske')">
-          <img src="images/paaske.jpg" alt="Påskefrokost">
+          <div class="card-media">
+            <img src="images/paaske.jpg" alt="Påskefrokost">
+          </div>
           <div class="card-body">
             <div class="card-tag">Sæson · Forår</div>
             <h3>Påskefrokost</h3>
@@ -1090,7 +1111,9 @@
         </article>
 
         <article class="card" data-buffet="jul" onclick="selectBuffet('jul')">
-          <img src="images/jul.jpg" alt="Julefrokost">
+          <div class="card-media">
+            <img src="images/jul.jpg" alt="Julefrokost">
+          </div>
           <div class="card-body">
             <div class="card-tag">Sæson · Vinter</div>
             <h3>Julefrokost</h3>
@@ -1141,7 +1164,6 @@
               </div>
             </div>
 
-            <!-- Smørrebrød -->
             <div class="smorrebrod-panel" id="smorrebrodPanel">
               <div class="choice-box">
                 <h4>Fordel smørrebrødet</h4>
@@ -1199,7 +1221,6 @@
               </div>
             </div>
 
-            <!-- Byg selv -->
             <div class="builder-panel" id="builderPanel">
               <div class="choice-box">
                 <h4>Sammensæt din Byg selv menu</h4>
@@ -1272,7 +1293,6 @@
               </div>
             </div>
 
-            <!-- Tilkøb kun til påske/jul -->
             <div class="addon-panel" id="addonPanel">
               <div class="choice-box">
                 <h4>Tilkøb</h4>
@@ -1317,7 +1337,6 @@
               </div>
             </div>
 
-            <!-- Kontakt -->
             <div class="grid-2">
               <div class="field">
                 <label class="label">Navn</label>
