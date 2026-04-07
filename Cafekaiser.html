@@ -4,92 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Café Kaiser</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  
+
   <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #0a0a0a;
-      color: white;
+    body { margin:0; font-family:'Poppins', sans-serif; background:#0a0a0a; color:white; }
+
+    /* HERO */
+    .hero { position:relative; height:100vh; overflow:hidden; }
+    .hero video { position:absolute; width:100%; height:100%; object-fit:cover; }
+    .hero-overlay {
+      position:relative; z-index:2; height:100%;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      background:rgba(0,0,0,0.5); text-align:center;
     }
 
-    .hero {
-      height: 100vh;
-      background: url('https://images.unsplash.com/photo-1555992336-03a23c9d2f7a') center/cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+    h1 { font-size:48px; margin:0; }
+    p { color:#ddd; }
 
-    .overlay {
-      background: rgba(0,0,0,0.6);
-      padding: 40px;
-      border-radius: 20px;
+    /* STICKY CTA */
+    .sticky-cta {
+      position:fixed; bottom:0; width:100%; display:flex; z-index:999;
     }
-
-    h1 {
-      font-size: 48px;
-      margin: 0;
+    .sticky-cta a {
+      flex:1; text-align:center; padding:18px;
+      font-weight:bold; text-decoration:none;
     }
+    .book { background:#C6A96B; color:black; }
+    .menu { background:black; color:white; border-top:1px solid #333; }
+    .takeaway { background:#1a1a1a; color:white; border-top:1px solid #333; }
 
-    p {
-      color: #ccc;
+    /* SECTION */
+    .section { padding:80px 20px; text-align:center; }
+
+    /* GALLERY */
+    .gallery { display:grid; gap:10px; }
+    @media(min-width:768px){
+      .gallery { grid-template-columns:repeat(3,1fr); }
     }
+    .gallery img { width:100%; height:250px; object-fit:cover; }
 
-    .btn {
-      padding: 14px 28px;
-      border-radius: 30px;
-      margin: 10px;
-      display: inline-block;
-      text-decoration: none;
-      font-weight: bold;
+    /* FOOTER */
+    footer { background:#000; padding:40px 20px; }
+    .locations { display:grid; gap:20px; }
+    @media(min-width:768px){
+      .locations { grid-template-columns:repeat(5,1fr); }
     }
+    .location { font-size:14px; color:#aaa; }
+    .location h4 { color:white; margin-bottom:5px; }
 
-    .btn-primary {
-      background: #C6A96B;
-      color: black;
+    /* MODAL */
+    .modal {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.9); display:none;
+      justify-content:center; align-items:center; z-index:1000;
     }
-
-    .btn-secondary {
-      border: 1px solid white;
-      color: white;
-    }
-
-    .section {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .grid {
-      display: grid;
-      gap: 20px;
-    }
-
-    @media(min-width: 768px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .card {
-      background: #111;
-      padding: 20px;
-      border-radius: 15px;
-    }
-
-    img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    .locations span {
-      border: 1px solid #C6A96B;
-      padding: 10px 20px;
-      margin: 5px;
-      display: inline-block;
-      border-radius: 30px;
+    .modal-content { text-align:center; }
+    .modal button {
+      display:block; margin:10px auto; padding:15px 30px;
+      border:none; border-radius:30px; background:#C6A96B; font-weight:bold;
     }
   </style>
 </head>
@@ -98,57 +71,80 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="overlay">
+    <video autoplay muted loop playsinline>
+      <source src="https://cdn.coverr.co/videos/coverr-restaurant-interior-5171/1080p.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay">
       <h1>Café Kaiser</h1>
-      <p>En hyggelig café i Helsingør, Hillerød, Farum, Hørsholm og Vanløse</p>
-
-      <a href="#" class="btn btn-primary">Book bord</a>
-      <a href="#" class="btn btn-secondary">Se menu</a>
+      <p>Mere end bare en café</p>
     </div>
   </section>
 
-  <!-- MENU -->
+  <!-- STORY -->
   <section class="section">
-    <h2>Populære retter</h2>
+    <h2>Mad lavet fra bunden</h2>
+    <p>Vi skaber hyggelige oplevelser med kvalitet og stemning i centrum</p>
+  </section>
 
-    <div class="grid">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
-        <h3>Kaiser Burger</h3>
-        <p>Saftig burger med sprøde fritter</p>
-      </div>
+  <!-- STEMNING -->
+  <section class="section">
+    <h2>Stemningen hos os</h2>
 
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0">
-        <h3>Brunch Deluxe</h3>
-        <p>Alt det bedste fra morgenbordet</p>
-      </div>
-
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1523986371872-9d3ba2e2f642">
-        <h3>Crispy Chicken</h3>
-        <p>Sprød kylling med hot honey glaze</p>
-      </div>
+    <div class="gallery">
+      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de">
+      <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1">
+      <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c">
     </div>
   </section>
 
-  <!-- LOCATIONS -->
-  <section class="section">
-    <h2>Vores caféer</h2>
+  <!-- FOOTER -->
+  <footer>
     <div class="locations">
-      <span>Helsingør</span>
-      <span>Hillerød</span>
-      <span>Farum</span>
-      <span>Hørsholm</span>
-      <span>Vanløse</span>
+      <div class="location"><h4>Helsingør</h4></div>
+      <div class="location"><h4>Hillerød</h4></div>
+      <div class="location"><h4>Farum</h4></div>
+      <div class="location"><h4>Hørsholm</h4></div>
+      <div class="location"><h4>Vanløse</h4></div>
     </div>
-  </section>
+  </footer>
 
-  <!-- CTA -->
-  <section class="section">
-    <h2>Klar til at besøge os?</h2>
-    <a href="#" class="btn btn-primary">Book bord nu</a>
-  </section>
+  <!-- STICKY CTA -->
+  <div class="sticky-cta">
+    <a href="#" class="book" onclick="openModal()">Book</a>
+    <a href="DIN-MENU-LINK" class="menu">Menu</a>
+    <a href="DIN-TAKEAWAY-LINK" class="takeaway">Takeaway</a>
+  </div>
+
+  <!-- BOOKING MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2>Vælg café</h2>
+
+      <button onclick="go('HELSINGOR-LINK')">Helsingør</button>
+      <button onclick="go('HILLEROD-LINK')">Hillerød</button>
+      <button onclick="go('FARUM-LINK')">Farum</button>
+      <button onclick="go('HORSHOLM-LINK')">Hørsholm</button>
+      <button onclick="go('VANLOSE-LINK')">Vanløse</button>
+
+      <br>
+      <button onclick="closeModal()">Luk</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(){
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal(){
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function go(link){
+      window.location.href = link;
+    }
+  </script>
 
 </body>
 </html>
