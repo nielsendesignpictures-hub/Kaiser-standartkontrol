@@ -3,35 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Café Kaiser Catering | Premium Buffeter & Selskabsmad</title>
-
+  <title>Café Kaiser Catering | Buffeter & Bestilling</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#0d0d0f;
-      --bg-soft:#141418;
-      --bg-card:#17171c;
-      --bg-alt:#101014;
-      --line:#2a2a31;
-      --line-soft:#23232a;
-      --text:#f5f2eb;
-      --muted:#b4ae9f;
-      --muted-2:#8b8678;
-      --gold:#d4af37;
-      --gold-light:#ecd27a;
-      --gold-dark:#a88312;
-      --white:#ffffff;
-      --success:#1f8a52;
-      --danger:#c54b4b;
-      --warning:#c99813;
-      --radius:20px;
-      --radius-sm:12px;
-      --shadow:0 20px 60px rgba(0,0,0,.45);
-      --shadow-gold:0 10px 40px rgba(212,175,55,.15);
-      --max:1400px;
+      --bg:#f7f3ec;
+      --bg-soft:#f1ebe1;
+      --card:#fffdf9;
+      --card-2:#ffffff;
+      --line:#e4dacb;
+      --line-soft:#efe7db;
+      --text:#1e1b16;
+      --muted:#6f6759;
+      --muted-2:#8b816f;
+      --gold:#c8a54b;
+      --gold-light:#dec27d;
+      --gold-dark:#a98732;
+      --brown:#5e4c34;
+      --success:#287a4d;
+      --warning:#b8860b;
+      --danger:#b64d4d;
+      --radius:22px;
+      --radius-sm:14px;
+      --shadow:0 20px 60px rgba(76,58,31,.10);
+      --shadow-soft:0 12px 30px rgba(76,58,31,.06);
+      --max:1380px;
       --transition:all .28s ease;
     }
 
@@ -40,19 +39,20 @@
     body{
       margin:0;
       font-family:'Inter',sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(212,175,55,.07), transparent 28%),
-        radial-gradient(circle at top left, rgba(212,175,55,.04), transparent 22%),
-        var(--bg);
       color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(200,165,75,.10), transparent 25%),
+        radial-gradient(circle at top left, rgba(200,165,75,.06), transparent 18%),
+        var(--bg);
       line-height:1.6;
     }
 
-    h1,h2,h3,h4{
+    h1,h2,h3,h4,h5{
+      margin:0 0 .5rem;
       font-family:'Playfair Display',serif;
       line-height:1.1;
-      margin:0 0 .5rem;
       letter-spacing:-.02em;
+      color:var(--brown);
     }
 
     a{text-decoration:none;color:inherit}
@@ -61,9 +61,9 @@
 
     .nav{
       position:fixed;top:0;left:0;right:0;z-index:999;
-      backdrop-filter:blur(16px);
-      background:rgba(13,13,15,.72);
-      border-bottom:1px solid rgba(255,255,255,.05);
+      backdrop-filter:blur(14px);
+      background:rgba(247,243,236,.82);
+      border-bottom:1px solid rgba(94,76,52,.08);
     }
 
     .nav-inner{
@@ -73,132 +73,161 @@
 
     .brand{
       display:flex;align-items:center;gap:12px;
-      font-weight:700;font-size:1.25rem;color:var(--gold-light);
+      font-weight:700;font-size:1.2rem;color:var(--brown);
     }
 
     .brand-mark{
-      width:40px;height:40px;border-radius:50%;
+      width:42px;height:42px;border-radius:50%;
       display:grid;place-items:center;
-      border:1px solid rgba(212,175,55,.45);
-      background:linear-gradient(135deg, rgba(212,175,55,.15), rgba(212,175,55,.04));
-      box-shadow:var(--shadow-gold);
-      font-size:1rem;
+      background:linear-gradient(135deg, #f6e8bf, #d8b45c);
+      color:#5c4412;font-weight:800;
+      box-shadow:var(--shadow-soft);
+      border:1px solid rgba(169,135,50,.25);
     }
 
     .nav-links{
-      display:flex;gap:26px;align-items:center;
-      color:var(--muted);font-size:.95rem;
+      display:flex;gap:24px;align-items:center;
+      color:var(--muted);font-size:.95rem;font-weight:500;
     }
 
-    .nav-links a:hover{color:var(--gold-light)}
+    .nav-links a:hover{color:var(--brown)}
+
     .nav-cta{
       padding:10px 16px;border-radius:999px;
-      border:1px solid rgba(212,175,55,.4);
-      color:var(--gold-light);
-      transition:var(--transition);
+      background:linear-gradient(135deg, var(--gold-light), var(--gold));
+      color:#503b12;
+      box-shadow:var(--shadow-soft);
     }
-    .nav-cta:hover{background:rgba(212,175,55,.08)}
 
     .hero{
-      min-height:100vh;
+      min-height:92vh;
       display:grid;place-items:center;
       position:relative;overflow:hidden;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.28), rgba(13,13,15,.95)),
-        url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+        linear-gradient(to bottom, rgba(34,24,12,.18), rgba(247,243,236,.30)),
+        url('images/hero.jpg') center/cover no-repeat;
     }
 
     .hero::after{
-      content:"";position:absolute;inset:auto 0 0 0;height:160px;
+      content:"";
+      position:absolute;inset:auto 0 0 0;height:180px;
       background:linear-gradient(to top, var(--bg), transparent);
     }
 
     .hero-content{
-      position:relative;z-index:2;text-align:center;
-      padding:120px 0 80px;max-width:950px;
+      position:relative;z-index:2;
+      text-align:center;
+      padding:120px 0 100px;
+      max-width:920px;
     }
 
     .eyebrow{
-      color:var(--gold-light);
-      text-transform:uppercase;letter-spacing:4px;
-      font-weight:600;font-size:.82rem;margin-bottom:18px;
+      color:var(--gold-dark);
+      text-transform:uppercase;
+      letter-spacing:4px;
+      font-weight:700;
+      font-size:.78rem;
+      margin-bottom:18px;
     }
 
     .hero h1{
-      font-size:clamp(3rem, 6vw, 5.8rem);
+      font-size:clamp(3rem, 6vw, 5.4rem);
+      color:#fffaf0;
+      text-shadow:0 8px 24px rgba(0,0,0,.18);
       margin-bottom:18px;
-      background:linear-gradient(180deg, #fff, #f1e3b6);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
     }
 
     .hero p{
-      font-size:1.18rem;color:#d2ccbe;
-      max-width:740px;margin:0 auto 36px;
+      font-size:1.14rem;
+      color:#fff7ea;
+      max-width:720px;
+      margin:0 auto 30px;
+      text-shadow:0 4px 18px rgba(0,0,0,.16);
     }
 
     .hero-actions{
-      display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
+      display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
     }
 
     .btn{
       border:none;cursor:pointer;transition:var(--transition);
-      font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.02em;
+      font-family:'Inter',sans-serif;font-weight:600;
     }
 
     .btn-primary{
-      background:linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color:#111;padding:15px 24px;border-radius:999px;
-      box-shadow:0 10px 30px rgba(212,175,55,.18);
+      background:linear-gradient(135deg, var(--gold-light), var(--gold));
+      color:#4b3810;
+      padding:15px 24px;border-radius:999px;
+      box-shadow:var(--shadow-soft);
     }
 
-    .btn-primary:hover{
-      transform:translateY(-2px);
-      box-shadow:0 16px 40px rgba(212,175,55,.28);
-    }
+    .btn-primary:hover{transform:translateY(-2px)}
 
     .btn-secondary{
-      background:rgba(255,255,255,.03);
-      color:var(--text);
+      background:rgba(255,255,255,.82);
+      color:var(--brown);
       padding:15px 24px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    .btn-secondary:hover{
-      background:rgba(255,255,255,.06);
-      border-color:rgba(212,175,55,.28);
+      border:1px solid rgba(255,255,255,.85);
     }
 
     .hero-stats{
       display:grid;grid-template-columns:repeat(4,1fr);
-      gap:18px;margin-top:46px;
+      gap:18px;margin-top:40px;
     }
 
     .stat-card{
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.05);
-      border-radius:18px;padding:18px;
-      backdrop-filter:blur(14px);
+      background:rgba(255,255,255,.84);
+      border:1px solid rgba(255,255,255,.85);
+      border-radius:20px;padding:18px;
+      box-shadow:var(--shadow-soft);
     }
 
     .stat-number{
-      display:block;font-family:'Playfair Display',serif;
-      color:var(--gold);font-size:2rem;font-weight:700;margin-bottom:4px;
+      display:block;
+      font-family:'Playfair Display',serif;
+      color:var(--gold-dark);
+      font-size:2rem;font-weight:700;
+      margin-bottom:4px;
     }
 
     .stat-label{color:var(--muted);font-size:.9rem}
 
-    section{padding:90px 0}
-    .section-head{text-align:center;margin-bottom:42px}
-    .section-head .eyebrow{margin-bottom:12px}
+    section{padding:86px 0}
+
+    .section-head{text-align:center;margin-bottom:38px}
     .section-head h2{
-      font-size:clamp(2.2rem,4vw,3.6rem);
-      margin-bottom:14px;
+      font-size:clamp(2.1rem,4vw,3.5rem);
+      margin-bottom:12px;
     }
     .section-head p{
-      max-width:760px;margin:0 auto;
-      color:var(--muted);font-size:1.05rem;
+      max-width:760px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:1.03rem;
     }
+
+    .steps{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    }
+
+    .step-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:26px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .step-num{
+      width:42px;height:42px;border-radius:50%;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, var(--gold-light), var(--gold));
+      color:#513c11;font-weight:800;
+      margin-bottom:14px;
+    }
+
+    .step-card h3{font-size:1.5rem}
+    .step-card p{margin:0;color:var(--muted)}
 
     .cards{
       display:grid;
@@ -207,40 +236,43 @@
     }
 
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
       overflow:hidden;
       box-shadow:var(--shadow);
       transition:var(--transition);
-      position:relative;
       cursor:pointer;
+      position:relative;
     }
 
     .card:hover{
       transform:translateY(-6px);
-      border-color:rgba(212,175,55,.35);
-      box-shadow:var(--shadow-gold);
+      box-shadow:0 20px 40px rgba(76,58,31,.14);
+      border-color:#d9c49a;
     }
 
     .card.selected{
-      border-color:var(--gold);
-      box-shadow:0 0 0 1px rgba(212,175,55,.35), var(--shadow-gold);
+      border:2px solid var(--gold);
+      box-shadow:0 0 0 4px rgba(200,165,75,.12), 0 20px 40px rgba(76,58,31,.14);
     }
 
     .card img{
       width:100%;height:250px;object-fit:cover;
-      filter:saturate(1.04);
     }
 
     .card-body{padding:24px}
     .card-tag{
-      display:inline-block;color:var(--gold-light);
-      font-size:.78rem;font-weight:700;letter-spacing:2px;
-      text-transform:uppercase;margin-bottom:10px;
+      display:inline-block;
+      color:var(--gold-dark);
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-weight:700;
+      margin-bottom:10px;
     }
 
-    .card h3{font-size:1.7rem;margin-bottom:12px}
+    .card h3{font-size:1.65rem;margin-bottom:10px}
     .card p{color:var(--muted);margin-bottom:16px;min-height:92px}
 
     .price-line{
@@ -249,32 +281,51 @@
 
     .price-line strong{
       font-family:'Playfair Display',serif;
-      color:var(--gold-light);
-      font-size:1.35rem;font-weight:700;
+      font-size:1.28rem;
+      color:var(--brown);
     }
 
     .price-line span{
       color:var(--muted-2);
-      font-size:.92rem;text-align:right;
+      text-align:right;
+      font-size:.9rem;
     }
 
     .order-shell{
       display:grid;
-      grid-template-columns:1.2fr .8fr;
+      grid-template-columns:1.15fr .85fr;
       gap:24px;
       align-items:start;
     }
 
     .panel{
-      background:var(--bg-card);
+      background:var(--card-2);
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
     .panel-inner{padding:28px}
-    .panel h3{font-size:1.7rem;margin-bottom:8px}
-    .panel-intro{color:var(--muted);margin-bottom:24px}
+
+    .panel h3{font-size:1.7rem}
+    .panel-intro{
+      color:var(--muted);
+      margin:8px 0 22px;
+    }
+
+    .flow-steps{
+      display:flex;gap:10px;flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .flow-step{
+      padding:10px 14px;border-radius:999px;
+      font-size:.9rem;font-weight:600;
+      background:var(--bg-soft);
+      color:var(--brown);
+      border:1px solid var(--line);
+    }
 
     .grid-2{
       display:grid;grid-template-columns:1fr 1fr;gap:18px;
@@ -282,103 +333,130 @@
 
     .field{margin-bottom:18px}
     .label{
-      display:block;font-size:.88rem;color:var(--muted);
-      margin-bottom:8px;font-weight:600;letter-spacing:.02em;
+      display:block;
+      font-size:.88rem;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:600;
     }
 
     .input,.select,.textarea{
-      width:100%;background:var(--bg-alt);
-      border:1px solid var(--line-soft);color:var(--text);
-      border-radius:14px;padding:15px 16px;font-size:.98rem;
+      width:100%;
+      padding:15px 16px;
+      border-radius:15px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-size:.98rem;
       transition:var(--transition);
     }
 
     .input:focus,.select:focus,.textarea:focus{
-      outline:none;border-color:rgba(212,175,55,.5);
-      box-shadow:0 0 0 3px rgba(212,175,55,.08);
+      outline:none;
+      border-color:rgba(200,165,75,.65);
+      box-shadow:0 0 0 4px rgba(200,165,75,.10);
     }
 
     .note-box{
-      background:rgba(212,175,55,.06);
-      border:1px solid rgba(212,175,55,.18);
-      border-radius:16px;padding:16px 18px;
-      color:#ddd3b9;font-size:.95rem;margin-bottom:22px;
+      background:#fff8e9;
+      border:1px solid #ebddb0;
+      color:#715b24;
+      border-radius:16px;
+      padding:16px 18px;
+      font-size:.95rem;
+      margin-bottom:20px;
     }
 
-    .addons,.builder-grid{
-      display:grid;gap:12px;
-    }
-
-    .addon,.builder-option{
-      display:flex;gap:14px;align-items:flex-start;
-      padding:14px;background:var(--bg-alt);
-      border:1px solid var(--line-soft);
-      border-radius:16px;transition:var(--transition);
-    }
-
-    .addon:hover,.builder-option:hover{
-      border-color:rgba(212,175,55,.22);
-      background:rgba(255,255,255,.02);
-    }
-
-    .addon input,.builder-option input{
-      margin-top:4px;transform:scale(1.15);
-      accent-color:var(--gold);
-    }
-
-    .addon strong,.builder-option strong{
-      display:block;margin-bottom:4px;color:var(--text);
-    }
-
-    .addon small,.builder-option small{
-      display:block;color:var(--muted);line-height:1.45;
-    }
-
-    .addon-price,.builder-price{
-      margin-left:auto;white-space:nowrap;
-      color:var(--gold-light);font-weight:700;
-      font-family:'Playfair Display',serif;
-    }
-
-    .builder-panel{
-      margin-top:24px;
-      border-top:1px solid var(--line);
-      padding-top:24px;
-      display:none;
-    }
-
-    .builder-panel.active{display:block}
-
-    .builder-head{
+    .choice-box{
+      background:#fffdf9;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
       margin-bottom:18px;
     }
 
-    .builder-head h4{
-      font-size:1.45rem;
-      color:var(--gold-light);
+    .choice-box h4{
+      font-size:1.2rem;
       margin-bottom:6px;
     }
 
-    .builder-head p{
+    .choice-box p{
+      margin:0 0 14px;
       color:var(--muted);
-      margin:0;
+      font-size:.94rem;
+    }
+
+    .options-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .option{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      padding:14px;
+      border:1px solid var(--line-soft);
+      border-radius:16px;
+      background:#fff;
+      transition:var(--transition);
+    }
+
+    .option:hover{
+      border-color:#dcc799;
+      background:#fffaf0;
+    }
+
+    .option input{
+      margin-top:4px;
+      transform:scale(1.15);
+      accent-color:var(--gold);
+    }
+
+    .option strong{
+      display:block;
+      color:var(--brown);
+      margin-bottom:4px;
+    }
+
+    .option small{
+      display:block;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .option-price{
+      margin-left:auto;
+      white-space:nowrap;
+      color:var(--gold-dark);
+      font-family:'Playfair Display',serif;
+      font-weight:700;
+    }
+
+    .builder-panel,.smorrebrod-panel,.addon-panel{
+      display:none;
+      margin-top:18px;
+    }
+
+    .builder-panel.active,.smorrebrod-panel.active,.addon-panel.active{
+      display:block;
     }
 
     .builder-section{
-      margin-bottom:24px;
+      margin-bottom:18px;
       padding:18px;
-      border:1px solid var(--line-soft);
+      border:1px solid var(--line);
       border-radius:18px;
-      background:rgba(255,255,255,.02);
+      background:#fffdf9;
     }
 
     .builder-section h5{
       margin:0 0 6px;
-      font-size:1.05rem;
-      color:var(--text);
+      font-size:1.08rem;
+      color:var(--brown);
     }
 
-    .builder-section .helper{
+    .helper{
       color:var(--muted-2);
       font-size:.9rem;
       margin-bottom:14px;
@@ -387,63 +465,72 @@
     .builder-status{
       margin-top:10px;
       font-size:.9rem;
-      color:var(--muted);
     }
-
-    .builder-status.ok{color:#8dd8ab}
-    .builder-status.warn{color:#f2cb69}
+    .builder-status.ok{color:var(--success)}
+    .builder-status.warn{color:var(--warning)}
 
     .summary{
-      position:sticky;top:96px;
+      position:sticky;
+      top:94px;
     }
 
     .summary-top{
-      padding:28px;border-bottom:1px solid var(--line);
+      padding:26px 28px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, #fff8ea, #fffdf9);
     }
 
-    .summary-top h3{font-size:1.7rem;margin-bottom:6px}
-    .summary-top p{color:var(--muted);margin:0}
+    .summary-top h3{font-size:1.7rem}
+    .summary-top p{margin:6px 0 0;color:var(--muted)}
 
     .summary-body{padding:24px 28px 28px}
 
     .summary-row{
-      display:flex;justify-content:space-between;gap:12px;
-      padding:12px 0;border-bottom:1px dashed rgba(255,255,255,.06);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px dashed var(--line);
       color:var(--muted);
     }
 
-    .summary-row strong{color:var(--text)}
-    .summary-row:last-of-type{border-bottom:none}
-
+    .summary-row strong{color:var(--brown)}
     .summary-subbox{
+      display:none;
       margin-top:16px;
       padding:16px;
       border-radius:16px;
-      background:rgba(255,255,255,.025);
-      border:1px solid rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      background:#fffdf8;
       color:var(--muted);
-      font-size:.92rem;
-      display:none;
+      font-size:.93rem;
     }
 
     .summary-subbox.active{display:block}
 
     .total-box{
-      margin-top:18px;padding:22px;border-radius:18px;
-      background:linear-gradient(135deg, rgba(212,175,55,.16), rgba(212,175,55,.05));
-      border:1px solid rgba(212,175,55,.28);
+      margin-top:18px;
+      padding:22px;
+      border-radius:18px;
+      background:linear-gradient(135deg, #fff5d7, #f7ebc6);
+      border:1px solid #e8d59d;
       text-align:center;
     }
 
     .total-box span{
-      display:block;color:#e8ddbf;font-size:.88rem;
-      text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;
+      display:block;
+      color:#83661e;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-size:.84rem;
+      margin-bottom:8px;
     }
 
     .total-box strong{
       font-family:'Playfair Display',serif;
-      color:var(--gold-light);
-      font-size:2.6rem;line-height:1;
+      font-size:2.6rem;
+      color:#6a521a;
+      line-height:1;
     }
 
     .summary-actions{
@@ -451,965 +538,836 @@
     }
 
     .btn-block{
-      width:100%;padding:15px 18px;border-radius:14px;font-size:.98rem;
+      width:100%;
+      padding:15px 18px;
+      border-radius:14px;
+      font-size:.98rem;
     }
 
     .btn-ghost{
-      background:transparent;color:var(--text);
-      border:1px solid var(--line-soft);
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
     }
 
     .btn-ghost:hover{
-      border-color:rgba(212,175,55,.28);
-      color:var(--gold-light);
+      background:#fffaf0;
+      border-color:#dcc799;
     }
 
     .tiers{
-      margin-top:24px;border:1px solid var(--line-soft);
-      border-radius:16px;overflow:hidden;
+      margin-top:24px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
     }
 
     .tier{
-      display:flex;justify-content:space-between;gap:14px;
-      padding:12px 14px;background:var(--bg-alt);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      background:#fff;
       border-bottom:1px solid var(--line-soft);
-      font-size:.92rem;color:var(--muted);
+      color:var(--muted);
+      font-size:.92rem;
     }
 
     .tier:last-child{border-bottom:none}
     .tier.active{
-      background:rgba(212,175,55,.08);
-      color:#f0e7cf;
+      background:#fff8e7;
+      color:#6b5520;
     }
 
     .dynamic-rules{
-      margin-top:18px;padding:16px;border-radius:16px;
-      background:rgba(255,255,255,.025);
-      border:1px solid rgba(255,255,255,.05);
-      color:var(--muted);font-size:.94rem;line-height:1.6;
+      margin-top:18px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fffdf9;
+      color:var(--muted);
+      font-size:.94rem;
+      line-height:1.6;
     }
 
-    .info-grid{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    .faq{
+      display:grid;gap:14px;
     }
 
-    .info-card{
-      background:var(--bg-card);border:1px solid var(--line);
-      border-radius:18px;padding:24px;
-    }
-
-    .info-card h4{
-      font-size:1.35rem;margin-bottom:12px;color:var(--gold-light);
-    }
-
-    .info-card p{color:var(--muted);margin:0}
-
-    .faq{display:grid;gap:14px}
     .faq-item{
-      background:var(--bg-card);border:1px solid var(--line);
-      border-radius:16px;overflow:hidden;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:var(--shadow-soft);
     }
 
     .faq-q{
-      width:100%;text-align:left;background:none;border:none;color:var(--text);
-      padding:18px 20px;font-size:1rem;font-weight:600;cursor:pointer;
-      display:flex;justify-content:space-between;align-items:center;
+      width:100%;
+      text-align:left;
+      background:none;
+      border:none;
+      padding:18px 20px;
+      font-size:1rem;
+      font-weight:600;
+      color:var(--brown);
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
 
     .faq-a{
-      display:none;padding:0 20px 18px;color:var(--muted);
+      display:none;
+      padding:0 20px 18px;
+      color:var(--muted);
     }
 
     .faq-item.open .faq-a{display:block}
-    .faq-item.open .faq-q{color:var(--gold-light)}
 
-    .modal{
-      position:fixed;inset:0;background:rgba(0,0,0,.75);
-      display:none;align-items:center;justify-content:center;
-      padding:20px;z-index:1000;backdrop-filter:blur(10px);
+    .confirmation-page{
+      display:none;
+      min-height:100vh;
+      padding:120px 0 60px;
+      background:
+        radial-gradient(circle at top right, rgba(200,165,75,.08), transparent 25%),
+        var(--bg);
     }
 
-    .modal.show{display:flex}
+    .confirmation-page.active{display:block}
+    .site-page.hidden{display:none}
 
-    .modal-card{
-      width:min(900px, 100%);
-      background:var(--bg-card);
-      border:1px solid rgba(212,175,55,.22);
-      border-radius:24px;overflow:hidden;box-shadow:var(--shadow);
+    .confirm-card{
+      background:#fffdf9;
+      border:1px solid var(--line);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .modal-head{
-      padding:26px 28px;
-      background:linear-gradient(180deg, rgba(212,175,55,.09), rgba(212,175,55,.02));
-      border-bottom:1px solid var(--line);
-      display:flex;justify-content:space-between;align-items:center;gap:16px;
+    .confirm-head{
+      padding:32px;
+      background:linear-gradient(135deg, #fff7dd, #f8ebc3);
+      border-bottom:1px solid #e8d59d;
+      text-align:center;
     }
 
-    .modal-head h3{font-size:1.8rem;margin:0}
-    .modal-head p{margin:6px 0 0;color:var(--muted)}
-
-    .close{
-      width:42px;height:42px;border-radius:50%;
-      border:1px solid var(--line-soft);
-      background:transparent;color:var(--text);font-size:1.1rem;cursor:pointer;
+    .confirm-icon{
+      width:68px;height:68px;border-radius:50%;
+      display:grid;place-items:center;
+      margin:0 auto 16px;
+      background:linear-gradient(135deg, #e6cf90, #caa64d);
+      color:#5a4414;
+      font-size:2rem;
+      font-weight:800;
     }
 
-    .close:hover{
-      border-color:rgba(212,175,55,.25);
-      color:var(--gold-light);
+    .confirm-head h2{
+      font-size:2.5rem;
+      margin-bottom:10px;
     }
 
-    .modal-body{padding:28px}
-
-    .receipt{
-      display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;
+    .confirm-head p{
+      margin:0 auto;
+      max-width:650px;
+      color:#735d28;
     }
 
-    .receipt-box{
-      border:1px solid var(--line-soft);
-      border-radius:16px;background:var(--bg-alt);padding:18px;
+    .confirm-body{
+      padding:30px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
     }
 
-    .receipt-box small{
-      display:block;color:var(--muted-2);margin-bottom:6px;
-      text-transform:uppercase;letter-spacing:1px;font-size:.75rem;
+    .confirm-box{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
     }
 
-    .receipt-box strong{
-      color:var(--text);font-size:1.05rem;
+    .confirm-box h4{
+      font-size:1.25rem;
+      margin-bottom:12px;
     }
 
-    .receipt-list{
-      margin-top:16px;border:1px solid var(--line-soft);
-      border-radius:16px;overflow:hidden;
+    .confirm-line{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px dashed var(--line);
+      color:var(--muted);
     }
 
-    .receipt-item{
-      display:flex;justify-content:space-between;gap:12px;
-      padding:12px 16px;background:var(--bg-alt);
-      border-bottom:1px solid var(--line-soft);color:var(--muted);
+    .confirm-line:last-child{border-bottom:none}
+    .confirm-line strong{color:var(--brown)}
+
+    .confirm-total{
+      margin-top:18px;
+      padding:18px;
+      background:#fff8e6;
+      border:1px solid #e8d59d;
+      border-radius:16px;
+      text-align:center;
     }
 
-    .receipt-item:last-child{border-bottom:none}
-
-    .receipt-total{
-      margin-top:18px;padding:22px;border-radius:18px;
-      background:linear-gradient(135deg, rgba(212,175,55,.16), rgba(212,175,55,.05));
-      border:1px solid rgba(212,175,55,.28);text-align:center;
+    .confirm-total span{
+      display:block;
+      color:#7e6525;
+      font-size:.86rem;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin-bottom:6px;
     }
 
-    .receipt-total small{
-      display:block;color:#e6dab7;text-transform:uppercase;
-      letter-spacing:2px;margin-bottom:6px;
-    }
-
-    .receipt-total strong{
-      font-size:2.8rem;color:var(--gold-light);
+    .confirm-total strong{
       font-family:'Playfair Display',serif;
+      font-size:2.4rem;
+      color:#6a521a;
     }
 
-    .modal-actions{
-      display:flex;gap:12px;padding:0 28px 28px;
+    .confirm-actions{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      padding:0 30px 30px;
+      flex-wrap:wrap;
     }
 
     footer{
+      padding:46px 0 26px;
       border-top:1px solid var(--line);
       background:var(--bg-soft);
-      padding:50px 0 30px;
-      margin-top:30px;
+      margin-top:20px;
     }
 
     .footer-grid{
-      display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px;
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr;
+      gap:24px;
     }
 
     .footer-brand{
-      color:var(--gold-light);font-family:'Playfair Display',serif;
-      font-size:1.6rem;margin-bottom:12px;display:block;
-    }
-
-    .footer-copy{
-      margin-top:28px;color:var(--muted-2);font-size:.9rem;
-      border-top:1px solid var(--line);padding-top:20px;text-align:center;
+      display:block;
+      font-size:1.5rem;
+      color:var(--brown);
+      margin-bottom:10px;
     }
 
     .footer-col h4{
-      font-size:1rem;margin-bottom:12px;color:var(--text);
+      font-size:1rem;
+      margin-bottom:10px;
     }
 
     .footer-col p{
-      color:var(--muted);margin:0 0 8px;
+      margin:0 0 8px;
+      color:var(--muted);
     }
 
-    @media (max-width: 1100px){
+    .footer-copy{
+      margin-top:28px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      text-align:center;
+      color:var(--muted-2);
+      font-size:.9rem;
+    }
+
+    @media (max-width:1100px){
       .cards{grid-template-columns:repeat(2,1fr)}
       .order-shell{grid-template-columns:1fr}
       .summary{position:static}
       .footer-grid{grid-template-columns:repeat(2,1fr)}
+      .confirm-body{grid-template-columns:1fr}
     }
 
-    @media (max-width: 760px){
+    @media (max-width:760px){
       .nav-links{display:none}
       .hero-stats{grid-template-columns:repeat(2,1fr)}
+      .steps{grid-template-columns:1fr}
       .cards{grid-template-columns:1fr}
       .grid-2{grid-template-columns:1fr}
-      .info-grid{grid-template-columns:1fr}
-      .receipt{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr}
-      section{padding:72px 0}
-      .hero-content{padding-top:110px}
-      .modal-actions{flex-direction:column}
+      .confirm-actions{flex-direction:column}
+      .confirm-head h2{font-size:2rem}
     }
   </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="container nav-inner">
-    <a href="#" class="brand">
-      <span class="brand-mark">K</span>
-      <span>Café Kaiser Catering</span>
-    </a>
-    <div class="nav-links">
-      <a href="#buffeter">Buffeter</a>
-      <a href="#bestilling">Bestilling</a>
-      <a href="#praktisk">Praktisk</a>
-      <a href="#faq">FAQ</a>
-      <a href="#kontakt" class="nav-cta">Kontakt os</a>
-    </div>
-  </div>
-</nav>
+<div class="site-page" id="sitePage">
 
-<header class="hero">
-  <div class="container hero-content">
-    <div class="eyebrow">13 års erfaring · 5 caféer · Nordsjælland & Vanløse</div>
-    <h1>Premium catering til brunch, højtider og selskaber</h1>
-    <p>
-      Café Kaiser tilbyder gennemførte buffetløsninger til både hyggelige sammenkomster
-      og store mærkedage. Vores catering bygger på populære caféklassikere, gode råvarer
-      og et elegant setup, der er let at servere for dine gæster.
-    </p>
-    <div class="hero-actions">
-      <a href="#bestilling" class="btn btn-primary">Beregn din bestilling</a>
-      <a href="#buffeter" class="btn btn-secondary">Se alle buffeter</a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="stat-card">
-        <span class="stat-number">13</span>
-        <span class="stat-label">års erfaring</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number">6</span>
-        <span class="stat-label">cateringprodukter</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number">5</span>
-        <span class="stat-label">afhentningssteder</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-number">8+</span>
-        <span class="stat-label">kuverter fra</span>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand">
+        <span class="brand-mark">K</span>
+        <span>Café Kaiser Catering</span>
+      </a>
+      <div class="nav-links">
+        <a href="#saadan">Sådan fungerer det</a>
+        <a href="#buffeter">Buffeter</a>
+        <a href="#bestilling">Bestilling</a>
+        <a href="#faq">FAQ</a>
+        <a href="#bestilling" class="nav-cta">Bestil catering</a>
       </div>
     </div>
-  </div>
-</header>
+  </nav>
 
-<section id="buffeter">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">Vores cateringunivers</div>
-      <h2>Buffeter og menuer til enhver anledning</h2>
+  <header class="hero">
+    <div class="container hero-content">
+      <div class="eyebrow">13 års erfaring · 5 caféer · brunch, frokost & sæsonbuffeter</div>
+      <h1>Catering fra Café Kaiser</h1>
       <p>
-        Vælg mellem brunch, smørrebrød, fleksible selskabsmenuer og sæsonbuffeter.
-        Alle koncepter er udviklet med fokus på smag, genkendelighed og høj kvalitet.
+        Vælg mellem vores populære brunchbuffet, smørrebrødsmenu, byg selv menu
+        samt sæsonbuffeter til påske og jul. Sammensat med gode råvarer,
+        høj genkendelighed og et udtryk, der passer til både hverdag og fest.
       </p>
+      <div class="hero-actions">
+        <a href="#bestilling" class="btn btn-primary">Start din bestilling</a>
+        <a href="#buffeter" class="btn btn-secondary">Se vores buffeter</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-number">13</span>
+          <span class="stat-label">års erfaring</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">5</span>
+          <span class="stat-label">caféer</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">5</span>
+          <span class="stat-label">cateringprodukter</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">8+</span>
+          <span class="stat-label">kuverter fra</span>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <div class="cards">
-      <article class="card selected" data-buffet="brunch" onclick="selectBuffet('brunch')">
-        <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Signaturprodukt</div>
-          <h3>Brunchbuffet</h3>
-          <p>En overdådig brunchbuffet med både varme og kolde brunchklassikere til alle aldre. Perfekt til familiearrangementer, fødselsdage og hyggelige weekendfejringer.</p>
-          <div class="price-line">
-            <strong>199 kr. pr. kuvert</strong>
-            <span>Min. 15 pers. weekend<br>Min. 25 pers. hverdage</span>
-          </div>
-        </div>
-      </article>
+  <section id="saadan">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Sådan fungerer det</div>
+        <h2>Bestil catering i tre enkle trin</h2>
+        <p>
+          Vi har gjort det nemt at vælge den rette buffet, tilpasse bestillingen
+          og sende en forespørgsel videre.
+        </p>
+      </div>
 
-      <article class="card" data-buffet="smorrebrod" onclick="selectBuffet('smorrebrod')">
-        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Dansk klassiker</div>
-          <h3>Smørrebrødsmenu</h3>
-          <p>2 stk. højtbelagte smørrebrød pr. person. Vælg mellem fiskefilet, æg og rejer, hønsesalat og roastbeef. En klassisk og sikker løsning til frokostanledninger.</p>
-          <div class="price-line">
-            <strong>179 kr. pr. kuvert</strong>
-            <span>Minimum 10 kuverter</span>
-          </div>
+      <div class="steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Vælg buffet</h3>
+          <p>Vælg mellem brunchbuffet, smørrebrødsmenu, byg selv menu samt vores påske- og julebuffet.</p>
         </div>
-      </article>
-
-      <article class="card" data-buffet="bygselv" onclick="selectBuffet('bygselv')">
-        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Fleksibel favorit</div>
-          <h3>Byg selv menu</h3>
-          <p>Sammensæt din egen menu med 2 slags kød, 2 salater, 2 kartoffelretter, 2 saucer og 1 dessert. En fleksibel buffetløsning til selskaber og fest.</p>
-          <div class="price-line">
-            <strong>Fra 249 kr. pr. kuvert</strong>
-            <span>10–19: 299 kr.<br>20–39: 269 kr.<br>40+: 249 kr.</span>
-          </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Tilpas bestilling</h3>
+          <p>Indtast antal kuverter, vælg eventuelle retter eller tilkøb, og se prisen opdateres med det samme.</p>
         </div>
-      </article>
-
-      <article class="card" data-buffet="paaske" onclick="selectBuffet('paaske')">
-        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Sæson · Forår</div>
-          <h3>Påskefrokost</h3>
-          <p>En klassisk påskefrokost med sild, æg og rejer, fiskefilet, hønsesalat, varmrøget laks, roastbeef, grøn salat samt rugbrød, brød og smør.</p>
-          <div class="price-line">
-            <strong>Fra 239 kr. pr. kuvert</strong>
-            <span>8–14: 279 kr.<br>15–29: 259 kr.<br>30+: 239 kr.</span>
-          </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>Send forespørgsel</h3>
+          <p>Afslut med dine kontaktoplysninger og få en tydelig bekræftelse på din bestilling og næste skridt.</p>
         </div>
-      </article>
-
-      <article class="card" data-buffet="jul" onclick="selectBuffet('jul')">
-        <img src="https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Sæson · Vinter</div>
-          <h3>Julefrokost</h3>
-          <p>Julefrokost med sild, æg og rejer, laks, fiskefilet, lun leverpostej, frikadeller, julesalat, brød, smør og risalamande med kirsebærsauce.</p>
-          <div class="price-line">
-            <strong>Fra 239 kr. pr. kuvert</strong>
-            <span>8–14: 279 kr.<br>15–29: 259 kr.<br>30+: 239 kr.</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-buffet="konfirmation" onclick="selectBuffet('konfirmation')">
-        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=80" alt="">
-        <div class="card-body">
-          <div class="card-tag">Selskab · Premium</div>
-          <h3>Konfirmationsbuffet</h3>
-          <p>En flot og velsmagende selskabsbuffet med marineret kylling, roastbeef, varmrøget laks, kartoffelret, friske salater, brød og smør.</p>
-          <div class="price-line">
-            <strong>Fra 249 kr. pr. kuvert</strong>
-            <span>8–14: 289 kr.<br>15–29: 269 kr.<br>30+: 249 kr.</span>
-          </div>
-        </div>
-      </article>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="bestilling">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">Interaktiv bestilling</div>
-      <h2>Beregn din catering med det samme</h2>
-      <p>
-        Vælg buffet, antal kuverter og eventuelle tilkøb. Pris og bestillingsoversigt
-        opdateres automatisk.
-      </p>
+  <section id="buffeter">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Vores udvalg</div>
+        <h2>Buffeter til både hverdag og særlige anledninger</h2>
+        <p>
+          Klik på den buffet, du ønsker, og tilpas derefter bestillingen i sektionen nedenfor.
+        </p>
+      </div>
+
+      <div class="cards">
+        <article class="card selected" data-buffet="brunch" onclick="selectBuffet('brunch')">
+          <img src="images/brunch.jpg" alt="Brunchbuffet">
+          <div class="card-body">
+            <div class="card-tag">Signatur</div>
+            <h3>Brunchbuffet</h3>
+            <p>En overdådig brunchbuffet med både varme og kolde brunchklassikere til alle aldre. Perfekt til familiearrangementer og hyggelige sammenkomster.</p>
+            <div class="price-line">
+              <strong>199 kr. pr. kuvert</strong>
+              <span>Min. 15 pers. weekend<br>Min. 25 pers. hverdage</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-buffet="smorrebrod" onclick="selectBuffet('smorrebrod')">
+          <img src="images/smorrebrod.jpg" alt="Smørrebrødsmenu">
+          <div class="card-body">
+            <div class="card-tag">Dansk klassiker</div>
+            <h3>Smørrebrødsmenu</h3>
+            <p>2 stk. højtbelagte smørrebrød pr. person. Vælg mellem vores klassiske favoritter og sammensæt en enkel og lækker frokostløsning.</p>
+            <div class="price-line">
+              <strong>179 kr. pr. kuvert</strong>
+              <span>Minimum 10 kuverter</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-buffet="bygselv" onclick="selectBuffet('bygselv')">
+          <img src="images/bygselv.jpg" alt="Byg selv menu">
+          <div class="card-body">
+            <div class="card-tag">Fleksibel favorit</div>
+            <h3>Byg selv menu</h3>
+            <p>Sammensæt din egen menu med kød, salater, kartofler, saucer og dessert. En fleksibel løsning til selskaber og festlige anledninger.</p>
+            <div class="price-line">
+              <strong>Fra 249 kr. pr. kuvert</strong>
+              <span>10–19: 299 kr.<br>20–39: 269 kr.<br>40+: 249 kr.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-buffet="paaske" onclick="selectBuffet('paaske')">
+          <img src="images/paaske.jpg" alt="Påskefrokost">
+          <div class="card-body">
+            <div class="card-tag">Sæson · Forår</div>
+            <h3>Påskefrokost</h3>
+            <p>En klassisk påskefrokost med sild, æg og rejer, fiskefilet, hønsesalat, laks, forårssalat, brød og smør.</p>
+            <div class="price-line">
+              <strong>Fra 239 kr. pr. kuvert</strong>
+              <span>8–14: 279 kr.<br>15–29: 259 kr.<br>30+: 239 kr.</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-buffet="jul" onclick="selectBuffet('jul')">
+          <img src="images/jul.jpg" alt="Julefrokost">
+          <div class="card-body">
+            <div class="card-tag">Sæson · Vinter</div>
+            <h3>Julefrokost</h3>
+            <p>En julefrokostbuffet med klassiske kolde og lune favoritter samt risalamande til dessert.</p>
+            <div class="price-line">
+              <strong>Fra 239 kr. pr. kuvert</strong>
+              <span>8–14: 279 kr.<br>15–29: 259 kr.<br>30+: 239 kr.</span>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
+  </section>
 
-    <div class="order-shell">
-      <div class="panel">
-        <div class="panel-inner">
-          <h3>Bestillingsoplysninger</h3>
-          <p class="panel-intro">
-            Udfyld dine oplysninger herunder. Ved valg af Byg selv menu kan du sammensætte
-            menuen direkte på siden.
-          </p>
+  <section id="bestilling">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Bestilling</div>
+        <h2>Sammensæt din bestilling</h2>
+        <p>
+          Når du vælger buffet, tilpasser siden automatisk muligheder, regler og prisberegning.
+        </p>
+      </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <label class="label">Navn</label>
-              <input class="input" id="name" type="text" placeholder="Dit navn">
-            </div>
-            <div class="field">
-              <label class="label">Telefon</label>
-              <input class="input" id="phone" type="text" placeholder="Dit telefonnummer">
-            </div>
-          </div>
+      <div class="order-shell">
+        <div class="panel">
+          <div class="panel-inner">
+            <h3>Din cateringbestilling</h3>
+            <p class="panel-intro">Vælg buffet, antal kuverter og eventuelle valgmuligheder. Nederst udfylder du dine kontaktoplysninger og sender forespørgslen videre.</p>
 
-          <div class="grid-2">
-            <div class="field">
-              <label class="label">E-mail</label>
-              <input class="input" id="email" type="email" placeholder="Din e-mail">
-            </div>
-            <div class="field">
-              <label class="label">Ønsket dato</label>
-              <input class="input" id="date" type="date">
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label class="label">Antal kuverter</label>
-              <input class="input" id="guests" type="number" min="8" value="15" oninput="updateSummary()">
-            </div>
-            <div class="field">
-              <label class="label">Afhentning / levering</label>
-              <select class="select" id="deliveryType" onchange="updateSummary()">
-                <option value="0">Afhentning</option>
-                <option value="199">Levering lokalområde (+199 kr.)</option>
-                <option value="299">Levering udvidet område (+299 kr.)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="note-box" id="rulesBox"></div>
-
-          <!-- Byg selv builder -->
-          <div class="builder-panel" id="builderPanel">
-            <div class="builder-head">
-              <h4>Sammensæt din Byg selv menu</h4>
-              <p>Vælg minimum 2 kød, 2 salater, 2 kartofler, 2 saucer og 1 dessert. Tillæg beregnes automatisk.</p>
+            <div class="flow-steps">
+              <div class="flow-step">1. Buffet</div>
+              <div class="flow-step">2. Tilpasning</div>
+              <div class="flow-step">3. Oplysninger</div>
+              <div class="flow-step">4. Bekræftelse</div>
             </div>
 
-            <div class="builder-section">
-              <h5>Kød – vælg 2</h5>
-              <div class="helper">Ønsker du mere kød, er tillægget 25 kr. pr. person. Oksemørbrad giver yderligere +45 kr. pr. person pr. valg.</div>
-              <div class="builder-grid">
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Helstegt oksefilet" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Helstegt oksefilet</strong>
-                    <small>Leveres rosa stegt og uskåret</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Helstegt oksemørbrad" data-extra="45" onchange="updateSummary()">
-                  <div>
-                    <strong>Helstegt oksemørbrad</strong>
-                    <small>Leveres rosa stegt og uskåret</small>
-                  </div>
-                  <div class="builder-price">+45 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Frikadeller" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Frikadeller</strong>
-                    <small>Klassisk og sikkert valg</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Glaseret skinke" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Glaseret skinke</strong>
-                    <small>Leveres uskåret</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Marineret kyllingebryst" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Marineret kyllingebryst</strong>
-                    <small>Et sikkert og populært valg</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kod" data-group="kod" data-name="Varmrøget laks med sauce verde" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Varmrøget laks med sauce verde</strong>
-                    <small>Serveres kold</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
+            <div class="note-box" id="rulesBox"></div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">Antal kuverter</label>
+                <input class="input" id="guests" type="number" min="15" value="15" oninput="updateSummary()">
               </div>
-              <div class="builder-status" id="status-kod"></div>
+              <div class="field">
+                <label class="label">Afhentning / levering</label>
+                <select class="select" id="deliveryType" onchange="updateSummary()">
+                  <option value="0">Afhentning</option>
+                  <option value="199">Levering lokalområde (+199 kr.)</option>
+                  <option value="299">Levering udvidet område (+299 kr.)</option>
+                </select>
+              </div>
             </div>
 
-            <div class="builder-section">
-              <h5>Salater – vælg 2</h5>
-              <div class="helper">Ønsker du flere salater, er tillægget 15 kr. pr. person. Nudelsalat med tigerrejer giver +15 kr. pr. person.</div>
-              <div class="builder-grid">
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-salat" data-group="salat" data-name="Broccolisalat" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Broccolisalat</strong>
-                    <small>Broccoli, bacon og pinjekerner</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-salat" data-group="salat" data-name="Nudelsalat med tigerrejer" data-extra="15" onchange="updateSummary()">
-                  <div>
-                    <strong>Nudelsalat med tigerrejer</strong>
-                    <small>Julienne grøntsager og sweet chili dressing</small>
-                  </div>
-                  <div class="builder-price">+15 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-salat" data-group="salat" data-name="Kaisers kartoffelsalat med asparges og ærter" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Kaisers kartoffelsalat</strong>
-                    <small>Med asparges og ærter</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-salat" data-group="salat" data-name="Rustik tomatsalat med mozzarella" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Rustik tomatsalat med mozzarella</strong>
-                    <small>Med hjemmesyltet rødløg</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-salat" data-group="salat" data-name="Couscoussalat med feta og granatæble" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Couscoussalat</strong>
-                    <small>Med soltørret tomatpesto, feta og granatæble</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
+            <!-- Smørrebrød -->
+            <div class="smorrebrod-panel" id="smorrebrodPanel">
+              <div class="choice-box">
+                <h4>Vælg smørrebrød</h4>
+                <p>Vælg de typer I ønsker i jeres menu. Menuen indeholder 2 stk. smørrebrød pr. person. Fordeling kan noteres i kommentarfeltet.</p>
+                <div class="options-grid">
+                  <label class="option">
+                    <input type="checkbox" class="smorrebrodCheck" data-name="Fiskefilet" onchange="updateSummary()">
+                    <div>
+                      <strong>Fiskefilet</strong>
+                      <small>Med hjemmerørt remoulade og citron</small>
+                    </div>
+                  </label>
+
+                  <label class="option">
+                    <input type="checkbox" class="smorrebrodCheck" data-name="Æg og rejer" onchange="updateSummary()">
+                    <div>
+                      <strong>Æg og rejer</strong>
+                      <small>Med mayonnaise, citron og purløg</small>
+                    </div>
+                  </label>
+
+                  <label class="option">
+                    <input type="checkbox" class="smorrebrodCheck" data-name="Hønsesalat" onchange="updateSummary()">
+                    <div>
+                      <strong>Hønsesalat</strong>
+                      <small>Med bacon, champignon og rødløg</small>
+                    </div>
+                  </label>
+
+                  <label class="option">
+                    <input type="checkbox" class="smorrebrodCheck" data-name="Roastbeef" onchange="updateSummary()">
+                    <div>
+                      <strong>Roastbeef</strong>
+                      <small>Med remoulade, peberrod og syltede agurker</small>
+                    </div>
+                  </label>
+                </div>
               </div>
-              <div class="builder-status" id="status-salat"></div>
             </div>
 
-            <div class="builder-section">
-              <h5>Kartofler – vælg 2</h5>
-              <div class="helper">Ønsker du flere kartoffelretter, er tillægget 20 kr. pr. person. Trøffel flødekartofler giver +15 kr. pr. person.</div>
-              <div class="builder-grid">
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kartoffel" data-group="kartoffel" data-name="Flødekartofler" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Flødekartofler</strong>
-                    <small>Klassisk selskabsfavorit</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kartoffel" data-group="kartoffel" data-name="Trøffel flødekartofler" data-extra="15" onchange="updateSummary()">
-                  <div>
-                    <strong>Trøffel flødekartofler</strong>
-                    <small>Premium opgradering</small>
-                  </div>
-                  <div class="builder-price">+15 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kartoffel" data-group="kartoffel" data-name="Små ovnstegte kartofler" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Små ovnstegte kartofler</strong>
-                    <small>Med urter og hvidløg</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kartoffel" data-group="kartoffel" data-name="Bagekartoffel med kryddersmør" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Bagekartoffel med kryddersmør</strong>
-                    <small>Klassisk og mættende valg</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-kartoffel" data-group="kartoffel" data-name="Kartoffelgratin" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Kartoffelgratin</strong>
-                    <small>1 pr. mand</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
+            <!-- Byg selv -->
+            <div class="builder-panel" id="builderPanel">
+              <div class="choice-box">
+                <h4>Sammensæt din Byg selv menu</h4>
+                <p>Vælg minimum 2 kød, 2 salater, 2 kartofler, 2 saucer og 1 dessert. Eventuelle tillæg beregnes automatisk.</p>
               </div>
-              <div class="builder-status" id="status-kartoffel"></div>
+
+              <div class="builder-section">
+                <h5>Kød – vælg 2</h5>
+                <div class="helper">Ekstra kød +25 kr. pr. person. Oksemørbrad +45 kr. pr. person.</div>
+                <div class="options-grid">
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Helstegt oksefilet" data-extra="0" onchange="updateSummary()"><div><strong>Helstegt oksefilet</strong><small>Leveres rosa stegt og uskåret</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Helstegt oksemørbrad" data-extra="45" onchange="updateSummary()"><div><strong>Helstegt oksemørbrad</strong><small>Leveres rosa stegt og uskåret</small></div><div class="option-price">+45 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Frikadeller" data-extra="0" onchange="updateSummary()"><div><strong>Frikadeller</strong><small>Klassisk favorit</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Glaseret skinke" data-extra="0" onchange="updateSummary()"><div><strong>Glaseret skinke</strong><small>Leveres uskåret</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Marineret kyllingebryst" data-extra="0" onchange="updateSummary()"><div><strong>Marineret kyllingebryst</strong><small>Et sikkert valg</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kod" data-name="Varmrøget laks med sauce verde" data-extra="0" onchange="updateSummary()"><div><strong>Varmrøget laks med sauce verde</strong><small>Serveres kold</small></div><div class="option-price">+0 kr.</div></label>
+                </div>
+                <div class="builder-status" id="status-kod"></div>
+              </div>
+
+              <div class="builder-section">
+                <h5>Salater – vælg 2</h5>
+                <div class="helper">Ekstra salater +15 kr. pr. person. Nudelsalat med tigerrejer +15 kr. pr. person.</div>
+                <div class="options-grid">
+                  <label class="option"><input type="checkbox" class="builder-salat" data-name="Broccolisalat" data-extra="0" onchange="updateSummary()"><div><strong>Broccolisalat</strong><small>Med bacon og pinjekerner</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-salat" data-name="Nudelsalat med tigerrejer" data-extra="15" onchange="updateSummary()"><div><strong>Nudelsalat med tigerrejer</strong><small>Med grønt og sweet chili dressing</small></div><div class="option-price">+15 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-salat" data-name="Kaisers kartoffelsalat med asparges og ærter" data-extra="0" onchange="updateSummary()"><div><strong>Kaisers kartoffelsalat</strong><small>Med asparges og ærter</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-salat" data-name="Rustik tomatsalat med mozzarella" data-extra="0" onchange="updateSummary()"><div><strong>Rustik tomatsalat</strong><small>Med mozzarella og syltede rødløg</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-salat" data-name="Couscoussalat med feta og granatæble" data-extra="0" onchange="updateSummary()"><div><strong>Couscoussalat</strong><small>Med feta og granatæble</small></div><div class="option-price">+0 kr.</div></label>
+                </div>
+                <div class="builder-status" id="status-salat"></div>
+              </div>
+
+              <div class="builder-section">
+                <h5>Kartofler – vælg 2</h5>
+                <div class="helper">Ekstra kartoffelretter +20 kr. pr. person. Trøffel flødekartofler +15 kr. pr. person.</div>
+                <div class="options-grid">
+                  <label class="option"><input type="checkbox" class="builder-kartoffel" data-name="Flødekartofler" data-extra="0" onchange="updateSummary()"><div><strong>Flødekartofler</strong><small>Klassisk selskabsfavorit</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kartoffel" data-name="Trøffel flødekartofler" data-extra="15" onchange="updateSummary()"><div><strong>Trøffel flødekartofler</strong><small>Premium opgradering</small></div><div class="option-price">+15 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kartoffel" data-name="Små ovnstegte kartofler" data-extra="0" onchange="updateSummary()"><div><strong>Små ovnstegte kartofler</strong><small>Med urter og hvidløg</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kartoffel" data-name="Bagekartoffel med kryddersmør" data-extra="0" onchange="updateSummary()"><div><strong>Bagekartoffel med kryddersmør</strong><small>Et mættende valg</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-kartoffel" data-name="Kartoffelgratin" data-extra="0" onchange="updateSummary()"><div><strong>Kartoffelgratin</strong><small>1 pr. mand</small></div><div class="option-price">+0 kr.</div></label>
+                </div>
+                <div class="builder-status" id="status-kartoffel"></div>
+              </div>
+
+              <div class="builder-section">
+                <h5>Saucer – vælg 2</h5>
+                <div class="helper">Ekstra saucer +15 kr. pr. person.</div>
+                <div class="options-grid">
+                  <label class="option"><input type="checkbox" class="builder-sauce" data-name="Bearnaise sauce" data-extra="0" onchange="updateSummary()"><div><strong>Bearnaise sauce</strong><small>Klassisk favorit</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-sauce" data-name="Rødvinssauce" data-extra="0" onchange="updateSummary()"><div><strong>Rødvinssauce</strong><small>Fyldig og elegant</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-sauce" data-name="Pebersauce" data-extra="0" onchange="updateSummary()"><div><strong>Pebersauce</strong><small>God til okse og kylling</small></div><div class="option-price">+0 kr.</div></label>
+                  <label class="option"><input type="checkbox" class="builder-sauce" data-name="Hjemmelavet tzatziki" data-extra="0" onchange="updateSummary()"><div><strong>Hjemmelavet tzatziki</strong><small>Frisk og cremet</small></div><div class="option-price">+0 kr.</div></label>
+                </div>
+                <div class="builder-status" id="status-sauce"></div>
+              </div>
+
+              <div class="builder-section">
+                <h5>Dessert – vælg 1</h5>
+                <div class="helper">Vælg én dessert som del af menuen.</div>
+                <div class="options-grid">
+                  <label class="option"><input type="radio" name="dessert" class="builder-dessert" data-name="Chokolademousse" data-extra="0" onchange="updateSummary()"><div><strong>Chokolademousse</strong><small>Med knas og bær</small></div></label>
+                  <label class="option"><input type="radio" name="dessert" class="builder-dessert" data-name="Panna cotta" data-extra="0" onchange="updateSummary()"><div><strong>Panna cotta</strong><small>Med bærkompot</small></div></label>
+                  <label class="option"><input type="radio" name="dessert" class="builder-dessert" data-name="Chokolade brownie med nødder" data-extra="0" onchange="updateSummary()"><div><strong>Chokolade brownie med nødder</strong><small>Fyldig og klassisk</small></div></label>
+                  <label class="option"><input type="radio" name="dessert" class="builder-dessert" data-name="Frugtsalat med vaniljecreme" data-extra="0" onchange="updateSummary()"><div><strong>Frugtsalat</strong><small>Med vaniljecreme</small></div></label>
+                  <label class="option"><input type="radio" name="dessert" class="builder-dessert" data-name="Kaisers jordbær/rabarber trifli" data-extra="0" onchange="updateSummary()"><div><strong>Kaisers jordbær/rabarber trifli</strong><small>Med flødeskum og makroner</small></div></label>
+                </div>
+                <div class="builder-status" id="status-dessert"></div>
+              </div>
             </div>
 
-            <div class="builder-section">
-              <h5>Saucer – vælg 2</h5>
-              <div class="helper">Ønsker du flere saucer, er tillægget 15 kr. pr. person.</div>
-              <div class="builder-grid">
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-sauce" data-group="sauce" data-name="Bearnaise sauce" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Bearnaise sauce</strong>
-                    <small>Klassisk favorit</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-sauce" data-group="sauce" data-name="Rødvinssauce" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Rødvinssauce</strong>
-                    <small>Fyldig og elegant</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-sauce" data-group="sauce" data-name="Pebersauce" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Pebersauce</strong>
-                    <small>God til okse og kylling</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="checkbox" class="builderCheck builder-sauce" data-group="sauce" data-name="Hjemmelavet tzatziki" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Hjemmelavet tzatziki</strong>
-                    <small>Frisk og cremet</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
+            <!-- Tilkøb kun til påske/jul -->
+            <div class="addon-panel" id="addonPanel">
+              <div class="choice-box">
+                <h4>Tilkøb</h4>
+                <p>Disse tilvalg gælder kun for vores sæsonbuffeter.</p>
+                <div class="options-grid">
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Brownie med skovbærkompot" data-price="49" onchange="updateSummary()">
+                    <div><strong>Brownie med skovbærkompot</strong><small>Et populært desserttilvalg</small></div>
+                    <div class="option-price">49 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Æble-karameltærte" data-price="49" onchange="updateSummary()">
+                    <div><strong>Æble-karameltærte</strong><small>Et klassisk dessertvalg</small></div>
+                    <div class="option-price">49 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Osteanretning" data-price="59" onchange="updateSummary()">
+                    <div><strong>Osteanretning</strong><small>Udvalgte oste og tilbehør</small></div>
+                    <div class="option-price">59 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Ekstra brød og smør" data-price="29" onchange="updateSummary()">
+                    <div><strong>Ekstra brød og smør</strong><small>Godt til større selskaber</small></div>
+                    <div class="option-price">29 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Ekstra fiskefilet" data-price="29" onchange="updateSummary()">
+                    <div><strong>Ekstra fiskefilet</strong><small>Velegnet til påske og jul</small></div>
+                    <div class="option-price">29 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Ekstra varmrøget laks" data-price="39" onchange="updateSummary()">
+                    <div><strong>Ekstra varmrøget laks</strong><small>Premium tilvalg</small></div>
+                    <div class="option-price">39 kr.</div>
+                  </label>
+                  <label class="option">
+                    <input type="checkbox" class="addonCheck" data-name="Ekstra frikadeller" data-price="29" onchange="updateSummary()">
+                    <div><strong>Ekstra frikadeller</strong><small>Et sikkert supplement</small></div>
+                    <div class="option-price">29 kr.</div>
+                  </label>
+                </div>
               </div>
-              <div class="builder-status" id="status-sauce"></div>
             </div>
 
-            <div class="builder-section">
-              <h5>Dessert – vælg 1</h5>
-              <div class="helper">Ønsker du flere desserter, er tillægget 15 kr. pr. person.</div>
-              <div class="builder-grid">
-                <label class="builder-option">
-                  <input type="radio" name="dessert" class="builderDessert" data-group="dessert" data-name="Chokolademousse" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Chokolademousse</strong>
-                    <small>Luftig og rig på smag med knas og bær</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="radio" name="dessert" class="builderDessert" data-group="dessert" data-name="Panna cotta" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Panna cotta</strong>
-                    <small>Cremet klassiker med bærkompot</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="radio" name="dessert" class="builderDessert" data-group="dessert" data-name="Chokolade brownie med nødder" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Chokolade brownie med nødder</strong>
-                    <small>Fyldig og klassisk dessert</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="radio" name="dessert" class="builderDessert" data-group="dessert" data-name="Frugtsalat med vaniljecreme" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Frugtsalat</strong>
-                    <small>Friske frugter med vaniljecreme</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
-                <label class="builder-option">
-                  <input type="radio" name="dessert" class="builderDessert" data-group="dessert" data-name="Kaisers jordbær/rabarber trifli" data-extra="0" onchange="updateSummary()">
-                  <div>
-                    <strong>Kaisers jordbær/rabarber trifli</strong>
-                    <small>Med flødeskum og makroner</small>
-                  </div>
-                  <div class="builder-price">+0 kr.</div>
-                </label>
+            <!-- Kontakt -->
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">Navn</label>
+                <input class="input" id="name" type="text" placeholder="Dit navn">
               </div>
-              <div class="builder-status" id="status-dessert"></div>
+              <div class="field">
+                <label class="label">Telefon</label>
+                <input class="input" id="phone" type="text" placeholder="Dit telefonnummer">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label class="label">E-mail</label>
+                <input class="input" id="email" type="email" placeholder="Din e-mail">
+              </div>
+              <div class="field">
+                <label class="label">Ønsket dato</label>
+                <input class="input" id="date" type="date">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Kommentar / særlige ønsker</label>
+              <textarea class="textarea" id="comment" rows="5" placeholder="Skriv gerne hvis I har spørgsmål, allergener, ønsket fordeling af smørrebrød eller særlige ønsker..."></textarea>
             </div>
           </div>
+        </div>
 
-          <div class="field">
-            <label class="label">Tilkøb</label>
-            <div class="addons">
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Brownie med skovbærkompot" data-price="49" onchange="updateSummary()">
-                <div>
-                  <strong>Brownie med skovbærkompot</strong>
-                  <small>Et populært desserttilvalg til både fest og frokostanledninger.</small>
-                </div>
-                <div class="addon-price">49 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Æble-karameltærte" data-price="49" onchange="updateSummary()">
-                <div>
-                  <strong>Æble-karameltærte</strong>
-                  <small>Et klassisk og sikkert tilvalg med bred appel.</small>
-                </div>
-                <div class="addon-price">49 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Osteanretning" data-price="59" onchange="updateSummary()">
-                <div>
-                  <strong>Osteanretning</strong>
-                  <small>Et premium tilvalg med udvalgte oste og tilbehør.</small>
-                </div>
-                <div class="addon-price">59 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Ekstra brød og smør" data-price="29" onchange="updateSummary()">
-                <div>
-                  <strong>Ekstra brød og smør</strong>
-                  <small>Velegnet til større selskaber eller ekstra god appetit.</small>
-                </div>
-                <div class="addon-price">29 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Ekstra fiskefilet" data-price="29" onchange="updateSummary()">
-                <div>
-                  <strong>Ekstra fiskefilet</strong>
-                  <small>Især oplagt til påske- og julefrokost.</small>
-                </div>
-                <div class="addon-price">29 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Ekstra varmrøget laks" data-price="39" onchange="updateSummary()">
-                <div>
-                  <strong>Ekstra varmrøget laks</strong>
-                  <small>Premium tilvalg som løfter buffetens samlede udtryk.</small>
-                </div>
-                <div class="addon-price">39 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Ekstra frikadeller" data-price="29" onchange="updateSummary()">
-                <div>
-                  <strong>Ekstra frikadeller</strong>
-                  <small>Et sikkert og populært supplement til familiebuffeter.</small>
-                </div>
-                <div class="addon-price">29 kr.</div>
-              </label>
-
-              <label class="addon">
-                <input type="checkbox" class="addonCheck" data-name="Vegetarisk supplement" data-price="39" onchange="updateSummary()">
-                <div>
-                  <strong>Vegetarisk supplement</strong>
-                  <small>Mulighed for et grønnere tilvalg til enkelte gæster.</small>
-                </div>
-                <div class="addon-price">39 kr.</div>
-              </label>
+        <aside class="panel summary">
+          <div class="summary-top">
+            <h3>Bestillingsoversigt</h3>
+            <p>Prisen opdateres automatisk ud fra dine valg.</p>
+          </div>
+          <div class="summary-body">
+            <div class="summary-row">
+              <span>Valgt buffet</span>
+              <strong id="sumBuffet">Brunchbuffet</strong>
             </div>
-          </div>
+            <div class="summary-row">
+              <span>Pris pr. kuvert</span>
+              <strong id="sumKuvert">199 kr.</strong>
+            </div>
+            <div class="summary-row">
+              <span>Antal kuverter</span>
+              <strong id="sumGuests">15</strong>
+            </div>
+            <div class="summary-row">
+              <span>Buffet subtotal</span>
+              <strong id="sumSubtotal">2.985 kr.</strong>
+            </div>
+            <div class="summary-row">
+              <span>Valg/tillæg</span>
+              <strong id="sumBuilderExtra">0 kr.</strong>
+            </div>
+            <div class="summary-row">
+              <span>Tilkøb</span>
+              <strong id="sumAddons">0 kr.</strong>
+            </div>
+            <div class="summary-row">
+              <span>Levering</span>
+              <strong id="sumDelivery">0 kr.</strong>
+            </div>
 
-          <div class="field">
-            <label class="label">Kommentar / særlige ønsker</label>
-            <textarea class="textarea" id="comment" rows="5" placeholder="Allergener, specifikke ønsker eller anden information..."></textarea>
+            <div class="summary-subbox" id="selectionBox"></div>
+
+            <div class="total-box">
+              <span>Samlet pris</span>
+              <strong id="sumTotal">2.985 kr.</strong>
+            </div>
+
+            <div class="summary-actions">
+              <button class="btn btn-primary btn-block" onclick="submitOrder()">Send bestilling</button>
+              <button class="btn btn-ghost btn-block" onclick="window.print()">Print / gem som PDF</button>
+            </div>
+
+            <div class="tiers" id="tierBox"></div>
+            <div class="dynamic-rules" id="dynamicRules"></div>
           </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">FAQ</div>
+        <h2>Ofte stillede spørgsmål</h2>
+        <p>Her finder du svar på de spørgsmål, der oftest opstår, når man bestiller catering hos os.</p>
+      </div>
+
+      <div class="faq">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Hvor lang tid før skal vi bestille?<span>+</span></button>
+          <div class="faq-a">Vi anbefaler bestilling senest to uger før ønsket dato. Ved højtider og travle perioder anbefaler vi, at man er ude i ekstra god tid.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Hvor afhenter vi maden?<span>+</span></button>
+          <div class="faq-a">Du kan afhente din bestilling i en af vores caféer i Helsingør, Hillerød, Farum, Hørsholm eller Vanløse.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Hvordan leveres maden?<span>+</span></button>
+          <div class="faq-a">Retterne leveres i foliebakker, og varme retter leveres i termokasser, så de er klar til at blive serveret for dine gæster.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Kan vi få særlige ønsker?<span>+</span></button>
+          <div class="faq-a">Ja, skriv jeres ønsker i kommentarfeltet. Vi tager gerne dialogen ved særlige behov, fordeling af smørrebrød eller andre tilpasninger.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <span class="footer-brand">Café Kaiser Catering</span>
+          <p>Buffeter og selskabsmad med udgangspunkt i vores populære caféklassikere, serveret med fokus på kvalitet, smag og enkelhed.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Afhentning</h4>
+          <p>Helsingør</p>
+          <p>Hillerød</p>
+          <p>Farum</p>
+          <p>Hørsholm</p>
+          <p>Vanløse</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Buffeter</h4>
+          <p>Brunchbuffet</p>
+          <p>Smørrebrødsmenu</p>
+          <p>Byg selv menu</p>
+          <p>Påskefrokost</p>
+          <p>Julefrokost</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Praktisk</h4>
+          <p>Bestilling senest 2 uger før</p>
+          <p>Afhentning i café</p>
+          <p>Udvalgte sæsonbuffeter med tilkøb</p>
+          <p>Kontakt os ved særlige ønsker</p>
         </div>
       </div>
 
-      <aside class="panel summary">
-        <div class="summary-top">
-          <h3>Bestillingsoversigt</h3>
-          <p>Din pris opdateres automatisk.</p>
+      <div class="footer-copy">
+        © Café Kaiser Catering
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- BEKRÆFTELSESSIDE -->
+<div class="confirmation-page" id="confirmationPage">
+  <div class="container">
+    <div class="confirm-card">
+      <div class="confirm-head">
+        <div class="confirm-icon">✓</div>
+        <h2>Tak for din bestilling</h2>
+        <p>
+          Vi har registreret din cateringforespørgsel. Nedenfor finder du en oversigt over
+          din bestilling. Vi vender tilbage hurtigst muligt for at bekræfte detaljerne.
+        </p>
+      </div>
+
+      <div class="confirm-body">
+        <div class="confirm-box">
+          <h4>Dine oplysninger</h4>
+          <div class="confirm-line"><span>Navn</span><strong id="cName">-</strong></div>
+          <div class="confirm-line"><span>Telefon</span><strong id="cPhone">-</strong></div>
+          <div class="confirm-line"><span>E-mail</span><strong id="cEmail">-</strong></div>
+          <div class="confirm-line"><span>Dato</span><strong id="cDate">-</strong></div>
         </div>
-        <div class="summary-body">
-          <div class="summary-row">
-            <span>Valgt buffet</span>
-            <strong id="sumBuffet">Brunchbuffet</strong>
-          </div>
-          <div class="summary-row">
-            <span>Pris pr. kuvert</span>
-            <strong id="sumKuvert">199 kr.</strong>
-          </div>
-          <div class="summary-row">
-            <span>Antal kuverter</span>
-            <strong id="sumGuests">15</strong>
-          </div>
-          <div class="summary-row">
-            <span>Buffet subtotal</span>
-            <strong id="sumSubtotal">2.985 kr.</strong>
-          </div>
-          <div class="summary-row">
-            <span>Byg selv tillæg</span>
-            <strong id="sumBuilderExtra">0 kr.</strong>
-          </div>
-          <div class="summary-row">
-            <span>Tilkøb</span>
-            <strong id="sumAddons">0 kr.</strong>
-          </div>
-          <div class="summary-row">
-            <span>Levering</span>
-            <strong id="sumDelivery">0 kr.</strong>
-          </div>
 
-          <div class="summary-subbox" id="builderSummaryBox"></div>
+        <div class="confirm-box">
+          <h4>Bestillingsoversigt</h4>
+          <div class="confirm-line"><span>Buffet</span><strong id="cBuffet">-</strong></div>
+          <div class="confirm-line"><span>Kuverter</span><strong id="cGuests">-</strong></div>
+          <div class="confirm-line"><span>Pris pr. kuvert</span><strong id="cKuvert">-</strong></div>
+          <div class="confirm-line"><span>Levering</span><strong id="cDelivery">-</strong></div>
+        </div>
 
-          <div class="total-box">
+        <div class="confirm-box">
+          <h4>Valg og tilpasninger</h4>
+          <div id="cSelections" style="color:var(--muted);white-space:pre-wrap;"></div>
+        </div>
+
+        <div class="confirm-box">
+          <h4>Prisopdeling</h4>
+          <div class="confirm-line"><span>Buffet subtotal</span><strong id="cSubtotal">-</strong></div>
+          <div class="confirm-line"><span>Valg/tillæg</span><strong id="cBuilderExtra">-</strong></div>
+          <div class="confirm-line"><span>Tilkøb</span><strong id="cAddons">-</strong></div>
+          <div class="confirm-line"><span>Levering</span><strong id="cDeliveryPrice">-</strong></div>
+
+          <div class="confirm-total">
             <span>Samlet pris</span>
-            <strong id="sumTotal">2.985 kr.</strong>
+            <strong id="cTotal">-</strong>
           </div>
-
-          <div class="summary-actions">
-            <button class="btn btn-primary btn-block" onclick="openModal()">Generér bestillingsresume</button>
-            <button class="btn btn-ghost btn-block" onclick="window.print()">Print / gem som PDF</button>
-          </div>
-
-          <div class="tiers" id="tierBox"></div>
-          <div class="dynamic-rules" id="dynamicRules"></div>
-        </div>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<section id="praktisk">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">Sådan fungerer det</div>
-      <h2>En enkel og professionel cateringoplevelse</h2>
-      <p>Vi har gjort det let at vælge catering, uden at gå på kompromis med kvalitet, præsentation eller fleksibilitet.</p>
-    </div>
-
-    <div class="info-grid">
-      <div class="info-card">
-        <h4>1. Vælg buffet</h4>
-        <p>Vælg mellem brunch, smørrebrød, byg selv menu eller vores sæson- og selskabsbuffeter.</p>
-      </div>
-      <div class="info-card">
-        <h4>2. Beregn pris</h4>
-        <p>Indtast antal kuverter og vælg eventuelle tilkøb. Ved Byg selv menu kan du sammensætte menuen direkte på siden.</p>
-      </div>
-      <div class="info-card">
-        <h4>3. Hent i café</h4>
-        <p>Afhentning i Helsingør, Hillerød, Farum, Hørsholm eller Vanløse. Kontakt os ved særlige ønsker eller hasteforespørgsler.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">Ofte stillede spørgsmål</div>
-      <h2>FAQ</h2>
-      <p>Her finder du svar på de spørgsmål, der typisk opstår i forbindelse med bestilling af catering.</p>
-    </div>
-
-    <div class="faq">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Hvor lang tid før skal vi bestille?<span>+</span></button>
-        <div class="faq-a">Vi anbefaler bestilling senest to uger før ønsket dato. I travle perioder som jul, påske og konfirmationssæson er det en klar fordel at være ude i god tid.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Tilbyder I levering?<span>+</span></button>
-        <div class="faq-a">De fleste af jeres nuværende cateringkoncepter er sat op til afhentning. På denne præsentationsside kan levering vises på udvalgte buffeter som eksempel.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Hvordan leveres maden?<span>+</span></button>
-        <div class="faq-a">Retterne leveres i foliebakker, og varme retter leveres i termokasser, så de er klar til at blive sat frem og serveret for gæsterne.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Kan vi få særlige ønsker eller tilpasninger?<span>+</span></button>
-        <div class="faq-a">Ja, ofte. Notér jeres ønsker i kommentarfeltet, så kan I tage dialogen videre derfra. Det gælder fx særlige smørrebrødsønsker, allergener eller ønsker til buffetens sammensætning.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer id="kontakt">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-col">
-        <span class="footer-brand">Café Kaiser Catering</span>
-        <p>Catering med udgangspunkt i vores populære caféklassikere. Udviklet til både brunch, højtider, frokostarrangementer og selskaber.</p>
-      </div>
-
-      <div class="footer-col">
-        <h4>Afhentning</h4>
-        <p>Helsingør</p>
-        <p>Hillerød</p>
-        <p>Farum</p>
-        <p>Hørsholm</p>
-        <p>Vanløse</p>
-      </div>
-
-      <div class="footer-col">
-        <h4>Buffeter</h4>
-        <p>Brunchbuffet</p>
-        <p>Smørrebrødsmenu</p>
-        <p>Byg selv menu</p>
-        <p>Påskefrokost</p>
-        <p>Julefrokost</p>
-        <p>Konfirmationsbuffet</p>
-      </div>
-
-      <div class="footer-col">
-        <h4>Praktisk</h4>
-        <p>Minimum fra 8–25 kuverter</p>
-        <p>Bestilling senest 2 uger før</p>
-        <p>Afhentning i café</p>
-        <p>Kontakt os ved hasteforespørgsler</p>
-      </div>
-    </div>
-
-    <div class="footer-copy">
-      © Café Kaiser Catering · Premium præsentationsside
-    </div>
-  </div>
-</footer>
-
-<div class="modal" id="modal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <div>
-        <h3>Bestillingsresume</h3>
-        <p>En præsentationsklar oversigt over den valgte cateringløsning.</p>
-      </div>
-      <button class="close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="receipt">
-        <div class="receipt-box">
-          <small>Navn</small>
-          <strong id="rName">-</strong>
-        </div>
-        <div class="receipt-box">
-          <small>Telefon</small>
-          <strong id="rPhone">-</strong>
-        </div>
-        <div class="receipt-box">
-          <small>E-mail</small>
-          <strong id="rEmail">-</strong>
-        </div>
-        <div class="receipt-box">
-          <small>Dato</small>
-          <strong id="rDate">-</strong>
-        </div>
-        <div class="receipt-box">
-          <small>Buffet</small>
-          <strong id="rBuffet">-</strong>
-        </div>
-        <div class="receipt-box">
-          <small>Kuverter</small>
-          <strong id="rGuests">-</strong>
         </div>
       </div>
 
-      <div class="receipt-box" id="rBuilderBox" style="display:none;margin-bottom:16px;">
-        <small>Valg i Byg selv menu</small>
-        <strong id="rBuilderSelections">-</strong>
+      <div class="confirm-actions">
+        <button class="btn btn-primary" onclick="window.print()">Print / gem som PDF</button>
+        <button class="btn btn-secondary" onclick="backToSite()">Lav en ny bestilling</button>
       </div>
-
-      <div class="receipt-list" id="receiptList"></div>
-
-      <div class="receipt-box" style="margin-top:16px;">
-        <small>Kommentar / særlige ønsker</small>
-        <strong id="rComment">Ingen kommentarer</strong>
-      </div>
-
-      <div class="receipt-total">
-        <small>Samlet pris</small>
-        <strong id="rTotal">0 kr.</strong>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-primary btn-block" onclick="window.print()">Print / gem som PDF</button>
-      <button class="btn btn-ghost btn-block" onclick="closeModal()">Luk</button>
     </div>
   </div>
 </div>
@@ -1421,16 +1379,18 @@
       type: "fixed",
       fixedPrice: 199,
       minGuests: 15,
-      rules: "Minimum 15 kuverter lørdag/søndag og minimum 25 kuverter på hverdage. Bestilles senest 2 uger før. Afhentning mellem kl. 10–12. Alle retter leveres i foliebakker, og varme retter i termokasser. Vi tilbyder ikke levering på dette koncept.",
-      deliveryAllowed: false
+      rules: "Minimum 15 kuverter lørdag/søndag og minimum 25 kuverter på hverdage. Bestilles senest 2 uger før. Afhentning mellem kl. 10–12. Der er ingen tilkøb til dette produkt.",
+      deliveryAllowed: false,
+      addonsAllowed: false
     },
     smorrebrod: {
       name: "Smørrebrødsmenu",
       type: "fixed",
       fixedPrice: 179,
       minGuests: 10,
-      rules: "Minimum 10 kuverter. Indeholder 2 stk. smørrebrød pr. person. Bestilles senest 2 uger før. Afhentning mellem kl. 11–16. Leveres i foliebakker. Vi tilbyder ikke levering på dette koncept.",
-      deliveryAllowed: false
+      rules: "Minimum 10 kuverter. Indeholder 2 stk. smørrebrød pr. person. Bestilles senest 2 uger før. Afhentning mellem kl. 11–16. Der er ingen tilkøb til dette produkt.",
+      deliveryAllowed: false,
+      addonsAllowed: false
     },
     bygselv: {
       name: "Byg selv menu",
@@ -1441,8 +1401,9 @@
         { min: 20, max: 39, price: 269, label: "20–39 kuverter" },
         { min: 40, max: Infinity, price: 249, label: "40+ kuverter" }
       ],
-      rules: "Vælg 2 slags kød, 2 salater, 2 kartoffelretter, 2 saucer og 1 dessert. Menuen inkluderer ølandshvede med pisket smør. Bestilles senest 2 uger før. Afhentes i café. Vi tilbyder ikke levering på dette koncept.",
-      deliveryAllowed: false
+      rules: "Vælg 2 slags kød, 2 salater, 2 kartofler, 2 saucer og 1 dessert. Menuen inkluderer ølandshvede med pisket smør. Bestilles senest 2 uger før og afhentes i café.",
+      deliveryAllowed: false,
+      addonsAllowed: false
     },
     paaske: {
       name: "Påskefrokost",
@@ -1453,8 +1414,9 @@
         { min: 15, max: 29, price: 259, label: "15–29 kuverter" },
         { min: 30, max: Infinity, price: 239, label: "30+ kuverter" }
       ],
-      rules: "Klassisk påskefrokostbuffet med kolde og lune frokostfavoritter. Minimum 8 kuverter. Bestilles i god tid op til sæson. Afhentning anbefales.",
-      deliveryAllowed: true
+      rules: "Minimum 8 kuverter. Bestilles i god tid op til sæson. Tilkøb er muligt til denne buffet.",
+      deliveryAllowed: true,
+      addonsAllowed: true
     },
     jul: {
       name: "Julefrokost",
@@ -1465,20 +1427,9 @@
         { min: 15, max: 29, price: 259, label: "15–29 kuverter" },
         { min: 30, max: Infinity, price: 239, label: "30+ kuverter" }
       ],
-      rules: "Julefrokostbuffet med klassiske kolde og lune elementer. Minimum 8 kuverter. Bestilles i god tid i julesæsonen. Afhentning anbefales.",
-      deliveryAllowed: true
-    },
-    konfirmation: {
-      name: "Konfirmationsbuffet",
-      type: "tiered",
-      minGuests: 8,
-      tiers: [
-        { min: 8, max: 14, price: 289, label: "8–14 kuverter" },
-        { min: 15, max: 29, price: 269, label: "15–29 kuverter" },
-        { min: 30, max: Infinity, price: 249, label: "30+ kuverter" }
-      ],
-      rules: "Selskabsbuffet med bred appel til både unge og voksne. Minimum 8 kuverter. Velegnet til konfirmationer og andre festlige anledninger.",
-      deliveryAllowed: true
+      rules: "Minimum 8 kuverter. Bestilles i god tid i julesæsonen. Tilkøb er muligt til denne buffet.",
+      deliveryAllowed: true,
+      addonsAllowed: true
     }
   };
 
@@ -1488,7 +1439,7 @@
     return new Intl.NumberFormat('da-DK').format(n) + " kr.";
   }
 
-  function getCurrentGuests() {
+  function getGuests() {
     let guests = parseInt(document.getElementById("guests").value || 0, 10);
     if (isNaN(guests)) guests = buffetData[selectedBuffet].minGuests;
     if (guests < buffetData[selectedBuffet].minGuests) {
@@ -1505,185 +1456,6 @@
     return tier ? tier.price : buffet.tiers[0].price;
   }
 
-  function getChecked(selector) {
-    return [...document.querySelectorAll(selector + ":checked")];
-  }
-
-  function getBuilderState() {
-    const meats = getChecked(".builder-kod");
-    const salads = getChecked(".builder-salat");
-    const potatoes = getChecked(".builder-kartoffel");
-    const sauces = getChecked(".builder-sauce");
-    const dessert = getChecked(".builderDessert");
-
-    return {
-      meats,
-      salads,
-      potatoes,
-      sauces,
-      dessert
-    };
-  }
-
-  function updateBuilderStatuses() {
-    const state = getBuilderState();
-
-    setStatus("status-kod", state.meats.length, 2, "kød");
-    setStatus("status-salat", state.salads.length, 2, "salater");
-    setStatus("status-kartoffel", state.potatoes.length, 2, "kartoffelretter");
-    setStatus("status-sauce", state.sauces.length, 2, "saucer");
-    setStatus("status-dessert", state.dessert.length, 1, "dessert");
-  }
-
-  function setStatus(id, count, required, label) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (count < required) {
-      el.className = "builder-status warn";
-      el.textContent = `Valgt ${count} / ${required} ${label}`;
-    } else {
-      el.className = "builder-status ok";
-      el.textContent = `Valgt ${count} / ${required} ${label}`;
-    }
-  }
-
-  function calculateBuilderExtra(guests) {
-    if (selectedBuffet !== "bygselv") return { extraPerGuest: 0, total: 0, valid: true, summary: "" };
-
-    const state = getBuilderState();
-    let extraPerGuest = 0;
-
-    // Meat: first 2 included, extra choices +25 each, plus selected option extras always apply
-    state.meats.forEach((item, index) => {
-      extraPerGuest += parseInt(item.dataset.extra, 10) || 0;
-      if (index >= 2) extraPerGuest += 25;
-    });
-
-    // Salads: first 2 included, extras +15 each
-    state.salads.forEach((item, index) => {
-      extraPerGuest += parseInt(item.dataset.extra, 10) || 0;
-      if (index >= 2) extraPerGuest += 15;
-    });
-
-    // Potatoes: first 2 included, extras +20 each
-    state.potatoes.forEach((item, index) => {
-      extraPerGuest += parseInt(item.dataset.extra, 10) || 0;
-      if (index >= 2) extraPerGuest += 20;
-    });
-
-    // Sauces: first 2 included, extras +15 each
-    state.sauces.forEach((item, index) => {
-      extraPerGuest += parseInt(item.dataset.extra, 10) || 0;
-      if (index >= 2) extraPerGuest += 15;
-    });
-
-    // Dessert: first 1 included, extra desserts not possible in UI
-    state.dessert.forEach((item) => {
-      extraPerGuest += parseInt(item.dataset.extra, 10) || 0;
-    });
-
-    const valid =
-      state.meats.length >= 2 &&
-      state.salads.length >= 2 &&
-      state.potatoes.length >= 2 &&
-      state.sauces.length >= 2 &&
-      state.dessert.length >= 1;
-
-    const summary = `
-Kød: ${state.meats.map(i => i.dataset.name).join(", ") || "-"}
-Salater: ${state.salads.map(i => i.dataset.name).join(", ") || "-"}
-Kartofler: ${state.potatoes.map(i => i.dataset.name).join(", ") || "-"}
-Saucer: ${state.sauces.map(i => i.dataset.name).join(", ") || "-"}
-Dessert: ${state.dessert.map(i => i.dataset.name).join(", ") || "-"}
-    `.trim();
-
-    return {
-      extraPerGuest,
-      total: extraPerGuest * guests,
-      valid,
-      summary
-    };
-  }
-
-  function renderTierBox(guests) {
-    const box = document.getElementById("tierBox");
-    const buffet = buffetData[selectedBuffet];
-    let html = "";
-
-    if (buffet.type === "fixed") {
-      html += `<div class="tier active"><span>Fast kuvertpris</span><strong>${formatPrice(buffet.fixedPrice)}</strong></div>`;
-    } else {
-      buffet.tiers.forEach(t => {
-        const active = guests >= t.min && guests <= t.max ? "active" : "";
-        html += `<div class="tier ${active}"><span>${t.label}</span><strong>${formatPrice(t.price)}</strong></div>`;
-      });
-    }
-
-    box.innerHTML = html;
-  }
-
-  function setRules() {
-    document.getElementById("rulesBox").textContent = buffetData[selectedBuffet].rules;
-    document.getElementById("dynamicRules").textContent = buffetData[selectedBuffet].rules;
-
-    const delivery = document.getElementById("deliveryType");
-    if (!buffetData[selectedBuffet].deliveryAllowed) {
-      delivery.value = "0";
-      delivery.disabled = true;
-      delivery.style.opacity = ".6";
-    } else {
-      delivery.disabled = false;
-      delivery.style.opacity = "1";
-    }
-
-    const builderPanel = document.getElementById("builderPanel");
-    if (selectedBuffet === "bygselv") {
-      builderPanel.classList.add("active");
-    } else {
-      builderPanel.classList.remove("active");
-    }
-  }
-
-  function updateSummary() {
-    const guests = getCurrentGuests();
-    const buffet = buffetData[selectedBuffet];
-    const pricePerGuest = getPricePerGuest(selectedBuffet, guests);
-    const subtotal = pricePerGuest * guests;
-
-    let addonTotal = 0;
-    const selectedAddons = [...document.querySelectorAll(".addonCheck:checked")];
-    selectedAddons.forEach(addon => {
-      addonTotal += parseInt(addon.dataset.price, 10) * guests;
-    });
-
-    const deliveryValue = buffet.deliveryAllowed ? parseInt(document.getElementById("deliveryType").value || 0, 10) : 0;
-
-    updateBuilderStatuses();
-    const builder = calculateBuilderExtra(guests);
-    const total = subtotal + addonTotal + deliveryValue + builder.total;
-
-    document.getElementById("sumBuffet").textContent = buffet.name;
-    document.getElementById("sumKuvert").textContent = formatPrice(pricePerGuest);
-    document.getElementById("sumGuests").textContent = guests;
-    document.getElementById("sumSubtotal").textContent = formatPrice(subtotal);
-    document.getElementById("sumAddons").textContent = formatPrice(addonTotal);
-    document.getElementById("sumDelivery").textContent = formatPrice(deliveryValue);
-    document.getElementById("sumBuilderExtra").textContent = formatPrice(builder.total);
-    document.getElementById("sumTotal").textContent = formatPrice(total);
-
-    const box = document.getElementById("builderSummaryBox");
-    if (selectedBuffet === "bygselv") {
-      box.classList.add("active");
-      box.innerHTML = `<strong style="display:block;color:var(--gold-light);margin-bottom:8px;">Valg i Byg selv menu</strong><pre style="white-space:pre-wrap;margin:0;font-family:inherit;color:var(--muted);">${builder.summary}</pre>${builder.valid ? "" : "<div style='margin-top:10px;color:#f2cb69;'>Vælg mindst 2 kød, 2 salater, 2 kartofler, 2 saucer og 1 dessert.</div>"}`;
-    } else {
-      box.classList.remove("active");
-      box.innerHTML = "";
-    }
-
-    renderTierBox(guests);
-    setRules();
-  }
-
   function selectBuffet(key) {
     selectedBuffet = key;
     document.querySelectorAll(".card").forEach(card => card.classList.remove("selected"));
@@ -1695,75 +1467,242 @@ Dessert: ${state.dessert.map(i => i.dataset.name).join(", ") || "-"}
       document.getElementById("guests").value = buffetData[key].minGuests;
     }
 
+    document.getElementById("smorrebrodPanel").classList.toggle("active", key === "smorrebrod");
+    document.getElementById("builderPanel").classList.toggle("active", key === "bygselv");
+    document.getElementById("addonPanel").classList.toggle("active", buffetData[key].addonsAllowed);
+
+    const delivery = document.getElementById("deliveryType");
+    if (!buffetData[key].deliveryAllowed) {
+      delivery.value = "0";
+      delivery.disabled = true;
+      delivery.style.opacity = ".65";
+    } else {
+      delivery.disabled = false;
+      delivery.style.opacity = "1";
+    }
+
+    document.querySelectorAll(".addonCheck").forEach(el => el.checked = false);
+
     updateSummary();
     document.getElementById("bestilling").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function openModal() {
-    updateSummary();
+  function getChecked(selector) {
+    return [...document.querySelectorAll(selector + ":checked")];
+  }
 
-    const guests = getCurrentGuests();
+  function setBuilderStatus(id, count, required, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (count >= required) {
+      el.className = "builder-status ok";
+      el.textContent = `Valgt ${count} / ${required} ${text}`;
+    } else {
+      el.className = "builder-status warn";
+      el.textContent = `Valgt ${count} / ${required} ${text}`;
+    }
+  }
+
+  function updateBuilderStatus() {
+    const meats = getChecked(".builder-kod");
+    const salads = getChecked(".builder-salat");
+    const potatoes = getChecked(".builder-kartoffel");
+    const sauces = getChecked(".builder-sauce");
+    const desserts = getChecked(".builder-dessert");
+
+    setBuilderStatus("status-kod", meats.length, 2, "kød");
+    setBuilderStatus("status-salat", salads.length, 2, "salater");
+    setBuilderStatus("status-kartoffel", potatoes.length, 2, "kartofler");
+    setBuilderStatus("status-sauce", sauces.length, 2, "saucer");
+    setBuilderStatus("status-dessert", desserts.length, 1, "dessert");
+  }
+
+  function calculateBuilder(guests) {
+    if (selectedBuffet !== "bygselv") return { total: 0, valid: true, summary: "" };
+
+    const meats = getChecked(".builder-kod");
+    const salads = getChecked(".builder-salat");
+    const potatoes = getChecked(".builder-kartoffel");
+    const sauces = getChecked(".builder-sauce");
+    const desserts = getChecked(".builder-dessert");
+
+    let extraPerGuest = 0;
+
+    meats.forEach((item, index) => {
+      extraPerGuest += parseInt(item.dataset.extra || 0, 10);
+      if (index >= 2) extraPerGuest += 25;
+    });
+
+    salads.forEach((item, index) => {
+      extraPerGuest += parseInt(item.dataset.extra || 0, 10);
+      if (index >= 2) extraPerGuest += 15;
+    });
+
+    potatoes.forEach((item, index) => {
+      extraPerGuest += parseInt(item.dataset.extra || 0, 10);
+      if (index >= 2) extraPerGuest += 20;
+    });
+
+    sauces.forEach((item, index) => {
+      extraPerGuest += parseInt(item.dataset.extra || 0, 10);
+      if (index >= 2) extraPerGuest += 15;
+    });
+
+    desserts.forEach((item) => {
+      extraPerGuest += parseInt(item.dataset.extra || 0, 10);
+    });
+
+    const valid = meats.length >= 2 && salads.length >= 2 && potatoes.length >= 2 && sauces.length >= 2 && desserts.length >= 1;
+
+    const summary = `
+Kød: ${meats.map(i => i.dataset.name).join(", ") || "-"}
+Salater: ${salads.map(i => i.dataset.name).join(", ") || "-"}
+Kartofler: ${potatoes.map(i => i.dataset.name).join(", ") || "-"}
+Saucer: ${sauces.map(i => i.dataset.name).join(", ") || "-"}
+Dessert: ${desserts.map(i => i.dataset.name).join(", ") || "-"}
+    `.trim();
+
+    return {
+      total: extraPerGuest * guests,
+      valid,
+      summary
+    };
+  }
+
+  function getSelectionsSummary() {
+    if (selectedBuffet === "smorrebrod") {
+      const picks = getChecked(".smorrebrodCheck").map(i => i.dataset.name);
+      if (!picks.length) return "Ingen typer valgt endnu.";
+      return "Valgte smørrebrød: " + picks.join(", ");
+    }
+
+    if (selectedBuffet === "bygselv") {
+      return calculateBuilder(getGuests()).summary;
+    }
+
+    if (buffetData[selectedBuffet].addonsAllowed) {
+      const addons = getChecked(".addonCheck").map(i => i.dataset.name);
+      return addons.length ? "Tilkøb: " + addons.join(", ") : "Ingen tilkøb valgt.";
+    }
+
+    return "Ingen ekstra valg på denne buffet.";
+  }
+
+  function renderTierBox(guests) {
+    const box = document.getElementById("tierBox");
     const buffet = buffetData[selectedBuffet];
-    const pricePerGuest = getPricePerGuest(selectedBuffet, guests);
-    const subtotal = pricePerGuest * guests;
+    let html = "";
+
+    if (buffet.type === "fixed") {
+      html = `<div class="tier active"><span>Fast kuvertpris</span><strong>${formatPrice(buffet.fixedPrice)}</strong></div>`;
+    } else {
+      buffet.tiers.forEach(t => {
+        const active = guests >= t.min && guests <= t.max ? "active" : "";
+        html += `<div class="tier ${active}"><span>${t.label}</span><strong>${formatPrice(t.price)}</strong></div>`;
+      });
+    }
+
+    box.innerHTML = html;
+  }
+
+  function updateSummary() {
+    const guests = getGuests();
+    const buffet = buffetData[selectedBuffet];
+    const kuvert = getPricePerGuest(selectedBuffet, guests);
+    const subtotal = kuvert * guests;
+
+    updateBuilderStatus();
+    const builder = calculateBuilder(guests);
+
+    let addonTotal = 0;
+    if (buffet.addonsAllowed) {
+      getChecked(".addonCheck").forEach(addon => {
+        addonTotal += parseInt(addon.dataset.price, 10) * guests;
+      });
+    }
+
     const deliveryValue = buffet.deliveryAllowed ? parseInt(document.getElementById("deliveryType").value || 0, 10) : 0;
-    const builder = calculateBuilderExtra(guests);
+    const total = subtotal + builder.total + addonTotal + deliveryValue;
+
+    document.getElementById("rulesBox").textContent = buffet.rules;
+    document.getElementById("dynamicRules").textContent = buffet.rules;
+
+    document.getElementById("sumBuffet").textContent = buffet.name;
+    document.getElementById("sumKuvert").textContent = formatPrice(kuvert);
+    document.getElementById("sumGuests").textContent = guests;
+    document.getElementById("sumSubtotal").textContent = formatPrice(subtotal);
+    document.getElementById("sumBuilderExtra").textContent = formatPrice(builder.total);
+    document.getElementById("sumAddons").textContent = formatPrice(addonTotal);
+    document.getElementById("sumDelivery").textContent = formatPrice(deliveryValue);
+    document.getElementById("sumTotal").textContent = formatPrice(total);
+
+    renderTierBox(guests);
+
+    const selectionBox = document.getElementById("selectionBox");
+    selectionBox.classList.add("active");
+    selectionBox.textContent = getSelectionsSummary();
+  }
+
+  function submitOrder() {
+    const guests = getGuests();
+    const buffet = buffetData[selectedBuffet];
+    const kuvert = getPricePerGuest(selectedBuffet, guests);
+    const subtotal = kuvert * guests;
+    const builder = calculateBuilder(guests);
 
     if (selectedBuffet === "bygselv" && !builder.valid) {
       alert("Du skal vælge minimum 2 kød, 2 salater, 2 kartofler, 2 saucer og 1 dessert for Byg selv menu.");
       return;
     }
 
-    const selectedAddons = [...document.querySelectorAll(".addonCheck:checked")];
+    if (selectedBuffet === "smorrebrod" && getChecked(".smorrebrodCheck").length === 0) {
+      alert("Vælg mindst én type smørrebrød.");
+      return;
+    }
+
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+
+    if (!name || !phone || !email) {
+      alert("Udfyld venligst navn, telefon og e-mail før du sender bestillingen.");
+      return;
+    }
+
     let addonTotal = 0;
-    let receiptHtml = `
-      <div class="receipt-item"><span>Buffet (${buffet.name})</span><strong>${formatPrice(subtotal)}</strong></div>
-    `;
-
-    if (selectedBuffet === "bygselv" && builder.total > 0) {
-      receiptHtml += `<div class="receipt-item"><span>Byg selv tillæg</span><strong>${formatPrice(builder.total)}</strong></div>`;
-    }
-
-    if (selectedAddons.length > 0) {
-      selectedAddons.forEach(addon => {
-        const addonLine = parseInt(addon.dataset.price, 10) * guests;
-        addonTotal += addonLine;
-        receiptHtml += `<div class="receipt-item"><span>${addon.dataset.name}</span><strong>${formatPrice(addonLine)}</strong></div>`;
+    if (buffet.addonsAllowed) {
+      getChecked(".addonCheck").forEach(addon => {
+        addonTotal += parseInt(addon.dataset.price, 10) * guests;
       });
-    } else {
-      receiptHtml += `<div class="receipt-item"><span>Tilkøb</span><strong>0 kr.</strong></div>`;
     }
 
-    receiptHtml += `<div class="receipt-item"><span>Levering / afhentning</span><strong>${formatPrice(deliveryValue)}</strong></div>`;
+    const deliveryValue = buffet.deliveryAllowed ? parseInt(document.getElementById("deliveryType").value || 0, 10) : 0;
+    const total = subtotal + builder.total + addonTotal + deliveryValue;
 
-    const total = subtotal + addonTotal + deliveryValue + builder.total;
+    document.getElementById("cName").textContent = name;
+    document.getElementById("cPhone").textContent = phone;
+    document.getElementById("cEmail").textContent = email;
+    document.getElementById("cDate").textContent = document.getElementById("date").value || "-";
+    document.getElementById("cBuffet").textContent = buffet.name;
+    document.getElementById("cGuests").textContent = guests + " kuverter";
+    document.getElementById("cKuvert").textContent = formatPrice(kuvert);
+    document.getElementById("cDelivery").textContent = buffet.deliveryAllowed ? document.getElementById("deliveryType").selectedOptions[0].text : "Afhentning";
+    document.getElementById("cSelections").textContent = getSelectionsSummary() + (document.getElementById("comment").value ? "\n\nKommentar: " + document.getElementById("comment").value : "");
+    document.getElementById("cSubtotal").textContent = formatPrice(subtotal);
+    document.getElementById("cBuilderExtra").textContent = formatPrice(builder.total);
+    document.getElementById("cAddons").textContent = formatPrice(addonTotal);
+    document.getElementById("cDeliveryPrice").textContent = formatPrice(deliveryValue);
+    document.getElementById("cTotal").textContent = formatPrice(total);
 
-    document.getElementById("rName").textContent = document.getElementById("name").value || "-";
-    document.getElementById("rPhone").textContent = document.getElementById("phone").value || "-";
-    document.getElementById("rEmail").textContent = document.getElementById("email").value || "-";
-    document.getElementById("rDate").textContent = document.getElementById("date").value || "-";
-    document.getElementById("rBuffet").textContent = buffet.name;
-    document.getElementById("rGuests").textContent = guests + " kuverter";
-    document.getElementById("rComment").textContent = document.getElementById("comment").value || "Ingen kommentarer";
-    document.getElementById("receiptList").innerHTML = receiptHtml;
-    document.getElementById("rTotal").textContent = formatPrice(total);
-
-    const rBuilderBox = document.getElementById("rBuilderBox");
-    const rBuilderSelections = document.getElementById("rBuilderSelections");
-
-    if (selectedBuffet === "bygselv") {
-      rBuilderBox.style.display = "block";
-      rBuilderSelections.innerHTML = builder.summary.replace(/\n/g, "<br>");
-    } else {
-      rBuilderBox.style.display = "none";
-      rBuilderSelections.innerHTML = "-";
-    }
-
-    document.getElementById("modal").classList.add("show");
+    document.getElementById("sitePage").classList.add("hidden");
+    document.getElementById("confirmationPage").classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function closeModal() {
-    document.getElementById("modal").classList.remove("show");
+  function backToSite() {
+    document.getElementById("confirmationPage").classList.remove("active");
+    document.getElementById("sitePage").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function toggleFaq(btn) {
@@ -1772,15 +1711,7 @@ Dessert: ${state.dessert.map(i => i.dataset.name).join(", ") || "-"}
     btn.querySelector("span").textContent = item.classList.contains("open") ? "−" : "+";
   }
 
-  document.getElementById("modal").addEventListener("click", function(e){
-    if(e.target === this) closeModal();
-  });
-
-  window.addEventListener("keydown", function(e){
-    if(e.key === "Escape") closeModal();
-  });
-
-  updateSummary();
+  selectBuffet("brunch");
 </script>
 
 </body>
