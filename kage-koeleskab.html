@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kagekøleskab – Udløb</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --muted2: rgba(255,255,255,.45);
+      --accent: #d9b65a;
+      --ok: #35c48b;
+      --warn: #ffcc66;
+      --bad: #ff6b6b;
+      --shadow: 0 18px 50px rgba(0,0,0,.50);
+      --r: 22px;
+      --r2: 16px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--font);
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(217,182,90,.25), transparent 55%),
+        radial-gradient(900px 500px at 10% 10%, rgba(120,180,255,.15), transparent 55%),
+        radial-gradient(900px 500px at 90% 20%, rgba(120,255,200,.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
+    .wrap{max-width: 1100px; margin: 26px auto; padding: 0 18px 60px;}
+    .header{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .title{
+      text-align:center;
+      margin: 2px 0 10px;
+      letter-spacing:.08em;
+      color: var(--muted2);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    h1{
+      margin: 0;
+      text-align:center;
+      font-size: 44px;
+      letter-spacing:.01em;
+      line-height:1.05;
+    }
+    .sub{
+      margin: 6px 0 0;
+      text-align:center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr; } }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+    .card h2{
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing:.02em;
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:end;}
+    .field{flex:1; min-width: 180px;}
+    label{display:block; color: var(--muted); font-size: 12px; margin: 0 0 6px;}
+    input, select, button, textarea{
+      width:100%;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding: 11px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+    textarea{min-height: 42px; resize: vertical;}
+    input::placeholder, textarea::placeholder{color: rgba(255,255,255,.35)}
+    input:focus, select:focus, textarea:focus{border-color: rgba(217,182,90,.55); box-shadow: 0 0 0 3px rgba(217,182,90,.15)}
+    .btn{
+      cursor:pointer;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing:.02em;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(217,182,90,.25), rgba(217,182,90,.10));
+    }
+    .btn:hover{filter: brightness(1.06)}
+    .btn2{
+      cursor:pointer;
+      border-radius: 999px;
+      font-weight: 700;
+      background: rgba(255,255,255,.06);
+    }
+    .btnDanger{
+      cursor:pointer;
+      border-radius: 999px;
+      font-weight: 700;
+      background: rgba(255,107,107,.14);
+      border-color: rgba(255,107,107,.24);
+    }
+
+    .pills{display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px;}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .dot{width:8px; height:8px; border-radius:99px; background: var(--accent); display:inline-block;}
+    .dot.ok{background: var(--ok)}
+    .dot.warn{background: var(--warn)}
+    .dot.bad{background: var(--bad)}
+
+    table{width:100%; border-collapse: collapse; margin-top: 8px; overflow:hidden; border-radius: 16px;}
+    th, td{padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.08); text-align:left; font-size: 13px; vertical-align: top;}
+    th{color: var(--muted); font-weight: 700; font-size: 12px; letter-spacing:.03em;}
+    tr:hover td{background: rgba(255,255,255,.03)}
+    .tag{
+      display:inline-flex; align-items:center;
+      padding: 4px 8px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      font-size: 12px; color: var(--muted);
+    }
+    .tag.bad{border-color: rgba(255,107,107,.25); background: rgba(255,107,107,.12); color: rgba(255,255,255,.88)}
+    .tag.warn{border-color: rgba(255,204,102,.25); background: rgba(255,204,102,.12); color: rgba(255,255,255,.88)}
+    .tag.ok{border-color: rgba(53,196,139,.25); background: rgba(53,196,139,.12); color: rgba(255,255,255,.88)}
+    .actions{display:flex; gap:8px; flex-wrap:wrap}
+    .mini{padding: 8px 10px; font-size: 12px;}
+    .muted{color: var(--muted)}
+    .small{font-size: 12px; color: var(--muted)}
+    .hr{height:1px; background: rgba(255,255,255,.08); margin: 12px 0;}
+
+    /* Modal */
+    .modalOverlay{
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 9999;
+    }
+    .modal{
+      width: min(820px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 26px;
+      padding: 16px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      backdrop-filter: blur(12px);
+    }
+    .modalHead{display:flex; align-items:center; justify-content:space-between; gap: 10px;}
+    .modal h3{margin:0; font-size: 16px;}
+    .modal p{margin: 8px 0 0; color: var(--muted); font-size: 13px;}
+    .modalList{margin-top: 12px;}
+    .modalItem{
+      display:flex; justify-content:space-between; gap: 12px; flex-wrap:wrap;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      margin-bottom: 8px;
+    }
+    .modalItem strong{font-size: 13px;}
+    .modalFoot{display:flex; justify-content:flex-end; gap: 10px; margin-top: 12px; flex-wrap:wrap;}
+    .xBtn{width:auto; padding: 8px 10px; border-radius: 999px;}
+    .hide{display:none !important;}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="title">KAISER</div>
+      <h1>Kagekøleskab</h1>
+      <div class="sub">Dato ind → beregner “smides ud” + popup på udløbsdagen (når siden er åben)</div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Registrér kage</h2>
+          <div class="row">
+            <div class="field">
+              <label for="by">Navn (tjener)</label>
+              <input id="by" placeholder="Fx Mads" autocomplete="name"/>
+            </div>
+            <div class="field">
+              <label for="place">Køleskab / Plads</label>
+              <input id="place" placeholder="Fx 1" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="field">
+              <label for="cakeType">Kage</label>
+              <select id="cakeType"></select>
+            </div>
+
+            <div class="field" id="customNameWrap" class="hide">
+              <label for="customName">Fritekst – kagenavn</label>
+              <input id="customName" placeholder="Fx Citronmåne" />
+            </div>
+
+            <div class="field" id="customDaysWrap" class="hide">
+              <label for="customDays">Holdbarhed (dage)</label>
+              <input id="customDays" type="number" min="0" step="1" placeholder="Fx 3" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="field">
+              <label for="note">Note (valgfri)</label>
+              <textarea id="note" placeholder="Fx glutenfri / halv kage / osv."></textarea>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="field">
+              <button class="btn" id="addBtn">Tilføj (Dato ind = nu)</button>
+              <div class="small" id="preview"></div>
+            </div>
+          </div>
+
+          <div class="pills" id="stats"></div>
+        </div>
+
+        <div class="card">
+          <h2>Alarm</h2>
+          <div class="small muted">
+            Popup vises når der er kager der skal smides ud (i dag/over dato).<br/>
+            Siden tjekker automatisk hvert minut.
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <div class="field">
+              <button class="btn2" id="checkNowBtn">Tjek nu</button>
+            </div>
+            <div class="field">
+              <button class="btn2" id="clearSnoozeBtn">Nulstil slumre</button>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Tip (valgfri)</label>
+              <div class="small muted">
+                Hvis I vil have “rigtige” notifikationer (browser notifications), kan vi aktivere det,
+                men det kræver tilladelse og virker bedst som PWA/kiosk-enhed.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <div class="row" style="justify-content:space-between; align-items:center;">
+          <h2 style="margin:0;">Aktive kager</h2>
+          <div class="row">
+            <div class="field" style="min-width:220px;">
+              <label for="filter">Filter</label>
+              <select id="filter">
+                <option value="active">Aktive</option>
+                <option value="due">Udløber i dag / over dato</option>
+                <option value="all">Alle</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Kage</th>
+              <th>Dato ind</th>
+              <th>Smides ud</th>
+              <th>Status</th>
+              <th>Info</th>
+              <th>Handling</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+
+        <div class="small muted" style="margin-top:10px;">
+          Data gemmes lokalt på enheden (localStorage). Hvis I vil have at alle tjenere ser samme liste på tværs af devices,
+          skal vi koble den på et fælles storage (fx Google Sheet / database).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modalOverlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modalHead">
+        <div>
+          <h3>⚠️ Kager der skal smides ud</h3>
+          <p>Følgende er udløbet eller udløber i dag.</p>
+        </div>
+        <button class="btn2 xBtn" id="closeModalBtn">Luk</button>
+      </div>
+      <div class="modalList" id="modalList"></div>
+      <div class="modalFoot">
+        <button class="btn2" id="snoozeBtn">Slumre 30 min</button>
+        <button class="btn" id="markAllBtn">Markér alle som “smidt ud”</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "kagekoeleskab.entries.v1";
+  const PREF_KEY = "kagekoeleskab.prefs.v1";
+
+  const DEFAULT_TYPES = [
+    { id: "gulerod", name: "Gulerodskage", days: 3 },
+    { id: "chokolade", name: "Chokoladekage", days: 2 },
+    { id: "aeble", name: "Æblekage", days: 3 },
+    { id: "custom", name: "Fritekst (andet)", days: null }
+  ];
+
+  const $ = (id) => document.getElementById(id);
+
+  const cakeType = $("cakeType");
+  const customNameWrap = $("customNameWrap");
+  const customDaysWrap = $("customDaysWrap");
+  const customName = $("customName");
+  const customDays = $("customDays");
+  const by = $("by");
+  const place = $("place");
+  const note = $("note");
+  const addBtn = $("addBtn");
+  const tbody = $("tbody");
+  const preview = $("preview");
+  const stats = $("stats");
+  const filter = $("filter");
+  const checkNowBtn = $("checkNowBtn");
+  const clearSnoozeBtn = $("clearSnoozeBtn");
+
+  const modalOverlay = $("modalOverlay");
+  const modalList = $("modalList");
+  const closeModalBtn = $("closeModalBtn");
+  const snoozeBtn = $("snoozeBtn");
+  const markAllBtn = $("markAllBtn");
+
+  let entries = loadEntries();
+  let prefs = loadPrefs();
+
+  function loadPrefs(){
+    try{
+      const raw = localStorage.getItem(PREF_KEY);
+      if(!raw) return { lastBy: "", lastPlace: "1", snoozeUntil: 0 };
+      return { lastBy:"", lastPlace:"1", snoozeUntil:0, ...JSON.parse(raw) };
+    }catch{
+      return { lastBy: "", lastPlace: "1", snoozeUntil: 0 };
+    }
+  }
+  function savePrefs(){
+    localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
+  }
+
+  function loadEntries(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    }catch{
+      return [];
+    }
+  }
+  function saveEntries(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  }
+
+  function uuid(){
+    if (crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Math.random().toString(16).slice(2) + "-" + Date.now();
+  }
+
+  function fmtDateTime(iso){
+    const d = new Date(iso);
+    return d.toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+  }
+  function fmtDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleDateString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit" });
+  }
+
+  function endOfDay(d){
+    const x = new Date(d);
+    x.setHours(23,59,59,999);
+    return x;
+  }
+
+  // Expiry: add days, then set to end-of-day
+  function computeDiscardAt(addedAtIso, days){
+    const d = new Date(addedAtIso);
+    d.setDate(d.getDate() + Number(days));
+    return endOfDay(d).toISOString();
+  }
+
+  function isSameLocalDate(a, b){
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+
+  function statusFor(entry){
+    if (entry.status === "discarded") return "discarded";
+    const now = new Date();
+    const discardAt = new Date(entry.discardAt);
+
+    // Due today (any time)
+    if (isSameLocalDate(now, discardAt)) return "dueToday";
+    if (discardAt < now) return "expired";
+    return "ok";
+  }
+
+  function tagHtml(entry){
+    const st = statusFor(entry);
+    if (entry.status === "discarded") return `<span class="tag ok">Smidt ud</span>`;
+    if (st === "expired") return `<span class="tag bad">Udløbet</span>`;
+    if (st === "dueToday") return `<span class="tag warn">I dag</span>`;
+    return `<span class="tag ok">OK</span>`;
+  }
+
+  function updatePreview(){
+    const nowIso = new Date().toISOString();
+    const t = DEFAULT_TYPES.find(x => x.id === cakeType.value) || DEFAULT_TYPES[0];
+
+    let name = t.name;
+    let days = t.days;
+
+    if (t.id === "custom"){
+      name = (customName.value || "Fritekst").trim();
+      days = Number(customDays.value);
+    }
+    const can = (t.id !== "custom") || (name && Number.isFinite(days) && days >= 0);
+
+    if (!can){
+      preview.textContent = "Udfyld fritekst + holdbarhed (dage) for at beregne smid-ud.";
+      return;
+    }
+    const discardAt = computeDiscardAt(nowIso, days);
+    preview.textContent = `Smides ud: ${fmtDate(discardAt)} (beregnet fra nu)`;
+  }
+
+  function renderTypes(){
+    cakeType.innerHTML = DEFAULT_TYPES.map(t => {
+      const extra = (t.days != null) ? ` (${t.days} dage)` : "";
+      return `<option value="${t.id}">${t.name}${extra}</option>`;
+    }).join("");
+  }
+
+  function render(){
+    // Stats
+    const active = entries.filter(e => e.status !== "discarded");
+    const now = new Date();
+    const dueToday = active.filter(e => statusFor(e) === "dueToday");
+    const expired = active.filter(e => statusFor(e) === "expired");
+    const ok = active.filter(e => statusFor(e) === "ok");
+
+    stats.innerHTML = `
+      <span class="pill"><span class="dot ok"></span> OK: <strong style="color:var(--text)">${ok.length}</strong></span>
+      <span class="pill"><span class="dot warn"></span> I dag: <strong style="color:var(--text)">${dueToday.length}</strong></span>
+      <span class="pill"><span class="dot bad"></span> Udløbet: <strong style="color:var(--text)">${expired.length}</strong></span>
+      <span class="pill"><span class="dot"></span> Aktive i alt: <strong style="color:var(--text)">${active.length}</strong></span>
+      <span class="pill">Nu: <strong style="color:var(--text)">${now.toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"})}</strong></span>
+    `;
+
+    // Filter list
+    let list = [...entries];
+    if (filter.value === "active") list = list.filter(e => e.status !== "discarded");
+    if (filter.value === "due") {
+      list = list.filter(e => e.status !== "discarded" && (statusFor(e)==="dueToday" || statusFor(e)==="expired"));
+    }
+
+    // Sort: due first, newest next
+    list.sort((a,b) => {
+      const pa = (a.status !== "discarded") ? (statusFor(a)==="expired"?0:statusFor(a)==="dueToday"?1:2) : 3;
+      const pb = (b.status !== "discarded") ? (statusFor(b)==="expired"?0:statusFor(b)==="dueToday"?1:2) : 3;
+      if (pa !== pb) return pa - pb;
+      return new Date(b.addedAt) - new Date(a.addedAt);
+    });
+
+    tbody.innerHTML = list.map(e => {
+      const info = [
+        e.by ? `Af: <strong>${escapeHtml(e.by)}</strong>` : "",
+        e.place ? `Plads: <strong>${escapeHtml(e.place)}</strong>` : "",
+        e.note ? `<span class="muted">${escapeHtml(e.note)}</span>` : ""
+      ].filter(Boolean).join("<br/>");
+
+      return `
+        <tr>
+          <td>
+            <strong>${escapeHtml(e.cakeName)}</strong><br/>
+            <span class="small muted">${Number.isFinite(e.days) ? `${e.days} dage` : ""}</span>
+          </td>
+          <td>${fmtDateTime(e.addedAt)}</td>
+          <td><strong>${fmtDate(e.discardAt)}</strong><br/><span class="small muted">(${fmtDateTime(e.discardAt)})</span></td>
+          <td>${tagHtml(e)}</td>
+          <td class="small">${info || `<span class="muted">–</span>`}</td>
+          <td>
+            <div class="actions">
+              ${e.status !== "discarded" ? `<button class="btn mini" data-action="discard" data-id="${e.id}">Smidt ud</button>` : ``}
+              <button class="btnDanger mini" data-action="delete" data-id="${e.id}">Slet</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    // attach action handlers
+    tbody.querySelectorAll("button[data-action]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const action = btn.getAttribute("data-action");
+        if (action === "discard") markDiscarded(id);
+        if (action === "delete") deleteEntry(id);
+      });
+    });
+  }
+
+  function escapeHtml(str){
+    return String(str ?? "").replace(/[&<>"']/g, (m) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function addEntry(){
+    const t = DEFAULT_TYPES.find(x => x.id === cakeType.value) || DEFAULT_TYPES[0];
+    const nowIso = new Date().toISOString();
+
+    let cakeName = t.name;
+    let days = t.days;
+
+    if (t.id === "custom"){
+      cakeName = (customName.value || "").trim();
+      days = Number(customDays.value);
+      if (!cakeName || !Number.isFinite(days) || days < 0){
+        alert("Udfyld fritekst (kagenavn) og holdbarhed (dage).");
+        return;
+      }
+    }
+
+    const entry = {
+      id: uuid(),
+      cakeName,
+      days,
+      addedAt: nowIso,
+      discardAt: computeDiscardAt(nowIso, days),
+      by: (by.value || "").trim(),
+      place: (place.value || "").trim(),
+      note: (note.value || "").trim(),
+      status: "active"
+    };
+
+    entries.unshift(entry);
+    saveEntries();
+
+    // persist name/place preference
+    prefs.lastBy = entry.by;
+    prefs.lastPlace = entry.place || prefs.lastPlace;
+    savePrefs();
+
+    // reset note & custom fields (keep by/place)
+    note.value = "";
+    if (t.id === "custom"){
+      customName.value = "";
+      customDays.value = "";
+    }
+
+    render();
+    checkAlarm(true);
+  }
+
+  function markDiscarded(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    e.status = "discarded";
+    saveEntries();
+    render();
+  }
+
+  function deleteEntry(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    const ok = confirm(`Slet "${e.cakeName}"?`);
+    if(!ok) return;
+    entries = entries.filter(x => x.id !== id);
+    saveEntries();
+    render();
+  }
+
+  function dueEntries(){
+    return entries.filter(e => e.status !== "discarded" && (statusFor(e)==="expired" || statusFor(e)==="dueToday"));
+  }
+
+  function openModal(list){
+    modalList.innerHTML = list.map(e => {
+      const st = statusFor(e);
+      const label = (st === "expired") ? "Udløbet" : "I dag";
+      const cls = (st === "expired") ? "bad" : "warn";
+      return `
+        <div class="modalItem">
+          <div>
+            <strong>${escapeHtml(e.cakeName)}</strong>
+            <div class="small muted">Smides ud: ${fmtDate(e.discardAt)} • Af: ${escapeHtml(e.by||"–")} • Plads: ${escapeHtml(e.place||"–")}</div>
+            ${e.note ? `<div class="small">${escapeHtml(e.note)}</div>` : ``}
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="tag ${cls}">${label}</span>
+            <button class="btn mini" data-mid="discard" data-id="${e.id}">Smidt ud</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    modalList.querySelectorAll("button[data-mid='discard']").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        markDiscarded(id);
+        // re-check and keep modal open if others remain
+        const list2 = dueEntries();
+        if(list2.length === 0) closeModal();
+        else openModal(list2);
+      });
+    });
+
+    modalOverlay.style.display = "flex";
+  }
+
+  function closeModal(){
+    modalOverlay.style.display = "none";
+  }
+
+  function checkAlarm(force){
+    const now = Date.now();
+    const snoozeUntil = Number(prefs.snoozeUntil || 0);
+
+    if(!force && now < snoozeUntil) return;
+
+    const list = dueEntries();
+    if(list.length > 0){
+      openModal(list);
+      // optional: small sound by browser default beep (kept simple)
+    }
+  }
+
+  function toggleCustom(){
+    const isCustom = cakeType.value === "custom";
+    customNameWrap.style.display = isCustom ? "block" : "none";
+    customDaysWrap.style.display = isCustom ? "block" : "none";
+    updatePreview();
+  }
+
+  // Events
+  addBtn.addEventListener("click", addEntry);
+  cakeType.addEventListener("change", toggleCustom);
+  customName.addEventListener("input", updatePreview);
+  customDays.addEventListener("input", updatePreview);
+  by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
+  place.addEventListener("input", () => { prefs.lastPlace = place.value; savePrefs(); });
+
+  filter.addEventListener("change", render);
+  checkNowBtn.addEventListener("click", () => checkAlarm(true));
+  clearSnoozeBtn.addEventListener("click", () => { prefs.snoozeUntil = 0; savePrefs(); alert("Slumre nulstillet."); });
+
+  closeModalBtn.addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", (e) => { if(e.target === modalOverlay) closeModal(); });
+
+  snoozeBtn.addEventListener("click", () => {
+    prefs.snoozeUntil = Date.now() + 30*60*1000;
+    savePrefs();
+    closeModal();
+  });
+
+  markAllBtn.addEventListener("click", () => {
+    const list = dueEntries();
+    list.forEach(e => e.status = "discarded");
+    saveEntries();
+    render();
+    closeModal();
+  });
+
+  // Init
+  renderTypes();
+  by.value = prefs.lastBy || "";
+  place.value = prefs.lastPlace || "1";
+  toggleCustom();
+  render();
+  updatePreview();
+
+  // Alarm check on load + interval
+  checkAlarm(false);
+  setInterval(() => checkAlarm(false), 60 * 1000);
+})();
+</script>
+</body>
+</html>
