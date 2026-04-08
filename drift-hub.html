@@ -263,7 +263,7 @@
       transform:translateY(-2px);
     }
 
-    /* NEW: fuld bredde kort inde i grid */
+    /* Fuldbredde cards (Kage/Kaffe som på dit screenshot) */
     .toolCard.wide{ grid-column: 1 / -1; }
     @media (max-width: 900px){
       .toolCard.wide{ grid-column: auto; }
@@ -616,8 +616,8 @@
             </div>
           </div>
 
-          <!-- NY: KAGE (fuld bredde) -->
-          <div class="toolCard wide" data-url="./kage-koeleskab.html">
+          <!-- NY: KAGE (fuld bredde, matcher listen) -->
+          <div class="toolCard" data-url="./kage-koeleskab.html">
             <div>
               <div class="toolTop">
                 <div class="toolIcon">🍰</div>
@@ -635,8 +635,8 @@
             </div>
           </div>
 
-          <!-- NY: KAFFE (fuld bredde) -->
-          <div class="toolCard wide" data-url="./kaffe-timer.html">
+          <!-- NY: KAFFE (fuld bredde, matcher listen) -->
+          <div class="toolCard" data-url="./kaffe-timer.html">
             <div>
               <div class="toolTop">
                 <div class="toolIcon">☕</div>
@@ -654,11 +654,11 @@
             </div>
           </div>
 
-        </div><!-- /toolGrid -->
-      </div><!-- /sectionBody -->
+        </div>
+      </div>
     </section>
 
-    <!-- toolViewer ligger KORREKT udenfor section -->
+    <!-- Viewer (korrekt: udenfor section/toolGrid) -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="toolPill" id="toolName">—</div>
@@ -670,7 +670,7 @@
       <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
 
-  </div><!-- /shell -->
+  </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -817,27 +817,11 @@
 
     let currentToolUrl = "";
 
-    function openTool(url) {
+    function openTool(url, title) {
       if (!url) return;
       currentToolUrl = url;
 
-      const nameMap = {
-        "./daglige-opgaver.html": "Daglige opgaver",
-        "./shiftleader-checklist.html": "Dagsansvarlig tjekliste",
-        "./skiftlederrapport1.html": "Skiftlederrapport",
-        "./rabat-guidelines.html": "Rabat & tilbud",
-        "./kontaktliste.html": "Kontaktliste",
-        "./idehub.html": "Idéhub",
-        "./soldout-products.html": "Udsolgte produkter",
-        "./guest-complaints.html": "Gæsteklager",
-        "./faults-issues.html": "Fejl & mangler",
-
-        // NYE:
-        "./kage-koeleskab.html": "Kagekøleskab",
-        "./kaffe-timer.html": "Filterkaffe Timer"
-      };
-
-      $("toolName").textContent = nameMap[url] || url.replace("./", "");
+      $("toolName").textContent = title || url.replace("./", "");
       $("toolFrame").src = url + (url.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
       $("toolViewer").classList.add("open");
       $("toolViewer").scrollIntoView({ behavior: "smooth" });
@@ -856,12 +840,17 @@
       } catch (_) {}
     }
 
-    // Klik handler på alle toolCards
-    document.querySelectorAll(".toolCard[data-url]").forEach(el => {
-      el.addEventListener("click", () => openTool(el.dataset.url));
+    // Klik: hent titel direkte fra kortet (så du slipper for nameMap)
+    document.querySelectorAll(".toolCard[data-url]").forEach(card => {
+      card.addEventListener("click", () => {
+        const url = card.dataset.url;
+        const title = card.querySelector(".toolName")?.textContent?.trim() || "Værktøj";
+        openTool(url, title);
+      });
     });
 
     $("closeToolBtn").addEventListener("click", closeTool);
+
     $("newTabBtn").addEventListener("click", () => {
       if (!currentToolUrl) return;
       const url = currentToolUrl + (currentToolUrl.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
@@ -872,7 +861,6 @@
     $("clockToggle").addEventListener("click", toggleClock);
     $("refreshBtn").addEventListener("click", refreshAll);
 
-    // (valgfri) ESC lukker tool
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeTool();
     });
