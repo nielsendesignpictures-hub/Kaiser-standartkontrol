@@ -263,6 +263,12 @@
       transform:translateY(-2px);
     }
 
+    /* NEW: fuld bredde kort inde i grid */
+    .toolCard.wide{ grid-column: 1 / -1; }
+    @media (max-width: 900px){
+      .toolCard.wide{ grid-column: auto; }
+    }
+
     .toolTop{
       display:flex;
       justify-content:space-between;
@@ -401,6 +407,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="shell">
 
@@ -443,8 +450,10 @@
         <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
         <div class="sectionInfo">Åbn moduler direkte</div>
       </div>
+
       <div class="sectionBody">
         <div class="toolGrid">
+
           <div class="toolCard" data-url="./daglige-opgaver.html">
             <div>
               <div class="toolTop">
@@ -605,42 +614,52 @@
               </div>
               <div class="launchText">Åbn →</div>
             </div>
+          </div>
 
-                 <div class="toolCard" data-url="./kage-koeleskab.html">
-  <div>
-    <div class="toolTop">
-      <div class="toolIcon">🍰</div>
-      <div class="badge red">KØL</div>
-    </div>
-    <div class="toolName">Kagekøleskab</div>
-    <div class="toolDesc">Registrér dato ind og få automatisk “smides ud” + alarm på dagen.</div>
-  </div>
-  <div class="toolBottom">
-    <div class="toolMeta">
-      <div class="metaChip">Kage</div>
-      <div class="metaChip">Udløb</div>
-    </div>
-    <div class="launchText">Åbn →</div>
-  </div>
-</div>
-      <div class="toolCard" data-url="./kaffe-timer.html">
-  <div>
-    <div class="toolTop">
-      <div class="toolIcon">☕</div>
-      <div class="badge blue">Timer</div>
-    </div>
-    <div class="toolName">Filterkaffe Timer</div>
-    <div class="toolDesc">Hold styr på udløb for Batch Brew kander og termobeholdere.</div>
-  </div>
-  <div class="toolBottom">
-    <div class="toolMeta">
-      <div class="metaChip">Kaffe</div>
-      <div class="metaChip">Drift</div>
-    </div>
-    <div class="launchText">Åbn →</div>
-  </div>
-</div>
-          <div class="toolViewer" id="toolViewer">
+          <!-- NY: KAGE (fuld bredde) -->
+          <div class="toolCard wide" data-url="./kage-koeleskab.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">🍰</div>
+                <div class="badge red">KØL</div>
+              </div>
+              <div class="toolName">Kagekøleskab</div>
+              <div class="toolDesc">Registrér dato ind og få automatisk “smides ud” + alarm på dagen.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Kage</div>
+                <div class="metaChip">Udløb</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+          <!-- NY: KAFFE (fuld bredde) -->
+          <div class="toolCard wide" data-url="./kaffe-timer.html">
+            <div>
+              <div class="toolTop">
+                <div class="toolIcon">☕</div>
+                <div class="badge blue">Timer</div>
+              </div>
+              <div class="toolName">Filterkaffe Timer</div>
+              <div class="toolDesc">Hold styr på udløb for Batch Brew kander og termobeholdere.</div>
+            </div>
+            <div class="toolBottom">
+              <div class="toolMeta">
+                <div class="metaChip">Kaffe</div>
+                <div class="metaChip">Drift</div>
+              </div>
+              <div class="launchText">Åbn →</div>
+            </div>
+          </div>
+
+        </div><!-- /toolGrid -->
+      </div><!-- /sectionBody -->
+    </section>
+
+    <!-- toolViewer ligger KORREKT udenfor section -->
+    <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="toolPill" id="toolName">—</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -650,14 +669,8 @@
       </div>
       <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
-          </div>
-        </div>
-      </div>
- 
-    </section>
 
-
-  
+  </div><!-- /shell -->
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -817,7 +830,11 @@
         "./idehub.html": "Idéhub",
         "./soldout-products.html": "Udsolgte produkter",
         "./guest-complaints.html": "Gæsteklager",
-        "./faults-issues.html": "Fejl & mangler"
+        "./faults-issues.html": "Fejl & mangler",
+
+        // NYE:
+        "./kage-koeleskab.html": "Kagekøleskab",
+        "./kaffe-timer.html": "Filterkaffe Timer"
       };
 
       $("toolName").textContent = nameMap[url] || url.replace("./", "");
@@ -839,7 +856,8 @@
       } catch (_) {}
     }
 
-    document.querySelectorAll("[data-url]").forEach(el => {
+    // Klik handler på alle toolCards
+    document.querySelectorAll(".toolCard[data-url]").forEach(el => {
       el.addEventListener("click", () => openTool(el.dataset.url));
     });
 
@@ -853,6 +871,11 @@
     $("fsBtn").addEventListener("click", toggleFullscreen);
     $("clockToggle").addEventListener("click", toggleClock);
     $("refreshBtn").addEventListener("click", refreshAll);
+
+    // (valgfri) ESC lukker tool
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeTool();
+    });
 
     (function init() {
       const loc = getLoc();
