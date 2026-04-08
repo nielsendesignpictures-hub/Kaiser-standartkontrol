@@ -5,292 +5,299 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Café Kaiser</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Samme fonte som catering-siden -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --header-bg: #e3cda4;        /* lys/beige som på catering-siden */
-      --header-bg-strong: #d7bf98; /* lidt mørkere til knapper */
-      --text-dark: #2b1c12;
-      --text-light: #ffffff;
-      --accent-gold: #c6a96b;
+    :root{
+      --bg:#cfc3b1;
+      --bg-deep:#bba98f;
+      --bg-soft:#e2d6c6;
+      --card:#f8f1e7;
+      --card-2:#fbf6ee;
+      --line:#cfbea8;
+      --line-soft:#dfd2c0;
+      --text:#1f1914;
+      --muted:#665b4e;
+      --muted-2:#837769;
+      --gold:#c19a3c;
+      --gold-light:#dfc172;
+      --gold-dark:#916c20;
+      --brown:#463626;
+      --brown-2:#5b4734;
+      --success:#2f7d55;
+      --warning:#9b7015;
+      --danger:#a54b4b;
+      --radius:22px;
+      --radius-sm:14px;
+      --shadow:0 24px 60px rgba(42,28,10,.16);
+      --shadow-soft:0 10px 24px rgba(42,28,10,.10);
+      --max:1380px;
+      --transition:all .25s ease;
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box;}
 
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #0a0a0a;   /* den mørke farve */
-      color: #fff;
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,sans-serif;
+      background:#0a0a0a; /* mørk baggrund = farve nr. 2 */
+      color:#fff;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a{text-decoration:none;color:inherit;}
 
     /* ============ HEADER ============ */
 
-    .site-header {
-      position: fixed;
-      inset: 0 0 auto 0;
-      z-index: 100;
-      color: var(--text-light);
-      transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    .site-header{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:100;
+      color:#fff; /* hvid tekst oven på mørk hero */
+      transition:background .25s ease, box-shadow .25s ease, color .25s ease;
     }
 
-    .site-header::after {
-      /* kurvet bund – vises kun når vi har .scrolled */
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -22px;
-      height: 44px;
-      background: var(--header-bg);
-      border-bottom-left-radius: 50% 44px;
-      border-bottom-right-radius: 50% 44px;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      pointer-events: none;
-      z-index: -1;
+    .site-header::after{
+      /* kurvet bund – kun synlig når .scrolled */
+      content:"";
+      position:absolute;
+      left:0;right:0;
+      bottom:-22px;
+      height:44px;
+      background:var(--bg-soft);
+      border-bottom-left-radius:50% 44px;
+      border-bottom-right-radius:50% 44px;
+      opacity:0;
+      transform:translateY(-8px);
+      transition:opacity .25s ease, transform .25s ease;
+      pointer-events:none;
+      z-index:-1;
     }
 
-    .site-header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.6rem 1.5rem;
+    .site-header-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:.6rem 1.5rem;
     }
 
-    /* LOGO VENSTRE */
-    .site-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      z-index: 2; /* over kurve */
+    /* Logo venstre */
+    .site-logo{
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      z-index:2;
     }
 
-    .site-logo img {
-      height: 46px;
-      width: auto;
-      display: block;
+    .site-logo img{
+      height:46px;
+      width:auto;
+      display:block;
     }
 
-    /* CENTER-KNAPPER */
-    .header-center {
-      flex: 1 1 auto;
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      z-index: 2;
+    /* Center-knapper */
+    .header-center{
+      flex:1 1 auto;
+      display:flex;
+      justify-content:center;
+      gap:.75rem;
+      z-index:2;
     }
 
-    .header-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 9px 20px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-weight: 600;
-      background: rgba(0, 0, 0, 0.35);
-      color: var(--text-light);
-      cursor: pointer;
-      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
-                  transform 0.1s ease;
-      white-space: nowrap;
+    .header-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:9px 20px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.55);
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:600;
+      background:rgba(0,0,0,.35);
+      color:#fff;
+      cursor:pointer;
+      transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
+      white-space:nowrap;
     }
 
-    .header-btn.primary {
-      background: var(--accent-gold);
-      border-color: var(--accent-gold);
-      color: #000;
+    .header-btn.primary{
+      background:var(--gold);
+      border-color:var(--gold);
+      color:#000;
     }
 
-    .header-btn.primary:hover {
-      background: #e1ca90;
-      border-color: #e1ca90;
-      transform: translateY(-1px);
+    .header-btn.primary:hover{
+      background:var(--gold-light);
+      border-color:var(--gold-light);
+      transform:translateY(-1px);
     }
 
-    .header-btn.ghost:hover {
-      background: rgba(0, 0, 0, 0.65);
-      transform: translateY(-1px);
+    .header-btn.ghost:hover{
+      background:rgba(0,0,0,.65);
+      transform:translateY(-1px);
     }
 
-    /* DROPDOWN HØJRE */
-    .header-right {
-      display: flex;
-      align-items: center;
-      z-index: 2;
+    /* Dropdown højre */
+    .header-right{
+      display:flex;
+      align-items:center;
+      z-index:2;
     }
 
-    .dropdown {
-      position: relative;
+    .dropdown{
+      position:relative;
     }
 
-    .dropdown-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      background: rgba(0, 0, 0, 0.35);
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      cursor: pointer;
-      color: inherit;
+    .dropdown-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:.35rem;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(0,0,0,.35);
+      font-size:11px;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      cursor:pointer;
+      color:inherit;
     }
 
-    .dropdown-toggle .chevron {
-      border: solid currentColor;
-      border-width: 0 2px 2px 0;
-      display: inline-block;
-      padding: 3px;
-      transform: rotate(45deg); /* pil ned */
-      transition: transform 0.15s ease;
+    .chevron{
+      border:solid currentColor;
+      border-width:0 2px 2px 0;
+      display:inline-block;
+      padding:3px;
+      transform:rotate(45deg);
+      transition:transform .15s ease;
     }
 
-    .dropdown.open .chevron {
-      transform: rotate(-135deg); /* pil op */
+    .dropdown.open .chevron{
+      transform:rotate(-135deg);
     }
 
-    .dropdown-menu {
-      position: absolute;
-      top: 120%;
-      right: 0;
-      min-width: 190px;
-      padding: 8px 0;
-      background: #ffffff;
-      color: #222;
-      border-radius: 12px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-      opacity: 0;
-      transform: translateY(-6px);
-      pointer-events: none;
-      transition: opacity 0.18s ease, transform 0.18s ease;
+    .dropdown-menu{
+      position:absolute;
+      top:120%;
+      right:0;
+      min-width:190px;
+      padding:8px 0;
+      background:#fff;
+      color:var(--text);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-soft);
+      opacity:0;
+      transform:translateY(-6px);
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
     }
 
-    .dropdown.open .dropdown-menu {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+    .dropdown.open .dropdown-menu{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
     }
 
-    .dropdown-menu a {
-      display: block;
-      padding: 9px 16px;
-      font-size: 14px;
-      color: inherit;
+    .dropdown-menu a{
+      display:block;
+      padding:9px 16px;
+      font-size:14px;
     }
 
-    .dropdown-menu a:hover {
-      background: rgba(0, 0, 0, 0.05);
+    .dropdown-menu a:hover{
+      background:rgba(0,0,0,.04);
     }
 
-    /* SCROLLET STATE – lys header med kurve */
-    .site-header.scrolled {
-      background: linear-gradient(to bottom, var(--header-bg), rgba(227, 205, 164, 0.96));
-      color: var(--text-dark);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Når man har scrollet – lys header med kurve */
+    .site-header.scrolled{
+      background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
+      color:var(--brown);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
 
-    .site-header.scrolled::after {
-      opacity: 1;
-      transform: translateY(0);
+    .site-header.scrolled::after{
+      opacity:1;
+      transform:translateY(0);
     }
 
-    .site-header.scrolled .header-btn.ghost {
-      background: transparent;
-      border-color: rgba(60, 40, 20, 0.4);
-      color: var(--text-dark);
+    .site-header.scrolled .header-btn.ghost{
+      background:transparent;
+      border-color:rgba(70,54,38,.4);
+      color:var(--brown);
     }
 
-    .site-header.scrolled .header-btn.ghost:hover {
-      background: rgba(255, 255, 255, 0.7);
+    .site-header.scrolled .header-btn.ghost:hover{
+      background:rgba(255,255,255,.9);
     }
 
-    .site-header.scrolled .dropdown-toggle {
-      background: transparent;
-      border-color: rgba(60, 40, 20, 0.4);
-      color: var(--text-dark);
+    .site-header.scrolled .dropdown-toggle{
+      background:transparent;
+      border-color:rgba(70,54,38,.4);
+      color:var(--brown);
     }
 
     /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .site-header-inner {
-        padding-inline: 1rem;
-        gap: 0.5rem;
+    @media (max-width: 768px){
+      .site-header-inner{
+        padding-inline:1rem;
+        gap:.5rem;
       }
-
-      .header-center {
-        gap: 0.4rem;
-      }
-
-      .header-btn {
-        padding: 7px 10px;
-        font-size: 10px;
-      }
-
-      .dropdown-toggle {
-        padding: 7px 10px;
-        font-size: 10px;
+      .header-center{gap:.4rem;}
+      .header-btn,
+      .dropdown-toggle{
+        padding:7px 10px;
+        font-size:10px;
       }
     }
 
-    @media (max-width: 520px) {
-      .header-center {
-        flex-direction: column;
-        align-items: center;
+    @media (max-width:520px){
+      .header-center{
+        flex-direction:column;
+        align-items:center;
       }
-
-      .site-logo img {
-        height: 40px;
-      }
+      .site-logo img{height:40px;}
     }
 
-    /* Lidt demo-indhold så du kan se headeren i spil */
-    main {
-      padding-top: 90px; /* så indhold ikke gemmer sig bag headeren */
-    }
+    /* Demo-indhold, så du kan se headeren */
+    main{padding-top:90px;}
 
-    .hero-demo {
-      height: 90vh;
+    .hero-demo{
+      height:90vh;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.85)),
+        linear-gradient(to bottom,rgba(0,0,0,.4),rgba(0,0,0,.9)),
         url('media/kaiser-hero.jpg') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:0 20px;
     }
 
-    .hero-demo h1 {
-      font-size: clamp(2.4rem, 3vw + 1.6rem, 3.4rem);
-      margin-bottom: 10px;
+    .hero-demo h1{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.4rem,3vw + 1.6rem,3.4rem);
+      margin-bottom:10px;
     }
 
-    .hero-demo p {
-      max-width: 600px;
-      margin: 0 auto;
-      color: #f0f0f0;
+    .hero-demo p{
+      max-width:600px;
+      margin:0 auto;
+      color:#f0f0f0;
     }
 
-    .content-section {
-      padding: 80px 20px;
-      background: #ffffff;  /* her skifter vi til hvid – 2‑farvet side */
-      color: #222;
+    .content-section{
+      padding:80px 20px;
+      background:#fff; /* farve nr. 2 – hvid sektion */
+      color:var(--text);
     }
   </style>
 </head>
@@ -304,13 +311,13 @@
         <img src="images/logo.png" alt="Café Kaiser">
       </a>
 
-      <!-- Center-knapper -->
+      <!-- Knapper i midten -->
       <div class="header-center">
         <a href="#booking" class="header-btn primary">Book bord</a>
         <a href="#menu" class="header-btn ghost">Se menu</a>
       </div>
 
-      <!-- Dropdown højre -->
+      <!-- Dropdown til højre -->
       <div class="header-right">
         <div class="dropdown" id="mainDropdown">
           <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
@@ -330,11 +337,11 @@
     </div>
   </header>
 
-  <!-- DEMO-INDHOLD – BYT DET MED DINE EGNE SEKTIONER -->
+  <!-- Demo-indhold – byt ud med dit eget -->
   <main id="top">
     <section class="hero-demo">
       <h1>En hyggelig Café i Helsingør, Hillerød, Farum, Hørsholm og Vanløse</h1>
-      <p>Scroll ned for at se, hvordan headeren skifter farve og viser den lyse top med kurve.</p>
+      <p>Scroll ned for at se, hvordan headeren skifter til den lyse catering‑farve med kurve.</p>
     </section>
 
     <section id="menu" class="content-section">
@@ -344,45 +351,41 @@
   </main>
 
   <script>
-    // Scroll-effekt på header
+    // Scroll-effekt til header
     const header = document.getElementById('page-header');
-    const scrollThreshold = 40; // px før farve kommer frem
+    const threshold = 40;
 
-    function updateHeaderOnScroll() {
-      if (window.scrollY > scrollThreshold) {
+    function onScroll(){
+      if(window.scrollY > threshold){
         header.classList.add('scrolled');
-      } else {
+      }else{
         header.classList.remove('scrolled');
       }
     }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('load', onScroll);
 
-    window.addEventListener('scroll', updateHeaderOnScroll);
-    window.addEventListener('load', updateHeaderOnScroll);
-
-    // Dropdown-menu
+    // Dropdown
     const dropdown = document.getElementById('mainDropdown');
     const toggle = dropdown.querySelector('.dropdown-toggle');
-    const menu = dropdown.querySelector('.dropdown-menu');
 
-    toggle.addEventListener('click', (e) => {
+    toggle.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const isOpen = dropdown.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(isOpen));
+      const open = dropdown.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
     });
 
-    // Luk dropdown når man klikker udenfor
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target)) {
+    document.addEventListener('click', (e)=>{
+      if(!dropdown.contains(e.target)){
         dropdown.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-expanded','false');
       }
     });
 
-    // Luk med Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
         dropdown.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-expanded','false');
       }
     });
   </script>
