@@ -39,7 +39,7 @@
     body{
       margin:0;
       font-family:'Inter',system-ui,sans-serif;
-      background:#fbf6ee;          /* LYS, ikke sort */
+      background:#fbf6ee; /* LYS, ikke sort */
       color:var(--text);
     }
 
@@ -49,7 +49,6 @@
     }
 
     a{text-decoration:none;color:inherit;}
-
     section[id]{scroll-margin-top:100px;}
 
     /* ========== GENERELLE KNAPPER ========== */
@@ -68,38 +67,43 @@
       cursor:pointer;
       transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
     }
-
     .btn-primary{
       background:var(--gold);
       color:#000;
       border-color:var(--gold);
     }
-
     .btn-primary:hover{
       background:var(--gold-light);
       border-color:var(--gold-light);
       transform:translateY(-1px);
     }
-
     .btn-ghost{
       background:transparent;
       color:#fff;
       border-color:rgba(255,255,255,.6);
     }
-
     .btn-ghost:hover{
       background:rgba(0,0,0,.65);
       transform:translateY(-1px);
     }
 
-    /* ========== HEADER ========== */
+    /* ========== HEADER (SKJULT I TOP, VISES VED SCROLL) ========== */
 
     .site-header{
       position:fixed;
       inset:0 0 auto 0;
       z-index:100;
       color:#fff;
-      transition:background .25s ease, box-shadow .25s ease, color .25s ease;
+      transform:translateY(-100%);
+      opacity:0;
+      pointer-events:none;
+      transition:transform .3s ease, opacity .3s ease,
+                 background .25s ease, box-shadow .25s ease, color .25s ease;
+    }
+    .site-header.visible{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
     }
 
     .site-header::after{
@@ -134,7 +138,6 @@
       gap:.6rem;
       z-index:2;
     }
-
     .site-logo img{
       height:46px;
       width:auto;
@@ -148,7 +151,6 @@
       gap:.75rem;
       z-index:2;
     }
-
     .header-btn{
       display:inline-flex;
       align-items:center;
@@ -166,19 +168,16 @@
       transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
       white-space:nowrap;
     }
-
     .header-btn.primary{
       background:var(--gold);
       border-color:var(--gold);
       color:#000;
     }
-
     .header-btn.primary:hover{
       background:var(--gold-light);
       border-color:var(--gold-light);
       transform:translateY(-1px);
     }
-
     .header-btn.ghost:hover{
       background:rgba(0,0,0,.65);
       transform:translateY(-1px);
@@ -190,10 +189,7 @@
       z-index:2;
     }
 
-    .dropdown{
-      position:relative;
-    }
-
+    .dropdown{position:relative;}
     .dropdown-toggle{
       display:inline-flex;
       align-items:center;
@@ -209,7 +205,6 @@
       cursor:pointer;
       color:inherit;
     }
-
     .chevron{
       border:solid currentColor;
       border-width:0 2px 2px 0;
@@ -218,11 +213,7 @@
       transform:rotate(45deg);
       transition:transform .15s ease;
     }
-
-    .dropdown.open .chevron{
-      transform:rotate(-135deg);
-    }
-
+    .dropdown.open .chevron{transform:rotate(-135deg);}
     .dropdown-menu{
       position:absolute;
       top:120%;
@@ -238,44 +229,36 @@
       pointer-events:none;
       transition:opacity .18s ease, transform .18s ease;
     }
-
     .dropdown.open .dropdown-menu{
       opacity:1;
       transform:translateY(0);
       pointer-events:auto;
     }
-
     .dropdown-menu a{
       display:block;
       padding:9px 16px;
       font-size:14px;
     }
+    .dropdown-menu a:hover{background:rgba(0,0,0,.04);}
 
-    .dropdown-menu a:hover{
-      background:rgba(0,0,0,.04);
-    }
-
+    /* scrollet styling */
     .site-header.scrolled{
       background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
       color:var(--brown);
       box-shadow:0 10px 30px rgba(0,0,0,.18);
     }
-
     .site-header.scrolled::after{
       opacity:1;
       transform:translateY(0);
     }
-
     .site-header.scrolled .header-btn.ghost{
       background:transparent;
       border-color:rgba(70,54,38,.4);
       color:var(--brown);
     }
-
     .site-header.scrolled .header-btn.ghost:hover{
       background:rgba(255,255,255,.9);
     }
-
     .site-header.scrolled .dropdown-toggle{
       background:transparent;
       border-color:rgba(70,54,38,.4);
@@ -288,13 +271,12 @@
       .header-btn,
       .dropdown-toggle{padding:7px 10px;font-size:10px;}
     }
-
     @media (max-width:520px){
       .header-center{flex-direction:column;align-items:center;}
       .site-logo img{height:40px;}
     }
 
-    /* ========== HERO MED VIDEO ========== */
+    /* ========== HERO MED LYSERE OVERLAY & 3 CTA ========== */
 
     .hero{
       position:relative;
@@ -304,69 +286,57 @@
       display:flex;
       align-items:stretch;
     }
-
     .hero-media{
       position:absolute;
       inset:0;
       overflow:hidden;
       z-index:0;
     }
-
     .hero-media video{
       width:100%;
       height:100%;
       object-fit:cover;
-      filter:brightness(.65) saturate(1.1);
+      filter:brightness(.8) saturate(1.05); /* LYSERE så man ser videoen */
       transform:scale(1.03);
-      animation:heroZoom 22s ease-in-out infinite alternate;
     }
-
-    @keyframes heroZoom{
-      from{transform:scale(1.03);}
-      to{transform:scale(1.08);}
-    }
-
     .hero-overlay{
       position:absolute;
       inset:0;
       background:
-        radial-gradient(circle at 10% 0, rgba(0,0,0,.45), transparent 55%),
-        radial-gradient(circle at 90% 100%, rgba(0,0,0,.75), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.9));
+        radial-gradient(circle at 10% 0, rgba(0,0,0,.25), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(0,0,0,.45), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7));
       z-index:0;
     }
-
     .hero-inner{
       position:relative;
       z-index:1;
       max-width:var(--max);
       margin:0 auto;
-      padding:140px 1.5rem 40px;
+      padding:120px 1.5rem 60px;
+      text-align:center;
       display:flex;
       flex-direction:column;
-      justify-content:space-between;
+      justify-content:center;
+      gap:40px;
     }
-
-    .hero-main{text-align:center;}
 
     .hero-eyebrow{
       text-transform:uppercase;
       letter-spacing:.24em;
       font-size:11px;
-      color:rgba(255,255,255,.7);
+      color:rgba(255,255,255,.8);
       margin-bottom:.8rem;
     }
-
     .hero-title{
-      font-size:clamp(2.5rem,3vw + 1.8rem,3.6rem);
+      font-size:clamp(2.4rem,3vw + 1.8rem,3.4rem);
       margin-bottom:.6rem;
     }
-
     .hero-subtitle{
       max-width:640px;
       margin:0 auto 1.8rem;
       font-size:15px;
-      color:#f3f1ec;
+      color:#f5f3ee;
       font-weight:300;
     }
 
@@ -374,168 +344,97 @@
       display:flex;
       flex-wrap:wrap;
       justify-content:center;
-      gap:.8rem;
-      margin-bottom:1.2rem;
+      gap:.75rem;
+      margin-bottom:.8rem;
     }
-
+    .hero-actions .btn{
+      min-width:170px;
+    }
     .hero-phone{
       font-size:13px;
-      color:rgba(255,255,255,.8);
+      color:rgba(255,255,255,.9);
     }
-
     .hero-phone a{
       color:var(--gold-light);
       font-weight:500;
     }
 
-    .hero-locations{
-      margin-top:40px;
+    @media (max-width:768px){
+      .hero-inner{padding:110px 1rem 50px;}
     }
 
-    .hero-locations-grid{
+    /* ========== HURTIGE VALG – GRAFISKE BOKSE ========== */
+
+    .quick-section{
+      background:var(--card-2);
+      padding:36px 1.5rem 40px;
+    }
+    .quick-inner{
+      max-width:var(--max);
+      margin:0 auto;
+    }
+    .quick-grid{
       display:grid;
-      gap:14px;
+      gap:18px;
     }
-
-    @media (min-width:720px){
-      .hero-locations-grid{
-        grid-template-columns:repeat(5, minmax(0,1fr));
+    @media (min-width:900px){
+      .quick-grid{
+        grid-template-columns:2fr 1.5fr 1.5fr;
       }
     }
 
-    .hero-location{
-      background:rgba(0,0,0,.55);
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.15);
-      padding:10px 12px 12px;
-      text-align:left;
-    }
-
-    .hero-location-label{
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      color:rgba(255,255,255,.7);
-      margin-bottom:4px;
-    }
-
-    .hero-location-name{
-      font-size:15px;
-      font-weight:600;
-      margin-bottom:6px;
-    }
-
-    .hero-location-btn{
-      display:inline-flex;
-      width:100%;
-      justify-content:center;
-      align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.55);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      font-weight:600;
-      background:rgba(0,0,0,.25);
-      color:#fff;
-      cursor:pointer;
-      transition:background .18s ease, border-color .18s ease, transform .1s ease;
-    }
-
-    .hero-location-btn:hover{
-      background:var(--gold);
-      border-color:var(--gold);
-      color:#000;
-      transform:translateY(-1px);
-    }
-
-    @media (max-width:768px){
-      .hero-inner{padding:120px 1rem 30px;}
-      .hero-location{text-align:center;}
-    }
-
-    /* ========== BOOKING-PANEL ========== */
-
-    .booking-panel{
-      position:fixed;
-      top:90px;
-      left:50%;
-      transform:translateX(-50%) translateY(-10px);
-      width:100%;
-      max-width:420px;
+    .quick-card{
       background:#fff;
-      color:var(--text);
       border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px 18px 12px;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .18s ease, transform .18s ease;
-      z-index:90;
+      box-shadow:var(--shadow-soft);
+      padding:20px 20px 18px;
+      position:relative;
+      overflow:hidden;
     }
-
-    .booking-panel.open{
-      opacity:1;
-      transform:translateX(-50%) translateY(0);
-      pointer-events:auto;
-    }
-
-    .booking-panel h3{
-      font-size:20px;
+    .quick-card h3{
+      font-size:18px;
       margin-bottom:6px;
     }
-
-    .booking-panel p{
+    .quick-card p{
       margin:0 0 12px;
       font-size:14px;
       color:var(--muted);
     }
 
-    .booking-list{
-      display:grid;
-      gap:8px;
-    }
-
-    .booking-list a{
+    .pill-row{
       display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:10px 12px;
-      border-radius:var(--radius-sm);
-      background:var(--card-2);
-      font-size:14px;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
     }
-
-    .booking-list a span{font-weight:500;}
-    .booking-list a small{color:var(--muted);}
-
-    .booking-panel-close{
-      margin-top:10px;
-      text-align:center;
-      font-size:13px;
-      color:var(--muted-2);
+    .pill{
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--line-soft);
+      font-size:12px;
+      background:var(--card-2);
       cursor:pointer;
     }
+    .pill:hover{
+      border-color:var(--gold);
+      color:var(--gold-dark);
+    }
 
-    /* ========== MENUKORT ========== */
+    /* ========== MENUKORT (som “bord”) ========== */
 
     .menu-section{
       background:#ffffff;
       color:var(--text);
-      padding:80px 1.5rem 90px;
+      padding:70px 1.5rem 80px;
     }
-
     .section-inner{
       max-width:var(--max);
       margin:0 auto;
     }
-
     .menu-header{
       text-align:center;
       margin-bottom:32px;
     }
-
     .menu-header p{
       margin-top:.5rem;
       color:var(--muted);
@@ -552,7 +451,6 @@
       position:relative;
       overflow:hidden;
     }
-
     .menu-board::before,
     .menu-board::after{
       content:"";
@@ -563,7 +461,6 @@
       background:linear-gradient(to right,transparent,var(--line-soft),transparent);
       opacity:.7;
     }
-
     .menu-board::before{top:70px;}
     .menu-board::after{bottom:70px;}
 
@@ -571,9 +468,7 @@
       text-align:center;
       margin-bottom:28px;
     }
-
     .menu-board-title h2{font-size:28px;}
-
     .menu-board-title span{
       display:block;
       margin-top:4px;
@@ -587,7 +482,6 @@
       display:grid;
       gap:32px;
     }
-
     @media (min-width:900px){
       .menu-columns{
         grid-template-columns:repeat(2, minmax(0,1fr));
@@ -598,7 +492,6 @@
       font-size:20px;
       margin-bottom:6px;
     }
-
     .menu-group small{
       display:block;
       margin-bottom:12px;
@@ -613,19 +506,15 @@
       padding:4px 0;
       border-bottom:1px dashed rgba(0,0,0,.06);
     }
-
     .menu-item:last-child{border-bottom:none;}
-
     .menu-item-title{
       font-weight:500;
       font-size:15px;
     }
-
     .menu-item-desc{
       font-size:13px;
       color:var(--muted-2);
     }
-
     .menu-item-price{
       font-weight:500;
       font-size:15px;
@@ -633,32 +522,97 @@
       color:var(--brown-2);
     }
 
-    /* ========== TAKEAWAY ========== */
+    /* ========== TAKEAWAY-SEKTION (ekstra tydelig) ========== */
 
     .takeaway-section{
       background:var(--bg-deep);
       color:#fff;
-      padding:70px 1.5rem;
-      text-align:center;
+      padding:60px 1.5rem;
     }
-
     .takeaway-inner{
-      max-width:700px;
+      max-width:var(--max);
       margin:0 auto;
+      display:grid;
+      gap:24px;
+      grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+      align-items:center;
     }
-
+    @media (max-width:900px){
+      .takeaway-inner{grid-template-columns:1fr;text-align:center;}
+    }
     .takeaway-inner p{
-      margin:10px auto 20px;
+      margin:10px 0 18px;
       color:#f7f3ec;
     }
+    .takeaway-highlight{
+      display:inline-flex;
+      padding:6px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,.25);
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
 
-    /* ========== VI STØTTER (LYS + ANIMATION) ========== */
+    /* ========== CATERING-TEASER ========== */
+
+    .catering-section{
+      background:#fff;
+      padding:70px 1.5rem;
+    }
+    .catering-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      display:grid;
+      gap:28px;
+      grid-template-columns:minmax(0,1.3fr) minmax(0,1.2fr);
+      align-items:center;
+    }
+    @media (max-width:900px){
+      .catering-inner{grid-template-columns:1fr;}
+    }
+
+    .catering-card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      padding:26px 22px;
+    }
+    .catering-card h2{
+      font-size:26px;
+      margin-bottom:8px;
+    }
+    .catering-card p{
+      margin:0 0 18px;
+      color:var(--muted);
+    }
+    .catering-tagline{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    .catering-img{
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow-soft);
+    }
+    .catering-img img{
+      width:100%;
+      height:100%;
+      max-height:260px;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* ========== VI STØTTER (animerede logoer, transparent PNG) ========== */
 
     .support-section{
       background:linear-gradient(120deg,var(--card) 0%,#ffffff 100%);
       padding:70px 1.5rem;
     }
-
     .support-inner{
       max-width:var(--max);
       margin:0 auto;
@@ -667,22 +621,18 @@
       grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
       align-items:center;
     }
-
     @media (max-width:900px){
       .support-inner{grid-template-columns:1fr;}
     }
-
     .support-text h2{
       font-size:26px;
       margin-bottom:8px;
     }
-
     .support-text p{
       margin:0;
       color:var(--muted);
       max-width:520px;
     }
-
     .support-badge{
       display:inline-flex;
       align-items:center;
@@ -703,16 +653,14 @@
       gap:22px;
       justify-content:flex-end;
     }
-
     @media (max-width:900px){
       .support-logos{justify-content:flex-start;}
     }
 
     .support-logo{
-      position:relative;
-      padding:12px 18px;
+      padding:10px 18px;
       border-radius:999px;
-      background:rgba(255,255,255,.9);
+      background:rgba(255,255,255,.92);
       box-shadow:var(--shadow-soft);
       display:flex;
       align-items:center;
@@ -721,10 +669,7 @@
       transform:translateY(12px);
       animation:supportIn .7s ease forwards;
     }
-
-    .support-logo:nth-child(2){
-      animation-delay:.15s;
-    }
+    .support-logo:nth-child(2){animation-delay:.18s;}
 
     @keyframes supportIn{
       to{opacity:1; transform:translateY(0);}
@@ -737,7 +682,6 @@
       filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));
       background:transparent; /* PNG uden boks */
     }
-
     .support-logo span{
       font-size:14px;
       color:var(--muted-2);
@@ -751,30 +695,25 @@
       padding:70px 1.5rem;
       text-align:center;
     }
-
     .social-inner{
       max-width:var(--max);
       margin:0 auto;
     }
-
     .social-inner p{
       margin:8px auto 24px;
       color:#d0d0d0;
       max-width:520px;
     }
-
     .social-grid{
       display:grid;
       gap:10px;
       margin-top:24px;
     }
-
     @media (min-width:768px){
       .social-grid{
         grid-template-columns:repeat(4,minmax(0,1fr));
       }
     }
-
     .social-grid img{
       width:100%;
       height:180px;
@@ -782,7 +721,6 @@
       border-radius:10px;
       display:block;
     }
-
     .btn-instagram{
       display:inline-flex;
       align-items:center;
@@ -794,20 +732,18 @@
       letter-spacing:.12em;
       text-transform:uppercase;
     }
-
     .btn-instagram:hover{
       background:#fff;
       color:#111;
     }
 
-    /* ========== FOOTER (forenklet) ========== */
+    /* ========== FOOTER (ryddet) ========== */
 
     footer{
       background:#15100b;
       color:#f2f2f2;
       padding:40px 1.5rem 28px;
     }
-
     .footer-inner{
       max-width:var(--max);
       margin:0 auto;
@@ -815,7 +751,6 @@
       gap:30px;
       grid-template-columns:minmax(0,1.1fr) minmax(0,2fr);
     }
-
     @media (max-width:980px){
       .footer-inner{grid-template-columns:1fr;}
     }
@@ -824,7 +759,6 @@
       font-size:22px;
       margin-bottom:8px;
     }
-
     .footer-brand p{
       margin:0;
       font-size:13px;
@@ -836,31 +770,25 @@
       display:grid;
       gap:18px;
     }
-
     @media (min-width:900px){
       .footer-locations{
         grid-template-columns:repeat(3,minmax(0,1fr));
       }
     }
-
     @media (max-width:600px){
-      .footer-locations{
-        grid-template-columns:1fr;
-      }
+      .footer-locations{grid-template-columns:1fr;}
     }
 
     .footer-location h4{
       font-size:15px;
       margin-bottom:4px;
     }
-
     .footer-location p{
       margin:0;
       font-size:13px;
       color:#ddd;
       line-height:1.5;
     }
-
     .footer-location a{
       color:#f7e7a5;
       font-size:13px;
@@ -878,18 +806,13 @@
       font-size:12px;
       color:#aaa;
     }
-
     .footer-links{
       display:flex;
       flex-wrap:wrap;
       gap:12px;
       align-items:center;
     }
-
-    .footer-links a{
-      color:#f7e7a5;
-    }
-
+    .footer-links a{color:#f7e7a5;}
     .kontrol-img{
       height:26px;
       width:auto;
@@ -900,7 +823,7 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER – skjult i toppen, vises først når man scroller -->
   <header class="site-header" id="page-header">
     <div class="site-header-inner">
       <a href="#hero" class="site-logo">
@@ -922,6 +845,7 @@
             <a href="#hero">Forside</a>
             <a href="#menu">Menukort</a>
             <a href="#takeaway">Takeaway</a>
+            <a href="#catering">Catering</a>
             <a href="#support">Vi støtter</a>
             <a href="#social">Sociale medier</a>
             <a href="#kontakt">Kontakt</a>
@@ -936,7 +860,7 @@
     <h3>Book bord</h3>
     <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
     <div class="booking-list">
-      <!-- RET alle disse links -->
+      <!-- RET alle links -->
       <a href="https://book.easyt...helsingor" target="_blank">
         <span>Helsingør</span><small>Book bord</small>
       </a>
@@ -960,77 +884,77 @@
     <!-- HERO MED VIDEO -->
     <section class="hero" id="hero">
       <div class="hero-media">
-        <!-- Sørg for at disse filer findes og er MP4/JPG -->
+        <!-- Sørg for at hero.mp4 + hero.jpg findes i /images/ -->
         <video autoplay muted loop playsinline poster="images/hero.jpg">
           <source src="images/hero.mp4" type="video/mp4">
-          Din browser understøtter ikke video – se vores billeder og menukort nedenfor.
+          Din browser understøtter ikke video.
         </video>
       </div>
       <div class="hero-overlay"></div>
 
       <div class="hero-inner">
-        <div class="hero-main">
+        <div>
           <div class="hero-eyebrow">Velkommen til Café Kaiser</div>
           <h1 class="hero-title">
             Brunch, frokost og hygge i Helsingør, Hillerød, Farum, Hørsholm og Vanløse
           </h1>
           <p class="hero-subtitle">
-            En café med fokus på gode råvarer og afslappet stemning. Se vores menukort,
-            og book bord på den café, der passer dig bedst.
+            Nyd brunch, frokost og aftenretter i afslappede omgivelser. Se menukortet,
+            book bord eller bestil din mad som takeaway.
           </p>
 
           <div class="hero-actions">
             <button type="button" class="btn btn-primary" data-booking-toggle>Book bord</button>
             <a href="#menu" class="btn btn-ghost">Se menukort</a>
+            <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/" target="_blank" class="btn btn-primary">
+              Bestil takeaway
+            </a>
           </div>
 
           <p class="hero-phone">
             Eller ring til os: <a href="tel:+4512345678">+45 12 34 56 78</a>
           </p>
         </div>
+      </div>
+    </section>
 
-        <div class="hero-locations">
-          <div class="hero-locations-grid">
-            <article class="hero-location">
-              <div class="hero-location-label">Book bord</div>
-              <div class="hero-location-name">Helsingør</div>
-              <a class="hero-location-btn" href="https://book.easyt...helsingor" target="_blank">
-                Book Helsingør
-              </a>
-            </article>
+    <!-- HURTIGE VALG / GRAFISKE BOKSE -->
+    <section class="quick-section">
+      <div class="quick-inner">
+        <div class="quick-grid">
+          <!-- Book bord card -->
+          <article class="quick-card">
+            <h3>Book bord</h3>
+            <p>Vælg den café, der passer dig bedst, og reserver bord online.</p>
+            <div class="pill-row">
+              <!-- disse pills linker direkte til booking -->
+              <a class="pill" href="https://book.easyt...helsingor" target="_blank">Helsingør</a>
+              <a class="pill" href="https://book.easyt...hillerod" target="_blank">Hillerød</a>
+              <a class="pill" href="https://book.easyt...farum" target="_blank">Farum</a>
+              <a class="pill" href="https://book.easyt...horsholm" target="_blank">Hørsholm</a>
+              <a class="pill" href="https://book.easyt...vanlose" target="_blank">Vanløse</a>
+            </div>
+          </article>
 
-            <article class="hero-location">
-              <div class="hero-location-label">Book bord</div>
-              <div class="hero-location-name">Hillerød</div>
-              <a class="hero-location-btn" href="https://book.easyt...hillerod" target="_blank">
-                Book Hillerød
-              </a>
-            </article>
+          <!-- Takeaway card -->
+          <article class="quick-card">
+            <h3>Bestil takeaway</h3>
+            <p>Bestil dine favoritter som takeaway – vælg café og afhent tidspunkt.</p>
+            <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/" target="_blank" class="btn btn-primary">
+              Gå til takeaway
+            </a>
+          </article>
 
-            <article class="hero-location">
-              <div class="hero-location-label">Book bord</div>
-              <div class="hero-location-name">Farum</div>
-              <a class="hero-location-btn" href="https://book.easyt...farum" target="_blank">
-                Book Farum
-              </a>
-            </article>
-
-            <article class="hero-location">
-              <div class="hero-location-label">Book bord</div>
-              <div class="hero-location-name">Hørsholm</div>
-              <a class="hero-location-btn" href="https://book.easyt...horsholm" target="_blank">
-                Book Hørsholm
-              </a>
-            </article>
-
-            <article class="hero-location">
-              <div class="hero-location-label">Book bord</div>
-              <div class="hero-location-name">Vanløse</div>
-              <a class="hero-location-btn" href="https://book.easyt...vanlose" target="_blank">
-                Book Vanløse
-              </a>
-            </article>
-          </div>
+          <!-- Catering card -->
+          <article class="quick-card">
+            <h3>Catering &amp; buffeter</h3>
+            <p>Se vores brunchbuffeter, smørrebrød og sæsonmenuer til selskaber.</p>
+            <a href="https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/Ck.html#buffeter"
+               target="_blank"
+               class="btn btn-primary">
+              Se catering
+            </a>
+          </article>
         </div>
       </div>
     </section>
@@ -1161,9 +1085,42 @@
     <!-- TAKEAWAY -->
     <section class="takeaway-section" id="takeaway">
       <div class="takeaway-inner">
-        <h2>Bestil takeaway</h2>
-        <p>Få dine favoritter fra Café Kaiser med hjem. Bestil online – nemt og hurtigt.</p>
-        <a href="https://cafekaiser.dk/takeaway" target="_blank" class="btn btn-primary">Gå til takeaway</a>
+        <div>
+          <div class="takeaway-highlight">Takeaway</div>
+          <h2>Bestil takeaway fra din lokale Café Kaiser</h2>
+          <p>Vælg café, bestil dine favoritter og afhent når det passer dig. Nemt og hurtigt.</p>
+          <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/" target="_blank" class="btn btn-primary">
+            Gå til takeaway
+          </a>
+        </div>
+        <div style="text-align:center;">
+          <!-- valgfrit billede af takeaway-poser / mad -->
+          <img src="images/takeaway.png" alt="Café Kaiser takeaway"
+               style="max-width:280px;width:100%;height:auto;">
+        </div>
+      </div>
+    </section>
+
+    <!-- CATERING TEASER -->
+    <section class="catering-section" id="catering">
+      <div class="catering-inner">
+        <div class="catering-card">
+          <div class="catering-tagline">Catering fra Café Kaiser</div>
+          <h2>Brunchbuffeter, smørrebrød og sæsonmenuer</h2>
+          <p>
+            Skal du holde selskab? Vælg mellem populære brunchbuffeter, smørrebrødsmenuer
+            og sæsonbuffeter sammensat med gode råvarer og høj genkendelighed.
+          </p>
+          <a href="https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/Ck.html#buffeter"
+             target="_blank"
+             class="btn btn-primary">
+            Se catering &amp; buffeter
+          </a>
+        </div>
+        <div class="catering-img">
+          <!-- brug evt. et udsnit fra din catering-side -->
+          <img src="images/catering-hero.jpg" alt="Catering fra Café Kaiser">
+        </div>
       </div>
     </section>
 
@@ -1220,7 +1177,7 @@
         <div class="footer-brand">
           <h3>Café Kaiser</h3>
           <p>
-            Hygge, brunch og gode råvarer siden XXXX.  
+            Hygge, brunch og gode råvarer.  
             Besøg os i Helsingør, Hillerød, Farum, Hørsholm og Vanløse.
           </p>
         </div>
@@ -1229,52 +1186,43 @@
           <div class="footer-location">
             <h4>Helsingør</h4>
             <p>
-              Stengade 35, 3000 Helsingør<br>
-              CVR: 32354262<br>
+              Stengade 35, 3000 Helsingør – CVR: 32354262<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
-
           <div class="footer-location">
             <h4>Hillerød</h4>
             <p>
-              Slotsarkaderne 52, 3400 Hillerød<br>
-              CVR: 42134570<br>
+              Slotsarkaderne 52, 3400 Hillerød – CVR: 42134570<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
-
           <div class="footer-location">
             <h4>Farum</h4>
             <p>
-              Farum Bytorv 22, 3520 Farum<br>
-              CVR: 43288989<br>
+              Farum Bytorv 22, 3520 Farum – CVR: 43288989<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
-
           <div class="footer-location">
             <h4>Hørsholm</h4>
             <p>
-              Hørsholm Midtpunkt 138, 2970 Hørsholm<br>
-              CVR: 44666030<br>
+              Hørsholm Midtpunkt 138, 2970 Hørsholm – CVR: 44666030<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
-
           <div class="footer-location">
             <h4>Vanløse</h4>
             <p>
-              Vanløse Torv 1, 2720 Vanløse<br>
-              CVR: 44786141<br>
+              Vanløse Torv 1, 2720 Vanløse – CVR: 44786141<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–tor 10–21 (køkken 10–20)<br>
               Fre–lør 10–22 (køkken 10–21)<br>
@@ -1299,20 +1247,21 @@
   </main>
 
   <script>
-    // Header scroll-effekt
+    // Header: vis kun ved scroll
     const header = document.getElementById('page-header');
     const threshold = 40;
+
     function onScroll(){
       if(window.scrollY > threshold){
-        header.classList.add('scrolled');
+        header.classList.add('visible','scrolled');
       }else{
-        header.classList.remove('scrolled');
+        header.classList.remove('visible','scrolled');
       }
     }
     window.addEventListener('scroll', onScroll);
     window.addEventListener('load', onScroll);
 
-    // Dropdown-menu til højre
+    // Dropdown-menu
     const dropdown = document.getElementById('mainDropdown');
     const toggle = dropdown.querySelector('.dropdown-toggle');
     toggle.addEventListener('click', (e)=>{
@@ -1337,15 +1286,18 @@
     const bookingPanel = document.getElementById('bookingPanel');
     const bookingToggles = document.querySelectorAll('[data-booking-toggle]');
     const bookingClose = document.querySelector('[data-booking-close]');
+
     bookingToggles.forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         e.preventDefault();
         bookingPanel.classList.toggle('open');
       });
     });
+
     bookingClose.addEventListener('click', ()=>{
       bookingPanel.classList.remove('open');
     });
+
     document.addEventListener('click', (e)=>{
       if(bookingPanel.classList.contains('open') &&
          !bookingPanel.contains(e.target) &&
@@ -1353,6 +1305,7 @@
         bookingPanel.classList.remove('open');
       }
     });
+
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
         bookingPanel.classList.remove('open');
