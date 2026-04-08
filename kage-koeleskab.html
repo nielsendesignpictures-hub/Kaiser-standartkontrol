@@ -3,22 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0f14" />
-  <title>Kagekøleskab – Udløb</title>
-
-  <!-- PWA (kiosk/standalone) -->
-  <link rel="manifest" href="./manifest.webmanifest">
-
+  <title>Kagekøleskab</title>
   <style>
     :root{
       --bg:#0b0f14;
+      --panel: rgba(255,255,255,.06);
       --border: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.65);
-      --muted2: rgba(255,255,255,.45);
       --accent: #d9b65a;
-      --ok: #35c48b;
-      --warn: #ffcc66;
       --bad: #ff2d2d;
       --shadow: 0 18px 50px rgba(0,0,0,.50);
       --r: 22px;
@@ -36,60 +29,22 @@
         var(--bg);
       color: var(--text);
     }
-    .wrap{max-width: 1200px; margin: 18px auto; padding: 0 18px 60px;}
-    .header{
+    .wrap{max-width: 1100px; margin: 18px auto; padding: 0 18px 50px;}
+    .shell{
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border: 1px solid var(--border);
       border-radius: 30px;
-      padding: 18px 18px 16px;
+      padding: 18px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .title{
-      text-align:center;
-      margin: 2px 0 6px;
-      letter-spacing:.08em;
-      color: var(--muted2);
-      font-weight: 800;
-      font-size: 12px;
-    }
-    h1{
-      margin: 0;
-      text-align:center;
-      font-size: 42px;
-      letter-spacing:.01em;
-      line-height:1.05;
-    }
-    .sub{
-      margin: 8px 0 0;
-      text-align:center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .topbar{
-      display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
-      margin-top: 12px;
-    }
-    .chip{
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--muted);
-      font-size: 13px;
-      white-space:nowrap;
-    }
-    .chip strong{color: var(--text); font-size: 14px;}
-
+    h1{margin:0; text-align:center; font-size: 42px; letter-spacing:.01em;}
     .grid{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1fr;
       gap: 14px;
       margin-top: 14px;
     }
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr; } }
-
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
       border: 1px solid var(--border);
@@ -98,56 +53,37 @@
       box-shadow: 0 14px 45px rgba(0,0,0,.35);
       backdrop-filter: blur(10px);
     }
-    .card h2{
-      margin: 0 0 12px;
-      font-size: 17px;
-      letter-spacing:.02em;
-    }
+    .card h2{margin:0 0 12px; font-size: 17px; letter-spacing:.02em;}
     .row{display:flex; gap:12px; flex-wrap:wrap; align-items:end;}
-    .field{flex:1; min-width: 200px;}
+    .field{flex:1; min-width: 220px;}
     label{display:block; color: var(--muted); font-size: 13px; margin: 0 0 6px;}
-    input, button, textarea{
+    input, textarea, button{
       width:100%;
       color: var(--text);
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 16px;
       padding: 14px 14px;
-      outline: none;
+      outline:none;
       font-size: 16px;
     }
     textarea{min-height: 46px; resize: vertical;}
-    input::placeholder, textarea::placeholder{color: rgba(255,255,255,.35)}
-    input:focus, textarea:focus{
-      border-color: rgba(217,182,90,.55);
-      box-shadow: 0 0 0 3px rgba(217,182,90,.15)
-    }
-
     .btn{
       cursor:pointer;
       border-radius: 999px;
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing:.02em;
       border: 1px solid rgba(255,255,255,.14);
       background: linear-gradient(180deg, rgba(217,182,90,.25), rgba(217,182,90,.10));
       padding: 16px 16px;
       font-size: 16px;
     }
-    .btn2{
-      cursor:pointer;
-      border-radius: 999px;
-      font-weight: 900;
-      background: rgba(255,255,255,.06);
-      padding: 14px 14px;
-      font-size: 15px;
-      border: 1px solid rgba(255,255,255,.12);
-    }
     .btnDanger{
       cursor:pointer;
       border-radius: 999px;
-      font-weight: 900;
-      background: rgba(255,59,59,.16);
-      border: 1px solid rgba(255,59,59,.28);
+      font-weight: 950;
+      background: rgba(255,45,45,.16);
+      border: 1px solid rgba(255,45,45,.28);
       padding: 14px 14px;
       font-size: 15px;
     }
@@ -168,7 +104,7 @@
       border: 1px solid rgba(255,255,255,.12);
       user-select:none;
     }
-    .cakeBtn .name{font-weight: 900; font-size: 16px;}
+    .cakeBtn .name{font-weight: 950; font-size: 16px;}
     .cakeBtn .meta{color: var(--muted); font-size: 13px; margin-top: 4px;}
     .cakeBtn.active{
       border-color: rgba(217,182,90,.55);
@@ -176,25 +112,7 @@
       background: rgba(217,182,90,.10);
     }
 
-    .pills{display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;}
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--muted);
-      font-size: 13px;
-      white-space:nowrap;
-    }
-    .dot{width:10px; height:10px; border-radius:99px; background: var(--accent); display:inline-block;}
-    .dot.ok{background: var(--ok)}
-    .dot.warn{background: var(--warn)}
-    .dot.bad{background: var(--bad)}
-
-    table{width:100%; border-collapse: collapse; margin-top: 10px; overflow:hidden; border-radius: 16px;}
+    table{width:100%; border-collapse: collapse; margin-top: 8px; overflow:hidden; border-radius: 16px;}
     th, td{
       padding: 12px 10px;
       border-bottom: 1px solid rgba(255,255,255,.08);
@@ -204,32 +122,19 @@
     }
     th{color: var(--muted); font-weight: 900; font-size: 12px; letter-spacing:.03em;}
     tr:hover td{background: rgba(255,255,255,.03)}
-    .tag{
-      display:inline-flex; align-items:center;
-      padding: 6px 10px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      font-size: 12px; color: var(--muted);
-      font-weight: 900;
-    }
-    .tag.bad{border-color: rgba(255,45,45,.30); background: rgba(255,45,45,.14); color: rgba(255,255,255,.92)}
-    .tag.warn{border-color: rgba(255,204,102,.25); background: rgba(255,204,102,.12); color: rgba(255,255,255,.92)}
-    .tag.ok{border-color: rgba(53,196,139,.25); background: rgba(53,196,139,.12); color: rgba(255,255,255,.92)}
     .actions{display:flex; gap:10px; flex-wrap:wrap}
     .mini{padding: 12px 14px; font-size: 14px;}
-    .muted{color: var(--muted)}
     .small{font-size: 12px; color: var(--muted)}
-    .hr{height:1px; background: rgba(255,255,255,.08); margin: 12px 0;}
 
-    /* Modals */
-    .modalOverlay{
+    /* Modal base */
+    .overlay{
       position: fixed; inset:0;
-      background: rgba(0,0,0,.65);
+      background: rgba(0,0,0,.70);
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
-      z-index: 9999;
+      z-index: 2147483647; /* ekstremt højt, så den ikke gemmes bag hub/iframe layers */
     }
     .modal{
       width: min(980px, 100%);
@@ -243,20 +148,10 @@
     .modalHead{display:flex; align-items:center; justify-content:space-between; gap: 10px;}
     .modal h3{margin:0; font-size: 18px;}
     .modal p{margin: 8px 0 0; color: var(--muted); font-size: 14px;}
-    .modalList{margin-top: 12px;}
-    .modalItem{
-      display:flex; justify-content:space-between; gap: 12px; flex-wrap:wrap;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      margin-bottom: 10px;
-    }
-    .modalItem strong{font-size: 15px;}
     .modalFoot{display:flex; justify-content:flex-end; gap: 10px; margin-top: 12px; flex-wrap:wrap;}
     .xBtn{width:auto;}
 
-    /* Alarm modal (stor rød) */
+    /* Alarm (stor rød) */
     .alarmModal{
       border-color: rgba(255,45,45,.45);
       box-shadow: 0 35px 120px rgba(255,45,45,.10), 0 30px 90px rgba(0,0,0,.70);
@@ -275,26 +170,21 @@
       background: rgba(255,45,45,.16);
       border: 1px solid rgba(255,45,45,.30);
       color: rgba(255,255,255,.95);
-      font-weight: 900;
+      font-weight: 950;
       font-size: 14px;
     }
-
-    /* Discard modal */
-    .kv{
-      display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;
-    }
-    .kv .box{
-      flex: 1;
-      min-width: 280px;
+    .list{margin-top:12px;}
+    .item{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
       padding: 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
+      margin-bottom: 10px;
     }
-    .qtyRow{
-      display:flex; gap:10px; align-items:end; flex-wrap:wrap;
-    }
-    .qtyRow .qty{flex:1; min-width: 200px;}
+
+    /* Smidt ud modal */
+    .qtyRow{display:flex; gap:10px; align-items:end; flex-wrap:wrap; margin-top:10px;}
     .unitBadge{
       width:auto;
       padding: 14px 14px;
@@ -329,20 +219,12 @@
 
 <body>
   <div class="wrap">
-    <div class="header">
-      <div class="title">KAISER</div>
+    <div class="shell">
       <h1>Kagekøleskab</h1>
-      <div class="sub">Holdbarhed = dage × 24 timer. Popup kommer når kagens udløbsdato er i dag (fx 5 timer tilbage).</div>
-
-      <div class="topbar">
-        <div class="chip">Nu: <strong id="nowClock">--:--</strong></div>
-        <div class="chip">Alarm tjek: <strong>hver 30 sek.</strong></div>
-        <button class="btn2" id="fullscreenBtn" style="width:auto;">Fuldskærm (kiosk)</button>
-      </div>
 
       <div class="grid">
         <div class="card">
-          <h2>Registrér kage (touch)</h2>
+          <h2>Tilføj kage</h2>
 
           <div class="row">
             <div class="field">
@@ -351,7 +233,7 @@
             </div>
             <div class="field">
               <label for="place">Køleskab / Plads</label>
-              <input id="place" placeholder="Fx 1" />
+              <input id="place" placeholder="Fx 1"/>
             </div>
           </div>
 
@@ -362,158 +244,117 @@
 
           <div class="row" style="margin-top:10px; display:none;" id="customRow">
             <div class="field">
-              <label for="customName">Fritekst – kagenavn</label>
-              <input id="customName" placeholder="Fx Citronmåne" />
+              <label for="customName">Andet – kagenavn</label>
+              <input id="customName" placeholder="Fx Citronmåne"/>
             </div>
             <div class="field">
               <label for="customDays">Holdbarhed (dage)</label>
-              <input id="customDays" type="number" min="0" step="1" placeholder="Fx 3" />
+              <input id="customDays" type="number" min="0" step="1" placeholder="Fx 3"/>
             </div>
           </div>
 
           <div class="row" style="margin-top:10px;">
             <div class="field">
               <label for="note">Note (valgfri)</label>
-              <textarea id="note" placeholder="Fx glutenfri / halv kage / osv."></textarea>
+              <textarea id="note" placeholder=""></textarea>
             </div>
           </div>
 
           <div class="row" style="margin-top:10px;">
             <div class="field">
-              <button class="btn" id="addBtn">Tilføj (Dato ind = nu)</button>
+              <button class="btn" id="addBtn" type="button">Tilføj</button>
               <div class="small" id="preview"></div>
             </div>
           </div>
-
-          <div class="pills" id="stats"></div>
         </div>
 
         <div class="card">
-          <h2>Alarm / kontrol</h2>
-          <div class="small muted">
-            Popup vises kun for kager hvor <strong>udløbsdato = i dag</strong>.
-            (Over tid vises i tabellen som “Over tid”, men popup’er ikke automatisk).
-          </div>
-
-          <div class="hr"></div>
-
-          <div class="row">
-            <div class="field">
-              <button class="btn2" id="checkNowBtn">Tjek nu</button>
-            </div>
-            <div class="field">
-              <button class="btn2" id="clearSnoozeBtn">Nulstil slumre</button>
-            </div>
-          </div>
-
-          <div class="hr"></div>
-
-          <div class="small muted">
-            “Smidt ud” kræver <strong>antal (stk)</strong>.
-          </div>
+          <h2>Aktive kager</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Kage</th>
+                <th>Dato ind</th>
+                <th>Smides ud</th>
+                <th>Handling</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
         </div>
-      </div>
-
-      <div class="card" style="margin-top:14px;">
-        <div class="row" style="justify-content:space-between; align-items:center;">
-          <h2 style="margin:0;">Kager</h2>
-          <div class="row">
-            <div class="field" style="min-width:240px;">
-              <label for="filter">Filter</label>
-              <select id="filter" style="width:100%; color:var(--text); background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:14px; font-size:16px;">
-                <option value="active">Aktive</option>
-                <option value="due">Udløber i dag</option>
-                <option value="all">Alle</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Kage</th>
-              <th>Dato ind</th>
-              <th>Smides ud (tidspunkt)</th>
-              <th>Har stået</th>
-              <th>Tid til udløb</th>
-              <th>Status</th>
-              <th>Smidt ud</th>
-              <th>Handling</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
       </div>
     </div>
   </div>
 
-  <!-- Alarm Modal -->
-  <div class="modalOverlay" id="alarmOverlay">
+  <!-- ALARM -->
+  <div class="overlay" id="alarmOverlay" aria-hidden="true">
     <div class="modal alarmModal">
       <div class="modalHead">
         <div>
           <div class="alarmTitle">KAGE SMIDES UD IDAG</div>
-          <div class="alarmBanner">Følgende kager har udløbsdato i dag. Smid ud ved udløbstidspunkt og markér “Smidt ud”.</div>
+          <div class="alarmBanner">Kager med udløbsdato i dag:</div>
         </div>
-        <button class="btn2 xBtn" id="closeAlarmBtn">Luk</button>
+        <button class="btn2 xBtn" id="closeAlarmBtn" type="button">Luk</button>
       </div>
-      <div class="modalList" id="alarmList"></div>
+
+      <div class="list" id="alarmList"></div>
+
       <div class="modalFoot">
-        <button class="btn2" id="snoozeBtn">Slumre 30 min</button>
+        <button class="btn2" id="snoozeBtn" type="button">Slumre 30 min</button>
       </div>
     </div>
   </div>
 
-  <!-- Discard Modal -->
-  <div class="modalOverlay" id="discardOverlay" style="z-index:10000;">
+  <!-- SMIDT UD -->
+  <div class="overlay" id="discardOverlay" aria-hidden="true">
     <div class="modal">
       <div class="modalHead">
         <div>
           <h3>Smidt ud – antal</h3>
-          <p id="discardSub" class="muted">–</p>
+          <p id="discardSub">–</p>
         </div>
-        <button class="btn2 xBtn" id="closeDiscardBtn">Luk</button>
+        <button class="btn2 xBtn" id="closeDiscardBtn" type="button">Luk</button>
       </div>
 
-      <div class="kv">
-        <div class="box">
-          <label>Hvor mange smider du ud? (påkrævet)</label>
-
-          <div class="qtyRow">
-            <div class="qty">
-              <input id="wasteQty" inputmode="numeric" pattern="[0-9]*" type="number" min="1" step="1" placeholder="Antal" />
-            </div>
-            <div class="unitBadge">stk</div>
+      <div style="margin-top:10px;">
+        <label>Hvor mange smider du ud?</label>
+        <div class="qtyRow">
+          <div style="flex:1; min-width:220px;">
+            <input id="wasteQty" inputmode="numeric" pattern="[0-9]*" type="number" min="1" step="1" placeholder="Antal" />
           </div>
-
-          <div class="keypad" id="keypad"></div>
-
-          <div class="small muted" style="margin-top:10px;">
-            Tip: brug knapperne for hurtig registrering.
-          </div>
+          <div class="unitBadge">stk</div>
         </div>
+
+        <div class="keypad" id="keypad"></div>
       </div>
 
       <div class="modalFoot">
-        <button class="btn2" id="discardCancelBtn">Annuller</button>
-        <button class="btn" id="discardSaveBtn">Gem “smidt ud”</button>
+        <button class="btn2" id="discardCancelBtn" type="button">Annuller</button>
+        <button class="btn" id="discardSaveBtn" type="button">Gem</button>
       </div>
     </div>
   </div>
 
 <script>
 (() => {
-  const STORAGE_KEY = "kagekoeleskab.entries.v4";
-  const LEGACY_KEYS = ["kagekoeleskab.entries.v3", "kagekoeleskab.entries.v2"];
-  const PREF_KEY = "kagekoeleskab.prefs.v4";
-  const LEGACY_PREF_KEYS = ["kagekoeleskab.prefs.v3", "kagekoeleskab.prefs.v2"];
+  const STORAGE_KEY = "kagekoeleskab.entries.v5";
+  const LEGACY_KEYS = [
+    "kagekoeleskab.entries.v4",
+    "kagekoeleskab.entries.v3",
+    "kagekoeleskab.entries.v2"
+  ];
+  const PREF_KEY = "kagekoeleskab.prefs.v5";
+  const LEGACY_PREF_KEYS = [
+    "kagekoeleskab.prefs.v4",
+    "kagekoeleskab.prefs.v3",
+    "kagekoeleskab.prefs.v2"
+  ];
 
   const TYPES = [
     { id: "gulerod", name: "Gulerodskage", days: 3 },
     { id: "chokolade", name: "Chokoladekage", days: 2 },
     { id: "aeble", name: "Æblekage", days: 3 },
-    { id: "custom", name: "Fritekst", days: null }
+    { id: "custom", name: "Andet", days: null }
   ];
 
   const $ = (id) => document.getElementById(id);
@@ -529,20 +370,14 @@
   const addBtn = $("addBtn");
   const tbody = $("tbody");
   const preview = $("preview");
-  const stats = $("stats");
-  const filter = $("filter");
-  const checkNowBtn = $("checkNowBtn");
-  const clearSnoozeBtn = $("clearSnoozeBtn");
-  const nowClock = $("nowClock");
-  const fullscreenBtn = $("fullscreenBtn");
 
-  // Alarm modal
+  // Alarm
   const alarmOverlay = $("alarmOverlay");
   const alarmList = $("alarmList");
   const closeAlarmBtn = $("closeAlarmBtn");
   const snoozeBtn = $("snoozeBtn");
 
-  // Discard modal
+  // Discard
   const discardOverlay = $("discardOverlay");
   const closeDiscardBtn = $("closeDiscardBtn");
   const discardCancelBtn = $("discardCancelBtn");
@@ -556,17 +391,7 @@
   let selectedTypeId = prefs.lastTypeId || "gulerod";
   let pendingDiscardId = null;
 
-  // Wake Lock (kiosk)
-  let wakeLock = null;
-  async function requestWakeLock(){
-    try{
-      if (!("wakeLock" in navigator)) return;
-      wakeLock = await navigator.wakeLock.request("screen");
-    }catch(e){}
-  }
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") requestWakeLock();
-  });
+  function tryParse(raw){ try{ return raw ? JSON.parse(raw) : null; } catch { return null; } }
 
   function loadPrefsWithMigration(){
     const direct = tryParse(localStorage.getItem(PREF_KEY));
@@ -582,17 +407,9 @@
     }
     return normalizePrefs(null);
   }
-
   function normalizePrefs(p){
-    return {
-      lastBy: "",
-      lastPlace: "1",
-      snoozeUntil: 0,
-      lastTypeId: "gulerod",
-      ...(p || {})
-    };
+    return { lastBy:"", lastPlace:"1", lastTypeId:"gulerod", snoozeUntil:0, ...(p||{}) };
   }
-
   function savePrefs(){ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }
 
   function loadEntriesWithMigration(){
@@ -609,40 +426,20 @@
     }
     return [];
   }
-
   function normalizeEntry(e){
     const base = {
-      id: "",
-      cakeName: "",
-      days: 0,
+      id: "", cakeName: "", days: 0,
       addedAt: new Date().toISOString(),
       discardAt: new Date().toISOString(),
-      by: "",
-      place: "",
-      note: "",
+      by: "", place: "", note: "",
       status: "active",
       discardedAt: null,
       wasteQty: null,
-      wasteUnit: "stk",
-      // legacy fallback:
-      wasteText: ""
+      wasteUnit: "stk"
     };
-    const x = { ...base, ...(e || {}) };
-
-    // hvis legacy wasteText eksisterer, behold den, men vis helst wasteQty hvis udfyldt
-    if (x.wasteQty == null && x.wasteText){
-      // prøv at parse "3 stk"
-      const m = String(x.wasteText).match(/(\d+)/);
-      if (m) x.wasteQty = Number(m[1]);
-    }
-    return x;
+    return { ...base, ...(e||{}) };
   }
-
   function saveEntries(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
-
-  function tryParse(raw){
-    try{ return raw ? JSON.parse(raw) : null; } catch { return null; }
-  }
 
   function uuid(){
     if (crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -660,60 +457,32 @@
     return d.toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
   }
 
-  function isSameLocalDate(a, b){
+  function isSameLocalDate(a,b){
     return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
   }
 
-  // 72 timer præcis (dage × 24t) fra addedAt
+  // 72 timer præcis (dage × 24t)
   function computeDiscardAt(addedAtIso, days){
     const ms = Number(days) * 24 * 60 * 60 * 1000;
-    const t0 = new Date(addedAtIso).getTime();
-    return new Date(t0 + ms).toISOString();
+    return new Date(new Date(addedAtIso).getTime() + ms).toISOString();
   }
 
   function statusFor(entry){
     if (entry.status === "discarded") return "discarded";
-
     const now = Date.now();
     const disc = new Date(entry.discardAt).getTime();
     if (now >= disc) return "expired";
-
-    const sameDay = isSameLocalDate(new Date(), new Date(entry.discardAt));
-    if (sameDay) return "dueToday";
-
+    if (isSameLocalDate(new Date(), new Date(entry.discardAt))) return "dueToday";
     return "ok";
-  }
-
-  function tagHtml(entry){
-    const st = statusFor(entry);
-    if (entry.status === "discarded") return `<span class="tag ok">Smidt ud</span>`;
-    if (st === "expired") return `<span class="tag bad">Over tid</span>`;
-    if (st === "dueToday") return `<span class="tag warn">I dag</span>`;
-    return `<span class="tag ok">OK</span>`;
-  }
-
-  function humanDuration(ms){
-    const neg = ms < 0;
-    ms = Math.abs(ms);
-
-    const s = Math.floor(ms / 1000);
-    const days = Math.floor(s / 86400);
-    const hrs = Math.floor((s % 86400) / 3600);
-    const mins = Math.floor((s % 3600) / 60);
-
-    const hh = String(hrs).padStart(2,"0");
-    const mm = String(mins).padStart(2,"0");
-    const base = days > 0 ? `${days}d ${hh}:${mm}` : `${hh}:${mm}`;
-    return neg ? `-${base}` : base;
   }
 
   function renderCakeButtons(){
     cakeGrid.innerHTML = TYPES.map(t => {
-      const meta = (t.days != null) ? `${t.days} dage (x24t)` : `skriv selv`;
+      const meta = (t.days != null) ? `${t.days} dage` : `skriv selv`;
       return `
         <div class="cakeBtn ${t.id===selectedTypeId ? "active":""}" data-type="${t.id}">
           <div class="name">${escapeHtml(t.name)}</div>
-          <div class="meta">${meta}</div>
+          <div class="meta">${escapeHtml(meta)}</div>
         </div>
       `;
     }).join("");
@@ -724,15 +493,10 @@
         prefs.lastTypeId = selectedTypeId;
         savePrefs();
         renderCakeButtons();
-        toggleCustom();
+        customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
         updatePreview();
-        requestWakeLock();
       });
     });
-  }
-
-  function toggleCustom(){
-    customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
   }
 
   function updatePreview(){
@@ -740,28 +504,20 @@
     const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
 
     let days = t.days;
+    let name = t.name;
 
     if (t.id === "custom"){
-      const name = (customName.value || "").trim();
+      name = (customName.value || "").trim();
       days = Number(customDays.value);
       if (!name || !Number.isFinite(days) || days < 0){
-        preview.textContent = "Udfyld fritekst + holdbarhed (dage).";
+        preview.textContent = "";
         return;
       }
     }
-
-    const discardAt = computeDiscardAt(nowIso, days);
-    preview.textContent = `Smides ud: ${fmtDateTime(discardAt)} (præcis)`;
-  }
-
-  // POPUP: kun “I dag” (så den kan poppe når der er fx 5 timer tilbage)
-  function alarmEntries(){
-    return entries.filter(e => e.status !== "discarded" && statusFor(e) === "dueToday");
+    preview.textContent = `Smides ud: ${fmtDateTime(computeDiscardAt(nowIso, days))}`;
   }
 
   function addEntry(){
-    requestWakeLock();
-
     const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
     const nowIso = new Date().toISOString();
 
@@ -772,7 +528,7 @@
       cakeName = (customName.value || "").trim();
       days = Number(customDays.value);
       if (!cakeName || !Number.isFinite(days) || days < 0){
-        alert("Udfyld fritekst (kagenavn) og holdbarhed (dage).");
+        alert("Udfyld 'Andet – kagenavn' og 'Holdbarhed (dage)'.");
         return;
       }
     }
@@ -794,35 +550,109 @@
 
     prefs.lastBy = entry.by;
     prefs.lastPlace = entry.place || prefs.lastPlace;
-    prefs.lastTypeId = selectedTypeId;
     savePrefs();
 
     note.value = "";
-    if (t.id === "custom"){
-      customName.value = "";
-      customDays.value = "";
-    }
-
+    if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
+    updatePreview();
     render();
     checkAlarm(true);
   }
 
-  function openDiscardModal(id){
-    requestWakeLock();
+  function render(){
+    const list = entries.filter(e => e.status !== "discarded");
 
-    const e = entries.find(x => x.id === id);
-    if(!e) return;
+    tbody.innerHTML = list.map(e => `
+      <tr>
+        <td>
+          <strong>${escapeHtml(e.cakeName)}</strong><br/>
+          <span class="small" style="color:var(--muted)">
+            ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
+          </span>
+        </td>
+        <td>${fmtDateTime(e.addedAt)}</td>
+        <td><strong>${fmtDateTime(e.discardAt)}</strong></td>
+        <td>
+          <div class="actions">
+            <button class="btn mini" type="button" data-action="discard" data-id="${e.id}">Smidt ud</button>
+            <button class="btnDanger mini" type="button" data-action="delete" data-id="${e.id}">Slet</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
 
-    pendingDiscardId = id;
-    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))} • Plads: ${escapeHtml(e.place||"–")}`;
-
-    wasteQty.value = "";
-    renderKeypad();
-
-    discardOverlay.style.display = "flex";
-    setTimeout(() => wasteQty.focus(), 50);
+    tbody.querySelectorAll("button[data-action]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const action = btn.getAttribute("data-action");
+        if (action === "discard") openDiscardModal(id);
+        if (action === "delete") deleteEntry(id);
+      });
+    });
   }
 
+  function deleteEntry(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    if (!confirm(`Slet "${e.cakeName}"?`)) return;
+    entries = entries.filter(x => x.id !== id);
+    saveEntries();
+    render();
+  }
+
+  // Alarm: kun kager med udløbsdato i dag
+  function alarmEntries(){
+    return entries.filter(e => e.status !== "discarded" && statusFor(e) === "dueToday");
+  }
+
+  function openAlarmModal(list){
+    alarmList.innerHTML = list.map(e => `
+      <div class="item">
+        <div>
+          <strong>${escapeHtml(e.cakeName)}</strong><br/>
+          <span class="small">Udløb: <strong>${escapeHtml(fmtDateTime(e.discardAt))}</strong></span><br/>
+          <span class="small" style="color:var(--muted)">
+            ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
+          </span>
+        </div>
+        <div>
+          <button class="btn mini" type="button" data-mid="discard" data-id="${e.id}">Smidt ud</button>
+        </div>
+      </div>
+    `).join("");
+
+    alarmList.querySelectorAll("button[data-mid='discard']").forEach(btn => {
+      btn.addEventListener("click", () => {
+        closeAlarmModal();
+        openDiscardModal(btn.getAttribute("data-id"));
+      });
+    });
+
+    alarmOverlay.style.display = "flex";
+    alarmOverlay.setAttribute("aria-hidden", "false");
+  }
+
+  function closeAlarmModal(){
+    alarmOverlay.style.display = "none";
+    alarmOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function checkAlarm(force){
+    const now = Date.now();
+    if (!force && now < Number(prefs.snoozeUntil || 0)) return;
+    const list = alarmEntries();
+    if (list.length > 0) openAlarmModal(list);
+  }
+
+  snoozeBtn.addEventListener("click", () => {
+    prefs.snoozeUntil = Date.now() + 30*60*1000;
+    savePrefs();
+    closeAlarmModal();
+  });
+  closeAlarmBtn.addEventListener("click", closeAlarmModal);
+  alarmOverlay.addEventListener("click", (e) => { if (e.target === alarmOverlay) closeAlarmModal(); });
+
+  // Discard modal (antal stk)
   function renderKeypad(){
     const buttons = [
       { t:"1", v:1, cls:"primary" }, { t:"2", v:2, cls:"primary" }, { t:"3", v:3, cls:"primary" }, { t:"4", v:4, cls:"primary" }, { t:"5", v:5, cls:"primary" },
@@ -853,14 +683,28 @@
     });
   }
 
+  function openDiscardModal(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+
+    pendingDiscardId = id;
+    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))}`;
+    wasteQty.value = "";
+    renderKeypad();
+
+    discardOverlay.style.display = "flex";
+    discardOverlay.setAttribute("aria-hidden", "false");
+    setTimeout(() => wasteQty.focus(), 30);
+  }
+
   function closeDiscardModal(){
     pendingDiscardId = null;
     discardOverlay.style.display = "none";
+    discardOverlay.setAttribute("aria-hidden", "true");
   }
 
   function saveDiscard(){
-    const id = pendingDiscardId;
-    const e = entries.find(x => x.id === id);
+    const e = entries.find(x => x.id === pendingDiscardId);
     if(!e) return;
 
     const qty = Number(wasteQty.value);
@@ -873,192 +717,15 @@
     e.discardedAt = new Date().toISOString();
     e.wasteQty = qty;
     e.wasteUnit = "stk";
-    e.wasteText = `${qty} stk`; // legacy/display
 
     saveEntries();
-    render();
     closeDiscardModal();
-  }
-
-  function deleteEntry(id){
-    const e = entries.find(x => x.id === id);
-    if(!e) return;
-    const ok = confirm(`Slet "${e.cakeName}"?`);
-    if(!ok) return;
-    entries = entries.filter(x => x.id !== id);
-    saveEntries();
     render();
   }
-
-  function render(){
-    const active = entries.filter(e => e.status !== "discarded");
-    const dueToday = active.filter(e => statusFor(e) === "dueToday");
-    const expired = active.filter(e => statusFor(e) === "expired");
-    const ok = active.filter(e => statusFor(e) === "ok");
-
-    stats.innerHTML = `
-      <span class="pill"><span class="dot ok"></span> OK: <strong style="color:var(--text)">${ok.length}</strong></span>
-      <span class="pill"><span class="dot warn"></span> I dag: <strong style="color:var(--text)">${dueToday.length}</strong></span>
-      <span class="pill"><span class="dot bad"></span> Over tid: <strong style="color:var(--text)">${expired.length}</strong></span>
-      <span class="pill"><span class="dot"></span> Aktive i alt: <strong style="color:var(--text)">${active.length}</strong></span>
-    `;
-
-    let list = [...entries];
-    if (filter.value === "active") list = list.filter(e => e.status !== "discarded");
-    if (filter.value === "due") list = list.filter(e => e.status !== "discarded" && statusFor(e)==="dueToday");
-
-    list.sort((a,b) => {
-      const pa = (a.status !== "discarded") ? (statusFor(a)==="expired"?0:statusFor(a)==="dueToday"?1:2) : 3;
-      const pb = (b.status !== "discarded") ? (statusFor(b)==="expired"?0:statusFor(b)==="dueToday"?1:2) : 3;
-      if (pa !== pb) return pa - pb;
-      return new Date(b.addedAt) - new Date(a.addedAt);
-    });
-
-    tbody.innerHTML = list.map(e => {
-      const info = [
-        e.by ? `Af: <strong>${escapeHtml(e.by)}</strong>` : "",
-        e.place ? `Plads: <strong>${escapeHtml(e.place)}</strong>` : "",
-        e.note ? `<span class="muted">${escapeHtml(e.note)}</span>` : ""
-      ].filter(Boolean).join("<br/>");
-
-      let waste = `<span class="muted">–</span>`;
-      if (e.status === "discarded"){
-        const txt = e.wasteQty ? `${e.wasteQty} stk` : (e.wasteText || "–");
-        waste = `<strong>${escapeHtml(txt)}</strong>`;
-      }
-
-      return `
-        <tr>
-          <td>
-            <strong>${escapeHtml(e.cakeName)}</strong><br/>
-            <span class="small muted">${Number.isFinite(e.days) ? `${e.days} dage` : ""}</span><br/>
-            <span class="small">${info || `<span class="muted">–</span>`}</span>
-          </td>
-          <td>${fmtDateTime(e.addedAt)}</td>
-          <td><strong>${fmtDateTime(e.discardAt)}</strong></td>
-          <td><strong data-age="${e.id}">--</strong></td>
-          <td><strong data-left="${e.id}">--</strong></td>
-          <td>${tagHtml(e)}</td>
-          <td class="small">${waste}</td>
-          <td>
-            <div class="actions">
-              ${e.status !== "discarded" ? `<button class="btn mini" data-action="discard" data-id="${e.id}">Smidt ud</button>` : ``}
-              <button class="btnDanger mini" data-action="delete" data-id="${e.id}">Slet</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join("");
-
-    tbody.querySelectorAll("button[data-action]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        const action = btn.getAttribute("data-action");
-        if (action === "discard") openDiscardModal(id);
-        if (action === "delete") deleteEntry(id);
-      });
-    });
-
-    updateTimers();
-  }
-
-  function updateTimers(){
-    const now = Date.now();
-
-    document.querySelectorAll("[data-age]").forEach(el => {
-      const id = el.getAttribute("data-age");
-      const e = entries.find(x => x.id === id);
-      if(!e) return;
-      el.textContent = humanDuration(now - new Date(e.addedAt).getTime());
-    });
-
-    document.querySelectorAll("[data-left]").forEach(el => {
-      const id = el.getAttribute("data-left");
-      const e = entries.find(x => x.id === id);
-      if(!e) return;
-      const left = new Date(e.discardAt).getTime() - now;
-      el.textContent = humanDuration(left);
-    });
-
-    nowClock.textContent = new Date().toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
-  }
-
-  function openAlarmModal(list){
-    alarmList.innerHTML = list.map(e => {
-      const left = new Date(e.discardAt).getTime() - Date.now();
-      return `
-        <div class="modalItem">
-          <div>
-            <strong>${escapeHtml(e.cakeName)}</strong>
-            <div class="small muted">
-              Udløb: ${escapeHtml(fmtDateTime(e.discardAt))} • Plads: ${escapeHtml(e.place||"–")} • Af: ${escapeHtml(e.by||"–")}
-            </div>
-            <div class="small">Tid til udløb: <strong>${humanDuration(left)}</strong></div>
-            ${e.note ? `<div class="small">${escapeHtml(e.note)}</div>` : ``}
-          </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span class="tag warn">I DAG</span>
-            <button class="btn mini" data-mid="discard" data-id="${e.id}">Smidt ud</button>
-          </div>
-        </div>
-      `;
-    }).join("");
-
-    alarmList.querySelectorAll("button[data-mid='discard']").forEach(btn => {
-      btn.addEventListener("click", () => {
-        // luk alarm og åbn discard
-        closeAlarmModal();
-        openDiscardModal(btn.getAttribute("data-id"));
-      });
-    });
-
-    alarmOverlay.style.display = "flex";
-  }
-
-  function closeAlarmModal(){ alarmOverlay.style.display = "none"; }
-
-  function checkAlarm(force){
-    const now = Date.now();
-    const snoozeUntil = Number(prefs.snoozeUntil || 0);
-    if(!force && now < snoozeUntil) return;
-
-    const list = alarmEntries();
-    if(list.length > 0) openAlarmModal(list);
-  }
-
-  async function goFullscreen(){
-    requestWakeLock();
-    try{
-      if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-    }catch(e){}
-  }
-
-  // Events
-  addBtn.addEventListener("click", addEntry);
-  customName.addEventListener("input", updatePreview);
-  customDays.addEventListener("input", updatePreview);
-
-  by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
-  place.addEventListener("input", () => { prefs.lastPlace = place.value; savePrefs(); });
-
-  filter.addEventListener("change", render);
-  checkNowBtn.addEventListener("click", () => checkAlarm(true));
-  clearSnoozeBtn.addEventListener("click", () => { prefs.snoozeUntil = 0; savePrefs(); alert("Slumre nulstillet."); });
-
-  fullscreenBtn.addEventListener("click", goFullscreen);
-
-  closeAlarmBtn.addEventListener("click", closeAlarmModal);
-  alarmOverlay.addEventListener("click", (e) => { if(e.target === alarmOverlay) closeAlarmModal(); });
-
-  snoozeBtn.addEventListener("click", () => {
-    prefs.snoozeUntil = Date.now() + 30*60*1000;
-    savePrefs();
-    closeAlarmModal();
-  });
 
   closeDiscardBtn.addEventListener("click", closeDiscardModal);
   discardCancelBtn.addEventListener("click", closeDiscardModal);
-  discardOverlay.addEventListener("click", (e) => { if(e.target === discardOverlay) closeDiscardModal(); });
+  discardOverlay.addEventListener("click", (e) => { if (e.target === discardOverlay) closeDiscardModal(); });
   discardSaveBtn.addEventListener("click", saveDiscard);
 
   // Init
@@ -1066,24 +733,19 @@
   place.value = prefs.lastPlace || "1";
 
   renderCakeButtons();
-  toggleCustom();
-  render();
+  customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
   updatePreview();
-  updateTimers();
+  render();
 
-  // SW (PWA)
-  if ("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
-  }
+  addBtn.addEventListener("click", addEntry);
+  customName.addEventListener("input", updatePreview);
+  customDays.addEventListener("input", updatePreview);
+  by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
+  place.addEventListener("input", () => { prefs.lastPlace = place.value; savePrefs(); });
 
-  // Auto tick: timers + alarm check
-  setInterval(() => {
-    updateTimers();
-    checkAlarm(false);
-  }, 30 * 1000);
-
-  // Tjek ved load
+  // Auto alarm check
   checkAlarm(false);
+  setInterval(() => checkAlarm(false), 30 * 1000);
 })();
 </script>
 </body>
