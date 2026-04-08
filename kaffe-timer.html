@@ -3,411 +3,286 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kaffetimer – Filterkaffe</title>
+  <title>Flirter Kaffe Timer</title>
   <style>
-    :root {
-      --bg: #0b0f14;
+    :root{
+      --bg:#0b0f14;
       --border: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.65);
       --accent: #d9b65a;
       --bad: #ff2d2d;
       --shadow: 0 18px 50px rgba(0,0,0,.50);
+      --r: 22px;
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
     }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; padding:0; background:var(--bg); color:var(--text); font-family:var(--font);}
+    .wrap{max-width:1100px; margin:20px auto; padding:0 20px;}
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-
-    body {
-      margin: 0;
-      font-family: var(--font);
-      background:
-        radial-gradient(1200px 600px at 50% -10%, rgba(217,182,90,.25), transparent 55%),
-        radial-gradient(900px 500px at 10% 10%, rgba(120,180,255,.15), transparent 55%),
-        var(--bg);
-      color: var(--text);
-    }
-
-    .wrap { max-width: 1100px; margin: 18px auto; padding: 0 18px 50px; }
-
-    .shell {
+    .shell{
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
       border: 1px solid var(--border);
       border-radius: 30px;
-      padding: 18px;
+      padding: 20px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
+    h1{margin:0 0 20px; text-align:center; font-size:42px; letter-spacing:.02em;}
+    .subtitle{text-align:center; color:var(--muted); margin-bottom:20px;}
 
-    h1 { margin: 0; text-align: center; font-size: 42px; letter-spacing: .01em; }
+    .quickBtns{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap:12px;
+      margin-bottom:24px;
+    }
+    .quickBtn{
+      padding:18px;
+      font-size:18px;
+      font-weight:900;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      cursor:pointer;
+      transition:all .2s;
+    }
+    .quickBtn:hover{background:rgba(217,182,90,.15); border-color:var(--accent);}
 
-    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 14px; }
+    .timerDisplay{
+      text-align:center;
+      font-size:92px;
+      font-weight:900;
+      letter-spacing:-4px;
+      margin:20px 0;
+      min-height:110px;
+      color:var(--accent);
+    }
+    .timerDisplay.expired{color:var(--bad); animation: pulse 1s infinite;}
 
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+    .activeTimers{
+      margin-top:30px;
+    }
+    .timerCard{
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px 18px;
+      margin-bottom:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .timerInfo strong{font-size:18px;}
+    .timerTime{font-size:28px; font-weight:900; color:var(--accent);}
+    .timerTime.expired{color:var(--bad);}
+
+    .btn{
+      padding:14px 24px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:16px;
+    }
+    .btn-red{
+      background:rgba(255,45,45,.18);
+      border:1px solid rgba(255,45,45,.4);
+      color:white;
     }
 
-    .card h2 { margin: 0 0 12px; font-size: 17px; letter-spacing: .02em; }
-
-    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; }
-    .field { flex: 1; min-width: 220px; }
-
-    label { display: block; color: var(--muted); font-size: 13px; margin: 0 0 6px; }
-
-    input {
-      width: 100%;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 16px;
-      padding: 14px;
-      outline: none;
-      font-size: 16px;
+    /* Alarm Modal */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
     }
-
-    .btn {
-      cursor: pointer;
-      border-radius: 999px;
-      font-weight: 950;
-      letter-spacing: .02em;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(217,182,90,.25), rgba(217,182,90,.10));
-      padding: 16px;
-      font-size: 16px;
-      color: var(--text);
+    .alarmModal{
+      background:linear-gradient(180deg, #2a0f0f, #1a0a0a);
+      border:3px solid #ff2d2d;
+      border-radius:26px;
+      padding:30px 40px;
+      text-align:center;
+      max-width:520px;
+      box-shadow:0 0 80px rgba(255,45,45,.6);
     }
-
-    .btn:active { transform: scale(0.98); }
-
-    .btnDanger {
-      cursor: pointer;
-      border-radius: 999px;
-      font-weight: 950;
-      background: rgba(255,45,45,.16);
-      border: 1px solid rgba(255,45,45,.28);
-      padding: 14px;
-      font-size: 15px;
-      color: var(--text);
+    .alarmTitle{
+      font-size:32px;
+      font-weight:1000;
+      text-transform:uppercase;
+      color:#ffdddd;
+      margin:0 0 10px;
     }
-
-    /* Preset tider taster */
-    .presetGrid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 6px;
+    .alarmText{
+      font-size:18px;
+      color:#ffaaaa;
+      margin-bottom:20px;
     }
-
-    .presetBtn {
-      padding: 14px;
-      border-radius: 18px;
-      cursor: pointer;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      text-align: center;
-      user-select: none;
-    }
-
-    .presetBtn.active {
-      border-color: rgba(217,182,90,.55);
-      background: rgba(217,182,90,.10);
-    }
-
-    .presetBtn .time { font-weight: 950; font-size: 18px; color: var(--text); }
-    .presetBtn .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
-
-    /* Timers Liste */
-    .timerList { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-
-    .timerItem {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.10);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .timerItem.expired {
-      border-color: rgba(255,45,45,.40);
-      background: rgba(255,45,45,.12);
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255, 45, 45, 0.4); }
-      70% { box-shadow: 0 0 0 15px rgba(255, 45, 45, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 45, 45, 0); }
-    }
-
-    .timerProgress {
-      position: absolute;
-      bottom: 0; left: 0; height: 4px;
-      background: var(--accent);
-      width: 0%;
-      transition: width 1s linear;
-    }
-
-    .timerItem.expired .timerProgress { background: var(--bad); }
-
-    .timerInfo { flex: 1; }
-    .timerName { font-weight: 950; font-size: 18px; }
-    .timerSub { color: var(--muted); font-size: 13px; margin-top: 2px; }
-
-    .timerDisplay {
-      font-family: monospace;
-      font-weight: 1000;
-      font-size: 32px;
-      letter-spacing: 0.02em;
-      min-width: 120px;
-      text-align: right;
-    }
-
-    .timerItem.expired .timerDisplay { color: var(--bad); }
-
-    .timerActions { margin-left: 12px; }
   </style>
 </head>
-
 <body>
   <div class="wrap">
     <div class="shell">
-      <h1>Filterkaffe Timer</h1>
+      <h1>Flirter Kaffe</h1>
+      <div class="subtitle">Nedtælling + alarm når kaffen er klar</div>
 
-      <div class="grid">
-        <!-- OPRET NY TIMERS -->
-        <div class="card">
-          <h2>Bryg ny kande</h2>
+      <div class="quickBtns" id="quickBtns"></div>
 
-          <div class="row">
-            <div class="field">
-              <label for="potName">Hvilken kande / lokation?</label>
-              <input id="potName" placeholder="Fx Kande 1 / Termo / Servering" />
-            </div>
-          </div>
+      <div class="timerDisplay" id="mainTimer">00:00</div>
 
-          <div style="margin-top: 14px;">
-            <label>Sæt tid</label>
-            <div class="presetGrid">
-              <div class="presetBtn active" data-mins="60">
-                <div class="time">60 min</div>
-                <div class="meta">Normal kaffe</div>
-              </div>
-              <div class="presetBtn" data-mins="90">
-                <div class="time">90 min</div>
-                <div class="meta">Max tid</div>
-              </div>
-              <div class="presetBtn" data-mins="custom">
-                <div class="time">Andet</div>
-                <div class="meta">Valgfri tid</div>
-              </div>
-            </div>
-          </div>
+      <div style="text-align:center; margin:15px 0;">
+        <button class="btn" id="customBtn">Indtast egen tid (minutter)</button>
+      </div>
 
-          <div class="row" id="customRow" style="margin-top: 12px; display: none;">
-            <div class="field">
-              <label for="customMins">Antal minutter</label>
-              <input id="customMins" type="number" min="1" placeholder="Fx 30" />
-            </div>
-          </div>
-
-          <div class="row" style="margin-top: 14px;">
-            <div class="field">
-              <button class="btn" id="startBtn" type="button">Start timer</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- AKTIVE TIDER -->
-        <div class="card">
-          <h2>Aktive kander</h2>
-          <div class="timerList" id="timerList"></div>
-        </div>
+      <div class="activeTimers">
+        <h2 style="margin:0 0 12px; font-size:18px; color:var(--muted);">Aktive timere</h2>
+        <div id="activeList"></div>
       </div>
     </div>
   </div>
 
-  <script>
-    (() => {
-      const STORAGE_KEY = "kaffetimer.timers.v1";
-      const $ = (id) => document.getElementById(id);
+  <!-- Alarm Modal -->
+  <div class="overlay" id="alarmOverlay">
+    <div class="alarmModal">
+      <div class="alarmTitle">TID ER UDLØBET</div>
+      <div class="alarmText">Flirter Kaffe er klar til servering!</div>
+      <button class="btn btn-red" id="stopAlarmBtn">Stop alarm</button>
+    </div>
+  </div>
 
-      const potName = $("potName");
-      const customRow = $("customRow");
-      const customMins = $("customMins");
-      const startBtn = $("startBtn");
-      const timerList = $("timerList");
+<script>
+const $ = id => document.getElementById(id);
+let timers = [];
+let alarmAudio = null;
+let currentAlarmTimerId = null;
 
-      let timers = loadTimers();
-      let selectedMins = 60; // default standard
+const defaultTimes = [
+  {label: "4 minutter", seconds: 240},
+  {label: "5 minutter", seconds: 300},
+  {label: "6 minutter", seconds: 360},
+  {label: "8 minutter", seconds: 480}
+];
 
-      function tryParse(raw) { try { return raw ? JSON.parse(raw) : null; } catch { return null; } }
-      function loadTimers() {
-        const arr = tryParse(localStorage.getItem(STORAGE_KEY));
-        return Array.isArray(arr) ? arr : [];
-      }
-      function saveTimers() { localStorage.setItem(STORAGE_KEY, JSON.stringify(timers)); }
+function createQuickButtons(){
+  const container = $("quickBtns");
+  defaultTimes.forEach(t => {
+    const btn = document.createElement("div");
+    btn.className = "quickBtn";
+    btn.textContent = t.label;
+    btn.onclick = () => startNewTimer(t.seconds, t.label);
+    container.appendChild(btn);
+  });
+}
 
-      // Setup presets
-      document.querySelectorAll(".presetBtn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".presetBtn").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
+function formatTime(seconds){
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
 
-          const val = btn.getAttribute("data-mins");
-          if (val === "custom") {
-            selectedMins = "custom";
-            customRow.style.display = "flex";
-          } else {
-            selectedMins = parseInt(val, 10);
-            customRow.style.display = "none";
-          }
-        });
-      });
+function startNewTimer(totalSeconds, label){
+  const timer = {
+    id: Date.now(),
+    label: label || "Custom",
+    remaining: totalSeconds,
+    interval: null
+  };
 
-      startBtn.addEventListener("click", () => {
-        let mins = selectedMins;
-        if (mins === "custom") {
-          mins = parseInt(customMins.value, 10);
-          if (isNaN(mins) || mins <= 0) {
-            alert("Udfyld antal minutter.");
-            return;
-          }
-        }
+  timer.interval = setInterval(() => {
+    timer.remaining--;
+    renderActiveTimers();
 
-        const name = (potName.value || "").trim() || "Batch brew";
-        const now = Date.now();
-        const durationMs = mins * 60 * 1000;
+    if (timer.remaining <= 0){
+      clearInterval(timer.interval);
+      triggerAlarm(timer.id);
+    }
+  }, 1000);
 
-        const newTimer = {
-          id: "id-" + Math.random().toString(16).slice(2) + "-" + now,
-          name: name,
-          durationMs: durationMs,
-          startedAt: now,
-          endsAt: now + durationMs,
-          soundPlayed: false
-        };
+  timers.push(timer);
+  renderActiveTimers();
+}
 
-        timers.unshift(newTimer);
-        saveTimers();
+function renderActiveTimers(){
+  const list = $("activeList");
+  list.innerHTML = "";
 
-        // Reset inputs
-        potName.value = "";
-        customMins.value = "";
+  if (timers.length === 0){
+    list.innerHTML = `<div style="color:var(--muted); text-align:center; padding:20px;">Ingen aktive timere</div>`;
+    return;
+  }
 
-        render();
-      });
+  timers.forEach(t => {
+    const div = document.createElement("div");
+    div.className = "timerCard";
+    div.innerHTML = `
+      <div class="timerInfo">
+        <strong>${t.label}</strong>
+      </div>
+      <div class="timerTime ${t.remaining <= 0 ? 'expired' : ''}">
+        ${formatTime(t.remaining)}
+      </div>
+      <button class="btn btn-red" style="padding:10px 18px; font-size:14px;">Stop</button>
+    `;
 
-      // Lyd alarm (Web Audio API - genererer sit eget biiiiib)
-      function playBeep() {
-        try {
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const oscillator = audioCtx.createOscillator();
-          const gainNode = audioCtx.createGain();
+    div.querySelector("button").onclick = () => stopTimer(t.id);
+    list.appendChild(div);
+  });
+}
 
-          oscillator.connect(gainNode);
-          gainNode.connect(audioCtx.destination);
+function stopTimer(id){
+  const timer = timers.find(t => t.id === id);
+  if (timer && timer.interval) clearInterval(timer.interval);
+  timers = timers.filter(t => t.id !== id);
+  renderActiveTimers();
 
-          oscillator.type = 'sine';
-          oscillator.frequency.value = 880; // A-note (skarp og klar)
+  if (currentAlarmTimerId === id) stopAlarm();
+}
 
-          gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-          // skruer op til volumen
-          gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+function triggerAlarm(timerId){
+  currentAlarmTimerId = timerId;
+  $("alarmOverlay").style.display = "flex";
 
-          oscillator.start();
+  // Simpel men kraftig alarm-lyd (gentages)
+  if (!alarmAudio){
+    alarmAudio = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  playAlarmSound();
+}
 
-          // Beep mønster: biib - biib - biib
-          setTimeout(() => {
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            setTimeout(() => {
-              gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
-              setTimeout(() => {
-                oscillator.stop();
-              }, 300);
-            }, 200);
-          }, 400);
+function playAlarmSound(){
+  if (!alarmAudio) return;
+  const oscillator = alarmAudio.createOscillator();
+  const gain = alarmAudio.createGain();
 
-        } catch (e) {
-          console.log("Audio API not allowed before user interaction.");
-        }
-      }
+  oscillator.connect(gain);
+  gain.connect(alarmAudio.destination);
+  oscillator.frequency.setValueAtTime(620, alarmAudio.currentTime);
+  gain.gain.setValueAtTime(0.6, alarmAudio.currentTime);
 
-      function render() {
-        if (timers.length === 0) {
-          timerList.innerHTML = `<div class="small" style="color:var(--muted); text-align:center; margin-top:20px;">Ingen aktive kander.</div>`;
-          return;
-        }
+  oscillator.start();
+  setTimeout(() => {
+    oscillator.stop();
+    if ($("alarmOverlay").style.display !== "none") setTimeout(playAlarmSound, 800);
+  }, 600);
+}
 
-        const now = Date.now();
+function stopAlarm(){
+  $("alarmOverlay").style.display = "none";
+  currentAlarmTimerId = null;
+}
 
-        timerList.innerHTML = timers.map(t => {
-          const leftMs = t.endsAt - now;
-          const expired = leftMs <= 0;
+$("customBtn").onclick = () => {
+  const min = parseInt(prompt("Hvor mange minutter skal timeren køre?", "6"));
+  if (min && min > 0) startNewTimer(min * 60, `${min} minutter`);
+};
 
-          // Beregn resterende tid
-          let absMs = Math.abs(leftMs);
-          const hrs = Math.floor(absMs / 3600000);
-          const mins = Math.floor((absMs % 3600000) / 60000);
-          const secs = Math.floor((absMs % 60000) / 1000);
+$("stopAlarmBtn").onclick = stopAlarm;
 
-          const displayTime = `${hrs > 0 ? hrs + ":" : ""}${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-
-          // Beregn progress bar %
-          const elapsed = now - t.startedAt;
-          const pct = Math.min(100, (elapsed / t.durationMs) * 100);
-
-          // Spil lyd hvis den rammer præcis 0
-          if (expired && !t.soundPlayed) {
-            t.soundPlayed = true;
-            playBeep();
-            saveTimers(); // gem at lyd er spillet
-          }
-
-          return `
-            <div class="timerItem ${expired ? 'expired' : ''}">
-              <div class="timerProgress" style="width: ${pct}%"></div>
-              <div class="timerInfo">
-                <div class="timerName">${escapeHtml(t.name)}</div>
-                <div class="timerSub">Brygget kl: ${new Date(t.startedAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
-              </div>
-              <div class="timerDisplay">
-                ${expired ? "-" : ""}${displayTime}
-              </div>
-              <div class="timerActions">
-                <button class="btnDanger mini" data-action="delete" data-id="${t.id}" style="width:auto; padding: 12px;">Slet</button>
-              </div>
-            </div>
-          `;
-        }).join("");
-
-        // Attach eventlisteners for slet
-        timerList.querySelectorAll("button[data-action='delete']").forEach(btn => {
-          btn.addEventListener("click", () => {
-            const id = btn.getAttribute("data-id");
-            timers = timers.filter(x => x.id !== id);
-            saveTimers();
-            render();
-          });
-        });
-      }
-
-      // Tick hvert sekund
-      setInterval(() => {
-        render();
-      }, 1000);
-
-      render();
-    })();
-  </script>
+// Init
+createQuickButtons();
+renderActiveTimers();
+</script>
 </body>
 </html>
