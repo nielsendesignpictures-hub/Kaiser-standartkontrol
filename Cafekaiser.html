@@ -39,7 +39,7 @@
     body{
       margin:0;
       font-family:'Inter',system-ui,sans-serif;
-      background:#fbf6ee; /* LYS, ikke sort */
+      background:#fbf6ee;
       color:var(--text);
     }
 
@@ -49,9 +49,9 @@
     }
 
     a{text-decoration:none;color:inherit;}
-    section[id]{scroll-margin-top:100px;}
+    section[id]{scroll-margin-top:90px;}
 
-    /* ========== GENERELLE KNAPPER ========== */
+    /* ========= GENERELLE KNAPPER ========= */
 
     .btn{
       display:inline-flex;
@@ -87,13 +87,15 @@
       transform:translateY(-1px);
     }
 
-    /* ========== HEADER (SKJULT I TOP, VISES VED SCROLL) ========== */
+    /* ========= HEADER – skjult ved load, kun ved scroll ========= */
 
     .site-header{
       position:fixed;
       inset:0 0 auto 0;
       z-index:100;
       color:#fff;
+      background:rgba(0,0,0,.55);
+      backdrop-filter:blur(10px);
       transform:translateY(-100%);
       opacity:0;
       pointer-events:none;
@@ -105,21 +107,10 @@
       opacity:1;
       pointer-events:auto;
     }
-
-    .site-header::after{
-      content:"";
-      position:absolute;
-      left:0;right:0;
-      bottom:-22px;
-      height:44px;
-      background:var(--bg-soft);
-      border-bottom-left-radius:50% 44px;
-      border-bottom-right-radius:50% 44px;
-      opacity:0;
-      transform:translateY(-8px);
-      transition:opacity .25s ease, transform .25s ease;
-      pointer-events:none;
-      z-index:-1;
+    .site-header.scrolled{
+      background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
+      color:var(--brown);
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
     }
 
     .site-header-inner{
@@ -151,6 +142,7 @@
       gap:.75rem;
       z-index:2;
     }
+
     .header-btn{
       display:inline-flex;
       align-items:center;
@@ -183,6 +175,15 @@
       transform:translateY(-1px);
     }
 
+    .site-header.scrolled .header-btn.ghost{
+      background:transparent;
+      border-color:rgba(70,54,38,.4);
+      color:var(--brown);
+    }
+    .site-header.scrolled .header-btn.ghost:hover{
+      background:rgba(255,255,255,.9);
+    }
+
     .header-right{
       display:flex;
       align-items:center;
@@ -205,6 +206,12 @@
       cursor:pointer;
       color:inherit;
     }
+    .site-header.scrolled .dropdown-toggle{
+      background:transparent;
+      border-color:rgba(70,54,38,.4);
+      color:var(--brown);
+    }
+
     .chevron{
       border:solid currentColor;
       border-width:0 2px 2px 0;
@@ -214,6 +221,7 @@
       transition:transform .15s ease;
     }
     .dropdown.open .chevron{transform:rotate(-135deg);}
+
     .dropdown-menu{
       position:absolute;
       top:120%;
@@ -241,30 +249,6 @@
     }
     .dropdown-menu a:hover{background:rgba(0,0,0,.04);}
 
-    /* scrollet styling */
-    .site-header.scrolled{
-      background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
-      color:var(--brown);
-      box-shadow:0 10px 30px rgba(0,0,0,.18);
-    }
-    .site-header.scrolled::after{
-      opacity:1;
-      transform:translateY(0);
-    }
-    .site-header.scrolled .header-btn.ghost{
-      background:transparent;
-      border-color:rgba(70,54,38,.4);
-      color:var(--brown);
-    }
-    .site-header.scrolled .header-btn.ghost:hover{
-      background:rgba(255,255,255,.9);
-    }
-    .site-header.scrolled .dropdown-toggle{
-      background:transparent;
-      border-color:rgba(70,54,38,.4);
-      color:var(--brown);
-    }
-
     @media (max-width:768px){
       .site-header-inner{padding-inline:1rem;gap:.5rem;}
       .header-center{gap:.4rem;}
@@ -276,7 +260,7 @@
       .site-logo img{height:40px;}
     }
 
-    /* ========== HERO MED LYSERE OVERLAY & 3 CTA ========== */
+    /* ========= HERO MED LYS OVERLAY & 3 CTA ========= */
 
     .hero{
       position:relative;
@@ -296,7 +280,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      filter:brightness(.8) saturate(1.05); /* LYSERE så man ser videoen */
+      filter:brightness(.8) saturate(1.05);
       transform:scale(1.03);
     }
     .hero-overlay{
@@ -308,17 +292,18 @@
         linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7));
       z-index:0;
     }
+
     .hero-inner{
       position:relative;
       z-index:1;
       max-width:var(--max);
       margin:0 auto;
-      padding:120px 1.5rem 60px;
+      padding:110px 1.5rem 70px;
       text-align:center;
       display:flex;
       flex-direction:column;
       justify-content:center;
-      gap:40px;
+      gap:36px;
     }
 
     .hero-eyebrow{
@@ -347,9 +332,8 @@
       gap:.75rem;
       margin-bottom:.8rem;
     }
-    .hero-actions .btn{
-      min-width:170px;
-    }
+    .hero-actions .btn{min-width:170px;}
+
     .hero-phone{
       font-size:13px;
       color:rgba(255,255,255,.9);
@@ -360,67 +344,117 @@
     }
 
     @media (max-width:768px){
-      .hero-inner{padding:110px 1rem 50px;}
+      .hero-inner{padding:100px 1rem 60px;}
     }
 
-    /* ========== HURTIGE VALG – GRAFISKE BOKSE ========== */
+    /* ========= “MAD & KAFFE”-AGTIGE BOKSE ========= */
 
-    .quick-section{
-      background:var(--card-2);
-      padding:36px 1.5rem 40px;
+    .feature-section{
+      background:#f4e8d8;
+      padding:70px 1.5rem;
     }
-    .quick-inner{
+    .feature-inner{
       max-width:var(--max);
       margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:70px;
     }
-    .quick-grid{
+    .feature-row{
       display:grid;
-      gap:18px;
+      gap:36px;
+      align-items:center;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,1.1fr);
     }
-    @media (min-width:900px){
-      .quick-grid{
-        grid-template-columns:2fr 1.5fr 1.5fr;
+    .feature-row.reverse{
+      grid-auto-flow:dense;
+    }
+    .feature-row.reverse > .feature-image{order:2;}
+    .feature-row.reverse > .feature-text{order:1;}
+
+    @media (max-width:900px){
+      .feature-row{
+        grid-template-columns:1fr;
+      }
+      .feature-row.reverse > .feature-image,
+      .feature-row.reverse > .feature-text{
+        order:unset;
       }
     }
 
-    .quick-card{
-      background:#fff;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow-soft);
-      padding:20px 20px 18px;
-      position:relative;
+    .feature-image{
+      border-radius:24px;
       overflow:hidden;
+      box-shadow:var(--shadow-soft);
     }
-    .quick-card h3{
-      font-size:18px;
+    .feature-image img{
+      width:100%;
+      height:100%;
+      max-height:360px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .feature-text h2{
+      font-size:28px;
+      margin-bottom:12px;
+    }
+    .feature-text p{
+      margin:0 0 18px;
+      color:var(--muted);
+      line-height:1.6;
+      max-width:460px;
+    }
+
+    /* ========= BOOKING-SEKTION (enkel) ========= */
+
+    .booking-section{
+      background:#ffffff;
+      padding:60px 1.5rem 70px;
+    }
+    .booking-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      text-align:center;
+    }
+    .booking-inner p{
+      margin:8px auto 24px;
+      color:var(--muted);
+      max-width:520px;
+    }
+    .booking-grid{
+      display:grid;
+      gap:16px;
+      margin-top:10px;
+    }
+    @media (min-width:820px){
+      .booking-grid{
+        grid-template-columns:repeat(5,minmax(0,1fr));
+      }
+    }
+    .booking-card{
+      background:var(--card-2);
+      border-radius:var(--radius-sm);
+      border:1px solid var(--line-soft);
+      padding:12px 10px 14px;
+      box-shadow:var(--shadow-soft);
+    }
+    .booking-card h3{
+      font-size:15px;
       margin-bottom:6px;
     }
-    .quick-card p{
-      margin:0 0 12px;
-      font-size:14px;
-      color:var(--muted);
+    .booking-card p{
+      margin:0 0 10px;
+      font-size:13px;
+      color:var(--muted-2);
+    }
+    .booking-card .btn{
+      width:100%;
+      padding:8px 0;
+      font-size:11px;
     }
 
-    .pill-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:6px;
-    }
-    .pill{
-      padding:6px 12px;
-      border-radius:999px;
-      border:1px solid var(--line-soft);
-      font-size:12px;
-      background:var(--card-2);
-      cursor:pointer;
-    }
-    .pill:hover{
-      border-color:var(--gold);
-      color:var(--gold-dark);
-    }
-
-    /* ========== MENUKORT (som “bord”) ========== */
+    /* ========= MENUKORT ========= */
 
     .menu-section{
       background:#ffffff;
@@ -522,7 +556,7 @@
       color:var(--brown-2);
     }
 
-    /* ========== TAKEAWAY-SEKTION (ekstra tydelig) ========== */
+    /* ========= TAKEAWAY ========= */
 
     .takeaway-section{
       background:var(--bg-deep);
@@ -554,7 +588,7 @@
       text-transform:uppercase;
     }
 
-    /* ========== CATERING-TEASER ========== */
+    /* ========= CATERING TEASER ========= */
 
     .catering-section{
       background:#fff;
@@ -607,31 +641,31 @@
       display:block;
     }
 
-    /* ========== VI STØTTER (animerede logoer, transparent PNG) ========== */
+    /* ========= VI STØTTER – kun logoer, ingen bokse ========= */
 
     .support-section{
-      background:linear-gradient(120deg,var(--card) 0%,#ffffff 100%);
-      padding:70px 1.5rem;
+      background:#f4e8d8;
+      padding:60px 1.5rem;
     }
     .support-inner{
       max-width:var(--max);
       margin:0 auto;
-      display:grid;
-      gap:32px;
-      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:24px;
       align-items:center;
     }
-    @media (max-width:900px){
-      .support-inner{grid-template-columns:1fr;}
+    .support-text{
+      max-width:520px;
     }
     .support-text h2{
-      font-size:26px;
+      font-size:24px;
       margin-bottom:8px;
     }
     .support-text p{
       margin:0;
       color:var(--muted);
-      max-width:520px;
     }
     .support-badge{
       display:inline-flex;
@@ -650,44 +684,18 @@
     .support-logos{
       display:flex;
       flex-wrap:wrap;
-      gap:22px;
-      justify-content:flex-end;
-    }
-    @media (max-width:900px){
-      .support-logos{justify-content:flex-start;}
-    }
-
-    .support-logo{
-      padding:10px 18px;
-      border-radius:999px;
-      background:rgba(255,255,255,.92);
-      box-shadow:var(--shadow-soft);
-      display:flex;
+      gap:24px;
       align-items:center;
-      gap:12px;
-      opacity:0;
-      transform:translateY(12px);
-      animation:supportIn .7s ease forwards;
     }
-    .support-logo:nth-child(2){animation-delay:.18s;}
-
-    @keyframes supportIn{
-      to{opacity:1; transform:translateY(0);}
-    }
-
-    .support-logo img{
-      height:42px;
+    .support-logos img{
+      height:52px;
       width:auto;
-      display:block;
-      filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));
+      filter:drop-shadow(0 6px 14px rgba(0,0,0,.2));
       background:transparent; /* PNG uden boks */
-    }
-    .support-logo span{
-      font-size:14px;
-      color:var(--muted-2);
+      display:block;
     }
 
-    /* ========== SOCIALE MEDIER ========== */
+    /* ========= SOCIALE MEDIER ========= */
 
     .social-section{
       background:#201710;
@@ -737,7 +745,7 @@
       color:#111;
     }
 
-    /* ========== FOOTER (ryddet) ========== */
+    /* ========= FOOTER ========= */
 
     footer{
       background:#15100b;
@@ -754,7 +762,6 @@
     @media (max-width:980px){
       .footer-inner{grid-template-columns:1fr;}
     }
-
     .footer-brand h3{
       font-size:22px;
       margin-bottom:8px;
@@ -778,7 +785,6 @@
     @media (max-width:600px){
       .footer-locations{grid-template-columns:1fr;}
     }
-
     .footer-location h4{
       font-size:15px;
       margin-bottom:4px;
@@ -823,7 +829,7 @@
 </head>
 <body>
 
-  <!-- HEADER – skjult i toppen, vises først når man scroller -->
+  <!-- HEADER (kun ved scroll) -->
   <header class="site-header" id="page-header">
     <div class="site-header-inner">
       <a href="#hero" class="site-logo">
@@ -831,7 +837,7 @@
       </a>
 
       <div class="header-center">
-        <button class="header-btn primary" type="button" data-booking-toggle>Book bord</button>
+        <a href="#booking" class="header-btn primary">Book bord</a>
         <a href="#menu" class="header-btn ghost">Se menu</a>
       </div>
 
@@ -843,6 +849,7 @@
           </button>
           <nav class="dropdown-menu" aria-label="Sektioner på siden">
             <a href="#hero">Forside</a>
+            <a href="#booking">Book bord</a>
             <a href="#menu">Menukort</a>
             <a href="#takeaway">Takeaway</a>
             <a href="#catering">Catering</a>
@@ -855,36 +862,11 @@
     </div>
   </header>
 
-  <!-- BOOKING-DROPDOWN -->
-  <div class="booking-panel" id="bookingPanel">
-    <h3>Book bord</h3>
-    <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
-    <div class="booking-list">
-      <!-- RET alle links -->
-      <a href="https://book.easyt...helsingor" target="_blank">
-        <span>Helsingør</span><small>Book bord</small>
-      </a>
-      <a href="https://book.easyt...hillerod" target="_blank">
-        <span>Hillerød</span><small>Book bord</small>
-      </a>
-      <a href="https://book.easyt...farum" target="_blank">
-        <span>Farum</span><small>Book bord</small>
-      </a>
-      <a href="https://book.easyt...horsholm" target="_blank">
-        <span>Hørsholm</span><small>Book bord</small>
-      </a>
-      <a href="https://book.easyt...vanlose" target="_blank">
-        <span>Vanløse</span><small>Book bord</small>
-      </a>
-    </div>
-    <div class="booking-panel-close" data-booking-close>Luk</div>
-  </div>
-
   <main>
     <!-- HERO MED VIDEO -->
     <section class="hero" id="hero">
       <div class="hero-media">
-        <!-- Sørg for at hero.mp4 + hero.jpg findes i /images/ -->
+        <!-- Sørg for at hero.mp4 + hero.jpg ligger i /images/ -->
         <video autoplay muted loop playsinline poster="images/hero.jpg">
           <source src="images/hero.mp4" type="video/mp4">
           Din browser understøtter ikke video.
@@ -904,7 +886,7 @@
           </p>
 
           <div class="hero-actions">
-            <button type="button" class="btn btn-primary" data-booking-toggle>Book bord</button>
+            <a href="#booking" class="btn btn-primary">Book bord</a>
             <a href="#menu" class="btn btn-ghost">Se menukort</a>
             <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/" target="_blank" class="btn btn-primary">
               Bestil takeaway
@@ -918,42 +900,96 @@
       </div>
     </section>
 
-    <!-- HURTIGE VALG / GRAFISKE BOKSE -->
-    <section class="quick-section">
-      <div class="quick-inner">
-        <div class="quick-grid">
-          <!-- Book bord card -->
-          <article class="quick-card">
-            <h3>Book bord</h3>
-            <p>Vælg den café, der passer dig bedst, og reserver bord online.</p>
-            <div class="pill-row">
-              <!-- disse pills linker direkte til booking -->
-              <a class="pill" href="https://book.easyt...helsingor" target="_blank">Helsingør</a>
-              <a class="pill" href="https://book.easyt...hillerod" target="_blank">Hillerød</a>
-              <a class="pill" href="https://book.easyt...farum" target="_blank">Farum</a>
-              <a class="pill" href="https://book.easyt...horsholm" target="_blank">Hørsholm</a>
-              <a class="pill" href="https://book.easyt...vanlose" target="_blank">Vanløse</a>
-            </div>
-          </article>
+    <!-- FEATURE-BOKSE á la Mad & Kaffe -->
+    <section class="feature-section">
+      <div class="feature-inner">
+        <!-- Maden -->
+        <div class="feature-row">
+          <div class="feature-image">
+            <!-- brug dit eget billede -->
+            <img src="images/feature-mad.jpg" alt="Brunch hos Café Kaiser">
+          </div>
+          <div class="feature-text">
+            <h2>Maden hos Café Kaiser</h2>
+            <p>
+              Vi laver caféklassikere med fokus på gode råvarer og høj kvalitet – fra brunch-bræt
+              og smørrebrød til burgere, salater og søde sager.
+            </p>
+            <a href="#menu" class="btn btn-primary">Se menukort</a>
+          </div>
+        </div>
 
-          <!-- Takeaway card -->
-          <article class="quick-card">
-            <h3>Bestil takeaway</h3>
-            <p>Bestil dine favoritter som takeaway – vælg café og afhent tidspunkt.</p>
-            <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/" target="_blank" class="btn btn-primary">
-              Gå til takeaway
+        <!-- Takeaway -->
+        <div class="feature-row reverse">
+          <div class="feature-image">
+            <img src="images/feature-takeaway.jpg" alt="Takeaway fra Café Kaiser">
+          </div>
+          <div class="feature-text">
+            <h2>Bestil takeaway</h2>
+            <p>
+              Få dine favoritter med hjem. Vælg café, bestil online og afhent når det passer dig.
+            </p>
+            <a href="https://cafekaiser.mealo.dk/vaelg-restaurant/"
+               target="_blank"
+               class="btn btn-primary">
+              Bestil takeaway
             </a>
-          </article>
+          </div>
+        </div>
 
-          <!-- Catering card -->
-          <article class="quick-card">
-            <h3>Catering &amp; buffeter</h3>
-            <p>Se vores brunchbuffeter, smørrebrød og sæsonmenuer til selskaber.</p>
+        <!-- Catering -->
+        <div class="feature-row">
+          <div class="feature-image">
+            <img src="images/feature-catering.jpg" alt="Catering fra Café Kaiser">
+          </div>
+          <div class="feature-text">
+            <h2>Catering &amp; buffeter</h2>
+            <p>
+              Hold brunch, konfirmation eller fest med catering fra Café Kaiser. Vælg mellem
+              brunchbuffeter, smørrebrød og sæsonmenuer.
+            </p>
             <a href="https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/Ck.html#buffeter"
                target="_blank"
                class="btn btn-primary">
               Se catering
             </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING-SEKTION (enkelt, ingen popup) -->
+    <section class="booking-section" id="booking">
+      <div class="booking-inner">
+        <h2>Book bord</h2>
+        <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
+
+        <div class="booking-grid">
+          <!-- HUSK at rette booking-links -->
+          <article class="booking-card">
+            <h3>Helsingør</h3>
+            <p>Stengade 35</p>
+            <a href="https://book.easyt...helsingor" target="_blank" class="btn btn-primary">Book bord</a>
+          </article>
+          <article class="booking-card">
+            <h3>Hillerød</h3>
+            <p>Slotsarkaderne 52</p>
+            <a href="https://book.easyt...hillerod" target="_blank" class="btn btn-primary">Book bord</a>
+          </article>
+          <article class="booking-card">
+            <h3>Farum</h3>
+            <p>Farum Bytorv 22</p>
+            <a href="https://book.easyt...farum" target="_blank" class="btn btn-primary">Book bord</a>
+          </article>
+          <article class="booking-card">
+            <h3>Hørsholm</h3>
+            <p>Hørsholm Midtpunkt 138</p>
+            <a href="https://book.easyt...horsholm" target="_blank" class="btn btn-primary">Book bord</a>
+          </article>
+          <article class="booking-card">
+            <h3>Vanløse</h3>
+            <p>Vanløse Torv 1</p>
+            <a href="https://book.easyt...vanlose" target="_blank" class="btn btn-primary">Book bord</a>
           </article>
         </div>
       </div>
@@ -1082,7 +1118,7 @@
       </div>
     </section>
 
-    <!-- TAKEAWAY -->
+    <!-- TAKEAWAY (ekstra tydelig sektion) -->
     <section class="takeaway-section" id="takeaway">
       <div class="takeaway-inner">
         <div>
@@ -1094,7 +1130,6 @@
           </a>
         </div>
         <div style="text-align:center;">
-          <!-- valgfrit billede af takeaway-poser / mad -->
           <img src="images/takeaway.png" alt="Café Kaiser takeaway"
                style="max-width:280px;width:100%;height:auto;">
         </div>
@@ -1118,7 +1153,6 @@
           </a>
         </div>
         <div class="catering-img">
-          <!-- brug evt. et udsnit fra din catering-side -->
           <img src="images/catering-hero.jpg" alt="Catering fra Café Kaiser">
         </div>
       </div>
@@ -1137,14 +1171,8 @@
         </div>
 
         <div class="support-logos">
-          <div class="support-logo">
-            <img src="images/KB.png" alt="Kræftens Bekæmpelse">
-            <span>Vi støtter Kræftens Bekæmpelse.</span>
-          </div>
-          <div class="support-logo">
-            <img src="images/HK.png" alt="Hospitalsklovne">
-            <span>Vi støtter Danske Hospitalsklovne.</span>
-          </div>
+          <img src="images/KB.png" alt="Kræftens Bekæmpelse">
+          <img src="images/HK.png" alt="Hospitalsklovne">
         </div>
       </div>
     </section>
@@ -1247,7 +1275,7 @@
   </main>
 
   <script>
-    // Header: vis kun ved scroll
+    // Header: vis først når man har scrollet lidt
     const header = document.getElementById('page-header');
     const threshold = 40;
 
@@ -1279,36 +1307,6 @@
       if(e.key === 'Escape'){
         dropdown.classList.remove('open');
         toggle.setAttribute('aria-expanded','false');
-      }
-    });
-
-    // Booking-panel
-    const bookingPanel = document.getElementById('bookingPanel');
-    const bookingToggles = document.querySelectorAll('[data-booking-toggle]');
-    const bookingClose = document.querySelector('[data-booking-close]');
-
-    bookingToggles.forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        e.preventDefault();
-        bookingPanel.classList.toggle('open');
-      });
-    });
-
-    bookingClose.addEventListener('click', ()=>{
-      bookingPanel.classList.remove('open');
-    });
-
-    document.addEventListener('click', (e)=>{
-      if(bookingPanel.classList.contains('open') &&
-         !bookingPanel.contains(e.target) &&
-         !e.target.closest('[data-booking-toggle]')){
-        bookingPanel.classList.remove('open');
-      }
-    });
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        bookingPanel.classList.remove('open');
       }
     });
   </script>
