@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Café Kaiser</title>
+  <title>Café Kaiser – Brunch, frokost & hygge</title>
 
   <!-- Samme fonte som catering-siden -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,24 +43,30 @@
     body{
       margin:0;
       font-family:'Inter',system-ui,sans-serif;
-      background:#0a0a0a; /* mørk baggrund = farve nr. 2 */
+      background:#0a0a0a; /* mørk farve nr. 2 */
       color:#fff;
+    }
+
+    h1,h2,h3,h4{
+      font-family:'Playfair Display',serif;
+      margin:0;
     }
 
     a{text-decoration:none;color:inherit;}
 
-    /* ============ HEADER ============ */
+    section[id]{scroll-margin-top:100px;} /* så anker-links ikke skjules bag header */
+
+    /* ================= HEADER ================= */
 
     .site-header{
       position:fixed;
       inset:0 0 auto 0;
       z-index:100;
-      color:#fff; /* hvid tekst oven på mørk hero */
+      color:#fff;
       transition:background .25s ease, box-shadow .25s ease, color .25s ease;
     }
 
     .site-header::after{
-      /* kurvet bund – kun synlig når .scrolled */
       content:"";
       position:absolute;
       left:0;right:0;
@@ -86,7 +92,6 @@
       padding:.6rem 1.5rem;
     }
 
-    /* Logo venstre */
     .site-logo{
       display:flex;
       align-items:center;
@@ -100,7 +105,6 @@
       display:block;
     }
 
-    /* Center-knapper */
     .header-center{
       flex:1 1 auto;
       display:flex;
@@ -144,7 +148,6 @@
       transform:translateY(-1px);
     }
 
-    /* Dropdown højre */
     .header-right{
       display:flex;
       align-items:center;
@@ -216,7 +219,6 @@
       background:rgba(0,0,0,.04);
     }
 
-    /* Når man har scrollet – lys header med kurve */
     .site-header.scrolled{
       background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
       color:var(--brown);
@@ -244,80 +246,557 @@
       color:var(--brown);
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px){
-      .site-header-inner{
-        padding-inline:1rem;
-        gap:.5rem;
-      }
+    @media (max-width:768px){
+      .site-header-inner{padding-inline:1rem;gap:.5rem;}
       .header-center{gap:.4rem;}
       .header-btn,
-      .dropdown-toggle{
-        padding:7px 10px;
-        font-size:10px;
-      }
+      .dropdown-toggle{padding:7px 10px;font-size:10px;}
     }
 
     @media (max-width:520px){
-      .header-center{
-        flex-direction:column;
-        align-items:center;
-      }
+      .header-center{flex-direction:column;align-items:center;}
       .site-logo img{height:40px;}
     }
 
-    /* Demo-indhold, så du kan se headeren */
-    main{padding-top:90px;}
+    /* ============== HERO MED VIDEO ============== */
 
-    .hero-demo{
-      height:90vh;
+    main{ /* ingen padding-top; hero tager højde for header */
+    }
+
+    .hero-video{
+      position:relative;
+      min-height:100vh;
+      overflow:hidden;
+      color:#fff;
+    }
+
+    .hero-video video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .hero-video::before{
+      content:"";
+      position:absolute;
+      inset:0;
       background:
-        linear-gradient(to bottom,rgba(0,0,0,.4),rgba(0,0,0,.9)),
-        url('media/kaiser-hero.jpg') center/cover no-repeat;
+        linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.9));
+      z-index:0;
+    }
+
+    .hero-video-inner{
+      position:relative;
+      z-index:1;
+      max-width:var(--max);
+      margin:0 auto;
+      padding:130px 1.5rem 90px; /* 130px til headeren */
+      text-align:center;
+    }
+
+    .eyebrow{
+      text-transform:uppercase;
+      letter-spacing:.24em;
+      font-size:11px;
+      color:rgba(255,255,255,.7);
+      margin-bottom:.8rem;
+    }
+
+    .hero-title{
+      font-size:clamp(2.4rem,3vw + 1.6rem,3.4rem);
+      margin-bottom:.5rem;
+    }
+
+    .hero-subtitle{
+      max-width:620px;
+      margin:0 auto 1.8rem;
+      color:#f3f1ec;
+      font-weight:300;
+    }
+
+    .hero-actions{
       display:flex;
-      flex-direction:column;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:.8rem;
+      margin-bottom:1.4rem;
+    }
+
+    .btn{
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      text-align:center;
-      padding:0 20px;
+      padding:12px 24px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
     }
 
-    .hero-demo h1{
-      font-family:'Playfair Display',serif;
-      font-size:clamp(2.4rem,3vw + 1.6rem,3.4rem);
-      margin-bottom:10px;
+    .btn-primary{
+      background:var(--gold);
+      color:#000;
+      border-color:var(--gold);
     }
 
-    .hero-demo p{
-      max-width:600px;
-      margin:0 auto;
-      color:#f0f0f0;
+    .btn-primary:hover{
+      background:var(--gold-light);
+      border-color:var(--gold-light);
+      transform:translateY(-1px);
     }
 
-    .content-section{
-      padding:80px 20px;
-      background:#fff; /* farve nr. 2 – hvid sektion */
+    .btn-ghost{
+      background:transparent;
+      color:#fff;
+      border-color:rgba(255,255,255,.6);
+    }
+
+    .btn-ghost:hover{
+      background:rgba(0,0,0,.65);
+      transform:translateY(-1px);
+    }
+
+    .hero-phone{
+      font-size:13px;
+      color:rgba(255,255,255,.8);
+    }
+
+    .hero-phone a{
+      color:var(--gold-light);
+      font-weight:500;
+    }
+
+    /* Booking dropdown-panel (fælles til hero + header) */
+    .booking-panel{
+      position:fixed;
+      top:90px;
+      left:50%;
+      transform:translateX(-50%) translateY(-10px);
+      width:100%;
+      max-width:420px;
+      background:#fff;
       color:var(--text);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px 18px 12px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+      z-index:90;
+    }
+
+    .booking-panel.open{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+      pointer-events:auto;
+    }
+
+    .booking-panel h3{
+      font-size:20px;
+      margin-bottom:6px;
+    }
+
+    .booking-panel p{
+      margin:0 0 12px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .booking-list{
+      display:grid;
+      gap:8px;
+    }
+
+    .booking-list a{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 12px;
+      border-radius:var(--radius-sm);
+      background:var(--card-2);
+      font-size:14px;
+    }
+
+    .booking-list a span{
+      font-weight:500;
+    }
+
+    .booking-list a small{
+      color:var(--muted);
+    }
+
+    .booking-panel-close{
+      margin-top:10px;
+      text-align:center;
+      font-size:13px;
+      color:var(--muted-2);
+      cursor:pointer;
+    }
+
+    /* ============== MENUKORT-SEKTION ============== */
+
+    .menu-section{
+      background:#ffffff;
+      color:var(--text);
+      padding:80px 1.5rem 90px;
+    }
+
+    .section-inner{
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .menu-header{
+      text-align:center;
+      margin-bottom:32px;
+    }
+
+    .menu-header p{
+      margin-top:.5rem;
+      color:var(--muted);
+    }
+
+    .menu-board{
+      max-width:1100px;
+      margin:0 auto;
+      background:var(--card-2);
+      border-radius:32px;
+      border:1px solid var(--line-soft);
+      box-shadow:var(--shadow-soft);
+      padding:36px 24px 30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .menu-board::before,
+    .menu-board::after{
+      content:"";
+      position:absolute;
+      left:40px;
+      right:40px;
+      height:1px;
+      background:linear-gradient(to right,transparent,var(--line-soft),transparent);
+      opacity:.7;
+    }
+
+    .menu-board::before{top:70px;}
+    .menu-board::after{bottom:70px;}
+
+    .menu-board-title{
+      text-align:center;
+      margin-bottom:28px;
+    }
+
+    .menu-board-title h2{
+      font-size:28px;
+    }
+
+    .menu-board-title span{
+      display:block;
+      margin-top:4px;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--muted);
+    }
+
+    .menu-columns{
+      display:grid;
+      gap:32px;
+    }
+
+    @media (min-width:900px){
+      .menu-columns{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+    }
+
+    .menu-group h3{
+      font-size:20px;
+      margin-bottom:6px;
+    }
+
+    .menu-group small{
+      display:block;
+      margin-bottom:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .menu-item{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:4px 0;
+      border-bottom:1px dashed rgba(0,0,0,.06);
+    }
+
+    .menu-item:last-child{
+      border-bottom:none;
+    }
+
+    .menu-item-title{
+      font-weight:500;
+      font-size:15px;
+    }
+
+    .menu-item-desc{
+      font-size:13px;
+      color:var(--muted-2);
+    }
+
+    .menu-item-price{
+      font-weight:500;
+      font-size:15px;
+      white-space:nowrap;
+      color:var(--brown-2);
+    }
+
+    /* ============== TAKEAWAY CTA ============== */
+
+    .takeaway-section{
+      background:var(--bg-deep);
+      color:#fff;
+      padding:70px 1.5rem;
+      text-align:center;
+    }
+
+    .takeaway-inner{
+      max-width:700px;
+      margin:0 auto;
+    }
+
+    .takeaway-inner p{
+      margin:10px auto 20px;
+      color:#f7f3ec;
+    }
+
+    /* ============== VI STØTTER ============== */
+
+    .support-section{
+      background:linear-gradient(to right,var(--bg-soft) 0%,var(--bg-soft) 50%,#ffffff 50%,#ffffff 100%);
+      padding:70px 1.5rem;
+    }
+
+    @media (max-width:768px){
+      .support-section{
+        background:var(--bg-soft);
+      }
+    }
+
+    .support-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      display:grid;
+      gap:32px;
+      grid-template-columns:1.1fr 1fr;
+      align-items:center;
+    }
+
+    @media (max-width:900px){
+      .support-inner{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .support-text h2{
+      font-size:26px;
+      margin-bottom:8px;
+    }
+
+    .support-text p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .support-logos{
+      display:flex;
+      flex-wrap:wrap;
+      gap:20px;
+      justify-content:flex-end;
+    }
+
+    @media (max-width:900px){
+      .support-logos{justify-content:flex-start;}
+    }
+
+    .support-logo-card{
+      background:#fff;
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-soft);
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:220px;
+    }
+
+    .support-logo-card img{
+      height:40px;
+      width:auto;
+      display:block;
+    }
+
+    .support-logo-card span{
+      font-size:14px;
+      color:var(--muted-2);
+    }
+
+    /* ============== SOCIALE MEDIER ============== */
+
+    .social-section{
+      background:#111;
+      color:#f5f5f5;
+      padding:70px 1.5rem;
+      text-align:center;
+    }
+
+    .social-inner{
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .social-inner p{
+      margin:8px auto 24px;
+      color:#d0d0d0;
+      max-width:520px;
+    }
+
+    .social-grid{
+      display:grid;
+      gap:10px;
+      margin-top:24px;
+    }
+
+    @media (min-width:768px){
+      .social-grid{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+      }
+    }
+
+    .social-grid img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:10px;
+      display:block;
+    }
+
+    .btn-instagram{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 20px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.5);
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .btn-instagram:hover{
+      background:#fff;
+      color:#111;
+    }
+
+    /* ============== FOOTER ============== */
+
+    footer{
+      background:#000;
+      color:#f2f2f2;
+      padding:50px 1.5rem 30px;
+    }
+
+    .footer-inner{
+      max-width:var(--max);
+      margin:0 auto;
+    }
+
+    .footer-locations{
+      display:grid;
+      gap:24px;
+      margin-bottom:30px;
+    }
+
+    @media (min-width:900px){
+      .footer-locations{
+        grid-template-columns:repeat(5,minmax(0,1fr));
+      }
+    }
+
+    @media (min-width:600px) and (max-width:899px){
+      .footer-locations{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+    }
+
+    .footer-location h4{
+      font-size:15px;
+      margin-bottom:4px;
+    }
+
+    .footer-location p{
+      margin:0;
+      font-size:13px;
+      color:#ccc;
+      line-height:1.5;
+    }
+
+    .footer-location a{
+      color:#f7e7a5;
+      font-size:13px;
+    }
+
+    .footer-meta{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:16px;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.15);
+      font-size:13px;
+      color:#aaa;
+    }
+
+    .footer-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+    }
+
+    .footer-links a{
+      color:#f7e7a5;
+    }
+
+    .kontrol-img{
+      height:28px;
+      width:auto;
+      display:inline-block;
+      vertical-align:middle;
     }
   </style>
 </head>
 <body>
 
-  <!-- FIXED HEADER -->
+  <!-- ========== HEADER ========== -->
   <header class="site-header" id="page-header">
     <div class="site-header-inner">
-      <!-- Logo venstre -->
-      <a href="#top" class="site-logo">
+      <a href="#hero" class="site-logo">
         <img src="images/logo.png" alt="Café Kaiser">
       </a>
 
-      <!-- Knapper i midten -->
       <div class="header-center">
-        <a href="#booking" class="header-btn primary">Book bord</a>
+        <button class="header-btn primary" type="button" data-booking-toggle>Book bord</button>
         <a href="#menu" class="header-btn ghost">Se menu</a>
       </div>
 
-      <!-- Dropdown til højre -->
       <div class="header-right">
         <div class="dropdown" id="mainDropdown">
           <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
@@ -325,11 +804,11 @@
             <span class="chevron"></span>
           </button>
           <nav class="dropdown-menu" aria-label="Sektioner på siden">
-            <a href="#top">Forside</a>
-            <a href="#om">Café Kaiser</a>
+            <a href="#hero">Forside</a>
             <a href="#menu">Menukort</a>
-            <a href="#catering">Kaiser Catering</a>
             <a href="#takeaway">Takeaway</a>
+            <a href="#support">Vi støtter</a>
+            <a href="#social">Sociale medier</a>
             <a href="#kontakt">Kontakt</a>
           </nav>
         </div>
@@ -337,21 +816,326 @@
     </div>
   </header>
 
-  <!-- Demo-indhold – byt ud med dit eget -->
-  <main id="top">
-    <section class="hero-demo">
-      <h1>En hyggelig Café i Helsingør, Hillerød, Farum, Hørsholm og Vanløse</h1>
-      <p>Scroll ned for at se, hvordan headeren skifter til den lyse catering‑farve med kurve.</p>
+  <!-- Booking-dropdown til både header + hero -->
+  <div class="booking-panel" id="bookingPanel">
+    <h3>Book bord</h3>
+    <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
+    <div class="booking-list">
+      <a href="https://book.easyt...helsingor" target="_blank">
+        <span>Helsingør</span>
+        <small>Book bord</small>
+      </a>
+      <a href="https://book.easyt...hillerod" target="_blank">
+        <span>Hillerød</span>
+        <small>Book bord</small>
+      </a>
+      <a href="https://book.easyt...farum" target="_blank">
+        <span>Farum</span>
+        <small>Book bord</small>
+      </a>
+      <a href="https://book.easyt...horsholm" target="_blank">
+        <span>Hørsholm</span>
+        <small>Book bord</small>
+      </a>
+      <a href="https://book.easyt...vanlose" target="_blank">
+        <span>Vanløse</span>
+        <small>Book bord</small>
+      </a>
+    </div>
+    <div class="booking-panel-close" data-booking-close>Luk</div>
+  </div>
+
+  <!-- ========== HERO MED VIDEO ========== -->
+  <main>
+    <section class="hero-video" id="hero">
+      <video autoplay muted loop playsinline poster="media/kaiser-hero.jpg">
+        <source src="media/kaiser-hero.mp4" type="video/mp4">
+        Din browser understøtter ikke video.
+      </video>
+
+      <div class="hero-video-inner">
+        <div class="eyebrow">Velkommen til Café Kaiser</div>
+        <h1 class="hero-title">En hyggelig café i Helsingør, Hillerød, Farum, Hørsholm og Vanløse</h1>
+        <p class="hero-subtitle">
+          Nyd brunch, frokost og aftenserveringer i afslappede omgivelser. Se vores menukort
+          og book bord direkte online.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" type="button" data-booking-toggle>Book bord</button>
+          <a href="#menu" class="btn btn-ghost">Se menukort</a>
+        </div>
+
+        <p class="hero-phone">
+          Eller ring til os: <a href="tel:+4512345678">+45 12 34 56 78</a>
+        </p>
+      </div>
     </section>
 
-    <section id="menu" class="content-section">
-      <h2>Menukort</h2>
-      <p>Her kommer dit menukort‑layout.</p>
+    <!-- ========== MENUKORT (VISUELT BORD) ========== -->
+    <section class="menu-section" id="menu">
+      <div class="section-inner">
+        <div class="menu-header">
+          <h2>Vores menukort</h2>
+          <p>Brunch, smørrebrød, caféretter og søde sager. Priser og udvalg kan variere lidt mellem caféerne.</p>
+        </div>
+
+        <div class="menu-board">
+          <div class="menu-board-title">
+            <h2>Menukort</h2>
+            <span>Morgen – Frokost – Aften</span>
+          </div>
+
+          <div class="menu-columns">
+            <div class="menu-group">
+              <h3>Morgenmad &amp; brunch</h3>
+              <small>Serveres fx kl. 10–13 – retter kun som eksempel, ret dem til dine egne.</small>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Brunch-bræt</div>
+                  <div class="menu-item-desc">Vælg 5 / 6 / 7 små retter – fx yoghurt, æg, ost, pålæg, pandekager m.m.</div>
+                </div>
+                <div class="menu-item-price">169 / 179 / 189,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Avocadomad</div>
+                  <div class="menu-item-desc">Ristet surdejsbrød, avocadocreme, tomat, urter &amp; chiliflager.</div>
+                </div>
+                <div class="menu-item-price">119,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Amerikanske pandekager</div>
+                  <div class="menu-item-desc">Serveres med sirup, bær &amp; creme.</div>
+                </div>
+                <div class="menu-item-price">99,-</div>
+              </div>
+            </div>
+
+            <div class="menu-group">
+              <h3>Højtbelagt smørrebrød</h3>
+              <small>Serveres fx kl. 11–16.</small>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Fiskefilet</div>
+                  <div class="menu-item-desc">Hjemmepaneret rødspættefilet med remoulade, citron &amp; urter.</div>
+                </div>
+                <div class="menu-item-price">99,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Roastbeef</div>
+                  <div class="menu-item-desc">Sprøde løg, hjemmelavet remoulade, peberrod &amp; syltede agurker.</div>
+                </div>
+                <div class="menu-item-price">105,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Kartoffelmad</div>
+                  <div class="menu-item-desc">Danske kartofler, purløg, mayonnaise &amp; ristede løg.</div>
+                </div>
+                <div class="menu-item-price">89,-</div>
+              </div>
+            </div>
+
+            <div class="menu-group">
+              <h3>Caféretter</h3>
+              <small>Burgere, salater og varme retter.</small>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Kaiser burger</div>
+                  <div class="menu-item-desc">Oksekød, cheddar, salat, tomat, syltede løg &amp; pommes frites.</div>
+                </div>
+                <div class="menu-item-price">159,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Caesarsalat</div>
+                  <div class="menu-item-desc">Grillet kylling, romainesalat, parmesan, croutoner &amp; dressing.</div>
+                </div>
+                <div class="menu-item-price">149,-</div>
+              </div>
+            </div>
+
+            <div class="menu-group">
+              <h3>Drikkevarer &amp; sødt</h3>
+              <small>Kaffe, specialøl, vin og kager.</small>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Kaffe / espresso / latte</div>
+                  <div class="menu-item-desc">Fra vores barista – mulighed for plantebaseret mælk.</div>
+                </div>
+                <div class="menu-item-price">fra 32,-</div>
+              </div>
+
+              <div class="menu-item">
+                <div>
+                  <div class="menu-item-title">Dagens kage</div>
+                  <div class="menu-item-desc">Spørg personalet – bagt på gode råvarer.</div>
+                </div>
+                <div class="menu-item-price">55,-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <!-- ========== TAKEAWAY ========== -->
+    <section class="takeaway-section" id="takeaway">
+      <div class="takeaway-inner">
+        <h2>Bestil takeaway</h2>
+        <p>Få dine favoritter fra Café Kaiser med hjem. Bestil online – nemt og hurtigt.</p>
+        <a href="https://cafekaiser.dk/takeaway" target="_blank" class="btn btn-primary">Gå til takeaway</a>
+      </div>
+    </section>
+
+    <!-- ========== VI STØTTER ========== -->
+    <section class="support-section" id="support">
+      <div class="support-inner">
+        <div class="support-text">
+          <h2>Vi støtter</h2>
+          <p>
+            Hos Café Kaiser vil vi gerne give lidt tilbage. Derfor støtter vi blandt andet
+            Kræftens Bekæmpelse og Danske Hospitalsklovne.
+          </p>
+        </div>
+
+        <div class="support-logos">
+          <div class="support-logo-card">
+            <img src="images/KB.png" alt="Kræftens Bekæmpelse">
+            <span>Vi støtter Kræftens Bekæmpelse.</span>
+          </div>
+          <div class="support-logo-card">
+            <img src="images/HK.png" alt="Hospitalsklovne">
+            <span>Vi støtter Danske Hospitalsklovne.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SOCIALE MEDIER ========== -->
+    <section class="social-section" id="social">
+      <div class="social-inner">
+        <h2>Følg os på sociale medier</h2>
+        <p>
+          Få mere brunch, kaffe og caféhygge i dit feed. Følg os på Instagram for nyheder,
+          tilbud og stemningsbilleder fra vores caféer.
+        </p>
+        <a href="https://instagram.com/ditbrugernavn" target="_blank" class="btn-instagram">
+          Følg @cafekaiser
+        </a>
+
+        <div class="social-grid">
+          <img src="images/ig-1.jpg" alt="Brunch hos Café Kaiser">
+          <img src="images/ig-2.jpg" alt="Kaffe og kage">
+          <img src="images/ig-3.jpg" alt="Hyggeligt cafémiljø">
+          <img src="images/ig-4.jpg" alt="Smørrebrød og frokostretter">
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FOOTER MED 5 AFDELINGER ========== -->
+    <footer id="kontakt">
+      <div class="footer-inner">
+        <div class="footer-locations">
+          <div class="footer-location">
+            <h4>Café Kaiser Helsingør</h4>
+            <p>
+              Stengade 35<br>
+              3000 Helsingør<br>
+              CVR: 32354262<br><br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Åbningstider:<br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Café Kaiser Hillerød</h4>
+            <p>
+              Slotsarkaderne 52<br>
+              3400 Hillerød<br>
+              CVR: 42134570<br><br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Åbningstider:<br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Café Kaiser Vanløse</h4>
+            <p>
+              Vanløse Torv 1<br>
+              2720 Vanløse<br>
+              CVR: 44786141<br><br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Åbningstider:<br>
+              Man–tor 10–21 (køkken 10–20)<br>
+              Fredag 10–22 (køkken 10–21)<br>
+              Lørdag 10–22 (køkken 10–21)<br>
+              Søndag 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Café Kaiser Hørsholm</h4>
+            <p>
+              Hørsholm Midtpunkt 138<br>
+              2970 Hørsholm<br>
+              CVR: 44666030<br><br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Åbningstider:<br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Café Kaiser Farum</h4>
+            <p>
+              Farum Bytorv 22<br>
+              3520 Farum<br>
+              CVR: 43288989<br><br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Åbningstider:<br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+        </div>
+
+        <div class="footer-meta">
+          <div class="footer-links">
+            <span>Se også:</span>
+            <a href="https://www.foedevarestyrelsen.dk/..." target="_blank">
+              Kontrolrapport
+              <img src="images/smiley.png" alt="Kontrolrapport" class="kontrol-img">
+            </a>
+            <a href="files/allergiliste.pdf" target="_blank">Allergiliste (pdf)</a>
+          </div>
+          <div>
+            © Café Kaiser – Alle rettigheder forbeholdes
+          </div>
+        </div>
+      </div>
+    </footer>
   </main>
 
   <script>
-    // Scroll-effekt til header
+    // Header scroll-effekt
     const header = document.getElementById('page-header');
     const threshold = 40;
 
@@ -365,7 +1149,7 @@
     window.addEventListener('scroll', onScroll);
     window.addEventListener('load', onScroll);
 
-    // Dropdown
+    // Højre dropdown-menu
     const dropdown = document.getElementById('mainDropdown');
     const toggle = dropdown.querySelector('.dropdown-toggle');
 
@@ -386,6 +1170,34 @@
       if(e.key === 'Escape'){
         dropdown.classList.remove('open');
         toggle.setAttribute('aria-expanded','false');
+      }
+    });
+
+    // Book bord dropdown-panel
+    const bookingPanel = document.getElementById('bookingPanel');
+    const bookingToggles = document.querySelectorAll('[data-booking-toggle]');
+    const bookingClose = document.querySelector('[data-booking-close]');
+
+    bookingToggles.forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        bookingPanel.classList.toggle('open');
+      });
+    });
+
+    bookingClose.addEventListener('click', ()=>{
+      bookingPanel.classList.remove('open');
+    });
+
+    document.addEventListener('click', (e)=>{
+      if(bookingPanel.classList.contains('open') && !bookingPanel.contains(e.target) && !e.target.closest('[data-booking-toggle]')){
+        bookingPanel.classList.remove('open');
+      }
+    });
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        bookingPanel.classList.remove('open');
       }
     });
   </script>
