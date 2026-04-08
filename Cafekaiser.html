@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Café Kaiser – Brunch, frokost & hygge</title>
 
-  <!-- Samme fonte som catering-siden -->
+  <!-- Fonte som catering-siden -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,15 +27,11 @@
       --gold-dark:#916c20;
       --brown:#463626;
       --brown-2:#5b4734;
-      --success:#2f7d55;
-      --warning:#9b7015;
-      --danger:#a54b4b;
-      --radius:22px;
-      --radius-sm:14px;
       --shadow:0 24px 60px rgba(42,28,10,.16);
       --shadow-soft:0 10px 24px rgba(42,28,10,.10);
+      --radius:22px;
+      --radius-sm:14px;
       --max:1380px;
-      --transition:all .25s ease;
     }
 
     *{box-sizing:border-box;}
@@ -43,8 +39,8 @@
     body{
       margin:0;
       font-family:'Inter',system-ui,sans-serif;
-      background:#0a0a0a; /* den mørke farve */
-      color:#fff;
+      background:#fbf6ee;          /* LYS, ikke sort */
+      color:var(--text);
     }
 
     h1,h2,h3,h4{
@@ -55,6 +51,46 @@
     a{text-decoration:none;color:inherit;}
 
     section[id]{scroll-margin-top:100px;}
+
+    /* ========== GENERELLE KNAPPER ========== */
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 24px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
+    }
+
+    .btn-primary{
+      background:var(--gold);
+      color:#000;
+      border-color:var(--gold);
+    }
+
+    .btn-primary:hover{
+      background:var(--gold-light);
+      border-color:var(--gold-light);
+      transform:translateY(-1px);
+    }
+
+    .btn-ghost{
+      background:transparent;
+      color:#fff;
+      border-color:rgba(255,255,255,.6);
+    }
+
+    .btn-ghost:hover{
+      background:rgba(0,0,0,.65);
+      transform:translateY(-1px);
+    }
 
     /* ========== HEADER ========== */
 
@@ -222,7 +258,7 @@
     .site-header.scrolled{
       background:linear-gradient(to bottom,var(--bg-soft),rgba(226,214,198,.96));
       color:var(--brown);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
     }
 
     .site-header.scrolled::after{
@@ -258,65 +294,25 @@
       .site-logo img{height:40px;}
     }
 
-    /* ========== KNAP-STYLES (GENBRUG) ========== */
+    /* ========== HERO MED VIDEO ========== */
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px 24px;
-      border-radius:999px;
-      border:1px solid transparent;
-      font-size:12px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      font-weight:600;
-      cursor:pointer;
-      transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;
-    }
-
-    .btn-primary{
-      background:var(--gold);
-      color:#000;
-      border-color:var(--gold);
-    }
-
-    .btn-primary:hover{
-      background:var(--gold-light);
-      border-color:var(--gold-light);
-      transform:translateY(-1px);
-    }
-
-    .btn-ghost{
-      background:transparent;
-      color:#fff;
-      border-color:rgba(255,255,255,.6);
-    }
-
-    .btn-ghost:hover{
-      background:rgba(0,0,0,.65);
-      transform:translateY(-1px);
-    }
-
-    /* ========== HERO V2 MED VIDEO ========== */
-
-    .hero-v2{
+    .hero{
       position:relative;
       min-height:100vh;
       color:#fff;
+      overflow:hidden;
       display:flex;
       align-items:stretch;
-      overflow:hidden;
     }
 
-    .hero-v2-media{
+    .hero-media{
       position:absolute;
       inset:0;
       overflow:hidden;
       z-index:0;
     }
 
-    .hero-v2-media video{
+    .hero-media video{
       width:100%;
       height:100%;
       object-fit:cover;
@@ -330,7 +326,7 @@
       to{transform:scale(1.08);}
     }
 
-    .hero-v2-overlay{
+    .hero-overlay{
       position:absolute;
       inset:0;
       background:
@@ -340,7 +336,7 @@
       z-index:0;
     }
 
-    .hero-v2-inner{
+    .hero-inner{
       position:relative;
       z-index:1;
       max-width:var(--max);
@@ -351,11 +347,9 @@
       justify-content:space-between;
     }
 
-    .hero-v2-main{
-      text-align:center;
-    }
+    .hero-main{text-align:center;}
 
-    .hero-v2-eyebrow{
+    .hero-eyebrow{
       text-transform:uppercase;
       letter-spacing:.24em;
       font-size:11px;
@@ -363,12 +357,12 @@
       margin-bottom:.8rem;
     }
 
-    .hero-v2-title{
+    .hero-title{
       font-size:clamp(2.5rem,3vw + 1.8rem,3.6rem);
       margin-bottom:.6rem;
     }
 
-    .hero-v2-subtitle{
+    .hero-subtitle{
       max-width:640px;
       margin:0 auto 1.8rem;
       font-size:15px;
@@ -376,7 +370,7 @@
       font-weight:300;
     }
 
-    .hero-v2-actions{
+    .hero-actions{
       display:flex;
       flex-wrap:wrap;
       justify-content:center;
@@ -384,32 +378,32 @@
       margin-bottom:1.2rem;
     }
 
-    .hero-v2-phone{
+    .hero-phone{
       font-size:13px;
       color:rgba(255,255,255,.8);
     }
 
-    .hero-v2-phone a{
+    .hero-phone a{
       color:var(--gold-light);
       font-weight:500;
     }
 
-    .hero-v2-locations{
+    .hero-locations{
       margin-top:40px;
     }
 
-    .hero-v2-locations-grid{
+    .hero-locations-grid{
       display:grid;
       gap:14px;
     }
 
     @media (min-width:720px){
-      .hero-v2-locations-grid{
+      .hero-locations-grid{
         grid-template-columns:repeat(5, minmax(0,1fr));
       }
     }
 
-    .hero-v2-location{
+    .hero-location{
       background:rgba(0,0,0,.55);
       border-radius:18px;
       border:1px solid rgba(255,255,255,.15);
@@ -417,7 +411,7 @@
       text-align:left;
     }
 
-    .hero-v2-location-label{
+    .hero-location-label{
       font-size:10px;
       text-transform:uppercase;
       letter-spacing:.18em;
@@ -425,13 +419,13 @@
       margin-bottom:4px;
     }
 
-    .hero-v2-location-name{
+    .hero-location-name{
       font-size:15px;
       font-weight:600;
       margin-bottom:6px;
     }
 
-    .hero-v2-location-btn{
+    .hero-location-btn{
       display:inline-flex;
       width:100%;
       justify-content:center;
@@ -449,7 +443,7 @@
       transition:background .18s ease, border-color .18s ease, transform .1s ease;
     }
 
-    .hero-v2-location-btn:hover{
+    .hero-location-btn:hover{
       background:var(--gold);
       border-color:var(--gold);
       color:#000;
@@ -457,11 +451,11 @@
     }
 
     @media (max-width:768px){
-      .hero-v2-inner{padding:120px 1rem 30px;}
-      .hero-v2-location{text-align:center;}
+      .hero-inner{padding:120px 1rem 30px;}
+      .hero-location{text-align:center;}
     }
 
-    /* ========== BOOKING-PANEL (dropdown) ========== */
+    /* ========== BOOKING-PANEL ========== */
 
     .booking-panel{
       position:fixed;
@@ -513,13 +507,8 @@
       font-size:14px;
     }
 
-    .booking-list a span{
-      font-weight:500;
-    }
-
-    .booking-list a small{
-      color:var(--muted);
-    }
+    .booking-list a span{font-weight:500;}
+    .booking-list a small{color:var(--muted);}
 
     .booking-panel-close{
       margin-top:10px;
@@ -583,9 +572,7 @@
       margin-bottom:28px;
     }
 
-    .menu-board-title h2{
-      font-size:28px;
-    }
+    .menu-board-title h2{font-size:28px;}
 
     .menu-board-title span{
       display:block;
@@ -627,9 +614,7 @@
       border-bottom:1px dashed rgba(0,0,0,.06);
     }
 
-    .menu-item:last-child{
-      border-bottom:none;
-    }
+    .menu-item:last-child{border-bottom:none;}
 
     .menu-item-title{
       font-weight:500;
@@ -667,17 +652,11 @@
       color:#f7f3ec;
     }
 
-    /* ========== VI STØTTER ========== */
+    /* ========== VI STØTTER (LYS + ANIMATION) ========== */
 
     .support-section{
-      background:linear-gradient(to right,var(--bg-soft) 0%,var(--bg-soft) 50%,#ffffff 50%,#ffffff 100%);
+      background:linear-gradient(120deg,var(--card) 0%,#ffffff 100%);
       padding:70px 1.5rem;
-    }
-
-    @media (max-width:768px){
-      .support-section{
-        background:var(--bg-soft);
-      }
     }
 
     .support-inner{
@@ -685,14 +664,12 @@
       margin:0 auto;
       display:grid;
       gap:32px;
-      grid-template-columns:1.1fr 1fr;
+      grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
       align-items:center;
     }
 
     @media (max-width:900px){
-      .support-inner{
-        grid-template-columns:1fr;
-      }
+      .support-inner{grid-template-columns:1fr;}
     }
 
     .support-text h2{
@@ -703,12 +680,27 @@
     .support-text p{
       margin:0;
       color:var(--muted);
+      max-width:520px;
+    }
+
+    .support-badge{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.8);
+      border:1px solid var(--line-soft);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      margin-bottom:12px;
+      color:var(--muted);
     }
 
     .support-logos{
       display:flex;
       flex-wrap:wrap;
-      gap:20px;
+      gap:22px;
       justify-content:flex-end;
     }
 
@@ -716,24 +708,37 @@
       .support-logos{justify-content:flex-start;}
     }
 
-    .support-logo-card{
-      background:#fff;
-      border-radius:var(--radius-sm);
+    .support-logo{
+      position:relative;
+      padding:12px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
       box-shadow:var(--shadow-soft);
-      padding:16px 18px;
       display:flex;
       align-items:center;
       gap:12px;
-      min-width:220px;
+      opacity:0;
+      transform:translateY(12px);
+      animation:supportIn .7s ease forwards;
     }
 
-    .support-logo-card img{
-      height:40px;
+    .support-logo:nth-child(2){
+      animation-delay:.15s;
+    }
+
+    @keyframes supportIn{
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .support-logo img{
+      height:42px;
       width:auto;
       display:block;
+      filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));
+      background:transparent; /* PNG uden boks */
     }
 
-    .support-logo-card span{
+    .support-logo span{
       font-size:14px;
       color:var(--muted-2);
     }
@@ -741,7 +746,7 @@
     /* ========== SOCIALE MEDIER ========== */
 
     .social-section{
-      background:#111;
+      background:#201710;
       color:#f5f5f5;
       padding:70px 1.5rem;
       text-align:center;
@@ -795,34 +800,52 @@
       color:#111;
     }
 
-    /* ========== FOOTER ========== */
+    /* ========== FOOTER (forenklet) ========== */
 
     footer{
-      background:#000;
+      background:#15100b;
       color:#f2f2f2;
-      padding:50px 1.5rem 30px;
+      padding:40px 1.5rem 28px;
     }
 
     .footer-inner{
       max-width:var(--max);
       margin:0 auto;
+      display:grid;
+      gap:30px;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,2fr);
+    }
+
+    @media (max-width:980px){
+      .footer-inner{grid-template-columns:1fr;}
+    }
+
+    .footer-brand h3{
+      font-size:22px;
+      margin-bottom:8px;
+    }
+
+    .footer-brand p{
+      margin:0;
+      font-size:13px;
+      color:#ccc;
+      max-width:280px;
     }
 
     .footer-locations{
       display:grid;
-      gap:24px;
-      margin-bottom:30px;
+      gap:18px;
     }
 
     @media (min-width:900px){
       .footer-locations{
-        grid-template-columns:repeat(5,minmax(0,1fr));
+        grid-template-columns:repeat(3,minmax(0,1fr));
       }
     }
 
-    @media (min-width:600px) and (max-width:899px){
+    @media (max-width:600px){
       .footer-locations{
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:1fr;
       }
     }
 
@@ -834,7 +857,7 @@
     .footer-location p{
       margin:0;
       font-size:13px;
-      color:#ccc;
+      color:#ddd;
       line-height:1.5;
     }
 
@@ -843,14 +866,16 @@
       font-size:13px;
     }
 
-    .footer-meta{
+    .footer-bottom{
+      max-width:var(--max);
+      margin:20px auto 0;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.18);
       display:flex;
       flex-wrap:wrap;
+      gap:12px;
       justify-content:space-between;
-      gap:16px;
-      padding-top:16px;
-      border-top:1px solid rgba(255,255,255,.15);
-      font-size:13px;
+      font-size:12px;
       color:#aaa;
     }
 
@@ -866,7 +891,7 @@
     }
 
     .kontrol-img{
-      height:28px;
+      height:26px;
       width:auto;
       display:inline-block;
       vertical-align:middle;
@@ -911,19 +936,20 @@
     <h3>Book bord</h3>
     <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
     <div class="booking-list">
-      <a href="https://book.easytable.com/book/?id=f54bc&lang=da" target="_blank">
+      <!-- RET alle disse links -->
+      <a href="https://book.easyt...helsingor" target="_blank">
         <span>Helsingør</span><small>Book bord</small>
       </a>
-      <a href="https://book.easytable.com/book/?id=ed949&lang=da" target="_blank">
+      <a href="https://book.easyt...hillerod" target="_blank">
         <span>Hillerød</span><small>Book bord</small>
       </a>
-      <a href="https://book.easytable.com/book/?id=df2e2&lang=auto" target="_blank">
+      <a href="https://book.easyt...farum" target="_blank">
         <span>Farum</span><small>Book bord</small>
       </a>
-      <a href="https://book.easytable.com/book/?id=99d6f&lang=auto" target="_blank">
+      <a href="https://book.easyt...horsholm" target="_blank">
         <span>Hørsholm</span><small>Book bord</small>
       </a>
-      <a href="https://book.easytable.com/book/?id=99c6d&lang=auto" target="_blank">
+      <a href="https://book.easyt...vanlose" target="_blank">
         <span>Vanløse</span><small>Book bord</small>
       </a>
     </div>
@@ -932,75 +958,75 @@
 
   <main>
     <!-- HERO MED VIDEO -->
-    <section class="hero-v2" id="hero">
-      <div class="hero-v2-media">
-        <!-- RET filnavne hvis din video/plakat hedder noget andet -->
-        <video autoplay muted loop playsinline poster="images/cafekaiser-hero.jpg">
-          <source src="images/cafekaiser-hero.mp4" type="video/mp4">
+    <section class="hero" id="hero">
+      <div class="hero-media">
+        <!-- Sørg for at disse filer findes og er MP4/JPG -->
+        <video autoplay muted loop playsinline poster="images/hero.jpg">
+          <source src="images/hero.mp4" type="video/mp4">
           Din browser understøtter ikke video – se vores billeder og menukort nedenfor.
         </video>
       </div>
-      <div class="hero-v2-overlay"></div>
+      <div class="hero-overlay"></div>
 
-      <div class="hero-v2-inner">
-        <div class="hero-v2-main">
-          <div class="hero-v2-eyebrow">Velkommen til Café Kaiser</div>
-          <h1 class="hero-v2-title">
+      <div class="hero-inner">
+        <div class="hero-main">
+          <div class="hero-eyebrow">Velkommen til Café Kaiser</div>
+          <h1 class="hero-title">
             Brunch, frokost og hygge i Helsingør, Hillerød, Farum, Hørsholm og Vanløse
           </h1>
-          <p class="hero-v2-subtitle">
+          <p class="hero-subtitle">
             En café med fokus på gode råvarer og afslappet stemning. Se vores menukort,
             og book bord på den café, der passer dig bedst.
           </p>
 
-          <div class="hero-v2-actions">
+          <div class="hero-actions">
             <button type="button" class="btn btn-primary" data-booking-toggle>Book bord</button>
             <a href="#menu" class="btn btn-ghost">Se menukort</a>
           </div>
 
-          <p class="hero-v2-phone">
+          <p class="hero-phone">
             Eller ring til os: <a href="tel:+4512345678">+45 12 34 56 78</a>
           </p>
         </div>
 
-        <div class="hero-v2-locations">
-          <div class="hero-v2-locations-grid">
-            <article class="hero-v2-location">
-              <div class="hero-v2-location-label">Book bord</div>
-              <div class="hero-v2-location-name">Helsingør</div>
-              <a class="hero-v2-location-btn" href="https://book.easyt...helsingor" target="_blank">
+        <div class="hero-locations">
+          <div class="hero-locations-grid">
+            <article class="hero-location">
+              <div class="hero-location-label">Book bord</div>
+              <div class="hero-location-name">Helsingør</div>
+              <a class="hero-location-btn" href="https://book.easyt...helsingor" target="_blank">
                 Book Helsingør
               </a>
             </article>
 
-            <article class="hero-v2-location">
-              <div class="hero-v2-location-label">Book bord</div>
-              <div class="hero-v2-location-name">Hillerød</div>
-              <a class="hero-v2-location-btn" href="https://book.easyt...hillerod" target="_blank">
+            <article class="hero-location">
+              <div class="hero-location-label">Book bord</div>
+              <div class="hero-location-name">Hillerød</div>
+              <a class="hero-location-btn" href="https://book.easyt...hillerod" target="_blank">
                 Book Hillerød
               </a>
             </article>
 
-            <article class="hero-v2-location">
-              <div class="hero-v2-location-label">Book bord</div>
-              <div class="hero-v2-location-name">Farum</div>
-              <a class="hero-v2-location-btn" href="https://book.easyt...farum" target="_blank">
+            <article class="hero-location">
+              <div class="hero-location-label">Book bord</div>
+              <div class="hero-location-name">Farum</div>
+              <a class="hero-location-btn" href="https://book.easyt...farum" target="_blank">
                 Book Farum
               </a>
             </article>
 
-            <article class="hero-v2-location">
-              <div class="hero-v2-location-label">Book bord</div>
-              <div class="hero-v2-location-name">Hørsholm</div>
-              <a class="hero-v2-location-btn" href="https://book.easyt...horsholm" target="_blank">
+            <article class="hero-location">
+              <div class="hero-location-label">Book bord</div>
+              <div class="hero-location-name">Hørsholm</div>
+              <a class="hero-location-btn" href="https://book.easyt...horsholm" target="_blank">
                 Book Hørsholm
               </a>
             </article>
 
-            <article class="hero-v2-location">
-              <div class="hero-v2-location-label">Book bord</div>
-              <div class="hero-v2-location-name">Vanløse</div>
-              <a class="hero-v2-location-btn" href="https://book.easyt...vanlose" target="_blank">
+            <article class="hero-location">
+              <div class="hero-location-label">Book bord</div>
+              <div class="hero-location-name">Vanløse</div>
+              <a class="hero-location-btn" href="https://book.easyt...vanlose" target="_blank">
                 Book Vanløse
               </a>
             </article>
@@ -1024,9 +1050,10 @@
           </div>
 
           <div class="menu-columns">
+            <!-- Kolonne 1 -->
             <div class="menu-group">
               <h3>Morgenmad &amp; brunch</h3>
-              <small>Serveres f.eks. kl. 10–13 – retter kun som eksempel, ret til dine egne.</small>
+              <small>Serveres fx kl. 10–13 – retter kun som eksempel, ret til dine egne.</small>
 
               <div class="menu-item">
                 <div>
@@ -1053,9 +1080,10 @@
               </div>
             </div>
 
+            <!-- Kolonne 2 -->
             <div class="menu-group">
               <h3>Højtbelagt smørrebrød</h3>
-              <small>Serveres f.eks. kl. 11–16.</small>
+              <small>Serveres fx kl. 11–16.</small>
 
               <div class="menu-item">
                 <div>
@@ -1082,6 +1110,7 @@
               </div>
             </div>
 
+            <!-- Kolonne 3 -->
             <div class="menu-group">
               <h3>Caféretter</h3>
               <small>Burgere, salater og varme retter.</small>
@@ -1103,6 +1132,7 @@
               </div>
             </div>
 
+            <!-- Kolonne 4 -->
             <div class="menu-group">
               <h3>Drikkevarer &amp; sødt</h3>
               <small>Kaffe, specialøl, vin og kager.</small>
@@ -1141,7 +1171,8 @@
     <section class="support-section" id="support">
       <div class="support-inner">
         <div class="support-text">
-          <h2>Vi støtter</h2>
+          <div class="support-badge">Vi støtter</div>
+          <h2>Vi støtter gode formål</h2>
           <p>
             Hos Café Kaiser vil vi gerne give lidt tilbage. Derfor støtter vi blandt andet
             Kræftens Bekæmpelse og Danske Hospitalsklovne.
@@ -1149,11 +1180,11 @@
         </div>
 
         <div class="support-logos">
-          <div class="support-logo-card">
+          <div class="support-logo">
             <img src="images/KB.png" alt="Kræftens Bekæmpelse">
             <span>Vi støtter Kræftens Bekæmpelse.</span>
           </div>
-          <div class="support-logo-card">
+          <div class="support-logo">
             <img src="images/HK.png" alt="Hospitalsklovne">
             <span>Vi støtter Danske Hospitalsklovne.</span>
           </div>
@@ -1174,7 +1205,7 @@
         </a>
 
         <div class="social-grid">
-          <!-- Ret filnavne til dine rigtige billeder -->
+          <!-- Ret til dine egne billeder -->
           <img src="images/ig-1.jpg" alt="Brunch hos Café Kaiser">
           <img src="images/ig-2.jpg" alt="Kaffe og kage">
           <img src="images/ig-3.jpg" alt="Hyggeligt cafémiljø">
@@ -1186,88 +1217,83 @@
     <!-- FOOTER -->
     <footer id="kontakt">
       <div class="footer-inner">
+        <div class="footer-brand">
+          <h3>Café Kaiser</h3>
+          <p>
+            Hygge, brunch og gode råvarer siden XXXX.  
+            Besøg os i Helsingør, Hillerød, Farum, Hørsholm og Vanløse.
+          </p>
+        </div>
+
         <div class="footer-locations">
           <div class="footer-location">
-            <h4>Café Kaiser Helsingør</h4>
+            <h4>Helsingør</h4>
             <p>
-              Stengade 35<br>
-              3000 Helsingør<br>
-              CVR: 32354262<br><br>
+              Stengade 35, 3000 Helsingør<br>
+              CVR: 32354262<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
-              Åbningstider:<br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
 
           <div class="footer-location">
-            <h4>Café Kaiser Hillerød</h4>
+            <h4>Hillerød</h4>
             <p>
-              Slotsarkaderne 52<br>
-              3400 Hillerød<br>
-              CVR: 42134570<br><br>
+              Slotsarkaderne 52, 3400 Hillerød<br>
+              CVR: 42134570<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
-              Åbningstider:<br>
               Man–fre 10–21 (køkken 10–20)<br>
               Lør–søn 10–21 (køkken 10–20)
             </p>
           </div>
 
           <div class="footer-location">
-            <h4>Café Kaiser Vanløse</h4>
+            <h4>Farum</h4>
             <p>
-              Vanløse Torv 1<br>
-              2720 Vanløse<br>
-              CVR: 44786141<br><br>
+              Farum Bytorv 22, 3520 Farum<br>
+              CVR: 43288989<br>
               <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
-              Åbningstider:<br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Hørsholm</h4>
+            <p>
+              Hørsholm Midtpunkt 138, 2970 Hørsholm<br>
+              CVR: 44666030<br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
+              Man–fre 10–21 (køkken 10–20)<br>
+              Lør–søn 10–21 (køkken 10–20)
+            </p>
+          </div>
+
+          <div class="footer-location">
+            <h4>Vanløse</h4>
+            <p>
+              Vanløse Torv 1, 2720 Vanløse<br>
+              CVR: 44786141<br>
+              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
               Man–tor 10–21 (køkken 10–20)<br>
-              Fredag 10–22 (køkken 10–21)<br>
-              Lørdag 10–22 (køkken 10–21)<br>
-              Søndag 10–21 (køkken 10–20)
-            </p>
-          </div>
-
-          <div class="footer-location">
-            <h4>Café Kaiser Hørsholm</h4>
-            <p>
-              Hørsholm Midtpunkt 138<br>
-              2970 Hørsholm<br>
-              CVR: 44666030<br><br>
-              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
-              Åbningstider:<br>
-              Man–fre 10–21 (køkken 10–20)<br>
-              Lør–søn 10–21 (køkken 10–20)
-            </p>
-          </div>
-
-          <div class="footer-location">
-            <h4>Café Kaiser Farum</h4>
-            <p>
-              Farum Bytorv 22<br>
-              3520 Farum<br>
-              CVR: 43288989<br><br>
-              <a href="https://goo.gl/maps/..." target="_blank">Klik her for rutevejledning</a><br><br>
-              Åbningstider:<br>
-              Man–fre 10–21 (køkken 10–20)<br>
-              Lør–søn 10–21 (køkken 10–20)
+              Fre–lør 10–22 (køkken 10–21)<br>
+              Søn 10–21 (køkken 10–20)
             </p>
           </div>
         </div>
+      </div>
 
-        <div class="footer-meta">
-          <div class="footer-links">
-            <span>Se også:</span>
-            <a href="https://www.foedevarestyrelsen.dk/..." target="_blank">
-              Kontrolrapport
-              <img src="images/smiley.png" alt="Kontrolrapport" class="kontrol-img">
-            </a>
-            <a href="files/allergiliste.pdf" target="_blank">Allergiliste (pdf)</a>
-          </div>
-          <div>
-            © Café Kaiser – Alle rettigheder forbeholdes
-          </div>
+      <div class="footer-bottom">
+        <div class="footer-links">
+          <span>Se også:</span>
+          <a href="https://www.foedevarestyrelsen.dk/..." target="_blank">
+            Kontrolrapport
+            <img src="images/smiley.png" alt="Kontrolrapport" class="kontrol-img">
+          </a>
+          <a href="files/allergiliste.pdf" target="_blank">Allergiliste (pdf)</a>
         </div>
+        <div>© Café Kaiser – Alle rettigheder forbeholdes</div>
       </div>
     </footer>
   </main>
@@ -1276,7 +1302,6 @@
     // Header scroll-effekt
     const header = document.getElementById('page-header');
     const threshold = 40;
-
     function onScroll(){
       if(window.scrollY > threshold){
         header.classList.add('scrolled');
@@ -1287,23 +1312,20 @@
     window.addEventListener('scroll', onScroll);
     window.addEventListener('load', onScroll);
 
-    // Dropdown til højre
+    // Dropdown-menu til højre
     const dropdown = document.getElementById('mainDropdown');
     const toggle = dropdown.querySelector('.dropdown-toggle');
-
     toggle.addEventListener('click', (e)=>{
       e.stopPropagation();
       const open = dropdown.classList.toggle('open');
       toggle.setAttribute('aria-expanded', String(open));
     });
-
     document.addEventListener('click', (e)=>{
       if(!dropdown.contains(e.target)){
         dropdown.classList.remove('open');
         toggle.setAttribute('aria-expanded','false');
       }
     });
-
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
         dropdown.classList.remove('open');
@@ -1311,22 +1333,19 @@
       }
     });
 
-    // Book bord-panel
+    // Booking-panel
     const bookingPanel = document.getElementById('bookingPanel');
     const bookingToggles = document.querySelectorAll('[data-booking-toggle]');
     const bookingClose = document.querySelector('[data-booking-close]');
-
     bookingToggles.forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         e.preventDefault();
         bookingPanel.classList.toggle('open');
       });
     });
-
     bookingClose.addEventListener('click', ()=>{
       bookingPanel.classList.remove('open');
     });
-
     document.addEventListener('click', (e)=>{
       if(bookingPanel.classList.contains('open') &&
          !bookingPanel.contains(e.target) &&
@@ -1334,7 +1353,6 @@
         bookingPanel.classList.remove('open');
       }
     });
-
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
         bookingPanel.classList.remove('open');
