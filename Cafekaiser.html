@@ -43,7 +43,7 @@
     body{
       margin:0;
       font-family:'Inter',system-ui,sans-serif;
-      background:#0a0a0a; /* mørk farve nr. 2 */
+      background:#0a0a0a; /* den mørke farve */
       color:#fff;
     }
 
@@ -54,9 +54,9 @@
 
     a{text-decoration:none;color:inherit;}
 
-    section[id]{scroll-margin-top:100px;} /* så anker-links ikke skjules bag header */
+    section[id]{scroll-margin-top:100px;}
 
-    /* ================= HEADER ================= */
+    /* ========== HEADER ========== */
 
     .site-header{
       position:fixed;
@@ -258,71 +258,7 @@
       .site-logo img{height:40px;}
     }
 
-    /* ============== HERO MED VIDEO ============== */
-
-    main{ /* ingen padding-top; hero tager højde for header */
-    }
-
-    .hero-video{
-      position:relative;
-      min-height:100vh;
-      overflow:hidden;
-      color:#fff;
-    }
-
-    .hero-video video{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .hero-video::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.9));
-      z-index:0;
-    }
-
-    .hero-video-inner{
-      position:relative;
-      z-index:1;
-      max-width:var(--max);
-      margin:0 auto;
-      padding:130px 1.5rem 90px; /* 130px til headeren */
-      text-align:center;
-    }
-
-    .eyebrow{
-      text-transform:uppercase;
-      letter-spacing:.24em;
-      font-size:11px;
-      color:rgba(255,255,255,.7);
-      margin-bottom:.8rem;
-    }
-
-    .hero-title{
-      font-size:clamp(2.4rem,3vw + 1.6rem,3.4rem);
-      margin-bottom:.5rem;
-    }
-
-    .hero-subtitle{
-      max-width:620px;
-      margin:0 auto 1.8rem;
-      color:#f3f1ec;
-      font-weight:300;
-    }
-
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:.8rem;
-      margin-bottom:1.4rem;
-    }
+    /* ========== KNAP-STYLES (GENBRUG) ========== */
 
     .btn{
       display:inline-flex;
@@ -362,17 +298,171 @@
       transform:translateY(-1px);
     }
 
-    .hero-phone{
+    /* ========== HERO V2 MED VIDEO ========== */
+
+    .hero-v2{
+      position:relative;
+      min-height:100vh;
+      color:#fff;
+      display:flex;
+      align-items:stretch;
+      overflow:hidden;
+    }
+
+    .hero-v2-media{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .hero-v2-media video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:brightness(.65) saturate(1.1);
+      transform:scale(1.03);
+      animation:heroZoom 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom{
+      from{transform:scale(1.03);}
+      to{transform:scale(1.08);}
+    }
+
+    .hero-v2-overlay{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 10% 0, rgba(0,0,0,.45), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(0,0,0,.75), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,.9));
+      z-index:0;
+    }
+
+    .hero-v2-inner{
+      position:relative;
+      z-index:1;
+      max-width:var(--max);
+      margin:0 auto;
+      padding:140px 1.5rem 40px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .hero-v2-main{
+      text-align:center;
+    }
+
+    .hero-v2-eyebrow{
+      text-transform:uppercase;
+      letter-spacing:.24em;
+      font-size:11px;
+      color:rgba(255,255,255,.7);
+      margin-bottom:.8rem;
+    }
+
+    .hero-v2-title{
+      font-size:clamp(2.5rem,3vw + 1.8rem,3.6rem);
+      margin-bottom:.6rem;
+    }
+
+    .hero-v2-subtitle{
+      max-width:640px;
+      margin:0 auto 1.8rem;
+      font-size:15px;
+      color:#f3f1ec;
+      font-weight:300;
+    }
+
+    .hero-v2-actions{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:.8rem;
+      margin-bottom:1.2rem;
+    }
+
+    .hero-v2-phone{
       font-size:13px;
       color:rgba(255,255,255,.8);
     }
 
-    .hero-phone a{
+    .hero-v2-phone a{
       color:var(--gold-light);
       font-weight:500;
     }
 
-    /* Booking dropdown-panel (fælles til hero + header) */
+    .hero-v2-locations{
+      margin-top:40px;
+    }
+
+    .hero-v2-locations-grid{
+      display:grid;
+      gap:14px;
+    }
+
+    @media (min-width:720px){
+      .hero-v2-locations-grid{
+        grid-template-columns:repeat(5, minmax(0,1fr));
+      }
+    }
+
+    .hero-v2-location{
+      background:rgba(0,0,0,.55);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.15);
+      padding:10px 12px 12px;
+      text-align:left;
+    }
+
+    .hero-v2-location-label{
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:rgba(255,255,255,.7);
+      margin-bottom:4px;
+    }
+
+    .hero-v2-location-name{
+      font-size:15px;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+
+    .hero-v2-location-btn{
+      display:inline-flex;
+      width:100%;
+      justify-content:center;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.55);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:600;
+      background:rgba(0,0,0,.25);
+      color:#fff;
+      cursor:pointer;
+      transition:background .18s ease, border-color .18s ease, transform .1s ease;
+    }
+
+    .hero-v2-location-btn:hover{
+      background:var(--gold);
+      border-color:var(--gold);
+      color:#000;
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:768px){
+      .hero-v2-inner{padding:120px 1rem 30px;}
+      .hero-v2-location{text-align:center;}
+    }
+
+    /* ========== BOOKING-PANEL (dropdown) ========== */
+
     .booking-panel{
       position:fixed;
       top:90px;
@@ -439,7 +529,7 @@
       cursor:pointer;
     }
 
-    /* ============== MENUKORT-SEKTION ============== */
+    /* ========== MENUKORT ========== */
 
     .menu-section{
       background:#ffffff;
@@ -558,7 +648,7 @@
       color:var(--brown-2);
     }
 
-    /* ============== TAKEAWAY CTA ============== */
+    /* ========== TAKEAWAY ========== */
 
     .takeaway-section{
       background:var(--bg-deep);
@@ -577,7 +667,7 @@
       color:#f7f3ec;
     }
 
-    /* ============== VI STØTTER ============== */
+    /* ========== VI STØTTER ========== */
 
     .support-section{
       background:linear-gradient(to right,var(--bg-soft) 0%,var(--bg-soft) 50%,#ffffff 50%,#ffffff 100%);
@@ -648,7 +738,7 @@
       color:var(--muted-2);
     }
 
-    /* ============== SOCIALE MEDIER ============== */
+    /* ========== SOCIALE MEDIER ========== */
 
     .social-section{
       background:#111;
@@ -705,7 +795,7 @@
       color:#111;
     }
 
-    /* ============== FOOTER ============== */
+    /* ========== FOOTER ========== */
 
     footer{
       background:#000;
@@ -785,7 +875,7 @@
 </head>
 <body>
 
-  <!-- ========== HEADER ========== -->
+  <!-- HEADER -->
   <header class="site-header" id="page-header">
     <div class="site-header-inner">
       <a href="#hero" class="site-logo">
@@ -816,63 +906,110 @@
     </div>
   </header>
 
-  <!-- Booking-dropdown til både header + hero -->
+  <!-- BOOKING-DROPDOWN -->
   <div class="booking-panel" id="bookingPanel">
     <h3>Book bord</h3>
     <p>Vælg din Café Kaiser – du sendes videre til vores bookingsystem.</p>
     <div class="booking-list">
       <a href="https://book.easyt...helsingor" target="_blank">
-        <span>Helsingør</span>
-        <small>Book bord</small>
+        <span>Helsingør</span><small>Book bord</small>
       </a>
       <a href="https://book.easyt...hillerod" target="_blank">
-        <span>Hillerød</span>
-        <small>Book bord</small>
+        <span>Hillerød</span><small>Book bord</small>
       </a>
       <a href="https://book.easyt...farum" target="_blank">
-        <span>Farum</span>
-        <small>Book bord</small>
+        <span>Farum</span><small>Book bord</small>
       </a>
       <a href="https://book.easyt...horsholm" target="_blank">
-        <span>Hørsholm</span>
-        <small>Book bord</small>
+        <span>Hørsholm</span><small>Book bord</small>
       </a>
       <a href="https://book.easyt...vanlose" target="_blank">
-        <span>Vanløse</span>
-        <small>Book bord</small>
+        <span>Vanløse</span><small>Book bord</small>
       </a>
     </div>
     <div class="booking-panel-close" data-booking-close>Luk</div>
   </div>
 
-  <!-- ========== HERO MED VIDEO ========== -->
   <main>
-    <section class="hero-video" id="hero">
-      <video autoplay muted loop playsinline poster="media/kaiser-hero.jpg">
-        <source src="media/kaiser-hero.mp4" type="video/mp4">
-        Din browser understøtter ikke video.
-      </video>
+    <!-- HERO MED VIDEO -->
+    <section class="hero-v2" id="hero">
+      <div class="hero-v2-media">
+        <!-- RET filnavne hvis din video/plakat hedder noget andet -->
+        <video autoplay muted loop playsinline poster="images/cafekaiser-hero.jpg">
+          <source src="images/cafekaiser-hero.mp4" type="video/mp4">
+          Din browser understøtter ikke video – se vores billeder og menukort nedenfor.
+        </video>
+      </div>
+      <div class="hero-v2-overlay"></div>
 
-      <div class="hero-video-inner">
-        <div class="eyebrow">Velkommen til Café Kaiser</div>
-        <h1 class="hero-title">En hyggelig café i Helsingør, Hillerød, Farum, Hørsholm og Vanløse</h1>
-        <p class="hero-subtitle">
-          Nyd brunch, frokost og aftenserveringer i afslappede omgivelser. Se vores menukort
-          og book bord direkte online.
-        </p>
+      <div class="hero-v2-inner">
+        <div class="hero-v2-main">
+          <div class="hero-v2-eyebrow">Velkommen til Café Kaiser</div>
+          <h1 class="hero-v2-title">
+            Brunch, frokost og hygge i Helsingør, Hillerød, Farum, Hørsholm og Vanløse
+          </h1>
+          <p class="hero-v2-subtitle">
+            En café med fokus på gode råvarer og afslappet stemning. Se vores menukort,
+            og book bord på den café, der passer dig bedst.
+          </p>
 
-        <div class="hero-actions">
-          <button class="btn btn-primary" type="button" data-booking-toggle>Book bord</button>
-          <a href="#menu" class="btn btn-ghost">Se menukort</a>
+          <div class="hero-v2-actions">
+            <button type="button" class="btn btn-primary" data-booking-toggle>Book bord</button>
+            <a href="#menu" class="btn btn-ghost">Se menukort</a>
+          </div>
+
+          <p class="hero-v2-phone">
+            Eller ring til os: <a href="tel:+4512345678">+45 12 34 56 78</a>
+          </p>
         </div>
 
-        <p class="hero-phone">
-          Eller ring til os: <a href="tel:+4512345678">+45 12 34 56 78</a>
-        </p>
+        <div class="hero-v2-locations">
+          <div class="hero-v2-locations-grid">
+            <article class="hero-v2-location">
+              <div class="hero-v2-location-label">Book bord</div>
+              <div class="hero-v2-location-name">Helsingør</div>
+              <a class="hero-v2-location-btn" href="https://book.easyt...helsingor" target="_blank">
+                Book Helsingør
+              </a>
+            </article>
+
+            <article class="hero-v2-location">
+              <div class="hero-v2-location-label">Book bord</div>
+              <div class="hero-v2-location-name">Hillerød</div>
+              <a class="hero-v2-location-btn" href="https://book.easyt...hillerod" target="_blank">
+                Book Hillerød
+              </a>
+            </article>
+
+            <article class="hero-v2-location">
+              <div class="hero-v2-location-label">Book bord</div>
+              <div class="hero-v2-location-name">Farum</div>
+              <a class="hero-v2-location-btn" href="https://book.easyt...farum" target="_blank">
+                Book Farum
+              </a>
+            </article>
+
+            <article class="hero-v2-location">
+              <div class="hero-v2-location-label">Book bord</div>
+              <div class="hero-v2-location-name">Hørsholm</div>
+              <a class="hero-v2-location-btn" href="https://book.easyt...horsholm" target="_blank">
+                Book Hørsholm
+              </a>
+            </article>
+
+            <article class="hero-v2-location">
+              <div class="hero-v2-location-label">Book bord</div>
+              <div class="hero-v2-location-name">Vanløse</div>
+              <a class="hero-v2-location-btn" href="https://book.easyt...vanlose" target="_blank">
+                Book Vanløse
+              </a>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ========== MENUKORT (VISUELT BORD) ========== -->
+    <!-- MENUKORT -->
     <section class="menu-section" id="menu">
       <div class="section-inner">
         <div class="menu-header">
@@ -889,12 +1026,12 @@
           <div class="menu-columns">
             <div class="menu-group">
               <h3>Morgenmad &amp; brunch</h3>
-              <small>Serveres fx kl. 10–13 – retter kun som eksempel, ret dem til dine egne.</small>
+              <small>Serveres f.eks. kl. 10–13 – retter kun som eksempel, ret til dine egne.</small>
 
               <div class="menu-item">
                 <div>
                   <div class="menu-item-title">Brunch-bræt</div>
-                  <div class="menu-item-desc">Vælg 5 / 6 / 7 små retter – fx yoghurt, æg, ost, pålæg, pandekager m.m.</div>
+                  <div class="menu-item-desc">Vælg 5 / 6 / 7 små retter – yoghurt, æg, ost, pålæg, pandekager m.m.</div>
                 </div>
                 <div class="menu-item-price">169 / 179 / 189,-</div>
               </div>
@@ -918,7 +1055,7 @@
 
             <div class="menu-group">
               <h3>Højtbelagt smørrebrød</h3>
-              <small>Serveres fx kl. 11–16.</small>
+              <small>Serveres f.eks. kl. 11–16.</small>
 
               <div class="menu-item">
                 <div>
@@ -991,7 +1128,7 @@
       </div>
     </section>
 
-    <!-- ========== TAKEAWAY ========== -->
+    <!-- TAKEAWAY -->
     <section class="takeaway-section" id="takeaway">
       <div class="takeaway-inner">
         <h2>Bestil takeaway</h2>
@@ -1000,7 +1137,7 @@
       </div>
     </section>
 
-    <!-- ========== VI STØTTER ========== -->
+    <!-- VI STØTTER -->
     <section class="support-section" id="support">
       <div class="support-inner">
         <div class="support-text">
@@ -1024,7 +1161,7 @@
       </div>
     </section>
 
-    <!-- ========== SOCIALE MEDIER ========== -->
+    <!-- SOCIALE MEDIER -->
     <section class="social-section" id="social">
       <div class="social-inner">
         <h2>Følg os på sociale medier</h2>
@@ -1032,11 +1169,12 @@
           Få mere brunch, kaffe og caféhygge i dit feed. Følg os på Instagram for nyheder,
           tilbud og stemningsbilleder fra vores caféer.
         </p>
-        <a href="https://instagram.com/ditbrugernavn" target="_blank" class="btn-instagram">
+        <a href="https://instagram.com/DIT_INSTAGRAM" target="_blank" class="btn-instagram">
           Følg @cafekaiser
         </a>
 
         <div class="social-grid">
+          <!-- Ret filnavne til dine rigtige billeder -->
           <img src="images/ig-1.jpg" alt="Brunch hos Café Kaiser">
           <img src="images/ig-2.jpg" alt="Kaffe og kage">
           <img src="images/ig-3.jpg" alt="Hyggeligt cafémiljø">
@@ -1045,7 +1183,7 @@
       </div>
     </section>
 
-    <!-- ========== FOOTER MED 5 AFDELINGER ========== -->
+    <!-- FOOTER -->
     <footer id="kontakt">
       <div class="footer-inner">
         <div class="footer-locations">
@@ -1149,7 +1287,7 @@
     window.addEventListener('scroll', onScroll);
     window.addEventListener('load', onScroll);
 
-    // Højre dropdown-menu
+    // Dropdown til højre
     const dropdown = document.getElementById('mainDropdown');
     const toggle = dropdown.querySelector('.dropdown-toggle');
 
@@ -1173,7 +1311,7 @@
       }
     });
 
-    // Book bord dropdown-panel
+    // Book bord-panel
     const bookingPanel = document.getElementById('bookingPanel');
     const bookingToggles = document.querySelectorAll('[data-booking-toggle]');
     const bookingClose = document.querySelector('[data-booking-close]');
@@ -1190,7 +1328,9 @@
     });
 
     document.addEventListener('click', (e)=>{
-      if(bookingPanel.classList.contains('open') && !bookingPanel.contains(e.target) && !e.target.closest('[data-booking-toggle]')){
+      if(bookingPanel.classList.contains('open') &&
+         !bookingPanel.contains(e.target) &&
+         !e.target.closest('[data-booking-toggle]')){
         bookingPanel.classList.remove('open');
       }
     });
