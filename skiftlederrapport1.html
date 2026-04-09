@@ -398,8 +398,8 @@
       <div class="heroLine"></div>
     </header>
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-  Drift version · Skiftlederrapport V2.1
-</div>
+      Drift version · Skiftlederrapport V2.1
+    </div>
 
     <section id="formWrap">
       <form
@@ -408,11 +408,10 @@
         action="https://formsubmit.co/skiftlederrapport@gmail.com"
       >
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
         <input type="text" name="_honey" style="display:none">
-        <textarea name="Rapport" id="reportPayload" style="display:none"></textarea>
 
         <div class="panel">
           <div class="panelHead">
@@ -441,12 +440,12 @@
             <div class="grid2">
               <div class="field">
                 <label class="label" for="name">Navn</label>
-                <input class="input" id="name" placeholder="Dit navn">
+                <input class="input" id="name" name="Navn" placeholder="Dit navn">
               </div>
 
               <div class="field">
                 <label class="label" for="department">Afdeling</label>
-                <select class="select" id="department">
+                <select class="select" id="department" name="Afdeling">
                   <option value="">Vælg afdeling...</option>
                   <option>Café Kaiser Helsingør</option>
                   <option>Café Kaiser Hillerød</option>
@@ -460,7 +459,7 @@
             <div class="grid2" style="margin-top:16px;">
               <div class="field">
                 <label class="label" for="dateField">Dato</label>
-                <input class="input" id="dateField" readonly>
+                <input class="input" id="dateField" name="Dato" readonly>
               </div>
 
               <div class="field">
@@ -494,34 +493,34 @@
                   <span>Lav</span>
                   <span>Høj</span>
                 </div>
-                <input type="hidden" id="rateDay">
+                <input type="hidden" id="rateDay" name="Frokost – rating af dagen">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="expDay">Service, stemning og gæsteoplevelse</label>
-                  <textarea class="textarea" id="expDay"></textarea>
+                  <textarea class="textarea" id="expDay" name="Frokost – service, stemning og gæsteoplevelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="opsDay">Dagens drift</label>
-                  <textarea class="textarea" id="opsDay"></textarea>
+                  <textarea class="textarea" id="opsDay" name="Frokost – dagens drift"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="incDay">Klager eller særlige hændelser</label>
-                  <textarea class="textarea" id="incDay"></textarea>
+                  <textarea class="textarea" id="incDay" name="Frokost – klager eller særlige hændelser"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="teamDay">Teamets præstation</label>
-                  <textarea class="textarea" id="teamDay"></textarea>
+                  <textarea class="textarea" id="teamDay" name="Frokost – teamets præstation"></textarea>
                 </div>
               </div>
 
@@ -550,41 +549,41 @@
                   <span>Lav</span>
                   <span>Høj</span>
                 </div>
-                <input type="hidden" id="rateEve">
+                <input type="hidden" id="rateEve" name="Aften – rating af dagen">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="expEve">Service, stemning og gæsteoplevelse</label>
-                  <textarea class="textarea" id="expEve"></textarea>
+                  <textarea class="textarea" id="expEve" name="Aften – service, stemning og gæsteoplevelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="opsEve">Dagens drift</label>
-                  <textarea class="textarea" id="opsEve"></textarea>
+                  <textarea class="textarea" id="opsEve" name="Aften – dagens drift"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="incEve">Klager eller særlige hændelser</label>
-                  <textarea class="textarea" id="incEve"></textarea>
+                  <textarea class="textarea" id="incEve" name="Aften – klager eller særlige hændelser"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="teamEve">Teamets præstation</label>
-                  <textarea class="textarea" id="teamEve"></textarea>
+                  <textarea class="textarea" id="teamEve" name="Aften – teamets præstation"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="needs">Mangler / afvigelser / behov for bestilling</label>
-                  <textarea class="textarea" id="needs"></textarea>
+                  <textarea class="textarea" id="needs" name="Mangler / afvigelser / behov for bestilling"></textarea>
                 </div>
               </div>
 
@@ -793,33 +792,6 @@
       return "";
     }
 
-    function buildReportText(){
-      return [
-        "Skiftlederrapport",
-        "",
-        "Navn: " + (val("name") || "-"),
-        "Afdeling: " + (val("department") || "-"),
-        "Dato: " + (val("dateField") || "-"),
-        "",
-        "BRUNCH / FROKOST",
-        "Rating: " + (val("rateDay") || "-"),
-        "Service, stemning og gæsteoplevelse: " + (val("expDay") || "-"),
-        "Dagens drift: " + (val("opsDay") || "-"),
-        "Klager eller særlige hændelser: " + (val("incDay") || "-"),
-        "Teamets præstation: " + (val("teamDay") || "-"),
-        "",
-        "AFTEN",
-        "Rating: " + (val("rateEve") || "-"),
-        "Service, stemning og gæsteoplevelse: " + (val("expEve") || "-"),
-        "Dagens drift: " + (val("opsEve") || "-"),
-        "Klager eller særlige hændelser: " + (val("incEve") || "-"),
-        "Teamets præstation: " + (val("teamEve") || "-"),
-        "",
-        "MANGLER / AFVIGELSER / BEHOV FOR BESTILLING",
-        (val("needs") || "-")
-      ].join("\n");
-    }
-
     function resetAll(){
       [
         "name","department","dateField",
@@ -888,7 +860,6 @@
       }
 
       updateSubject();
-      $("reportPayload").value = buildReportText();
       localStorage.removeItem(STORAGE_KEY);
 
       $("primaryAction").disabled = true;
