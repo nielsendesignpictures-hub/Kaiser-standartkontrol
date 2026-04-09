@@ -564,12 +564,15 @@
 
     tbody.innerHTML = list.map(e => `
       <tr>
-        <td>
-          <strong>${escapeHtml(e.cakeName)}</strong><br/>
-          <span class="small" style="color:var(--muted)">
-            ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
-          </span>
-        </td>
+<td>
+  <strong>${escapeHtml(e.cakeName)}</strong><br/>
+
+  <span class="small" style="color:var(--muted)">
+    ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
+  </span>
+
+  ${e.note ? `<br><span class="small" style="color:var(--muted)">${escapeHtml(e.note)}</span>` : ``}
+</td>
         <td>${fmtDateTime(e.addedAt)}</td>
         <td><strong>${fmtDateTime(e.discardAt)}</strong></td>
         <td>
