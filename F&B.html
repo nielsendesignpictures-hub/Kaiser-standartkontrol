@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="da">
 <head>
@@ -673,6 +674,148 @@
       color:#ffd0d0;
       border-color:rgba(255,107,107,.35);
     }
+
+    /* --- NYT TOOL: Mål & frister (lokalt) --- */
+    .goalsGrid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+
+    .goalsCard{
+      border-radius:24px;
+      border:1px solid var(--line);
+      background:
+        radial-gradient(700px 220px at 50% 0%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      padding:16px;
+    }
+
+    .goalsTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .goalsCount{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .goalsForm{
+      display:grid;
+      grid-template-columns: 180px 1fr 140px;
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
+    }
+
+    @media (max-width: 760px){
+      .goalsForm{grid-template-columns:1fr;}
+    }
+
+    .goalsInput{
+      min-height:44px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      font-size:13px;
+      font-weight:800;
+      outline:none;
+    }
+
+    .goalsInput::placeholder{color:rgba(255,255,255,0.45);}
+
+    .goalsBtn{
+      min-height:44px;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid rgba(214,178,74,.35);
+      background:rgba(214,178,74,.16);
+      color:#fff6d6;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .goalsList{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .goalItem{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.05);
+    }
+
+    .goalBar{
+      width:6px;
+      min-height:64px;
+      border-radius:999px;
+      flex:0 0 auto;
+      background:var(--green);
+    }
+
+    .goalBar.urgent{background:var(--red);}
+    .goalBar.warning{background:var(--warn);}
+    .goalBar.calm{background:var(--green);}
+
+    .goalInfo{flex:1;min-width:0;}
+    .goalMain{font-size:14px;font-weight:900;line-height:1.35;}
+    .goalSub{margin-top:4px;font-size:12px;line-height:1.45;color:var(--muted);font-weight:800;}
+    .goalMeta{margin-top:6px;font-size:11px;color:var(--muted2);font-weight:900;letter-spacing:.05em;text-transform:uppercase;}
+
+    .goalActions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+
+    .goalDelBtn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      color:var(--red);
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
+      line-height:1;
+    }
+
+    .goalEmpty{
+      text-align:center;
+      padding:18px;
+      color:var(--muted2);
+      font-size:13px;
+      font-weight:800;
+    }
   </style>
 </head>
 <body>
@@ -732,6 +875,32 @@
       <div class="sectionBody">
         <div id="notificationList">
           <div class="empty">Ingen nye notifikationer</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NYT TOOL: Mål & frister (lokalt) -->
+    <section class="section" id="goalsSection">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Mål & frister</div>
+        <div class="sectionInfo" id="goalsSectionInfo">Lokale mål (gemmes på denne enhed)</div>
+      </div>
+      <div class="sectionBody">
+        <div class="goalsGrid">
+          <div class="goalsCard">
+            <div class="goalsTop">
+              <div class="cardKicker"><span class="dot gold"></span> Årets milepæle</div>
+              <div class="goalsCount" id="goalsCountPill">0 aktive</div>
+            </div>
+
+            <div class="goalsForm">
+              <input class="goalsInput" type="date" id="goalDateInput" />
+              <input class="goalsInput" type="text" id="goalTextInput" placeholder="Beskriv mål… (fx Ny menu på plads)" />
+              <button class="goalsBtn" type="button" onclick="addGoalLocal()">+ Tilføj</button>
+            </div>
+
+            <div class="goalsList" id="goalsList"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1516,9 +1685,138 @@
       text.textContent = isOpen ? "Åbn Menu Intelligence" : "Skjul Menu Intelligence";
     }
 
+    /* --- NYT TOOL: Mål & frister (lokalt) --- */
+    const GOALS_STORAGE_KEY = "kaiser_fb_local_goals_v1";
+
+    function loadLocalGoals() {
+      try {
+        const arr = JSON.parse(localStorage.getItem(GOALS_STORAGE_KEY) || "[]");
+        return Array.isArray(arr) ? arr : [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function saveLocalGoals(goals) {
+      localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals));
+    }
+
+    function daysUntil(ymd) {
+      const d = new Date(ymd + "T00:00:00");
+      if (isNaN(d.getTime())) return null;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const diff = d.getTime() - today.getTime();
+      return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function formatGoalDateDK(ymd) {
+      const d = new Date(ymd + "T00:00:00");
+      if (isNaN(d.getTime())) return "Ukendt dato";
+      return d.toLocaleDateString("da-DK", { day: "2-digit", month: "2-digit", year: "2-digit" });
+    }
+
+    function goalUrgencyClass(diffDays) {
+      if (diffDays === null) return "warning";
+      if (diffDays < 0) return "urgent";
+      if (diffDays <= 30) return "urgent";
+      if (diffDays <= 90) return "warning";
+      return "calm";
+    }
+
+    function renderLocalGoals() {
+      const list = $("goalsList");
+      const pill = $("goalsCountPill");
+      if (!list || !pill) return;
+
+      const goals = loadLocalGoals()
+        .filter(g => g && g.date && g.text)
+        .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+      pill.textContent = `${goals.length} aktive`;
+
+      if (!goals.length) {
+        list.innerHTML = `<div class="goalEmpty">Ingen mål endnu. Tilføj en dato og en beskrivelse ovenfor.</div>`;
+        return;
+      }
+
+      list.innerHTML = goals.map(g => {
+        const diff = daysUntil(g.date);
+        const urgency = goalUrgencyClass(diff);
+
+        let meta = "";
+        if (diff === null) meta = "Datofejl";
+        else if (diff < 0) meta = `Overskredet • ${Math.abs(diff)} dag(e)`;
+        else if (diff === 0) meta = `I dag`;
+        else meta = `${diff} dag(e) tilbage`;
+
+        return `
+          <div class="goalItem">
+            <div class="goalBar ${urgency}"></div>
+            <div class="goalInfo">
+              <div class="goalMain">${esc(g.text)}</div>
+              <div class="goalSub">${esc(formatGoalDateDK(g.date))}</div>
+              <div class="goalMeta">${esc(meta)}</div>
+            </div>
+            <div class="goalActions">
+              <button class="goalDelBtn" type="button" onclick="deleteGoalLocal('${esc(g.id)}')" title="Slet mål">×</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function addGoalLocal() {
+      const dateEl = $("goalDateInput");
+      const textEl = $("goalTextInput");
+      if (!dateEl || !textEl) return;
+
+      const date = String(dateEl.value || "").trim();
+      const text = String(textEl.value || "").trim();
+
+      if (!date || !text) {
+        alert("Udfyld både dato og beskrivelse.");
+        return;
+      }
+
+      const goals = loadLocalGoals();
+      goals.push({
+        id: String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        date,
+        text
+      });
+
+      saveLocalGoals(goals);
+      dateEl.value = "";
+      textEl.value = "";
+      renderLocalGoals();
+    }
+
+    function deleteGoalLocal(id) {
+      const ok = confirm("Slet dette mål?");
+      if (!ok) return;
+
+      const goals = loadLocalGoals().filter(g => g.id !== id);
+      saveLocalGoals(goals);
+      renderLocalGoals();
+    }
+
+    function bindGoalEnterKey() {
+      const textEl = $("goalTextInput");
+      if (!textEl) return;
+      textEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addGoalLocal();
+      });
+    }
+
     async function boot() {
       updateClock();
       renderNotifications();
+
+      renderLocalGoals();
+      bindGoalEnterKey();
+
       await Promise.allSettled([
         loadPortalBundle(),
         loadCateringData()
