@@ -235,7 +235,7 @@
 
     .toolGrid{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:repeat(2,1fr); /* 2-kolonne grid */
       gap:14px;
     }
 
@@ -263,10 +263,10 @@
       transform:translateY(-2px);
     }
 
-    /* Fuldbredde cards (Kage/Kaffe som på dit screenshot) */
-    .toolCard{ grid-column: 1 / -1; }
+    /* Fuld-bredde cards – kun dem der får ekstra klassen .toolCard--full (Kage/Kaffe) */
+    .toolCard--full{ grid-column: 1 / -1; }
     @media (max-width: 900px){
-      .toolCard{ grid-column: auto; }
+      .toolCard--full{ grid-column: auto; }
     }
 
     .toolTop{
@@ -616,8 +616,8 @@
             </div>
           </div>
 
-          <!-- NY: KAGE (fuld bredde, matcher listen) -->
-          <div class="toolCard" data-url="./kage-koeleskab.html">
+          <!-- KAGE – fuld bredde -->
+          <div class="toolCard toolCard--full" data-url="./kage-koeleskab.html">
             <div>
               <div class="toolTop">
                 <div class="toolIcon">🍰</div>
@@ -635,8 +635,8 @@
             </div>
           </div>
 
-          <!-- NY: KAFFE (fuld bredde, matcher listen) -->
-          <div class="toolCard" data-url="./kaffe-timer.html">
+          <!-- KAFFE – fuld bredde -->
+          <div class="toolCard toolCard--full" data-url="./kaffe-timer.html">
             <div>
               <div class="toolTop">
                 <div class="toolIcon">☕</div>
@@ -658,7 +658,7 @@
       </div>
     </section>
 
-    <!-- Viewer (korrekt: udenfor section/toolGrid) -->
+    <!-- Viewer (udenfor section/toolGrid) -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="toolPill" id="toolName">—</div>
@@ -676,6 +676,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const LOC_KEY = "kaiser_kitchenpct_loc";
     const CLOCK_KEY = "kaiser_drift_clock_visible_v41";
+    const AUTO_RELOAD_HOURS = 4; // 0 = slået fra. 24 = auto-reload én gang i døgnet.
 
     const $ = id => document.getElementById(id);
 
@@ -840,7 +841,7 @@
       } catch (_) {}
     }
 
-    // Klik: hent titel direkte fra kortet (så du slipper for nameMap)
+    // Klik: hent titel direkte fra kortet
     document.querySelectorAll(".toolCard[data-url]").forEach(card => {
       card.addEventListener("click", () => {
         const url = card.dataset.url;
@@ -876,6 +877,13 @@
       setInterval(loadSoldoutCount, 60000);
       setInterval(loadComplaintCount, 60000);
       setInterval(loadFaultCount, 60000);
+
+      // Automatisk reload af hele siden (fx for at hente nye versioner)
+      if (AUTO_RELOAD_HOURS > 0) {
+        setTimeout(() => {
+          location.reload();
+        }, AUTO_RELOAD_HOURS * 60 * 60 * 1000);
+      }
     })();
   </script>
 </body>
