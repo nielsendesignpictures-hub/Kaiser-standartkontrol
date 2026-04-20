@@ -626,7 +626,6 @@
 
   <div class="actionsSticky" id="actionsSticky">
     <div class="actionsInner">
-      <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
       <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
     </div>
   </div>
@@ -685,7 +684,6 @@
       $("step1").classList.remove("hidden");
       $("step2").classList.add("hidden");
       $("stepPill").textContent = "Step 1 af 2 · Frokost";
-      $("secondaryAction").textContent = "Nulstil";
       $("primaryAction").textContent = "Gem frokost og fortsæt";
       $("primaryAction").className = "btn btn-blue";
     } else {
@@ -895,15 +893,7 @@
     $("reportForm").submit();
   });
 
-  $("secondaryAction").addEventListener("click", function(){
-    clearError();
 
-    if(currentStep() === 1){
-      if(confirm("Vil du nulstille rapporten?")){
-        resetAll();
-      }
-      return;
-    }
 
     saveDraft(true);
     setStep(1);
