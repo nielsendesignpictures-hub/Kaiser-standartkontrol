@@ -398,7 +398,7 @@
       <div class="heroLine"></div>
     </header>
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Skiftlederrapport V2.1
+      Drift version · Skiftlederrapport V2.2
     </div>
 
     <section id="formWrap">
@@ -408,14 +408,11 @@
         action="https://formsubmit.co/skiftlederrapport@gmail.com"
       >
         <input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_next" id="nextField" value="">
-<input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" id="nextField" value="">
+        <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
+        <input type="text" name="_honey" style="display:none">
 
-<!-- ✅ TILFØJ DEN HER -->
-<input type="hidden" name="_cc" value="Christian@cafekaiser.dk,Casper@cafekaiser.dk,Stefan@cafekaiser.dk">
-
-<input type="text" name="_honey" style="display:none">
         <div class="panel">
           <div class="panelHead">
             <div class="stepBar">
@@ -442,11 +439,6 @@
           <div class="panelBody">
             <div class="grid2">
               <div class="field">
-                <label class="label" for="name">Navn</label>
-               <input class="input" id="name" name="Navn" placeholder="Dit navn" required>
-              </div>
-
-              <div class="field">
                 <label class="label" for="department">Afdeling</label>
                 <select class="select" id="department" name="Afdeling" required>
                   <option value="">Vælg afdeling...</option>
@@ -457,18 +449,24 @@
                   <option>Café Kaiser Vanløse</option>
                 </select>
               </div>
-            </div>
 
-            <div class="grid2" style="margin-top:16px;">
               <div class="field">
                 <label class="label" for="dateField">Dato</label>
                 <input class="input" id="dateField" name="Dato" readonly>
               </div>
+            </div>
 
+            <div class="grid2" style="margin-top:16px;">
               <div class="field">
                 <div class="label">Modtagelse</div>
                 <div class="muted" style="padding-top:16px;">
-                  Rapporten sendes til central indbakke og fordeles via Gmail filtre.
+                  Rapporten sendes til central indbakke og fordeles via Gmail filtre/forwarding.
+                </div>
+              </div>
+              <div class="field">
+                <div class="label">Info</div>
+                <div class="muted" style="padding-top:16px;">
+                  Frokost- og aften-navn udfyldes i hver deres step.
                 </div>
               </div>
             </div>
@@ -482,6 +480,14 @@
             </div>
             <div class="divider"></div>
             <div class="panelBody grid1">
+
+              <!-- ✅ NYT: FROKOST-NAVN -->
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="nameDay">Frokost – Navn</label>
+                  <input class="input" id="nameDay" name="Frokost – Navn" placeholder="Navn på frokost skiftleder" required>
+                </div>
+              </div>
 
               <div class="sectionCard">
                 <div class="label">Rating af dagen</div>
@@ -538,6 +544,14 @@
             </div>
             <div class="divider"></div>
             <div class="panelBody grid1">
+
+              <!-- ✅ NYT: AFTEN-NAVN -->
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="nameEve">Aften – Navn</label>
+                  <input class="input" id="nameEve" name="Aften – Navn" placeholder="Navn på aften skiftleder" required>
+                </div>
+              </div>
 
               <div class="sectionCard">
                 <div class="label">Rating af dagen</div>
@@ -617,295 +631,307 @@
     </div>
   </div>
 
-  <script>
-    const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v1";
+<script>
+  // ✅ Ny storage key så gamle drafts ikke konflikter med nye felter
+  const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v2_2_splitnames";
 
-    function $(id){ return document.getElementById(id); }
+  function $(id){ return document.getElementById(id); }
 
-    function val(id){
-      const el = $(id);
-      return el ? (el.value || "").trim() : "";
+  function val(id){
+    const el = $(id);
+    return el ? (el.value || "").trim() : "";
+  }
+
+  function setVal(id, value){
+    const el = $(id);
+    if(el) el.value = value || "";
+  }
+
+  function nowLocalString(){
+    return new Date().toLocaleString("da-DK");
+  }
+
+  function localISODate(){
+    const d = new Date();
+    const off = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - off * 60000);
+    return local.toISOString().slice(0,10);
+  }
+
+  function clearError(){
+    $("errorWrap").classList.add("hidden");
+    $("errorText").textContent = "";
+  }
+
+  function showError(message){
+    $("errorText").textContent = message;
+    $("errorWrap").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function currentStep(){
+    return $("step2").classList.contains("hidden") ? 1 : 2;
+  }
+
+  function updateSubject(){
+    const afd = val("department") || "Afdeling";
+    $("subjectField").value = `Skiftlederrapport – ${afd} – ${localISODate()}`;
+  }
+
+  function setStep(step){
+    clearError();
+
+    if(step === 1){
+      $("step1").classList.remove("hidden");
+      $("step2").classList.add("hidden");
+      $("stepPill").textContent = "Step 1 af 2 · Frokost";
+      $("secondaryAction").textContent = "Nulstil";
+      $("primaryAction").textContent = "Gem frokost og fortsæt";
+      $("primaryAction").className = "btn btn-blue";
+    } else {
+      $("step1").classList.add("hidden");
+      $("step2").classList.remove("hidden");
+      $("stepPill").textContent = "Step 2 af 2 · Aften";
+      $("secondaryAction").textContent = "Tilbage til frokost";
+      $("primaryAction").textContent = "Send rapport";
+      $("primaryAction").className = "btn btn-gold";
     }
 
-    function setVal(id, value){
-      const el = $(id);
-      if(el) el.value = value || "";
-    }
+    saveDraft(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-    function nowLocalString(){
-      return new Date().toLocaleString("da-DK");
-    }
+  function updateRatingUI(targetId){
+    document.querySelectorAll('.ratingBtn[data-target="' + targetId + '"]').forEach(btn => {
+      btn.classList.toggle("selected", btn.dataset.value === val(targetId));
+    });
+  }
 
-    function localISODate(){
-      const d = new Date();
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      return local.toISOString().slice(0,10);
-    }
-
-    function clearError(){
-      $("errorWrap").classList.add("hidden");
-      $("errorText").textContent = "";
-    }
-
-    function showError(message){
-      $("errorText").textContent = message;
-      $("errorWrap").classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function currentStep(){
-      return $("step2").classList.contains("hidden") ? 1 : 2;
-    }
-
-    function updateSubject(){
-      const afd = val("department") || "Afdeling";
-      $("subjectField").value = `Skiftlederrapport – ${afd} – ${localISODate()}`;
-    }
-
-    function setStep(step){
-      clearError();
-
-      if(step === 1){
-        $("step1").classList.remove("hidden");
-        $("step2").classList.add("hidden");
-        $("stepPill").textContent = "Step 1 af 2 · Frokost";
-        $("secondaryAction").textContent = "Nulstil";
-        $("primaryAction").textContent = "Gem frokost og fortsæt";
-        $("primaryAction").className = "btn btn-blue";
-      } else {
-        $("step1").classList.add("hidden");
-        $("step2").classList.remove("hidden");
-        $("stepPill").textContent = "Step 2 af 2 · Aften";
-        $("secondaryAction").textContent = "Tilbage til frokost";
-        $("primaryAction").textContent = "Send rapport";
-        $("primaryAction").className = "btn btn-gold";
-      }
-
-      saveDraft(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function updateRatingUI(targetId){
-      document.querySelectorAll('.ratingBtn[data-target="' + targetId + '"]').forEach(btn => {
-        btn.classList.toggle("selected", btn.dataset.value === val(targetId));
+  function bindRatings(){
+    document.querySelectorAll(".ratingBtn").forEach(btn => {
+      btn.addEventListener("click", function(){
+        const target = btn.dataset.target;
+        const value = btn.dataset.value;
+        setVal(target, value);
+        updateRatingUI(target);
+        saveDraft(false);
+        clearError();
       });
+    });
+  }
+
+  function saveDraft(showSavedPill){
+    const data = {
+      // ✅ separate navne
+      nameDay: val("nameDay"),
+      nameEve: val("nameEve"),
+
+      department: val("department"),
+      dateField: val("dateField"),
+
+      rateDay: val("rateDay"),
+      expDay: val("expDay"),
+      opsDay: val("opsDay"),
+      incDay: val("incDay"),
+      teamDay: val("teamDay"),
+
+      rateEve: val("rateEve"),
+      expEve: val("expEve"),
+      opsEve: val("opsEve"),
+      incEve: val("incEve"),
+      teamEve: val("teamEve"),
+
+      needs: val("needs"),
+      step: currentStep()
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    if(showSavedPill){
+      $("draftPill").classList.remove("hidden");
     }
+  }
 
-    function bindRatings(){
-      document.querySelectorAll(".ratingBtn").forEach(btn => {
-        btn.addEventListener("click", function(){
-          const target = btn.dataset.target;
-          const value = btn.dataset.value;
-          setVal(target, value);
-          updateRatingUI(target);
-          saveDraft(false);
-          clearError();
-        });
-      });
-    }
+  function loadDraft(){
+    const raw = localStorage.getItem(STORAGE_KEY);
 
-    function saveDraft(showSavedPill){
-      const data = {
-        name: val("name"),
-        department: val("department"),
-        dateField: val("dateField"),
-
-        rateDay: val("rateDay"),
-        expDay: val("expDay"),
-        opsDay: val("opsDay"),
-        incDay: val("incDay"),
-        teamDay: val("teamDay"),
-
-        rateEve: val("rateEve"),
-        expEve: val("expEve"),
-        opsEve: val("opsEve"),
-        incEve: val("incEve"),
-        teamEve: val("teamEve"),
-
-        needs: val("needs"),
-        step: currentStep()
-      };
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-      if(showSavedPill){
-        $("draftPill").classList.remove("hidden");
-      }
-    }
-
-    function loadDraft(){
-      const raw = localStorage.getItem(STORAGE_KEY);
-
-      if(!raw){
-        $("dateField").value = nowLocalString();
-        updateSubject();
-        return;
-      }
-
-      try{
-        const data = JSON.parse(raw);
-
-        setVal("name", data.name);
-        setVal("department", data.department);
-        setVal("dateField", data.dateField || nowLocalString());
-
-        setVal("rateDay", data.rateDay);
-        setVal("expDay", data.expDay);
-        setVal("opsDay", data.opsDay);
-        setVal("incDay", data.incDay);
-        setVal("teamDay", data.teamDay);
-
-        setVal("rateEve", data.rateEve);
-        setVal("expEve", data.expEve);
-        setVal("opsEve", data.opsEve);
-        setVal("incEve", data.incEve);
-        setVal("teamEve", data.teamEve);
-
-        setVal("needs", data.needs);
-
-        updateRatingUI("rateDay");
-        updateRatingUI("rateEve");
-        updateSubject();
-
-        if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay){
-          $("draftPill").classList.remove("hidden");
-        }
-
-        if(data.step === 2){
-          setStep(2);
-        } else {
-          setStep(1);
-        }
-      } catch(e){
-        $("dateField").value = nowLocalString();
-        updateSubject();
-      }
-    }
-
-    function validateStep1(){
-      if(!val("name")) return "Udfyld navn.";
-      if(!val("department")) return "Vælg afdeling.";
-      if(!val("rateDay")) return "Vælg rating for frokost.";
-      return "";
-    }
-
-    function validateStep2(){
-      if(!val("rateEve")) return "Vælg rating for aften.";
-      return "";
-    }
-
-    function resetAll(){
-      [
-        "name","department","dateField",
-        "rateDay","expDay","opsDay","incDay","teamDay",
-        "rateEve","expEve","opsEve","incEve","teamEve","needs"
-      ].forEach(id => setVal(id, ""));
-
+    if(!raw){
       $("dateField").value = nowLocalString();
-      localStorage.removeItem(STORAGE_KEY);
-      $("draftPill").classList.add("hidden");
+      updateSubject();
+      return;
+    }
+
+    try{
+      const data = JSON.parse(raw);
+
+      // ✅ Backwards compatibility hvis nogen havde en gammel draft med "name"
+      if(!data.nameDay && data.name) data.nameDay = data.name;
+
+      setVal("nameDay", data.nameDay);
+      setVal("nameEve", data.nameEve);
+
+      setVal("department", data.department);
+      setVal("dateField", data.dateField || nowLocalString());
+
+      setVal("rateDay", data.rateDay);
+      setVal("expDay", data.expDay);
+      setVal("opsDay", data.opsDay);
+      setVal("incDay", data.incDay);
+      setVal("teamDay", data.teamDay);
+
+      setVal("rateEve", data.rateEve);
+      setVal("expEve", data.expEve);
+      setVal("opsEve", data.opsEve);
+      setVal("incEve", data.incEve);
+      setVal("teamEve", data.teamEve);
+
+      setVal("needs", data.needs);
+
       updateRatingUI("rateDay");
       updateRatingUI("rateEve");
       updateSubject();
-      setStep(1);
-      clearError();
-    }
 
-    function bindAutosave(){
-      [
-        "name","department",
-        "expDay","opsDay","incDay","teamDay",
-        "expEve","opsEve","incEve","teamEve","needs"
-      ].forEach(id => {
-        const el = $(id);
-        if(!el) return;
-        el.addEventListener("input", () => {
-          saveDraft(false);
-          if(id === "department") updateSubject();
-        });
-        el.addEventListener("change", () => {
-          saveDraft(false);
-          if(id === "department") updateSubject();
-        });
+      if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay || data.nameDay){
+        $("draftPill").classList.remove("hidden");
+      }
+
+      if(data.step === 2){
+        setStep(2);
+      } else {
+        setStep(1);
+      }
+    } catch(e){
+      $("dateField").value = nowLocalString();
+      updateSubject();
+    }
+  }
+
+  function validateStep1(){
+    if(!val("nameDay")) return "Udfyld frokost-navn.";
+    if(!val("department")) return "Vælg afdeling.";
+    if(!val("rateDay")) return "Vælg rating for frokost.";
+    return "";
+  }
+
+  function validateStep2(){
+    if(!val("nameEve")) return "Udfyld aften-navn.";
+    if(!val("rateEve")) return "Vælg rating for aften.";
+    return "";
+  }
+
+  function resetAll(){
+    [
+      "nameDay","nameEve","department","dateField",
+      "rateDay","expDay","opsDay","incDay","teamDay",
+      "rateEve","expEve","opsEve","incEve","teamEve","needs"
+    ].forEach(id => setVal(id, ""));
+
+    $("dateField").value = nowLocalString();
+    localStorage.removeItem(STORAGE_KEY);
+    $("draftPill").classList.add("hidden");
+    updateRatingUI("rateDay");
+    updateRatingUI("rateEve");
+    updateSubject();
+    setStep(1);
+    clearError();
+  }
+
+  function bindAutosave(){
+    [
+      "nameDay","nameEve","department",
+      "expDay","opsDay","incDay","teamDay",
+      "expEve","opsEve","incEve","teamEve","needs"
+    ].forEach(id => {
+      const el = $(id);
+      if(!el) return;
+
+      el.addEventListener("input", () => {
+        saveDraft(false);
+        if(id === "department") updateSubject();
       });
 
-      $("department").addEventListener("change", updateSubject);
-    }
+      el.addEventListener("change", () => {
+        saveDraft(false);
+        if(id === "department") updateSubject();
+      });
+    });
 
-    $("primaryAction").addEventListener("click", function(){
-      clearError();
+    $("department").addEventListener("change", updateSubject);
+  }
 
-      if(currentStep() === 1){
-        const err = validateStep1();
-        if(err){
-          showError(err);
-          return;
-        }
+  $("primaryAction").addEventListener("click", function(){
+    clearError();
 
-        updateSubject();
-        saveDraft(true);
-        setStep(2);
-        return;
-      }
-
-      const err1 = validateStep1();
-      if(err1){
-        showError(err1);
-        setStep(1);
-        return;
-      }
-
-      const err2 = validateStep2();
-      if(err2){
-        showError(err2);
+    if(currentStep() === 1){
+      const err = validateStep1();
+      if(err){
+        showError(err);
         return;
       }
 
       updateSubject();
-      localStorage.removeItem(STORAGE_KEY);
-
-      $("primaryAction").disabled = true;
-      $("primaryAction").textContent = "Sender...";
-
-      $("reportForm").submit();
-    });
-
-    $("secondaryAction").addEventListener("click", function(){
-      clearError();
-
-      if(currentStep() === 1){
-        if(confirm("Vil du nulstille rapporten?")){
-          resetAll();
-        }
-        return;
-      }
-
       saveDraft(true);
-      setStep(1);
-    });
-
-    $("newReportBtn").addEventListener("click", function(){
-      resetAll();
-      $("thanksWrap").classList.add("hidden");
-      $("formWrap").classList.remove("hidden");
-      $("actionsSticky").classList.remove("hidden");
-    });
-
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("sent") === "1") {
-      $("formWrap").classList.add("hidden");
-      $("thanksWrap").classList.remove("hidden");
-      $("actionsSticky").classList.add("hidden");
-      localStorage.removeItem(STORAGE_KEY);
+      setStep(2);
+      return;
     }
 
-    $("dateField").value = nowLocalString();
-    $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
+    const err1 = validateStep1();
+    if(err1){
+      showError(err1);
+      setStep(1);
+      return;
+    }
 
-    bindRatings();
-    bindAutosave();
-    loadDraft();
-  </script>
+    const err2 = validateStep2();
+    if(err2){
+      showError(err2);
+      return;
+    }
+
+    updateSubject();
+    localStorage.removeItem(STORAGE_KEY);
+
+    $("primaryAction").disabled = true;
+    $("primaryAction").textContent = "Sender...";
+
+    $("reportForm").submit();
+  });
+
+  $("secondaryAction").addEventListener("click", function(){
+    clearError();
+
+    if(currentStep() === 1){
+      if(confirm("Vil du nulstille rapporten?")){
+        resetAll();
+      }
+      return;
+    }
+
+    saveDraft(true);
+    setStep(1);
+  });
+
+  $("newReportBtn").addEventListener("click", function(){
+    resetAll();
+    $("thanksWrap").classList.add("hidden");
+    $("formWrap").classList.remove("hidden");
+    $("actionsSticky").classList.remove("hidden");
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("sent") === "1") {
+    $("formWrap").classList.add("hidden");
+    $("thanksWrap").classList.remove("hidden");
+    $("actionsSticky").classList.add("hidden");
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  $("dateField").value = nowLocalString();
+  $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
+
+  bindRatings();
+  bindAutosave();
+  loadDraft();
+</script>
 </body>
 </html>
