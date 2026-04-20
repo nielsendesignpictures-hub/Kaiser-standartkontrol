@@ -932,6 +932,35 @@
   bindRatings();
   bindAutosave();
   loadDraft();
+  function msUntil2359(){
+  const now = new Date();
+  const t = new Date(now);
+  t.setHours(23, 59, 0, 0);
+  if (t <= now) t.setDate(t.getDate() + 1);
+  return t - now;
+}
+
+function tryAutoSendAt2359(){
+  setTimeout(() => {
+    // Kun send hvis vi er på step 2 og alt er udfyldt
+    if (currentStep() === 2 && !validateStep1() && !validateStep2()) {
+      // Genbrug din eksisterende send-flow:
+      updateSubject();
+      localStorage.removeItem(STORAGE_KEY);
+
+      $("primaryAction").disabled = true;
+      $("primaryAction").textContent = "Sender...";
+
+      $("reportForm").submit();
+      return;
+    }
+
+    // Planlæg igen til næste dag (uanset om den sendte eller ej)
+    tryAutoSendAt2359();
+  }, msUntil2359());
+}
+
+tryAutoSendAt2359();
 </script>
 </body>
 </html>
