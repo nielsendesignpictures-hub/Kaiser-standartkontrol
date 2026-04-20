@@ -1,3 +1,12 @@
+Her er en opdateret og færdig `telefonliste.html`, hvor:
+
+- De leverandører du har sendt er lagt ind i **contacts**‑listen.  
+- Telefonnumre er **ikke klikbare** (ingen `tel:`‑links – den er tiltænkt PC).  
+- Hvis et nummer mangler (fx Easytablebooking), vises `Tlf: —` og en note om at udfylde.
+
+Du kan lægge filen direkte på serveren og pege et kort fra HUB’en på `./telefonliste.html`.
+
+```html
 <!doctype html>
 <html lang="da">
 <head>
@@ -264,13 +273,8 @@
       font-weight:800;
     }
 
-    .contactPhone a{
+    .contactPhone span{
       color:var(--text);
-      text-decoration:none;
-    }
-
-    .contactPhone a:hover{
-      text-decoration:underline;
     }
 
     .contactNote{
@@ -299,7 +303,7 @@
 
       <div class="heroMetaRow">
         <div id="locLabel">Lokation: Alle caféer</div>
-        <div>Tryk på et nummer for at ringe (på mobil) eller læs direkte (på skærm).</div>
+        <div>Brug listen til at slå numre op – ring fra telefonen ved kassen.</div>
       </div>
 
       <div class="searchRow">
@@ -347,7 +351,7 @@
       }
     })();
 
-    // KONTAKT-DATA – ret/udvid her
+    // KONTAKT-DATA – opdateret med dine leverandører
     const contacts = [
       // NØD
       {
@@ -369,12 +373,12 @@
         badgeColor: "red"
       },
 
-      // INTERNT
+      // INTERNT – kan du udfylde med rigtige numre senere
       {
         name: "Caféchef",
         role: "Lokal caféchef",
         category: "intern",
-        phone: "00000000",
+        phone: "",
         note: "Primær ansvarlig for caféens daglige drift.",
         icon: "👤",
         badgeColor: "green"
@@ -383,65 +387,147 @@
         name: "Floormanager / skiftleder",
         role: "Vagtansvarlig",
         category: "intern",
-        phone: "00000001",
+        phone: "",
         note: "Kontakt ved akutte driftsudfordringer på vagten.",
         icon: "👤",
         badgeColor: "green"
       },
-      {
-        name: "HQ – Drift",
-        role: "Driftsansvarlig",
-        category: "intern",
-        phone: "00000002",
-        note: "Spørgsmål til procedurer, åbningstider, menukort m.m.",
-        icon: "🏢",
-        badgeColor: "blue"
-      },
-      {
-        name: "HQ – HR / Personale",
-        role: "HR",
-        category: "intern",
-        phone: "00000003",
-        note: "Kontrakter, sygdom, ansættelse og personalejuridiske spørgsmål.",
-        icon: "📋",
-        badgeColor: "blue"
-      },
 
-      // LEVERANDØRER
+      // LEVERANDØRER – dine konkrete kontakter
       {
-        name: "IT / Kassesystem",
-        role: "POS-support",
+        name: "BC Catering",
+        role: "Catering",
         category: "leverandør",
-        phone: "00000004",
-        note: "Fejl på kassesystem, printere, dankortterminal m.m.",
-        icon: "🖥️",
+        phone: "46773500",
+        note: "",
+        icon: "🍽️",
         badgeColor: "blue"
       },
       {
-        name: "Kaffe-leverandør",
-        role: "Service & bestilling",
+        name: "Oskar Davidsen",
+        role: "Catering",
         category: "leverandør",
-        phone: "00000005",
-        note: "Bestilling af kaffe samt service på kaffeudstyr.",
+        phone: "43451422",
+        note: "",
+        icon: "🥪",
+        badgeColor: "blue"
+      },
+      {
+        name: "Kaffe Bønnen",
+        role: "Kaffeleverandør",
+        category: "leverandør",
+        phone: "77776060",
+        note: "",
         icon: "☕",
         badgeColor: "blue"
       },
       {
-        name: "Køletekniker",
-        role: "Service",
+        name: "Royal",
+        role: "Drikkevarer",
         category: "leverandør",
-        phone: "00000006",
-        note: "Akutte problemer med køl og frys. Husk at notere temperaturer.",
-        icon: "❄️",
+        phone: "56771500",
+        note: "Leverandør af øl og sodavand.",
+        icon: "🍺",
+        badgeColor: "blue"
+      },
+      {
+        name: "Brønnum",
+        role: "Barudstyr & drikkevarer",
+        category: "leverandør",
+        phone: "44888400",
+        note: "",
+        icon: "🍸",
+        badgeColor: "blue"
+      },
+      {
+        name: "Sirup – Kasper",
+        role: "Sirup / Inn Sale",
+        category: "leverandør",
+        phone: "27101515",
+        email: "kv@innsale.com",
+        note: "",
+        icon: "🧴",
+        badgeColor: "blue"
+      },
+      {
+        name: "Friture afhentning",
+        role: "Fritureolie",
+        category: "leverandør",
+        phone: "81740907",
+        note: "Send SMS med adresse og firmanavn.",
+        icon: "🛢️",
+        badgeColor: "blue"
+      },
+      {
+        name: "Flatpay – Dankort",
+        role: "Betaling / kortterminal",
+        category: "leverandør",
+        phone: "88773939",
+        note: "",
+        icon: "💳",
+        badgeColor: "blue"
+      },
+      {
+        name: "Multiline",
+        role: "Internet / telefoni",
+        category: "leverandør",
+        phone: "88445566",
+        note: "",
+        icon: "📡",
+        badgeColor: "blue"
+      },
+      {
+        name: "Initial",
+        role: "Måtter & hygiejne",
+        category: "leverandør",
+        phone: "70113300",
+        note: "",
+        icon: "🧼",
+        badgeColor: "blue"
+      },
+      {
+        name: "Easytablebooking",
+        role: "Bordbooking",
+        category: "leverandør",
+        phone: "",
+        note: "Udfyld telefonnummer når det er klart.",
+        icon: "📅",
+        badgeColor: "blue"
+      },
+      {
+        name: "Frontliners",
+        role: "Personale / vikar",
+        category: "leverandør",
+        phone: "31530099",
+        note: "",
+        icon: "👥",
+        badgeColor: "blue"
+      },
+      {
+        name: "WOLT",
+        role: "Takeaway platform",
+        category: "leverandør",
+        phone: "20636499",
+        note: "",
+        icon: "📦",
+        badgeColor: "blue"
+      },
+      {
+        name: "Brix El – Jakob Brix",
+        role: "Elektriker",
+        category: "leverandør",
+        phone: "40161500",
+        note: "",
+        icon: "💡",
         badgeColor: "blue"
       },
 
-      // CENTER / BYGNING
+      // CENTER / BYGNING – kan udfyldes når du har data
       {
         name: "Center-vagt / Sikkerhed",
         role: "Center / bygning",
         category: "center",
-        phone: "00000007",
+        phone: "",
         note: "Lås, alarm, uvedkommende gæster, ulykker i centerområdet.",
         icon: "🛡️",
         badgeColor: "green"
@@ -452,8 +538,8 @@
     let searchTerm = "";
 
     function formatPhone(p){
-      // enkel formattering til dansk 8-cifret nummer: 22 33 44 55
-      const clean = p.replace(/\D/g,"");
+      if (!p) return "—";
+      const clean = String(p).replace(/\D/g,"");
       if (clean.length === 8) {
         return clean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4");
       }
@@ -476,6 +562,16 @@
       return "badge";
     }
 
+    function labelForCategory(cat){
+      switch(cat){
+        case "nød": return "Nødnummer";
+        case "intern": return "Intern kontakt";
+        case "leverandør": return "Leverandør";
+        case "center": return "Center / bygning";
+        default: return "";
+      }
+    }
+
     function renderContacts(){
       const grid = $("#contactGrid");
       grid.innerHTML = "";
@@ -485,7 +581,7 @@
       const filtered = contacts.filter(c => {
         if (activeFilter !== "alle" && c.category !== activeFilter) return false;
         if (!term) return true;
-        const haystack = (c.name + " " + c.role + " " + (c.note || "")).toLowerCase();
+        const haystack = (c.name + " " + c.role + " " + (c.note || "") + " " + (c.email || "")).toLowerCase();
         return haystack.includes(term);
       });
 
@@ -514,24 +610,14 @@
           </div>
           <div>
             <div class="contactPhone">
-              Tlf:
-              <a href="tel:${c.phone}">${formatPhone(c.phone)}</a>
+              Tlf: <span>${formatPhone(c.phone)}</span>
             </div>
+            ${c.email ? `<div class="contactNote">Mail: ${c.email}</div>` : ""}
             ${c.note ? `<div class="contactNote">${c.note}</div>` : ""}
           </div>
         `;
         grid.appendChild(card);
       });
-    }
-
-    function labelForCategory(cat){
-      switch(cat){
-        case "nød": return "Nødnummer";
-        case "intern": return "Intern kontakt";
-        case "leverandør": return "Leverandør";
-        case "center": return "Center / bygning";
-        default: return "";
-      }
     }
 
     // Event listeners
