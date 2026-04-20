@@ -388,6 +388,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="shell">
 
@@ -397,8 +398,9 @@
       <div class="subtitle">Touch-optimeret rapport til frokost og aften</div>
       <div class="heroLine"></div>
     </header>
+
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Skiftlederrapport V2.2
+      Drift version · Skiftlederrapport V2.3
     </div>
 
     <section id="formWrap">
@@ -481,7 +483,6 @@
             <div class="divider"></div>
             <div class="panelBody grid1">
 
-              <!-- ✅ NYT: FROKOST-NAVN -->
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="nameDay">Frokost – Navn</label>
@@ -545,7 +546,6 @@
             <div class="divider"></div>
             <div class="panelBody grid1">
 
-              <!-- ✅ NYT: AFTEN-NAVN -->
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="nameEve">Aften – Navn</label>
@@ -626,13 +626,13 @@
 
   <div class="actionsSticky" id="actionsSticky">
     <div class="actionsInner">
+      <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
       <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
     </div>
   </div>
-
-<script>
-  // ✅ Ny storage key så gamle drafts ikke konflikter med nye felter
-  const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v2_2_splitnames";
+  <script>
+  // ✅ Ny storage key så gamle drafts ikke konflikter
+  const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v2_3_splitnames_noback";
 
   function $(id){ return document.getElementById(id); }
 
@@ -677,6 +677,7 @@
     $("subjectField").value = `Skiftlederrapport – ${afd} – ${localISODate()}`;
   }
 
+  // ✅ Ingen "tilbage til frokost" efter gem: sekundær-knap er altid nulstil
   function setStep(step){
     clearError();
 
@@ -684,12 +685,15 @@
       $("step1").classList.remove("hidden");
       $("step2").classList.add("hidden");
       $("stepPill").textContent = "Step 1 af 2 · Frokost";
+      $("secondaryAction").textContent = "Nulstil";
       $("primaryAction").textContent = "Gem frokost og fortsæt";
       $("primaryAction").className = "btn btn-blue";
     } else {
       $("step1").classList.add("hidden");
       $("step2").classList.remove("hidden");
       $("stepPill").textContent = "Step 2 af 2 · Aften";
+      $("secondaryAction").textContent = "Nulstil";
+      $("primaryAction").textContent = "Send rapport";
       $("primaryAction").className = "btn btn-gold";
     }
 
@@ -718,10 +722,8 @@
 
   function saveDraft(showSavedPill){
     const data = {
-      // ✅ separate navne
       nameDay: val("nameDay"),
       nameEve: val("nameEve"),
-
       department: val("department"),
       dateField: val("dateField"),
 
@@ -760,12 +762,8 @@
     try{
       const data = JSON.parse(raw);
 
-      // ✅ Backwards compatibility hvis nogen havde en gammel draft med "name"
-      if(!data.nameDay && data.name) data.nameDay = data.name;
-
       setVal("nameDay", data.nameDay);
       setVal("nameEve", data.nameEve);
-
       setVal("department", data.department);
       setVal("dateField", data.dateField || nowLocalString());
 
@@ -855,6 +853,16 @@
     $("department").addEventListener("change", updateSubject);
   }
 
+  function doSend(){
+    updateSubject();
+    localStorage.removeItem(STORAGE_KEY);
+
+    $("primaryAction").disabled = true;
+    $("primaryAction").textContent = "Sender...";
+
+    $("reportForm").submit();
+  }
+
   $("primaryAction").addEventListener("click", function(){
     clearError();
 
@@ -874,6 +882,7 @@
     const err1 = validateStep1();
     if(err1){
       showError(err1);
+      // ingen tilbage-knap, men vi kan stadig vise step1 hvis du nulstiller og starter forfra
       setStep(1);
       return;
     }
@@ -884,19 +893,15 @@
       return;
     }
 
-    updateSubject();
-    localStorage.removeItem(STORAGE_KEY);
-
-    $("primaryAction").disabled = true;
-    $("primaryAction").textContent = "Sender...";
-
-    $("reportForm").submit();
+    doSend();
   });
 
-
-
-    saveDraft(true);
-    setStep(1);
+  // ✅ Sekundær-knap er altid nulstil (ingen tilbage)
+  $("secondaryAction").addEventListener("click", function(){
+    clearError();
+    if(confirm("Vil du nulstille rapporten? (Du mister kladden)")){
+      resetAll();
+    }
   });
 
   $("newReportBtn").addEventListener("click", function(){
@@ -920,35 +925,33 @@
   bindRatings();
   bindAutosave();
   loadDraft();
+
+  // ✅ Best effort auto-send kl 23:59 (kun hvis fanen stadig er åben + enheden er vågen)
   function msUntil2359(){
-  const now = new Date();
-  const t = new Date(now);
-  t.setHours(23, 59, 0, 0);
-  if (t <= now) t.setDate(t.getDate() + 1);
-  return t - now;
-}
+    const now = new Date();
+    const t = new Date(now);
+    t.setHours(23, 59, 0, 0);
+    if (t <= now) t.setDate(t.getDate() + 1);
+    return t - now;
+  }
 
-function tryAutoSendAt2359(){
-  setTimeout(() => {
-    // Kun send hvis vi er på step 2 og alt er udfyldt
-    if (currentStep() === 2 && !validateStep1() && !validateStep2()) {
-      // Genbrug din eksisterende send-flow:
-      updateSubject();
-      localStorage.removeItem(STORAGE_KEY);
+  function scheduleAutoSend(){
+    // hvis vi er på "sent"-skærmen, så ingen auto-send
+    if (params.get("sent") === "1") return;
 
-      $("primaryAction").disabled = true;
-      $("primaryAction").textContent = "Sender...";
+    setTimeout(() => {
+      // Send kun hvis step 2 og alt er validt
+      if (currentStep() === 2 && !validateStep1() && !validateStep2()) {
+        doSend();
+        return;
+      }
+      // planlæg igen til næste dag
+      scheduleAutoSend();
+    }, msUntil2359());
+  }
 
-      $("reportForm").submit();
-      return;
-    }
-
-    // Planlæg igen til næste dag (uanset om den sendte eller ej)
-    tryAutoSendAt2359();
-  }, msUntil2359());
-}
-
-tryAutoSendAt2359();
+  scheduleAutoSend();
 </script>
+
 </body>
 </html>
