@@ -3,213 +3,553 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser Kontaktliste</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <title>Kaiser – Telefonliste</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --bg0: #0d1117;
-      --bg1: #161b22;
-      --text: rgba(255,255,255,0.95);
-      --muted: rgba(255,255,255,0.7);
-      --gold: #d6b24a;
-      --blue: #5ea7ff;
-      --green: #62d26f;
+    :root{
+      --bg0:#0d1117;
+      --bg1:#161b22;
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.78);
+      --muted2:rgba(255,255,255,0.55);
+      --gold:#d6b24a;
+      --green:#62d26f;
+      --red:#ff6b6b;
+      --blue:#5ea7ff;
+      --shadow:0 20px 60px rgba(0,0,0,.40);
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg0);
-      color: var(--text);
-      margin: 0;
-      padding: 20px;
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      padding:14px;
     }
 
-    .container { max-width: 1000px; margin: 0 auto; }
+    .shell{max-width:1180px;margin:0 auto;}
 
-    /* Søgefelt */
-    .search-wrap { margin-bottom: 20px; }
-    .search-input {
-      width: 100%;
-      padding: 18px 25px;
-      border-radius: 15px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: var(--bg1);
-      color: white;
-      font-size: 18px;
-      outline: none;
-    }
-
-    /* Filter knapper */
-    .filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-    }
-    .filter-btn {
-      padding: 12px 20px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 12px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .filter-btn.active {
-      background: var(--gold);
-      color: black;
-      border-color: var(--gold);
+    .hero{
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 260px at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(700px 220px at 20% 0%, rgba(245,158,11,0.10), transparent 60%),
+        radial-gradient(700px 220px at 80% 0%, rgba(94,167,255,0.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:20px 18px 18px;
     }
 
-    /* Kontakt Kort Grid */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+    .kicker{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted2);
     }
 
-    @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
-
-    .contact-card {
-      background: var(--bg1);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .title{
+      font-family:"Playfair Display",serif;
+      font-size:clamp(30px,5vw,44px);
+      line-height:1;
+      margin-top:6px;
+      letter-spacing:-.03em;
     }
 
-    .contact-info .name {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .contact-info .role {
-      font-size: 13px;
-      color: var(--gold);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .contact-info .phone {
-      font-size: 20px;
-      font-weight: 900;
-      margin-top: 10px;
-      color: var(--text);
-      display: block;
-      text-decoration: none;
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      margin-top:8px;
     }
 
-    .contact-actions {
-      display: flex;
-      gap: 10px;
+    .heroMetaRow{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted2);
+      font-weight:700;
     }
 
-    .action-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      border: none;
-      background: rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: white;
-      text-decoration: none;
+    .searchRow{
+      margin-top:14px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
-    .action-btn:hover { background: rgba(255,255,255,0.1); }
-    .action-btn.call { background: rgba(98, 210, 111, 0.15); color: var(--green); }
+
+    .searchInput{
+      flex:1 1 260px;
+      min-height:44px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(0,0,0,0.35);
+      padding:0 14px;
+      color:var(--text);
+      font-size:14px;
+      font-weight:600;
+    }
+    .searchInput::placeholder{color:var(--muted2);}
+
+    .filterRow{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .filterChip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      min-height:36px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.04);
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      user-select:none;
+    }
+    .filterChip--active{
+      background:rgba(214,178,74,0.20);
+      border-color:rgba(214,178,74,0.42);
+      color:var(--gold);
+    }
+
+    .section{
+      margin-top:16px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      box-shadow:var(--shadow);
+    }
+
+    .sectionHead{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .sectionDot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--gold);
+    }
+
+    .sectionInfo{
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted2);
+    }
+
+    .sectionBody{padding:16px;}
+
+    .contactGrid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    @media (max-width: 900px){
+      .contactGrid{grid-template-columns:1fr;}
+    }
+
+    .contactCard{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      padding:14px 14px 12px;
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .contactTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .contactIcon{
+      font-size:26px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .badge.red{
+      background:rgba(255,107,107,0.12);
+      border-color:rgba(255,107,107,0.30);
+      color:#ff9494;
+    }
+
+    .badge.green{
+      background:rgba(98,210,111,0.12);
+      border-color:rgba(98,210,111,0.30);
+      color:#93e49c;
+    }
+
+    .badge.blue{
+      background:rgba(94,167,255,0.12);
+      border-color:rgba(94,167,255,0.30);
+      color:#8cc1ff;
+    }
+
+    .contactName{
+      margin-top:8px;
+      font-size:17px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .contactRole{
+      margin-top:2px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .contactPhone{
+      margin-top:8px;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .contactPhone a{
+      color:var(--text);
+      text-decoration:none;
+    }
+
+    .contactPhone a:hover{
+      text-decoration:underline;
+    }
+
+    .contactNote{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted2);
+      font-weight:600;
+    }
+
+    .emptyState{
+      padding:12px;
+      font-size:13px;
+      color:var(--muted2);
+      font-weight:600;
+      text-align:center;
+    }
   </style>
 </head>
 <body>
+  <div class="shell">
 
-<div class="container">
-  <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-input" placeholder="Søg efter navn eller rolle...">
+    <header class="hero">
+      <div class="kicker">KAISER</div>
+      <div class="title">Telefonliste</div>
+      <div class="sub">Vigtige numre til nødsituationer, ledelse og leverandører</div>
+
+      <div class="heroMetaRow">
+        <div id="locLabel">Lokation: Alle caféer</div>
+        <div>Tryk på et nummer for at ringe (på mobil) eller læs direkte (på skærm).</div>
+      </div>
+
+      <div class="searchRow">
+        <input id="searchInput" class="searchInput" type="search"
+               placeholder="Søg efter navn, rolle eller note…" autocomplete="off" />
+      </div>
+
+      <div class="filterRow">
+        <button class="filterChip filterChip--active" data-filter="alle">Alle</button>
+        <button class="filterChip" data-filter="nød">Nød</button>
+        <button class="filterChip" data-filter="intern">Internt</button>
+        <button class="filterChip" data-filter="leverandør">Leverandører</button>
+        <button class="filterChip" data-filter="center">Center / bygning</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle">
+          <span class="sectionDot"></span> Kontakter
+        </div>
+        <div class="sectionInfo" id="resultInfo">Viser alle kontakter</div>
+      </div>
+
+      <div class="sectionBody">
+        <div id="contactGrid" class="contactGrid"></div>
+        <div id="emptyState" class="emptyState" style="display:none;">
+          Ingen kontakter matcher din søgning eller dit filter.
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <div class="filters">
-    <button class="filter-btn active" onclick="filterContacts('all', this)">Alle</button>
-    <button class="filter-btn" onclick="filterContacts('hq', this)">HQ / Kontor</button>
-    <button class="filter-btn" onclick="filterContacts('chef', this)">Cafechefer</button>
-    <button class="filter-btn" onclick="filterContacts('teknik', this)">Teknik / Vagt</button>
-  </div>
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
-  <div class="contact-grid" id="contactGrid">
-    <!-- HQ -->
-    <div class="contact-card" data-cat="hq">
-      <div class="contact-info">
-        <div class="role">Driftsdirektør</div>
-        <div class="name">Anders Andersen</div>
-        <a href="tel:+4512345678" class="phone">12 34 56 78</a>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:+4512345678" class="action-btn call">📞</a>
-      </div>
-    </div>
-
-    <!-- Chef -->
-    <div class="contact-card" data-cat="chef">
-      <div class="contact-info">
-        <div class="role">Cafechef - Roskilde</div>
-        <div class="name">Mette Jensen</div>
-        <a href="tel:+4588888888" class="phone">88 88 88 88</a>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:+4588888888" class="action-btn call">📞</a>
-      </div>
-    </div>
-
-    <!-- Teknik -->
-    <div class="contact-card" data-cat="teknik">
-      <div class="contact-info">
-        <div class="role">IT & HUB Support</div>
-        <div class="name">Teknisk Afdeling</div>
-        <a href="tel:+4599999999" class="phone">99 99 99 99</a>
-      </div>
-      <div class="contact-actions">
-        <a href="tel:+4599999999" class="action-btn call">📞</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Søgefunktion
-  document.getElementById('searchInput').addEventListener('input', function(e) {
-    const term = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll('.contact-card');
-    
-    cards.forEach(card => {
-      const text = card.innerText.toLowerCase();
-      card.style.display = text.includes(term) ? 'flex' : 'none';
-    });
-  });
-
-  // Filter funktion
-  function filterContacts(cat, btn) {
-    // Opdater knapper
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    // Vis/skjul kort
-    const cards = document.querySelectorAll('.contact-card');
-    cards.forEach(card => {
-      if (cat === 'all' || card.dataset.cat === cat) {
-        card.style.display = 'flex';
-      } else {
-        card.style.display = 'none';
+    // Lokation (genbrug "loc" param hvis du kalder siden fra HUB'en)
+    (function initLocation(){
+      const sp = new URLSearchParams(location.search);
+      const loc = sp.get("loc");
+      if (loc) {
+        $("#locLabel").textContent = "Lokation: Café Kaiser " + loc;
       }
-    });
-  }
-</script>
+    })();
 
+    // KONTAKT-DATA – ret/udvid her
+    const contacts = [
+      // NØD
+      {
+        name: "Alarmcentralen",
+        role: "112",
+        category: "nød",
+        phone: "112",
+        note: "Ring kun ved akut fare for liv, brand eller alvorlig ulykke.",
+        icon: "⚠️",
+        badgeColor: "red"
+      },
+      {
+        name: "Giftlinjen",
+        role: "Bispebjerg Hospital",
+        category: "nød",
+        phone: "82121212",
+        note: "Mistanke om forgiftning (medicin, rengøring m.m.).",
+        icon: "⚠️",
+        badgeColor: "red"
+      },
+
+      // INTERNT
+      {
+        name: "Caféchef",
+        role: "Lokal caféchef",
+        category: "intern",
+        phone: "00000000",
+        note: "Primær ansvarlig for caféens daglige drift.",
+        icon: "👤",
+        badgeColor: "green"
+      },
+      {
+        name: "Floormanager / skiftleder",
+        role: "Vagtansvarlig",
+        category: "intern",
+        phone: "00000001",
+        note: "Kontakt ved akutte driftsudfordringer på vagten.",
+        icon: "👤",
+        badgeColor: "green"
+      },
+      {
+        name: "HQ – Drift",
+        role: "Driftsansvarlig",
+        category: "intern",
+        phone: "00000002",
+        note: "Spørgsmål til procedurer, åbningstider, menukort m.m.",
+        icon: "🏢",
+        badgeColor: "blue"
+      },
+      {
+        name: "HQ – HR / Personale",
+        role: "HR",
+        category: "intern",
+        phone: "00000003",
+        note: "Kontrakter, sygdom, ansættelse og personalejuridiske spørgsmål.",
+        icon: "📋",
+        badgeColor: "blue"
+      },
+
+      // LEVERANDØRER
+      {
+        name: "IT / Kassesystem",
+        role: "POS-support",
+        category: "leverandør",
+        phone: "00000004",
+        note: "Fejl på kassesystem, printere, dankortterminal m.m.",
+        icon: "🖥️",
+        badgeColor: "blue"
+      },
+      {
+        name: "Kaffe-leverandør",
+        role: "Service & bestilling",
+        category: "leverandør",
+        phone: "00000005",
+        note: "Bestilling af kaffe samt service på kaffeudstyr.",
+        icon: "☕",
+        badgeColor: "blue"
+      },
+      {
+        name: "Køletekniker",
+        role: "Service",
+        category: "leverandør",
+        phone: "00000006",
+        note: "Akutte problemer med køl og frys. Husk at notere temperaturer.",
+        icon: "❄️",
+        badgeColor: "blue"
+      },
+
+      // CENTER / BYGNING
+      {
+        name: "Center-vagt / Sikkerhed",
+        role: "Center / bygning",
+        category: "center",
+        phone: "00000007",
+        note: "Lås, alarm, uvedkommende gæster, ulykker i centerområdet.",
+        icon: "🛡️",
+        badgeColor: "green"
+      }
+    ];
+
+    let activeFilter = "alle";
+    let searchTerm = "";
+
+    function formatPhone(p){
+      // enkel formattering til dansk 8-cifret nummer: 22 33 44 55
+      const clean = p.replace(/\D/g,"");
+      if (clean.length === 8) {
+        return clean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4");
+      }
+      return p;
+    }
+
+    function iconFor(contact){
+      return contact.icon || {
+        "nød":"⚠️",
+        "intern":"👤",
+        "leverandør":"🏭",
+        "center":"🏢"
+      }[contact.category] || "📞";
+    }
+
+    function badgeClass(color){
+      if(color === "red") return "badge red";
+      if(color === "green") return "badge green";
+      if(color === "blue") return "badge blue";
+      return "badge";
+    }
+
+    function renderContacts(){
+      const grid = $("#contactGrid");
+      grid.innerHTML = "";
+
+      const term = searchTerm.trim().toLowerCase();
+
+      const filtered = contacts.filter(c => {
+        if (activeFilter !== "alle" && c.category !== activeFilter) return false;
+        if (!term) return true;
+        const haystack = (c.name + " " + c.role + " " + (c.note || "")).toLowerCase();
+        return haystack.includes(term);
+      });
+
+      $("#resultInfo").textContent =
+        activeFilter === "alle"
+          ? `Viser ${filtered.length} kontakt(er)`
+          : `Viser ${filtered.length} kontakt(er) i kategori "${activeFilter}"`;
+
+      if (filtered.length === 0) {
+        $("#emptyState").style.display = "block";
+        return;
+      }
+      $("#emptyState").style.display = "none";
+
+      filtered.forEach(c => {
+        const card = document.createElement("article");
+        card.className = "contactCard";
+        card.innerHTML = `
+          <div>
+            <div class="contactTop">
+              <div class="contactIcon">${iconFor(c)}</div>
+              <div class="${badgeClass(c.badgeColor)}">${c.role}</div>
+            </div>
+            <div class="contactName">${c.name}</div>
+            <div class="contactRole">${labelForCategory(c.category)}</div>
+          </div>
+          <div>
+            <div class="contactPhone">
+              Tlf:
+              <a href="tel:${c.phone}">${formatPhone(c.phone)}</a>
+            </div>
+            ${c.note ? `<div class="contactNote">${c.note}</div>` : ""}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function labelForCategory(cat){
+      switch(cat){
+        case "nød": return "Nødnummer";
+        case "intern": return "Intern kontakt";
+        case "leverandør": return "Leverandør";
+        case "center": return "Center / bygning";
+        default: return "";
+      }
+    }
+
+    // Event listeners
+    $("#searchInput").addEventListener("input", (e)=>{
+      searchTerm = e.target.value;
+      renderContacts();
+    });
+
+    $$(".filterChip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeFilter = btn.dataset.filter;
+        $$(".filterChip").forEach(b => b.classList.remove("filterChip--active"));
+        btn.classList.add("filterChip--active");
+        renderContacts();
+      });
+    });
+
+    renderContacts();
+  </script>
 </body>
 </html>
