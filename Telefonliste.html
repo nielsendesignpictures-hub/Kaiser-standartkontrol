@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaiser Kontaktliste</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg0: #0d1117;
+      --bg1: #161b22;
+      --text: rgba(255,255,255,0.95);
+      --muted: rgba(255,255,255,0.7);
+      --gold: #d6b24a;
+      --blue: #5ea7ff;
+      --green: #62d26f;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg0);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    /* Søgefelt */
+    .search-wrap { margin-bottom: 20px; }
+    .search-input {
+      width: 100%;
+      padding: 18px 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--bg1);
+      color: white;
+      font-size: 18px;
+      outline: none;
+    }
+
+    /* Filter knapper */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .filter-btn {
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-btn.active {
+      background: var(--gold);
+      color: black;
+      border-color: var(--gold);
+    }
+
+    /* Kontakt Kort Grid */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    .contact-card {
+      background: var(--bg1);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-info .name {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .contact-info .role {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .contact-info .phone {
+      font-size: 20px;
+      font-weight: 900;
+      margin-top: 10px;
+      color: var(--text);
+      display: block;
+      text-decoration: none;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.1); }
+    .action-btn.call { background: rgba(98, 210, 111, 0.15); color: var(--green); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" class="search-input" placeholder="Søg efter navn eller rolle...">
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterContacts('all', this)">Alle</button>
+    <button class="filter-btn" onclick="filterContacts('hq', this)">HQ / Kontor</button>
+    <button class="filter-btn" onclick="filterContacts('chef', this)">Cafechefer</button>
+    <button class="filter-btn" onclick="filterContacts('teknik', this)">Teknik / Vagt</button>
+  </div>
+
+  <div class="contact-grid" id="contactGrid">
+    <!-- HQ -->
+    <div class="contact-card" data-cat="hq">
+      <div class="contact-info">
+        <div class="role">Driftsdirektør</div>
+        <div class="name">Anders Andersen</div>
+        <a href="tel:+4512345678" class="phone">12 34 56 78</a>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:+4512345678" class="action-btn call">📞</a>
+      </div>
+    </div>
+
+    <!-- Chef -->
+    <div class="contact-card" data-cat="chef">
+      <div class="contact-info">
+        <div class="role">Cafechef - Roskilde</div>
+        <div class="name">Mette Jensen</div>
+        <a href="tel:+4588888888" class="phone">88 88 88 88</a>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:+4588888888" class="action-btn call">📞</a>
+      </div>
+    </div>
+
+    <!-- Teknik -->
+    <div class="contact-card" data-cat="teknik">
+      <div class="contact-info">
+        <div class="role">IT & HUB Support</div>
+        <div class="name">Teknisk Afdeling</div>
+        <a href="tel:+4599999999" class="phone">99 99 99 99</a>
+      </div>
+      <div class="contact-actions">
+        <a href="tel:+4599999999" class="action-btn call">📞</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Søgefunktion
+  document.getElementById('searchInput').addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll('.contact-card');
+    
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(term) ? 'flex' : 'none';
+    });
+  });
+
+  // Filter funktion
+  function filterContacts(cat, btn) {
+    // Opdater knapper
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Vis/skjul kort
+    const cards = document.querySelectorAll('.contact-card');
+    cards.forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
