@@ -548,11 +548,14 @@
     entries.unshift(entry);
     saveEntries();
 
-    prefs.lastBy = entry.by;
-    prefs.lastPlace = entry.place || prefs.lastPlace;
-    savePrefs();
+// Gem stadig plads, men nulstil navn
+prefs.lastBy = "";
+prefs.lastPlace = entry.place || prefs.lastPlace;
+savePrefs();
 
-    note.value = "";
+// Ryd felter i UI
+by.value = "";
+note.value = "";
     if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
     updatePreview();
     render();
