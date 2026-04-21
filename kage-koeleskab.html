@@ -390,6 +390,113 @@
   let prefs = loadPrefsWithMigration();
   let selectedTypeId = prefs.lastTypeId || "gulerod";
   let pendingDiscardId = null;
+    // === Notifikationer / faneblad indikator ===
+  const WARN_BEFORE_MS = 2 * 60 * 60 * 1000; // 2 timer
+  const NOTIF_STATE_KEY = "kagekoeleskab.notifState.v1";
+  let notifState = tryParse(localStorage.getItem(NOTIF_STATE_KEY)) || {};
+  function saveNotifState(){ localStorage.setItem(NOTIF_STATE_KEY, JSON.stringify(notifState)); }
+
+  function ensureNotifPermissionFromUserGesture(){
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "default") {
+      // Må gerne kaldes fra et klik (fx "Tilføj")
+      Notification.requestPermission().then(() => {});
+    }
+  }
+
+  function dueSoonEntries(){
+    const now = Date.now();
+    return entries.filter(e => {
+      if (e.status === "discarded") return false;
+      const t = new Date(e.discardAt).getTime();
+      const diff = t - now;
+      return diff > 0 && diff <= WARN_BEFORE_MS;
+    });
+  }
+
+  function fmtTimeLeft(ms){
+    const m = Math.max(0, Math.round(ms / 60000));
+    const h = Math.floor(m / 60);
+    const mm = m % 60;
+    if (h <= 0) return `${mm} min`;
+    return `${h} t ${mm} min`;
+  }
+
+  function notifyOnce(entry, kind, title, body){
+    if (!("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+
+    notifState[entry.id] ||= {};
+    if (notifState[entry.id][kind]) return; // allerede sendt
+
+    try{
+      new Notification(title, { body });
+      notifState[entry.id][kind] = true;
+      saveNotifState();
+    }catch(e){
+      // Ignorér hvis browser blokerer i konteksten
+    }
+  }
+
+  function updateTabIndicators(){
+    const dueTodayCount = alarmEntries().length;   // “udløb i dag”
+    const dueSoonCount = dueSoonEntries().length;  // “udløber inden 2 timer”
+    const n = dueTodayCount + dueSoonCount;
+
+    document.title = n > 0 ? `(${n}) Kagekøleskab` : "Kagekøleskab";
+
+    // Optional: lille badge på favicon med antal
+    try{
+      const size = 64;
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      const ctx = c.getContext("2d");
+
+      // baggrund (mørk)
+      ctx.fillStyle = "#0b0f14";
+      ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.fill();
+
+      if (n > 0){
+        // rød badge
+        ctx.fillStyle = "#ff2d2d";
+        ctx.beginPath(); ctx.arc(size*0.72, size*0.30, size*0.22, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 22px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(String(Math.min(n, 99)), size*0.72, size*0.30);
+      } else {
+        // lille “K” når alt ok (valgfrit)
+        ctx.fillStyle = "#d9b65a";
+        ctx.font = "bold 30px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("K", size/2, size/2);
+      }
+
+      let link = document.querySelector("link[rel='icon']");
+      if (!link){
+        link = document.createElement("link");
+        link.rel = "icon";
+        document.head.appendChild(link);
+      }
+      link.href = c.toDataURL("image/png");
+    }catch{}
+  }
+
+  function checkDueSoonNotifications(){
+    const now = Date.now();
+    for (const e of dueSoonEntries()){
+      const diff = new Date(e.discardAt).getTime() - now;
+      notifyOnce(
+        e,
+        "soon",
+        "Kage skal smides ud snart",
+        `${e.cakeName} • om ca. ${fmtTimeLeft(diff)} (udløb: ${fmtDateTime(e.discardAt)})`
+      );
+    }
+  }
 
   function tryParse(raw){ try{ return raw ? JSON.parse(raw) : null; } catch { return null; } }
 
@@ -560,6 +667,8 @@ note.value = "";
     updatePreview();
     render();
     checkAlarm(true);
+      updateTabIndicators();
+  checkDueSoonNotifications();
   }
 
   function render(){
@@ -743,7 +852,10 @@ note.value = "";
   updatePreview();
   render();
 
-  addBtn.addEventListener("click", addEntry);
+    addBtn.addEventListener("click", () => {
+    ensureNotifPermissionFromUserGesture();
+    addEntry();
+  });
   customName.addEventListener("input", updatePreview);
   customDays.addEventListener("input", updatePreview);
   by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
@@ -751,7 +863,11 @@ note.value = "";
 
   // Auto alarm check
   checkAlarm(false);
-  setInterval(() => checkAlarm(false), 30 * 1000);
+    setInterval(() => {
+    checkAlarm(false);
+    checkDueSoonNotifications();
+    updateTabIndicators();
+  }, 30 * 1000);
 })();
 </script>
 </body>
