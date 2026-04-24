@@ -257,16 +257,37 @@
       margin-top:6px;
     }
 
+    /* ✅ Større rating “cards” med ⭐ */
     .ratingBtn{
-      min-height:84px;
+      min-height:96px;
       border-radius:20px;
       border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,.04);
       color:var(--text);
-      font-size:28px;
       font-weight:900;
       transition:.16s ease;
       cursor:pointer;
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px 8px;
+    }
+
+    .rbNum{
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-0.02em;
+    }
+
+    .rbStars{
+      font-size:15px;
+      letter-spacing:.12em;
+      color:rgba(213,231,248,.75);
+      font-weight:800;
+      line-height:1;
     }
 
     .ratingBtn.selected{
@@ -275,6 +296,7 @@
       box-shadow:0 0 0 4px rgba(102,183,255,.12);
       color:white;
     }
+    .ratingBtn.selected .rbStars{ color:white; }
 
     .ratingLegend{
       margin-top:10px;
@@ -292,6 +314,28 @@
       font-weight:900;
       font-size:18px;
       letter-spacing:-0.01em;
+    }
+
+    .statusLine{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(145,205,255,.10);
+      background:rgba(255,255,255,.03);
+      color:rgba(213,231,248,.80);
+      font-weight:800;
+      font-size:14px;
+      line-height:1.35;
+    }
+    .statusLine.good{
+      border-color:rgba(72,201,135,.18);
+      background:rgba(72,201,135,.08);
+      color:#bdf5d6;
+    }
+    .statusLine.warn{
+      border-color:rgba(255,199,92,.20);
+      background:rgba(255,199,92,.08);
+      color:#ffe2b3;
     }
 
     .errorBox{
@@ -392,7 +436,8 @@
     @media (max-width: 700px){
       .actionsInner{ grid-template-columns:1fr; }
       .btn{ min-height:64px; font-size:20px; }
-      .ratingBtn{ min-height:72px; font-size:24px; }
+      .ratingBtn{ min-height:86px; }
+      .rbNum{ font-size:28px; }
     }
   </style>
 </head>
@@ -408,7 +453,7 @@
     </header>
 
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Skiftlederrapport V3.0
+      Drift version · Skiftlederrapport V3.1
     </div>
 
     <section id="formWrap">
@@ -418,7 +463,7 @@
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
 
-        <!-- ✅ Ledelse CC (fast) -->
+        <!-- ✅ Ledelse CC -->
         <input type="hidden" name="_cc" value="Christian@cafekaiser.dk,Casper@cafekaiser.dk,Stefan@cafekaiser.dk">
 
         <input type="text" name="_honey" style="display:none">
@@ -435,6 +480,9 @@
             <div class="muted">
               Udfyld frokost → gem → udfyld aften → send. (Efter “Gem frokost” kan du ikke gå tilbage.)
             </div>
+
+            <!-- ✅ Live status -->
+            <div id="statusLine" class="statusLine warn">Status: —</div>
           </div>
         </div>
 
@@ -471,7 +519,7 @@
           </div>
         </div>
 
-        <!-- STEP 1: Frokost -->
+        <!-- STEP 1 -->
         <section id="step1">
           <div class="panel">
             <div class="panelHead">
@@ -491,25 +539,31 @@
                 <div class="label">Dagens Rating</div>
 
                 <div class="ratingWrap">
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">4</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">5</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">
+                    <div class="rbNum">1</div><div class="rbStars">★☆☆☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">
+                    <div class="rbNum">2</div><div class="rbStars">★★☆☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">
+                    <div class="rbNum">3</div><div class="rbStars">★★★☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">
+                    <div class="rbNum">4</div><div class="rbStars">★★★★☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">
+                    <div class="rbNum">5</div><div class="rbStars">★★★★★</div>
+                  </button>
                 </div>
 
-                <div class="ratingLegend">
-                  <span>Lav</span>
-                  <span>Høj</span>
-                </div>
-
+                <div class="ratingLegend"><span>Lav</span><span>Høj</span></div>
                 <div class="ratingPreview" id="rateDayPreview">Dagens Rating: —</div>
                 <input type="hidden" id="rateDay" name="Frokost – Dagens Rating">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="guestDay">Gæsterejsen (Service, Stemning & Feedback)</label>
+                  <label class="label" for="guestDay">Gæsterejsen (Service, Stemning & Feedback) – Beskrivelse</label>
                   <textarea class="textarea" id="guestDay" name="Frokost – Gæsterejsen – Beskrivelse"></textarea>
                 </div>
               </div>
@@ -546,7 +600,7 @@
           </div>
         </section>
 
-        <!-- STEP 2: Aften -->
+        <!-- STEP 2 -->
         <section id="step2" class="hidden">
           <div class="panel">
             <div class="panelHead">
@@ -566,25 +620,31 @@
                 <div class="label">Dagens Rating</div>
 
                 <div class="ratingWrap">
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">4</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">5</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">
+                    <div class="rbNum">1</div><div class="rbStars">★☆☆☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">
+                    <div class="rbNum">2</div><div class="rbStars">★★☆☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">
+                    <div class="rbNum">3</div><div class="rbStars">★★★☆☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">
+                    <div class="rbNum">4</div><div class="rbStars">★★★★☆</div>
+                  </button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">
+                    <div class="rbNum">5</div><div class="rbStars">★★★★★</div>
+                  </button>
                 </div>
 
-                <div class="ratingLegend">
-                  <span>Lav</span>
-                  <span>Høj</span>
-                </div>
-
+                <div class="ratingLegend"><span>Lav</span><span>Høj</span></div>
                 <div class="ratingPreview" id="rateEvePreview">Dagens Rating: —</div>
                 <input type="hidden" id="rateEve" name="Aften – Dagens Rating">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="guestEve">Gæsterejsen (Service, Stemning & Feedback)</label>
+                  <label class="label" for="guestEve">Gæsterejsen (Service, Stemning & Feedback) – Beskrivelse</label>
                   <textarea class="textarea" id="guestEve" name="Aften – Gæsterejsen – Beskrivelse"></textarea>
                 </div>
               </div>
@@ -645,8 +705,9 @@
       <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
     </div>
   </div>
+
   <script>
-  const STORAGE_KEY = "kaiser_shift_report_v3";
+  const STORAGE_KEY = "kaiser_shift_report_v3_1";
 
   function $(id){ return document.getElementById(id); }
 
@@ -725,6 +786,7 @@
     }
 
     saveDraft(false);
+    updateStatusLine();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -733,6 +795,7 @@
       btn.classList.toggle("selected", btn.dataset.value === val(targetId));
     });
     setRatingPreview(targetId);
+    updateStatusLine();
   }
 
   function bindRatings(){
@@ -787,6 +850,7 @@
       updateSubject();
       setRatingPreview("rateDay");
       setRatingPreview("rateEve");
+      updateStatusLine();
       return;
     }
 
@@ -825,12 +889,15 @@
       } else {
         setStep(1);
       }
+
+      updateStatusLine();
     } catch(e){
       $("dateField").value = nowLocalString();
       updateSubject();
       setStep(1);
       setRatingPreview("rateDay");
       setRatingPreview("rateEve");
+      updateStatusLine();
     }
   }
 
@@ -845,6 +912,46 @@
     if(!val("nameEve")) return "Udfyld navn (aften).";
     if(!val("rateEve")) return "Vælg dagens rating (aften).";
     return "";
+  }
+
+  // ✅ Live status / mangler-liste
+  function updateStatusLine(){
+    const el = $("statusLine");
+    if(!el) return;
+
+    const step = currentStep();
+    const missing = [];
+
+    if(!val("department")) missing.push("Afdeling");
+
+    if(step === 1){
+      if(!val("nameDay")) missing.push("Navn (frokost)");
+      if(!val("rateDay")) missing.push("Rating (frokost)");
+      if(missing.length){
+        el.classList.remove("good");
+        el.classList.add("warn");
+        el.textContent = "Status: Mangler – " + missing.join(", ");
+      }else{
+        el.classList.remove("warn");
+        el.classList.add("good");
+        el.textContent = "Status: Klar til at gemme frokost og fortsætte til aften.";
+      }
+      return;
+    }
+
+    // step 2
+    if(!val("nameEve")) missing.push("Navn (aften)");
+    if(!val("rateEve")) missing.push("Rating (aften)");
+
+    if(missing.length){
+      el.classList.remove("good");
+      el.classList.add("warn");
+      el.textContent = "Status: Mangler – " + missing.join(", ");
+    }else{
+      el.classList.remove("warn");
+      el.classList.add("good");
+      el.textContent = "Status: Klar til at sende rapport.";
+    }
   }
 
   function resetAll(){
@@ -864,6 +971,7 @@
     updateRatingUI("rateEve");
     setStep(1);
     clearError();
+    updateStatusLine();
   }
 
   function bindAutosave(){
@@ -878,15 +986,20 @@
       el.addEventListener("input", () => {
         saveDraft(false);
         if(id === "department") updateSubject();
+        updateStatusLine();
       });
 
       el.addEventListener("change", () => {
         saveDraft(false);
         if(id === "department") updateSubject();
+        updateStatusLine();
       });
     });
 
-    $("department").addEventListener("change", updateSubject);
+    $("department").addEventListener("change", () => {
+      updateSubject();
+      updateStatusLine();
+    });
   }
 
   function doSend(){
@@ -906,6 +1019,7 @@
       const err = validateStep1();
       if(err){
         showError(err);
+        updateStatusLine();
         return;
       }
 
@@ -925,6 +1039,7 @@
     const err2 = validateStep2();
     if(err2){
       showError(err2);
+      updateStatusLine();
       return;
     }
 
@@ -954,12 +1069,24 @@
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  $("dateField").value = nowLocalString();
+  // ✅ Dato & tid auto-opdater (hvert minut)
+  function startDateTicker(){
+    $("dateField").value = nowLocalString();
+    setInterval(() => {
+      // Opdater kun hvis vi IKKE allerede er på "sent" skærm
+      if (params.get("sent") === "1") return;
+      $("dateField").value = nowLocalString();
+      saveDraft(false);
+    }, 60 * 1000);
+  }
+
   $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
 
   bindRatings();
   bindAutosave();
+  startDateTicker();
   loadDraft();
+  updateStatusLine();
 
   // ✅ Best effort auto-send kl 23:59 (kun hvis fanen stadig er åben + enheden er vågen)
   function msUntil2359(){
