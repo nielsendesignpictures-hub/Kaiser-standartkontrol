@@ -1,401 +1,1311 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Todo Liste</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser – Operations Command Center</title>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #0f0f0f;
-            color: #e0e0e0;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+  <style>
+    :root {
+      --bg-deep: #050508;
+      --bg-dark: #0a0a0f;
+      --bg-panel: rgba(20, 20, 25, 0.6);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-glow: rgba(214, 178, 74, 0.3);
+      --border-crit: rgba(255, 107, 107, 0.4);
+      --border-safe: rgba(98, 210, 111, 0.3);
+      
+      --neon-gold: #d6b24a;
+      --neon-cyan: #00f0ff;
+      --neon-red: #ff4757;
+      --neon-green: #2ed573;
+      --neon-orange: #ffa502;
+      
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b0;
+      --text-muted: #606070;
+      
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Inter', sans-serif;
+      
+      --radius: 16px;
+      --radius-lg: 24px;
+    }
 
-        header {
-            margin-bottom: 50px;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      height: 100%;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background: var(--bg-deep);
+      overflow-x: hidden;
+    }
 
-        h1 {
-            font-size: 48px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(214, 178, 74, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 71, 87, 0.02) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .subtitle {
-            color: #888;
-            font-size: 16px;
-        }
+    /* Scanline Effect */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 0, 0, 0.1) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.3;
+    }
 
-        .input-section {
-            margin-bottom: 50px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 20px;
-        }
+    .shell {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
+    /* Header / Command Bar */
+    .commandBar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 20px 30px;
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(20px);
+      margin-bottom: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
 
-        #taskInput {
-            flex: 1;
-            padding: 14px 18px;
-            background: #0f0f0f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 15px;
-            transition: all 0.2s;
-        }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-        #taskInput:focus {
-            outline: none;
-            border-color: #666;
-            background: #151515;
-        }
+    .brandIcon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--neon-gold), var(--neon-orange));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--bg-deep);
+      box-shadow: 0 0 30px rgba(214, 178, 74, 0.3);
+    }
 
-        #taskInput::placeholder {
-            color: #555;
-        }
+    .brandText h1 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      background: linear-gradient(to right, #fff, #a0a0b0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .priority-buttons {
-            display: flex;
-            gap: 8px;
-        }
+    .brandText span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
 
-        .priority-btn {
-            padding: 14px 20px;
-            background: #1f1f1f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #888;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
+    .statusPill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 99px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
 
-        .priority-btn:hover {
-            background: #252525;
-            border-color: #444;
-        }
+    .statusPill::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon-cyan);
+      animation: pulse 2s infinite;
+    }
 
-        .priority-btn.active {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-        }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
 
-        #addBtn {
-            padding: 14px 32px;
-            background: #fff;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+    .dateTime {
+      text-align: right;
+      font-family: var(--font-mono);
+    }
 
-        #addBtn:hover {
-            background: #e0e0e0;
-            transform: translateY(-1px);
-        }
+    .dateTime .time {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
 
-        #addBtn:active {
-            transform: translateY(0);
-        }
+    .dateTime .date {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
 
-        .section {
-            margin-bottom: 40px;
-        }
+    /* AI Briefing Section */
+    .aiBriefing {
+      background: linear-gradient(135deg, rgba(214, 178, 74, 0.1), rgba(0, 0, 0, 0.4));
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #2a2a2a;
-        }
+    .aiBriefing::before {
+      content: 'AI';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--neon-gold);
+      opacity: 0.5;
+      letter-spacing: 0.2em;
+    }
 
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #666;
-        }
+    .aiBriefing h2 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--neon-gold);
+    }
 
-        .task-count {
-            background: #1f1f1f;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            color: #888;
-        }
+    .aiBriefing p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
 
-        .task-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+    .aiBriefing .actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+    }
 
-        .task-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 18px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        .task-item:hover {
-            background: #1f1f1f;
-            border-color: #333;
-        }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--neon-gold), var(--neon-orange));
+      color: var(--bg-deep);
+      box-shadow: 0 4px 20px rgba(214, 178, 74, 0.3);
+    }
 
-        .task-item.completed {
-            opacity: 0.5;
-        }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(214, 178, 74, 0.4);
+    }
 
-        .task-item.completed .task-text {
-            text-decoration: line-through;
-            color: #666;
-        }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-secondary);
+    }
 
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #fff;
-        }
+    /* Risk Radar */
+    .riskRadar {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
 
-        .task-text {
-            flex: 1;
-            font-size: 15px;
-            color: #e0e0e0;
-            line-height: 1.5;
-        }
+    .radarContainer {
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
 
-        .delete-btn {
-            padding: 6px 14px;
-            background: transparent;
-            color: #666;
-            border: 1px solid #2a2a2a;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-            opacity: 0;
-        }
+    .radarHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-        .task-item:hover .delete-btn {
-            opacity: 1;
-        }
+    .radarTitle {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
 
-        .delete-btn:hover {
-            background: #2a2a2a;
-            color: #ff4444;
-            border-color: #ff4444;
-        }
+    .radarGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
 
-        .empty-state {
-            text-align: center;
-            color: #444;
-            padding: 40px 20px;
-            font-size: 14px;
-        }
+    .locationNode {
+      background: var(--bg-glass);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 36px;
-            }
+    .locationNode:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
 
-            .input-wrapper {
-                flex-direction: column;
-            }
+    .locationNode.critical {
+      border-color: var(--neon-red);
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.2);
+    }
 
-            .priority-buttons {
-                width: 100%;
-            }
+    .locationNode.warning {
+      border-color: var(--neon-orange);
+    }
 
-            .priority-btn {
-                flex: 1;
-            }
-        }
-    </style>
+    .locationNode.stable {
+      border-color: var(--neon-green);
+    }
+
+    .locationNode::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      opacity: 0.5;
+    }
+
+    .locName {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .locStatus {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-family: var(--font-mono);
+    }
+
+    .locSignals {
+      margin-top: 8px;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    /* Next Action Panel */
+    .nextAction {
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), rgba(0, 0, 0, 0.4));
+      border: 1px solid var(--border-crit);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: relative;
+    }
+
+    .nextAction h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--neon-red);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nextAction h3::before {
+      content: '⚡';
+    }
+
+    .actionText {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .actionSub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Live Feed */
+    .liveFeed {
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .feedHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .feedTitle {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedTitle::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--neon-red);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .feedList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .feedItem {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      border-left: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .feedItem:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .feedItem.critical { border-left-color: var(--neon-red); }
+    .feedItem.warning { border-left-color: var(--neon-orange); }
+    .feedItem.info { border-left-color: var(--neon-cyan); }
+
+    .feedTime {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      min-width: 60px;
+    }
+
+    .feedContent {
+      flex: 1;
+    }
+
+    .feedText {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .feedLoc {
+      font-size: 11px;
+      color: var(--neon-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Main Grid */
+    .mainGrid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1200px) {
+      .riskRadar { grid-template-columns: 1fr; }
+      .mainGrid { grid-template-columns: 1fr; }
+      .commandBar { grid-template-columns: 1fr; text-align: center; }
+      .dateTime { text-align: center; }
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .panelHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .panelTitle {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Signal Cards */
+    .signalGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .signalCard {
+      background: var(--bg-glass);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .signalCard:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .signalIcon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .signalCard.complaints .signalIcon { background: rgba(255, 71, 87, 0.2); color: var(--neon-red); }
+    .signalCard.soldout .signalIcon { background: rgba(255, 165, 2, 0.2); color: var(--neon-orange); }
+    .signalCard.faults .signalIcon { background: rgba(0, 240, 255, 0.2); color: var(--neon-cyan); }
+    .signalCard.supplier .signalIcon { background: rgba(214, 178, 74, 0.2); color: var(--neon-gold); }
+
+    .signalCount {
+      font-size: 32px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
+    }
+
+    .signalLabel {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    /* Lists */
+    .dataList {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dataRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s;
+    }
+
+    .dataRow:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dataRowMain {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .dataRowMeta {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-red { background: rgba(255, 71, 87, 0.2); color: var(--neon-red); }
+    .badge-orange { background: rgba(255, 165, 2, 0.2); color: var(--neon-orange); }
+    .badge-green { background: rgba(46, 213, 115, 0.2); color: var(--neon-green); }
+    .badge-cyan { background: rgba(0, 240, 255, 0.2); color: var(--neon-cyan); }
+
+    /* Goals Section */
+    .goalsSection {
+      margin-top: 24px;
+    }
+
+    .goalItem {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border-left: 3px solid var(--neon-gold);
+      margin-bottom: 12px;
+    }
+
+    .goalDate {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+
+    .goalText {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .goalDays {
+      font-size: 12px;
+      color: var(--neon-gold);
+      font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    /* Notification Pulse */
+    .notification-pulse {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-panel);
+      border: 1px solid var(--neon-red);
+      border-radius: 16px;
+      padding: 20px 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .notification-pulse.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .notification-pulse h4 {
+      color: var(--neon-red);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .notification-pulse p {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Todo</h1>
-            <p class="subtitle">Hold styr på dine opgaver</p>
-        </header>
-        
-        <div class="input-section">
-            <div class="input-wrapper">
-                <input type="text" id="taskInput" placeholder="Skriv en ny opgave...">
-                <button id="addBtn">Tilføj</button>
-            </div>
-            <div class="priority-buttons">
-                <button class="priority-btn active" data-priority="high">🔴 Haster</button>
-                <button class="priority-btn" data-priority="medium">🟠 Denne uge</button>
-                <button class="priority-btn" data-priority="low">🟡 Projekt</button>
-            </div>
-        </div>
+  <div class="shell">
 
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title">🔴 Haster</span>
-                <span class="task-count" id="highCount">0</span>
-            </div>
-            <ul class="task-list" id="highPriority"></ul>
+    <!-- Command Bar -->
+    <header class="commandBar">
+      <div class="brand">
+        <div class="brandIcon">K</div>
+        <div class="brandText">
+          <h1>Operations Board</h1>
+          <span>Command Center</span>
         </div>
+      </div>
+      
+      <div class="statusPill" id="systemStatus">System Online</div>
+      
+      <div class="dateTime">
+        <div class="time" id="clockTime">00:00</div>
+        <div class="date" id="clockDate">--.--.----</div>
+      </div>
+    </header>
 
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title">🟠 Denne uge</span>
-                <span class="task-count" id="mediumCount">0</span>
-            </div>
-            <ul class="task-list" id="mediumPriority"></ul>
-        </div>
+    <!-- AI Briefing -->
+    <section class="aiBriefing animate-in">
+      <h2 id="aiHeadline">Analyserer driftsdata...</h2>
+      <p id="aiText">Henter seneste information fra alle lokationer for at generere din ledelsesbriefing.</p>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="focusOnCritical()">Fokusér på kritisk</button>
+        <button class="btn btn-secondary" onclick="refreshData()">Opdater data</button>
+      </div>
+    </section>
 
-        <div class="section">
-            <div class="section-header">
-                <span class="section-title">🟡 Projekter</span>
-                <span class="task-count" id="lowCount">0</span>
-            </div>
-            <ul class="task-list" id="lowPriority"></ul>
+    <!-- Risk Radar & Next Action -->
+    <div class="riskRadar">
+      <div class="radarContainer">
+        <div class="radarHeader">
+          <div class="radarTitle">📍 Risk Radar – Lokationsoverblik</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">Live Data</div>
         </div>
+        <div class="radarGrid" id="locationRadar">
+          <!-- Dynamisk indhold -->
+        </div>
+      </div>
+
+      <div class="nextAction">
+        <h3>Næste handling</h3>
+        <div class="actionText" id="nextActionText">Ingen kritiske handlinger</div>
+        <div class="actionSub" id="nextActionSub">Alle systemer fungerer normalt</div>
+      </div>
     </div>
 
-    <script>
-        // Initial tasks
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || {
-            high: [
-                { text: 'Pænstere drifttool til mødet mandag', completed: false },
-                { text: 'Sende mails ud omkring køkkenchefmøde', completed: false }
-            ],
-            medium: [
-                { text: 'Har køkkencheferne styr på alt omkring flæsk?', completed: false },
-                { text: 'Opdatere køkken %', completed: false },
-                { text: 'Skrive nye opskrifter ind i SharePoint', completed: false }
-            ],
-            low: [
-                { text: 'Catering-opskrifter', completed: false },
-                { text: 'Oprette nye knapper i Friendly', completed: false },
-                { text: 'Lave AI-opskriftsbot til tjenere', completed: false }
-            ]
+    <!-- Live Event Stream -->
+    <section class="liveFeed animate-in">
+      <div class="feedHeader">
+        <div class="feedTitle">Live Event Stream</div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
+          <span id="eventCount">0</span> hændelser i dag
+        </div>
+      </div>
+      <div class="feedList" id="liveFeedList">
+        <div class="empty">Venter på live data...</div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <div class="mainGrid">
+      <!-- Signals Overview -->
+      <div class="panel animate-in">
+        <div class="panelHeader">
+          <div class="panelTitle">⚡ Driftssignaler</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
+            Opdateret <span id="lastUpdate">--:--</span>
+          </div>
+        </div>
+        
+        <div class="signalGrid">
+          <div class="signalCard complaints" onclick="filterSignals('complaints')">
+            <div class="signalIcon">⚠</div>
+            <div class="signalCount" id="countComplaints">0</div>
+            <div class="signalLabel">Klager</div>
+          </div>
+          
+          <div class="signalCard soldout" onclick="filterSignals('soldout')">
+            <div class="signalIcon">📦</div>
+            <div class="signalCount" id="countSoldout">0</div>
+            <div class="signalLabel">Udsolgt</div>
+          </div>
+          
+          <div class="signalCard faults" onclick="filterSignals('faults')">
+            <div class="signalIcon">🔧</div>
+            <div class="signalCount" id="countFaults">0</div>
+            <div class="signalLabel">Fejl</div>
+          </div>
+          
+          <div class="signalCard supplier" onclick="filterSignals('supplier')">
+            <div class="signalIcon">🚚</div>
+            <div class="signalCount" id="countSupplier">0</div>
+            <div class="signalLabel">Leverandør</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <div class="panelTitle" style="margin-bottom: 16px;">Seneste signaler</div>
+          <div class="dataList" id="recentSignalsList">
+            <div class="empty">Ingen signaler</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="panel animate-in">
+        <div class="panelHeader">
+          <div class="panelTitle">📊 KPI Overblik</div>
+        </div>
+
+        <div class="dataList" style="margin-bottom: 24px;">
+          <div class="dataRow">
+            <span class="dataRowMain">Kædestatus</span>
+            <span class="badge badge-red" id="chainStatusBadge">Kritisk</span>
+          </div>
+          <div class="dataRow">
+            <span class="dataRowMain">Åbne signaler</span>
+            <span class="dataRowMeta" id="totalSignals">0</span>
+          </div>
+          <div class="dataRow">
+            <span class="dataRowMain">Fokuslokation</span>
+            <span class="dataRowMeta" id="focusLocation">—</span>
+          </div>
+          <div class="dataRow">
+            <span class="dataRowMain">Kitchen % (MTD)</span>
+            <span class="dataRowMeta" id="kitchenPct">—</span>
+          </div>
+        </div>
+
+        <div class="panelTitle" style="margin-bottom: 16px;">Catering i dag</div>
+        <div class="dataList" id="cateringList">
+          <div class="empty">Ingen catering</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Goals Section -->
+    <section class="goalsSection panel animate-in">
+      <div class="panelHeader">
+        <div class="panelTitle">🎯 Mål & Milepæle</div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
+          <span id="activeGoalsCount">0</span> aktive
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 12px; margin-bottom: 20px;">
+        <input type="date" id="goalDate" class="btn btn-secondary" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; font-family: var(--font-sans);">
+        <input type="text" id="goalText" placeholder="Beskriv mål..." class="btn btn-secondary" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; flex: 1; text-align: left;">
+        <button class="btn btn-primary" onclick="addGoal()">+ Tilføj</button>
+      </div>
+
+      <div id="goalsList">
+        <div class="empty">Ingen mål endnu</div>
+      </div>
+    </section>
+
+    <!-- Notification Popup -->
+    <div class="notification-pulse" id="notifPopup">
+      <h4>Ny notifikation</h4>
+      <p id="notifText">Ingen nye notifikationer</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Configuration
+    const OPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+    const $ = id => document.getElementById(id);
+    
+    // Storage keys
+    const STORAGE_KEY = "kaiser_command_center_v1";
+    const GOALS_KEY = "kaiser_goals_v1";
+    const NOTIF_KEY = "kaiser_notifs_v1";
+
+    // State
+    let state = {
+      data: null,
+      lastUpdate: null,
+      filter: null,
+      goals: []
+    };
+
+    // Initialize
+    function init() {
+      loadGoals();
+      updateClock();
+      setInterval(updateClock, 1000);
+      fetchData();
+      setInterval(fetchData, 60000); // Refresh every minute
+    }
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      $('clockTime').textContent = now.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+      $('clockDate').textContent = now.toLocaleDateString('da-DK');
+    }
+
+    // Data Fetching
+    async function fetchData() {
+      try {
+        const data = await jsonp(OPS_SCRIPT_URL, { 
+          action: "fbPortalBundle", 
+          month: new Date().toISOString().slice(0, 7) 
+        });
+        
+        if (data && data.ok) {
+          state.data = data;
+          state.lastUpdate = new Date();
+          $('lastUpdate').textContent = state.lastUpdate.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+          
+          renderAll();
+          $('systemStatus').textContent = "System Online";
+          $('systemStatus').style.color = "var(--neon-cyan)";
+        }
+      } catch (e) {
+        console.error('Fetch error:', e);
+        $('systemStatus').textContent = "Offline Mode";
+        $('systemStatus').style.color = "var(--neon-red)";
+      }
+    }
+
+    function jsonp(url, params) {
+      return new Promise((resolve, reject) => {
+        const cb = "cb_" + Math.random().toString(36).slice(2);
+        const script = document.createElement('script');
+        const timeout = setTimeout(() => reject(new Error('Timeout')), 15000);
+        
+        window[cb] = (data) => {
+          clearTimeout(timeout);
+          resolve(data);
+          delete window[cb];
+          script.remove();
         };
+        
+        const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+        script.src = url + (url.includes('?') ? '&' : '?') + qs;
+        document.body.appendChild(script);
+      });
+    }
 
-        const taskInput = document.getElementById('taskInput');
-        const addBtn = document.getElementById('addBtn');
-        const priorityBtns = document.querySelectorAll('.priority-btn');
-        let selectedPriority = 'high';
+    // AI Briefing Generator
+    function generateAIBriefing() {
+      if (!state.data) return { headline: "Venter på data...", text: "Henter information..." };
+      
+      const d = state.data;
+      const complaints = d.complaints || [];
+      const soldout = d.soldout || [];
+      const faults = d.faults || [];
+      const supplier = d.supplier || [];
+      const kitchen = d.kitchen || [];
+      
+      // Find focus location
+      const locCount = {};
+      [...complaints, ...soldout, ...faults, ...supplier].forEach(x => {
+        const loc = x.location || "Ukendt";
+        locCount[loc] = (locCount[loc] || 0) + 1;
+      });
+      
+      const sorted = Object.entries(locCount).sort((a,b) => b[1] - a[1]);
+      const topLoc = sorted[0];
+      const totalSignals = complaints.length + soldout.length + faults.length + supplier.length;
+      
+      let headline = "";
+      let text = "";
+      let action = "";
+      
+      if (totalSignals === 0) {
+        headline = "Driften er stabil";
+        text = "Ingen kritiske signaler på tværs af kæden lige nu. Brug dagen på kvalitetssikring og forebyggende vedligehold.";
+        action = "Fortsæt normal drift";
+      } else if (totalSignals > 10) {
+        headline = "Kritisk driftssituation";
+        text = `${totalSignals} åbne signaler kræver øjeblikkelig handling. ${topLoc ? topLoc[0] + " er hårdest ramt med " + topLoc[1] + " signaler." : ""}`;
+        action = "Start i " + (topLoc ? topLoc[0] : "hovedkvarteret");
+      } else {
+        headline = "Fokusér på " + (topLoc ? topLoc[0] : "driften");
+        text = `${topLoc ? topLoc[0] + " har " + topLoc[1] + " signaler. `;
+        if (complaints.length > 3) text += "Gæsteklager er prioritet #1. ";
+        if (soldout.length > 3) text += "Vareflow kræver opfølgning. ";
+        text += "Tjek detaljerne nedenfor."`;
+        action = "Gå til " + (topLoc ? topLoc[0] : "lokation");
+      }
+      
+      // Kitchen analysis
+      if (kitchen.length > 0) {
+        const avg = kitchen.reduce((a,b) => a + (Number(b.pct)||0), 0) / kitchen.length;
+        if (avg > 16) {
+          text += ` Kitchen % er høj (${avg.toFixed(1)}%) - tjek indkøb og svind.`;
+        }
+      }
+      
+      return { headline, text, action, topLoc };
+    }
 
-        // Priority button selection
-        priorityBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                priorityBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedPriority = btn.dataset.priority;
-            });
+    // Rendering
+    function renderAll() {
+      const briefing = generateAIBriefing();
+      
+      // AI Briefing
+      $('aiHeadline').textContent = briefing.headline;
+      $('aiText').textContent = briefing.text;
+      $('nextActionText').textContent = briefing.action;
+      $('nextActionSub').textContent = briefing.text.slice(0, 100) + "...";
+      
+      // Stats
+      const d = state.data;
+      $('countComplaints').textContent = (d.complaints || []).length;
+      $('countSoldout').textContent = (d.soldout || []).length;
+      $('countFaults').textContent = (d.faults || []).length;
+      $('countSupplier').textContent = (d.supplier || []).length;
+      $('totalSignals').textContent = (d.complaints || []).length + (d.soldout || []).length + (d.faults || []).length + (d.supplier || []).length;
+      
+      // Status badge
+      const total = $('totalSignals').textContent;
+      const statusBadge = $('chainStatusBadge');
+      if (total > 10) {
+        statusBadge.textContent = "KRITISK";
+        statusBadge.className = "badge badge-red";
+      } else if (total > 5) {
+        statusBadge.textContent = "OPMÆRKSOMHED";
+        statusBadge.className = "badge badge-orange";
+      } else {
+        statusBadge.textContent = "STABIL";
+        statusBadge.className = "badge badge-green";
+      }
+      
+      // Focus location
+      if (briefing.topLoc) {
+        $('focusLocation').textContent = briefing.topLoc[0];
+      }
+      
+      // Kitchen %
+      if (d.kitchen && d.kitchen.length > 0) {
+        const avg = d.kitchen.reduce((a,b) => a + (Number(b.pct)||0), 0) / d.kitchen.length;
+        $('kitchenPct').textContent = avg.toFixed(1) + "%";
+        $('kitchenPct').style.color = avg > 16 ? "var(--neon-red)" : "var(--neon-green)";
+      }
+      
+      // Location Radar
+      renderRadar(d);
+      
+      // Live Feed
+      renderLiveFeed(d);
+      
+      // Recent Signals
+      renderRecentSignals(d);
+      
+      // Catering
+      renderCatering(d);
+    }
+
+    function renderRadar(data) {
+      const locCount = {};
+      const locDetails = {};
+      
+      const add = (arr, type) => {
+        arr.forEach(x => {
+          const loc = x.location || "Ukendt";
+          if (!locCount[loc]) {
+            locCount[loc] = { total: 0, complaints: 0, soldout: 0, faults: 0, supplier: 0 };
+            locDetails[loc] = x;
+          }
+          locCount[loc].total++;
+          locCount[loc][type]++;
         });
+      };
+      
+      add(data.complaints || [], 'complaints');
+      add(data.soldout || [], 'soldout');
+      add(data.faults || [], 'faults');
+      add(data.supplier || [], 'supplier');
+      
+      const html = Object.entries(locCount)
+        .sort((a,b) => b[1].total - a[1].total)
+        .slice(0, 6)
+        .map(([loc, counts]) => {
+          let status = 'stable';
+          let color = 'var(--neon-green)';
+          if (counts.total > 5) { status = 'critical'; color = 'var(--neon-red)'; }
+          else if (counts.total > 2) { status = 'warning'; color = 'var(--neon-orange)'; }
+          
+          return `
+            <div class="locationNode ${status}" onclick="showLocationDetails('${loc}')">
+              <div class="locName">${loc}</div>
+              <div class="locStatus" style="color: ${color}">${status === 'critical' ? 'KRITISK' : status === 'warning' ? 'ADVARSEL' : 'STABIL'}</div>
+              <div class="locSignals" style="color: ${color}">${counts.total}</div>
+            </div>
+          `;
+        }).join('');
+      
+      $('locationRadar').innerHTML = html || '<div class="empty">Ingen data</div>';
+    }
 
-        // Render all tasks
-        function renderTasks() {
-            ['high', 'medium', 'low'].forEach(priority => {
-                const list = document.getElementById(`${priority}Priority`);
-                const countElement = document.getElementById(`${priority}Count`);
-                list.innerHTML = '';
-
-                const activeTasks = tasks[priority].filter(t => !t.completed);
-                countElement.textContent = activeTasks.length;
-
-                if (tasks[priority].length === 0) {
-                    list.innerHTML = '<div class="empty-state">Ingen opgaver</div>';
-                    return;
-                }
-
-                tasks[priority].forEach((task, index) => {
-                    const li = document.createElement('li');
-                    li.className = `task-item ${task.completed ? 'completed' : ''}`;
-                    li.innerHTML = `
-                        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
-                               onchange="toggleTask('${priority}', ${index})">
-                        <span class="task-text">${task.text}</span>
-                        <button class="delete-btn" onclick="deleteTask('${priority}', ${index})">Slet</button>
-                    `;
-                    list.appendChild(li);
-                });
-            });
-        }
-
-        // Add new task
-        function addTask() {
-            const text = taskInput.value.trim();
-            if (text === '') return;
-
-            tasks[selectedPriority].push({
-                text: text,
-                completed: false
-            });
-
-            saveTasks();
-            renderTasks();
-            taskInput.value = '';
-        }
-
-        // Toggle task completion
-        function toggleTask(priority, index) {
-            tasks[priority][index].completed = !tasks[priority][index].completed;
-            saveTasks();
-            renderTasks();
-        }
-
-        // Delete task
-        function deleteTask(priority, index) {
-            tasks[priority].splice(index, 1);
-            saveTasks();
-            renderTasks();
-        }
-
-        // Save to localStorage
-        function saveTasks() {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        }
-
-        // Event listeners
-        addBtn.addEventListener('click', addTask);
-        taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTask();
+    function renderLiveFeed(data) {
+      const events = [];
+      
+      (data.complaints || []).forEach(x => {
+        events.push({
+          time: x.createdAt || x.updatedAt,
+          type: 'critical',
+          text: `Klage: ${x.description || x.category || 'Ny klage'}`,
+          loc: x.location
         });
+      });
+      
+      (data.soldout || []).forEach(x => {
+        events.push({
+          time: x.createdAt || x.updatedAt,
+          type: 'warning',
+          text: `Udsolgt: ${x.productName || x.category}`,
+          loc: x.location
+        });
+      });
+      
+      (data.faults || []).forEach(x => {
+        events.push({
+          time: x.createdAt || x.updatedAt,
+          type: 'info',
+          text: `Fejl: ${x.description || x.issueType}`,
+          loc: x.location
+        });
+      });
+      
+      events.sort((a,b) => new Date(b.time) - new Date(a.time));
+      
+      $('eventCount').textContent = events.length;
+      
+      if (events.length === 0) {
+        $('liveFeedList').innerHTML = '<div class="empty">Ingen hændelser i dag</div>';
+        return;
+      }
+      
+      $('liveFeedList').innerHTML = events.slice(0, 10).map(e => `
+        <div class="feedItem ${e.type}">
+          <div class="feedTime">${new Date(e.time).toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'})}</div>
+          <div class="feedContent">
+            <div class="feedText">${e.text}</div>
+            <div class="feedLoc">${e.loc}</div>
+          </div>
+        </div>
+      `).join('');
+    }
 
-        // Initial render
-        renderTasks();
-    </script>
+    function renderRecentSignals(data) {
+      const all = [
+        ...(data.complaints || []).map(x => ({...x, type: 'complaints', icon: '⚠', color: 'var(--neon-red)'})),
+        ...(data.soldout || []).map(x => ({...x, type: 'soldout', icon: '📦', color: 'var(--neon-orange)'})),
+        ...(data.faults || []).map(x => ({...x, type: 'faults', icon: '🔧', color: 'var(--neon-cyan)'})),
+        ...(data.supplier || []).map(x => ({...x, type: 'supplier', icon: '🚚', color: 'var(--neon-gold)'}))
+      ].sort((a,b) => new Date(b.createdAt || b.updatedAt) - new Date(a.createdAt || a.updatedAt)).slice(0, 5);
+      
+      if (all.length === 0) {
+        $('recentSignalsList').innerHTML = '<div class="empty">Ingen signaler</div>';
+        return;
+      }
+      
+      $('recentSignalsList').innerHTML = all.map(s => `
+        <div class="dataRow">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:20px;">${s.icon}</span>
+            <div>
+              <div class="dataRowMain">${s.location || 'Ukendt'}</div>
+              <div class="dataRowMeta">${s.description || s.productName || s.category || 'Ingen beskrivelse'}</div>
+            </div>
+          </div>
+          <span class="badge" style="background: ${s.color}20; color: ${s.color}">
+            ${s.type === 'complaints' ? 'KLAGE' : s.type === 'soldout' ? 'UDSOLGT' : s.type === 'faults' ? 'FEJL' : 'LEVERANDØR'}
+          </span>
+        </div>
+      `).join('');
+    }
+
+    function renderCatering(data) {
+      // Simuleret catering data - i virkeligheden hentes dette fra getOrders
+      $('cateringList').innerHTML = '<div class="empty">Ingen catering i dag</div>';
+    }
+
+    // Goals Management
+    function loadGoals() {
+      try {
+        state.goals = JSON.parse(localStorage.getItem(GOALS_KEY) || '[]');
+        renderGoals();
+      } catch(e) { state.goals = []; }
+    }
+
+    function addGoal() {
+      const date = $('goalDate').value;
+      const text = $('goalText').value;
+      
+      if (!date || !text) {
+        alert('Udfyld både dato og tekst');
+        return;
+      }
+      
+      state.goals.push({ id: Date.now(), date, text });
+      localStorage.setItem(GOALS_KEY, JSON.stringify(state.goals));
+      $('goalText').value = '';
+      renderGoals();
+    }
+
+    function renderGoals() {
+      $('activeGoalsCount').textContent = state.goals.length;
+      
+      if (state.goals.length === 0) {
+        $('goalsList').innerHTML = '<div class="empty">Ingen mål endnu</div>';
+        return;
+      }
+      
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      
+      $('goalsList').innerHTML = state.goals.map(g => {
+        const goalDate = new Date(g.date);
+        const diff = Math.ceil((goalDate - today) / (1000 * 60 * 60 * 24));
+        let daysText = diff > 0 ? `${diff} dage` : diff === 0 ? 'I dag' : `${Math.abs(diff)} dage siden`;
+        let urgency = diff <= 7 && diff >= 0 ? 'var(--neon-red)' : 'var(--neon-gold)';
+        
+        return `
+          <div class="goalItem" style="border-left-color: ${urgency}">
+            <div class="goalDate">${new Date(g.date).toLocaleDateString('da-DK')}</div>
+            <div class="goalText">${g.text}</div>
+            <div class="goalDays" style="color: ${urgency}">${daysText}</div>
+            <button onclick="deleteGoal(${g.id})" style="background:none; border:none; color: var(--text-muted); cursor:pointer; font-size:18px;">×</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteGoal(id) {
+      state.goals = state.goals.filter(g => g.id !== id);
+      localStorage.setItem(GOALS_KEY, JSON.stringify(state.goals));
+      renderGoals();
+    }
+
+    // Actions
+    function focusOnCritical() {
+      const briefing = generateAIBriefing();
+      if (briefing.topLoc) {
+        alert(`Fokuserer på ${briefing.topLoc[0]} - ${briefing.topLoc[1]} signaler kræver handling`);
+      }
+    }
+
+    function refreshData() {
+      fetchData();
+      const btn = event.target;
+      const original = btn.textContent;
+      btn.textContent = 'Opdaterer...';
+      setTimeout(() => btn.textContent = original, 1000);
+    }
+
+    function filterSignals(type) {
+      state.filter = state.filter === type ? null : type;
+      // Her kunne man filtrere visningen
+      console.log('Filter:', type);
+    }
+
+    function showLocationDetails(loc) {
+      alert(`Viser detaljer for ${loc}`);
+    }
+
+    // Start
+    init();
+  </script>
 </body>
 </html>
