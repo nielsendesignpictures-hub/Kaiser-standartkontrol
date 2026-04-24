@@ -363,6 +363,7 @@
       letter-spacing:.08em;
       text-transform:uppercase;
       min-width:96px;
+      transition: all 0.2s ease;
     }
 
     .statusBtn.ok.active{
@@ -419,6 +420,11 @@
       font-size:16px;
       font-weight:900;
       cursor:pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ratingBtn:hover{
+      background:rgba(255,255,255,0.08);
     }
 
     .ratingBtn.active{
@@ -432,11 +438,14 @@
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      margin-top:20px;
+      padding-top:20px;
+      border-top:1px solid var(--line2);
     }
 
     .btn{
       min-height:46px;
-      padding:12px 16px;
+      padding:12px 20px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);
@@ -446,12 +455,22 @@
       letter-spacing:.08em;
       text-transform:uppercase;
       cursor:pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover{
+      background:rgba(255,255,255,0.08);
+      transform: translateY(-1px);
     }
 
     .btn.primary{
       background:linear-gradient(135deg,var(--gold),var(--gold2));
       color:#0a0e14;
       border:none;
+    }
+
+    .btn.primary:hover{
+      filter: brightness(1.1);
     }
 
     .btn.danger{
@@ -466,6 +485,11 @@
     }
 
     .hidden{display:none !important;}
+    
+    /* Tilføjelse for bedre synlighed af aktive knapper */
+    .statusBtn:hover{
+      background:rgba(255,255,255,0.08);
+    }
   </style>
 </head>
 <body>
@@ -602,8 +626,55 @@
       </div>
     </section>
 
-    
+    <section class="section hidden" id="reportSection">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Skiftlederrapport</div>
+        <div class="sectionInfo">Udfyldes ved afslutning (Efter aftenryk)</div>
+      </div>
+      <div class="sectionBody">
+        <div class="reportGrid">
+          <div class="field">
+            <label class="label">Service og gæsteoplevelse</label>
+            <textarea id="serviceComment" class="textarea" placeholder="Beskriv dagens serviceflow, særlige gæsteoplevelser eller udfordringer..."></textarea>
+          </div>
+          <div class="field">
+            <label class="label">Drift og teknik</label>
+            <textarea id="operationsComment" class="textarea" placeholder="Beskriv driftsmæssige forhold, teknik, rengøring eller lignende..."></textarea>
+          </div>
+          <div class="field">
+            <label class="label">Hændelser og bemærkninger</label>
+            <textarea id="incidentsComment" class="textarea" placeholder="Eventuelle hændelser, klager, udfordringer med leverandører..."></textarea>
+          </div>
+          <div class="field">
+            <label class="label">Team og bemanding</label>
+            <textarea id="teamComment" class="textarea" placeholder="Bemanding, sygdom, ferie, bemærkninger til teamet..."></textarea>
+          </div>
+        </div>
+        
+        <div class="field" style="margin-top:16px;">
+          <label class="label">Afvigelser og opfølgning</label>
+          <textarea id="deviationsComment" class="textarea" placeholder="Beskriv eventuelle afvigelser fra standarden og hvad der skal følges op på..."></textarea>
+        </div>
 
+        <div style="margin-top:20px; padding:20px; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,0.03);">
+          <div class="label">Dagens overordnede vurdering (1-5)</div>
+          <div class="dayRatingRow" id="dayRatingRow"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionBody">
+        <div class="actions">
+          <div class="statusLine" id="lastSavedText" style="margin-right:auto; align-self:center;">Senest gemt: —</div>
+          <button class="btn danger" type="button" id="resetBtn">Nulstil dag</button>
+          <button class="btn" type="button" id="saveBtn">Gem nu</button>
+          <button class="btn primary hidden" type="button" id="emailBtn">Send rapport</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
 
   <script>
     const STORAGE_KEY = "kaiser_shiftleader_checklist_v3";
@@ -692,7 +763,7 @@
       location: "",
       managerName: "",
       date: "",
-      checkType: "frokost",
+      checkType: "frokost", // Default værdi
       showAll: false,
       items: {},
       dayRating: 0,
@@ -722,6 +793,7 @@
       $("saveStatus").textContent = "Gemt lokalt";
       $("lastSavedText").textContent = `Senest gemt: ${now}`;
       updateTopBar();
+      updateSummary();
     }
 
     function loadState() {
@@ -729,12 +801,17 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
           state.date = todayISO();
+          // Sørg for at checkType har en værdi
+          if (!state.checkType) state.checkType = "frokost";
           return;
         }
         Object.assign(state, JSON.parse(raw) || {});
         if (!state.date) state.date = todayISO();
+        // VIGTIGT: Sørg for at checkType altid har en værdi
+        if (!state.checkType) state.checkType = "frokost";
       } catch (err) {
         state.date = todayISO();
+        state.checkType = "frokost";
       }
     }
 
@@ -776,7 +853,6 @@
       state.items[key].status = status;
       saveState();
       renderChecklist();
-      updateSummary();
     }
 
     function setItemNote(type, text, note) {
@@ -797,45 +873,57 @@
       $("dateInput").value = state.date || todayISO();
       $("checkType").value = state.checkType || "frokost";
       $("showAllToggle").checked = !!state.showAll;
-      $("serviceComment").value = state.serviceComment || "";
-      $("operationsComment").value = state.operationsComment || "";
-      $("incidentsComment").value = state.incidentsComment || "";
-      $("teamComment").value = state.teamComment || "";
-      $("deviationsComment").value = state.deviationsComment || "";
+      
+      if ($("serviceComment")) $("serviceComment").value = state.serviceComment || "";
+      if ($("operationsComment")) $("operationsComment").value = state.operationsComment || "";
+      if ($("incidentsComment")) $("incidentsComment").value = state.incidentsComment || "";
+      if ($("teamComment")) $("teamComment").value = state.teamComment || "";
+      if ($("deviationsComment")) $("deviationsComment").value = state.deviationsComment || "";
 
-      $("checklistInfo").textContent =
-        state.checkType === "frokost" ? "Før frokostryk" :
-        state.checkType === "aften" ? "Før aftenryk" :
-        "Efter aftenryk";
+      const typeText = {
+        "frokost": "Før frokostryk",
+        "aften": "Før aftenryk", 
+        "rapport": "Efter aftenryk"
+      };
+      $("checklistInfo").textContent = typeText[state.checkType] || "Før frokostryk";
     }
 
     function renderChecklist() {
       const wrap = $("checklistWrap");
-      const sections = CHECKLISTS[state.checkType] || [];
+      // Sørg for at vi har en gyldig checkType
+      const currentType = state.checkType || "frokost";
+      const sections = CHECKLISTS[currentType] || [];
 
       wrap.classList.toggle("show-all", !!state.showAll);
+
+      if (sections.length === 0) {
+        wrap.innerHTML = '<div style="text-align:center; padding:40px; color:var(--muted);">Ingen punkter fundet for denne tjektype</div>';
+        return;
+      }
 
       wrap.innerHTML = sections.map(section => `
         <div class="category">
           <div class="categoryTitle">${section.title}</div>
           <div class="categorySub">${section.subtitle}</div>
 
-          <div class="checklist ${state.showAll ? "show-all" : ""}">
+          <div class="checklist">
             ${section.items.map(item => {
-              const value = getItemValue(state.checkType, item);
+              const value = getItemValue(currentType, item);
               const noteVisible = value.status === "mangler";
-              const completedHidden = (value.status === "ok" || value.status === "na") && !state.showAll;
+              const isCompleted = (value.status === "ok" || value.status === "na");
+              const completedHidden = isCompleted && !state.showAll;
+              
               return `
                 <div class="item ${completedHidden ? "completed-hidden" : ""}">
                   <div class="itemTop">
-                    <div class="itemText">${item}</div>
+                    <div class="itemText">${escapeHtml(item)}</div>
                     <div class="statusGroup">
                       <button class="statusBtn ok ${value.status === "ok" ? "active" : ""}" type="button"
-                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','ok')">OK</button>
+                        onclick="setItemStatusFromUI('${escapeJs(currentType)}','${escapeJs(item)}','ok')">OK</button>
                       <button class="statusBtn warn ${value.status === "mangler" ? "active" : ""}" type="button"
-                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','mangler')">Mangler</button>
+                        onclick="setItemStatusFromUI('${escapeJs(currentType)}','${escapeJs(item)}','mangler')">Mangler</button>
                       <button class="statusBtn na ${value.status === "na" ? "active" : ""}" type="button"
-                        onclick="setItemStatusFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}','na')">Ikke relevant</button>
+                        onclick="setItemStatusFromUI('${escapeJs(currentType)}','${escapeJs(item)}','na')">Ikke relevant</button>
                     </div>
                   </div>
 
@@ -844,7 +932,7 @@
                       class="textarea"
                       style="min-height:90px;margin-top:10px;"
                       placeholder="Beskriv hvad der mangler..."
-                      oninput="setItemNoteFromUI('${escapeJs(state.checkType)}','${escapeJs(item)}', this.value)"
+                      oninput="setItemNoteFromUI('${escapeJs(currentType)}','${escapeJs(item)}', this.value)"
                     >${escapeHtml(value.note || "")}</textarea>
                   </div>
                 </div>
@@ -853,17 +941,21 @@
           </div>
         </div>
       `).join("");
-
-      renderReportSection();
     }
 
     function renderReportSection() {
       const isReport = state.checkType === "rapport";
-      $("reportSection").classList.toggle("hidden", !isReport);
+      const reportSection = $("reportSection");
+      const emailBtn = $("emailBtn");
+      
+      if (reportSection) reportSection.classList.toggle("hidden", !isReport);
+      if (emailBtn) emailBtn.classList.toggle("hidden", !isReport);
     }
 
     function renderDayRating() {
       const wrap = $("dayRatingRow");
+      if (!wrap) return;
+      
       wrap.innerHTML = "";
 
       for (let i = 1; i <= 5; i++) {
@@ -908,10 +1000,13 @@
     function updateTopBar() {
       $("topLocation").textContent = state.location || "—";
       $("topManager").textContent = state.managerName || "—";
-      $("topCheckType").textContent =
-        state.checkType === "frokost" ? "Frokost" :
-        state.checkType === "aften" ? "Aften" :
-        "Rapport";
+      
+      const typeText = {
+        "frokost": "Frokost",
+        "aften": "Aften",
+        "rapport": "Rapport"
+      };
+      $("topCheckType").textContent = typeText[state.checkType] || "Frokost";
     }
 
     function escapeHtml(str) {
@@ -928,6 +1023,7 @@
       return String(str || "")
         .replace(/\\/g, "\\\\")
         .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "");
     }
@@ -953,6 +1049,7 @@
         saveState();
         syncMetaToUI();
         renderChecklist();
+        renderReportSection();
         updateSummary();
         updateTopBar();
       });
@@ -963,39 +1060,57 @@
         renderChecklist();
       });
 
-      $("serviceComment").addEventListener("input", e => {
-        state.serviceComment = e.target.value;
-        saveState();
-      });
-
-      $("operationsComment").addEventListener("input", e => {
-        state.operationsComment = e.target.value;
-        saveState();
-      });
-
-      $("incidentsComment").addEventListener("input", e => {
-        state.incidentsComment = e.target.value;
-        saveState();
-      });
-
-      $("teamComment").addEventListener("input", e => {
-        state.teamComment = e.target.value;
-        saveState();
-      });
-
-      $("deviationsComment").addEventListener("input", e => {
-        state.deviationsComment = e.target.value;
-        saveState();
-      });
+      // Rapport felter
+      if ($("serviceComment")) {
+        $("serviceComment").addEventListener("input", e => {
+          state.serviceComment = e.target.value;
+          saveState();
+        });
+      }
+      
+      if ($("operationsComment")) {
+        $("operationsComment").addEventListener("input", e => {
+          state.operationsComment = e.target.value;
+          saveState();
+        });
+      }
+      
+      if ($("incidentsComment")) {
+        $("incidentsComment").addEventListener("input", e => {
+          state.incidentsComment = e.target.value;
+          saveState();
+        });
+      }
+      
+      if ($("teamComment")) {
+        $("teamComment").addEventListener("input", e => {
+          state.teamComment = e.target.value;
+          saveState();
+        });
+      }
+      
+      if ($("deviationsComment")) {
+        $("deviationsComment").addEventListener("input", e => {
+          state.deviationsComment = e.target.value;
+          saveState();
+        });
+      }
 
       $("saveBtn").addEventListener("click", () => {
         saveState();
+        alert("Tjeklisten er gemt lokalt på denne enhed.");
       });
 
       $("resetBtn").addEventListener("click", () => {
-        if (!confirm("Vil du nulstille checklisten og starte en ny dag?")) return;
+        if (!confirm("Vil du nulstille checklisten og starte en ny dag? Alle data slettes.")) return;
         resetStateForNewDay();
       });
+      
+      if ($("emailBtn")) {
+        $("emailBtn").addEventListener("click", () => {
+          alert("Rapporten ville her blive sendt til Caféchef og HQ (funktion kræver backend integration).");
+        });
+      }
     }
 
     function boot() {
@@ -1009,17 +1124,16 @@
       updateTopBar();
     }
 
-    function setItemStatusFromUI(type, item, status) {
+    // Gør funktioner globalt tilgængelige for onclick handlers
+    window.setItemStatusFromUI = function(type, item, status) {
       setItemStatus(type, item, status);
-    }
+    };
 
-    function setItemNoteFromUI(type, item, note) {
+    window.setItemNoteFromUI = function(type, item, note) {
       setItemNote(type, item, note);
-    }
+    };
 
-    window.setItemStatusFromUI = setItemStatusFromUI;
-    window.setItemNoteFromUI = setItemNoteFromUI;
-
+    // Start app
     boot();
   </script>
 </body>
