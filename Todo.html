@@ -39,7 +39,7 @@
     
     /* Sidebar */
     .logo{display:flex;align-items:center;gap:10px;padding:8px 0;margin-bottom:24px}
-    .logo-icon{width:28px;height:28px;background:var(--text-1);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}
+    .logo-img{height:32px;width:auto}
     .logo-text{font-weight:600;font-size:15px}
     .nav-section{margin-bottom:24px}
     .nav-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);margin-bottom:8px;padding:0 8px}
@@ -120,7 +120,7 @@
     .card-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
     .card-title svg{width:16px;height:16px;color:var(--text-3)}
     .card-badge{font-size:11px;font-weight:500;color:var(--text-3);padding:4px 8px;background:var(--surface-hover);border-radius:4px}
-    .card-body{padding:16px 20px;max-height:400px;overflow-y:auto}
+    .card-body{padding:16px 20px;max-height:600px;overflow-y:auto}
     
     /* Signal Items */
     .signal-list{display:flex;flex-direction:column;gap:8px}
@@ -175,7 +175,7 @@
     .notif-content{flex:1;min-width:0}
     .notif-title{font-size:14px;font-weight:600;margin-bottom:4px}
     .notif-text{font-size:13px;color:var(--text-2);margin-bottom:8px;line-height:1.4}
-    .notif-meta{display:flex;gap:12px;font-size:11px;color:var(--text-3);margin-bottom:8px}
+    .notif-meta{display:flex;gap:12px;font-size:11px;color:var(--text-3);margin-bottom:8px;flex-wrap:wrap}
     .notif-actions{display:flex;gap:8px}
     
     /* Empty State */
@@ -188,7 +188,7 @@
     /* Catering */
     .catering-item{display:flex;gap:12px;padding:12px;background:var(--surface-hover);border-radius:var(--radius);margin-bottom:8px}
     .catering-item:last-child{margin-bottom:0}
-    .catering-time{font-size:13px;font-weight:600;color:var(--text-1);min-width:60px}
+    .catering-time{font-size:13px;font-weight:600;color:var(--text-1);min-width:100px}
     .catering-info{flex:1;min-width:0}
     .catering-name{font-size:13px;font-weight:500}
     .catering-details{font-size:12px;color:var(--text-2);margin-top:2px}
@@ -208,6 +208,14 @@
     .kitchen-pct{font-size:14px;font-weight:600}
     .kitchen-amt{font-size:12px;color:var(--text-3);margin-left:12px}
     
+    /* Views */
+    .view{display:none}
+    .view.active{display:block}
+    
+    /* Iframe */
+    .iframe-container{width:100%;height:calc(100vh - 120px);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:white}
+    .iframe-container iframe{width:100%;height:100%;border:0}
+    
     /* Animations */
     @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
     .animate-in{animation:fadeIn .3s ease}
@@ -223,37 +231,37 @@
 
 <div class="app">
   <!-- Mobile Menu -->
-  <button class="mobile-menu" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+  <button class="mobile-menu" onclick="toggleSidebar()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="logo">
-      <div class="logo-icon">K</div>
-      <div class="logo-text">Kaiser Ops</div>
+      <img src="images/logo.png" alt="Kaiser Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div class="logo-text" style="display:none">Kaiser Ops</div>
     </div>
     
     <nav class="nav-section">
       <div class="nav-label">Dashboard</div>
-      <div class="nav-item active" data-view="overview">
+      <div class="nav-item active" onclick="switchView('overview')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Oversigt
       </div>
-      <div class="nav-item" data-view="signals">
+      <div class="nav-item" onclick="switchView('signals')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         Signaler
         <span class="nav-badge" id="navSignalCount">0</span>
       </div>
-      <div class="nav-item" data-view="locations">
+      <div class="nav-item" onclick="switchView('locations')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         Lokationer
       </div>
-      <div class="nav-item" data-view="goals">
+      <div class="nav-item" onclick="switchView('goals')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Mål & Frister
       </div>
-      <div class="nav-item" data-view="notifications">
+      <div class="nav-item" onclick="switchView('notifications')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         Notifikationer
         <span class="nav-badge" id="navNotifCount" style="display:none">0</span>
@@ -262,13 +270,13 @@
     
     <nav class="nav-section">
       <div class="nav-label">Data</div>
-      <div class="nav-item" data-view="catering">
+      <div class="nav-item" onclick="switchView('catering')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Catering
       </div>
-      <div class="nav-item" data-view="analytics">
+      <div class="nav-item" onclick="switchView('analytics')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Analyse
+        Menu Intelligence
       </div>
     </nav>
     
@@ -286,208 +294,346 @@
   <!-- Main Content -->
   <main class="main">
     
-    <!-- Page Header -->
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Operations Dashboard</h1>
-        <p class="page-desc">Live overblik over alle caféer og driftssignaler</p>
+    <!-- ============================================
+         VIEW: OVERVIEW
+    ============================================ -->
+    <div class="view active" id="viewOverview">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Operations Dashboard</h1>
+          <p class="page-desc">Live overblik over alle caféer og driftssignaler</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn" onclick="fetchData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Opdater
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Eksporter
+          </button>
+        </div>
       </div>
-      <div class="header-actions">
-        <button class="btn" onclick="fetchData()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          Opdater
-        </button>
-        <button class="btn btn-primary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Eksporter
-        </button>
+
+      <div class="status-banner live" id="statusBanner">
+        <div class="status-dot live" id="statusDot"></div>
+        <div class="status-text" id="statusText">Starter system...</div>
+        <div class="status-time" id="statusTime">--:--:--</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Åbne signaler</span>
+            <div class="stat-icon red">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            </div>
+          </div>
+          <div class="stat-value crit" id="statSignals">0</div>
+          <div class="stat-change">Total på tværs af alle kategorier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Kritiske lokationer</span>
+            <div class="stat-icon amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+          </div>
+          <div class="stat-value warn" id="statCritLocs">0</div>
+          <div class="stat-change">Med mere end 4 aktive signaler</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Notifikationer</span>
+            <div class="stat-icon red">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+          </div>
+          <div class="stat-value crit" id="statNotifications">0</div>
+          <div class="stat-change">Kræver kvittering</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Catering events</span>
+            <div class="stat-icon blue">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="stat-value" id="statCatering">0</div>
+          <div class="stat-change">I dag og kommende 7 dage</div>
+        </div>
+      </div>
+
+      <div class="focus-card" id="focusCard">
+        <div class="focus-header">
+          <div class="focus-badge">Dagens fokus</div>
+          <span style="font-size:12px;color:var(--text-3)">Smart analyse</span>
+        </div>
+        <div class="focus-title" id="focusTitle">Analyserer driftsdata...</div>
+        <div class="focus-text" id="focusText">Henter og analyserer dagens signaler for at give dig den bedste anbefaling til, hvor du skal starte.</div>
+        <div class="focus-actions" id="focusActions"></div>
+      </div>
+
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              Gæsteklager
+            </div>
+            <span class="card-badge" id="countComplaints">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listComplaints"><div class="empty">Indlæser...</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Udsolgte varer
+            </div>
+            <span class="card-badge" id="countSoldout">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listSoldout"><div class="empty">Indlæser...</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              Driftsfejl
+            </div>
+            <span class="card-badge" id="countFaults">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listFaults"><div class="empty">Indlæser...</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Leverandørfejl
+            </div>
+            <span class="card-badge" id="countSupplier">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listSupplier"><div class="empty">Indlæser...</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Lokationsoverblik
+            </div>
+            <span class="card-badge" id="locationCount">0 lokationer</span>
+          </div>
+          <div class="card-body">
+            <div class="grid-3" style="margin-bottom:0" id="locationGrid"><div class="empty">Indlæser lokationer...</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Kitchen % Overblik
+            </div>
+            <span class="card-badge">MTD data</span>
+          </div>
+          <div class="card-body" id="kitchenList"><div class="empty">Indlæser...</div></div>
+        </div>
       </div>
     </div>
 
-    <!-- Status Banner -->
-    <div class="status-banner live" id="statusBanner">
-      <div class="status-dot live" id="statusDot"></div>
-      <div class="status-text" id="statusText">Starter system...</div>
-      <div class="status-time" id="statusTime">--:--:--</div>
-    </div>
+    <!-- ============================================
+         VIEW: SIGNALS
+    ============================================ -->
+    <div class="view" id="viewSignals">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Alle Signaler</h1>
+          <p class="page-desc">Komplet oversigt over alle driftssignaler</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn" onclick="fetchData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/></svg>
+            Opdater
+          </button>
+        </div>
+      </div>
 
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-header">
-          <span class="stat-label">Åbne signaler</span>
-          <div class="stat-icon red">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              Gæsteklager
+            </div>
+            <span class="card-badge" id="countComplaintsFull">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listComplaintsFull"></div>
           </div>
         </div>
-        <div class="stat-value crit" id="statSignals">0</div>
-        <div class="stat-change">Total på tværs af alle kategorier</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-header">
-          <span class="stat-label">Kritiske lokationer</span>
-          <div class="stat-icon amber">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Udsolgte varer
+            </div>
+            <span class="card-badge" id="countSoldoutFull">0</span>
+          </div>
+          <div class="card-body">
+            <div class="signal-list" id="listSoldoutFull"></div>
           </div>
         </div>
-        <div class="stat-value warn" id="statCritLocs">0</div>
-        <div class="stat-change">Med mere end 4 aktive signaler</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-header">
-          <span class="stat-label">Notifikationer</span>
-          <div class="stat-icon red">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          </div>
-        </div>
-        <div class="stat-value crit" id="statNotifications">0</div>
-        <div class="stat-change">Kræver kvittering</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-header">
-          <span class="stat-label">Catering events</span>
-          <div class="stat-icon blue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-        </div>
-        <div class="stat-value" id="statCatering">0</div>
-        <div class="stat-change">I dag og kommende 7 dage</div>
-      </div>
-    </div>
 
-    <!-- Focus Card -->
-    <div class="focus-card" id="focusCard">
-      <div class="focus-header">
-        <div class="focus-badge">Dagens fokus</div>
-        <span style="font-size:12px;color:var(--text-3)">Smart analyse</span>
-      </div>
-      <div class="focus-title" id="focusTitle">Analyserer driftsdata...</div>
-      <div class="focus-text" id="focusText">Henter og analyserer dagens signaler for at give dig den bedste anbefaling til, hvor du skal starte.</div>
-      <div class="focus-actions" id="focusActions"></div>
-    </div>
-
-    <!-- Notifications Section -->
-    <div id="notificationSection" style="display:none">
-      <div class="card" style="margin-bottom:24px">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            Notifikationer der kræver handling
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              Driftsfejl
+            </div>
+            <span class="card-badge" id="countFaultsFull">0</span>
           </div>
-          <span class="card-badge" id="notifBadge">0 åbne</span>
-        </div>
-        <div class="card-body" id="notificationList"></div>
-      </div>
-    </div>
-
-    <!-- Signal Cards -->
-    <div class="grid-4">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-            Gæsteklager
+          <div class="card-body">
+            <div class="signal-list" id="listFaultsFull"></div>
           </div>
-          <span class="card-badge" id="countComplaints">0</span>
         </div>
-        <div class="card-body">
-          <div class="signal-list" id="listComplaints"><div class="empty">Indlæser...</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Udsolgte varer
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="1" y="3" width="15" height="13"/></svg>
+              Leverandørfejl
+            </div>
+            <span class="card-badge" id="countSupplierFull">0</span>
           </div>
-          <span class="card-badge" id="countSoldout">0</span>
-        </div>
-        <div class="card-body">
-          <div class="signal-list" id="listSoldout"><div class="empty">Indlæser...</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            Driftsfejl
+          <div class="card-body">
+            <div class="signal-list" id="listSupplierFull"></div>
           </div>
-          <span class="card-badge" id="countFaults">0</span>
-        </div>
-        <div class="card-body">
-          <div class="signal-list" id="listFaults"><div class="empty">Indlæser...</div></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Leverandørfejl
-          </div>
-          <span class="card-badge" id="countSupplier">0</span>
-        </div>
-        <div class="card-body">
-          <div class="signal-list" id="listSupplier"><div class="empty">Indlæser...</div></div>
         </div>
       </div>
     </div>
 
-    <!-- Locations & Goals -->
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Lokationsoverblik
-          </div>
-          <span class="card-badge" id="locationCount">0 lokationer</span>
-        </div>
-        <div class="card-body">
-          <div class="grid-3" style="margin-bottom:0" id="locationGrid"><div class="empty">Indlæser lokationer...</div></div>
+    <!-- ============================================
+         VIEW: LOCATIONS
+    ============================================ -->
+    <div class="view" id="viewLocations">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Lokationer</h1>
+          <p class="page-desc">Samlet overblik over alle lokationer og deres status</p>
         </div>
       </div>
+
+      <div class="grid-3" id="locationGridFull">
+        <div class="empty">Indlæser lokationer...</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         VIEW: GOALS
+    ============================================ -->
+    <div class="view" id="viewGoals">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Mål & Frister</h1>
+          <p class="page-desc">Dine personlige mål og to-do liste</p>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Mål & Frister
+            Alle mål
           </div>
-          <span class="card-badge" id="goalCount">0 mål</span>
+          <span class="card-badge" id="goalCountFull">0 mål</span>
         </div>
         <div class="goal-input-group">
-          <input type="date" id="goalDate" class="goal-input">
-          <input type="text" id="goalText" class="goal-input" placeholder="Beskriv målet (fx ny menu klar)...">
-          <button class="btn btn-primary" onclick="addGoal()">Tilføj</button>
+          <input type="date" id="goalDateFull" class="goal-input">
+          <input type="text" id="goalTextFull" class="goal-input" placeholder="Beskriv målet (fx ny menu klar)...">
+          <button class="btn btn-primary" onclick="addGoalFull()">Tilføj</button>
         </div>
-        <div class="goal-list" id="goalList"></div>
+        <div class="goal-list" id="goalListFull"></div>
       </div>
     </div>
 
-    <!-- Catering & Kitchen -->
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Catering Events
-          </div>
+    <!-- ============================================
+         VIEW: NOTIFICATIONS
+    ============================================ -->
+    <div class="view" id="viewNotifications">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Notifikationer</h1>
+          <p class="page-desc">Alle notifikationer der kræver din handling</p>
         </div>
-        <div class="tabs">
-          <div class="tab active" onclick="switchTab('today')">I dag</div>
-          <div class="tab" onclick="switchTab('upcoming')">Kommende</div>
-        </div>
-        <div class="tab-content active" id="tabToday"><div class="empty">Indlæser...</div></div>
-        <div class="tab-content" id="tabUpcoming"><div class="empty">Indlæser...</div></div>
       </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Kitchen % Overblik
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Åbne notifikationer
           </div>
-          <span class="card-badge">MTD data</span>
+          <span class="card-badge" id="notifBadgeFull">0 åbne</span>
         </div>
-        <div class="card-body" id="kitchenList"><div class="empty">Indlæser...</div></div>
+        <div class="card-body" id="notificationListFull"></div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         VIEW: CATERING
+    ============================================ -->
+    <div class="view" id="viewCatering">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Catering Events</h1>
+          <p class="page-desc">Alle catering events – historik og kommende</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn" onclick="fetchCatering()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/></svg>
+            Opdater
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" onclick="switchCateringTab('all')">Alle Events</div>
+          <div class="tab" onclick="switchCateringTab('today')">I dag</div>
+          <div class="tab" onclick="switchCateringTab('upcoming')">Kommende</div>
+          <div class="tab" onclick="switchCateringTab('past')">Historik</div>
+        </div>
+        <div class="tab-content active" id="tabCateringAll"><div class="empty">Indlæser...</div></div>
+        <div class="tab-content" id="tabCateringToday"><div class="empty">Indlæser...</div></div>
+        <div class="tab-content" id="tabCateringUpcoming"><div class="empty">Indlæser...</div></div>
+        <div class="tab-content" id="tabCateringPast"><div class="empty">Indlæser...</div></div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         VIEW: ANALYTICS (Menu Intelligence)
+    ============================================ -->
+    <div class="view" id="viewAnalytics">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Menu Intelligence</h1>
+          <p class="page-desc">Avanceret analyse og indsigt i menu-performance</p>
+        </div>
+      </div>
+
+      <div class="iframe-container">
+        <iframe src="https://kaiser-live-dashboard.onrender.com/menu-intelligence.html" title="Menu Intelligence"></iframe>
       </div>
     </div>
 
@@ -531,6 +677,37 @@ const parseDateTime = (dateStr, timeStr) => {
 
 // Global state
 let globalData = null;
+let globalCatering = null;
+let currentView = 'overview';
+
+// Navigation
+function switchView(view) {
+  // Update nav items
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  
+  // Update views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  $('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
+  
+  currentView = view;
+  
+  // Close mobile menu
+  if (window.innerWidth <= 768) {
+    $('sidebar').classList.remove('show');
+  }
+  
+  // Render view-specific data
+  if (view === 'signals' && globalData) renderSignalsView(globalData);
+  if (view === 'locations' && globalData) renderLocationsView(globalData);
+  if (view === 'goals') renderGoalsFull();
+  if (view === 'notifications') renderNotificationsFull();
+  if (view === 'catering' && globalCatering) renderCateringView(globalCatering);
+}
+
+function toggleSidebar() {
+  $('sidebar').classList.toggle('show');
+}
 
 // Status
 function setStatus(msg, type) {
@@ -560,6 +737,8 @@ function fetchData() {
       globalData = data;
       processNotifications(data);
       renderAll(data);
+      if (currentView === 'signals') renderSignalsView(data);
+      if (currentView === 'locations') renderLocationsView(data);
     } else {
       setStatus("Fejl ved hentning af data", "critical");
     }
@@ -591,7 +770,9 @@ function fetchCatering() {
     delete window[cb];
     script.remove();
     if (data && data.ok && Array.isArray(data.orders)) {
-      renderCatering(data.orders);
+      globalCatering = data.orders;
+      renderCateringOverview(data.orders);
+      if (currentView === 'catering') renderCateringView(data.orders);
     }
   };
   
@@ -684,6 +865,7 @@ function acknowledgeNotification(id) {
   const items = loadNotifications().map(n => n.id === id ? {...n, acknowledged: true, acknowledgedAt: new Date().toISOString()} : n);
   saveNotifications(items);
   renderNotifications();
+  renderNotificationsFull();
   if (globalData) renderAll(globalData);
 }
 
@@ -693,19 +875,23 @@ function renderNotifications() {
   
   $("statNotifications").textContent = open.length;
   $("navNotifCount").textContent = open.length;
-  $("notifBadge").textContent = `${open.length} åbne`;
   
   if (open.length > 0) {
     $("navNotifCount").style.display = "";
-    $("notificationSection").style.display = "block";
   } else {
     $("navNotifCount").style.display = "none";
-    $("notificationSection").style.display = "none";
   }
+}
+
+function renderNotificationsFull() {
+  const items = loadNotifications();
+  const open = items.filter(n => !n.acknowledged);
   
-  const list = $("notificationList");
+  $("notifBadgeFull").textContent = `${open.length} åbne`;
+  
+  const list = $("notificationListFull");
   if (!open.length) {
-    list.innerHTML = '<div class="empty">Ingen åbne notifikationer</div>';
+    list.innerHTML = '<div class="empty">Ingen åbne notifikationer – godt arbejde! 🎉</div>';
     return;
   }
   
@@ -724,6 +910,7 @@ function renderNotifications() {
           <div class="notif-meta">
             <span>${fmtDate(n.createdAt)}</span>
             <span>${esc(n.location)}</span>
+            <span>${esc(n.type)}</span>
           </div>
           <div class="notif-actions">
             <button class="btn btn-primary" onclick="acknowledgeNotification('${esc(n.id)}')">Kvitter</button>
@@ -734,7 +921,7 @@ function renderNotifications() {
   }).join("");
 }
 
-// Render All
+// Render All (Overview)
 function renderAll(data) {
   const complaints = data.complaints || [];
   const soldout = data.soldout || [];
@@ -765,8 +952,8 @@ function renderAll(data) {
     $("focusTitle").textContent = `Start dagen med ${locName}`;
     $("focusText").textContent = `${locName} har ${locCount} aktive signaler (${pct}% af alle). Det er den mest pressede lokation lige nu. Fokusér på at lukke de sager, der direkte påvirker gæsteoplevelse og serviceleverance først.${riskMsg}`;
     $("focusActions").innerHTML = `
-      <button class="btn btn-primary" onclick="alert('Åbner detaljer for ${esc(locName)}')">Gå til ${esc(locName)}</button>
-      <button class="btn" onclick="alert('Viser alle signaler')">Se alle signaler</button>
+      <button class="btn btn-primary" onclick="switchView('locations')">Gå til lokationer</button>
+      <button class="btn" onclick="switchView('signals')">Se alle signaler</button>
     `;
   } else {
     $("focusTitle").textContent = `Stabil drift på tværs af alle lokationer`;
@@ -780,7 +967,7 @@ function renderAll(data) {
   $("countFaults").textContent = faults.length;
   $("countSupplier").textContent = supplier.length;
   
-  // Signal lists
+  // Signal lists (overview - max 5)
   renderSignalList("listComplaints", complaints.slice(0,5), "red", e => `
     <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.category||"Klage")}</div>
     <div class="signal-sub">${esc(e.description||"Ingen beskrivelse")}</div>
@@ -802,9 +989,9 @@ function renderAll(data) {
     <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
   `);
   
-  // Locations
+  // Locations (overview - max 6)
   $("locationCount").textContent = `${sortedLocs.length} lokationer`;
-  $("locationGrid").innerHTML = sortedLocs.map(([loc, count]) => {
+  $("locationGrid").innerHTML = sortedLocs.slice(0,6).map(([loc, count]) => {
     const cls = count >= 4 ? "crit" : count >= 2 ? "warn" : "ok";
     const txt = count >= 4 ? "Kritisk" : count >= 2 ? "Opmærksom" : "Stabil";
     const c = complaints.filter(x=>x.location===loc).length;
@@ -812,7 +999,7 @@ function renderAll(data) {
     const f = faults.filter(x=>x.location===loc).length;
     const sup = supplier.filter(x=>x.location===loc).length;
     return `
-      <div class="location-card" onclick="alert('Åbner detaljer for ${esc(loc)}')">
+      <div class="location-card" onclick="switchView('locations')">
         <div class="location-header">
           <div class="location-name">${esc(loc)}</div>
           <div class="location-status ${cls}">${txt}</div>
@@ -852,8 +1039,78 @@ function renderSignalList(id, items, color, fn) {
   `).join("");
 }
 
+// Render Signals View (all signals)
+function renderSignalsView(data) {
+  const complaints = data.complaints || [];
+  const soldout = data.soldout || [];
+  const faults = data.faults || [];
+  const supplier = data.supplier || [];
+  
+  $("countComplaintsFull").textContent = complaints.length;
+  $("countSoldoutFull").textContent = soldout.length;
+  $("countFaultsFull").textContent = faults.length;
+  $("countSupplierFull").textContent = supplier.length;
+  
+  renderSignalList("listComplaintsFull", complaints, "red", e => `
+    <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.category||"Klage")}</div>
+    <div class="signal-sub">${esc(e.description||"Ingen beskrivelse")}</div>
+    <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
+  `);
+  renderSignalList("listSoldoutFull", soldout, "amber", e => `
+    <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"Produkt")}</div>
+    <div class="signal-sub">${esc(e.category||"Ingen kategori")}</div>
+    <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
+  `);
+  renderSignalList("listFaultsFull", faults, "blue", e => `
+    <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.issueType||e.area||"Fejl")}</div>
+    <div class="signal-sub">${esc(e.description||"Ingen beskrivelse")}</div>
+    <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
+  `);
+  renderSignalList("listSupplierFull", supplier, "purple", e => `
+    <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"Produkt")}</div>
+    <div class="signal-sub">${esc(e.description||e.issueType||"Ingen note")}</div>
+    <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
+  `);
+}
+
+// Render Locations View (all locations)
+function renderLocationsView(data) {
+  const complaints = data.complaints || [];
+  const soldout = data.soldout || [];
+  const faults = data.faults || [];
+  const supplier = data.supplier || [];
+  const all = [...complaints, ...soldout, ...faults, ...supplier];
+  
+  const locMap = {};
+  all.forEach(s => { const l = s.location || "Ukendt"; locMap[l] = (locMap[l]||0)+1; });
+  const sortedLocs = Object.entries(locMap).sort((a,b) => b[1]-a[1]);
+  
+  $("locationGridFull").innerHTML = sortedLocs.map(([loc, count]) => {
+    const cls = count >= 4 ? "crit" : count >= 2 ? "warn" : "ok";
+    const txt = count >= 4 ? "Kritisk" : count >= 2 ? "Opmærksom" : "Stabil";
+    const c = complaints.filter(x=>x.location===loc).length;
+    const s = soldout.filter(x=>x.location===loc).length;
+    const f = faults.filter(x=>x.location===loc).length;
+    const sup = supplier.filter(x=>x.location===loc).length;
+    return `
+      <div class="location-card">
+        <div class="location-header">
+          <div class="location-name">${esc(loc)}</div>
+          <div class="location-status ${cls}">${txt}</div>
+        </div>
+        <div class="location-stats">
+          <div class="location-stat"><div class="location-stat-label">Klager</div><div class="location-stat-value">${c}</div></div>
+          <div class="location-stat"><div class="location-stat-label">Udsolgt</div><div class="location-stat-value">${s}</div></div>
+          <div class="location-stat"><div class="location-stat-label">Fejl</div><div class="location-stat-value">${f}</div></div>
+          <div class="location-stat"><div class="location-stat-label">Leverandør</div><div class="location-stat-value">${sup}</div></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 // Catering
-function renderCatering(orders) {
+function renderCateringOverview(orders) {
   const today = isoToday();
   const now = Date.now();
   
@@ -872,13 +1129,36 @@ function renderCatering(orders) {
   }).filter(ev => isFinite(ev.ts)).sort((a,b) => a.ts - b.ts);
   
   const todayEvents = events.filter(ev => ev.deliveryDate === today);
-  const upcomingEvents = events.filter(ev => ev.ts > now && ev.deliveryDate !== today).slice(0,7);
+  const upcomingEvents = events.filter(ev => ev.ts > now && ev.deliveryDate !== today);
   
-  $("statCatering").textContent = todayEvents.length + upcomingEvents.length;
+  $("statCatering").textContent = todayEvents.length + upcomingEvents.slice(0,7).length;
+}
+
+function renderCateringView(orders) {
+  const today = isoToday();
+  const now = Date.now();
+  
+  const events = orders.map(o => {
+    const ts = parseDateTime(o.deliveryDate, o.deliveryTime);
+    return {
+      location: o.location || "",
+      deliveryDate: o.deliveryDate || "",
+      deliveryTime: o.deliveryTime || "",
+      customerName: o.customerName || "Ukendt kunde",
+      guests: Number(o.guests || 0),
+      note: o.note || "",
+      status: o.status || "Bekræftet",
+      ts
+    };
+  }).filter(ev => isFinite(ev.ts)).sort((a,b) => a.ts - b.ts);
+  
+  const todayEvents = events.filter(ev => ev.deliveryDate === today);
+  const upcomingEvents = events.filter(ev => ev.ts > now && ev.deliveryDate !== today);
+  const pastEvents = events.filter(ev => ev.ts < now && ev.deliveryDate !== today).reverse();
   
   const renderEvent = ev => `
     <div class="catering-item">
-      <div class="catering-time">${esc(ev.deliveryTime)}</div>
+      <div class="catering-time">${esc(ev.deliveryDate)} ${esc(ev.deliveryTime)}</div>
       <div class="catering-info">
         <div class="catering-name">${esc(ev.location)} • ${esc(ev.customerName)}</div>
         <div class="catering-details">${ev.guests} gæster${ev.note ? " • " + esc(ev.note) : ""} • ${esc(ev.status)}</div>
@@ -886,29 +1166,19 @@ function renderCatering(orders) {
     </div>
   `;
   
-  $("tabToday").innerHTML = todayEvents.length ? todayEvents.map(renderEvent).join("") : '<div class="empty">Ingen catering events i dag</div>';
-  $("tabUpcoming").innerHTML = upcomingEvents.length ? upcomingEvents.map(ev => `
-    <div class="catering-item">
-      <div class="catering-time">${esc(ev.deliveryDate)}</div>
-      <div class="catering-info">
-        <div class="catering-name">${esc(ev.location)} • ${esc(ev.customerName)}</div>
-        <div class="catering-details">${ev.deliveryTime} • ${ev.guests} gæster • ${esc(ev.status)}</div>
-      </div>
-    </div>
-  `).join("") : '<div class="empty">Ingen kommende events</div>';
+  $("tabCateringAll").innerHTML = events.length ? events.map(renderEvent).join("") : '<div class="empty">Ingen catering events fundet</div>';
+  $("tabCateringToday").innerHTML = todayEvents.length ? todayEvents.map(renderEvent).join("") : '<div class="empty">Ingen catering events i dag</div>';
+  $("tabCateringUpcoming").innerHTML = upcomingEvents.length ? upcomingEvents.map(renderEvent).join("") : '<div class="empty">Ingen kommende events</div>';
+  $("tabCateringPast").innerHTML = pastEvents.length ? pastEvents.slice(0,20).map(renderEvent).join("") : '<div class="empty">Ingen historik tilgængelig</div>';
 }
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+function switchCateringTab(tab) {
+  document.querySelectorAll('#viewCatering .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#viewCatering .tab-content').forEach(c => c.classList.remove('active'));
   
-  if (tab === 'today') {
-    document.querySelectorAll('.tab')[0].classList.add('active');
-    $('tabToday').classList.add('active');
-  } else {
-    document.querySelectorAll('.tab')[1].classList.add('active');
-    $('tabUpcoming').classList.add('active');
-  }
+  const tabMap = {all: 0, today: 1, upcoming: 2, past: 3};
+  document.querySelectorAll('#viewCatering .tab')[tabMap[tab]].classList.add('active');
+  $('tabCatering' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
 }
 
 // Goals
@@ -918,18 +1188,18 @@ function loadGoals() {
 
 function saveGoals(g) { 
   localStorage.setItem(GOALS_KEY, JSON.stringify(g)); 
-  renderGoals(); 
+  renderGoalsFull();
 }
 
-function addGoal() {
-  const date = $("goalDate").value;
-  const text = $("goalText").value.trim();
+function addGoalFull() {
+  const date = $("goalDateFull").value;
+  const text = $("goalTextFull").value.trim();
   if (!text) return alert("Skriv en målbeskrivelse");
   const goals = loadGoals();
   goals.push({ id: Date.now(), text, date, done: false });
   saveGoals(goals);
-  $("goalDate").value = "";
-  $("goalText").value = "";
+  $("goalDateFull").value = "";
+  $("goalTextFull").value = "";
 }
 
 function toggleGoal(id) {
@@ -942,16 +1212,16 @@ function deleteGoal(id) {
   saveGoals(loadGoals().filter(g => g.id !== id));
 }
 
-function renderGoals() {
+function renderGoalsFull() {
   const goals = loadGoals();
-  $("goalCount").textContent = `${goals.length} mål`;
+  $("goalCountFull").textContent = `${goals.length} mål`;
   
-  $("goalList").innerHTML = goals.length ? goals.map(g => {
+  $("goalListFull").innerHTML = goals.length ? goals.map(g => {
     const diff = g.date ? Math.ceil((new Date(g.date+"T00:00:00") - new Date().setHours(0,0,0,0))/86400000) : null;
     let meta = "";
     if (diff !== null) {
-      if (diff < 0) meta = `Overskredet`;
-      else if (diff === 0) meta = `I dag`;
+      if (diff < 0) meta = `Overskredet (${Math.abs(diff)} dage)`;
+      else if (diff === 0) meta = `I dag!`;
       else meta = `${diff} dage`;
     }
     return `
@@ -978,9 +1248,10 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchCatering();
   setInterval(fetchData, 60000);
   setInterval(fetchCatering, 60000);
-  renderGoals();
+  renderGoalsFull();
   renderNotifications();
-  $("goalText").addEventListener("keydown", e => { if(e.key==="Enter") addGoal(); });
+  renderNotificationsFull();
+  $("goalTextFull").addEventListener("keydown", e => { if(e.key==="Enter") addGoalFull(); });
 });
 </script>
 </body>
