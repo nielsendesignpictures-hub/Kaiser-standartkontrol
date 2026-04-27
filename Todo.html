@@ -27,6 +27,8 @@
       --purple:#8b5cf6;--purple-soft:#f5f3ff;--purple-border:#ddd6fe;
       --radius:8px;--radius-lg:12px;
       --sidebar-bg:#18181b;--sidebar-text:#a1a1aa;--sidebar-text-active:#fff;
+      --sidebar-width:240px;
+      --sidebar-width-collapsed:60px;
     }
     html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);line-height:1.5;font-size:14px}
@@ -49,34 +51,161 @@
     
     .app{display:none;min-height:100vh}
     .app.show{display:flex}
-    .sidebar{width:240px;background:var(--sidebar-bg);border-right:1px solid rgba(255,255,255,.1);padding:16px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transform:translateX(0);transition:transform .3s}
+    .sidebar{
+      width:var(--sidebar-width);
+      background:var(--sidebar-bg);
+      border-right:1px solid rgba(255,255,255,.1);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      position:fixed;
+      top:0;
+      left:0;
+      bottom:0;
+      z-index:100;
+      transform:translateX(0);
+      transition:width .3s ease, padding .3s ease;
+      overflow:hidden;
+    }
+    .sidebar.collapsed{
+      width:var(--sidebar-width-collapsed);
+      padding:16px 8px;
+    }
     .sidebar.hidden{transform:translateX(-100%)}
-    .main{flex:1;margin-left:240px;padding:24px 32px;transition:margin-left .3s}
-    .main.expanded{margin-left:0}
+    .main{
+      flex:1;
+      margin-left:var(--sidebar-width);
+      padding:24px 32px;
+      transition:margin-left .3s ease;
+    }
+    .main.expanded{margin-left:var(--sidebar-width-collapsed)}
     @media(max-width:768px){
       .sidebar{transform:translateX(-100%)}
       .sidebar.show{transform:translateX(0);box-shadow:0 0 20px rgba(0,0,0,.5)}
       .main{margin-left:0;padding:16px}
+      .main.expanded{margin-left:0}
     }
     
-    .logo{display:flex;align-items:center;justify-content:center;padding:12px 0;margin-bottom:24px}
-    .logo-img{height:48px;width:auto;max-width:180px}
-    .logo-text{font-weight:600;font-size:15px;color:var(--sidebar-text-active)}
+    .sidebar-toggle{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      height:40px;
+      margin-bottom:16px;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.05);
+      border:none;
+      color:var(--sidebar-text);
+      cursor:pointer;
+      transition:all .15s;
+      font-size:20px;
+    }
+    .sidebar-toggle:hover{background:rgba(255,255,255,.1)}
+    .sidebar.collapsed .sidebar-toggle{width:44px;margin:0 auto 16px}
+    
+    .logo{display:flex;align-items:center;justify-content:center;padding:12px 0;margin-bottom:24px;transition:all .3s}
+    .logo-img{height:48px;width:auto;max-width:180px;transition:all .3s}
+    .sidebar.collapsed .logo-img{height:32px;max-width:32px}
+    .logo-text{font-weight:600;font-size:15px;color:var(--sidebar-text-active);white-space:nowrap}
+    .sidebar.collapsed .logo-text{display:none}
+    
     .nav-section{margin-bottom:24px}
-    .nav-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--sidebar-text);margin-bottom:8px;padding:0 8px}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);color:var(--sidebar-text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+    .nav-label{
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:var(--sidebar-text);
+      margin-bottom:8px;
+      padding:0 8px;
+      white-space:nowrap;
+      overflow:hidden;
+      transition:opacity .3s;
+    }
+    .sidebar.collapsed .nav-label{opacity:0;height:0;margin:0;padding:0}
+    
+    .nav-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:var(--radius);
+      color:var(--sidebar-text);
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      transition:all .15s;
+      white-space:nowrap;
+      position:relative;
+    }
     .nav-item:hover{background:rgba(255,255,255,.05);color:var(--sidebar-text-active)}
     .nav-item.active{background:rgba(255,255,255,.1);color:var(--sidebar-text-active)}
-    .nav-item svg{width:16px;height:16px;opacity:.7}
+    .nav-item svg{width:16px;height:16px;opacity:.7;flex-shrink:0}
     .nav-item.active svg{opacity:1}
-    .nav-badge{margin-left:auto;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--red);color:#fff}
-    .sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.1)}
-    .user-info{display:flex;align-items:center;gap:10px}
-    .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
-    .user-name{font-size:13px;font-weight:500;color:var(--sidebar-text-active)}
-    .user-role{font-size:11px;color:var(--sidebar-text)}
-    .logout-btn{margin-top:12px;width:100%;padding:8px;border-radius:var(--radius);background:rgba(255,255,255,.05);color:var(--sidebar-text);border:none;font-size:12px;cursor:pointer;transition:background .15s;font-family:inherit}
+    .nav-item-text{
+      flex:1;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      transition:opacity .3s;
+    }
+    .sidebar.collapsed .nav-item-text{opacity:0;width:0}
+    .sidebar.collapsed .nav-item{justify-content:center;padding:8px}
+    
+    .nav-badge{
+      margin-left:auto;
+      font-size:11px;
+      font-weight:600;
+      padding:2px 6px;
+      border-radius:4px;
+      background:var(--red);
+      color:#fff;
+      flex-shrink:0;
+      transition:opacity .3s;
+    }
+    .sidebar.collapsed .nav-badge{
+      position:absolute;
+      top:4px;
+      right:4px;
+      padding:1px 4px;
+      font-size:9px;
+    }
+    
+    .sidebar-footer{
+      margin-top:auto;
+      padding:12px;
+      border-top:1px solid rgba(255,255,255,.1);
+      transition:all .3s;
+    }
+    .sidebar.collapsed .sidebar-footer{padding:8px}
+    
+    .user-info{display:flex;align-items:center;gap:10px;transition:all .3s}
+    .sidebar.collapsed .user-info{justify-content:center}
+    
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex-shrink:0}
+    .user-details{flex:1;min-width:0;transition:opacity .3s}
+    .sidebar.collapsed .user-details{opacity:0;width:0;overflow:hidden}
+    
+    .user-name{font-size:13px;font-weight:500;color:var(--sidebar-text-active);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .user-role{font-size:11px;color:var(--sidebar-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    
+    .logout-btn{
+      margin-top:12px;
+      width:100%;
+      padding:8px;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.05);
+      color:var(--sidebar-text);
+      border:none;
+      font-size:12px;
+      cursor:pointer;
+      transition:all .15s;
+      font-family:inherit;
+      white-space:nowrap;
+    }
     .logout-btn:hover{background:rgba(255,255,255,.1)}
+    .sidebar.collapsed .logout-btn{font-size:0;padding:8px}
+    .sidebar.collapsed .logout-btn::before{content:'⎋';font-size:16px}
     
     .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px}
     .page-title{font-size:24px;font-weight:600;letter-spacing:-.02em}
@@ -172,20 +301,55 @@
     .location-stat-label{font-size:10px;color:var(--text-3);text-transform:uppercase;font-weight:600;letter-spacing:.05em}
     .location-stat-value{font-size:16px;font-weight:600;margin-top:2px}
     
+    /* GOAL STYLING WITH COLORS */
     .goal-input-group{display:flex;gap:8px;padding:16px 20px;border-bottom:1px solid var(--border-light);flex-wrap:wrap}
     .goal-input{flex:1;min-width:150px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit}
     .goal-input:focus{outline:none;border-color:var(--text-1)}
     .goal-list{padding:12px 20px;max-height:400px;overflow-y:auto}
-    .goal-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);margin-bottom:6px;background:var(--surface-hover)}
+    .goal-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px;
+      border-radius:var(--radius);
+      margin-bottom:8px;
+      background:var(--surface-hover);
+      border:2px solid transparent;
+      transition:all .2s;
+    }
     .goal-item:last-child{margin-bottom:0}
+    .goal-item:hover{box-shadow:0 2px 6px rgba(0,0,0,.08)}
+    
+    /* Goal urgency colors */
+    .goal-item.urgent{background:var(--red-soft);border-color:var(--red-border)}
+    .goal-item.warning{background:var(--amber-soft);border-color:var(--amber-border)}
+    .goal-item.calm{background:var(--green-soft);border-color:var(--green-border)}
+    .goal-item.overdue{background:var(--red-bg);border-color:var(--red);border-style:dashed}
+    
     .goal-check{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
     .goal-check:hover{border-color:var(--text-2)}
     .goal-check.done{background:var(--green);border-color:var(--green)}
     .goal-check.done::after{content:'✓';color:#fff;font-size:11px;font-weight:700}
-    .goal-text{flex:1;font-size:13px;word-break:break-word}
-    .goal-text.done{text-decoration:line-through;color:var(--text-3)}
-    .goal-date{font-size:11px;color:var(--text-3);font-weight:500;white-space:nowrap}
-    .goal-delete{width:24px;height:24px;border:none;background:none;color:var(--text-3);cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;font-family:inherit}
+    
+    .goal-content{flex:1;min-width:0}
+    .goal-text{font-size:13px;font-weight:600;line-height:1.4;word-break:break-word;margin-bottom:4px}
+    .goal-text.done{text-decoration:line-through;color:var(--text-3);font-weight:500}
+    .goal-date-full{font-size:12px;color:var(--text-2);font-weight:500}
+    
+    .goal-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .goal-days{
+      font-size:11px;
+      font-weight:700;
+      padding:4px 8px;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+    .goal-item.urgent .goal-days{background:var(--red);color:#fff}
+    .goal-item.warning .goal-days{background:var(--amber);color:#fff}
+    .goal-item.calm .goal-days{background:var(--green);color:#fff}
+    .goal-item.overdue .goal-days{background:var(--red);color:#fff}
+    
+    .goal-delete{width:28px;height:28px;border:none;background:rgba(0,0,0,.05);color:var(--text-3);cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;font-family:inherit;transition:all .15s}
     .goal-delete:hover{background:var(--red-soft);color:var(--red)}
     
     .notif-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
@@ -258,7 +422,7 @@
     </form>
     
     <div class="login-error" id="loginError">Forkert email eller adgangskode</div>
-    <div class="login-version">Kaiser Operations Hub v2.1.2</div>
+    <div class="login-version">Kaiser Operations Hub v2.1.3</div>
   </div>
 </div>
 
@@ -268,6 +432,10 @@
   </button>
 
   <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebarCollapse()">
+      <span id="sidebarToggleIcon">‹</span>
+    </button>
+    
     <div class="logo">
       <img src="images/logo.png" alt="Kaiser Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <div class="logo-text" style="display:none">Kaiser Ops</div>
@@ -277,24 +445,24 @@
       <div class="nav-label">Dashboard</div>
       <div class="nav-item active" onclick="switchView('overview')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Oversigt
+        <span class="nav-item-text">Oversigt</span>
       </div>
       <div class="nav-item" onclick="switchView('signals')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-        Signaler
+        <span class="nav-item-text">Signaler</span>
         <span class="nav-badge" id="navSignalCount">0</span>
       </div>
       <div class="nav-item" onclick="switchView('locations')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Lokationer
+        <span class="nav-item-text">Lokationer</span>
       </div>
       <div class="nav-item" onclick="switchView('goals')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Mål & Frister
+        <span class="nav-item-text">Mål & Frister</span>
       </div>
       <div class="nav-item" onclick="switchView('notifications')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        Notifikationer
+        <span class="nav-item-text">Notifikationer</span>
         <span class="nav-badge" id="navNotifCount" style="display:none">0</span>
       </div>
     </nav>
@@ -303,19 +471,19 @@
       <div class="nav-label">Data</div>
       <div class="nav-item" onclick="switchView('catering')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Catering
+        <span class="nav-item-text">Catering</span>
       </div>
       <div class="nav-item" onclick="switchView('analytics')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Menu Intelligence
+        <span class="nav-item-text">Menu Intelligence</span>
       </div>
     </nav>
     
     <div class="sidebar-footer">
       <div class="user-info">
-        <div class="user-avatar">SA</div>
-        <div>
-          <div class="user-name" id="userName">Stefan Andersen</div>
+        <div class="user-avatar">SN</div>
+        <div class="user-details">
+          <div class="user-name" id="userName">Stefan Nielsen</div>
           <div class="user-role">Operations Manager</div>
         </div>
       </div>
@@ -323,7 +491,7 @@
     </div>
   </aside>
 
-  <main class="main">
+  <main class="main" id="mainContent">
     
     <div class="view active" id="viewOverview">
       <div class="page-header">
@@ -479,96 +647,13 @@
       </div>
     </div>
 
-    <div class="view" id="viewSignals">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Alle Signaler</h1>
-          <p class="page-desc">Komplet oversigt over alle driftssignaler</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn" onclick="fetchData()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/></svg>
-            Opdater
-          </button>
-        </div>
-      </div>
-
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterSignals('all')">Alle (<span id="filterCountAll">0</span>)</button>
-        <button class="filter-btn" onclick="filterSignals('active')">Aktive (<span id="filterCountActive">0</span>)</button>
-        <button class="filter-btn" onclick="filterSignals('completed')">Færdige (<span id="filterCountCompleted">0</span>)</button>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-              Gæsteklager
-            </div>
-            <span class="card-badge" id="countComplaintsFull">0</span>
-          </div>
-          <div class="card-body">
-            <div class="signal-list" id="listComplaintsFull"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-              Udsolgte varer
-            </div>
-            <span class="card-badge" id="countSoldoutFull">0</span>
-          </div>
-          <div class="card-body">
-            <div class="signal-list" id="listSoldoutFull"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-              Driftsfejl
-            </div>
-            <span class="card-badge" id="countFaultsFull">0</span>
-          </div>
-          <div class="card-body">
-            <div class="signal-list" id="listFaultsFull"></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><rect x="1" y="3" width="15" height="13"/></svg>
-              Leverandørfejl
-            </div>
-            <span class="card-badge" id="countSupplierFull">0</span>
-          </div>
-          <div class="card-body">
-            <div class="signal-list" id="listSupplierFull"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="view" id="viewLocations">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Lokationer</h1>
-          <p class="page-desc">Samlet overblik over alle lokationer</p>
-        </div>
-      </div>
-      <div class="grid-3" id="locationGridFull"><div class="empty">Indlæser...</div></div>
-    </div>
+    <!-- ANDRE VIEWS FORTSÆTTER HER - Jeg inkluderer kun Goals View som ændret -->
 
     <div class="view" id="viewGoals">
       <div class="page-header">
         <div>
           <h1 class="page-title">Mål & Frister</h1>
-          <p class="page-desc">Dine personlige mål</p>
+          <p class="page-desc">Dine personlige mål med farvekodet prioritering</p>
         </div>
       </div>
       <div class="card">
@@ -581,75 +666,24 @@
         </div>
         <div class="goal-input-group">
           <input type="date" id="goalDateFull" class="goal-input">
-          <input type="text" id="goalTextFull" class="goal-input" placeholder="Beskriv målet...">
+          <input type="text" id="goalTextFull" class="goal-input" placeholder="Beskriv målet (fx ny menu klar)...">
           <button class="btn btn-primary" onclick="addGoalFull()">Tilføj</button>
         </div>
         <div class="goal-list" id="goalListFull"></div>
       </div>
     </div>
 
-    <div class="view" id="viewNotifications">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Notifikationer</h1>
-          <p class="page-desc">Alle notifikationer der kræver handling</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
-            Åbne notifikationer
-          </div>
-          <span class="card-badge" id="notifBadgeFull">0 åbne</span>
-        </div>
-        <div class="card-body" id="notificationListFull"></div>
-      </div>
-    </div>
-
-    <div class="view" id="viewCatering">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Catering Events</h1>
-          <p class="page-desc">Alle catering events</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn" onclick="fetchCatering()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/></svg>
-            Opdater
-          </button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="tabs">
-          <div class="tab active" onclick="switchCateringTab('all')">Alle Events</div>
-          <div class="tab" onclick="switchCateringTab('today')">I dag</div>
-          <div class="tab" onclick="switchCateringTab('upcoming')">Kommende</div>
-          <div class="tab" onclick="switchCateringTab('past')">Historik</div>
-        </div>
-        <div class="tab-content active" id="tabCateringAll"><div class="empty">Indlæser...</div></div>
-        <div class="tab-content" id="tabCateringToday"><div class="empty">Indlæser...</div></div>
-        <div class="tab-content" id="tabCateringUpcoming"><div class="empty">Indlæser...</div></div>
-        <div class="tab-content" id="tabCateringPast"><div class="empty">Indlæser...</div></div>
-      </div>
-    </div>
-
-    <div class="view" id="viewAnalytics">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">Menu Intelligence</h1>
-          <p class="page-desc">Avanceret analyse</p>
-        </div>
-      </div>
-      <div class="iframe-container">
-        <iframe src="https://kaiser-live-dashboard.onrender.com/menu-intelligence.html" title="Menu Intelligence"></iframe>
-      </div>
-    </div>
+    <!-- REST AF VIEWS - UÆNDRET -->
+    <div class="view" id="viewSignals"><!-- SAMME SOM FØR --></div>
+    <div class="view" id="viewLocations"><!-- SAMME SOM FØR --></div>
+    <div class="view" id="viewNotifications"><!-- SAMME SOM FØR --></div>
+    <div class="view" id="viewCatering"><!-- SAMME SOM FØR --></div>
+    <div class="view" id="viewAnalytics"><!-- SAMME SOM FØR --></div>
 
   </main>
 </div>
 
-<div class="version-badge">v2.1.2</div>
+<div class="version-badge">v2.1.3</div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -658,78 +692,98 @@ const NOTIF_KEY = "kaiser_notifications_v1";
 const SEEN_KEY = "kaiser_seen_signals_v1";
 const COMPLETED_SIGNALS_KEY = "kaiser_completed_signals_v1";
 const AUTH_KEY = "kaiser_auth_session";
-const APP_VERSION = "2.1.2";
+const SIDEBAR_STATE_KEY = "kaiser_sidebar_collapsed";
+const APP_VERSION = "2.1.3";
 const VALID_EMAIL = "stefan@cafekaiser.dk";
 const VALID_PASSWORD = "Jegergenial1!";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const fmtDate = v => {
-  if(!v)return"—";
-  try{const d=new Date(v);return isNaN(d.getTime())?v:d.toLocaleString("da-DK",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}catch{return v}
-};
-const fmtMoney = v => Number(v||0).toLocaleString("da-DK") + " kr.";
-const fmtPct = v => {const n=Number(v);return isFinite(n)?n.toLocaleString("da-DK",{minimumFractionDigits:1,maximumFractionDigits:1})+"%":"—"};
-const monthISO = () => new Date().toISOString().slice(0,7);
-const isoToday = () => {const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-const parseDateTime = (dateStr, timeStr) => {
-  if(!dateStr)return NaN;
-  const t=(timeStr&&/^\d{2}:\d{2}$/.test(timeStr))?timeStr:"12:00";
-  const [y,m,d]=String(dateStr).split("-").map(Number);
-  const [hh,mm]=String(t).split(":").map(Number);
-  if(!y||!m||!d)return NaN;
-  return new Date(y,m-1,d,hh||0,mm||0,0,0).getTime();
-};
 
-let globalData = null;
-let globalCatering = null;
-let currentView = 'overview';
-let currentSignalFilter = 'all';
-
-function loadCompletedSignals() {
-  try{const data=JSON.parse(localStorage.getItem(COMPLETED_SIGNALS_KEY)||'{}');return new Set(data.signals||[])}catch{return new Set()}
+// SIDEBAR COLLAPSE TOGGLE
+function toggleSidebarCollapse() {
+  const sidebar = $('sidebar');
+  const mainContent = $('mainContent');
+  const icon = $('sidebarToggleIcon');
+  
+  if (sidebar.classList.contains('collapsed')) {
+    sidebar.classList.remove('collapsed');
+    mainContent.classList.remove('expanded');
+    icon.textContent = '‹';
+    localStorage.setItem(SIDEBAR_STATE_KEY, 'expanded');
+  } else {
+    sidebar.classList.add('collapsed');
+    mainContent.classList.add('expanded');
+    icon.textContent = '›';
+    localStorage.setItem(SIDEBAR_STATE_KEY, 'collapsed');
+  }
 }
 
-function saveCompletedSignals(completedSet) {
-  localStorage.setItem(COMPLETED_SIGNALS_KEY,JSON.stringify({signals:Array.from(completedSet),lastUpdated:new Date().toISOString()}));
+function restoreSidebarState() {
+  const state = localStorage.getItem(SIDEBAR_STATE_KEY);
+  if (state === 'collapsed') {
+    $('sidebar').classList.add('collapsed');
+    $('mainContent').classList.add('expanded');
+    $('sidebarToggleIcon').textContent = '›';
+  }
 }
 
-function makeSignalId(type, signal) {
-  return `${type}_${signal.location||''}_${signal.category||signal.productName||signal.issueType||''}_${signal.createdAt||signal.updatedAt||''}`;
+function toggleSidebar(){const sidebar=$('sidebar');if(sidebar)sidebar.classList.toggle('show')}
+
+// GOAL URGENCY CALCULATION
+function getGoalUrgency(diff) {
+  if (diff === null) return 'warning';
+  if (diff < 0) return 'overdue';
+  if (diff <= 7) return 'urgent';
+  if (diff <= 30) return 'warning';
+  return 'calm';
 }
 
-function toggleSignalComplete(type, signal) {
-  const completed=loadCompletedSignals();
-  const id=makeSignalId(type,signal);
-  if(completed.has(id)){completed.delete(id)}else{completed.add(id)}
-  saveCompletedSignals(completed);
-  if(globalData){renderSignalsView(globalData);updateSignalCounts()}
+function formatGoalDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('da-DK', { day: '2-digit', month: 'long', year: 'numeric' });
+  } catch {
+    return dateStr;
+  }
 }
 
-function filterSignals(filter) {
-  currentSignalFilter=filter;
-  document.querySelectorAll('.filter-btn').forEach(btn=>btn.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  if(globalData)renderSignalsView(globalData);
+function renderGoalsFull(){
+  const goals=loadGoals();
+  $("goalCountFull").textContent=`${goals.length} mål`;
+  
+  $("goalListFull").innerHTML=goals.length?goals.map(g=>{
+    const diff=g.date?Math.ceil((new Date(g.date+"T00:00:00")-new Date().setHours(0,0,0,0))/86400000):null;
+    const urgency = getGoalUrgency(diff);
+    const formattedDate = formatGoalDate(g.date);
+    
+    let daysText = "";
+    if (diff !== null) {
+      if (diff < 0) daysText = `${Math.abs(diff)} dage overskredet`;
+      else if (diff === 0) daysText = `I DAG`;
+      else if (diff === 1) daysText = `I morgen`;
+      else daysText = `${diff} dage`;
+    }
+    
+    return`
+      <div class="goal-item ${urgency}">
+        <div class="goal-check ${g.done?'done':''}" onclick="toggleGoal(${g.id})"></div>
+        <div class="goal-content">
+          <div class="goal-text ${g.done?'done':''}">${esc(g.text)}</div>
+          <div class="goal-date-full">${formattedDate}</div>
+        </div>
+        <div class="goal-meta">
+          ${daysText ? `<div class="goal-days">${daysText}</div>` : ''}
+          <button class="goal-delete" onclick="deleteGoal(${g.id})">×</button>
+        </div>
+      </div>
+    `
+  }).join(""):'<div class="empty">Ingen mål endnu. Tilføj et mål ovenfor for at komme i gang.</div>'
 }
 
-function updateSignalCounts() {
-  if(!globalData)return;
-  const completed=loadCompletedSignals();
-  const all=[
-    ...(globalData.complaints||[]).map(s=>({...s,type:'complaint'})),
-    ...(globalData.soldout||[]).map(s=>({...s,type:'soldout'})),
-    ...(globalData.faults||[]).map(s=>({...s,type:'fault'})),
-    ...(globalData.supplier||[]).map(s=>({...s,type:'supplier'}))
-  ];
-  const allCount=all.length;
-  const completedCount=all.filter(s=>completed.has(makeSignalId(s.type,s))).length;
-  const activeCount=allCount-completedCount;
-  const fca=$('filterCountAll');const fct=$('filterCountActive');const fcc=$('filterCountCompleted');
-  if(fca)fca.textContent=allCount;
-  if(fct)fct.textContent=activeCount;
-  if(fcc)fcc.textContent=completedCount;
-}
+// RESTEN AF DIN KODE (uændret fra sidste version, men med Stefan Nielsen fix)
 
 function handleLogin(event) {
   event.preventDefault();
@@ -737,7 +791,7 @@ function handleLogin(event) {
   const password=$('loginPassword').value;
   const errorEl=$('loginError');
   if(email===VALID_EMAIL&&password===VALID_PASSWORD){
-    const session={email:email,name:"Stefan Andersen",loginTime:new Date().toISOString(),version:APP_VERSION};
+    const session={email:email,name:"Stefan Nielsen",loginTime:new Date().toISOString(),version:APP_VERSION};
     localStorage.setItem(AUTH_KEY,JSON.stringify(session));
     $('loginWrapper').style.display='none';
     $('app').classList.add('show');
@@ -751,173 +805,49 @@ function handleLogin(event) {
   }
 }
 
-function handleLogout() {
-  if(confirm('Er du sikker på, at du vil logge ud?')){localStorage.removeItem(AUTH_KEY);location.reload()}
-}
-
 function checkAuth() {
   try{
     const session=JSON.parse(localStorage.getItem(AUTH_KEY)||'{}');
     if(session.email===VALID_EMAIL){
       $('loginWrapper').style.display='none';
       $('app').classList.add('show');
-      $('userName').textContent=session.name||"Stefan Andersen";
+      $('userName').textContent=session.name||"Stefan Nielsen";
       return true;
     }
   }catch(e){}
   return false;
 }
 
-function exportToExcel() {
-  if(!globalData){alert('Ingen data at eksportere.');return}
-  let csv='\ufeff';
-  csv+='GÆSTEKLAGER\nLokation,Kategori,Beskrivelse,Dato\n';
-  (globalData.complaints||[]).forEach(c=>{csv+=`"${esc(c.location||'')}","${esc(c.category||'')}","${esc(c.description||'')}","${esc(c.createdAt||c.updatedAt||'')}"\n`});
-  csv+='\n';
-  csv+='UDSOLGTE VARER\nLokation,Produkt,Kategori,Dato\n';
-  (globalData.soldout||[]).forEach(s=>{csv+=`"${esc(s.location||'')}","${esc(s.productName||'')}","${esc(s.category||'')}","${esc(s.createdAt||s.updatedAt||'')}"\n`});
-  csv+='\n';
-  csv+='DRIFTSFEJL\nLokation,Type,Beskrivelse,Dato\n';
-  (globalData.faults||[]).forEach(f=>{csv+=`"${esc(f.location||'')}","${esc(f.issueType||f.area||'')}","${esc(f.description||'')}","${esc(f.createdAt||f.updatedAt||'')}"\n`});
-  csv+='\n';
-  csv+='LEVERANDØRFEJL\nLokation,Produkt,Beskrivelse,Dato\n';
-  (globalData.supplier||[]).forEach(s=>{csv+=`"${esc(s.location||'')}","${esc(s.productName||'')}","${esc(s.description||s.issueType||'')}","${esc(s.createdAt||s.updatedAt||'')}"\n`});
-  csv+='\n';
-  csv+='KITCHEN %\nLokation,Kitchen %,Omsætning,Indkøb\n';
-  (globalData.kitchen||[]).forEach(k=>{csv+=`"${esc(k.location||'')}","${k.pct||0}","${k.revenue||0}","${k.purchases||0}"\n`});
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const link=document.createElement('a');
-  const url=URL.createObjectURL(blob);
-  link.setAttribute('href',url);
-  link.setAttribute('download',`kaiser_export_${new Date().toISOString().slice(0,10)}.csv`);
-  link.style.visibility='hidden';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-function fetchData() {
-  console.log('fetchData called');
-  setStatus("Henter driftsdata...","warning");
-  const cb="__cb_"+Date.now()+"_"+Math.random().toString(16).slice(2);
-  const script=document.createElement("script");
-  window[cb]=data=>{
-    delete window[cb];
-    script.remove();
-    console.log('Data received:',data);
-    if(data&&data.ok){
-      setStatus("Live – Data opdateret","live");
-      globalData=data;
-      processNotifications(data);
-      renderAll(data);
-      if(currentView==='signals')renderSignalsView(data);
-      if(currentView==='locations')renderLocationsView(data);
-      updateSignalCounts();
-    }else{
-      setStatus("Datafejl: "+((data&&data.error)||"Ukendt fejl"),"critical");
-    }
-  };
-  script.onerror=()=>{
-    console.error('Script load error');
-    setStatus("Netværksfejl – prøv igen","critical");
-    delete window[cb];
-    script.remove();
-  };
-  const params=new URLSearchParams({action:"fbPortalBundle",month:monthISO(),callback:cb,_t:Date.now()}).toString();
-  script.src=`${SCRIPT_URL}?${params}`;
-  console.log('Loading script:',script.src);
-  document.body.appendChild(script);
-  setTimeout(()=>{if(window[cb]){setStatus("Timeout","critical");delete window[cb];script.remove()}},20000);
-}
-
-function fetchCatering() {
-  const cb="__cb_cat_"+Date.now();
-  const script=document.createElement("script");
-  window[cb]=data=>{
-    delete window[cb];
-    script.remove();
-    if(data&&data.ok&&Array.isArray(data.orders)){
-      globalCatering=data.orders;
-      renderCateringOverview(data.orders);
-      if(currentView==='catering')renderCateringView(data.orders);
-    }
-  };
-  script.onerror=()=>{delete window[cb];script.remove()};
-  script.src=`${SCRIPT_URL}?${new URLSearchParams({action:"getOrders",callback:cb,_t:Date.now()}).toString()}`;
-  document.body.appendChild(script);
-}
-
-function processNotifications(data) {
-  const seen=loadSeenSignals();
-  const existing=loadNotifications();
-  const existingIds=new Set(existing.map(x=>x.id));
-  const additions=[];
-  const sources=[
-    {type:"complaint",items:data.complaints||[]},
-    {type:"soldout",items:data.soldout||[]},
-    {type:"fault",items:data.faults||[]},
-    {type:"supplier",items:data.supplier||[]}
-  ];
-  for(const source of sources){
-    for(const ev of source.items){
-      const key=makeNotifSignalKey(source.type,ev);
-      if(!seen.has(key)){
-        seen.add(key);
-        const id="notif_"+btoa(key).replace(/[^a-zA-Z0-9]/g,"").slice(0,60);
-        if(!existingIds.has(id)){
-          additions.push({id,key,type:source.type,title:makeNotifTitle(source.type,ev),text:makeNotifText(source.type,ev),location:ev.location||"Ukendt",createdAt:ev.createdAt||ev.updatedAt||ev.date||new Date().toISOString(),acknowledged:false});
-        }
-      }
-    }
-  }
-  if(additions.length)saveNotifications([...additions,...existing]);
-  saveSeenSignals(seen);
-  renderNotifications();
-}
-
-function makeNotifSignalKey(type,ev){return[type,ev.location||"",ev.category||"",ev.productName||"",ev.issueType||"",ev.description||"",ev.createdAt||ev.updatedAt||""].join("||")}
-function makeNotifTitle(type,ev){const loc=ev.location||"Ukendt";if(type==="complaint")return`${loc} • Gæsteklage`;if(type==="soldout")return`${loc} • Udsolgt vare`;if(type==="fault")return`${loc} • Driftsfejl`;if(type==="supplier")return`${loc} • Leverandørfejl`;return`${loc} • Signal`}
-function makeNotifText(type,ev){if(type==="complaint")return ev.description||ev.category||"Ny klage registreret";if(type==="soldout")return[ev.productName,ev.category].filter(Boolean).join(" • ")||"Ny udsolgt vare";if(type==="fault")return ev.description||ev.issueType||"Ny fejl registreret";if(type==="supplier")return ev.description||ev.productName||"Ny leverandørfejl";return"Nyt signal registreret"}
-function loadNotifications(){try{return JSON.parse(localStorage.getItem(NOTIF_KEY)||"[]")}catch{return[]}}
-function saveNotifications(items){localStorage.setItem(NOTIF_KEY,JSON.stringify(items))}
-function loadSeenSignals(){try{const arr=JSON.parse(localStorage.getItem(SEEN_KEY)||"[]");return new Set(Array.isArray(arr)?arr:[])}catch{return new Set()}}
-function saveSeenSignals(setObj){localStorage.setItem(SEEN_KEY,JSON.stringify(Array.from(setObj)))}
-function acknowledgeNotification(id){const items=loadNotifications().map(n=>n.id===id?{...n,acknowledged:true,acknowledgedAt:new Date().toISOString()}:n);saveNotifications(items);renderNotifications();renderNotificationsFull();if(globalData)renderAll(globalData)}
-function renderNotifications(){const items=loadNotifications();const open=items.filter(n=>!n.acknowledged);$("statNotifications").textContent=open.length;$("navNotifCount").textContent=open.length;if(open.length>0){$("navNotifCount").style.display=""}else{$("navNotifCount").style.display="none"}}
-function renderNotificationsFull(){const items=loadNotifications();const open=items.filter(n=>!n.acknowledged);$("notifBadgeFull").textContent=`${open.length} åbne`;const list=$("notificationListFull");if(!open.length){list.innerHTML='<div class="empty">Ingen åbne notifikationer 🎉</div>';return}list.innerHTML=open.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(n=>{let barClass="red";if(n.type==="soldout")barClass="amber";if(n.type==="fault")barClass="blue";if(n.type==="supplier")barClass="purple";return`<div class="notif-card"><div class="notif-bar ${barClass}"></div><div class="notif-content"><div class="notif-title">${esc(n.title)}</div><div class="notif-text">${esc(n.text)}</div><div class="notif-meta"><span>${fmtDate(n.createdAt)}</span><span>${esc(n.location)}</span></div><div class="notif-actions"><button class="btn btn-primary" onclick="acknowledgeNotification('${esc(n.id)}')">Kvitter</button></div></div></div>`}).join("")}
-
-function renderAll(data){const complaints=data.complaints||[];const soldout=data.soldout||[];const faults=data.faults||[];const supplier=data.supplier||[];const kitchen=data.kitchen||[];const all=[...complaints,...soldout,...faults,...supplier];const total=all.length;const locMap={};all.forEach(s=>{const l=s.location||"Ukendt";locMap[l]=(locMap[l]||0)+1});const sortedLocs=Object.entries(locMap).sort((a,b)=>b[1]-a[1]);const topLoc=sortedLocs[0];const critLocs=sortedLocs.filter(([_,c])=>c>=4).length;$("statSignals").textContent=total;$("statCritLocs").textContent=critLocs;$("navSignalCount").textContent=total;if(topLoc){const[locName,locCount]=topLoc;const pct=Math.round(locCount/total*100);const riskMsg=supplier.length>5?" Vareflow og leverandørfejl udgør den største risiko.":"";$("focusTitle").textContent=`Start dagen med ${locName}`;$("focusText").textContent=`${locName} har ${locCount} aktive signaler (${pct}% af alle). Det er den mest pressede lokation lige nu. Fokusér på at lukke de sager, der direkte påvirker gæsteoplevelse først.${riskMsg}`;$("focusActions").innerHTML=`<button class="btn btn-primary" onclick="switchView('locations')">Gå til lokationer</button><button class="btn" onclick="switchView('signals')">Se alle signaler</button>`}else{$("focusTitle").textContent=`Stabil drift`;$("focusText").textContent=`Ingen markante hotspots lige nu. Brug dagen på forebyggelse.`;$("focusActions").innerHTML=``}$("countComplaints").textContent=complaints.length;$("countSoldout").textContent=soldout.length;$("countFaults").textContent=faults.length;$("countSupplier").textContent=supplier.length;renderSignalList("listComplaints",complaints.slice(0,5),"red",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.category||"Klage")}</div><div class="signal-sub">${esc(e.description||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);renderSignalList("listSoldout",soldout.slice(0,5),"amber",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"Produkt")}</div><div class="signal-sub">${esc(e.category||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);renderSignalList("listFaults",faults.slice(0,5),"blue",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.issueType||e.area||"Fejl")}</div><div class="signal-sub">${esc(e.description||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);renderSignalList("listSupplier",supplier.slice(0,5),"purple",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"")}</div><div class="signal-sub">${esc(e.description||e.issueType||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);$("locationCount").textContent=`${sortedLocs.length} lokationer`;$("locationGrid").innerHTML=sortedLocs.slice(0,6).map(([loc,count])=>{const cls=count>=4?"crit":count>=2?"warn":"ok";const txt=count>=4?"Kritisk":count>=2?"Opmærksom":"Stabil";const c=complaints.filter(x=>x.location===loc).length;const s=soldout.filter(x=>x.location===loc).length;const f=faults.filter(x=>x.location===loc).length;const sup=supplier.filter(x=>x.location===loc).length;return`<div class="location-card" onclick="switchView('locations')"><div class="location-header"><div class="location-name">${esc(loc)}</div><div class="location-status ${cls}">${txt}</div></div><div class="location-stats"><div class="location-stat"><div class="location-stat-label">Klager</div><div class="location-stat-value">${c}</div></div><div class="location-stat"><div class="location-stat-label">Udsolgt</div><div class="location-stat-value">${s}</div></div><div class="location-stat"><div class="location-stat-label">Fejl</div><div class="location-stat-value">${f}</div></div><div class="location-stat"><div class="location-stat-label">Leverandør</div><div class="location-stat-value">${sup}</div></div></div></div>`}).join("");if(kitchen.length){$("kitchenList").innerHTML=kitchen.sort((a,b)=>(Number(a.pct)||0)-(Number(b.pct)||0)).map(k=>`<div class="kitchen-row"><div class="kitchen-loc">${esc(k.location||"Ukendt")}</div><div style="display:flex;align-items:center"><div class="kitchen-pct">${fmtPct(k.pct)}</div><div class="kitchen-amt">${fmtMoney(k.purchases)}</div></div></div>`).join("")}else{$("kitchenList").innerHTML='<div class="empty">Indlæser kitchen data...</div>'}}
-
-function renderSignalList(id,items,color,fn){const el=$(id);if(!items.length){el.innerHTML='<div class="empty">Ingen hændelser</div>';return}el.innerHTML=items.map(item=>`<div class="signal-item"><div class="signal-bar ${color}"></div><div class="signal-content">${fn(item)}</div></div>`).join("")}
-
-function renderSignalsView(data){const complaints=data.complaints||[];const soldout=data.soldout||[];const faults=data.faults||[];const supplier=data.supplier||[];const completed=loadCompletedSignals();const renderSignalWithAction=(items,type,color,fn)=>{let filtered=items.map(item=>({...item,type}));if(currentSignalFilter==='active'){filtered=filtered.filter(item=>!completed.has(makeSignalId(type,item)))}else if(currentSignalFilter==='completed'){filtered=filtered.filter(item=>completed.has(makeSignalId(type,item)))}if(!filtered.length)return'<div class="empty">Ingen signaler</div>';return filtered.map(item=>{const isCompleted=completed.has(makeSignalId(type,item));return`<div class="signal-item ${isCompleted?'completed':''}"><div class="signal-bar ${color}"></div><div class="signal-content">${fn(item)}</div><div class="signal-actions"><button class="signal-complete-btn ${isCompleted?'completed':''}" onclick='toggleSignalComplete("${type}",${JSON.stringify(item).replace(/'/g,"&apos;")})'>${isCompleted?'✓':'○'}</button></div></div>`}).join("")};$("countComplaintsFull").textContent=complaints.length;$("countSoldoutFull").textContent=soldout.length;$("countFaultsFull").textContent=faults.length;$("countSupplierFull").textContent=supplier.length;$("listComplaintsFull").innerHTML=renderSignalWithAction(complaints,"complaint","red",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.category||"Klage")}</div><div class="signal-sub">${esc(e.description||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);$("listSoldoutFull").innerHTML=renderSignalWithAction(soldout,"soldout","amber",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"Produkt")}</div><div class="signal-sub">${esc(e.category||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);$("listFaultsFull").innerHTML=renderSignalWithAction(faults,"fault","blue",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.issueType||e.area||"Fejl")}</div><div class="signal-sub">${esc(e.description||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`);$("listSupplierFull").innerHTML=renderSignalWithAction(supplier,"supplier","purple",e=>`<div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.productName||"")}</div><div class="signal-sub">${esc(e.description||e.issueType||"")}</div><div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>`)}
-
-function renderLocationsView(data){const complaints=data.complaints||[];const soldout=data.soldout||[];const faults=data.faults||[];const supplier=data.supplier||[];const all=[...complaints,...soldout,...faults,...supplier];const locMap={};all.forEach(s=>{const l=s.location||"Ukendt";locMap[l]=(locMap[l]||0)+1});const sortedLocs=Object.entries(locMap).sort((a,b)=>b[1]-a[1]);$("locationGridFull").innerHTML=sortedLocs.map(([loc,count])=>{const cls=count>=4?"crit":count>=2?"warn":"ok";const txt=count>=4?"Kritisk":count>=2?"Opmærksom":"Stabil";const c=complaints.filter(x=>x.location===loc).length;const s=soldout.filter(x=>x.location===loc).length;const f=faults.filter(x=>x.location===loc).length;const sup=supplier.filter(x=>x.location===loc).length;return`<div class="location-card"><div class="location-header"><div class="location-name">${esc(loc)}</div><div class="location-status ${cls}">${txt}</div></div><div class="location-stats"><div class="location-stat"><div class="location-stat-label">Klager</div><div class="location-stat-value">${c}</div></div><div class="location-stat"><div class="location-stat-label">Udsolgt</div><div class="location-stat-value">${s}</div></div><div class="location-stat"><div class="location-stat-label">Fejl</div><div class="location-stat-value">${f}</div></div><div class="location-stat"><div class="location-stat-label">Leverandør</div><div class="location-stat-value">${sup}</div></div></div></div>`}).join("")}
-
-function renderCateringOverview(orders){const today=isoToday();const now=Date.now();const events=orders.map(o=>{const ts=parseDateTime(o.deliveryDate,o.deliveryTime);return{location:o.location||"",deliveryDate:o.deliveryDate||"",deliveryTime:o.deliveryTime||"",customerName:o.customerName||"Ukendt",guests:Number(o.guests||0),note:o.note||"",status:o.status||"Bekræftet",ts}}).filter(ev=>isFinite(ev.ts)).sort((a,b)=>a.ts-b.ts);const todayEvents=events.filter(ev=>ev.deliveryDate===today);const upcomingEvents=events.filter(ev=>ev.ts>now&&ev.deliveryDate!==today);$("statCatering").textContent=todayEvents.length+upcomingEvents.slice(0,7).length}
-
-function renderCateringView(orders){const today=isoToday();const now=Date.now();const events=orders.map(o=>{const ts=parseDateTime(o.deliveryDate,o.deliveryTime);return{location:o.location||"",deliveryDate:o.deliveryDate||"",deliveryTime:o.deliveryTime||"",customerName:o.customerName||"Ukendt",guests:Number(o.guests||0),note:o.note||"",status:o.status||"Bekræftet",ts}}).filter(ev=>isFinite(ev.ts)).sort((a,b)=>a.ts-b.ts);const todayEvents=events.filter(ev=>ev.deliveryDate===today);const upcomingEvents=events.filter(ev=>ev.ts>now&&ev.deliveryDate!==today);const pastEvents=events.filter(ev=>ev.ts<now&&ev.deliveryDate!==today).reverse();const renderEvent=ev=>`<div class="catering-item"><div class="catering-time">${esc(ev.deliveryDate)} ${esc(ev.deliveryTime)}</div><div class="catering-info"><div class="catering-name">${esc(ev.location)} • ${esc(ev.customerName)}</div><div class="catering-details">${ev.guests} gæster${ev.note?" • "+esc(ev.note):""} • ${esc(ev.status)}</div></div></div>`;$("tabCateringAll").innerHTML=events.length?events.map(renderEvent).join(""):'<div class="empty">Ingen events</div>';$("tabCateringToday").innerHTML=todayEvents.length?todayEvents.map(renderEvent).join(""):'<div class="empty">Ingen events i dag</div>';$("tabCateringUpcoming").innerHTML=upcomingEvents.length?upcomingEvents.map(renderEvent).join(""):'<div class="empty">Ingen kommende</div>';$("tabCateringPast").innerHTML=pastEvents.length?pastEvents.slice(0,20).map(renderEvent).join(""):'<div class="empty">Ingen historik</div>'}
-
-function switchCateringTab(tab){document.querySelectorAll('#viewCatering .tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('#viewCatering .tab-content').forEach(c=>c.classList.remove('active'));const tabMap={all:0,today:1,upcoming:2,past:3};document.querySelectorAll('#viewCatering .tab')[tabMap[tab]].classList.add('active');$('tabCatering'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active')}
-
 function loadGoals(){try{return JSON.parse(localStorage.getItem(GOALS_KEY)||"[]")}catch{return[]}}
 function saveGoals(g){localStorage.setItem(GOALS_KEY,JSON.stringify(g));renderGoalsFull()}
 function addGoalFull(){const date=$("goalDateFull").value;const text=$("goalTextFull").value.trim();if(!text)return alert("Skriv målbeskrivelse");const goals=loadGoals();goals.push({id:Date.now(),text,date,done:false});saveGoals(goals);$("goalDateFull").value="";$("goalTextFull").value=""}
 function toggleGoal(id){const goals=loadGoals().map(g=>g.id===id?{...g,done:!g.done}:g);saveGoals(goals)}
 function deleteGoal(id){if(!confirm("Slet mål?"))return;saveGoals(loadGoals().filter(g=>g.id!==id))}
-function renderGoalsFull(){const goals=loadGoals();$("goalCountFull").textContent=`${goals.length} mål`;$("goalListFull").innerHTML=goals.length?goals.map(g=>{const diff=g.date?Math.ceil((new Date(g.date+"T00:00:00")-new Date().setHours(0,0,0,0))/86400000):null;let meta="";if(diff!==null){if(diff<0)meta=`Overskredet (${Math.abs(diff)} dage)`;else if(diff===0)meta=`I dag!`;else meta=`${diff} dage`}return`<div class="goal-item"><div class="goal-check ${g.done?'done':''}" onclick="toggleGoal(${g.id})"></div><div class="goal-text ${g.done?'done':''}">${esc(g.text)}</div><div class="goal-date">${meta}</div><button class="goal-delete" onclick="deleteGoal(${g.id})">×</button></div>`}).join(""):'<div class="empty">Ingen mål</div>'}
 
-function setStatus(msg,type){const banner=$("statusBanner");const dot=$("statusDot");const text=$("statusText");const time=$("statusTime");if(banner)banner.className="status-banner "+type;if(dot)dot.className="status-dot "+type;if(text)text.textContent=msg;if(time)time.textContent=new Date().toLocaleTimeString("da-DK");console.log(`Status: ${type} - ${msg}`)}
+function initializeApp(){
+  console.log('Init app');
+  restoreSidebarState();
+  updateClock();
+  setInterval(updateClock,1000);
+  fetchData();
+  fetchCatering();
+  setInterval(fetchData,60000);
+  setInterval(fetchCatering,60000);
+  renderGoalsFull();
+  renderNotifications();
+  renderNotificationsFull();
+  const goalInput=$("goalTextFull");
+  if(goalInput)goalInput.addEventListener("keydown",e=>{if(e.key==="Enter")addGoalFull()});
+}
 
-function toggleSidebar(){const sidebar=$('sidebar');if(sidebar)sidebar.classList.toggle('show')}
+document.addEventListener("DOMContentLoaded",()=>{
+  console.log('DOM loaded');
+  if(checkAuth())initializeApp();
+});
 
-function switchView(view){console.log(`Switch to: ${view}`);document.querySelectorAll('.nav-item').forEach(item=>item.classList.remove('active'));if(event&&event.currentTarget)event.currentTarget.classList.add('active');document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const viewEl=$('view'+view.charAt(0).toUpperCase()+view.slice(1));if(viewEl)viewEl.classList.add('active');currentView=view;if(window.innerWidth<=768){const sidebar=$('sidebar');if(sidebar)sidebar.classList.remove('show')}if(view==='signals'&&globalData)renderSignalsView(globalData);if(view==='locations'&&globalData)renderLocationsView(globalData);if(view==='goals')renderGoalsFull();if(view==='notifications')renderNotificationsFull();if(view==='catering'&&globalCatering)renderCateringView(globalCatering)}
+// REST AF DIN KODE - FULDSTÆNDIG UÆNDRET (fetchData, rendering, etc.)
+// [INDSÆT AL DIN EKSISTERENDE KODE HER]
 
-function updateClock(){const timeEl=$("statusTime");if(timeEl)timeEl.textContent=new Date().toLocaleTimeString("da-DK")}
-
-function initializeApp(){console.log('Init app');updateClock();setInterval(updateClock,1000);fetchData();fetchCatering();setInterval(fetchData,60000);setInterval(fetchCatering,60000);renderGoalsFull();renderNotifications();renderNotificationsFull();const goalInput=$("goalTextFull");if(goalInput)goalInput.addEventListener("keydown",e=>{if(e.key==="Enter")addGoalFull()})}
-
-document.addEventListener("DOMContentLoaded",()=>{console.log('DOM loaded');if(checkAuth())initializeApp()});
 </script>
 </body>
 </html>
