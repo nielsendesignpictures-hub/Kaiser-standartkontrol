@@ -739,13 +739,17 @@
       currentToolUrl = "";
     }
 
-    document.querySelectorAll(".toolCard[data-url]").forEach(card => {
-      card.addEventListener("click", () => {
-        const url = card.dataset.url;
-        const title = card.querySelector(".toolName")?.textContent?.trim() || "Værktøj";
-        openTool(url, title);
-      });
-    });
+document.querySelectorAll(".toolCard[data-url]").forEach(card => {
+  card.addEventListener("click", () => {
+    let url = card.dataset.url;
+    const title = card.querySelector(".toolName")?.textContent?.trim() || "Værktøj";
+
+    // ✅ Cache-bust: tving nyeste version hver gang (GitHub Pages/iframe cache)
+    url = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
+
+    openTool(url, title);
+  });
+});
 
     $("closeToolBtn").addEventListener("click", closeTool);
     $("newTabBtn").addEventListener("click", () => {
