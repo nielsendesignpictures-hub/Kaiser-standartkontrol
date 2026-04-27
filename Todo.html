@@ -3,523 +3,827 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Kaiser – Operations Dashboard</title>
-
-  <!-- Mobilvenlig opsætning for et app-lignende feel -->
+  <title>Kaiser – F&B Operations Board</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Kaiser Ops">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* --- Nyt lyst design system --- */
     :root {
-      --bg-main: #f8f9fa;
+      --bg: #f3f4f6;
       --bg-card: #ffffff;
-      --text-primary: #111827;
-      --text-secondary: #6b7280;
+      --bg-card-alt: #f9fafb;
+      --text: #111827;
+      --text-muted: #6b7280;
       --text-light: #9ca3af;
-      --border-color: #e5e7eb;
-
-      --color-gold: #b45309;
-      --color-red: #b91c1c;
-      --color-green: #047857;
-      --color-blue: #1d4ed8;
-
-      --color-gold-bg: #fffbeb;
-      --color-red-bg: #fef2f2;
-      --color-green-bg: #ecfdf5;
-      --color-blue-bg: #eff6ff;
-
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      
+      --gold: #d97706;
+      --gold-bg: #fffbeb;
+      --gold-border: #fde68a;
+      
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      
+      --green: #059669;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      
+      --blue: #2563eb;
+      --blue-bg: #eff6ff;
+      --blue-border: #bfdbfe;
+      
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      
       --radius: 12px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
+    
     body {
-      background: var(--bg-main);
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 14px;
       line-height: 1.5;
-      padding: 16px;
-    }
-
-    .shell { max-width: 1200px; margin: 0 auto; }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-gold); }
-    .status-dot.live { background: var(--color-green); animation: pulse 2s infinite; }
-    .status-dot.error { background: var(--color-red); }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      min-height: 100vh;
       padding: 20px;
     }
 
-    .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
+    .shell { max-width: 1400px; margin: 0 auto; }
 
-    /* --- Status Bar Øverst --- */
-    .statusBar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* === HEADER === */
+    .header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 16px;
-      margin-bottom: 24px;
+      box-shadow: var(--shadow);
     }
 
-    .statCard h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-    .statCard .crit-text { color: var(--color-red); }
-    .statCard .warn-text { color: var(--color-gold); }
-    .statCard .ok-text { color: var(--color-green); }
+    .header-left { display: flex; flex-direction: column; gap: 4px; }
+    .header-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); }
+    .header-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; line-height: 1.1; }
+    .header-sub { font-size: 13px; color: var(--text-muted); }
 
-    /* --- Dagens Fokus --- */
-    .focusCard {
-      padding: 24px;
-      border-left: 4px solid var(--color-gold);
-    }
-    .focusTitle { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-    .focusText { font-size: 15px; color: var(--text-secondary); max-width: 600px; }
-
-    /* --- Main Grid --- */
-    .mainGrid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 24px;
-      margin-top: 24px;
-    }
-    @media (max-width: 900px) {
-      .mainGrid { grid-template-columns: 1fr; }
-    }
-
-    /* Signal Cards */
-    .signalGrid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .signalCard {
+    .header-status {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--bg-main);
-      padding: 16px;
-      border-radius: 8px;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
     }
-    .sig-icon { font-size: 20px; }
-    .sig-details h4 { font-size: 20px; font-weight: 700; }
-    .sig-details span { font-size: 12px; color: var(--text-secondary); }
+    .header-status.error { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    /* Lister (Feed, Lokationer, Mål) */
+    /* === TOP STATS === */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1100px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-value { font-size: 24px; font-weight: 800; line-height: 1.2; }
+    .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .stat-value.crit { color: var(--red); }
+    .stat-value.warn { color: var(--amber); }
+    .stat-value.ok { color: var(--green); }
+
+    /* === AI BRIEFING === */
+    .briefing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-left: 4px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .briefing-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .briefing-text { font-size: 16px; font-weight: 600; line-height: 1.6; }
+    .briefing-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .briefing-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid transparent; cursor: pointer; }
+    .briefing-tag:hover { filter: brightness(0.95); }
+    .briefing-tag.crit { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+    .briefing-tag.warn { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-border); }
+    .briefing-tag.ok { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+
+    /* === MAIN GRID === */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: var(--bg-card-alt);
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-dot.red { background: var(--red); }
+    .card-dot.gold { background: var(--gold); }
+    .card-dot.blue { background: var(--blue); }
+    .card-dot.green { background: var(--green); }
+    .card-dot.amber { background: var(--amber); }
+    .card-badge { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .card-body { padding: 16px 20px; }
+
+    /* === HERO SECTION === */
+    .hero-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 0;
+    }
+    @media (max-width: 1000px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-col {
+      padding: 24px;
+      border-right: 1px solid var(--border);
+    }
+    .hero-col:last-child { border-right: none; }
+    @media (max-width: 1000px) { .hero-col { border-right: none; border-bottom: 1px solid var(--border); } }
+    .hero-col:last-child { border-bottom: none; }
+
+    .hero-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .hero-main-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+    .hero-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .hero-pill { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid transparent; }
+    .hero-pill.crit { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
+    .hero-pill.warn { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-border); }
+    .hero-pill.ok { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+    .hero-pill.info { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
+
+    .hero-small-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .hero-small-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* === SIGNAL GRID === */
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1100px) { .signal-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .signal-grid { grid-template-columns: 1fr; } }
+
+    .signal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+    .signal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
+    .signal-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+    .signal-count { font-size: 28px; font-weight: 800; }
+    .signal-count.crit { color: var(--red); }
+    .signal-count.warn { color: var(--amber); }
+    .signal-count.blue { color: var(--blue); }
+    .signal-count.gold { color: var(--gold); }
+
+    /* === LISTS === */
     .list { display: flex; flex-direction: column; gap: 8px; }
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .list-item:hover { background: var(--bg); }
+    .list-bar { width: 4px; min-height: 40px; border-radius: 999px; flex-shrink: 0; }
+    .list-bar.red { background: var(--red); }
+    .list-bar.gold { background: var(--gold); }
+    .list-bar.blue { background: var(--blue); }
+    .list-bar.amber { background: var(--amber); }
+    .list-bar.green { background: var(--green); }
+    .list-content { flex: 1; min-width: 0; }
+    .list-main { font-size: 13px; font-weight: 600; line-height: 1.3; }
+    .list-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .list-meta { font-size: 11px; color: var(--text-light); margin-top: 4px; font-weight: 500; }
 
-    .listItem {
+    /* === BOTTOM GRID === */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 900px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+    /* === LOCATION CARDS === */
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1100px) { .location-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .location-grid { grid-template-columns: 1fr; } }
+
+    .location-card {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .location-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .location-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .location-name { font-size: 15px; font-weight: 700; }
+    .location-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; }
+    .location-status.crit { background: var(--red-bg); color: var(--red); }
+    .location-status.warn { background: var(--amber-bg); color: var(--amber); }
+    .location-status.ok { background: var(--green-bg); color: var(--green); }
+    .location-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .metric { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px; }
+    .metric-label { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .metric-value { font-size: 14px; font-weight: 700; margin-top: 2px; }
+
+    /* === GOALS === */
+    .goals-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .goals-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    @media (max-width: 600px) { .goals-form { grid-template-columns: 1fr; } }
+    .goals-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--bg-card-alt);
+    }
+    .goals-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-bg); }
+    .goals-btn {
+      padding: 10px 20px;
+      background: var(--gold);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .goals-btn:hover { background: var(--amber); }
+    .goals-list { padding: 12px 20px; max-height: 400px; overflow-y: auto; }
+    .goal-item {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 12px;
-      background: var(--bg-main);
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-light);
       border-radius: 8px;
+      margin-bottom: 8px;
     }
-    .listItem-icon { width: 24px; text-align: center; }
-    .listItem-content { flex: 1; }
-    .listItem-title { font-size: 14px; font-weight: 600; }
-    .listItem-sub { font-size: 12px; color: var(--text-secondary); }
-    .listItem-meta { font-size: 13px; font-weight: 600; text-align: right; }
+    .goal-item:last-child { margin-bottom: 0; }
+    .goal-bar { width: 4px; min-height: 36px; border-radius: 999px; }
+    .goal-bar.urgent { background: var(--red); }
+    .goal-bar.warning { background: var(--amber); }
+    .goal-bar.calm { background: var(--green); }
+    .goal-content { flex: 1; }
+    .goal-text { font-size: 13px; font-weight: 600; }
+    .goal-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .goal-days { font-size: 11px; font-weight: 600; color: var(--text-light); }
+    .goal-delete { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--red); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .goal-delete:hover { background: var(--red-bg); border-color: var(--red-border); }
 
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge-red { background: var(--color-red-bg); color: var(--color-red); }
-    .badge-gold { background: var(--color-gold-bg); color: var(--color-gold); }
-    .badge-green { background: var(--color-green-bg); color: var(--color-green); }
+    .empty-state { text-align: center; padding: 24px; color: var(--text-light); font-size: 13px; }
 
-    /* Mål-sektion */
-    .goal-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 16px; }
-    .goal-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    .goal-btn {
-      padding: 0 16px;
-      background: var(--text-primary);
-      color: var(--bg-card);
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .goal-item-actions { display: flex; gap: 8px; }
-    .goal-item-actions button {
-      background: none; border: none; font-size: 16px; cursor: pointer; color: var(--color-red);
-    }
-    .empty { text-align: center; padding: 20px; color: var(--text-light); font-size: 13px; }
+    /* === UTILITIES === */
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="shell">
 
+    <!-- HEADER -->
     <header class="header">
-      <div class="logo">Kaiser Ops</div>
-      <div class="status">
-        <div class="status-dot" id="statusDot"></div>
-        <span id="statusText">Henter data...</span>
+      <div class="header-left">
+        <div class="header-kicker">Kaiser</div>
+        <div class="header-title">F&B Operations Board</div>
+        <div class="header-sub">Live iPad-overblik til daglig ledelse, fokus og handling</div>
+      </div>
+      <div class="header-status" id="headerStatus">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Forbinder...</span>
       </div>
     </header>
 
-    <!-- Hoved-statuslinje -->
-    <div class="statusBar">
-      <div class="card statCard">
-        <div class="card-title">Dagens Fokus</div>
-        <h3 id="topFocus">--</h3>
+    <!-- TOP STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Kædestatus</div>
+        <div class="stat-value" id="chainStatus">—</div>
+        <div class="stat-sub">Samlet driftsbillede</div>
       </div>
-      <div class="card statCard">
-        <div class="card-title">Kædestatus</div>
-        <h3 id="topChainStatus" class="warn-text">Venter...</h3>
+      <div class="stat-card">
+        <div class="stat-label">Fokuslokation</div>
+        <div class="stat-value" id="focusLocation">—</div>
+        <div class="stat-sub">Første ledercheck</div>
       </div>
-      <div class="card statCard">
-        <div class="card-title">Åbne Signaler</div>
-        <h3 id="topSignals">0</h3>
+      <div class="stat-card">
+        <div class="stat-label">Åbne signaler</div>
+        <div class="stat-value" id="openSignals">0</div>
+        <div class="stat-sub">Klager, udsolgt, fejl, leverandør</div>
       </div>
-      <div class="card statCard">
-        <div class="card-title">Dato & Tid</div>
-        <h3 id="topTime">--:--</h3>
+      <div class="stat-card">
+        <div class="stat-label">Tid</div>
+        <div class="stat-value" id="currentTime">--:--</div>
+        <div class="stat-sub" id="lastUpdate">Senest opdateret: —</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Notifikationer</div>
+        <div class="stat-value" id="notifCount">0</div>
+        <div class="stat-sub">Kræver handling</div>
       </div>
     </div>
 
-    <!-- AI Briefing / Dagens Anbefaling -->
-    <div class="card focusCard">
-      <h2 class="focusTitle" id="focusTitle">Analyserer dagens drift...</h2>
-      <p class="focusText" id="focusText">Venter på live data for at kunne give en handlingsplan.</p>
+    <!-- AI BRIEFING -->
+    <div class="briefing-card">
+      <div class="briefing-label">
+        <span>🤖</span> AI Operations Briefing
+      </div>
+      <div class="briefing-text" id="aiBriefing">
+        Analyserer dagens drift...
+      </div>
+      <div class="briefing-tags" id="aiTags"></div>
     </div>
 
-    <!-- Hovedgrid med signaler og lokationer -->
-    <div class="mainGrid">
-      
-      <!-- Venstre kolonne -->
-      <div style="display: flex; flex-direction: column; gap: 24px;">
-        <!-- Signal-oversigt -->
-        <div class="card">
-          <div class="card-title">Signaloversigt</div>
-          <div class="signalGrid">
-            <div class="signalCard">
-              <span class="sig-icon">⚠️</span>
-              <div class="sig-details">
-                <h4 id="countComplaints">0</h4>
-                <span>Klager</span>
-              </div>
-            </div>
-            <div class="signalCard">
-              <span class="sig-icon">📦</span>
-              <div class="sig-details">
-                <h4 id="countSoldout">0</h4>
-                <span>Udsolgt</span>
-              </div>
-            </div>
-            <div class="signalCard">
-              <span class="sig-icon">🔧</span>
-              <div class="sig-details">
-                <h4 id="countFaults">0</h4>
-                <span>Fejl</span>
-              </div>
-            </div>
-            <div class="signalCard">
-              <span class="sig-icon">🚚</span>
-              <div class="sig-details">
-                <h4 id="countSupplier">0</h4>
-                <span>Leverandør</span>
-              </div>
-            </div>
-          </div>
+    <!-- HERO: LEDELSESBLIK -->
+    <div class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-col">
+          <div class="hero-label">Daglig briefing</div>
+          <div class="hero-main-title" id="heroTitle">Indlæser...</div>
+          <div class="hero-text" id="heroText">Henter data...</div>
+          <div class="hero-pills" id="heroPills"></div>
         </div>
+        <div class="hero-col">
+          <div class="hero-label">Største risiko</div>
+          <div class="hero-small-title" id="riskTitle">—</div>
+          <div class="hero-small-text" id="riskText">Analyserer...</div>
+        </div>
+        <div class="hero-col">
+          <div class="hero-label">Dagens drift</div>
+          <div class="hero-small-title" id="opsTitle">—</div>
+          <div class="hero-small-text" id="opsText">Analyserer...</div>
+        </div>
+      </div>
+    </div>
 
-        <!-- Live Feed -->
-        <div class="card">
-          <div class="card-title">Live Signal Feed</div>
-          <div class="list" id="liveFeed">
-            <div class="empty">Venter på hændelser...</div>
-          </div>
+    <!-- SIGNAL GRID -->
+    <div class="signal-grid">
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-label">Gæsteklager</div>
+          <div class="card-dot red"></div>
+        </div>
+        <div class="signal-count crit" id="complaintsCount">0</div>
+        <div class="list" id="complaintsList"></div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-label">Udsolgte varer</div>
+          <div class="card-dot gold"></div>
+        </div>
+        <div class="signal-count gold" id="soldoutCount">0</div>
+        <div class="list" id="soldoutList"></div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-label">Fejl & mangler</div>
+          <div class="card-dot blue"></div>
+        </div>
+        <div class="signal-count blue" id="faultsCount">0</div>
+        <div class="list" id="faultsList"></div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-header">
+          <div class="signal-label">Leverandørfejl</div>
+          <div class="card-dot amber"></div>
+        </div>
+        <div class="signal-count warn" id="supplierCount">0</div>
+        <div class="list" id="supplierList"></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM GRID: LOKATIONER + MÅL -->
+    <div class="bottom-grid">
+      
+      <!-- LOKATIONER -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="card-dot green"></span> Lokationer i fokus</div>
+          <div class="card-badge">Samlet signalbillede pr. lokation</div>
+        </div>
+        <div class="card-body">
+          <div class="location-grid" id="locationGrid"></div>
         </div>
       </div>
 
-      <!-- Højre kolonne (Sidebar) -->
-      <div style="display: flex; flex-direction: column; gap: 24px;">
-        <!-- Lokationer i Fokus -->
-        <div class="card">
-          <div class="card-title">Lokationer i Fokus</div>
-          <div class="list" id="locationList">
-            <div class="empty">Analyserer lokationer...</div>
-          </div>
+      <!-- MÅL & FRISTER -->
+      <div class="goals-section">
+        <div class="card-header">
+          <div class="card-title"><span class="card-dot gold"></span> Mål & frister</div>
+          <div class="card-badge">Lokale mål (gemmes på denne enhed)</div>
         </div>
-
-        <!-- Mål & Frister -->
-        <div class="card">
-          <div class="card-title">Mål & Frister</div>
-          <div class="goal-form">
-            <input type="date" id="goalDate" class="goal-input">
-            <input type="text" id="goalText" class="goal-input" placeholder="Beskriv nyt mål...">
-            <button class="goal-btn" onclick="addGoal()">Tilføj</button>
-          </div>
-          <div class="list" id="goalsList">
-            <div class="empty">Ingen aktive mål</div>
-          </div>
+        <div class="goals-form">
+          <input type="date" id="goalDate" class="goals-input" />
+          <input type="text" id="goalText" class="goals-input" placeholder="Beskriv mål... (fx Ny menu på plads)" />
+          <button class="goals-btn" onclick="addGoal()">+ Tilføj</button>
         </div>
+        <div class="goals-list" id="goalsList"></div>
       </div>
-      
     </div>
 
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-    const $ = id => document.getElementById(id);
     const GOALS_KEY = "kaiser_ops_goals_v1";
 
-    let appData = null;
-    let goals = [];
+    let bundleData = null;
 
-    // --- Hjælpefunktioner ---
-    function updateStatus(text, type = 'loading') {
-      $('statusText').textContent = text;
-      $('statusDot').className = `status-dot ${type}`;
+    // === UTILITY ===
+    const $ = id => document.getElementById(id);
+    
+    function esc(s) {
+      return String(s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
     }
 
-    function escapeHtml(text) {
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    function fmtDate(val) {
+      if (!val) return "—";
+      try {
+        const d = new Date(val);
+        if (isNaN(d.getTime())) return val;
+        return d.toLocaleString("da-DK", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+      } catch { return val; }
     }
 
-    // --- Datahentning ---
+    function daysUntil(ymd) {
+      if (!ymd) return null;
+      const d = new Date(ymd + "T00:00:00");
+      if (isNaN(d.getTime())) return null;
+      const today = new Date(); today.setHours(0,0,0,0);
+      return Math.ceil((d.getTime() - today.getTime()) / 86400000);
+    }
+
+    function formatDKDate(ymd) {
+      if (!ymd) return "—";
+      const d = new Date(ymd + "T00:00:00");
+      if (isNaN(d.getTime())) return ymd;
+      return d.toLocaleDateString("da-DK", { day:"2-digit", month:"2-digit", year:"2-digit" });
+    }
+
+    // === DATA FETCHING ===
     function fetchData() {
-      updateStatus('Henter data...', 'loading');
+      setStatus("Henter data...", "loading");
       
-      const cb = 'kaiser_cb_' + Date.now();
-      const script = document.createElement('script');
+      const cb = "__kaiser_cb_" + Date.now();
+      const script = document.createElement("script");
       
-      window[cb] = function(data) {
-        if (data && data.ok) {
-          appData = data;
-          renderAll();
-          updateStatus('Live', 'live');
-        } else {
-          updateStatus('Datafejl', 'error');
-          console.error("Datafejl fra script:", data.error);
-        }
+      window[cb] = (data) => {
         delete window[cb];
         script.remove();
+        if (data && data.ok) {
+          bundleData = data;
+          setStatus("Live", "live");
+          renderAll();
+        } else {
+          setStatus("Datafejl", "error");
+          console.error("Data error:", data);
+        }
       };
-      
+
       const month = new Date().toISOString().slice(0, 7);
-      script.src = `${SCRIPT_URL}?action=fbPortalBundle&month=${month}&callback=${cb}&_=${Date.now()}`;
-      script.onerror = () => updateStatus('Netværksfejl', 'error');
-      
+      script.src = `${SCRIPT_URL}?action=fbPortalBundle&month=${month}&callback=${cb}&_t=${Date.now()}`;
+      script.onerror = () => { setStatus("Netværksfejl", "error"); delete window[cb]; script.remove(); };
       document.body.appendChild(script);
-      setTimeout(() => { if (window[cb]) updateStatus('Timeout', 'error'); }, 10000);
+      setTimeout(() => { if (window[cb]) { setStatus("Timeout", "error"); delete window[cb]; script.remove(); } }, 15000);
     }
 
-    // --- Rendering af UI ---
-    function renderAll() {
-      if (!appData) return;
+    function setStatus(text, type) {
+      const statusEl = $("headerStatus");
+      const dotEl = $("statusDot");
+      const textEl = $("statusText");
+      
+      textEl.textContent = text;
+      statusEl.classList.remove("error");
+      dotEl.style.animation = "none";
+      
+      if (type === "live") {
+        statusEl.style.background = "var(--green-bg)";
+        statusEl.style.borderColor = "var(--green-border)";
+        statusEl.style.color = "var(--green)";
+        dotEl.style.animation = "pulse 2s infinite";
+      } else if (type === "error") {
+        statusEl.classList.add("error");
+        statusEl.style.background = "var(--red-bg)";
+        statusEl.style.borderColor = "var(--red-border)";
+        statusEl.style.color = "var(--red)";
+      } else {
+        statusEl.style.background = "var(--blue-bg)";
+        statusEl.style.borderColor = "var(--blue-border)";
+        statusEl.style.color = "var(--blue)";
+      }
+    }
 
-      const d = appData;
+    // === RENDERING ===
+    function renderAll() {
+      if (!bundleData) return;
+      const d = bundleData;
+
       const complaints = d.complaints || [];
       const soldout = d.soldout || [];
       const faults = d.faults || [];
       const supplier = d.supplier || [];
       const allSignals = [...complaints, ...soldout, ...faults, ...supplier];
-      const totalSignals = allSignals.length;
+      const total = allSignals.length;
 
-      // Beregn fokus lokation
-      const locCount = allSignals.reduce((acc, sig) => {
-        const loc = sig.location || 'Ukendt';
-        acc[loc] = (acc[loc] || 0) + 1;
-        return acc;
-      }, {});
-      const topLoc = Object.entries(locCount).sort((a, b) => b[1] - a[1])[0];
+      // Count by location
+      const locMap = {};
+      allSignals.forEach(s => {
+        const loc = s.location || "Ukendt";
+        locMap[loc] = (locMap[loc] || 0) + 1;
+      });
+      const sortedLocs = Object.entries(locMap).sort((a,b) => b[1] - a[1]);
+      const topLoc = sortedLocs[0];
 
-      // Opdater top status bar
-      $('topFocus').textContent = topLoc ? topLoc[0] : 'Ingen';
-      $('topSignals').textContent = totalSignals;
-      
-      if (totalSignals > 8) {
-        $('topChainStatus').textContent = 'Kritisk';
-        $('topChainStatus').className = 'crit-text';
-      } else if (totalSignals > 3) {
-        $('topChainStatus').textContent = 'Opmærksomhed';
-        $('topChainStatus').className = 'warn-text';
+      // Status
+      let statusClass = "ok";
+      let statusText = "Stabil";
+      if (total >= 8) { statusClass = "crit"; statusText = "Kritisk"; }
+      else if (total >= 3) { statusClass = "warn"; statusText = "Opmærksomhed"; }
+
+      // Update top stats
+      $("chainStatus").textContent = statusText;
+      $("chainStatus").className = `stat-value ${statusClass}`;
+      $("focusLocation").textContent = topLoc ? topLoc[0] : "Ingen";
+      $("openSignals").textContent = total;
+      $("notifCount").textContent = Math.min(total, 12);
+
+      // Update AI briefing
+      if (total === 0) {
+        $("aiBriefing").textContent = "Driften ser rolig ud lige nu. Ingen kritiske signaler. Brug dagen på proaktivt arbejde og kvalitetssikring.";
       } else {
-        $('topChainStatus').textContent = 'Stabil';
-        $('topChainStatus').className = 'ok-text';
+        $("aiBriefing").innerHTML = `<strong>${topLoc[0]}</strong> er det mest kritiske punkt med <strong>${topLoc[1]} signaler</strong>. ${
+          supplier.length > 5 ? "Vareflow og leverandørfejl er den største risiko i dag. " : ""
+        }Start her og fokusér på at lukke de åbne sager, der påvirker gæst og service direkte.`;
       }
 
-      // Opdater "Dagens Fokus" kort
-      if (totalSignals === 0) {
-        $('focusTitle').textContent = 'Driften er stabil';
-        $('focusText').textContent = 'Ingen åbne signaler. God dag til proaktivt arbejde og kvalitetstjek.';
-        $('focusCard').style.borderColor = 'var(--color-green)';
+      // AI Tags
+      $("aiTags").innerHTML = sortedLocs.slice(0, 4).map(([loc, count]) => {
+        const cls = count >= 4 ? "crit" : count >= 2 ? "warn" : "ok";
+        return `<span class="briefing-tag ${cls}" onclick="alert('Fokuserer på: ${esc(loc)}')">${esc(loc)} (${count})</span>`;
+      }).join("");
+
+      // Hero
+      if (topLoc) {
+        $("heroTitle").textContent = `${topLoc[0]} bør være dit første fokus i dag`;
+        $("heroText").textContent = `${topLoc[0]} har ${topLoc[1]} registrerede driftssignaler og skiller sig tydeligst ud i det samlede billede. Start her, få overblik og luk først de ting der påvirker gæst, service eller vareflow direkte.`;
+        $("heroPills").innerHTML = `
+          <span class="hero-pill ${statusClass}">Kædestatus: ${statusText}</span>
+          <span class="hero-pill warn">Fokus: ${topLoc[0]}</span>
+          <span class="hero-pill ok">Handling: Check ${topLoc[0]}</span>
+        `;
       } else {
-        $('focusTitle').textContent = `Fokusér på ${topLoc[0]}`;
-        $('focusText').textContent = `${topLoc[0]} har ${topLoc[1]} signaler, hvilket udgør ${Math.round(topLoc[1]/totalSignals * 100)}% af dagens hændelser. Start her.`;
-        $('focusCard').style.borderColor = 'var(--color-red)';
+        $("heroTitle").textContent = "Driften ser rolig ud lige nu";
+        $("heroText").textContent = "Der er ingen tydelige driftssignaler i systemet. Brug dagen på kvalitetssikring, varestatus og forebyggende opfølgning.";
+        $("heroPills").innerHTML = `<span class="hero-pill ok">Status: Stabil</span>`;
       }
 
-      // Opdater signal-tællere
-      $('countComplaints').textContent = complaints.length;
-      $('countSoldout').textContent = soldout.length;
-      $('countFaults').textContent = faults.length;
-      $('countSupplier').textContent = supplier.length;
+      // Risk
+      if (supplier.length > 5 || soldout.length > 5) {
+        $("riskTitle").textContent = "Vareflow";
+        $("riskText").textContent = "Leverandørfejl og udsolgte varer er det tydeligste risikobillede. Afklar status tidligt, så gæst og service ikke bliver presset senere.";
+      } else if (faults.length > 3) {
+        $("riskTitle").textContent = "Driftsfejl";
+        $("riskText").textContent = "Tekniske fejl og mangler er det mest synlige problem. Prioritér fejl der bremser service eller påvirker arbejdsgange.";
+      } else if (complaints.length > 3) {
+        $("riskTitle").textContent = "Gæstetryk";
+        $("riskText").textContent = "Gæsteklager bør gennemgås hurtigt for at undgå gentagelser og sikre læring i serviceperioden.";
+      } else {
+        $("riskTitle").textContent = "Lav risiko";
+        $("riskText").textContent = "Ingen markante operationelle hotspots i data lige nu. Hold fokus på stabilitet og ensartethed.";
+      }
 
-      // Opdater lokationsliste
-      const sortedLocs = Object.entries(locCount).sort((a, b) => b[1] - a[1]);
-      $('locationList').innerHTML = sortedLocs.length > 0 ? sortedLocs.map(([loc, count]) => `
-        <div class="listItem">
-          <div class="listItem-icon">📍</div>
-          <div class="listItem-content">
-            <div class="listItem-title">${escapeHtml(loc)}</div>
-          </div>
-          <div class="listItem-meta">
-            <span class="badge ${count > 3 ? 'badge-red' : 'badge-gold'}">${count}</span>
-          </div>
-        </div>
-      `).join('') : '<div class="empty">Ingen signaler</div>';
+      // Ops
+      $("opsTitle").textContent = `${complaints.length} catering`;
+      $("opsText").textContent = "Brug cateringniveauet som pejlemærke. Match køkken og varestatus med forventet aktivitet.";
 
-      // Opdater live feed
-      const sortedFeed = allSignals
-        .sort((a,b) => new Date(b.createdAt||b.updatedAt) - new Date(a.createdAt||a.updatedAt))
-        .slice(0, 10);
-        
-      $('liveFeed').innerHTML = sortedFeed.length > 0 ? sortedFeed.map(item => {
-        const time = new Date(item.createdAt || item.updatedAt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-        const text = item.description || item.productName || item.category || 'Ukendt hændelse';
+      // Signal counts
+      $("complaintsCount").textContent = complaints.length;
+      $("soldoutCount").textContent = soldout.length;
+      $("faultsCount").textContent = faults.length;
+      $("supplierCount").textContent = supplier.length;
+
+      // Signal lists (top 3 each)
+      renderList("complaintsList", complaints.slice(0, 3), "red", ev => `
+        <div class="list-main">${esc(ev.location || "Ukendt")} • ${esc(ev.category || "Klage")}</div>
+        <div class="list-sub">${esc(ev.description || "Ingen beskrivelse")}</div>
+        <div class="list-meta">${fmtDate(ev.createdAt || ev.updatedAt || ev.date)}</div>
+      `);
+      renderList("soldoutList", soldout.slice(0, 3), "gold", ev => `
+        <div class="list-main">${esc(ev.location || "Ukendt")} • ${esc(ev.productName || "Produkt")}</div>
+        <div class="list-sub">${esc(ev.category || "Ingen kategori")}</div>
+        <div class="list-meta">${fmtDate(ev.createdAt || ev.updatedAt || ev.date)}</div>
+      `);
+      renderList("faultsList", faults.slice(0, 3), "blue", ev => `
+        <div class="list-main">${esc(ev.location || "Ukendt")} • ${esc(ev.issueType || ev.area || "Fejl")}</div>
+        <div class="list-sub">${esc(ev.description || "Ingen beskrivelse")}</div>
+        <div class="list-meta">${fmtDate(ev.createdAt || ev.updatedAt || ev.date)}</div>
+      `);
+      renderList("supplierList", supplier.slice(0, 3), "amber", ev => `
+        <div class="list-main">${esc(ev.location || "Ukendt")} • ${esc(ev.productName || "Produkt")}</div>
+        <div class="list-sub">${esc(ev.description || ev.issueType || "Ingen note")}</div>
+        <div class="list-meta">${fmtDate(ev.createdAt || ev.updatedAt || ev.date)}</div>
+      `);
+
+      // Location grid
+      $("locationGrid").innerHTML = sortedLocs.length > 0 ? sortedLocs.map(([loc, count]) => {
+        const cls = count >= 4 ? "crit" : count >= 2 ? "warn" : "ok";
+        const txt = count >= 4 ? "Kritisk" : count >= 2 ? "Opmærksomhed" : "Stabil";
+        const locComplaints = complaints.filter(x => x.location === loc).length;
+        const locSoldout = soldout.filter(x => x.location === loc).length;
+        const locFaults = faults.filter(x => x.location === loc).length;
+        const locSupplier = supplier.filter(x => x.location === loc).length;
         return `
-          <div class="listItem">
-            <div class="listItem-icon">⚡️</div>
-            <div class="listItem-content">
-              <div class="listItem-title">${escapeHtml(text)}</div>
-              <div class="listItem-sub">${escapeHtml(item.location)} - ${time}</div>
+          <div class="location-card">
+            <div class="location-header">
+              <div class="location-name">${esc(loc)}</div>
+              <div class="location-status ${cls}">${txt}</div>
+            </div>
+            <div class="location-metrics">
+              <div class="metric"><div class="metric-label">Klager</div><div class="metric-value">${locComplaints}</div></div>
+              <div class="metric"><div class="metric-label">Udsolgt</div><div class="metric-value">${locSoldout}</div></div>
+              <div class="metric"><div class="metric-label">Fejl</div><div class="metric-value">${locFaults}</div></div>
+              <div class="metric"><div class="metric-label">Leverandør</div><div class="metric-value">${locSupplier}</div></div>
             </div>
           </div>
         `;
-      }).join('') : '<div class="empty">Ingen hændelser i dag</div>';
+      }).join("") : '<div class="empty-state">Ingen lokationer fundet</div>';
     }
 
-    // --- Mål & Frister ---
+    function renderList(id, items, colorClass, renderFn) {
+      const el = $(id);
+      if (!items || items.length === 0) {
+        el.innerHTML = '<div class="empty-state">Ingen hændelser</div>';
+        return;
+      }
+      el.innerHTML = items.map(item => `
+        <div class="list-item">
+          <div class="list-bar ${colorClass}"></div>
+          <div class="list-content">${renderFn(item)}</div>
+        </div>
+      `).join("");
+    }
+
+    // === GOALS ===
     function loadGoals() {
-      goals = JSON.parse(localStorage.getItem(GOALS_KEY) || '[]');
-      renderGoals();
+      try { return JSON.parse(localStorage.getItem(GOALS_KEY) || "[]"); } catch { return []; }
     }
-
-    function saveGoals() {
+    function saveGoals(goals) {
       localStorage.setItem(GOALS_KEY, JSON.stringify(goals));
       renderGoals();
     }
 
     function addGoal() {
-      const date = $('goalDate').value;
-      const text = $('goalText').value.trim();
-      if (!text) return alert('Beskriv venligst målet.');
-      goals.push({ id: Date.now(), text, date: date || null, completed: false });
-      $('goalText').value = '';
-      saveGoals();
-    }
-
-    function toggleGoal(id) {
-      const goal = goals.find(g => g.id === id);
-      if (goal) goal.completed = !goal.completed;
-      saveGoals();
+      const dateEl = $("goalDate");
+      const textEl = $("goalText");
+      const date = dateEl.value.trim();
+      const text = textEl.value.trim();
+      if (!text) { alert("Udfyld beskrivelse."); return; }
+      
+      const goals = loadGoals();
+      goals.push({ id: Date.now() + "_" + Math.random().toString(16).slice(2), date, text });
+      saveGoals(goals);
+      dateEl.value = "";
+      textEl.value = "";
     }
 
     function deleteGoal(id) {
-      if (confirm('Slet dette mål?')) {
-        goals = goals.filter(g => g.id !== id);
-        saveGoals();
-      }
+      if (!confirm("Slet dette mål?")) return;
+      const goals = loadGoals().filter(g => g.id !== id);
+      saveGoals(goals);
     }
 
     function renderGoals() {
-      const activeGoals = goals.filter(g => !g.completed);
-      $('goalsList').innerHTML = activeGoals.length > 0 ? activeGoals.map(goal => {
-        let daysText = '';
-        if (goal.date) {
-          const diff = Math.ceil((new Date(goal.date) - new Date()) / 86400000);
-          if (diff < 0) daysText = `Overskredet`;
-          else if (diff === 0) daysText = `I dag`;
-          else daysText = `Om ${diff} dage`;
-        }
+      const goals = loadGoals().filter(g => g.text).sort((a,b) => {
+        if (!a.date) return 1; if (!b.date) return -1;
+        return new Date(a.date) - new Date(b.date);
+      });
+      
+      $("goalsList").innerHTML = goals.length > 0 ? goals.map(g => {
+        const diff = daysUntil(g.date);
+        let urgency = "calm";
+        if (diff !== null && diff < 0) urgency = "urgent";
+        else if (diff !== null && diff <= 30) urgency = "warning";
+        
+        let meta = "";
+        if (diff === null) meta = "";
+        else if (diff < 0) meta = `Overskredet (${Math.abs(diff)} dage)`;
+        else if (diff === 0) meta = "I dag";
+        else meta = `${diff} dage tilbage`;
+
         return `
-          <div class="listItem">
-            <div class="listItem-icon" onclick="toggleGoal(${goal.id})">✅</div>
-            <div class="listItem-content">
-              <div class="listItem-title">${escapeHtml(goal.text)}</div>
-              ${goal.date ? `<div class="listItem-sub">${daysText}</div>` : ''}
+          <div class="goal-item">
+            <div class="goal-bar ${urgency}"></div>
+            <div class="goal-content">
+              <div class="goal-text">${esc(g.text)}</div>
+              <div class="goal-date">${g.date ? formatDKDate(g.date) : "Ingen dato"}</div>
+              <div class="goal-days">${meta}</div>
             </div>
-            <div class="goal-item-actions">
-              <button onclick="deleteGoal(${goal.id})">🗑️</button>
-            </div>
+            <button class="goal-delete" onclick="deleteGoal('${esc(g.id)}')">×</button>
           </div>
         `;
-      }).join('') : '<div class="empty">Ingen aktive mål</div>';
+      }).join("") : '<div class="empty-state">Ingen mål endnu. Tilføj et ovenfor.</div>';
     }
 
-    // --- Initialisering ---
-    document.addEventListener('DOMContentLoaded', () => {
-      // Ur
-      const timeEl = $('topTime');
-      setInterval(() => {
-        timeEl.textContent = new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-      }, 1000);
-      
-      // Hent data
+    // === INIT ===
+    document.addEventListener("DOMContentLoaded", () => {
+      // Clock
+      function updateClock() {
+        const now = new Date();
+        $("currentTime").textContent = now.toLocaleTimeString("da-DK", { hour:"2-digit", minute:"2-digit" });
+        $("lastUpdate").textContent = "Senest opdateret: " + now.toLocaleTimeString("da-DK", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // Fetch data
       fetchData();
-      setInterval(fetchData, 60000); // Hvert minut
+      setInterval(fetchData, 60000);
 
-      // Hent lokale mål
-      loadGoals();
+      // Goals
+      renderGoals();
+
+      // Enter key for goal input
+      $("goalText").addEventListener("keydown", e => { if (e.key === "Enter") addGoal(); });
     });
-
   </script>
 </body>
 </html>
