@@ -257,16 +257,37 @@
       margin-top:6px;
     }
 
+    /* ⭐ store rating cards */
     .ratingBtn{
-      min-height:84px;
+      min-height:96px;
       border-radius:20px;
       border:1px solid rgba(145,205,255,.14);
       background:rgba(255,255,255,.04);
       color:var(--text);
-      font-size:28px;
       font-weight:900;
       transition:.16s ease;
       cursor:pointer;
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px 8px;
+    }
+
+    .rbNum{
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-0.02em;
+    }
+
+    .rbStars{
+      font-size:15px;
+      letter-spacing:.12em;
+      color:rgba(213,231,248,.75);
+      font-weight:800;
+      line-height:1;
     }
 
     .ratingBtn.selected{
@@ -275,6 +296,7 @@
       box-shadow:0 0 0 4px rgba(102,183,255,.12);
       color:white;
     }
+    .ratingBtn.selected .rbStars{ color:white; }
 
     .ratingLegend{
       margin-top:10px;
@@ -284,6 +306,113 @@
       color:var(--muted2);
       font-size:13px;
       font-weight:800;
+    }
+
+    .ratingPreview{
+      margin-top:10px;
+      color:rgba(255,255,255,.92);
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:-0.01em;
+    }
+
+    /* High-tech status */
+    .statusLine{
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid rgba(145,205,255,.10);
+      background:rgba(255,255,255,.03);
+      color:rgba(213,231,248,.82);
+      font-weight:800;
+      font-size:14px;
+      line-height:1.35;
+    }
+    .statusLine.good{
+      border-color:rgba(72,201,135,.18);
+      background:rgba(72,201,135,.08);
+      color:#bdf5d6;
+    }
+    .statusLine.warn{
+      border-color:rgba(255,199,92,.20);
+      background:rgba(255,199,92,.08);
+      color:#ffe2b3;
+    }
+
+    .statusTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .statusToggle{
+      border:1px solid rgba(145,205,255,.14);
+      background:rgba(255,255,255,.04);
+      color:rgba(213,231,248,.86);
+      font-weight:900;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      min-height:44px;
+    }
+    .statusToggle:active{ transform:translateY(1px); }
+
+    .statusProgress{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(145,205,255,.10);
+    }
+
+    .statusBar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, rgba(72,201,135,.95), rgba(102,183,255,.95));
+    }
+
+    .statusMeta{
+      margin-top:8px;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(184,210,234,.55);
+      font-weight:900;
+    }
+
+    .statusMissing{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .statusChip{
+      min-height:46px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,199,92,.25);
+      background:rgba(255,199,92,.10);
+      color:#ffe2b3;
+      font-weight:900;
+      font-size:14px;
+      cursor:pointer;
+    }
+    .statusChip:active{ transform:translateY(1px); }
+
+    .fieldPulse{
+      animation:pulseOutline .9s ease;
+    }
+
+    @keyframes pulseOutline{
+      0%{ box-shadow:0 0 0 0 rgba(102,183,255,0); }
+      30%{ box-shadow:0 0 0 6px rgba(102,183,255,.25); }
+      100%{ box-shadow:0 0 0 0 rgba(102,183,255,0); }
     }
 
     .errorBox{
@@ -384,7 +513,8 @@
     @media (max-width: 700px){
       .actionsInner{ grid-template-columns:1fr; }
       .btn{ min-height:64px; font-size:20px; }
-      .ratingBtn{ min-height:72px; font-size:24px; }
+      .ratingBtn{ min-height:86px; }
+      .rbNum{ font-size:28px; }
     }
   </style>
 </head>
@@ -400,32 +530,49 @@
     </header>
 
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Skiftlederrapport V2.3
+      Drift version · Skiftlederrapport V3.2
     </div>
 
     <section id="formWrap">
-      <form
-        id="reportForm"
-        method="POST"
-        action="https://formsubmit.co/skiftlederrapport@gmail.com"
-      >
+      <form id="reportForm" method="POST" action="https://formsubmit.co/skiftlederrapport@gmail.com">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
         <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
+
+        <!-- Ledelse CC -->
+        <input type="hidden" name="_cc" value="Christian@cafekaiser.dk,Stefan@cafekaiser.dk">
+
         <input type="text" name="_honey" style="display:none">
-       
 
         <div class="panel">
           <div class="panelHead">
             <div class="stepBar">
-              <div class="pill pill-blue" id="stepPill">Step 1 af 2 · Frokost</div>
+              <div class="pill pill-blue" id="stepPill">Frokost · Dato & tid</div>
               <div class="pill pill-green hidden" id="draftPill">Frokost gemt</div>
             </div>
           </div>
           <div class="divider"></div>
           <div class="panelBody">
-            <div class="muted">Først udfyldes frokostdelen. Derefter gemmes den, og aften-delen åbnes. Rapporten sendes samlet til sidst.</div>
+            <div class="muted">
+              Udfyld frokost → gem → udfyld aften → send. (Efter “Gem frokost” kan du ikke gå tilbage.)
+            </div>
+
+            <!-- High-tech status -->
+            <div id="statusLine" class="statusLine warn">
+              <div class="statusTop">
+                <div id="statusText">Status: —</div>
+                <button type="button" id="statusToggle" class="statusToggle" aria-expanded="true">Skjul</button>
+              </div>
+
+              <div class="statusProgress" aria-hidden="true">
+                <div id="statusBar" class="statusBar" style="width:0%"></div>
+              </div>
+
+              <div id="statusMeta" class="statusMeta">—</div>
+
+              <div id="statusMissing" class="statusMissing"></div>
+            </div>
           </div>
         </div>
 
@@ -433,6 +580,7 @@
           <div class="errorBox" id="errorText"></div>
         </div>
 
+        <!-- Stamdata -->
         <div class="panel">
           <div class="panelHead">
             <div class="blockTitle">Stamdata</div>
@@ -454,84 +602,77 @@
               </div>
 
               <div class="field">
-                <label class="label" for="dateField">Dato</label>
-                <input class="input" id="dateField" name="Dato" readonly>
-              </div>
-            </div>
-
-            <div class="grid2" style="margin-top:16px;">
-              <div class="field">
-                <div class="label">Modtagelse</div>
-                <div class="muted" style="padding-top:16px;">
-                  Rapporten sendes til central indbakke og fordeles via Gmail filtre/forwarding.
-                </div>
-              </div>
-              <div class="field">
-                <div class="label">Info</div>
-                <div class="muted" style="padding-top:16px;">
-                  Frokost- og aften-navn udfyldes i hver deres step.
-                </div>
+                <label class="label" for="dateField">Dagens dato & tid</label>
+                <input class="input" id="dateField" name="Dato & tid" readonly>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- STEP 1 -->
         <section id="step1">
           <div class="panel">
             <div class="panelHead">
-              <div class="blockTitle">Brunch / frokost</div>
+              <div class="blockTitle">Skiftlederrapport: Frokost</div>
             </div>
             <div class="divider"></div>
             <div class="panelBody grid1">
 
-              <div class="sectionCard">
+              <div class="sectionCard" id="cardNameDay">
                 <div class="field">
-                  <label class="label" for="nameDay">Frokost – Navn</label>
-                  <input class="input" id="nameDay" name="Frokost – Navn" placeholder="Navn på frokost skiftleder" required>
+                  <label class="label" for="nameDay">Navn</label>
+                  <input class="input" id="nameDay" name="Frokost – Navn" placeholder="Klods Hans" required>
                 </div>
               </div>
 
-              <div class="sectionCard">
-                <div class="label">Rating af dagen</div>
+              <div class="sectionCard" id="cardRateDay">
+                <div class="label">Dagens Rating</div>
+
                 <div class="ratingWrap">
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5">1</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5">2</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5">3</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5">4</button>
-                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5">5</button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="1/5"><div class="rbNum">1</div><div class="rbStars">★☆☆☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="2/5"><div class="rbNum">2</div><div class="rbStars">★★☆☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="3/5"><div class="rbNum">3</div><div class="rbStars">★★★☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="4/5"><div class="rbNum">4</div><div class="rbStars">★★★★☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateDay" data-value="5/5"><div class="rbNum">5</div><div class="rbStars">★★★★★</div></button>
                 </div>
-                <div class="ratingLegend">
-                  <span>Lav</span>
-                  <span>Høj</span>
-                </div>
-                <input type="hidden" id="rateDay" name="Frokost – rating af dagen">
+
+                <div class="ratingLegend"><span>Lav</span><span>Høj</span></div>
+                <div class="ratingPreview" id="rateDayPreview">Dagens Rating: —</div>
+                <input type="hidden" id="rateDay" name="Frokost – Dagens Rating">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="expDay">Service, stemning og gæsteoplevelse</label>
-                  <textarea class="textarea" id="expDay" name="Frokost – service, stemning og gæsteoplevelse"></textarea>
-                </div>
-              </div>
-
-              <div class="sectionCard">
-                <div class="field">
-                  <label class="label" for="opsDay">Dagens drift</label>
-                  <textarea class="textarea" id="opsDay" name="Frokost – dagens drift"></textarea>
+                  <label class="label" for="guestDay">Gæsterejsen (Service, Stemning & Feedback) – Beskrivelse</label>
+                  <textarea class="textarea" id="guestDay" name="Frokost – Gæsterejsen – Beskrivelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="incDay">Klager eller særlige hændelser</label>
-                  <textarea class="textarea" id="incDay" name="Frokost – klager eller særlige hændelser"></textarea>
+                  <label class="label" for="teamDayDesc">Team & Flow (Drift & Præstation) – Beskrivelse</label>
+                  <textarea class="textarea" id="teamDayDesc" name="Frokost – Team & Flow – Beskrivelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="teamDay">Teamets præstation</label>
-                  <textarea class="textarea" id="teamDay" name="Frokost – teamets præstation"></textarea>
+                  <label class="label" for="teamDayFlow">Team & Flow – Flow</label>
+                  <textarea class="textarea" id="teamDayFlow" name="Frokost – Team & Flow – Flow"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="maintDayFaults">Vedligeholdelse (Fejl & Mangler) – Fejl</label>
+                  <textarea class="textarea" id="maintDayFaults" name="Frokost – Vedligeholdelse – Fejl"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="maintDayMissing">Vedligeholdelse (Fejl & Mangler) – Mangler</label>
+                  <textarea class="textarea" id="maintDayMissing" name="Frokost – Vedligeholdelse – Mangler"></textarea>
                 </div>
               </div>
 
@@ -539,75 +680,77 @@
           </div>
         </section>
 
+        <!-- STEP 2 -->
         <section id="step2" class="hidden">
           <div class="panel">
             <div class="panelHead">
-              <div class="blockTitle">Aften</div>
+              <div class="blockTitle">Skiftlederrapport: Aften</div>
             </div>
             <div class="divider"></div>
             <div class="panelBody grid1">
 
-              <div class="sectionCard">
+              <div class="sectionCard" id="cardNameEve">
                 <div class="field">
-                  <label class="label" for="nameEve">Aften – Navn</label>
-                  <input class="input" id="nameEve" name="Aften – Navn" placeholder="Navn på aften skiftleder" required>
+                  <label class="label" for="nameEve">Navn</label>
+                  <input class="input" id="nameEve" name="Aften – Navn" placeholder="Klods Hans" required>
                 </div>
               </div>
 
-              <div class="sectionCard">
-                <div class="label">Rating af dagen</div>
+              <div class="sectionCard" id="cardRateEve">
+                <div class="label">Dagens Rating</div>
+
                 <div class="ratingWrap">
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5">1</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5">2</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5">3</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5">4</button>
-                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5">5</button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="1/5"><div class="rbNum">1</div><div class="rbStars">★☆☆☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="2/5"><div class="rbNum">2</div><div class="rbStars">★★☆☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="3/5"><div class="rbNum">3</div><div class="rbStars">★★★☆☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="4/5"><div class="rbNum">4</div><div class="rbStars">★★★★☆</div></button>
+                  <button type="button" class="ratingBtn" data-target="rateEve" data-value="5/5"><div class="rbNum">5</div><div class="rbStars">★★★★★</div></button>
                 </div>
-                <div class="ratingLegend">
-                  <span>Lav</span>
-                  <span>Høj</span>
-                </div>
-                <input type="hidden" id="rateEve" name="Aften – rating af dagen">
+
+                <div class="ratingLegend"><span>Lav</span><span>Høj</span></div>
+                <div class="ratingPreview" id="rateEvePreview">Dagens Rating: —</div>
+                <input type="hidden" id="rateEve" name="Aften – Dagens Rating">
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="expEve">Service, stemning og gæsteoplevelse</label>
-                  <textarea class="textarea" id="expEve" name="Aften – service, stemning og gæsteoplevelse"></textarea>
-                </div>
-              </div>
-
-              <div class="sectionCard">
-                <div class="field">
-                  <label class="label" for="opsEve">Dagens drift</label>
-                  <textarea class="textarea" id="opsEve" name="Aften – dagens drift"></textarea>
+                  <label class="label" for="guestEve">Gæsterejsen (Service, Stemning & Feedback) – Beskrivelse</label>
+                  <textarea class="textarea" id="guestEve" name="Aften – Gæsterejsen – Beskrivelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="incEve">Klager eller særlige hændelser</label>
-                  <textarea class="textarea" id="incEve" name="Aften – klager eller særlige hændelser"></textarea>
+                  <label class="label" for="teamEveDesc">Team & Flow (Drift & Præstation) – Beskrivelse</label>
+                  <textarea class="textarea" id="teamEveDesc" name="Aften – Team & Flow – Beskrivelse"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="teamEve">Teamets præstation</label>
-                  <textarea class="textarea" id="teamEve" name="Aften – teamets præstation"></textarea>
+                  <label class="label" for="teamEveFlow">Team & Flow – Flow</label>
+                  <textarea class="textarea" id="teamEveFlow" name="Aften – Team & Flow – Flow"></textarea>
                 </div>
               </div>
 
               <div class="sectionCard">
                 <div class="field">
-                  <label class="label" for="needs">Mangler / afvigelser / behov for bestilling</label>
-                  <textarea class="textarea" id="needs" name="Mangler / afvigelser / behov for bestilling"></textarea>
+                  <label class="label" for="maintEveFaults">Vedligeholdelse (Fejl & Mangler) – Fejl</label>
+                  <textarea class="textarea" id="maintEveFaults" name="Aften – Vedligeholdelse – Fejl"></textarea>
+                </div>
+              </div>
+
+              <div class="sectionCard">
+                <div class="field">
+                  <label class="label" for="maintEveMissing">Vedligeholdelse (Fejl & Mangler) – Mangler</label>
+                  <textarea class="textarea" id="maintEveMissing" name="Aften – Vedligeholdelse – Mangler"></textarea>
                 </div>
               </div>
 
             </div>
           </div>
         </section>
+
       </form>
     </section>
 
@@ -623,6 +766,7 @@
         </div>
       </div>
     </section>
+
   </div>
 
   <div class="actionsSticky" id="actionsSticky">
@@ -631,9 +775,9 @@
       <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
     </div>
   </div>
+
   <script>
-  // ✅ Ny storage key så gamle drafts ikke konflikter
-  const STORAGE_KEY = "kaiser_skiftlederrapport_formsubmit_v2_3_splitnames_noback";
+  const STORAGE_KEY = "kaiser_shift_report_v3_2";
 
   function $(id){ return document.getElementById(id); }
 
@@ -658,6 +802,19 @@
     return local.toISOString().slice(0,10);
   }
 
+  function starsFromRating(rating){
+    const n = parseInt((rating || "").split("/")[0], 10);
+    if(!n || n < 1 || n > 5) return "";
+    return "★".repeat(n) + "☆".repeat(5-n);
+  }
+
+  function setRatingPreview(targetId){
+    const v = val(targetId);
+    const stars = starsFromRating(v);
+    const previewId = (targetId === "rateDay") ? "rateDayPreview" : "rateEvePreview";
+    $(previewId).textContent = v ? `Dagens Rating: ${v} ${stars}` : "Dagens Rating: —";
+  }
+
   function clearError(){
     $("errorWrap").classList.add("hidden");
     $("errorText").textContent = "";
@@ -678,27 +835,27 @@
     $("subjectField").value = `Skiftlederrapport – ${afd} – ${localISODate()}`;
   }
 
-  // ✅ Ingen "tilbage til frokost" efter gem: sekundær-knap er altid nulstil
   function setStep(step){
     clearError();
 
     if(step === 1){
       $("step1").classList.remove("hidden");
       $("step2").classList.add("hidden");
-      $("stepPill").textContent = "Step 1 af 2 · Frokost";
+      $("stepPill").textContent = "Frokost · Dato & tid";
       $("secondaryAction").textContent = "Nulstil";
       $("primaryAction").textContent = "Gem frokost og fortsæt";
       $("primaryAction").className = "btn btn-blue";
     } else {
       $("step1").classList.add("hidden");
       $("step2").classList.remove("hidden");
-      $("stepPill").textContent = "Step 2 af 2 · Aften";
+      $("stepPill").textContent = "Aften · Dato & tid";
       $("secondaryAction").textContent = "Nulstil";
       $("primaryAction").textContent = "Send rapport";
       $("primaryAction").className = "btn btn-gold";
     }
 
     saveDraft(false);
+    updateStatusLine();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -706,6 +863,8 @@
     document.querySelectorAll('.ratingBtn[data-target="' + targetId + '"]').forEach(btn => {
       btn.classList.toggle("selected", btn.dataset.value === val(targetId));
     });
+    setRatingPreview(targetId);
+    updateStatusLine();
   }
 
   function bindRatings(){
@@ -723,32 +882,30 @@
 
   function saveDraft(showSavedPill){
     const data = {
-      nameDay: val("nameDay"),
-      nameEve: val("nameEve"),
       department: val("department"),
       dateField: val("dateField"),
 
+      nameDay: val("nameDay"),
       rateDay: val("rateDay"),
-      expDay: val("expDay"),
-      opsDay: val("opsDay"),
-      incDay: val("incDay"),
-      teamDay: val("teamDay"),
+      guestDay: val("guestDay"),
+      teamDayDesc: val("teamDayDesc"),
+      teamDayFlow: val("teamDayFlow"),
+      maintDayFaults: val("maintDayFaults"),
+      maintDayMissing: val("maintDayMissing"),
 
+      nameEve: val("nameEve"),
       rateEve: val("rateEve"),
-      expEve: val("expEve"),
-      opsEve: val("opsEve"),
-      incEve: val("incEve"),
-      teamEve: val("teamEve"),
+      guestEve: val("guestEve"),
+      teamEveDesc: val("teamEveDesc"),
+      teamEveFlow: val("teamEveFlow"),
+      maintEveFaults: val("maintEveFaults"),
+      maintEveMissing: val("maintEveMissing"),
 
-      needs: val("needs"),
       step: currentStep()
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-    if(showSavedPill){
-      $("draftPill").classList.remove("hidden");
-    }
+    if(showSavedPill) $("draftPill").classList.remove("hidden");
   }
 
   function loadDraft(){
@@ -757,85 +914,178 @@
     if(!raw){
       $("dateField").value = nowLocalString();
       updateSubject();
+      setRatingPreview("rateDay");
+      setRatingPreview("rateEve");
+      updateStatusLine();
       return;
     }
 
     try{
       const data = JSON.parse(raw);
 
-      setVal("nameDay", data.nameDay);
-      setVal("nameEve", data.nameEve);
       setVal("department", data.department);
       setVal("dateField", data.dateField || nowLocalString());
 
+      setVal("nameDay", data.nameDay);
       setVal("rateDay", data.rateDay);
-      setVal("expDay", data.expDay);
-      setVal("opsDay", data.opsDay);
-      setVal("incDay", data.incDay);
-      setVal("teamDay", data.teamDay);
+      setVal("guestDay", data.guestDay);
+      setVal("teamDayDesc", data.teamDayDesc);
+      setVal("teamDayFlow", data.teamDayFlow);
+      setVal("maintDayFaults", data.maintDayFaults);
+      setVal("maintDayMissing", data.maintDayMissing);
 
+      setVal("nameEve", data.nameEve);
       setVal("rateEve", data.rateEve);
-      setVal("expEve", data.expEve);
-      setVal("opsEve", data.opsEve);
-      setVal("incEve", data.incEve);
-      setVal("teamEve", data.teamEve);
-
-      setVal("needs", data.needs);
+      setVal("guestEve", data.guestEve);
+      setVal("teamEveDesc", data.teamEveDesc);
+      setVal("teamEveFlow", data.teamEveFlow);
+      setVal("maintEveFaults", data.maintEveFaults);
+      setVal("maintEveMissing", data.maintEveMissing);
 
       updateRatingUI("rateDay");
       updateRatingUI("rateEve");
       updateSubject();
 
-      if(data.rateDay || data.expDay || data.opsDay || data.incDay || data.teamDay || data.nameDay){
-        $("draftPill").classList.remove("hidden");
-      }
+      if(data.rateDay || data.nameDay) $("draftPill").classList.remove("hidden");
+      setStep(data.step === 2 ? 2 : 1);
 
-      if(data.step === 2){
-        setStep(2);
-      } else {
-        setStep(1);
-      }
+      updateStatusLine();
     } catch(e){
       $("dateField").value = nowLocalString();
       updateSubject();
+      setStep(1);
+      setRatingPreview("rateDay");
+      setRatingPreview("rateEve");
+      updateStatusLine();
     }
   }
 
   function validateStep1(){
-    if(!val("nameDay")) return "Udfyld frokost-navn.";
     if(!val("department")) return "Vælg afdeling.";
-    if(!val("rateDay")) return "Vælg rating for frokost.";
+    if(!val("nameDay")) return "Udfyld navn (frokost).";
+    if(!val("rateDay")) return "Vælg dagens rating (frokost).";
     return "";
   }
 
   function validateStep2(){
-    if(!val("nameEve")) return "Udfyld aften-navn.";
-    if(!val("rateEve")) return "Vælg rating for aften.";
+    if(!val("nameEve")) return "Udfyld navn (aften).";
+    if(!val("rateEve")) return "Vælg dagens rating (aften).";
     return "";
+  }
+
+  function requiredFields(step){
+    const base = [{ id: "department", label: "Afdeling", anchor: "department" }];
+
+    if(step === 1){
+      return base.concat([
+        { id: "nameDay", label: "Navn (frokost)", anchor: "cardNameDay" },
+        { id: "rateDay", label: "Rating (frokost)", anchor: "cardRateDay" }
+      ]);
+    }
+    return base.concat([
+      { id: "nameEve", label: "Navn (aften)", anchor: "cardNameEve" },
+      { id: "rateEve", label: "Rating (aften)", anchor: "cardRateEve" }
+    ]);
+  }
+
+  function scrollToField(anchorId){
+    let target = $(anchorId) || $(anchorId?.replace?.("#",""));
+    if(!target) return;
+
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    const focusEl = target.querySelector("input,textarea,select");
+    if(focusEl){
+      setTimeout(() => focusEl.focus({ preventScroll:true }), 350);
+    }
+
+    target.classList.add("fieldPulse");
+    setTimeout(() => target.classList.remove("fieldPulse"), 900);
+  }
+
+  function updateStatusLine(){
+    const line = $("statusLine");
+    if(!line) return;
+
+    const step = currentStep();
+    const req = requiredFields(step);
+
+    const filled = req.filter(f => !!val(f.id)).length;
+    const total = req.length;
+    const pct = Math.round((filled / total) * 100);
+
+    const missing = req.filter(f => !val(f.id));
+
+    $("statusBar").style.width = `${pct}%`;
+
+    const stepName = (step === 1) ? "Frokost" : "Aften";
+    $("statusMeta").textContent = `${stepName}: ${filled}/${total} felter OK · ${pct}%`;
+
+    const statusMissing = $("statusMissing");
+    statusMissing.innerHTML = "";
+
+    if(missing.length === 0){
+      line.classList.remove("warn");
+      line.classList.add("good");
+      $("statusText").textContent = (step === 1)
+        ? "Status: Klar til at gemme frokost og fortsætte."
+        : "Status: Klar til at sende rapport.";
+
+      // Auto-skjul chips når alt er OK
+      $("statusToggle").setAttribute("aria-expanded", "false");
+      $("statusToggle").textContent = "Detaljer";
+      statusMissing.classList.add("hidden");
+      return;
+    }
+
+    line.classList.remove("good");
+    line.classList.add("warn");
+
+    const first = missing[0]?.label || "felter";
+    $("statusText").textContent =
+      missing.length === 1
+        ? `Status: Mangler – ${first}`
+        : `Status: Mangler – ${missing.length} felter (fx ${first})`;
+
+    // Auto-vis chips når der mangler noget
+    statusMissing.classList.remove("hidden");
+    $("statusToggle").setAttribute("aria-expanded", "true");
+    $("statusToggle").textContent = "Skjul";
+
+    statusMissing.innerHTML = missing.map(f => `
+      <button type="button" class="statusChip" data-anchor="${f.anchor}">
+        ${f.label}
+      </button>
+    `).join("");
   }
 
   function resetAll(){
     [
-      "nameDay","nameEve","department","dateField",
-      "rateDay","expDay","opsDay","incDay","teamDay",
-      "rateEve","expEve","opsEve","incEve","teamEve","needs"
+      "department","dateField",
+      "nameDay","rateDay","guestDay","teamDayDesc","teamDayFlow","maintDayFaults","maintDayMissing",
+      "nameEve","rateEve","guestEve","teamEveDesc","teamEveFlow","maintEveFaults","maintEveMissing"
     ].forEach(id => setVal(id, ""));
 
     $("dateField").value = nowLocalString();
     localStorage.removeItem(STORAGE_KEY);
     $("draftPill").classList.add("hidden");
+    updateSubject();
+
+    setVal("rateDay", "");
+    setVal("rateEve", "");
     updateRatingUI("rateDay");
     updateRatingUI("rateEve");
-    updateSubject();
+
     setStep(1);
     clearError();
+    updateStatusLine();
   }
 
   function bindAutosave(){
     [
-      "nameDay","nameEve","department",
-      "expDay","opsDay","incDay","teamDay",
-      "expEve","opsEve","incEve","teamEve","needs"
+      "department",
+      "nameDay","guestDay","teamDayDesc","teamDayFlow","maintDayFaults","maintDayMissing",
+      "nameEve","guestEve","teamEveDesc","teamEveFlow","maintEveFaults","maintEveMissing"
     ].forEach(id => {
       const el = $(id);
       if(!el) return;
@@ -843,15 +1093,20 @@
       el.addEventListener("input", () => {
         saveDraft(false);
         if(id === "department") updateSubject();
+        updateStatusLine();
       });
 
       el.addEventListener("change", () => {
         saveDraft(false);
         if(id === "department") updateSubject();
+        updateStatusLine();
       });
     });
 
-    $("department").addEventListener("change", updateSubject);
+    $("department").addEventListener("change", () => {
+      updateSubject();
+      updateStatusLine();
+    });
   }
 
   function doSend(){
@@ -871,6 +1126,7 @@
       const err = validateStep1();
       if(err){
         showError(err);
+        updateStatusLine();
         return;
       }
 
@@ -883,7 +1139,6 @@
     const err1 = validateStep1();
     if(err1){
       showError(err1);
-      // ingen tilbage-knap, men vi kan stadig vise step1 hvis du nulstiller og starter forfra
       setStep(1);
       return;
     }
@@ -891,13 +1146,14 @@
     const err2 = validateStep2();
     if(err2){
       showError(err2);
+      updateStatusLine();
       return;
     }
 
     doSend();
   });
 
-  // ✅ Sekundær-knap er altid nulstil (ingen tilbage)
+  // Secondary = nulstil (ingen tilbage)
   $("secondaryAction").addEventListener("click", function(){
     clearError();
     if(confirm("Vil du nulstille rapporten? (Du mister kladden)")){
@@ -912,6 +1168,22 @@
     $("actionsSticky").classList.remove("hidden");
   });
 
+  // Status toggle
+  $("statusToggle").addEventListener("click", () => {
+    const box = $("statusMissing");
+    const isHidden = box.classList.contains("hidden");
+    box.classList.toggle("hidden", !isHidden);
+    $("statusToggle").setAttribute("aria-expanded", String(isHidden));
+    $("statusToggle").textContent = isHidden ? "Skjul" : "Detaljer";
+  });
+
+  // Chip click -> scroll
+  $("statusMissing").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-anchor]");
+    if(!btn) return;
+    scrollToField(btn.dataset.anchor);
+  });
+
   const params = new URLSearchParams(window.location.search);
   if (params.get("sent") === "1") {
     $("formWrap").classList.add("hidden");
@@ -920,14 +1192,25 @@
     localStorage.removeItem(STORAGE_KEY);
   }
 
-  $("dateField").value = nowLocalString();
+  // Dato/tid ticker
+  function startDateTicker(){
+    $("dateField").value = nowLocalString();
+    setInterval(() => {
+      if (params.get("sent") === "1") return;
+      $("dateField").value = nowLocalString();
+      saveDraft(false);
+    }, 60 * 1000);
+  }
+
   $("nextField").value = window.location.origin + window.location.pathname + "?sent=1";
 
   bindRatings();
   bindAutosave();
+  startDateTicker();
   loadDraft();
+  updateStatusLine();
 
-  // ✅ Best effort auto-send kl 23:59 (kun hvis fanen stadig er åben + enheden er vågen)
+  // Best-effort auto-send 23:59
   function msUntil2359(){
     const now = new Date();
     const t = new Date(now);
@@ -937,16 +1220,13 @@
   }
 
   function scheduleAutoSend(){
-    // hvis vi er på "sent"-skærmen, så ingen auto-send
     if (params.get("sent") === "1") return;
 
     setTimeout(() => {
-      // Send kun hvis step 2 og alt er validt
       if (currentStep() === 2 && !validateStep1() && !validateStep2()) {
         doSend();
         return;
       }
-      // planlæg igen til næste dag
       scheduleAutoSend();
     }, msUntil2359());
   }
