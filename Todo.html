@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Kaiser – Operations Hub</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,39 +21,62 @@
       --blue:#3b82f6;--blue-soft:#eff6ff;--blue-border:#bfdbfe;
       --purple:#8b5cf6;--purple-soft:#f5f3ff;--purple-border:#ddd6fe;
       --radius:8px;--radius-lg:12px;
+      --sidebar-bg:#18181b;--sidebar-text:#a1a1aa;--sidebar-text-active:#fff;
     }
     html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);line-height:1.5;font-size:14px}
     
+    /* ============================================
+       LOGIN SCREEN
+    ============================================ */
+    .login-wrapper{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px}
+    .login-card{background:var(--surface);border-radius:var(--radius-lg);padding:40px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .login-logo{text-align:center;margin-bottom:32px}
+    .login-logo img{max-width:120px;height:auto;margin-bottom:16px}
+    .login-title{font-size:24px;font-weight:600;text-align:center;margin-bottom:8px}
+    .login-subtitle{font-size:14px;color:var(--text-2);text-align:center;margin-bottom:32px}
+    .login-form{display:flex;flex-direction:column;gap:16px}
+    .login-input{padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:inherit;transition:border .15s}
+    .login-input:focus{outline:none;border-color:var(--blue)}
+    .login-btn{padding:12px 16px;border-radius:var(--radius);font-size:14px;font-weight:600;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;cursor:pointer;transition:transform .15s}
+    .login-btn:hover{transform:translateY(-1px)}
+    .login-btn:active{transform:translateY(0)}
+    .login-error{padding:12px;background:var(--red-soft);color:var(--red);border-radius:var(--radius);font-size:13px;text-align:center;display:none}
+    .login-error.show{display:block}
+    .login-version{text-align:center;margin-top:24px;font-size:11px;color:var(--text-3)}
+    
     /* Layout */
-    .app{display:flex;min-height:100vh}
-    .sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transform:translateX(0);transition:transform .3s}
+    .app{display:none;min-height:100vh}
+    .app.show{display:flex}
+    .sidebar{width:240px;background:var(--sidebar-bg);border-right:1px solid rgba(255,255,255,.1);padding:16px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transform:translateX(0);transition:transform .3s}
     .sidebar.hidden{transform:translateX(-100%)}
     .main{flex:1;margin-left:240px;padding:24px 32px;transition:margin-left .3s}
     .main.expanded{margin-left:0}
     @media(max-width:768px){
       .sidebar{transform:translateX(-100%)}
-      .sidebar.show{transform:translateX(0)}
+      .sidebar.show{transform:translateX(0);box-shadow:0 0 20px rgba(0,0,0,.5)}
       .main{margin-left:0;padding:16px}
     }
     
     /* Sidebar */
     .logo{display:flex;align-items:center;gap:10px;padding:8px 0;margin-bottom:24px}
     .logo-img{height:32px;width:auto}
-    .logo-text{font-weight:600;font-size:15px}
+    .logo-text{font-weight:600;font-size:15px;color:var(--sidebar-text-active)}
     .nav-section{margin-bottom:24px}
-    .nav-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);margin-bottom:8px;padding:0 8px}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
-    .nav-item:hover{background:var(--surface-hover);color:var(--text-1)}
-    .nav-item.active{background:var(--text-1);color:#525050}
+    .nav-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--sidebar-text);margin-bottom:8px;padding:0 8px}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--radius);color:var(--sidebar-text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+    .nav-item:hover{background:rgba(255,255,255,.05);color:var(--sidebar-text-active)}
+    .nav-item.active{background:rgba(255,255,255,.1);color:var(--sidebar-text-active)}
     .nav-item svg{width:16px;height:16px;opacity:.7}
     .nav-item.active svg{opacity:1}
-    .nav-badge{margin-left:auto;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--red-soft);color:var(--red)}
-    .sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
+    .nav-badge{margin-left:auto;font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--red);color:#fff}
+    .sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.1)}
     .user-info{display:flex;align-items:center;gap:10px}
     .user-avatar{width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
-    .user-name{font-size:13px;font-weight:500}
-    .user-role{font-size:11px;color:var(--text-3)}
+    .user-name{font-size:13px;font-weight:500;color:var(--sidebar-text-active)}
+    .user-role{font-size:11px;color:var(--sidebar-text)}
+    .logout-btn{margin-top:12px;width:100%;padding:8px;border-radius:var(--radius);background:rgba(255,255,255,.05);color:var(--sidebar-text);border:none;font-size:12px;cursor:pointer;transition:background .15s}
+    .logout-btn:hover{background:rgba(255,255,255,.1)}
     
     /* Main Header */
     .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px}
@@ -216,6 +239,9 @@
     .iframe-container{width:100%;height:calc(100vh - 120px);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:white}
     .iframe-container iframe{width:100%;height:100%;border:0}
     
+    /* Version Badge */
+    .version-badge{position:fixed;bottom:16px;right:16px;padding:6px 12px;background:rgba(0,0,0,.8);color:#fff;font-size:11px;border-radius:var(--radius);z-index:1000;backdrop-filter:blur(10px)}
+    
     /* Animations */
     @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
     .animate-in{animation:fadeIn .3s ease}
@@ -229,7 +255,46 @@
 </head>
 <body>
 
-<div class="app">
+<!-- ============================================
+     LOGIN SCREEN
+============================================ -->
+<div class="login-wrapper" id="loginWrapper">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="images/logo.png" alt="Kaiser Logo" onerror="this.style.display='none'">
+      <div class="login-title">Kaiser Operations</div>
+      <div class="login-subtitle">Log ind for at fortsætte</div>
+    </div>
+    
+    <form class="login-form" onsubmit="return handleLogin(event)">
+      <input 
+        type="email" 
+        id="loginEmail" 
+        class="login-input" 
+        placeholder="Email" 
+        required 
+        autocomplete="username"
+      >
+      <input 
+        type="password" 
+        id="loginPassword" 
+        class="login-input" 
+        placeholder="Adgangskode" 
+        required
+        autocomplete="current-password"
+      >
+      <button type="submit" class="login-btn">Log ind</button>
+    </form>
+    
+    <div class="login-error" id="loginError">Forkert email eller adgangskode</div>
+    <div class="login-version">Kaiser Operations Hub v2.1.0</div>
+  </div>
+</div>
+
+<!-- ============================================
+     MAIN APP
+============================================ -->
+<div class="app" id="app">
   <!-- Mobile Menu -->
   <button class="mobile-menu" onclick="toggleSidebar()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -282,12 +347,13 @@
     
     <div class="sidebar-footer">
       <div class="user-info">
-        <div class="user-avatar">MA</div>
+        <div class="user-avatar">SA</div>
         <div>
-          <div class="user-name">Marcus Andersen</div>
-          <div class="user-role">Café Manager</div>
+          <div class="user-name" id="userName">Stefan Andersen</div>
+          <div class="user-role">Operations Manager</div>
         </div>
       </div>
+      <button class="logout-btn" onclick="handleLogout()">Log ud</button>
     </div>
   </aside>
 
@@ -308,7 +374,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
             Opdater
           </button>
-          <button class="btn btn-primary">
+          <button class="btn btn-primary" onclick="exportToExcel()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Eksporter
           </button>
@@ -452,7 +518,7 @@
     </div>
 
     <!-- ============================================
-         VIEW: SIGNALS
+         VIEW: SIGNALS (samme struktur som før)
     ============================================ -->
     <div class="view" id="viewSignals">
       <div class="page-header">
@@ -622,7 +688,7 @@
     </div>
 
     <!-- ============================================
-         VIEW: ANALYTICS (Menu Intelligence)
+         VIEW: ANALYTICS
     ============================================ -->
     <div class="view" id="viewAnalytics">
       <div class="page-header">
@@ -640,13 +706,148 @@
   </main>
 </div>
 
+<!-- Version Badge -->
+<div class="version-badge">v2.1.0</div>
+
 <script>
+// ============================================
+// CONFIGURATION
+// ============================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
 const GOALS_KEY = "kaiser_goals_v2";
 const NOTIF_KEY = "kaiser_notifications_v1";
 const SEEN_KEY = "kaiser_seen_signals_v1";
+const AUTH_KEY = "kaiser_auth_session";
+const APP_VERSION = "2.1.0";
 
-// Helpers
+// Valid credentials
+const VALID_EMAIL = "stefan@cafekaiser.dk";
+const VALID_PASSWORD = "Jegergenial1!";
+
+// ============================================
+// AUTHENTICATION
+// ============================================
+function handleLogin(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errorEl = document.getElementById('loginError');
+  
+  if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+    // Store session
+    const session = {
+      email: email,
+      name: "Stefan Andersen",
+      loginTime: new Date().toISOString(),
+      version: APP_VERSION
+    };
+    localStorage.setItem(AUTH_KEY, JSON.stringify(session));
+    
+    // Show app
+    document.getElementById('loginWrapper').style.display = 'none';
+    document.getElementById('app').classList.add('show');
+    
+    // Update user info
+    document.getElementById('userName').textContent = session.name;
+    
+    // Initialize app
+    initializeApp();
+    
+    return false;
+  } else {
+    errorEl.classList.add('show');
+    setTimeout(() => errorEl.classList.remove('show'), 3000);
+    return false;
+  }
+}
+
+function handleLogout() {
+  if (confirm('Er du sikker på, at du vil logge ud?')) {
+    localStorage.removeItem(AUTH_KEY);
+    location.reload();
+  }
+}
+
+function checkAuth() {
+  try {
+    const session = JSON.parse(localStorage.getItem(AUTH_KEY) || '{}');
+    if (session.email === VALID_EMAIL) {
+      document.getElementById('loginWrapper').style.display = 'none';
+      document.getElementById('app').classList.add('show');
+      document.getElementById('userName').textContent = session.name || "Stefan Andersen";
+      return true;
+    }
+  } catch (e) {}
+  return false;
+}
+
+// ============================================
+// EXCEL EXPORT
+// ============================================
+function exportToExcel() {
+  if (!globalData) {
+    alert('Ingen data at eksportere. Vent venligst på, at data indlæses.');
+    return;
+  }
+  
+  // Create CSV content
+  let csv = '';
+  
+  // Complaints
+  csv += 'GÆSTEKLAGER\n';
+  csv += 'Lokation,Kategori,Beskrivelse,Dato\n';
+  (globalData.complaints || []).forEach(c => {
+    csv += `"${esc(c.location||'')}","${esc(c.category||'')}","${esc(c.description||'')}","${esc(c.createdAt||c.updatedAt||'')}"\n`;
+  });
+  csv += '\n';
+  
+  // Soldout
+  csv += 'UDSOLGTE VARER\n';
+  csv += 'Lokation,Produkt,Kategori,Dato\n';
+  (globalData.soldout || []).forEach(s => {
+    csv += `"${esc(s.location||'')}","${esc(s.productName||'')}","${esc(s.category||'')}","${esc(s.createdAt||s.updatedAt||'')}"\n`;
+  });
+  csv += '\n';
+  
+  // Faults
+  csv += 'DRIFTSFEJL\n';
+  csv += 'Lokation,Type,Beskrivelse,Dato\n';
+  (globalData.faults || []).forEach(f => {
+    csv += `"${esc(f.location||'')}","${esc(f.issueType||f.area||'')}","${esc(f.description||'')}","${esc(f.createdAt||f.updatedAt||'')}"\n`;
+  });
+  csv += '\n';
+  
+  // Supplier
+  csv += 'LEVERANDØRFEJL\n';
+  csv += 'Lokation,Produkt,Beskrivelse,Dato\n';
+  (globalData.supplier || []).forEach(s => {
+    csv += `"${esc(s.location||'')}","${esc(s.productName||'')}","${esc(s.description||s.issueType||'')}","${esc(s.createdAt||s.updatedAt||'')}"\n`;
+  });
+  csv += '\n';
+  
+  // Kitchen
+  csv += 'KITCHEN %\n';
+  csv += 'Lokation,Kitchen %,Omsætning,Indkøb\n';
+  (globalData.kitchen || []).forEach(k => {
+    csv += `"${esc(k.location||'')}","${k.pct||0}","${k.revenue||0}","${k.purchases||0}"\n`;
+  });
+  
+  // Create download
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `kaiser_export_${new Date().toISOString().slice(0,10)}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// ============================================
+// HELPERS
+// ============================================
 const $ = id => document.getElementById(id);
 const esc = s => String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const fmtDate = v => {
@@ -680,24 +881,22 @@ let globalData = null;
 let globalCatering = null;
 let currentView = 'overview';
 
-// Navigation
+// ============================================
+// NAVIGATION
+// ============================================
 function switchView(view) {
-  // Update nav items
   document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
   event.currentTarget.classList.add('active');
   
-  // Update views
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   $('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
   
   currentView = view;
   
-  // Close mobile menu
   if (window.innerWidth <= 768) {
     $('sidebar').classList.remove('show');
   }
   
-  // Render view-specific data
   if (view === 'signals' && globalData) renderSignalsView(globalData);
   if (view === 'locations' && globalData) renderLocationsView(globalData);
   if (view === 'goals') renderGoalsFull();
@@ -722,7 +921,9 @@ function setStatus(msg, type) {
   time.textContent = new Date().toLocaleTimeString("da-DK");
 }
 
-// Fetch Data with JSONP
+// ============================================
+// DATA FETCHING
+// ============================================
 function fetchData() {
   setStatus("Henter driftsdata...", "warning");
   
@@ -761,7 +962,6 @@ function fetchData() {
   }, 15000);
 }
 
-// Fetch Catering Data
 function fetchCatering() {
   const cb = "__cb_cat_" + Date.now();
   const script = document.createElement("script");
@@ -781,7 +981,9 @@ function fetchCatering() {
   document.body.appendChild(script);
 }
 
-// Process Notifications
+// ============================================
+// NOTIFICATIONS
+// ============================================
 function processNotifications(data) {
   const seen = loadSeenSignals();
   const existing = loadNotifications();
@@ -921,7 +1123,9 @@ function renderNotificationsFull() {
   }).join("");
 }
 
-// Render All (Overview)
+// ============================================
+// RENDERING (resten af koden fortsætter som før)
+// ============================================
 function renderAll(data) {
   const complaints = data.complaints || [];
   const soldout = data.soldout || [];
@@ -931,19 +1135,16 @@ function renderAll(data) {
   const all = [...complaints, ...soldout, ...faults, ...supplier];
   const total = all.length;
   
-  // Location counts
   const locMap = {};
   all.forEach(s => { const l = s.location || "Ukendt"; locMap[l] = (locMap[l]||0)+1; });
   const sortedLocs = Object.entries(locMap).sort((a,b) => b[1]-a[1]);
   const topLoc = sortedLocs[0];
   const critLocs = sortedLocs.filter(([_,c]) => c >= 4).length;
   
-  // Stats
   $("statSignals").textContent = total;
   $("statCritLocs").textContent = critLocs;
   $("navSignalCount").textContent = total;
   
-  // Focus card
   if (topLoc) {
     const [locName, locCount] = topLoc;
     const pct = Math.round(locCount/total*100);
@@ -961,13 +1162,11 @@ function renderAll(data) {
     $("focusActions").innerHTML = `<button class="btn">Åbn kvalitetscheckliste</button>`;
   }
   
-  // Counts
   $("countComplaints").textContent = complaints.length;
   $("countSoldout").textContent = soldout.length;
   $("countFaults").textContent = faults.length;
   $("countSupplier").textContent = supplier.length;
   
-  // Signal lists (overview - max 5)
   renderSignalList("listComplaints", complaints.slice(0,5), "red", e => `
     <div class="signal-main">${esc(e.location||"Ukendt")} • ${esc(e.category||"Klage")}</div>
     <div class="signal-sub">${esc(e.description||"Ingen beskrivelse")}</div>
@@ -989,7 +1188,6 @@ function renderAll(data) {
     <div class="signal-time">${fmtDate(e.createdAt||e.updatedAt||e.date)}</div>
   `);
   
-  // Locations (overview - max 6)
   $("locationCount").textContent = `${sortedLocs.length} lokationer`;
   $("locationGrid").innerHTML = sortedLocs.slice(0,6).map(([loc, count]) => {
     const cls = count >= 4 ? "crit" : count >= 2 ? "warn" : "ok";
@@ -1014,7 +1212,6 @@ function renderAll(data) {
     `;
   }).join("");
   
-  // Kitchen
   if (kitchen.length) {
     $("kitchenList").innerHTML = kitchen.sort((a,b) => (Number(a.pct)||0) - (Number(b.pct)||0)).map(k => `
       <div class="kitchen-row">
@@ -1039,7 +1236,6 @@ function renderSignalList(id, items, color, fn) {
   `).join("");
 }
 
-// Render Signals View (all signals)
 function renderSignalsView(data) {
   const complaints = data.complaints || [];
   const soldout = data.soldout || [];
@@ -1073,7 +1269,6 @@ function renderSignalsView(data) {
   `);
 }
 
-// Render Locations View (all locations)
 function renderLocationsView(data) {
   const complaints = data.complaints || [];
   const soldout = data.soldout || [];
@@ -1109,7 +1304,6 @@ function renderLocationsView(data) {
   }).join("");
 }
 
-// Catering
 function renderCateringOverview(orders) {
   const today = isoToday();
   const now = Date.now();
@@ -1181,7 +1375,9 @@ function switchCateringTab(tab) {
   $('tabCatering' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
 }
 
-// Goals
+// ============================================
+// GOALS
+// ============================================
 function loadGoals() { 
   try { return JSON.parse(localStorage.getItem(GOALS_KEY)||"[]"); } catch { return []; } 
 }
@@ -1235,13 +1431,14 @@ function renderGoalsFull() {
   }).join("") : '<div class="empty">Ingen mål endnu. Tilføj et mål ovenfor.</div>';
 }
 
-// Clock
+// ============================================
+// UTILITIES
+// ============================================
 function updateClock() {
   $("statusTime").textContent = new Date().toLocaleTimeString("da-DK");
 }
 
-// Init
-document.addEventListener("DOMContentLoaded", () => {
+function initializeApp() {
   updateClock();
   setInterval(updateClock, 1000);
   fetchData();
@@ -1252,6 +1449,15 @@ document.addEventListener("DOMContentLoaded", () => {
   renderNotifications();
   renderNotificationsFull();
   $("goalTextFull").addEventListener("keydown", e => { if(e.key==="Enter") addGoalFull(); });
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener("DOMContentLoaded", () => {
+  if (checkAuth()) {
+    initializeApp();
+  }
 });
 </script>
 </body>
