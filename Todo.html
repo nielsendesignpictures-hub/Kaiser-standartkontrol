@@ -738,7 +738,7 @@ function handleLogin(event) {
     // Store session
     const session = {
       email: email,
-      name: "Stefan Andersen",
+      name: "Stefan Nielsen",
       loginTime: new Date().toISOString(),
       version: APP_VERSION
     };
@@ -775,7 +775,7 @@ function checkAuth() {
     if (session.email === VALID_EMAIL) {
       document.getElementById('loginWrapper').style.display = 'none';
       document.getElementById('app').classList.add('show');
-      document.getElementById('userName').textContent = session.name || "Stefan Andersen";
+      document.getElementById('userName').textContent = session.name || "Stefan Nielsen";
       return true;
     }
   } catch (e) {}
