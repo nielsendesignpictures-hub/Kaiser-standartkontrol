@@ -740,7 +740,7 @@ function handleLogin(event) {
   const password=$('loginPassword').value;
   const errorEl=$('loginError');
   if(email===VALID_EMAIL&&password===VALID_PASSWORD){
-    const session={email:email,name:"Stefan Andersen",loginTime:new Date().toISOString(),version:APP_VERSION};
+    const session={email:email,name:"Stefan Nielsen",loginTime:new Date().toISOString(),version:APP_VERSION};
     localStorage.setItem(AUTH_KEY,JSON.stringify(session));
     $('loginWrapper').style.display='none';
     $('app').classList.add('show');
@@ -764,7 +764,7 @@ function checkAuth() {
     if(session.email===VALID_EMAIL){
       $('loginWrapper').style.display='none';
       $('app').classList.add('show');
-      $('userName').textContent=session.name||"Stefan Andersen";
+      $('userName').textContent=session.name||"Stefan Nielsen";
       return true;
     }
   }catch(e){}
