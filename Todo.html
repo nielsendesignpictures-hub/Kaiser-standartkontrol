@@ -239,6 +239,33 @@
     ::-webkit-scrollbar-track{background:var(--bg)}
     ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
     ::-webkit-scrollbar-thumb:hover{background:#d4d4d8}
+
+    .sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .nav-label,
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .user-role,
+.sidebar.collapsed .user-name {
+  display: none;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+}
+
+.sidebar.collapsed .nav-item span {
+  display: none;
+}
+
+.sidebar.collapsed .user-info {
+  justify-content: center;
+}
+
+.main.collapsed {
+  margin-left: 70px;
+}
   </style>
 </head>
 <body>
@@ -269,7 +296,7 @@
  
   <aside class="sidebar" id="sidebar">
     <div class="logo">
-      <button id="sidebarToggle" class="sidebar-toggle" type="button" onclick="toggleSidebar()">
+<button id="sidebarToggle" class="sidebar-toggle" type="button" onclick="toggleSidebar()" style="margin-right:10px;background:none;border:none;color:white;font-size:18px;cursor:pointer;">
   ☰
 </button>
       <img src="images/logo.png" alt="Kaiser Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
@@ -326,7 +353,7 @@
       <div class="user-info">
         <div class="user-avatar">SN</div>
         <div>
-          <div class="user-name" id="userName"></div>
+          
           <div class="user-role">Operations Manager</div>
         </div>
       </div>
@@ -933,12 +960,12 @@ function renderGoalsFull(){const goals=loadGoals();$("goalCountFull").textConten
 function setStatus(msg,type){const banner=$("statusBanner");const dot=$("statusDot");const text=$("statusText");const time=$("statusTime");if(banner)banner.className="status-banner "+type;if(dot)dot.className="status-dot "+type;if(text)text.textContent=msg;if(time)time.textContent=new Date().toLocaleTimeString("da-DK");console.log(`Status: ${type} - ${msg}`)}
  
 function toggleSidebar(){
-  const sidebar = $('sidebar');
+  const sidebar = document.getElementById('sidebar');
   const main = document.querySelector('.main');
 
   if(window.innerWidth > 768){
-    sidebar.classList.toggle('hidden');
-    main.classList.toggle('expanded');
+    sidebar.classList.toggle('collapsed');
+    main.classList.toggle('collapsed');
   } else {
     sidebar.classList.toggle('show');
   }
