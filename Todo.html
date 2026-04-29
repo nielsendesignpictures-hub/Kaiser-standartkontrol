@@ -308,6 +308,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         Catering
       </div>
+<div class="nav-item" onclick="switchView('cateringManager')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="3" y="4" width="18" height="18" rx="2"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+  Catering Manager
+</div>
+      
       <div class="nav-item" onclick="switchView('analytics')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Menu Intelligence
@@ -316,9 +324,9 @@
  
     <div class="sidebar-footer">
       <div class="user-info">
-        <div class="user-avatar">SA</div>
+        <div class="user-avatar">SN</div>
         <div>
-          <div class="user-name" id="userName">Hr. Nielsen </div>
+          <div class="user-name" id="userName"></div>
           <div class="user-role">Operations Manager</div>
         </div>
       </div>
@@ -636,7 +644,19 @@
         <div class="tab-content" id="tabCateringPast"><div class="empty">Indlæser...</div></div>
       </div>
     </div>
- 
+
+    <div class="view" id="viewCateringManager">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Catering Manager</h1>
+      <p class="page-desc">Administrer catering direkte</p>
+    </div>
+  </div>
+
+  <div class="iframe-container">
+    <iframe src="https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/catering-manager.html" title="Catering Manager"></iframe>
+  </div>
+</div>
     <div class="view" id="viewAnalytics">
       <div class="page-header">
         <div>
@@ -912,7 +932,17 @@ function renderGoalsFull(){const goals=loadGoals();$("goalCountFull").textConten
  
 function setStatus(msg,type){const banner=$("statusBanner");const dot=$("statusDot");const text=$("statusText");const time=$("statusTime");if(banner)banner.className="status-banner "+type;if(dot)dot.className="status-dot "+type;if(text)text.textContent=msg;if(time)time.textContent=new Date().toLocaleTimeString("da-DK");console.log(`Status: ${type} - ${msg}`)}
  
-function toggleSidebar(){const sidebar=$('sidebar');if(sidebar)sidebar.classList.toggle('show')}
+function toggleSidebar(){
+  const sidebar = $('sidebar');
+  const main = document.querySelector('.main');
+
+  if(window.innerWidth > 768){
+    sidebar.classList.toggle('hidden');
+    main.classList.toggle('expanded');
+  } else {
+    sidebar.classList.toggle('show');
+  }
+}
  
 function switchView(view){console.log(`Switch to: ${view}`);document.querySelectorAll('.nav-item').forEach(item=>item.classList.remove('active'));if(event&&event.currentTarget)event.currentTarget.classList.add('active');document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));const viewEl=$('view'+view.charAt(0).toUpperCase()+view.slice(1));if(viewEl)viewEl.classList.add('active');currentView=view;if(window.innerWidth<=768){const sidebar=$('sidebar');if(sidebar)sidebar.classList.remove('show')}if(view==='signals'&&globalData)renderSignalsView(globalData);if(view==='locations'&&globalData)renderLocationsView(globalData);if(view==='goals')renderGoalsFull();if(view==='notifications')renderNotificationsFull();if(view==='catering'&&globalCatering)renderCateringView(globalCatering)}
  
