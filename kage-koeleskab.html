@@ -87,6 +87,15 @@
       padding: 14px 14px;
       font-size: 15px;
     }
+    .btnEdit{
+      cursor:pointer;
+      border-radius: 999px;
+      font-weight: 950;
+      background: rgba(120,180,255,.16);
+      border: 1px solid rgba(120,180,255,.28);
+      padding: 14px 14px;
+      font-size: 15px;
+    }
 
     .cakeGrid{
       display:grid;
@@ -126,7 +135,6 @@
     .mini{padding: 12px 14px; font-size: 14px;}
     .small{font-size: 12px; color: var(--muted)}
 
-    /* Modal base */
     .overlay{
       position: fixed; inset:0;
       background: rgba(0,0,0,.70);
@@ -134,7 +142,7 @@
       align-items:center;
       justify-content:center;
       padding: 18px;
-      z-index: 2147483647; /* ekstremt højt, så den ikke gemmes bag hub/iframe layers */
+      z-index: 2147483647;
     }
     .modal{
       width: min(980px, 100%);
@@ -151,7 +159,6 @@
     .modalFoot{display:flex; justify-content:flex-end; gap: 10px; margin-top: 12px; flex-wrap:wrap;}
     .xBtn{width:auto;}
 
-    /* Alarm (stor rød) */
     .alarmModal{
       border-color: rgba(255,45,45,.45);
       box-shadow: 0 35px 120px rgba(255,45,45,.10), 0 30px 90px rgba(0,0,0,.70);
@@ -183,7 +190,6 @@
       margin-bottom: 10px;
     }
 
-    /* Smidt ud modal */
     .qtyRow{display:flex; gap:10px; align-items:end; flex-wrap:wrap; margin-top:10px;}
     .unitBadge{
       width:auto;
@@ -232,8 +238,8 @@
               <input id="by" placeholder="Fx Mads" autocomplete="name"/>
             </div>
             <div class="field">
-              <label for="place">Køleskab / Plads</label>
-              <input id="place" placeholder="Fx 1"/>
+              <label for="qty">Antal stk</label>
+              <input id="qty" type="number" min="1" step="1" placeholder="Fx 4"/>
             </div>
           </div>
 
@@ -274,6 +280,7 @@
             <thead>
               <tr>
                 <th>Kage</th>
+                <th>Antal</th>
                 <th>Dato ind</th>
                 <th>Smides ud</th>
                 <th>Handling</th>
@@ -335,16 +342,48 @@
     </div>
   </div>
 
+  <!-- REDIGER ANTAL -->
+  <div class="overlay" id="editQtyOverlay" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <div>
+          <h3>Rediger antal</h3>
+          <p id="editQtySub">–</p>
+        </div>
+        <button class="btn2 xBtn" id="closeEditQtyBtn" type="button">Luk</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label>Nyt antal stk</label>
+        <div class="qtyRow">
+          <div style="flex:1; min-width:220px;">
+            <input id="editQtyInput" inputmode="numeric" pattern="[0-9]*" type="number" min="0" step="1" placeholder="Antal" />
+          </div>
+          <div class="unitBadge">stk</div>
+        </div>
+
+        <div class="keypad" id="editKeypad"></div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn2" id="editQtyCancelBtn" type="button">Annuller</button>
+        <button class="btn" id="editQtySaveBtn" type="button">Gem</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (() => {
-  const STORAGE_KEY = "kagekoeleskab.entries.v5";
+  const STORAGE_KEY = "kagekoeleskab.entries.v6";
   const LEGACY_KEYS = [
+    "kagekoeleskab.entries.v5",
     "kagekoeleskab.entries.v4",
     "kagekoeleskab.entries.v3",
     "kagekoeleskab.entries.v2"
   ];
-  const PREF_KEY = "kagekoeleskab.prefs.v5";
+  const PREF_KEY = "kagekoeleskab.prefs.v6";
   const LEGACY_PREF_KEYS = [
+    "kagekoeleskab.prefs.v5",
     "kagekoeleskab.prefs.v4",
     "kagekoeleskab.prefs.v3",
     "kagekoeleskab.prefs.v2"
@@ -365,7 +404,7 @@
   const customDays = $("customDays");
 
   const by = $("by");
-  const place = $("place");
+  const qty = $("qty");
   const note = $("note");
   const addBtn = $("addBtn");
   const tbody = $("tbody");
@@ -386,12 +425,22 @@
   const wasteQty = $("wasteQty");
   const keypad = $("keypad");
 
+  // Edit qty
+  const editQtyOverlay = $("editQtyOverlay");
+  const closeEditQtyBtn = $("closeEditQtyBtn");
+  const editQtyCancelBtn = $("editQtyCancelBtn");
+  const editQtySaveBtn = $("editQtySaveBtn");
+  const editQtySub = $("editQtySub");
+  const editQtyInput = $("editQtyInput");
+  const editKeypad = $("editKeypad");
+
   let entries = loadEntriesWithMigration();
   let prefs = loadPrefsWithMigration();
   let selectedTypeId = prefs.lastTypeId || "gulerod";
   let pendingDiscardId = null;
-    // === Notifikationer / faneblad indikator ===
-  const WARN_BEFORE_MS = 2 * 60 * 60 * 1000; // 2 timer
+  let pendingEditId = null;
+
+  const WARN_BEFORE_MS = 2 * 60 * 60 * 1000;
   const NOTIF_STATE_KEY = "kagekoeleskab.notifState.v1";
   let notifState = tryParse(localStorage.getItem(NOTIF_STATE_KEY)) || {};
   function saveNotifState(){ localStorage.setItem(NOTIF_STATE_KEY, JSON.stringify(notifState)); }
@@ -399,7 +448,6 @@
   function ensureNotifPermissionFromUserGesture(){
     if (!("Notification" in window)) return;
     if (Notification.permission === "default") {
-      // Må gerne kaldes fra et klik (fx "Tilføj")
       Notification.requestPermission().then(() => {});
     }
   }
@@ -425,62 +473,44 @@
   function notifyOnce(entry, kind, title, body){
     if (!("Notification" in window)) return;
     if (Notification.permission !== "granted") return;
-
     notifState[entry.id] ||= {};
-    if (notifState[entry.id][kind]) return; // allerede sendt
-
+    if (notifState[entry.id][kind]) return;
     try{
       new Notification(title, { body });
       notifState[entry.id][kind] = true;
       saveNotifState();
-    }catch(e){
-      // Ignorér hvis browser blokerer i konteksten
-    }
+    }catch(e){}
   }
 
   function updateTabIndicators(){
-    const dueTodayCount = alarmEntries().length;   // “udløb i dag”
-    const dueSoonCount = dueSoonEntries().length;  // “udløber inden 2 timer”
+    const dueTodayCount = alarmEntries().length;
+    const dueSoonCount = dueSoonEntries().length;
     const n = dueTodayCount + dueSoonCount;
-
     document.title = n > 0 ? `(${n}) Kagekøleskab` : "Kagekøleskab";
-
-    // Optional: lille badge på favicon med antal
     try{
       const size = 64;
       const c = document.createElement("canvas");
       c.width = c.height = size;
       const ctx = c.getContext("2d");
-
-      // baggrund (mørk)
       ctx.fillStyle = "#0b0f14";
       ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.fill();
-
       if (n > 0){
-        // rød badge
         ctx.fillStyle = "#ff2d2d";
         ctx.beginPath(); ctx.arc(size*0.72, size*0.30, size*0.22, 0, Math.PI*2); ctx.fill();
-
         ctx.fillStyle = "#fff";
         ctx.font = "bold 22px system-ui, -apple-system, Segoe UI, Roboto, Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(String(Math.min(n, 99)), size*0.72, size*0.30);
       } else {
-        // lille “K” når alt ok (valgfrit)
         ctx.fillStyle = "#d9b65a";
         ctx.font = "bold 30px system-ui, -apple-system, Segoe UI, Roboto, Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText("K", size/2, size/2);
       }
-
       let link = document.querySelector("link[rel='icon']");
-      if (!link){
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.head.appendChild(link);
-      }
+      if (!link){ link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
       link.href = c.toDataURL("image/png");
     }catch{}
   }
@@ -489,12 +519,7 @@
     const now = Date.now();
     for (const e of dueSoonEntries()){
       const diff = new Date(e.discardAt).getTime() - now;
-      notifyOnce(
-        e,
-        "soon",
-        "Kage skal smides ud snart",
-        `${e.cakeName} • om ca. ${fmtTimeLeft(diff)} (udløb: ${fmtDateTime(e.discardAt)})`
-      );
+      notifyOnce(e, "soon", "Kage skal smides ud snart", `${e.cakeName} • om ca. ${fmtTimeLeft(diff)} (udløb: ${fmtDateTime(e.discardAt)})`);
     }
   }
 
@@ -503,7 +528,6 @@
   function loadPrefsWithMigration(){
     const direct = tryParse(localStorage.getItem(PREF_KEY));
     if (direct) return normalizePrefs(direct);
-
     for (const k of LEGACY_PREF_KEYS){
       const legacy = tryParse(localStorage.getItem(k));
       if (legacy){
@@ -515,14 +539,13 @@
     return normalizePrefs(null);
   }
   function normalizePrefs(p){
-    return { lastBy:"", lastPlace:"1", lastTypeId:"gulerod", snoozeUntil:0, ...(p||{}) };
+    return { lastBy:"", lastQty:"", lastTypeId:"gulerod", snoozeUntil:0, ...(p||{}) };
   }
   function savePrefs(){ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }
 
   function loadEntriesWithMigration(){
     const direct = tryParse(localStorage.getItem(STORAGE_KEY));
     if (Array.isArray(direct)) return direct.map(normalizeEntry);
-
     for (const k of LEGACY_KEYS){
       const legacy = tryParse(localStorage.getItem(k));
       if (Array.isArray(legacy)){
@@ -538,13 +561,20 @@
       id: "", cakeName: "", days: 0,
       addedAt: new Date().toISOString(),
       discardAt: new Date().toISOString(),
-      by: "", place: "", note: "",
+      by: "", qty: 1, note: "",
       status: "active",
       discardedAt: null,
       wasteQty: null,
       wasteUnit: "stk"
     };
-    return { ...base, ...(e||{}) };
+    const merged = { ...base, ...(e||{}) };
+    // Migrér gammel "place" til "qty"
+    if (e && e.place !== undefined && e.qty === undefined){
+      const n = parseInt(e.place, 10);
+      merged.qty = (Number.isFinite(n) && n > 0) ? n : 1;
+    }
+    delete merged.place;
+    return merged;
   }
   function saveEntries(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
 
@@ -554,9 +584,7 @@
   }
 
   function escapeHtml(str){
-    return String(str ?? "").replace(/[&<>"']/g, (m) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
+    return String(str ?? "").replace(/[&<>"']/g, (m) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
   }
 
   function fmtDateTime(iso){
@@ -568,7 +596,6 @@
     return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
   }
 
-  // 72 timer præcis (dage × 24t)
   function computeDiscardAt(addedAtIso, days){
     const ms = Number(days) * 24 * 60 * 60 * 1000;
     return new Date(new Date(addedAtIso).getTime() + ms).toISOString();
@@ -590,8 +617,7 @@
         <div class="cakeBtn ${t.id===selectedTypeId ? "active":""}" data-type="${t.id}">
           <div class="name">${escapeHtml(t.name)}</div>
           <div class="meta">${escapeHtml(meta)}</div>
-        </div>
-      `;
+        </div>`;
     }).join("");
 
     cakeGrid.querySelectorAll(".cakeBtn").forEach(btn => {
@@ -609,17 +635,12 @@
   function updatePreview(){
     const nowIso = new Date().toISOString();
     const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
-
     let days = t.days;
     let name = t.name;
-
     if (t.id === "custom"){
       name = (customName.value || "").trim();
       days = Number(customDays.value);
-      if (!name || !Number.isFinite(days) || days < 0){
-        preview.textContent = "";
-        return;
-      }
+      if (!name || !Number.isFinite(days) || days < 0){ preview.textContent = ""; return; }
     }
     preview.textContent = `Smides ud: ${fmtDateTime(computeDiscardAt(nowIso, days))}`;
   }
@@ -640,6 +661,12 @@
       }
     }
 
+    const qtyVal = parseInt(qty.value, 10);
+    if (!Number.isFinite(qtyVal) || qtyVal < 1){
+      alert("Udfyld 'Antal stk' (mindst 1).");
+      return;
+    }
+
     const entry = normalizeEntry({
       id: uuid(),
       cakeName,
@@ -647,7 +674,7 @@
       addedAt: nowIso,
       discardAt: computeDiscardAt(nowIso, days),
       by: (by.value || "").trim(),
-      place: (place.value || "").trim(),
+      qty: qtyVal,
       note: (note.value || "").trim(),
       status: "active"
     });
@@ -655,20 +682,19 @@
     entries.unshift(entry);
     saveEntries();
 
-// Gem stadig plads, men nulstil navn
-prefs.lastBy = "";
-prefs.lastPlace = entry.place || prefs.lastPlace;
-savePrefs();
+    prefs.lastBy = "";
+    prefs.lastQty = "";
+    savePrefs();
 
-// Ryd felter i UI
-by.value = "";
-note.value = "";
+    by.value = "";
+    qty.value = "";
+    note.value = "";
     if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
     updatePreview();
     render();
     checkAlarm(true);
-      updateTabIndicators();
-  checkDueSoonNotifications();
+    updateTabIndicators();
+    checkDueSoonNotifications();
   }
 
   function render(){
@@ -676,19 +702,21 @@ note.value = "";
 
     tbody.innerHTML = list.map(e => `
       <tr>
-<td>
-  <strong>${escapeHtml(e.cakeName)}</strong><br/>
-
-  <span class="small" style="color:var(--muted)">
-    ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
-  </span>
-
-  ${e.note ? `<br><span class="small" style="color:var(--muted)">${escapeHtml(e.note)}</span>` : ``}
-</td>
+        <td>
+          <strong>${escapeHtml(e.cakeName)}</strong><br/>
+          <span class="small" style="color:var(--muted)">
+            ${e.by ? e.by : ""}
+          </span>
+          ${e.note ? `<br><span class="small" style="color:var(--muted)">${escapeHtml(e.note)}</span>` : ``}
+        </td>
+        <td>
+          <strong>${escapeHtml(String(e.qty || 1))}</strong> stk
+        </td>
         <td>${fmtDateTime(e.addedAt)}</td>
         <td><strong>${fmtDateTime(e.discardAt)}</strong></td>
         <td>
           <div class="actions">
+            <button class="btnEdit mini" type="button" data-action="editqty" data-id="${e.id}">Ret antal</button>
             <button class="btn mini" type="button" data-action="discard" data-id="${e.id}">Smidt ud</button>
             <button class="btnDanger mini" type="button" data-action="delete" data-id="${e.id}">Slet</button>
           </div>
@@ -702,6 +730,7 @@ note.value = "";
         const action = btn.getAttribute("data-action");
         if (action === "discard") openDiscardModal(id);
         if (action === "delete") deleteEntry(id);
+        if (action === "editqty") openEditQtyModal(id);
       });
     });
   }
@@ -715,7 +744,73 @@ note.value = "";
     render();
   }
 
-  // Alarm: kun kager med udløbsdato i dag
+  // === Edit Qty Modal ===
+  function buildKeypadInto(container, inputEl){
+    const buttons = [
+      { t:"1", v:1, cls:"primary" }, { t:"2", v:2, cls:"primary" }, { t:"3", v:3, cls:"primary" }, { t:"4", v:4, cls:"primary" }, { t:"5", v:5, cls:"primary" },
+      { t:"6", v:6 }, { t:"7", v:7 }, { t:"8", v:8 }, { t:"9", v:9 }, { t:"10", v:10 },
+      { t:"-1", v:"-1" }, { t:"+1", v:"+1" }, { t:"Ryd", v:"clear" }, { t:"", v:null, disabled:true }, { t:"", v:null, disabled:true }
+    ];
+
+    container.innerHTML = buttons.map(b => {
+      if (b.disabled) return `<button type="button" disabled style="opacity:.15; cursor:default;"></button>`;
+      const cls = b.cls ? `class="${b.cls}"` : "";
+      return `<button type="button" ${cls} data-k="${b.v}">${escapeHtml(b.t)}</button>`;
+    }).join("");
+
+    container.querySelectorAll("button[data-k]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const k = btn.getAttribute("data-k");
+        let n = parseInt(inputEl.value || "0", 10);
+        if (Number.isNaN(n)) n = 0;
+        if (k === "clear") n = 0;
+        else if (k === "+1") n = n + 1;
+        else if (k === "-1") n = Math.max(0, n - 1);
+        else n = parseInt(k, 10);
+        inputEl.value = n > 0 ? String(n) : "";
+        inputEl.focus();
+      });
+    });
+  }
+
+  function openEditQtyModal(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    pendingEditId = id;
+    editQtySub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Nuværende: ${e.qty || 1} stk`;
+    editQtyInput.value = String(e.qty || 1);
+    buildKeypadInto(editKeypad, editQtyInput);
+    editQtyOverlay.style.display = "flex";
+    editQtyOverlay.setAttribute("aria-hidden", "false");
+    setTimeout(() => editQtyInput.focus(), 30);
+  }
+
+  function closeEditQtyModal(){
+    pendingEditId = null;
+    editQtyOverlay.style.display = "none";
+    editQtyOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function saveEditQty(){
+    const e = entries.find(x => x.id === pendingEditId);
+    if(!e) return;
+    const n = parseInt(editQtyInput.value, 10);
+    if (!Number.isFinite(n) || n < 0){
+      alert("Indtast et gyldigt antal (0 eller mere).");
+      return;
+    }
+    e.qty = n;
+    saveEntries();
+    closeEditQtyModal();
+    render();
+  }
+
+  closeEditQtyBtn.addEventListener("click", closeEditQtyModal);
+  editQtyCancelBtn.addEventListener("click", closeEditQtyModal);
+  editQtyOverlay.addEventListener("click", (e) => { if (e.target === editQtyOverlay) closeEditQtyModal(); });
+  editQtySaveBtn.addEventListener("click", saveEditQty);
+
+  // === Alarm ===
   function alarmEntries(){
     return entries.filter(e => e.status !== "discarded" && statusFor(e) === "dueToday");
   }
@@ -724,10 +819,10 @@ note.value = "";
     alarmList.innerHTML = list.map(e => `
       <div class="item">
         <div>
-          <strong>${escapeHtml(e.cakeName)}</strong><br/>
+          <strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk<br/>
           <span class="small">Udløb: <strong>${escapeHtml(fmtDateTime(e.discardAt))}</strong></span><br/>
           <span class="small" style="color:var(--muted)">
-            ${escapeHtml(e.place ? `Plads ${e.place}` : "")}${e.by ? ` • ${e.by}` : ""}
+            ${e.by ? e.by : ""}
           </span>
         </div>
         <div>
@@ -767,46 +862,14 @@ note.value = "";
   closeAlarmBtn.addEventListener("click", closeAlarmModal);
   alarmOverlay.addEventListener("click", (e) => { if (e.target === alarmOverlay) closeAlarmModal(); });
 
-  // Discard modal (antal stk)
-  function renderKeypad(){
-    const buttons = [
-      { t:"1", v:1, cls:"primary" }, { t:"2", v:2, cls:"primary" }, { t:"3", v:3, cls:"primary" }, { t:"4", v:4, cls:"primary" }, { t:"5", v:5, cls:"primary" },
-      { t:"6", v:6 }, { t:"7", v:7 }, { t:"8", v:8 }, { t:"9", v:9 }, { t:"10", v:10 },
-      { t:"-1", v:"-1" }, { t:"+1", v:"+1" }, { t:"Ryd", v:"clear" }, { t:"", v:null, disabled:true }, { t:"", v:null, disabled:true }
-    ];
-
-    keypad.innerHTML = buttons.map(b => {
-      if (b.disabled) return `<button type="button" disabled style="opacity:.15; cursor:default;"></button>`;
-      const cls = b.cls ? `class="${b.cls}"` : "";
-      return `<button type="button" ${cls} data-k="${b.v}">${escapeHtml(b.t)}</button>`;
-    }).join("");
-
-    keypad.querySelectorAll("button[data-k]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const k = btn.getAttribute("data-k");
-        let n = parseInt(wasteQty.value || "0", 10);
-        if (Number.isNaN(n)) n = 0;
-
-        if (k === "clear") n = 0;
-        else if (k === "+1") n = n + 1;
-        else if (k === "-1") n = Math.max(0, n - 1);
-        else n = parseInt(k, 10);
-
-        wasteQty.value = n > 0 ? String(n) : "";
-        wasteQty.focus();
-      });
-    });
-  }
-
+  // === Discard modal ===
   function openDiscardModal(id){
     const e = entries.find(x => x.id === id);
     if(!e) return;
-
     pendingDiscardId = id;
-    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))}`;
+    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))}`;
     wasteQty.value = "";
-    renderKeypad();
-
+    buildKeypadInto(keypad, wasteQty);
     discardOverlay.style.display = "flex";
     discardOverlay.setAttribute("aria-hidden", "false");
     setTimeout(() => wasteQty.focus(), 30);
@@ -821,18 +884,15 @@ note.value = "";
   function saveDiscard(){
     const e = entries.find(x => x.id === pendingDiscardId);
     if(!e) return;
-
-    const qty = Number(wasteQty.value);
-    if (!Number.isInteger(qty) || qty < 1){
+    const q = Number(wasteQty.value);
+    if (!Number.isInteger(q) || q < 1){
       alert("Vælg antal (stk).");
       return;
     }
-
     e.status = "discarded";
     e.discardedAt = new Date().toISOString();
-    e.wasteQty = qty;
+    e.wasteQty = q;
     e.wasteUnit = "stk";
-
     saveEntries();
     closeDiscardModal();
     render();
@@ -843,27 +903,26 @@ note.value = "";
   discardOverlay.addEventListener("click", (e) => { if (e.target === discardOverlay) closeDiscardModal(); });
   discardSaveBtn.addEventListener("click", saveDiscard);
 
-  // Init
+  // === Init ===
   by.value = prefs.lastBy || "";
-  place.value = prefs.lastPlace || "1";
+  qty.value = prefs.lastQty || "";
 
   renderCakeButtons();
   customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
   updatePreview();
   render();
 
-    addBtn.addEventListener("click", () => {
+  addBtn.addEventListener("click", () => {
     ensureNotifPermissionFromUserGesture();
     addEntry();
   });
   customName.addEventListener("input", updatePreview);
   customDays.addEventListener("input", updatePreview);
   by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
-  place.addEventListener("input", () => { prefs.lastPlace = place.value; savePrefs(); });
+  qty.addEventListener("input", () => { prefs.lastQty = qty.value; savePrefs(); });
 
-  // Auto alarm check
   checkAlarm(false);
-    setInterval(() => {
+  setInterval(() => {
     checkAlarm(false);
     checkDueSoonNotifications();
     updateTabIndicators();
