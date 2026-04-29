@@ -27,13 +27,8 @@
       background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent);}
 
     /* Search & Filter bar */
-    .controlBar{
-      display:flex;gap:12px;flex-wrap:wrap;align-items:center;
-      margin-bottom:14px;
-    }
-    .searchWrap{
-      flex:1;min-width:220px;position:relative;
-    }
+    .controlBar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+    .searchWrap{flex:1;min-width:220px;position:relative;}
     .searchWrap input{
       width:100%;padding:14px 14px 14px 44px;
       border-radius:16px;border:1px solid rgba(255,255,255,.12);
@@ -43,33 +38,23 @@
     }
     .searchWrap input::placeholder{color:rgba(255,255,255,.4);}
     .searchWrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(214,178,74,.15);}
-    .searchIcon{
-      position:absolute;left:14px;top:50%;transform:translateY(-50%);
-      color:rgba(255,255,255,.4);font-size:18px;pointer-events:none;
-    }
-    .filterBtns{
-      display:flex;gap:8px;flex-wrap:wrap;
-    }
+    .searchIcon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.4);font-size:18px;pointer-events:none;}
+    .filterBtns{display:flex;gap:8px;flex-wrap:wrap;}
     .filterBtn{
       padding:10px 18px;border-radius:999px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.06);
       color:var(--muted);font-weight:800;font-size:13px;
       cursor:pointer;transition:.2s ease;
-      font-family:Inter,sans-serif;
-      white-space:nowrap;
+      font-family:Inter,sans-serif;white-space:nowrap;
     }
     .filterBtn:hover{background:rgba(255,255,255,.10);}
     .filterBtn.active{
       background:linear-gradient(180deg,rgba(214,178,74,.25),rgba(214,178,74,.10));
-      border-color:rgba(214,178,74,.45);
-      color:var(--text);
+      border-color:rgba(214,178,74,.45);color:var(--text);
       box-shadow:0 0 0 3px rgba(214,178,74,.10);
     }
-    .resultCount{
-      font-size:12px;font-weight:700;color:rgba(255,255,255,.4);
-      text-align:center;margin-bottom:10px;
-    }
+    .resultCount{font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-align:center;margin-bottom:10px;}
 
     .section{border-radius:22px;border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);box-shadow:var(--shadow);overflow:hidden;}
@@ -79,14 +64,50 @@
       letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
     .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
     .toolGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:16px;}
+
     .toolCard{border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:10px;
       background:rgba(255,255,255,.04);cursor:pointer;transition:.2s ease;}
     .toolCard:hover{background:rgba(255,255,255,.08);transform:translateY(-2px);}
     .toolCard.hidden{display:none;}
-    .toolCard img{
-      width:100%;height:180px;object-fit:cover;object-position:center;
-      border-radius:14px;display:block;
+
+    /* Billede-wrapper med lazy load + blur-up */
+    .imgWrap{
+      position:relative;width:100%;height:180px;
+      border-radius:14px;overflow:hidden;
+      background:rgba(255,255,255,.06);
     }
+    .imgWrap img{
+      width:100%;height:100%;object-fit:cover;object-position:center;
+      display:block;
+      filter:blur(20px);
+      transform:scale(1.1);
+      transition:filter .6s ease, transform .6s ease, opacity .6s ease;
+      opacity:0.6;
+    }
+    .imgWrap img.loaded{
+      filter:blur(0);
+      transform:scale(1);
+      opacity:1;
+    }
+    /* Skeleton shimmer */
+    .imgWrap::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(90deg,
+        rgba(255,255,255,.0) 0%,
+        rgba(255,255,255,.05) 40%,
+        rgba(255,255,255,.1) 50%,
+        rgba(255,255,255,.05) 60%,
+        rgba(255,255,255,.0) 100%);
+      background-size:200% 100%;
+      animation:shimmer 1.5s ease infinite;
+      z-index:1;border-radius:14px;pointer-events:none;
+    }
+    .imgWrap.done::before{display:none;}
+    @keyframes shimmer{
+      0%{background-position:200% 0;}
+      100%{background-position:-200% 0;}
+    }
+
     .toolName{margin-top:8px;font-weight:900;font-size:16px;}
     .toolDesc{color:var(--muted);font-weight:600;font-size:13px;}
     .toolCat{
@@ -96,12 +117,9 @@
       color:rgba(255,255,255,.5);
     }
 
-    .noResults{
-      text-align:center;padding:40px 16px;color:rgba(255,255,255,.4);
-      font-weight:700;font-size:15px;
-    }
+    .noResults{text-align:center;padding:40px 16px;color:rgba(255,255,255,.4);font-weight:700;font-size:15px;}
 
-    /* viewer */
+    /* Viewer */
     .viewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
       background:rgba(13,17,23,.96);backdrop-filter:blur(8px);z-index:9999;
       justify-content:center;align-items:center;flex-direction:column;animation:fadeIn .3s ease;}
@@ -110,7 +128,24 @@
     #closeBtn{position:absolute;top:20px;right:30px;padding:10px 20px;
       border-radius:999px;background:rgba(255,107,107,.2);border:1px solid rgba(255,107,107,.4);
       color:#ff6b6b;font-weight:900;font-size:14px;cursor:pointer;}
-    #viewerImg{max-width:90%;max-height:80vh;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.45);}
+
+    .viewerImgWrap{position:relative;}
+    #viewerImg{
+      max-width:90vw;max-height:80vh;border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.45);
+      opacity:0;transition:opacity .4s ease;
+    }
+    #viewerImg.loaded{opacity:1;}
+    .viewerSpinner{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:40px;height:40px;border-radius:50%;
+      border:3px solid rgba(255,255,255,.1);
+      border-top-color:var(--gold);
+      animation:spin .8s linear infinite;
+    }
+    .viewerSpinner.hide{display:none;}
+    @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+
     #viewerTitle{margin-top:16px;font-weight:900;font-size:18px;}
   </style>
 </head>
@@ -142,9 +177,7 @@
         </div>
       </div>
 
-      <div class="toolGrid" id="toolGrid">
-        <!-- Alle kort genereres af JS herunder -->
-      </div>
+      <div class="toolGrid" id="toolGrid"></div>
 
       <div class="noResults" id="noResults" style="display:none;">
         Ingen retter matcher din søgning 🤷
@@ -159,111 +192,199 @@
   <!-- Viewer modal -->
   <div class="viewer" id="viewer">
     <button id="closeBtn">✖ Luk</button>
-    <img id="viewerImg" src="" alt="">
+    <div class="viewerImgWrap">
+      <div class="viewerSpinner" id="viewerSpinner"></div>
+      <img id="viewerImg" src="" alt="">
+    </div>
     <div id="viewerTitle"></div>
   </div>
 
   <script>
-    // ============================================================
-    //  RETTER – tilføj / fjern / rediger her
-    //  Kategorier oprettes automatisk ud fra "cat" feltet
-    // ============================================================
     const DISHES = [
       // ——— Lune retter ———
       { name: "Kyllingewrap",      cat: "Lune retter",   img: "madgalleri/wrap.jpg" },
-      { name: "Stjerneskud",      cat: "Lune retter",   img: "madgalleri/stjerneskud.jpg" },
-      { name: "Fish'n'chips",    cat: "Lune retter",   img: "madgalleri/fish.jpg" },
-      { name: "Nachos",        cat: "Lune retter",   img: "madgalleri/nachos.jpg" },
-      { name: "Pariserbøf",     cat: "Lune retter",   img: "madgalleri/pariserbøf.jpg" },
-      { name: "Black angus",         cat: "Lune retter",   img: "madgalleri/blackangus.jpg" },
+      { name: "Stjerneskud",       cat: "Lune retter",   img: "madgalleri/stjerneskud.jpg" },
+      { name: "Fish'n'chips",      cat: "Lune retter",   img: "madgalleri/fish.jpg" },
+      { name: "Nachos",            cat: "Lune retter",   img: "madgalleri/nachos.jpg" },
+      { name: "Pariserbøf",        cat: "Lune retter",   img: "madgalleri/pariserbøf.jpg" },
+      { name: "Black angus",       cat: "Lune retter",   img: "madgalleri/blackangus.jpg" },
 
-      // ——— Salater  ———
-      { name: "Pokebowl",         cat: "Salater",  img: "madgalleri/poke.jpg" },
-      { name: "Cæsar Salat",      cat: "Salater",  img: "madgalleri/caesar.jpg" },
-      { name: "Laksesalat",    cat: "Salater",  img: "madgalleri/laks.jpg" },
+      // ——— Salater ———
+      { name: "Pokebowl",          cat: "Salater",       img: "madgalleri/poke.jpg" },
+      { name: "Cæsar Salat",       cat: "Salater",       img: "madgalleri/caesar.jpg" },
+      { name: "Laksesalat",        cat: "Salater",       img: "madgalleri/laks.jpg" },
 
       // ——— Burger ———
-      { name: "Kaiser Burger",    cat: "Burger",   img: "madgalleri/kaiserB.jpg" },
-      { name: "Mexicansk burger",    cat: "Burger",   img: "madgalleri/mexicansk.jpg" },
-      { name: "Bearnaise burger",   cat: "Burger",   img: "madgalleri/bearnaise.jpg" },
-      { name: "Signatur burger",   cat: "Burger",   img: "madgalleri/signatur.jpg" },
+      { name: "Kaiser Burger",     cat: "Burger",        img: "madgalleri/kaiserB.jpg" },
+      { name: "Mexicansk burger",  cat: "Burger",        img: "madgalleri/mexicansk.jpg" },
+      { name: "Bearnaise burger",  cat: "Burger",        img: "madgalleri/bearnaise.jpg" },
+      { name: "Signatur burger",   cat: "Burger",        img: "madgalleri/signatur.jpg" },
 
       // ——— Dessert ———
-      { name: "Rabarber crumble",    cat: "Dessert",  img: "madgalleri/chokoladekage.jpg" },
-      { name: "Pandekage med is",     cat: "Dessert",  img: "madgalleri/creme-brulee.jpg" },
+      { name: "Rabarber crumble",  cat: "Dessert",       img: "madgalleri/chokoladekage.jpg" },
+      { name: "Pandekage med is",  cat: "Dessert",       img: "madgalleri/creme-brulee.jpg" },
 
       // ——— Smørrebrød ———
-      { name: "Fiskefilet",       cat: "Smørrebrød", img: "madgalleri/fiskefilet.jpg" },
-      { name: "Hakkebøf smørrebrød",     cat: "Smørrebrød", img: "madgalleri/hakkebof.jpg" },
-      { name: "Hønsesalat",       cat: "Smørrebrød",   img: "madgalleri/hs.jpg" },
-      { name: "Æg & Rejer",       cat: "Smørrebrød",   img: "madgalleri/ær.png" },
-      { name: "Roastbeef",       cat: "Smørrebrød",   img: "madgalleri/roastbeef.jpg" },
+      { name: "Fiskefilet",        cat: "Smørrebrød",    img: "madgalleri/fiskefilet.jpg" },
+      { name: "Hakkebøf smørrebrød", cat: "Smørrebrød",  img: "madgalleri/hakkebof.jpg" },
+      { name: "Hønsesalat",        cat: "Smørrebrød",    img: "madgalleri/hs.jpg" },
+      { name: "Æg & Rejer",        cat: "Smørrebrød",    img: "madgalleri/ær.png" },
+      { name: "Roastbeef",         cat: "Smørrebrød",    img: "madgalleri/roastbeef.jpg" },
 
       // ——— Sandwich ———
-      { name: "Kylling sandwich",       cat: "Sandwich", img: "madgalleri/kylling.jpg" },
-      { name: "Tun sandwich",     cat: "Sandwich", img: "madgalleri/tun.jpg" },
-      { name: "Kaiser sandwich",       cat: "Sandwich",   img: "madgalleri/kaiser.jpg" },
-      { name: "Serrano sandwich",       cat: "Sandwich",   img: "madgalleri/serrano.jpg" },
+      { name: "Kylling sandwich",  cat: "Sandwich",      img: "madgalleri/kylling.jpg" },
+      { name: "Tun sandwich",      cat: "Sandwich",      img: "madgalleri/tun.jpg" },
+      { name: "Kaiser sandwich",   cat: "Sandwich",      img: "madgalleri/kaiser.jpg" },
+      { name: "Serrano sandwich",  cat: "Sandwich",      img: "madgalleri/serrano.jpg" },
 
       // ——— Børne menu ———
-      { name: "Børne burger",       cat: "Børne mad", img: "madgalleri/kylling.jpg" },
-      { name: "Børne fiskefilet",     cat: "Børne mad", img: "madgalleri/tun.jpg" },
-      { name: "Nuggets",       cat: "Børne mad",   img: "madgalleri/kaiser.jpg" },
+      { name: "Børne burger",      cat: "Børne mad",     img: "madgalleri/kylling.jpg" },
+      { name: "Børne fiskefilet",  cat: "Børne mad",     img: "madgalleri/tun.jpg" },
+      { name: "Nuggets",           cat: "Børne mad",     img: "madgalleri/kaiser.jpg" },
 
-      // ——— Aften retter  ———
-      { name: "Stegt flæsk",       cat: "Aften", img: "madgalleri/kylling.jpg" },
-      { name: "Wiener",     cat: "Aften", img: "madgalleri/tun.jpg" },
-      { name: "Okse mørbrad",       cat: "Aften",   img: "madgalleri/kaiser.jpg" },
-      { name: "Ærtepasta",       cat: "Sandwich",   img: "madgalleri/serrano.jpg" },
-     
+      // ——— Aften retter ———
+      { name: "Stegt flæsk",      cat: "Aften",          img: "madgalleri/kylling.jpg" },
+      { name: "Wiener",           cat: "Aften",          img: "madgalleri/tun.jpg" },
+      { name: "Okse mørbrad",     cat: "Aften",          img: "madgalleri/kaiser.jpg" },
+      { name: "Ærtepasta",        cat: "Sandwich",       img: "madgalleri/serrano.jpg" },
     ];
 
     // ============================================================
-    //  Byg UI
+    //  UI references
     // ============================================================
-    const toolGrid     = document.getElementById('toolGrid');
-    const filterBtns   = document.getElementById('filterBtns');
-    const searchInput  = document.getElementById('searchInput');
-    const resultCount  = document.getElementById('resultCount');
-    const noResults    = document.getElementById('noResults');
-    const viewer       = document.getElementById('viewer');
-    const viewerImg    = document.getElementById('viewerImg');
-    const viewerTitle  = document.getElementById('viewerTitle');
-    const closeBtn     = document.getElementById('closeBtn');
+    const toolGrid      = document.getElementById('toolGrid');
+    const filterBtns    = document.getElementById('filterBtns');
+    const searchInput   = document.getElementById('searchInput');
+    const resultCount   = document.getElementById('resultCount');
+    const noResults     = document.getElementById('noResults');
+    const viewer        = document.getElementById('viewer');
+    const viewerImg     = document.getElementById('viewerImg');
+    const viewerTitle   = document.getElementById('viewerTitle');
+    const viewerSpinner = document.getElementById('viewerSpinner');
+    const closeBtn      = document.getElementById('closeBtn');
 
     let activeFilter = "Alle";
 
-    // Unikke kategorier
+    // Kategorier
     const categories = ["Alle", ...Array.from(new Set(DISHES.map(d => d.cat)))];
 
-    // Render filter-knapper
     filterBtns.innerHTML = categories.map(c =>
       `<button class="filterBtn${c === "Alle" ? " active" : ""}" data-cat="${c}">${c}</button>`
     ).join("");
 
-    // Render kort
+    // ============================================================
+    //  Render kort – billeder starter tomme (lazy)
+    // ============================================================
     function renderCards(){
       toolGrid.innerHTML = DISHES.map((d, i) =>
         `<div class="toolCard" data-index="${i}" data-cat="${d.cat}" data-name="${d.name.toLowerCase()}">
-          <img src="${d.img}" alt="${d.name}" loading="lazy">
+          <div class="imgWrap">
+            <img data-src="${d.img}" alt="${d.name}">
+          </div>
           <div class="toolName">${d.name}</div>
           <span class="toolCat">${d.cat}</span>
         </div>`
       ).join("");
 
-      // Klik → viewer
       toolGrid.querySelectorAll('.toolCard').forEach(card => {
-        card.addEventListener('click', () => {
-          const dish = DISHES[card.dataset.index];
-          viewerImg.src = dish.img;
-          viewerTitle.textContent = dish.name;
-          viewer.classList.add('open');
-        });
+        card.addEventListener('click', () => openViewer(Number(card.dataset.index)));
       });
+
+      observeImages();
     }
+
+    // ============================================================
+    //  Intersection Observer – lazy load + blur-up
+    // ============================================================
+    let observer;
+
+    function observeImages(){
+      if (observer) observer.disconnect();
+
+      const imgs = toolGrid.querySelectorAll('img[data-src]');
+
+      if (!('IntersectionObserver' in window)){
+        imgs.forEach(img => loadImage(img));
+        return;
+      }
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting){
+            loadImage(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '200px 0px'
+      });
+
+      imgs.forEach(img => observer.observe(img));
+    }
+
+    function loadImage(img){
+      const src = img.getAttribute('data-src');
+      if (!src) return;
+
+      const temp = new Image();
+      temp.onload = () => {
+        img.src = src;
+        img.removeAttribute('data-src');
+        img.classList.add('loaded');
+        const wrap = img.closest('.imgWrap');
+        if (wrap) wrap.classList.add('done');
+      };
+      temp.onerror = () => {
+        img.src = src;
+        img.removeAttribute('data-src');
+        img.classList.add('loaded');
+        const wrap = img.closest('.imgWrap');
+        if (wrap) wrap.classList.add('done');
+      };
+      temp.src = src;
+    }
+
     renderCards();
 
-    // Filtrér + søg
+    // ============================================================
+    //  Viewer – loader fuldt billede med spinner
+    // ============================================================
+    function openViewer(index){
+      const dish = DISHES[index];
+      if (!dish) return;
+
+      viewerImg.classList.remove('loaded');
+      viewerImg.src = '';
+      viewerSpinner.classList.remove('hide');
+      viewerTitle.textContent = dish.name;
+      viewer.classList.add('open');
+
+      const full = new Image();
+      full.onload = () => {
+        viewerImg.src = dish.img;
+        viewerImg.classList.add('loaded');
+        viewerSpinner.classList.add('hide');
+      };
+      full.onerror = () => {
+        viewerImg.src = dish.img;
+        viewerImg.classList.add('loaded');
+        viewerSpinner.classList.add('hide');
+      };
+      full.src = dish.img;
+    }
+
+    function closeViewer(){
+      viewer.classList.remove('open');
+      viewerImg.src = '';
+    }
+
+    closeBtn.addEventListener('click', closeViewer);
+    viewer.addEventListener('click', e => { if (e.target === viewer) closeViewer(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
+
+    // ============================================================
+    //  Filter + Søg
+    // ============================================================
     function applyFilter(){
       const query = searchInput.value.trim().toLowerCase();
       const cards = toolGrid.querySelectorAll('.toolCard');
@@ -277,15 +398,16 @@
         if (show) visible++;
       });
 
-      const total = cards.length;
       resultCount.textContent = query || activeFilter !== "Alle"
-        ? `Viser ${visible} af ${total} retter`
-        : `${total} retter i alt`;
+        ? `Viser ${visible} af ${DISHES.length} retter`
+        : `${DISHES.length} retter i alt`;
 
       noResults.style.display = visible === 0 ? 'block' : 'none';
+
+      // Re-observe efter filter (nye synlige kort skal lazy-loades)
+      observeImages();
     }
 
-    // Filter klik
     filterBtns.addEventListener('click', e => {
       const btn = e.target.closest('.filterBtn');
       if (!btn) return;
@@ -295,19 +417,8 @@
       applyFilter();
     });
 
-    // Søg
     searchInput.addEventListener('input', applyFilter);
 
-    // Viewer luk
-    closeBtn.addEventListener('click', () => viewer.classList.remove('open'));
-    viewer.addEventListener('click', e => { if (e.target === viewer) viewer.classList.remove('open'); });
-
-    // Keyboard: Escape lukker viewer
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') viewer.classList.remove('open');
-    });
-
-    // Initial count
     applyFilter();
   </script>
 </body>
