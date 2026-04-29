@@ -68,53 +68,73 @@ body{
 <div class="shell">
   <header class="hero">
     <div class="kicker">S&F</div>
-    <div class="title">Budget Regner</div>
-    <div class="sub">Overblik over indkomst og udgifter</div>
+    <div class="title">Budget Regner</div>
+    <div class="sub">Overblik over indkomst og udgifter</div>
     <div class="goldline"></div>
   </header>
 
+  <!-- 🔹 Indkomst -->
   <section class="section" id="indtjening">
     <h3>Indkomst</h3>
-    <div class="inputRow"><label>Indkomst 1:</label><input type="number" id="inc1" placeholder="0"></div>
-    <div class="inputRow"><label>Indkomst 2:</label><input type="number" id="inc2" placeholder="0"></div>
+    <div class="inputRow"><label>Indkomst 1:</label><input type="number" id="inc1" placeholder="0"></div>
+    <div class="inputRow"><label>Indkomst 2:</label><input type="number" id="inc2" placeholder="0"></div>
     <div class="inputRow"><label>Børnebidrag:</label><input type="number" id="inc3" placeholder="0"></div>
     <div class="inputRow"><label>Børnepenge:</label><input type="number" id="inc4" placeholder="0"></div>
   </section>
 
+  <!-- 🔹 Udgifter -->
   <section class="section" id="udgifter">
     <h3>Udgifter</h3>
 
-    <!-- Eksempelvis udgifter -->
     <div class="inputRow"><label>Husleje:</label><input type="number" class="expense" id="ud1" placeholder="0"></div>
     <div class="inputRow"><label>Mad:</label><input type="number" class="expense" id="ud2" placeholder="0"></div>
     <div class="inputRow"><label>Clever:</label><input type="number" class="expense" id="ud3" placeholder="0"></div>
     <div class="inputRow"><label>Forsikring:</label><input type="number" class="expense" id="ud4" placeholder="0"></div>
+    <div class="inputRow"><label>Abonnementer:</label><input type="number" class="expense" id="ud5" placeholder="0"></div>
+    <div class="inputRow"><label>Resurs bank - Freja:</label><input type="number" class="expense" id="ud6" placeholder="0"></div>
+    <div class="inputRow"><label>Resurs bank - Stefan:</label><input type="number" class="expense" id="ud8" placeholder="0"></div>
+    <div class="inputRow"><label>Børnehave madordning:</label><input type="number" class="expense" id="ud9" placeholder="0"></div>
+    <div class="inputRow"><label>SFO:</label><input type="number" class="expense" id="ud10" placeholder="0"></div>
+    <div class="inputRow"><label>Boliglån:</label><input type="number" class="expense" id="ud11" placeholder="0"></div>
+    <div class="inputRow"><label>Norwegian Stefan:</label><input type="number" class="expense" id="ud12" placeholder="0"></div>
+    <div class="inputRow"><label>Klara:</label><input type="number" class="expense" id="ud13" placeholder="0"></div>
+    <div class="inputRow"><label>Clubtan x2:</label><input type="number" class="expense" id="ud14" placeholder="0"></div>
+    <div class="inputRow"><label>Leasing:</label><input type="number" class="expense" id="ud15" placeholder="0"></div>
+    <div class="inputRow"><label>El regning:</label><input type="number" class="expense" id="ud16" placeholder="0"></div>
+    <div class="inputRow"><label>Viabill Stefan:</label><input type="number" class="expense" id="ud17" placeholder="0"></div>
+    <div class="inputRow"><label>Viabill Freja:</label><input type="number" class="expense" id="ud18" placeholder="0"></div>
+    <div class="inputRow"><label>Streaming:</label><input type="number" class="expense" id="ud19" placeholder="0"></div>
+    <div class="inputRow"><label>Mobil/Internet:</label><input type="number" class="expense" id="ud20" placeholder="0"></div>
+    <div class="inputRow"><label>Annas dans:</label><input type="number" class="expense" id="ud21" placeholder="0"></div>
+    <div class="inputRow"><label>Vipper:</label><input type="number" class="expense" id="ud22" placeholder="0"></div>
 
-    <!-- ... dine mellem‑udgifter som før ... -->
-
-    <!-- fire "Andet"‑rækker med kommentar -->
+    <!-- 🔸 Andet med kommentar -->
     <div class="inputRow">
-      <label>Andet:</label><input type="number" class="expense" id="ud23" placeholder="0">
+      <label>Andet:</label>
+      <input type="number" class="expense" id="ud23" placeholder="0">
       <input type="text" class="note" id="note23" placeholder="Kommentar...">
     </div>
     <div class="inputRow">
-      <label>Andet:</label><input type="number" class="expense" id="ud24" placeholder="0">
+      <label>Andet:</label>
+      <input type="number" class="expense" id="ud24" placeholder="0">
       <input type="text" class="note" id="note24" placeholder="Kommentar...">
     </div>
     <div class="inputRow">
-      <label>Andet:</label><input type="number" class="expense" id="ud25" placeholder="0">
+      <label>Andet:</label>
+      <input type="number" class="expense" id="ud25" placeholder="0">
       <input type="text" class="note" id="note25" placeholder="Kommentar...">
     </div>
     <div class="inputRow">
-      <label>Andet:</label><input type="number" class="expense" id="ud26" placeholder="0">
+      <label>Andet:</label>
+      <input type="number" class="expense" id="ud26" placeholder="0">
       <input type="text" class="note" id="note26" placeholder="Kommentar...">
     </div>
   </section>
 
   <div class="summary">
-    <h3>Tilbage Efter Udgifter</h3>
-    <div class="total" id="result">0 kr</div>
-    <button class="button" id="resetBtn">Nulstil Alt</button>
+    <h3>Tilbage Efter Udgifter</h3>
+    <div class="total" id="result">0 kr</div>
+    <button class="button" id="resetBtn">Nulstil Alt</button>
   </div>
 </div>
 
@@ -122,15 +142,15 @@ body{
 const incs = [
   document.getElementById('inc1'),
   document.getElementById('inc2'),
-  document.getElementById('inc3'), // børnebidrag
-  document.getElementById('inc4')  // børnepenge
+  document.getElementById('inc3'),
+  document.getElementById('inc4')
 ];
 const expenses = document.querySelectorAll('.expense');
 const notes = document.querySelectorAll('.note');
 const result = document.getElementById('result');
 const resetBtn = document.getElementById('resetBtn');
 
-// Load saved values
+// Load gemte værdier
 window.addEventListener('load', ()=>{
   [...incs, ...expenses, ...notes].forEach(i=>{
     i.value = localStorage.getItem(i.id) || '';
@@ -138,7 +158,7 @@ window.addEventListener('load', ()=>{
   calc();
 });
 
-// Save on input
+// Gem automatisk
 [...incs, ...expenses, ...notes].forEach(inp=>{
   inp.addEventListener('input', ()=>{
     localStorage.setItem(inp.id, inp.value);
@@ -158,7 +178,7 @@ function calc(){
   const totalInc = incs.reduce((a,i)=>a+(parseFloat(i.value)||0),0);
   const totalExp = [...expenses].reduce((a,i)=>a+(parseFloat(i.value)||0),0);
   const left = totalInc - totalExp;
-  result.textContent = `${left.toLocaleString('da-DK')} kr`;
+  result.textContent = `${left.toLocaleString('da-DK')} kr`;
   result.style.color = left >= 0 ? 'var(--green)' : '#ff6b6b';
 }
 </script>
