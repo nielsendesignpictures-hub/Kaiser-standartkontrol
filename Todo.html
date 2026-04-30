@@ -888,7 +888,18 @@ function processNotifications(data) {
       const key=makeNotifSignalKey(source.type,ev);
       if(!seen.has(key)){
         seen.add(key);
-        const id="notif_"+btoa(key).replace(/[^a-zA-Z0-9]/g,"").slice(0,60);
+        function safeBase64(str) {
+  return btoa(
+    new TextEncoder()
+      .encode(str)
+      .reduce((data, byte) => data + String.fromCharCode(byte), '')
+  );
+}
+
+const id = "notif_" +
+  safeBase64(key)
+    .replace(/[^a-zA-Z0-9]/g,"")
+    .slice(0,60);
         if(!existingIds.has(id)){
           additions.push({id,key,type:source.type,title:makeNotifTitle(source.type,ev),text:makeNotifText(source.type,ev),location:ev.location||"Ukendt",createdAt:ev.createdAt||ev.updatedAt||ev.date||new Date().toISOString(),acknowledged:false});
         }
