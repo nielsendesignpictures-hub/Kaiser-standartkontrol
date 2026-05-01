@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyWds-PHayXHll-vvpUwgs2vCU6KqFkgd9Sceg63fB1xM1_o7ZRH3jZrA778ZsxRaOMfw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
 
 async function loadFaults() {
 
