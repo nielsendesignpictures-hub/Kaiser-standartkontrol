@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Kaiser – Fejl & Mangler</title>
+<title>Café Kaiser – Drift Status</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -15,7 +15,13 @@ body{
 }
 
 h1{
+  margin-bottom:20px;
+}
+
+select{
+  padding:8px 12px;
   margin-bottom:30px;
+  font-size:16px;
 }
 
 .card{
@@ -39,21 +45,23 @@ h1{
 
 <body>
 
-<h1 id="locationTitle"></h1>
+<h1>Drift Status</h1>
+
+<select id="locationSelect">
+  <option value="">Vælg lokation</option>
+</select>
+
 <div id="issues"></div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxKNg1OGlbT0cOlPhW4BpM2L-_9EVdDyhn9lhnyuYLiNrofIQaR0FJ15Vwc7ROg1clv/exec";
 
-const params = new URLSearchParams(window.location.search);
-const LOCATION = params.get("location");
+let ALL_DATA = [];
+let CURRENT_LOCATION = null;
 
-document.getElementById("locationTitle").innerText =
-  LOCATION ? LOCATION : "Ingen lokation valgt";
-
+/* LOAD DATA */
 function loadData(){
-
   const old=document.getElementById("jsonp");
   if(old) old.remove();
 
@@ -64,13 +72,40 @@ function loadData(){
 }
 
 function handleData(data){
+  ALL_DATA = data;
+  populateLocations();
+}
+
+/* Populate dropdown */
+function populateLocations(){
+
+  const select=document.getElementById("locationSelect");
+
+  const locations=[...new Set(ALL_DATA.map(i=>i.location))];
+
+  select.innerHTML='<option value="">Vælg lokation</option>';
+
+  locations.forEach(loc=>{
+    select.innerHTML+=`<option value="${loc}">${loc}</option>`;
+  });
+
+  select.onchange=function(){
+    CURRENT_LOCATION=this.value;
+    render();
+  };
+}
+
+/* Render issues */
+function render(){
 
   const container=document.getElementById("issues");
   container.innerHTML="";
 
-  data.forEach(issue=>{
+  if(!CURRENT_LOCATION) return;
 
-    if(issue.location!==LOCATION) return;
+  ALL_DATA.forEach(issue=>{
+
+    if(issue.location!==CURRENT_LOCATION) return;
 
     const statusClass =
       issue.status==="Closed" ? "status-closed" :
@@ -93,7 +128,7 @@ function handleData(data){
         ${issue.estimatedCompletion ? `
           <div class="deadline">
             Forventet færdig: ${issue.estimatedCompletion}
-            ${overdue ? "<span style='color:red'>(Forsinket)</span>" : ""}
+            ${overdue ? "<span style='color:red'> (Forsinket)</span>" : ""}
           </div>
         ` : `
           <div class="deadline">
