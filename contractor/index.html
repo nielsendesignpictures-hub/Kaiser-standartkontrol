@@ -190,13 +190,13 @@ button{
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxh_V_dfa0NtQWOQ8rkzqDq8z9GnRGLHXhneT7F_dQOOPO9XKem4M6UtT_sR6n05WVp/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxKNg1OGlbT0cOlPhW4BpM2L-_9EVdDyhn9lhnyuYLiNrofIQaR0FJ15Vwc7ROg1clv/exec";
 
 let CURRENT_VIEW="open";
 let CURRENT_LOCATION=null;
 let isLoading=false;
 
-/* LOAD DATA */
+/* LOAD */
 function loadData(manual=false){
 
   if(isLoading) return;
@@ -291,7 +291,6 @@ function render(data){
   document.getElementById("kpi-progress").innerText=progress;
   document.getElementById("kpi-closed").innerText=closed;
 
-  /* Sidebar lokationer */
   const locContainer=document.getElementById("locationList");
   locContainer.innerHTML="";
 
@@ -305,38 +304,45 @@ function render(data){
   });
 }
 
-/* SAVE DATE */
+/* UPDATE VIA GET */
 function saveDate(id){
 
-  const date = document.getElementById("date-"+id).value;
+  const date=document.getElementById("date-"+id).value;
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + id +
-    "&estimatedCompletion=" + date +
-    "&t=" + Date.now();
+  if(!date){
+    alert("Vælg en dato først");
+    return;
+  }
+
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update"+
+    "&id="+encodeURIComponent(id)+
+    "&estimatedCompletion="+encodeURIComponent(date)+
+    "&t="+Date.now();
 
   document.body.appendChild(script);
 
-  setTimeout(()=>loadData(true),800);
+  setTimeout(()=>loadData(true),1000);
 }
 
-/* MARK DONE */
 function markDone(id){
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + id +
-    "&status=Closed&t=" + Date.now();
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update"+
+    "&id="+encodeURIComponent(id)+
+    "&status=Closed"+
+    "&t="+Date.now();
 
   document.body.appendChild(script);
 
-  setTimeout(()=>loadData(true),800);
+  setTimeout(()=>loadData(true),1000);
 }
 
-/* NAVIGATION */
+/* NAV */
 function setView(view){
   CURRENT_VIEW=view;
   CURRENT_LOCATION=null;
