@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rasmus -  Håndværker</title>
+<title>Kaiser Operations</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -33,7 +33,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
-  width: 250px;
+  width: 240px;
   background: var(--sidebar);
   height: 100vh;
   padding: 30px 20px;
@@ -50,12 +50,10 @@ body {
   padding: 12px 15px;
   border-radius: 10px;
   margin-bottom: 10px;
-  cursor: pointer;
   color: var(--muted);
 }
 
-.menu-item.active,
-.menu-item:hover {
+.menu-item.active {
   background: var(--card);
   color: white;
 }
@@ -67,29 +65,22 @@ body {
   overflow-y: auto;
 }
 
-/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.header h1 {
-  margin: 0;
 }
 
 .live-bar {
   background: rgba(82,196,26,0.1);
   border: 1px solid rgba(82,196,26,0.3);
-  padding: 12px 20px;
-  border-radius: 12px;
-  margin-bottom: 30px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin: 20px 0 30px 0;
   display: flex;
   justify-content: space-between;
 }
 
-/* KPI */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -116,17 +107,11 @@ body {
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 20px;
-  transition: 0.2s;
-}
-
-.issue-card:hover {
-  border-color: var(--gold);
 }
 
 .issue-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .severity-high { color: var(--danger); }
@@ -136,34 +121,6 @@ body {
 .muted {
   color: var(--muted);
   font-size: 14px;
-}
-
-.actions {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
-}
-
-input[type="date"] {
-  background: #111;
-  border: 1px solid var(--border);
-  padding: 8px;
-  border-radius: 8px;
-  color: white;
-}
-
-button {
-  background: var(--gold);
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button.secondary {
-  background: #333;
-  color: white;
 }
 </style>
 </head>
@@ -181,8 +138,7 @@ button.secondary {
 <div class="main">
 
   <div class="header">
-    <h1>Operations Dashboard</h1>
-    <button onclick="loadIssues()">Opdater</button>
+    <h1>Rasmus's Håndværker portal</h1>
   </div>
 
   <div class="live-bar">
@@ -214,12 +170,19 @@ button.secondary {
 </div>
 
 <script>
-const API_URL = "view-source:https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQMVH3pWuVUR29lE_eM37J-IWb6t88evtZ41TosB5iIrpSdLQzoVIRSfdr-EYduPH2-TpchPJcie9qlhadsi1DwX30Q8lb0-vliFLAsMi3H8nDfRx1-ppqxlYZv2cOXACGT6mxBZ0KBnpfGfPsw9Qk34PfQYozYrk4_7A_AJ3Q7Ju1fFgUCpw7bFI_EEPWJiamf4wgkUv9jKfJbZ8FSdeiHTEHZnkDRw_XSN0IGlRnMEDN7wArIgO6McUjxUmvRMgVVE7_dWZ6643u-WkicIza5betY8A&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQMVH3pWuVUR29lE_eM37J-IWb6t88evtZ41TosB5iIrpSdLQzoVIRSfdr-EYduPH2-TpchPJcie9qlhadsi1DwX30Q8lb0-vliFLAsMi3H8nDfRx1-ppqxlYZv2cOXACGT6mxBZ0KBnpfGfPsw9Qk34PfQYozYrk4_7A_AJ3Q7Ju1fFgUCpw7bFI_EEPWJiamf4wgkUv9jKfJbZ8FSdeiHTEHZnkDRw_XSN0IGlRnMEDN7wArIgO6McUjxUmvRMgVVE7_dWZ6643u-WkicIza5betY8A&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
 
-async function loadIssues() {
-  const res = await fetch(API_URL);
-  const data = await res.json();
+function loadIssues() {
+  const oldScript = document.getElementById("jsonpScript");
+  if (oldScript) oldScript.remove();
 
+  const script = document.createElement("script");
+  script.id = "jsonpScript";
+  script.src = API_URL + "?callback=handleData&t=" + new Date().getTime();
+  document.body.appendChild(script);
+}
+
+function handleData(data) {
   const container = document.getElementById("issues");
   container.innerHTML = "";
 
@@ -250,16 +213,6 @@ async function loadIssues() {
         </p>
 
         <p>${issue.description}</p>
-
-        <div class="actions">
-          <input type="date" id="date-${issue.id}" />
-          <button onclick="updateIssue('${issue.id}')">
-            Gem dato
-          </button>
-          <button class="secondary" onclick="closeIssue('${issue.id}')">
-            Markér færdig
-          </button>
-        </div>
       </div>
     `;
   });
@@ -270,32 +223,6 @@ async function loadIssues() {
   document.getElementById("kpi-closed").innerText = closed;
   document.getElementById("lastUpdated").innerText =
     new Date().toLocaleTimeString();
-}
-
-async function updateIssue(id) {
-  const date = document.getElementById(`date-${id}`).value;
-
-  await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      id: id,
-      estimatedDate: date
-    })
-  });
-
-  loadIssues();
-}
-
-async function closeIssue(id) {
-  await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      id: id,
-      status: "Closed"
-    })
-  });
-
-  loadIssues();
 }
 
 loadIssues();
