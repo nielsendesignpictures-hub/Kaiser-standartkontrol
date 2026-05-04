@@ -216,6 +216,8 @@ function loadData(manual=false){
 
 /* CALLBACK */
 function handleData(data){
+  render(data.issues, data.comments);
+}
 
   render(data);
 
@@ -227,7 +229,7 @@ function handleData(data){
 }
 
 /* RENDER */
-function render(data){
+function render(issues, comments){
 
   const container=document.getElementById("issues");
   container.innerHTML="";
@@ -235,13 +237,15 @@ function render(data){
   let open=0,high=0,progress=0,closed=0;
   const locationCount={};
 
-  data.sort((a,b)=>{
+  issues.sort((a,b)=>{
     if(a.severity==="High") return -1;
     if(b.severity==="High") return 1;
     return 0;
   });
 
-  data.forEach(issue=>{
+  issues.forEach(issue=>{
+    const issueComments =
+  comments.filter(c => c.issueId === issue.id);
 
     if(issue.status==="Closed") closed++;
     else open++;
@@ -263,6 +267,29 @@ function render(data){
           <h3>${issue.location}</h3>
           <span class="severity-${issue.severity?.toLowerCase()}">
             ${issue.severity||""}
+            <hr>
+
+<textarea id="comment-${issue.id}"
+  placeholder="Skriv status..."
+  style="width:100%;margin-top:10px;"></textarea>
+
+<button class="btn-dark"
+  onclick="saveComment('${issue.id}','${issue.location}')">
+  Tilføj kommentar
+</button>
+
+${issueComments.length ? `
+  <div style="margin-top:15px;">
+    <strong>Historik:</strong>
+    ${issueComments.map(c=>`
+      <div style="font-size:14px;margin-top:8px;">
+        <strong>${c.author}</strong>
+        (${new Date(c.createdAt).toLocaleString()}):
+        <br>${c.comment}
+      </div>
+    `).join("")}
+  </div>
+` : ""}
           </span>
         </div>
 
@@ -365,6 +392,27 @@ function filterLocation(loc){
 loadData();
 setInterval(()=>loadData(false),20000);
 
+function saveComment(id, location){
+
+  const comment =
+    document.getElementById("comment-"+id).value;
+
+  if(!comment) return;
+
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update"+
+    "&id="+encodeURIComponent(id)+
+    "&comment="+encodeURIComponent(comment)+
+    "&author=Håndværker"+
+    "&location="+encodeURIComponent(location)+
+    "&t="+Date.now();
+
+  document.body.appendChild(script);
+
+  setTimeout(()=>loadData(true),1000);
+}
 </script>
 
 </body>
