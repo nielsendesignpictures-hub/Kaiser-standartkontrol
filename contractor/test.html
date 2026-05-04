@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TEST</title>
+</head>
+<body>
+
+<h1>Test Load</h1>
+<div id="out"></div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxKNg1OGlbT0cOlPhW4BpM2L-_9EVdDyhn9lhnyuYLiNrofIQaR0FJ15Vwc7ROg1clv/exec";
+
+function loadData(){
+  const script = document.createElement("script");
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  document.body.appendChild(script);
+}
+
+function handleData(data){
+
+  console.log("DATA:", data);
+
+  const issues = data.issues || [];
+
+  document.getElementById("out").innerHTML =
+    "<pre>" + JSON.stringify(issues, null, 2) + "</pre>";
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
