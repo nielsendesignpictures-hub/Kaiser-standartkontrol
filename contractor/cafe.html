@@ -32,8 +32,15 @@ select{
   border:1px solid #e5e7eb;
 }
 
-.status-open{color:#dc2626;font-weight:600}
-.status-inprogress{color:#f59e0b;font-weight:600}
+.status-open{
+  color:#dc2626;
+  font-weight:600;
+}
+
+.status-inprogress{
+  color:#f59e0b;
+  font-weight:600;
+}
 
 .deadline{
   margin-top:10px;
@@ -43,6 +50,17 @@ select{
 .overdue{
   color:#dc2626;
   font-weight:600;
+}
+
+.history{
+  margin-top:15px;
+  padding-top:10px;
+  border-top:1px solid #eee;
+}
+
+.history-entry{
+  font-size:14px;
+  margin-top:8px;
 }
 </style>
 </head>
@@ -61,7 +79,8 @@ select{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxKNg1OGlbT0cOlPhW4BpM2L-_9EVdDyhn9lhnyuYLiNrofIQaR0FJ15Vwc7ROg1clv/exec";
 
-let ALL_DATA = [];
+let ALL_ISSUES = [];
+let ALL_COMMENTS = [];
 let CURRENT_LOCATION = null;
 
 /* LOAD DATA */
@@ -76,7 +95,8 @@ function loadData(){
 }
 
 function handleData(data){
-  ALL_DATA = data;
+  ALL_ISSUES = data.issues;
+  ALL_COMMENTS = data.comments;
   populateLocations();
 }
 
@@ -85,7 +105,7 @@ function populateLocations(){
 
   const select=document.getElementById("locationSelect");
 
-  const locations=[...new Set(ALL_DATA.map(i=>i.location))];
+  const locations=[...new Set(ALL_ISSUES.map(i=>i.location))];
 
   select.innerHTML='<option value="">Vælg lokation</option>';
 
@@ -107,8 +127,9 @@ function render(){
 
   if(!CURRENT_LOCATION) return;
 
-  // Sortér High severity først
-  const filtered = ALL_DATA
+  const today = new Date().toISOString().split("T")[0];
+
+  const filtered = ALL_ISSUES
     .filter(issue =>
       issue.location===CURRENT_LOCATION &&
       issue.status!=="Closed"
@@ -119,9 +140,15 @@ function render(){
       return 0;
     });
 
-  const today = new Date().toISOString().split("T")[0];
+  if(filtered.length===0){
+    container.innerHTML="<p>Ingen aktive sager ✅</p>";
+    return;
+  }
 
   filtered.forEach(issue=>{
+
+    const issueComments =
+      ALL_COMMENTS.filter(c=>c.issueId===issue.id);
 
     const statusClass =
       issue.status==="In Progress"
@@ -134,6 +161,7 @@ function render(){
 
     container.innerHTML+=`
       <div class="card">
+
         <h3>${issue.description}</h3>
 
         <p class="${statusClass}">
@@ -150,13 +178,24 @@ function render(){
             Ikke planlagt endnu
           </div>
         `}
+
+        ${issueComments.length ? `
+          <div class="history">
+            <strong>Historik:</strong>
+            ${issueComments.map(c=>`
+              <div class="history-entry">
+                <strong>${c.author}</strong>
+                (${new Date(c.createdAt).toLocaleString()}):
+                <br>
+                ${c.comment}
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
+
       </div>
     `;
   });
-
-  if(filtered.length===0){
-    container.innerHTML="<p>Ingen aktive sager ✅</p>";
-  }
 }
 
 loadData();
