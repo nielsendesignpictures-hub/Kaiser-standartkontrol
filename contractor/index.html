@@ -1,30 +1,68 @@
 <!DOCTYPE html>
-<html lang="da">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Driftsportal</title>
-<link rel="stylesheet" href="contractor.css">
+  <title>Fejl Dashboard</title>
+  <style>
+    body { font-family: Arial; background:#111; color:white; }
+    table { width:100%; border-collapse: collapse; }
+    th, td { padding:10px; border-bottom:1px solid #333; }
+    input { padding:5px; }
+    button { padding:5px 10px; }
+  </style>
 </head>
 <body>
 
-<div class="container">
+<h2>Åbne Fejl</h2>
 
-  <div class="card">
+<table id="issuesTable">
+  <thead>
+    <tr>
+      <th>Lokation</th>
+      <th>Beskrivelse</th>
+      <th>Severity</th>
+      <th>Status</th>
+      <th>Færdig dato</th>
+      <th>Gem</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-    <div class="card-header">
-      <div class="title">
-        <span class="icon">🔧</span>
-        <h2>Driftsfejl</h2>
-      </div>
-      <div id="openCount" class="count">0</div>
-    </div>
+<script>
+const API_URL = "DIN_APPS_SCRIPT_URL_HER";
 
-    <div id="faultList" class="fault-list"></div>
+async function loadData() {
+  const res = await fetch(API_URL);
+  const data = await res.json();
 
-  </div>
+  const tbody = document.querySelector("#issuesTable tbody");
+  tbody.innerHTML = "";
 
-</div>
+  data.forEach(issue => {
+    if(issue.status !== "Closed") {
+      const row = `
+        <tr>
+          <td>${issue.location}</td>
+          <td>${issue.description}</td>
+          <td>${issue.severity}</td>
+          <td>${issue.status}</td>
+          <td>
+            <input type="date" id="date-${issue.id}">
+          </td>
+          <td>
+            <button onclick="updateIssue('${issue.id}')">
+              Gem
+            </button>
+          </td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    }
+  });
+}
 
-<script src="contractor.js"></script>
+loadData();
+</script>
+
 </body>
 </html>
