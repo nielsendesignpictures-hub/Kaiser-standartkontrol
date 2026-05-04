@@ -95,8 +95,10 @@ function loadData(){
 }
 
 function handleData(data){
-  ALL_ISSUES = data.issues;
-  ALL_COMMENTS = data.comments;
+
+  ALL_ISSUES = data.issues || [];
+  ALL_COMMENTS = data.comments || [];
+
   populateLocations();
 }
 
