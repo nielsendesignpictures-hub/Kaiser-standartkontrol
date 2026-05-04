@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Kaiser – Fejl & Mangler</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Inter,sans-serif;
+  background:#f3f4f6;
+  padding:40px;
+}
+
+h1{
+  margin-bottom:30px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  border:1px solid #e5e7eb;
+}
+
+.status-open{color:#dc2626;font-weight:600}
+.status-inprogress{color:#f59e0b;font-weight:600}
+.status-closed{color:#16a34a;font-weight:600}
+
+.deadline{
+  margin-top:10px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="locationTitle"></h1>
+<div id="issues"></div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxKNg1OGlbT0cOlPhW4BpM2L-_9EVdDyhn9lhnyuYLiNrofIQaR0FJ15Vwc7ROg1clv/exec";
+
+const params = new URLSearchParams(window.location.search);
+const LOCATION = params.get("location");
+
+document.getElementById("locationTitle").innerText =
+  LOCATION ? LOCATION : "Ingen lokation valgt";
+
+function loadData(){
+
+  const old=document.getElementById("jsonp");
+  if(old) old.remove();
+
+  const script=document.createElement("script");
+  script.id="jsonp";
+  script.src=API_URL+"?callback=handleData&t="+Date.now();
+  document.body.appendChild(script);
+}
+
+function handleData(data){
+
+  const container=document.getElementById("issues");
+  container.innerHTML="";
+
+  data.forEach(issue=>{
+
+    if(issue.location!==LOCATION) return;
+
+    const statusClass =
+      issue.status==="Closed" ? "status-closed" :
+      issue.status==="In Progress" ? "status-inprogress" :
+      "status-open";
+
+    const today = new Date().toISOString().split("T")[0];
+    const overdue =
+      issue.estimatedCompletion &&
+      issue.status!=="Closed" &&
+      issue.estimatedCompletion < today;
+
+    container.innerHTML+=`
+      <div class="card">
+        <h3>${issue.description}</h3>
+        <p class="${statusClass}">
+          ${issue.status}
+        </p>
+
+        ${issue.estimatedCompletion ? `
+          <div class="deadline">
+            Forventet færdig: ${issue.estimatedCompletion}
+            ${overdue ? "<span style='color:red'>(Forsinket)</span>" : ""}
+          </div>
+        ` : `
+          <div class="deadline">
+            Ikke planlagt endnu
+          </div>
+        `}
+      </div>
+    `;
+  });
+}
+
+loadData();
+setInterval(loadData,20000);
+
+</script>
+
+</body>
+</html>
