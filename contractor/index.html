@@ -8,10 +8,8 @@
 
 <style>
 :root{
-  --black:#0d0f14;
   --sidebar:#000;
-  --white:#ffffff;
-  --border:#e6e6e6;
+  --border:#e5e7eb;
   --muted:#6b7280;
   --danger:#dc2626;
   --warning:#f59e0b;
@@ -34,6 +32,7 @@ body{
   color:white;
   height:100vh;
   padding:30px 20px;
+  overflow-y:auto;
 }
 
 .logo{
@@ -43,19 +42,20 @@ body{
 }
 
 .menu-item{
-  padding:12px 14px;
+  padding:10px 14px;
   border-radius:8px;
-  margin-bottom:8px;
+  margin-bottom:6px;
   cursor:pointer;
   transition:.2s;
 }
 
-.menu-item:hover{
-  background:#1f1f1f;
-}
+.menu-item:hover{background:#1f1f1f}
+.menu-item.active{background:#1f1f1f}
 
-.menu-item.active{
-  background:#1f1f1f;
+hr{
+  border:none;
+  border-top:1px solid #222;
+  margin:25px 0;
 }
 
 /* Main */
@@ -140,6 +140,7 @@ button{
 
 .btn-dark{background:black;color:white}
 .btn-success{background:var(--success);color:white}
+.btn-light{background:#ddd}
 </style>
 </head>
 
@@ -147,15 +148,33 @@ button{
 
 <div class="sidebar">
   <div class="logo">Café Kaiser</div>
-  <div class="menu-item active" onclick="setView('open')" id="nav-open">Åbne sager</div>
-  <div class="menu-item" onclick="setView('closed')" id="nav-closed">Færdige</div>
+
+  <div id="nav-open" class="menu-item active" onclick="setView('open')">
+    Åbne sager
+  </div>
+
+  <div id="nav-closed" class="menu-item" onclick="setView('closed')">
+    Færdige
+  </div>
+
+  <hr>
+
+  <strong style="font-size:13px;color:#aaa;">Lokationer</strong>
+  <div id="locationList"></div>
+
 </div>
 
 <div class="main">
 
   <div class="header">
     <h1 id="title">Åbne sager</h1>
-    <div class="live">● Live</div>
+    <div>
+      <span id="liveStatus" class="live">● Live</span>
+      <span id="lastUpdated" style="margin-left:10px;color:#6b7280;"></span>
+      <button class="btn-light" onclick="loadData(true)" style="margin-left:20px;">
+        Opdater
+      </button>
+    </div>
   </div>
 
   <div class="kpi-grid">
@@ -170,10 +189,22 @@ button{
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxh_V_dfa0NtQWOQ8rkzqDq8z9GnRGLHXhneT7F_dQOOPO9XKem4M6UtT_sR6n05WVp/exec";
-let CURRENT_VIEW="open";
 
-function loadData(){
+const API_URL = "https://script.google.com/macros/s/AKfycbxh_V_dfa0NtQWOQ8rkzqDq8z9GnRGLHXhneT7F_dQOOPO9XKem4M6UtT_sR6n05WVp/exec";
+
+let CURRENT_VIEW="open";
+let CURRENT_LOCATION=null;
+let isLoading=false;
+
+/* LOAD DATA */
+function loadData(manual=false){
+
+  if(isLoading) return;
+  isLoading=true;
+
+  document.getElementById("liveStatus").innerText=
+    manual ? "● Opdaterer..." : "● Auto opdaterer...";
+
   const old=document.getElementById("jsonp");
   if(old) old.remove();
 
@@ -183,16 +214,26 @@ function loadData(){
   document.body.appendChild(script);
 }
 
+/* CALLBACK */
 function handleData(data){
+
   render(data);
+
+  document.getElementById("liveStatus").innerText="● Live";
+  document.getElementById("lastUpdated").innerText=
+    new Date().toLocaleTimeString();
+
+  isLoading=false;
 }
 
+/* RENDER */
 function render(data){
 
   const container=document.getElementById("issues");
   container.innerHTML="";
 
   let open=0,high=0,progress=0,closed=0;
+  const locationCount={};
 
   data.sort((a,b)=>{
     if(a.severity==="High") return -1;
@@ -208,8 +249,13 @@ function render(data){
     if(issue.severity==="High") high++;
     if(issue.status==="In Progress") progress++;
 
+    if(issue.status!=="Closed"){
+      locationCount[issue.location]=(locationCount[issue.location]||0)+1;
+    }
+
     if(CURRENT_VIEW==="open" && issue.status==="Closed") return;
     if(CURRENT_VIEW==="closed" && issue.status!=="Closed") return;
+    if(CURRENT_LOCATION && issue.location!==CURRENT_LOCATION) return;
 
     container.innerHTML+=`
       <div class="card">
@@ -225,9 +271,14 @@ function render(data){
 
         ${CURRENT_VIEW==="open" ? `
         <div class="actions">
-          <input type="date" id="date-${issue.id}" value="${issue.estimatedCompletion||""}">
-          <button class="btn-dark" onclick="saveDate('${issue.id}')">Gem dato</button>
-          <button class="btn-success" onclick="markDone('${issue.id}')">Færdig</button>
+          <input type="date" id="date-${issue.id}"
+            value="${issue.estimatedCompletion||""}">
+          <button class="btn-dark" onclick="saveDate('${issue.id}')">
+            Gem dato
+          </button>
+          <button class="btn-success" onclick="markDone('${issue.id}')">
+            Færdig
+          </button>
         </div>` : `
         <p class="muted">Afsluttet</p>
         `}
@@ -239,41 +290,70 @@ function render(data){
   document.getElementById("kpi-high").innerText=high;
   document.getElementById("kpi-progress").innerText=progress;
   document.getElementById("kpi-closed").innerText=closed;
+
+  /* Sidebar lokationer */
+  const locContainer=document.getElementById("locationList");
+  locContainer.innerHTML="";
+
+  Object.keys(locationCount).forEach(loc=>{
+    locContainer.innerHTML+=`
+      <div class="menu-item"
+           onclick="filterLocation('${loc}')">
+        ${loc} (${locationCount[loc]})
+      </div>
+    `;
+  });
 }
 
+/* SAVE DATE */
 function saveDate(id){
   const date=document.getElementById("date-"+id).value;
 
   fetch(API_URL,{
     method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
     body:JSON.stringify({
       id:id,
       estimatedCompletion:date
     })
-  }).then(()=>loadData());
+  }).then(()=>loadData(true));
 }
 
+/* MARK DONE */
 function markDone(id){
   fetch(API_URL,{
     method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
     body:JSON.stringify({
       id:id,
       status:"Closed"
     })
-  }).then(()=>loadData());
+  }).then(()=>loadData(true));
 }
 
+/* NAVIGATION */
 function setView(view){
   CURRENT_VIEW=view;
+  CURRENT_LOCATION=null;
+
   document.getElementById("title").innerText=
     view==="open"?"Åbne sager":"Færdige";
+
   document.getElementById("nav-open").classList.toggle("active",view==="open");
   document.getElementById("nav-closed").classList.toggle("active",view==="closed");
-  loadData();
+
+  loadData(true);
 }
 
+function filterLocation(loc){
+  CURRENT_LOCATION=loc;
+  loadData(true);
+}
+
+/* INIT */
 loadData();
-setInterval(loadData,30000);
+setInterval(()=>loadData(false),20000);
+
 </script>
 
 </body>
