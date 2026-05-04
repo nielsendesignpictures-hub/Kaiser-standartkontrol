@@ -213,7 +213,7 @@ let CURRENT_VIEW="open";
 let CURRENT_LOCATION=null;
 let isLoading=false;
 
-/* LOAD DATA */
+/* LOAD */
 function loadData(manual=false){
 
   if(isLoading) return;
@@ -232,15 +232,21 @@ function loadData(manual=false){
 }
 
 function handleData(data){
-  render(data.issues, data.comments);
+
+  const issues = data.issues || [];
+  const comments = data.comments || [];
+
+  render(issues, comments);
+
   document.getElementById("liveStatus").innerText="● Live";
   document.getElementById("lastUpdated").innerText=
     new Date().toLocaleTimeString();
+
   isLoading=false;
 }
 
 /* RENDER */
-function render(issues, comments){
+function render(issues = [], comments = []){
 
   const container=document.getElementById("issues");
   container.innerHTML="";
@@ -290,12 +296,10 @@ function render(issues, comments){
           <input type="date"
             id="date-${issue.id}"
             value="${issue.estimatedCompletion||""}">
-
           <button class="btn-dark"
             onclick="saveDate('${issue.id}')">
             Gem dato
           </button>
-
           <button class="btn-success"
             onclick="markDone('${issue.id}')">
             Færdig
@@ -395,7 +399,6 @@ function saveComment(id, location){
   setTimeout(()=>loadData(true),1000);
 }
 
-/* NAV */
 function setView(view){
   CURRENT_VIEW=view;
   CURRENT_LOCATION=null;
