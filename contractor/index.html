@@ -181,7 +181,8 @@ function loadIssues() {
   script.src = API_URL + "?callback=handleData&t=" + new Date().getTime();
   document.body.appendChild(script);
 }
-
+function handleData(data) {
+  console.log("DATA:", data);
 function handleData(data) {
   const container = document.getElementById("issues");
   container.innerHTML = "";
