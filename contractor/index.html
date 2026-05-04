@@ -307,28 +307,33 @@ function render(data){
 
 /* SAVE DATE */
 function saveDate(id){
-  const date=document.getElementById("date-"+id).value;
 
-  fetch(API_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"text/plain;charset=utf-8" },
-    body:JSON.stringify({
-      id:id,
-      estimatedCompletion:date
-    })
-  }).then(()=>loadData(true));
+  const date = document.getElementById("date-"+id).value;
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + id +
+    "&estimatedCompletion=" + date +
+    "&t=" + Date.now();
+
+  document.body.appendChild(script);
+
+  setTimeout(()=>loadData(true),800);
 }
 
 /* MARK DONE */
 function markDone(id){
-  fetch(API_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"text/plain;charset=utf-8" },
-    body:JSON.stringify({
-      id:id,
-      status:"Closed"
-    })
-  }).then(()=>loadData(true));
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + id +
+    "&status=Closed&t=" + Date.now();
+
+  document.body.appendChild(script);
+
+  setTimeout(()=>loadData(true),800);
 }
 
 /* NAVIGATION */
