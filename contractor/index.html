@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Kaiser – Operations</title>
+<title>Café Kaiser – Håndværker Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -124,6 +124,13 @@ hr{
   margin-top:15px;
   display:flex;
   gap:10px;
+  flex-wrap:wrap;
+}
+
+textarea{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
 }
 
 input[type="date"]{
@@ -141,6 +148,17 @@ button{
 .btn-dark{background:black;color:white}
 .btn-success{background:var(--success);color:white}
 .btn-light{background:#ddd}
+
+.history{
+  margin-top:15px;
+  padding-top:10px;
+  border-top:1px solid #eee;
+}
+
+.history-entry{
+  font-size:14px;
+  margin-top:8px;
+}
 </style>
 </head>
 
@@ -161,7 +179,6 @@ button{
 
   <strong style="font-size:13px;color:#aaa;">Lokationer</strong>
   <div id="locationList"></div>
-
 </div>
 
 <div class="main">
@@ -196,7 +213,7 @@ let CURRENT_VIEW="open";
 let CURRENT_LOCATION=null;
 let isLoading=false;
 
-/* LOAD */
+/* LOAD DATA */
 function loadData(manual=false){
 
   if(isLoading) return;
@@ -214,17 +231,11 @@ function loadData(manual=false){
   document.body.appendChild(script);
 }
 
-/* CALLBACK */
 function handleData(data){
   render(data.issues, data.comments);
-}
-
-  render(data);
-
   document.getElementById("liveStatus").innerText="● Live";
   document.getElementById("lastUpdated").innerText=
     new Date().toLocaleTimeString();
-
   isLoading=false;
 }
 
@@ -244,8 +255,6 @@ function render(issues, comments){
   });
 
   issues.forEach(issue=>{
-    const issueComments =
-  comments.filter(c => c.issueId === issue.id);
 
     if(issue.status==="Closed") closed++;
     else open++;
@@ -261,35 +270,15 @@ function render(issues, comments){
     if(CURRENT_VIEW==="closed" && issue.status!=="Closed") return;
     if(CURRENT_LOCATION && issue.location!==CURRENT_LOCATION) return;
 
+    const issueComments =
+      comments.filter(c=>c.issueId===issue.id);
+
     container.innerHTML+=`
       <div class="card">
         <div class="card-header">
           <h3>${issue.location}</h3>
           <span class="severity-${issue.severity?.toLowerCase()}">
             ${issue.severity||""}
-            <hr>
-
-<textarea id="comment-${issue.id}"
-  placeholder="Skriv status..."
-  style="width:100%;margin-top:10px;"></textarea>
-
-<button class="btn-dark"
-  onclick="saveComment('${issue.id}','${issue.location}')">
-  Tilføj kommentar
-</button>
-
-${issueComments.length ? `
-  <div style="margin-top:15px;">
-    <strong>Historik:</strong>
-    ${issueComments.map(c=>`
-      <div style="font-size:14px;margin-top:8px;">
-        <strong>${c.author}</strong>
-        (${new Date(c.createdAt).toLocaleString()}):
-        <br>${c.comment}
-      </div>
-    `).join("")}
-  </div>
-
           </span>
         </div>
 
@@ -298,17 +287,42 @@ ${issueComments.length ? `
 
         ${CURRENT_VIEW==="open" ? `
         <div class="actions">
-          <input type="date" id="date-${issue.id}"
+          <input type="date"
+            id="date-${issue.id}"
             value="${issue.estimatedCompletion||""}">
-          <button class="btn-dark" onclick="saveDate('${issue.id}')">
+
+          <button class="btn-dark"
+            onclick="saveDate('${issue.id}')">
             Gem dato
           </button>
-          <button class="btn-success" onclick="markDone('${issue.id}')">
+
+          <button class="btn-success"
+            onclick="markDone('${issue.id}')">
             Færdig
           </button>
-        </div>` : `
-        <p class="muted">Afsluttet</p>
-        `}
+        </div>
+
+        <textarea id="comment-${issue.id}"
+          placeholder="Skriv status..."></textarea>
+
+        <button class="btn-dark"
+          onclick="saveComment('${issue.id}','${issue.location}')">
+          Tilføj kommentar
+        </button>
+        ` : ""}
+
+        ${issueComments.length ? `
+          <div class="history">
+            <strong>Historik:</strong>
+            ${issueComments.map(c=>`
+              <div class="history-entry">
+                <strong>${c.author}</strong>
+                (${new Date(c.createdAt).toLocaleString()}):
+                <br>${c.comment}
+              </div>
+            `).join("")}
+          </div>
+        ` : ""}
       </div>
     `;
   });
@@ -331,15 +345,11 @@ ${issueComments.length ? `
   });
 }
 
-/* UPDATE VIA GET */
+/* UPDATE */
 function saveDate(id){
 
   const date=document.getElementById("date-"+id).value;
-
-  if(!date){
-    alert("Vælg en dato først");
-    return;
-  }
+  if(!date) return;
 
   const script=document.createElement("script");
   script.src=
@@ -350,12 +360,10 @@ function saveDate(id){
     "&t="+Date.now();
 
   document.body.appendChild(script);
-
   setTimeout(()=>loadData(true),1000);
 }
 
 function markDone(id){
-
   const script=document.createElement("script");
   script.src=
     API_URL+
@@ -365,38 +373,12 @@ function markDone(id){
     "&t="+Date.now();
 
   document.body.appendChild(script);
-
   setTimeout(()=>loadData(true),1000);
 }
 
-/* NAV */
-function setView(view){
-  CURRENT_VIEW=view;
-  CURRENT_LOCATION=null;
-
-  document.getElementById("title").innerText=
-    view==="open"?"Åbne sager":"Færdige";
-
-  document.getElementById("nav-open").classList.toggle("active",view==="open");
-  document.getElementById("nav-closed").classList.toggle("active",view==="closed");
-
-  loadData(true);
-}
-
-function filterLocation(loc){
-  CURRENT_LOCATION=loc;
-  loadData(true);
-}
-
-/* INIT */
-loadData();
-setInterval(()=>loadData(false),20000);
-
 function saveComment(id, location){
 
-  const comment =
-    document.getElementById("comment-"+id).value;
-
+  const comment=document.getElementById("comment-"+id).value;
   if(!comment) return;
 
   const script=document.createElement("script");
@@ -410,9 +392,26 @@ function saveComment(id, location){
     "&t="+Date.now();
 
   document.body.appendChild(script);
-
   setTimeout(()=>loadData(true),1000);
 }
+
+/* NAV */
+function setView(view){
+  CURRENT_VIEW=view;
+  CURRENT_LOCATION=null;
+  document.getElementById("title").innerText=
+    view==="open"?"Åbne sager":"Færdige";
+  loadData(true);
+}
+
+function filterLocation(loc){
+  CURRENT_LOCATION=loc;
+  loadData(true);
+}
+
+loadData();
+setInterval(()=>loadData(false),20000);
+
 </script>
 
 </body>
