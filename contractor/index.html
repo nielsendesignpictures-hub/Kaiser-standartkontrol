@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaiser Operations</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -31,7 +30,7 @@ body {
   display: flex;
 }
 
-/* SIDEBAR */
+/* Sidebar */
 .sidebar {
   width: 240px;
   background: var(--sidebar);
@@ -58,7 +57,7 @@ body {
   color: white;
 }
 
-/* MAIN */
+/* Main */
 .main {
   flex: 1;
   padding: 40px;
@@ -100,7 +99,6 @@ body {
   font-size: 32px;
 }
 
-/* ISSUE CARDS */
 .issue-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -138,7 +136,7 @@ body {
 <div class="main">
 
   <div class="header">
-    <h1>Rasmus's Håndværker portal</h1>
+    <h1>Operations Dashboard</h1>
   </div>
 
   <div class="live-bar">
@@ -170,20 +168,32 @@ body {
 </div>
 
 <script>
+
 const API_URL = "https://script.google.com/macros/s/AKfycbxh_V_dfa0NtQWOQ8rkzqDq8z9GnRGLHXhneT7F_dQOOPO9XKem4M6UtT_sR6n05WVp/exec";
 
+/* Load JSONP */
 function loadIssues() {
+  console.log("Loading JSONP...");
+
   const oldScript = document.getElementById("jsonpScript");
   if (oldScript) oldScript.remove();
 
   const script = document.createElement("script");
   script.id = "jsonpScript";
-  script.src = API_URL + "?callback=handleData&t=" + new Date().getTime();
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
   document.body.appendChild(script);
 }
+
+/* Callback fra Apps Script */
 function handleData(data) {
-  console.log("DATA:", data);
-function handleData(data) {
+  console.log("DATA RECEIVED:", data);
+
+  renderIssues(data);
+}
+
+/* Render dashboard */
+function renderIssues(data) {
+
   const container = document.getElementById("issues");
   container.innerHTML = "";
 
@@ -197,6 +207,7 @@ function handleData(data) {
     }
 
     open++;
+
     if(issue.severity === "High") high++;
     if(issue.status === "In Progress") progress++;
 
@@ -204,16 +215,14 @@ function handleData(data) {
       <div class="issue-card">
         <div class="issue-header">
           <h3>${issue.location}</h3>
-          <span class="severity-${issue.severity.toLowerCase()}">
-            ${issue.severity}
+          <span class="severity-${issue.severity ? issue.severity.toLowerCase() : 'low'}">
+            ${issue.severity || ""}
           </span>
         </div>
-
         <p class="muted">
-          ${issue.area} • ${issue.issueType}
+          ${issue.area || ""} • ${issue.issueType || ""}
         </p>
-
-        <p>${issue.description}</p>
+        <p>${issue.description || ""}</p>
       </div>
     `;
   });
@@ -226,8 +235,10 @@ function handleData(data) {
     new Date().toLocaleTimeString();
 }
 
+/* Init */
 loadIssues();
 setInterval(loadIssues, 30000);
+
 </script>
 
 </body>
