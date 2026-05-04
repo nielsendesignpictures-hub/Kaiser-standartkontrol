@@ -32,15 +32,8 @@ select{
   border:1px solid #e5e7eb;
 }
 
-.status-open{
-  color:#dc2626;
-  font-weight:600;
-}
-
-.status-inprogress{
-  color:#f59e0b;
-  font-weight:600;
-}
+.status-open{color:#dc2626;font-weight:600;}
+.status-inprogress{color:#f59e0b;font-weight:600;}
 
 .deadline{
   margin-top:10px;
@@ -83,8 +76,9 @@ let ALL_ISSUES = [];
 let ALL_COMMENTS = [];
 let CURRENT_LOCATION = null;
 
-/* LOAD DATA */
+/* LOAD */
 function loadData(){
+
   const old=document.getElementById("jsonp");
   if(old) old.remove();
 
@@ -96,8 +90,9 @@ function loadData(){
 
 function handleData(data){
 
-  ALL_ISSUES = data.issues || [];
-  ALL_COMMENTS = data.comments || [];
+  // Sikkerhed hvis noget ændres igen senere
+  ALL_ISSUES = Array.isArray(data.issues) ? data.issues : [];
+  ALL_COMMENTS = Array.isArray(data.comments) ? data.comments : [];
 
   populateLocations();
 }
@@ -121,7 +116,7 @@ function populateLocations(){
   };
 }
 
-/* Render issues */
+/* Render */
 function render(){
 
   const container=document.getElementById("issues");
@@ -159,7 +154,7 @@ function render(){
 
     const overdue =
       issue.estimatedCompletion &&
-      issue.estimatedCompletion < today;
+      issue.estimatedCompletion.split("T")[0] < today;
 
     container.innerHTML+=`
       <div class="card">
@@ -172,7 +167,7 @@ function render(){
 
         ${issue.estimatedCompletion ? `
           <div class="deadline">
-            Forventet færdig: ${issue.estimatedCompletion}
+            Forventet færdig: ${issue.estimatedCompletion.split("T")[0]}
             ${overdue ? "<span class='overdue'> (Forsinket)</span>" : ""}
           </div>
         ` : `
@@ -188,8 +183,7 @@ function render(){
               <div class="history-entry">
                 <strong>${c.author}</strong>
                 (${new Date(c.createdAt).toLocaleString()}):
-                <br>
-                ${c.comment}
+                <br>${c.comment}
               </div>
             `).join("")}
           </div>
