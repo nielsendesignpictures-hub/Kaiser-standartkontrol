@@ -3,565 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Financial Intelligence Dashboard</title>
+<title>Executive Financial Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-body: #050505;
-  --bg-card: #111111;
-  --bg-sidebar: #0a0a0a;
-  --text-main: #ffffff;
-  --text-muted: #888888;
-  --accent-orange: #FF512F;
-  --accent-red: #DD2476;
-  --border-color: #222222;
+
+body{
+  margin:0;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:#050505;
+  color:white;
 }
 
-* { box-sizing: border-box; outline: none; }
-
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg-body);
-  color: var(--text-main);
-  height: 100vh;
-  display: flex;
-  overflow: hidden;
+.container{
+  padding:40px;
+  max-width:1400px;
+  margin:auto;
 }
 
-/* SIDEBAR */
-.sidebar {
-  width: 80px;
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 30px;
-  z-index: 10;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:40px;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
-  border-radius: 10px;
-  margin-bottom: 50px;
+.title{
+  font-size:26px;
+  font-weight:600;
 }
 
-.nav-item {
-  width: 45px;
-  height: 45px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--text-muted);
-  cursor: pointer;
-  margin-bottom: 15px;
-  transition: 0.3s;
+button{
+  background:#FF512F;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
 }
 
-.nav-item:hover, .nav-item.active {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
 }
 
-.nav-item.active {
-  background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+.card{
+  background:#111;
+  border:1px solid #222;
+  padding:25px;
+  border-radius:18px;
 }
 
-/* MAIN CONTENT */
-.main-content {
-  flex: 1;
-  padding: 40px;
-  overflow-y: auto;
-  position: relative;
+.kpi{
+  font-size:34px;
+  font-weight:700;
+  margin-top:8px;
 }
 
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
+.label{
+  font-size:12px;
+  color:#777;
+  text-transform:uppercase;
 }
 
-.page-title h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin: 0;
+.green{color:#22C55E;}
+.red{color:#EF4444;}
+.yellow{color:#FACC15;}
+
+.badge-card{
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.page-title p {
-  color: var(--text-muted);
-  margin: 5px 0 0 0;
-  font-size: 14px;
+.badge-card:hover{
+  transform:translateY(-4px);
+  border-color:#333;
 }
 
-.btn-primary {
-  background: var(--accent-orange);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255, 81, 47, 0.3);
+table{
+  width:100%;
+  margin-top:30px;
+  border-collapse:collapse;
 }
 
-.location-select {
-  background: #1a1a1a;
-  color: white;
-  border: 1px solid #333;
-  padding: 10px 15px;
-  border-radius: 10px;
+th,td{
+  padding:12px 0;
+  border-bottom:1px solid #222;
+  text-align:left;
 }
 
-/* DASHBOARD GRID */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 25px;
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
 }
 
-/* CARD STYLES */
-.card {
-  background: var(--bg-card);
-  border-radius: 20px;
-  padding: 25px;
-  border: 1px solid var(--border-color);
-  position: relative;
-  overflow: hidden;
+.modal-box{
+  background:#111;
+  padding:30px;
+  border-radius:18px;
+  width:400px;
 }
 
-.card-lg { grid-column: span 8; }
-.card-md { grid-column: span 4; }
-.card-sm { grid-column: span 3; }
-
-@media (max-width: 1200px) {
-  .card-lg, .card-md, .card-sm { grid-column: span 6; }
-}
-@media (max-width: 800px) {
-  .card-lg, .card-md, .card-sm { grid-column: span 12; }
-  .sidebar { width: 60px; }
-}
-
-.kpi-value {
-  font-size: 38px;
-  font-weight: 700;
-  margin: 10px 0;
-  letter-spacing: -1px;
-}
-
-.kpi-label {
-  font-size: 13px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-dot {
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 6px;
-}
-
-.gradient-text-orange { background: linear-gradient(to right, #FF512F, #DD2476); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-.table-header {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-table { width: 100%; border-collapse: collapse; }
-th { text-align: left; color: var(--text-muted); font-weight: 500; padding: 10px 0; border-bottom: 1px solid #333; }
-td { padding: 15px 0; border-bottom: 1px solid #222; font-size: 14px; }
-tr:last-child td { border-bottom: none; }
-
-/* MODAL */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(5px);
-  z-index: 100;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-box {
-  background: #1A1A1A;
-  padding: 30px;
-  border-radius: 20px;
-  width: 400px;
-  border: 1px solid #333;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-}
-
-.modal-box h3 { margin-top: 0; }
-
-.input-group { margin-bottom: 15px; }
-.input-group label { display: block; color: var(--text-muted); font-size: 12px; margin-bottom: 5px; }
-.input-group input, .input-group select {
-  width: 100%;
-  background: #000;
-  border: 1px solid #333;
-  padding: 12px;
-  border-radius: 8px;
-  color: white;
+.modal-box input, .modal-box select{
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  background:#000;
+  border:1px solid #222;
+  color:white;
+  border-radius:8px;
 }
 
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="logo-icon"></div>
-  <div class="nav-item active" onclick="switchView('dashboard', this)">📊</div>
-  <div class="nav-item" onclick="switchView('overview', this)">🏢</div>
-  <div class="nav-item">⚙️</div>
+<div class="container">
+
+<div class="topbar">
+  <div class="title" id="pageTitle">Koncern Dashboard</div>
+  <div>
+    <button onclick="goHome()">Forside</button>
+    <button onclick="openModal()">+ Opret Måned</button>
+  </div>
 </div>
 
-<!-- MAIN -->
-<div class="main-content">
-  
-  <!-- HEADER -->
-  <div class="header-row">
-    <div class="page-title">
-      <h1 id="pageTitle">Executive Dashboard</h1>
-      <p id="pageSubtitle">Welcome back.</p>
-    </div>
-    
-    <div style="display:flex; gap:15px;">
-       <select id="locationSelect" class="location-select" onchange="render()">
-        <option value="Helsingør">Helsingør</option>
-        <option value="Hillerød">Hillerød</option>
-        <option value="Farum">Farum</option>
-        <option value="Hørsholm">Hørsholm</option>
-        <option value="Vanløse">Vanløse</option>
-      </select>
-      <button class="btn-primary" onclick="openModal()">+ Opret Måned</button>
-    </div>
-  </div>
-
-  <!-- KPI CARDS -->
-  <div class="grid-container" id="kpiGrid">
-    <!-- Injected via JS -->
-  </div>
-
-  <!-- BOTTOM SECTION (Chart + Table) -->
-  <div class="grid-container" style="margin-top: 25px;">
-    <div class="card card-lg">
-      <canvas id="chart" height="100"></canvas>
-    </div>
-    <div class="card card-md">
-      <div class="table-header">Seneste Aktivitet</div>
-      <table id="miniTable"></table>
-    </div>
-  </div>
-
-  <!-- FULL DATA TABLE -->
-  <div class="card" style="margin-top: 25px;">
-    <div class="table-header">Månedsoversigt</div>
-    <table id="dataTable"></table>
-  </div>
+<div id="content"></div>
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-box">
     <h3>Ny Måned</h3>
-    
-    <div class="input-group">
-      <label>Afdeling</label>
-      <select id="modalLoc">
-        <option value="Helsingør">Helsingør</option>
-        <option value="Hillerød">Hillerød</option>
-        <option value="Farum">Farum</option>
-        <option value="Hørsholm">Hørsholm</option>
-        <option value="Vanløse">Vanløse</option>
-      </select>
-    </div>
 
-    <div class="input-group">
-      <label>Måned & År</label>
-      <input type="month" id="inpMonth">
-    </div>
+    <select id="locInput">
+      <option>Helsingør</option>
+      <option>Hillerød</option>
+      <option>Farum</option>
+      <option>Hørsholm</option>
+      <option>Vanløse</option>
+    </select>
 
-    <div class="input-group">
-      <label>Omsætning (Inkl Moms)</label>
-      <input type="number" id="inpRev" placeholder="0">
-    </div>
+    <input type="month" id="monthInput">
+    <input type="number" id="revInput" placeholder="Omsætning (inkl moms)">
+    <input type="number" id="salInput" placeholder="Løn">
+    <input type="number" id="kitInput" placeholder="Køkken">
+    <input type="number" id="barInput" placeholder="Bar">
 
-    <div class="input-group">
-      <label>Løn (Ex Moms)</label>
-      <input type="number" id="inpSal" placeholder="0">
-    </div>
-
-    <div class="input-group">
-      <label>Køkken Indkøb</label>
-      <input type="number" id="inpKit" placeholder="0">
-    </div>
-
-    <div class="input-group">
-      <label>Bar Indkøb</label>
-      <input type="number" id="inpBar" placeholder="0">
-    </div>
-
-    <div style="display:flex; justify-content:space-between; margin-top:20px;">
-      <button class="btn-primary" style="background:#333;" onclick="closeModal()">Luk</button>
-      <button class="btn-primary" onclick="saveData()">Gem Data</button>
-    </div>
+    <button onclick="saveMonth()">Gem</button>
   </div>
 </div>
 
 <script>
-const VAT = 1.25;
 
-// CONFIGURATION
-const TARGETS = {
-  "Helsingør": { salary: 35, fb: 33 },
-  "Hillerød":  { salary: 35, fb: 33 },
-  "Farum":     { salary: 36, fb: 33 },
-  "Hørsholm":  { salary: 35, fb: 33 },
-  "Vanløse":   { salary: 35, fb: 33 }
+const VAT=1.25;
+
+const TARGETS={
+  "Helsingør":{salary:35,fb:33},
+  "Hillerød":{salary:35,fb:33},
+  "Farum":{salary:36,fb:33},
+  "Hørsholm":{salary:35,fb:33},
+  "Vanløse":{salary:35,fb:33}
 };
 
-let data = JSON.parse(localStorage.getItem("execFinV2")) || {};
-let currentView = 'dashboard';
-let chartInstance = null;
+let data=JSON.parse(localStorage.getItem("finStable"))||{
+  "Helsingør":[],
+  "Hillerød":[],
+  "Farum":[],
+  "Hørsholm":[],
+  "Vanløse":[]
+};
 
-function saveStorage() {
-  localStorage.setItem("execFinV2", JSON.stringify(data));
+let activeLocation=null;
+
+function saveStorage(){
+  localStorage.setItem("finStable",JSON.stringify(data));
 }
 
-// --- MODAL LOGIC ---
-function openModal() {
-  // Reset fields immediately
-  document.getElementById("inpMonth").valueAsDate = new Date();
-  document.getElementById("inpRev").value = '';
-  document.getElementById("inpSal").value = '';
-  document.getElementById("inpKit").value = '';
-  document.getElementById("inpBar").value = '';
-  document.getElementById("modalLoc").value = locationSelect.value;
-  
-  document.getElementById("modal").style.display = "flex";
+function openModal(){
+  monthInput.value="";
+  revInput.value="";
+  salInput.value="";
+  kitInput.value="";
+  barInput.value="";
+  modal.style.display="flex";
 }
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-function saveData() {
-  const loc = document.getElementById("modalLoc").value;
-  const m = document.getElementById("inpMonth").value;
-  const rev = parseFloat(document.getElementById("inpRev").value);
-  const sal = parseFloat(document.getElementById("inpSal").value);
-  const kit = parseFloat(document.getElementById("inpKit").value);
-  const bar = parseFloat(document.getElementById("inpBar").value);
-
-  if(!data[loc]) data[loc] = [];
-  
-  data[loc].push({ m, rev, sal, kit, bar });
+function saveMonth(){
+  const loc=locInput.value;
+  data[loc].push({
+    month:monthInput.value,
+    rev:+revInput.value,
+    sal:+salInput.value,
+    kit:+kitInput.value,
+    bar:+barInput.value
+  });
   saveStorage();
-  closeModal();
+  modal.style.display="none";
   render();
 }
 
-// --- RENDER LOGIC ---
-
-function getNet(rev) { return rev / VAT; }
-function getColor(pct, target) {
-  if(pct <= target) return "#22C55E"; // Green
-  if(pct <= target + 1) return "#FACC15"; // Yellow
-  return "#EF4444"; // Red
-}
-
-function switchView(view, el) {
-  currentView = view;
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  el.classList.add('active');
-  
-  document.getElementById("pageTitle").innerText = view === 'dashboard' ? "Executive Dashboard" : "Koncern Overblik";
-  document.getElementById("pageSubtitle").innerText = view === 'dashboard' ? 
-    locationSelect.value + " Performance" : 
-    "Samlet økonomi alle lokationer";
-    
+function goHome(){
+  activeLocation=null;
+  pageTitle.innerText="Koncern Dashboard";
   render();
 }
 
-function render() {
-  if(currentView === 'dashboard') renderDashboard();
-  else renderOverview();
+function render(){
+  if(!activeLocation){
+    renderHome();
+  }else{
+    renderLocation(activeLocation);
+  }
 }
 
-// DASHBOARD (Single Loc)
-function renderDashboard() {
-  const loc = locationSelect.value;
-  const months = data[loc] || [];
-  
-  // Sort chronologically
-  months.sort((a,b) => new Date(a.m) - new Date(b.m));
+function color(val,target){
+  if(val<=target) return "green";
+  if(val<=target+1) return "yellow";
+  return "red";
+}
 
-  const latest = months[months.length-1];
-  if(!latest) {
-    document.getElementById("kpiGrid").innerHTML = "<div style='color:#666'>Ingen data. Opret måned.</div>";
+function renderHome(){
+  content.innerHTML="";
+  let html="<div class='grid'>";
+  Object.keys(data).forEach(loc=>{
+    const months=data[loc];
+    if(months.length===0){
+      html+=`<div class="card badge-card" onclick="openLoc('${loc}')">
+      <div class="label">${loc}</div>
+      <div class="kpi">Ingen data</div>
+      </div>`;
+      return;
+    }
+    const latest=months[months.length-1];
+    const net=latest.rev/VAT;
+    const salPct=(latest.sal/net)*100;
+    const fbPct=((latest.kit+latest.bar)/net)*100;
+    const score=Math.max(0,100-(Math.max(salPct-TARGETS[loc].salary,0)*10)-(Math.max(fbPct-TARGETS[loc].fb,0)*10));
+    html+=`
+    <div class="card badge-card" onclick="openLoc('${loc}')">
+      <div class="label">${loc}</div>
+      <div class="kpi">${net.toLocaleString("da-DK",{maximumFractionDigits:0})}</div>
+      <div class="${color(salPct,TARGETS[loc].salary)}">Løn ${salPct.toFixed(1)}%</div>
+      <div class="${color(fbPct,TARGETS[loc].fb)}">F&B ${fbPct.toFixed(1)}%</div>
+      <div>Score ${score.toFixed(0)}</div>
+    </div>`;
+  });
+  html+="</div>";
+  content.innerHTML=html;
+}
+
+function openLoc(loc){
+  activeLocation=loc;
+  pageTitle.innerText=loc+" Performance";
+  render();
+}
+
+function renderLocation(loc){
+  const months=data[loc];
+  if(months.length===0){
+    content.innerHTML="<div class='card'>Ingen data endnu</div>";
     return;
   }
+  const latest=months[months.length-1];
+  const net=latest.rev/VAT;
+  const salPct=(latest.sal/net)*100;
+  const fbPct=((latest.kit+latest.bar)/net)*100;
 
-  const net = getNet(latest.rev);
-  const sPct = (latest.sal / net) * 100;
-  const fPct = ((latest.kit + latest.bar) / net) * 100;
-  
-  const t = TARGETS[loc];
-  const score = Math.max(0, 100 - Math.max(sPct-t.salary,0)*10 - Math.max(fPct-t.fb,0)*10);
+  content.innerHTML=`
+    <div class="grid">
+      <div class="card">
+        <div class="label">Omsætning (Ex Moms)</div>
+        <div class="kpi">${net.toLocaleString("da-DK",{maximumFractionDigits:0})}</div>
+      </div>
+      <div class="card">
+        <div class="label">Løn %</div>
+        <div class="kpi ${color(salPct,TARGETS[loc].salary)}">${salPct.toFixed(1)}%</div>
+      </div>
+      <div class="card">
+        <div class="label">Køkken + Bar %</div>
+        <div class="kpi ${color(fbPct,TARGETS[loc].fb)}">${fbPct.toFixed(1)}%</div>
+      </div>
+    </div>
 
-  // Top Cards
-  const kpiHTML = `
-    <div class="card card-sm">
-      <div class="kpi-label">Omsætning (Ex Moms)</div>
-      <div class="kpi-value">${net.toLocaleString()}</div>
-      <div class="status-dot" style="background:white;"></div> Netto
-    </div>
-    <div class="card card-sm">
-      <div class="kpi-label">Løn %</div>
-      <div class="kpi-value" style="color:${getColor(sPct, t.salary)}">${sPct.toFixed(1)}</div>
-      <div class="status-dot" style="background:${getColor(sPct, t.salary)}"></div> Tgt: ${t.salary}%
-    </div>
-    <div class="card card-sm">
-      <div class="kpi-label">Køkken + Bar %</div>
-      <div class="kpi-value" style="color:${getColor(fPct, t.fb)}">${fPct.toFixed(1)}</div>
-      <div class="status-dot" style="background:${getColor(fPct, t.fb)}"></div> Tgt: ${t.fb}%
-    </div>
-    <div class="card card-sm" style="background: linear-gradient(180deg, #111 0%, #1a100e 100%);">
-      <div class="kpi-label">Performance Score</div>
-      <div class="kpi-value gradient-text-orange">${score.toFixed(0)}</div>
-      <div class="status-dot" style="background:var(--accent-orange);"></div> Index
-    </div>
+    <table>
+      <tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>F&B%</th></tr>
+      ${months.map(m=>{
+        const n=m.rev/VAT;
+        return `<tr>
+          <td>${m.month}</td>
+          <td>${n.toLocaleString("da-DK",{maximumFractionDigits:0})}</td>
+          <td>${((m.sal/n)*100).toFixed(1)}%</td>
+          <td>${(((m.kit+m.bar)/n)*100).toFixed(1)}%</td>
+        </tr>`;
+      }).join("")}
+    </table>
   `;
-  document.getElementById("kpiGrid").innerHTML = kpiHTML;
-
-  // Tables
-  const tableRows = months.map(row => {
-    const r = getNet(row.rev);
-    return `<tr>
-      <td>${row.m}</td>
-      <td>${r.toLocaleString()}</td>
-      <td><span style="color:${getColor((row.sal/r)*100, t.salary)}">(${(row.sal/r)*100}.toFixed(1))%</span></td>
-      <td><span style="color:${getColor(((row.kit+row.bar)/r)*100, t.fb)}">(${((row.kit+row.bar)/r)*100}.toFixed(1))%</span></td>
-    </tr>`;
-  }).join("");
-
-  document.getElementById("dataTable").innerHTML = `<tr><th>Måned</th><th>Oms</th><th>Løn %</th><th>F&B %</th></tr>` + tableRows;
-  
-  // Mini Table (Top 3)
-  document.getElementById("miniTable").innerHTML = tableRows.split('<tr>').slice(1,4).map(r=>'<tr>'+r+'</tr>').join('');
-
-  // Chart
-  renderChart(months);
 }
 
-// OVERVIEW (All Locs)
-function renderOverview() {
-  let totalRev = 0, totalKit = 0, totalBar = 0, totalSal = 0;
-  let count = 0;
-  
-  Object.keys(data).forEach(loc => {
-    if(data[loc].length > 0) {
-      const last = data[loc].sort((a,b)=>new Date(a.m)-new Date(b.m)).pop();
-      totalRev += getNet(last.rev);
-      totalKit += last.kit;
-      totalBar += last.bar;
-      totalSal += last.sal;
-      count++;
-    }
-  });
-
-  const globalFB = ((totalKit + totalBar) / totalRev) * 100;
-  const globalSal = (totalSal / totalRev) * 100;
-  const globalScore = Math.max(0, 100 - Math.max(globalSal-35,0)*10 - Math.max(globalFB-33,0)*10);
-
-  const kpiHTML = `
-    <div class="card card-sm">
-      <div class="kpi-label">Total Omsætning</div>
-      <div class="kpi-value">${totalRev.toLocaleString()}</div>
-      <div>${count} Lokationer aktive</div>
-    </div>
-    <div class="card card-sm">
-      <div class="kpi-label">Gns Løn %</div>
-      <div class="kpi-value" style="color:${globalSal<=35?'#22C55E':'#EF4444'}">${globalSal.toFixed(1)}</div>
-      <div>Tgt: 35%</div>
-    </div>
-    <div class="card card-sm">
-      <div class="kpi-label">Gns Vareforbrug</div>
-      <div class="kpi-value" style="color:${globalFB<=33?'#22C55E':'#EF4444'}">${globalFB.toFixed(1)}</div>
-      <div>Tgt: 33%</div>
-    </div>
-    <div class="card card-sm">
-      <div class="kpi-label">Status</div>
-      <div class="kpi-value gradient-text-orange">${globalScore.toFixed(0)}</div>
-      <div>Global Index</div>
-    </div>
-  `;
-  document.getElementById("kpiGrid").innerHTML = kpiHTML;
-  document.getElementById("dataTable").innerHTML = "<tr><td colspan='4' style='text-align:center;'>Vis kun enkelt afdelings detaljer i Dashboard fanen</td></tr>";
-  document.getElementById("miniTable").innerHTML = "";
-  
-  if(chartInstance) chartInstance.destroy();
-  document.getElementById("chart").getContext('2d').clearRect(0,0,800,300); // Clear canvas roughly
-}
-
-// CHART CONFIG
-function renderChart(months) {
-  const ctx = document.getElementById('chart').getContext('2d');
-  if(chartInstance) chartInstance.destroy();
-
-  // Create Gradient
-  let gradient = ctx.createLinearGradient(0, 0, 0, 300);
-  gradient.addColorStop(0, "rgba(255, 81, 47, 0.2)");
-  gradient.addColorStop(1, "rgba(255, 81, 47, 0)");
-
-  chartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: months.map(m => m.m.substring(5)), // Show Month Name
-      datasets: [{
-        label: 'Løn % vs F&B %',
-        data: months.map(m => [getNet(m.rev)]).map(v => 0), // Placeholder logic simplified
-        borderColor: '#FF512F',
-        backgroundColor: gradient,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: '#fff',
-        data: months.map(m => {
-          const net = getNet(m.rev);
-          return ((m.kit+m.bar)/net)*100; // Plotting F&B primarily
-        })
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: '#222' }, ticks: { color: '#666' } },
-        y: { grid: { color: '#222' }, ticks: { color: '#666' }, suggestedMax: 50 }
-      }
-    }
-  });
-}
-
-// Init
 render();
+
 </script>
 </body>
 </html>
