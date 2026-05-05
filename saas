@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Performance Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:#0f172a;
+  color:#fff;
+  display:flex;
+}
+.sidebar{
+  width:240px;
+  background:#111827;
+  padding:25px 15px;
+  height:100vh;
+  box-sizing:border-box;
+}
+.sidebar h2{
+  font-size:18px;
+  margin-bottom:30px;
+}
+.nav-item{
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+.nav-item:hover, .active{
+  background:#1e293b;
+  color:#fff;
+}
+.main{
+  flex:1;
+  padding:30px;
+  overflow-y:auto;
+}
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:20px;
+}
+.grid{
+  display:grid;
+  gap:20px;
+}
+.grid-4{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+input,select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #334155;
+  background:#0f172a;
+  color:white;
+}
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+button:hover{background:#1d4ed8;}
+.positive{color:#22c55e;}
+.negative{color:#ef4444;}
+h1{margin-top:0;}
+.small{color:#94a3b8;font-size:14px;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Performance</h2>
+  <div class="nav-item active" onclick="navigate('dashboard',this)">Dashboard</div>
+  <div class="nav-item" onclick="navigate('group',this)">Koncern</div>
+  <div class="nav-item" onclick="navigate('departments',this)">Afdelinger</div>
+  <div class="nav-item" onclick="navigate('budgets',this)">Budget</div>
+</div>
+
+<div class="main" id="content"></div>
+
+<script>
+
+let chartInstance=null;
+let data=JSON.parse(localStorage.getItem("v2Dashboard"))||{
+  vat:25,
+  departments:[]
+};
+
+function saveData(){
+  localStorage.setItem("v2Dashboard",JSON.stringify(data));
+}
+
+function navigate(view,el){
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  el.classList.add("active");
+  if(view==="dashboard") renderDashboard();
+  if(view==="group") renderGroup();
+  if(view==="departments") renderDepartments();
+  if(view==="budgets") renderBudgets();
+}
+
+function getCurrentDep(){
+  return data.departments[0];
+}
+
+function calcPercent(actual,revenueNet){
+  return revenueNet? (actual/revenueNet*100):0;
+}
+
+function renderDashboard(){
+  const dep=getCurrentDep();
+  if(!dep){
+    document.getElementById("content").innerHTML="<h1>Opret en afdeling først</h1>";
+    return;
+  }
+  const latest=dep.months[dep.months.length-1];
+  let html=`<h1>${dep.name}</h1>`;
+  if(!latest){
+    html+=`<div class="card">Ingen data endnu</div>`;
+    document.getElementById("content").innerHTML=html;
+    return;
+  }
+  const revenueNet=latest.revenueGross/(1+data.vat/100);
+
+  function buildMetric(title,value,budget){
+    const percent=calcPercent(value,revenueNet);
+    const budgetKr=revenueNet*(budget/100);
+    const diffKr=value-budgetKr;
+    const diffPercent=percent-budget;
+    const cls=diffPercent>0?"negative":"positive";
+    return `
+    <div class="card">
+      <h3>${title}</h3>
+      <h2>${percent.toFixed(1)}%</h2>
+      <div class="${cls}">
+        ${diffPercent.toFixed(1)}% 
+        (${diffKr.toFixed(0)} kr)
+      </div>
+    </div>`;
+  }
+
+  html+=`
+  <div class="grid grid-4">
+    <div class="card">
+      <h3>Omsætning (ex moms)</h3>
+      <h2>${revenueNet.toFixed(0)} kr</h2>
+      <div class="small">Indtastet inkl moms</div>
+    </div>
+    ${buildMetric("Køkken",latest.kitchen,dep.budgets.kitchen)}
+    ${buildMetric("Bar",latest.bar,dep.budgets.bar)}
+    ${buildMetric("Løn",latest.salary,dep.budgets.salary)}
+  </div>
+  <div class="card">
+    <canvas id="chart"></canvas>
+  </div>
+  `;
+  document.getElementById("content").innerHTML=html;
+
+  renderChart(dep);
+}
+
+function renderChart(dep){
+  if(chartInstance) chartInstance.destroy();
+  const ctx=document.getElementById("chart");
+  const labels=dep.months.map(m=>m.month);
+  const vatFactor=(1+data.vat/100);
+
+  chartInstance=new Chart(ctx,{
+    type:"line",
+    data:{
+      labels,
+      datasets:[
+        {
+          label:"Køkken %",
+          data:dep.months.map(m=>calcPercent(m.kitchen,m.revenueGross/vatFactor)),
+          borderColor:"#22c55e"
+        },
+        {
+          label:"Bar %",
+          data:dep.months.map(m=>calcPercent(m.bar,m.revenueGross/vatFactor)),
+          borderColor:"#3b82f6"
+        },
+        {
+          label:"Løn %",
+          data:dep.months.map(m=>calcPercent(m.salary,m.revenueGross/vatFactor)),
+          borderColor:"#ef4444"
+        }
+      ]
+    },
+    options:{
+      plugins:{legend:{labels:{color:"white"}}},
+      scales:{
+        x:{ticks:{color:"white"}},
+        y:{ticks:{color:"white"}}
+      }
+    }
+  });
+}
+
+function renderDepartments(){
+  let html=`<h1>Afdelinger</h1>
+  <div class="card">
+    <input id="depName" placeholder="Afdelingsnavn">
+    <button onclick="addDepartment()">Opret</button>
+  </div>`;
+  data.departments.forEach((d,i)=>{
+    html+=`<div class="card">
+      <strong>${d.name}</strong>
+      <button onclick="deleteDepartment(${i})">Slet</button>
+    </div>`;
+  });
+  document.getElementById("content").innerHTML=html;
+}
+
+function addDepartment(){
+  const name=document.getElementById("depName").value;
+  if(!name) return;
+  data.departments.push({
+    name,
+    budgets:{kitchen:30,bar:18,salary:35},
+    months:[]
+  });
+  saveData();
+  renderDepartments();
+}
+
+function deleteDepartment(i){
+  data.departments.splice(i,1);
+  saveData();
+  renderDepartments();
+}
+
+function renderBudgets(){
+  const dep=getCurrentDep();
+  if(!dep){
+    document.getElementById("content").innerHTML="Opret afdeling først";
+    return;
+  }
+  document.getElementById("content").innerHTML=`
+  <h1>Budget & Moms</h1>
+  <div class="card">
+    <h3>${dep.name}</h3>
+    Køkken % <input value="${dep.budgets.kitchen}" onchange="updateBudget('kitchen',this.value)">
+    Bar % <input value="${dep.budgets.bar}" onchange="updateBudget('bar',this.value)">
+    Løn % <input value="${dep.budgets.salary}" onchange="updateBudget('salary',this.value)">
+  </div>
+  <div class="card">
+    Moms % <input value="${data.vat}" onchange="updateVAT(this.value)">
+  </div>
+  `;
+}
+
+function updateBudget(type,val){
+  getCurrentDep().budgets[type]=parseFloat(val);
+  saveData();
+}
+
+function updateVAT(val){
+  data.vat=parseFloat(val);
+  saveData();
+}
+
+function renderGroup(){
+  let totalK=0,totalB=0,totalS=0,count=0;
+  const vatFactor=(1+data.vat/100);
+  data.departments.forEach(dep=>{
+    const latest=dep.months[dep.months.length-1];
+    if(latest){
+      const net=latest.revenueGross/vatFactor;
+      totalK+=calcPercent(latest.kitchen,net);
+      totalB+=calcPercent(latest.bar,net);
+      totalS+=calcPercent(latest.salary,net);
+      count++;
+    }
+  });
+  if(count===0){
+    document.getElementById("content").innerHTML="<h1>Ingen data</h1>";
+    return;
+  }
+  document.getElementById("content").innerHTML=`
+  <h1>Koncern Gennemsnit</h1>
+  <div class="grid grid-4">
+    <div class="card"><h2>${(totalK/count).toFixed(1)}%</h2><div>Køkken</div></div>
+    <div class="card"><h2>${(totalB/count).toFixed(1)}%</h2><div>Bar</div></div>
+    <div class="card"><h2>${(totalS/count).toFixed(1)}%</h2><div>Løn</div></div>
+  </div>
+  `;
+}
+
+renderDashboard();
+
+</script>
+</body>
+</html>
