@@ -3,128 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Executive Performance Intelligence</title>
+<title>Executive KPI Metrics</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
 body{
   margin:0;
   font-family:'Inter',sans-serif;
-  background:radial-gradient(circle at 20% 0%,#0f172a,#020617 70%);
-  color:white;
+  background:#0B1220;
+  color:#E5E7EB;
 }
 
 .container{
-  max-width:1500px;
+  max-width:1300px;
   margin:auto;
-  padding:50px;
+  padding:60px 40px;
 }
 
-.header{
+.topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:40px;
+  margin-bottom:60px;
 }
 
 .title{
-  font-size:30px;
-  font-weight:700;
-  letter-spacing:-0.5px;
-}
-
-.glass{
-  background:rgba(30,41,59,0.6);
-  backdrop-filter:blur(25px);
-  border:1px solid rgba(255,255,255,0.05);
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 15px 60px rgba(0,0,0,0.6);
-}
-
-.grid{
-  display:grid;
-  gap:25px;
-}
-
-.grid-4{
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-}
-
-.kpi{
-  font-size:38px;
-  font-weight:700;
-}
-
-.sub{
-  color:#94a3b8;
-  font-size:14px;
-}
-
-.positive{color:#22c55e;}
-.negative{color:#ef4444;}
-
-button{
-  background:linear-gradient(135deg,#2563eb,#1d4ed8);
-  border:none;
-  padding:12px 20px;
-  border-radius:14px;
-  color:white;
-  cursor:pointer;
+  font-size:22px;
   font-weight:600;
-  font-size:14px;
 }
 
-button.secondary{
-  background:#334155;
+.controls{
+  display:flex;
+  gap:15px;
 }
 
 select,input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #334155;
-  background:#0f172a;
+  background:#111827;
+  border:1px solid #1F2937;
+  padding:8px 12px;
+  border-radius:8px;
+  color:#E5E7EB;
+}
+
+button{
+  background:#2563EB;
+  border:none;
+  padding:9px 16px;
+  border-radius:8px;
   color:white;
-  margin-top:6px;
+  cursor:pointer;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:60px;
+  margin-bottom:60px;
+}
+
+.metric span{
+  font-size:13px;
+  color:#6B7280;
+}
+
+.metric h2{
+  font-size:46px;
+  margin:8px 0;
+  font-weight:600;
+}
+
+.good{color:#22C55E;}
+.warn{color:#FACC15;}
+.bad{color:#EF4444;}
+
+.score{
+  font-size:42px;
+  font-weight:600;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:40px;
+}
+
+th{
+  text-align:left;
+  color:#6B7280;
+  padding-bottom:10px;
+}
+
+td{
+  padding:14px 0;
+  border-bottom:1px solid #1F2937;
 }
 
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.6);
   justify-content:center;
   align-items:center;
 }
 
-.modal-content{
-  width:420px;
+.modal-box{
+  background:#111827;
+  padding:30px;
+  border-radius:12px;
+  width:400px;
 }
 
-.score{
-  font-size:32px;
-  font-weight:700;
-}
-
-.quarter-card{
-  text-align:center;
-}
-
-table{
+.modal-box input{
   width:100%;
-  border-collapse:collapse;
-}
-
-td,th{
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.actions button{
-  padding:6px 10px;
-  font-size:12px;
+  margin-bottom:12px;
 }
 
 </style>
@@ -133,214 +126,131 @@ td,th{
 
 <div class="container">
 
-<div class="header">
-  <div class="title">Executive Performance Intelligence</div>
-  <button onclick="openModal()">+ Opret måned</button>
-</div>
-
-<div class="glass" style="margin-bottom:30px;">
-  Lokation:
-  <select id="locationSelect" onchange="render()">
-    <option>Helsingør</option>
-    <option>Hillerød</option>
-    <option>Farum</option>
-    <option>Hørsholm</option>
-    <option>Vanløse</option>
-  </select>
-</div>
-
-<div class="grid grid-4" id="kpis"></div>
-
-<div class="glass" style="margin-top:30px;">
-  <canvas id="chart"></canvas>
-</div>
-
-<div class="glass" style="margin-top:30px;">
-  <h3>Årsvisning</h3>
-  År:
-  <select id="yearSelect" onchange="render()"></select>
-  <div class="grid grid-4" id="quarters" style="margin-top:20px;"></div>
-</div>
-
-<div class="glass" style="margin-top:30px;">
-  <h3>Månedsdata</h3>
-  <table id="dataTable"></table>
-</div>
-
-</div>
-
-<div class="modal" id="modal">
-  <div class="glass modal-content">
-    <h3>Opret / Redigér måned</h3>
-
-    Lokation:
-    <select id="modalLocation">
+<div class="topbar">
+  <div class="title">Executive KPI Metrics</div>
+  <div class="controls">
+    <select id="locationSelect" onchange="render()">
       <option>Helsingør</option>
       <option>Hillerød</option>
       <option>Farum</option>
       <option>Hørsholm</option>
       <option>Vanløse</option>
     </select>
+    <button onclick="openModal()">+ Opret måned</button>
+  </div>
+</div>
 
-    Måned:
+<div class="metrics" id="metrics"></div>
+
+<table id="table"></table>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3>Opret måned</h3>
     <input type="month" id="month">
-
-    Omsætning (inkl moms)
-    <input type="number" id="revenue">
-
-    Løn
-    <input type="number" id="salary">
-
-    Køkken indkøb
-    <input type="number" id="kitchen">
-
-    Bar indkøb
-    <input type="number" id="bar">
-
-    <br><br>
+    <input type="number" id="revenue" placeholder="Omsætning (inkl moms)">
+    <input type="number" id="salary" placeholder="Løn">
+    <input type="number" id="kitchen" placeholder="Køkken">
+    <input type="number" id="bar" placeholder="Bar">
     <button onclick="saveMonth()">Gem</button>
-    <button class="secondary" onclick="closeModal()">Annuller</button>
   </div>
 </div>
 
 <script>
 
-let VAT=1.25;
-let chartInstance;
-let editIndex=null;
+const VAT=1.25;
 
-let data=JSON.parse(localStorage.getItem("execPro"))||{};
+const TARGETS={
+  "Helsingør":{salary:35,fb:33},
+  "Hillerød":{salary:35,fb:33},
+  "Farum":{salary:36,fb:33},
+  "Hørsholm":{salary:35,fb:33},
+  "Vanløse":{salary:35,fb:33}
+};
 
-function saveData(){
-  localStorage.setItem("execPro",JSON.stringify(data));
-}
+let data=JSON.parse(localStorage.getItem("execKPI"))||{};
+
+function save(){localStorage.setItem("execKPI",JSON.stringify(data));}
 
 function openModal(){
-  editIndex=null;
-  document.getElementById("modal").style.display="flex";
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display="none";
+  modal.style.display="flex";
 }
 
 function saveMonth(){
-  const loc=document.getElementById("modalLocation").value;
-  const month=document.getElementById("month").value;
-  const revenue=parseFloat(document.getElementById("revenue").value);
-  const salary=parseFloat(document.getElementById("salary").value);
-  const kitchen=parseFloat(document.getElementById("kitchen").value);
-  const bar=parseFloat(document.getElementById("bar").value);
-
+  const loc=locationSelect.value;
   if(!data[loc]) data[loc]=[];
 
-  if(editIndex!==null){
-    data[loc][editIndex]={month,revenue,salary,kitchen,bar};
-  } else {
-    data[loc].push({month,revenue,salary,kitchen,bar});
-  }
+  data[loc].push({
+    month:month.value,
+    revenue:+revenue.value,
+    salary:+salary.value,
+    kitchen:+kitchen.value,
+    bar:+bar.value
+  });
 
-  saveData();
-  closeModal();
+  save();
+  modal.style.display="none";
   render();
 }
 
-function deleteMonth(loc,i){
-  data[loc].splice(i,1);
-  saveData();
-  render();
+function colorClass(value,target){
+  if(value<=target) return "good";
+  if(value<=target+1) return "warn";
+  return "bad";
 }
 
 function render(){
-  const loc=document.getElementById("locationSelect").value;
+  const loc=locationSelect.value;
   const months=data[loc]||[];
-
   if(months.length===0) return;
 
   months.sort((a,b)=>new Date(a.month)-new Date(b.month));
-
   const latest=months[months.length-1];
-  const revenueNet=latest.revenue/VAT;
+  const net=latest.revenue/VAT;
 
-  const kPct=latest.kitchen/revenueNet*100;
-  const bPct=latest.bar/revenueNet*100;
-  const sPct=latest.salary/revenueNet*100;
+  const salaryPct=latest.salary/net*100;
+  const fbPct=(latest.kitchen+latest.bar)/net*100;
 
-  const score=Math.max(0,100-(Math.max(kPct-30,0)*10)-(Math.max(sPct-35,0)*10));
+  const salaryTarget=TARGETS[loc].salary;
+  const fbTarget=TARGETS[loc].fb;
 
-  document.getElementById("kpis").innerHTML=`
-    <div class="glass"><div class="sub">Omsætning ex moms</div><div class="kpi">${revenueNet.toFixed(0)} kr</div></div>
-    <div class="glass"><div class="sub">Køkken %</div><div class="kpi">${kPct.toFixed(1)}%</div></div>
-    <div class="glass"><div class="sub">Bar %</div><div class="kpi">${bPct.toFixed(1)}%</div></div>
-    <div class="glass"><div class="sub">Løn %</div><div class="kpi">${sPct.toFixed(1)}%</div></div>
-    <div class="glass"><div class="sub">Performance Score</div><div class="score">${score.toFixed(0)} / 100</div></div>
+  const salaryDiff=Math.max(salaryPct-salaryTarget,0);
+  const fbDiff=Math.max(fbPct-fbTarget,0);
+
+  const score=Math.max(0,100-(salaryDiff*10)-(fbDiff*10));
+
+  document.getElementById("metrics").innerHTML=`
+    <div class="metric">
+      <span>Omsætning ex moms</span>
+      <h2>${net.toFixed(0)}</h2>
+    </div>
+    <div class="metric">
+      <span>Løn % (Target ${salaryTarget}%)</span>
+      <h2 class="${colorClass(salaryPct,salaryTarget)}">${salaryPct.toFixed(1)}%</h2>
+    </div>
+    <div class="metric">
+      <span>Køkken + Bar % (Target ${fbTarget}%)</span>
+      <h2 class="${colorClass(fbPct,fbTarget)}">${fbPct.toFixed(1)}%</h2>
+    </div>
+    <div class="metric">
+      <span>Performance Index</span>
+      <h2 class="score">${score.toFixed(0)}</h2>
+    </div>
   `;
 
-  renderChart(months);
-  renderYear(months);
-  renderTable(loc,months);
-}
-
-function renderChart(months){
-  if(chartInstance) chartInstance.destroy();
-  chartInstance=new Chart(document.getElementById("chart"),{
-    type:"line",
-    data:{
-      labels:months.map(m=>m.month),
-      datasets:[
-        {label:"Køkken %",data:months.map(m=>m.kitchen/(m.revenue/VAT)*100),borderColor:"#22c55e",tension:0.4},
-        {label:"Bar %",data:months.map(m=>m.bar/(m.revenue/VAT)*100),borderColor:"#3b82f6",tension:0.4},
-        {label:"Løn %",data:months.map(m=>m.salary/(m.revenue/VAT)*100),borderColor:"#ef4444",tension:0.4}
-      ]
-    },
-    options:{
-      plugins:{legend:{labels:{color:"white"}}},
-      scales:{x:{ticks:{color:"white"}},y:{ticks:{color:"white"}}}
-    }
-  });
-}
-
-function renderYear(months){
-  const years=[...new Set(months.map(m=>m.month.substring(0,4)))];
-  document.getElementById("yearSelect").innerHTML=years.map(y=>`<option>${y}</option>`).join("");
-  const year=document.getElementById("yearSelect").value||years[0];
-
-  const yearMonths=months.filter(m=>m.month.startsWith(year));
-  const quartersDiv=document.getElementById("quarters");
-  quartersDiv.innerHTML="";
-
-  for(let q=1;q<=4;q++){
-    const qm=yearMonths.filter(m=>Math.ceil((new Date(m.month).getMonth()+1)/3)===q);
-    if(qm.length===0){
-      quartersDiv.innerHTML+=`<div class="glass quarter-card">Q${q}<br>Ingen data</div>`;
-      continue;
-    }
-    let total=0;
-    qm.forEach(m=>{
-      total+=m.kitchen/(m.revenue/VAT)*100;
-    });
-    const avg=total/qm.length;
-    quartersDiv.innerHTML+=`<div class="glass quarter-card"><h3>Q${q}</h3><div>${avg.toFixed(1)}%</div></div>`;
-  }
-}
-
-function renderTable(loc,months){
-  const table=document.getElementById("dataTable");
-  table.innerHTML="<tr><th>Måned</th><th>Oms</th><th>K%</th><th>B%</th><th>L%</th><th></th></tr>";
-  months.forEach((m,i)=>{
-    const net=m.revenue/VAT;
-    table.innerHTML+=`
-      <tr>
+  document.getElementById("table").innerHTML=
+    "<tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>F&B%</th></tr>"+
+    months.map(m=>{
+      const n=m.revenue/VAT;
+      return `<tr>
         <td>${m.month}</td>
-        <td>${net.toFixed(0)}</td>
-        <td>${(m.kitchen/net*100).toFixed(1)}%</td>
-        <td>${(m.bar/net*100).toFixed(1)}%</td>
-        <td>${(m.salary/net*100).toFixed(1)}%</td>
-        <td class="actions">
-          <button onclick="deleteMonth('${loc}',${i})">Slet</button>
-        </td>
+        <td>${n.toFixed(0)}</td>
+        <td>${(m.salary/n*100).toFixed(1)}%</td>
+        <td>${((m.kitchen+m.bar)/n*100).toFixed(1)}%</td>
       </tr>`;
-  });
+    }).join("");
 }
 
 render();
