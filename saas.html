@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Executive Financial Intelligence</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -16,8 +15,8 @@ body{
 }
 
 .container{
-  padding:40px;
-  max-width:1400px;
+  padding:50px;
+  max-width:1500px;
   margin:auto;
 }
 
@@ -29,7 +28,7 @@ body{
 }
 
 .title{
-  font-size:26px;
+  font-size:28px;
   font-weight:600;
 }
 
@@ -40,6 +39,7 @@ button{
   border-radius:10px;
   color:white;
   cursor:pointer;
+  margin-left:10px;
 }
 
 .grid{
@@ -50,13 +50,18 @@ button{
 
 .card{
   background:#111;
-  border:1px solid #222;
+  border:1px solid #1f1f1f;
   padding:25px;
   border-radius:18px;
+  transition:0.2s;
+}
+
+.card:hover{
+  border-color:#333;
 }
 
 .kpi{
-  font-size:34px;
+  font-size:32px;
   font-weight:700;
   margin-top:8px;
 }
@@ -67,29 +72,29 @@ button{
   text-transform:uppercase;
 }
 
+.sub{
+  font-size:14px;
+  color:#aaa;
+  margin-top:4px;
+}
+
 .green{color:#22C55E;}
 .red{color:#EF4444;}
 .yellow{color:#FACC15;}
 
 .badge-card{
   cursor:pointer;
-  transition:0.2s;
-}
-
-.badge-card:hover{
-  transform:translateY(-4px);
-  border-color:#333;
 }
 
 table{
   width:100%;
-  margin-top:30px;
+  margin-top:40px;
   border-collapse:collapse;
 }
 
 th,td{
   padding:12px 0;
-  border-bottom:1px solid #222;
+  border-bottom:1px solid #1f1f1f;
   text-align:left;
 }
 
@@ -106,7 +111,7 @@ th,td{
   background:#111;
   padding:30px;
   border-radius:18px;
-  width:400px;
+  width:420px;
 }
 
 .modal-box input, .modal-box select{
@@ -117,6 +122,12 @@ th,td{
   border:1px solid #222;
   color:white;
   border-radius:8px;
+}
+
+hr{
+  border:none;
+  border-top:1px solid #1f1f1f;
+  margin:20px 0;
 }
 
 </style>
@@ -171,7 +182,7 @@ const TARGETS={
   "Vanløse":{salary:35,fb:33}
 };
 
-let data=JSON.parse(localStorage.getItem("finStable"))||{
+let data=JSON.parse(localStorage.getItem("finStableFinal"))||{
   "Helsingør":[],
   "Hillerød":[],
   "Farum":[],
@@ -182,7 +193,7 @@ let data=JSON.parse(localStorage.getItem("finStable"))||{
 let activeLocation=null;
 
 function saveStorage(){
-  localStorage.setItem("finStable",JSON.stringify(data));
+  localStorage.setItem("finStableFinal",JSON.stringify(data));
 }
 
 function openModal(){
@@ -214,18 +225,15 @@ function goHome(){
   render();
 }
 
-function render(){
-  if(!activeLocation){
-    renderHome();
-  }else{
-    renderLocation(activeLocation);
-  }
-}
-
 function color(val,target){
   if(val<=target) return "green";
   if(val<=target+1) return "yellow";
   return "red";
+}
+
+function render(){
+  if(!activeLocation) renderHome();
+  else renderLocation(activeLocation);
 }
 
 function renderHome(){
@@ -243,14 +251,15 @@ function renderHome(){
     const latest=months[months.length-1];
     const net=latest.rev/VAT;
     const salPct=(latest.sal/net)*100;
-    const fbPct=((latest.kit+latest.bar)/net)*100;
+    const fbTotal=latest.kit+latest.bar;
+    const fbPct=(fbTotal/net)*100;
     const score=Math.max(0,100-(Math.max(salPct-TARGETS[loc].salary,0)*10)-(Math.max(fbPct-TARGETS[loc].fb,0)*10));
     html+=`
     <div class="card badge-card" onclick="openLoc('${loc}')">
       <div class="label">${loc}</div>
       <div class="kpi">${net.toLocaleString("da-DK",{maximumFractionDigits:0})}</div>
-      <div class="${color(salPct,TARGETS[loc].salary)}">Løn ${salPct.toFixed(1)}%</div>
-      <div class="${color(fbPct,TARGETS[loc].fb)}">F&B ${fbPct.toFixed(1)}%</div>
+      <div class="${color(salPct,TARGETS[loc].salary)}">Løn ${salPct.toFixed(1)}% · ${latest.sal.toLocaleString("da-DK")} kr</div>
+      <div class="${color(fbPct,TARGETS[loc].fb)}">F&B ${fbPct.toFixed(1)}% · ${fbTotal.toLocaleString("da-DK")} kr</div>
       <div>Score ${score.toFixed(0)}</div>
     </div>`;
   });
@@ -272,8 +281,12 @@ function renderLocation(loc){
   }
   const latest=months[months.length-1];
   const net=latest.rev/VAT;
+
   const salPct=(latest.sal/net)*100;
-  const fbPct=((latest.kit+latest.bar)/net)*100;
+  const kitPct=(latest.kit/net)*100;
+  const barPct=(latest.bar/net)*100;
+  const fbTotal=latest.kit+latest.bar;
+  const fbPct=(fbTotal/net)*100;
 
   content.innerHTML=`
     <div class="grid">
@@ -281,24 +294,44 @@ function renderLocation(loc){
         <div class="label">Omsætning (Ex Moms)</div>
         <div class="kpi">${net.toLocaleString("da-DK",{maximumFractionDigits:0})}</div>
       </div>
+
       <div class="card">
-        <div class="label">Løn %</div>
+        <div class="label">Løn</div>
         <div class="kpi ${color(salPct,TARGETS[loc].salary)}">${salPct.toFixed(1)}%</div>
+        <div class="sub">${latest.sal.toLocaleString("da-DK")} kr</div>
       </div>
+
       <div class="card">
-        <div class="label">Køkken + Bar %</div>
+        <div class="label">Køkken</div>
+        <div class="kpi">${kitPct.toFixed(1)}%</div>
+        <div class="sub">${latest.kit.toLocaleString("da-DK")} kr</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Bar</div>
+        <div class="kpi">${barPct.toFixed(1)}%</div>
+        <div class="sub">${latest.bar.toLocaleString("da-DK")} kr</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Køkken + Bar (Target ${TARGETS[loc].fb}%)</div>
         <div class="kpi ${color(fbPct,TARGETS[loc].fb)}">${fbPct.toFixed(1)}%</div>
+        <div class="sub">${fbTotal.toLocaleString("da-DK")} kr</div>
       </div>
     </div>
 
+    <hr>
+
     <table>
-      <tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>F&B%</th></tr>
+      <tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>Køkken%</th><th>Bar%</th><th>F&B%</th></tr>
       ${months.map(m=>{
         const n=m.rev/VAT;
         return `<tr>
           <td>${m.month}</td>
           <td>${n.toLocaleString("da-DK",{maximumFractionDigits:0})}</td>
           <td>${((m.sal/n)*100).toFixed(1)}%</td>
+          <td>${((m.kit/n)*100).toFixed(1)}%</td>
+          <td>${((m.bar/n)*100).toFixed(1)}%</td>
           <td>${(((m.kit+m.bar)/n)*100).toFixed(1)}%</td>
         </tr>`;
       }).join("")}
