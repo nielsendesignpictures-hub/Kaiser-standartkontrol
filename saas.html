@@ -3,205 +3,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Executive Performance Dashboard</title>
-<link rel="manifest" href="manifest.json">
+<title>Executive KPI Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:Inter,system-ui;background:#0f172a;color:#fff;display:flex}
-.sidebar{width:240px;background:#111827;padding:25px 15px;height:100vh}
-.sidebar h2{font-size:18px;margin-bottom:30px}
-.nav-item{padding:12px;border-radius:10px;cursor:pointer;color:#94a3b8;margin-bottom:10px}
-.nav-item:hover,.active{background:#1e293b;color:#fff}
-.main{flex:1;padding:30px;overflow-y:auto}
-.card{background:#1e293b;padding:20px;border-radius:16px;margin-bottom:20px}
-.grid{display:grid;gap:20px}
-.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-h1{margin-top:0}
-select,input{padding:8px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff}
-.positive{color:#22c55e}
-.negative{color:#ef4444}
-.neutral{color:#facc15}
-.score{font-size:26px;font-weight:bold}
-.small{font-size:13px;color:#94a3b8}
+
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at top left,#0f172a,#020617 70%);
+  color:white;
+}
+
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:40px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:40px;
+}
+
+.title{
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-0.5px;
+}
+
+.glass{
+  background:rgba(30,41,59,0.6);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.grid{
+  display:grid;
+  gap:20px;
+}
+
+.grid-4{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+.kpi{
+  font-size:34px;
+  font-weight:700;
+}
+
+.sub{
+  color:#94a3b8;
+  font-size:14px;
+}
+
+.positive{color:#22c55e;}
+.negative{color:#ef4444;}
+
+button{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  border:none;
+  padding:10px 18px;
+  border-radius:12px;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
+
+select,input{
+  width:100%;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid #334155;
+  background:#0f172a;
+  color:white;
+  margin-top:5px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  width:400px;
+}
+
+.score{
+  font-size:28px;
+  font-weight:700;
+}
+
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>Executive</h2>
-  <div class="nav-item active" onclick="navigate('dashboard',this)">Dashboard</div>
-  <div class="nav-item" onclick="navigate('year',this)">Årsvisning</div>
+<div class="container">
+
+<div class="header">
+  <div class="title">Executive KPI Intelligence</div>
+  <button onclick="openModal()">+ Opret måned</button>
 </div>
 
-<div class="main" id="content"></div>
+<div class="glass" style="margin-bottom:30px;">
+  Lokation:
+  <select id="locationSelect" onchange="render()">
+    <option>Helsingør</option>
+    <option>Hillerød</option>
+    <option>Farum</option>
+    <option>Hørsholm</option>
+    <option>Vanløse</option>
+  </select>
+</div>
+
+<div class="grid grid-4" id="kpis"></div>
+
+<div class="glass">
+  <canvas id="chart"></canvas>
+</div>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="glass modal-content">
+    <h3>Opret måned</h3>
+
+    Måned:
+    <select id="month">
+      <option>Januar</option>
+      <option>Februar</option>
+      <option>Marts</option>
+      <option>April</option>
+      <option>Maj</option>
+      <option>Juni</option>
+      <option>Juli</option>
+      <option>August</option>
+      <option>September</option>
+      <option>Oktober</option>
+      <option>November</option>
+      <option>December</option>
+    </select>
+
+    Omsætning (inkl moms)
+    <input type="number" id="revenue">
+
+    Løn (ex moms)
+    <input type="number" id="salary">
+
+    Køkken indkøb
+    <input type="number" id="kitchen">
+
+    Bar indkøb
+    <input type="number" id="bar">
+
+    <br><br>
+    <button onclick="saveMonth()">Gem</button>
+    <button onclick="closeModal()" style="background:#334155;">Annuller</button>
+  </div>
+</div>
 
 <script>
 
-let chartInstance=null;
+let VAT = 1.25;
+let chartInstance;
 
-let data=JSON.parse(localStorage.getItem("execV3"))||{
-  vat:25,
-  departments:[
-    {
-      name:"Standard Afdeling",
-      budgets:{kitchen:30,bar:18,salary:35},
-      months:[]
-    }
-  ]
-};
+let data = JSON.parse(localStorage.getItem("executiveKPI")) || {};
 
-function save(){localStorage.setItem("execV3",JSON.stringify(data));}
-
-function navigate(view,el){
-  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
-  el.classList.add("active");
-  if(view==="dashboard") renderDashboard();
-  if(view==="year") renderYear();
+function saveData(){
+  localStorage.setItem("executiveKPI", JSON.stringify(data));
 }
 
-function calcPercent(val,rev){return rev?val/rev*100:0;}
+function openModal(){
+  document.getElementById("modal").style.display="flex";
+}
 
-function getRevenueNet(m){return m.revenueGross/(1+data.vat/100);}
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
 
-function renderDashboard(){
-  const dep=data.departments[0];
-  const latest=dep.months[dep.months.length-1];
-  if(!latest){
-    document.getElementById("content").innerHTML="<h1>Indtast måned data i koden først</h1>";
-    return;
-  }
-  const rev=getRevenueNet(latest);
+function saveMonth(){
+  const loc=document.getElementById("locationSelect").value;
+  const month=document.getElementById("month").value;
+  const revenue=parseFloat(document.getElementById("revenue").value);
+  const salary=parseFloat(document.getElementById("salary").value);
+  const kitchen=parseFloat(document.getElementById("kitchen").value);
+  const bar=parseFloat(document.getElementById("bar").value);
 
-  function metric(title,val,budget){
-    const p=calcPercent(val,rev);
-    const diff=p-budget;
-    const cls=diff>0?"negative":"positive";
-    return `
-    <div class="card">
-      <h3>${title}</h3>
-      <h2>${p.toFixed(1)}%</h2>
-      <div class="${cls}">${diff.toFixed(1)}%</div>
-    </div>`;
-  }
+  if(!data[loc]) data[loc]=[];
 
-  document.getElementById("content").innerHTML=`
-  <h1>${dep.name}</h1>
-  <div class="grid grid-4">
-    <div class="card">
-      <h3>Omsætning ex moms</h3>
-      <h2>${rev.toFixed(0)} kr</h2>
+  data[loc].push({month,revenue,salary,kitchen,bar});
+  saveData();
+  closeModal();
+  render();
+}
+
+function render(){
+  const loc=document.getElementById("locationSelect").value;
+  const months=data[loc]||[];
+  if(months.length===0) return;
+
+  const latest=months[months.length-1];
+  const revenueNet=latest.revenue/VAT;
+
+  const kPct=latest.kitchen/revenueNet*100;
+  const bPct=latest.bar/revenueNet*100;
+  const sPct=latest.salary/revenueNet*100;
+
+  const score=Math.max(0,100-(kPct-30)-(sPct-35));
+
+  document.getElementById("kpis").innerHTML=`
+    <div class="glass">
+      <div class="sub">Omsætning ex moms</div>
+      <div class="kpi">${revenueNet.toFixed(0)} kr</div>
     </div>
-    ${metric("Køkken",latest.kitchen,dep.budgets.kitchen)}
-    ${metric("Bar",latest.bar,dep.budgets.bar)}
-    ${metric("Løn",latest.salary,dep.budgets.salary)}
-  </div>
-  `;
-}
-
-function renderYear(){
-  const dep=data.departments[0];
-  const years=[...new Set(dep.months.map(m=>m.month.substring(0,4)))];
-  if(years.length===0){
-    document.getElementById("content").innerHTML="<h1>Ingen data</h1>";
-    return;
-  }
-  const selectedYear=years[years.length-1];
-  const months=dep.months.filter(m=>m.month.startsWith(selectedYear));
-
-  let yearOptions=years.map(y=>`<option>${y}</option>`).join("");
-
-  const vatFactor=(1+data.vat/100);
-
-  let totalRev=0,totalK=0,totalB=0,totalS=0;
-
-  months.forEach(m=>{
-    const net=m.revenueGross/vatFactor;
-    totalRev+=net;
-    totalK+=calcPercent(m.kitchen,net);
-    totalB+=calcPercent(m.bar,net);
-    totalS+=calcPercent(m.salary,net);
-  });
-
-  const avgK=totalK/months.length;
-  const avgB=totalB/months.length;
-  const avgS=totalS/months.length;
-
-  const score=Math.max(0,100-(Math.max(avgK-dep.budgets.kitchen,0)*10));
-
-  document.getElementById("content").innerHTML=`
-  <h1>Årsrapport</h1>
-  <div class="card">
-    År:
-    <select onchange="changeYear(this.value)">
-      ${yearOptions}
-    </select>
-  </div>
-
-  <div class="grid grid-4">
-    <div class="card"><h3>Års Omsætning</h3><h2>${totalRev.toFixed(0)} kr</h2></div>
-    <div class="card"><h3>Gns Køkken</h3><h2>${avgK.toFixed(1)}%</h2></div>
-    <div class="card"><h3>Gns Bar</h3><h2>${avgB.toFixed(1)}%</h2></div>
-    <div class="card"><h3>Gns Løn</h3><h2>${avgS.toFixed(1)}%</h2></div>
-  </div>
-
-  <div class="card">
-    <h3>Performance Score</h3>
-    <div class="score">${score.toFixed(0)} / 100</div>
-  </div>
-
-  <div class="grid grid-4">
-    ${renderQuarter(dep,1,selectedYear)}
-    ${renderQuarter(dep,2,selectedYear)}
-    ${renderQuarter(dep,3,selectedYear)}
-    ${renderQuarter(dep,4,selectedYear)}
-  </div>
-
-  <div class="card">
-    <canvas id="yearChart"></canvas>
-  </div>
+    <div class="glass">
+      <div class="sub">Køkken %</div>
+      <div class="kpi">${kPct.toFixed(1)}%</div>
+    </div>
+    <div class="glass">
+      <div class="sub">Bar %</div>
+      <div class="kpi">${bPct.toFixed(1)}%</div>
+    </div>
+    <div class="glass">
+      <div class="sub">Løn %</div>
+      <div class="kpi">${sPct.toFixed(1)}%</div>
+    </div>
+    <div class="glass">
+      <div class="sub">Performance Score</div>
+      <div class="score">${score.toFixed(0)} / 100</div>
+    </div>
   `;
 
-  renderYearChart(months,dep);
-}
-
-function renderQuarter(dep,q,year){
-  const vatFactor=(1+data.vat/100);
-  const months=dep.months.filter(m=>{
-    if(!m.month.startsWith(year)) return false;
-    const monthIndex=new Date(m.month).getMonth()+1;
-    return Math.ceil(monthIndex/3)===q;
-  });
-  if(months.length===0) return `<div class="card">Q${q}<br>Ingen data</div>`;
-
-  let totalK=0,totalB=0,totalS=0;
-  months.forEach(m=>{
-    const net=m.revenueGross/vatFactor;
-    totalK+=calcPercent(m.kitchen,net);
-    totalB+=calcPercent(m.bar,net);
-    totalS+=calcPercent(m.salary,net);
-  });
-  const avgK=totalK/months.length;
-  const score=Math.max(0,100-(Math.max(avgK-dep.budgets.kitchen,0)*10));
-
-  return `
-  <div class="card">
-    <h3>Q${q}</h3>
-    <div>Køkken ${avgK.toFixed(1)}%</div>
-    <div>Score ${score.toFixed(0)}</div>
-  </div>`;
-}
-
-function renderYearChart(months,dep){
   if(chartInstance) chartInstance.destroy();
-  chartInstance=new Chart(document.getElementById("yearChart"),{
+
+  chartInstance=new Chart(document.getElementById("chart"),{
     type:"line",
     data:{
       labels:months.map(m=>m.month),
       datasets:[
         {
           label:"Køkken %",
-          data:months.map(m=>calcPercent(m.kitchen,getRevenueNet(m))),
-          borderColor:"#22c55e"
+          data:months.map(m=>m.kitchen/(m.revenue/VAT)*100),
+          borderColor:"#22c55e",
+          tension:0.4
+        },
+        {
+          label:"Løn %",
+          data:months.map(m=>m.salary/(m.revenue/VAT)*100),
+          borderColor:"#ef4444",
+          tension:0.4
         }
       ]
     },
@@ -215,14 +274,9 @@ function renderYearChart(months,dep){
   });
 }
 
-function changeYear(){renderYear();}
-
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("service-worker.js");
-}
-
-renderDashboard();
+render();
 
 </script>
+
 </body>
 </html>
