@@ -3,259 +3,312 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Executive KPI Metrics</title>
+<title>Executive KPI Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-body{
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:#0B1220;
-  color:#E5E7EB;
+:root {
+  --bg-dark: #0D1117;
+  --bg-medium: #161B22;
+  --border-color: #30363D;
+  --text-primary: #E6EDF3;
+  --text-secondary: #7D8590;
+  --accent: #F97316;
+  --good: #22C55E;
+  --warn: #FACC15;
+  --bad: #EF4444;
 }
 
-.container{
-  max-width:1300px;
-  margin:auto;
-  padding:60px 40px;
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:60px;
+/* --- Sidebar --- */
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-medium);
+  border-right: 1px solid var(--border-color);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-title { font-size: 20px; font-weight: 600; margin-bottom: 40px; }
+.nav-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.nav-item.active, .nav-item:hover {
+  background-color: var(--accent);
+  color: white;
 }
 
-.title{
-  font-size:22px;
-  font-weight:600;
+/* --- Main Content --- */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
 }
-
-.controls{
-  display:flex;
-  gap:15px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
-
-select,input{
-  background:#111827;
-  border:1px solid #1F2937;
-  padding:8px 12px;
-  border-radius:8px;
-  color:#E5E7EB;
+.header h1 { font-size: 28px; margin: 0; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; }
+.kpi-card {
+  background-color: var(--bg-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
 }
+.kpi-card .label { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+.kpi-card .value { font-size: 36px; font-weight: 600; }
+.kpi-card .diff { font-size: 14px; font-weight: 500; }
+.good { color: var(--good); } .warn { color: var(--warn); } .bad { color: var(--bad); }
 
-button{
-  background:#2563EB;
-  border:none;
-  padding:9px 16px;
-  border-radius:8px;
-  color:white;
-  cursor:pointer;
-}
+/* --- Table & Chart --- */
+.table-container { margin-top: 40px; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-weight: 500; color: var(--text-secondary); padding: 0 10px 12px; border-bottom: 1px solid var(--border-color); }
+td { padding: 16px 10px; border-bottom: 1px solid var(--border-color); font-weight: 500; }
 
-.metrics{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:60px;
-  margin-bottom:60px;
-}
-
-.metric span{
-  font-size:13px;
-  color:#6B7280;
-}
-
-.metric h2{
-  font-size:46px;
-  margin:8px 0;
-  font-weight:600;
-}
-
-.good{color:#22C55E;}
-.warn{color:#FACC15;}
-.bad{color:#EF4444;}
-
-.score{
-  font-size:42px;
-  font-weight:600;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:40px;
-}
-
-th{
-  text-align:left;
-  color:#6B7280;
-  padding-bottom:10px;
-}
-
-td{
-  padding:14px 0;
-  border-bottom:1px solid #1F2937;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-box{
-  background:#111827;
-  padding:30px;
-  border-radius:12px;
-  width:400px;
-}
-
-.modal-box input{
-  width:100%;
-  margin-bottom:12px;
-}
-
+/* --- Modal & Form --- */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+.modal-box { background-color: var(--bg-medium); padding: 30px; border-radius: 16px; width: 400px; }
+.modal-box h3 { margin-top: 0; }
+select, input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; color: var(--text-primary); margin-bottom: 15px; box-sizing: border-box; }
+button { background: var(--accent); border: none; padding: 12px 18px; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<div class="container">
-
-<div class="topbar">
-  <div class="title">Executive KPI Metrics</div>
-  <div class="controls">
-    <select id="locationSelect" onchange="render()">
-      <option>Helsingør</option>
-      <option>Hillerød</option>
-      <option>Farum</option>
-      <option>Hørsholm</option>
-      <option>Vanløse</option>
-    </select>
-    <button onclick="openModal()">+ Opret måned</button>
-  </div>
+<div class="sidebar">
+  <div class="sidebar-title">KPI Dashboard</div>
+  <div class="nav-item active" onclick="navigate('dashboard', this)">Dashboard</div>
+  <div class="nav-item" onclick="navigate('group', this)">Koncern Overblik</div>
 </div>
 
-<div class="metrics" id="metrics"></div>
-
-<table id="table"></table>
-
+<div class="main-content" id="content-area">
+  <!-- Content will be injected here by JavaScript -->
 </div>
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3>Opret måned</h3>
+    <h3>Opret Måned</h3>
+    <select id="modalLocation"></select>
     <input type="month" id="month">
     <input type="number" id="revenue" placeholder="Omsætning (inkl moms)">
     <input type="number" id="salary" placeholder="Løn">
     <input type="number" id="kitchen" placeholder="Køkken">
     <input type="number" id="bar" placeholder="Bar">
-    <button onclick="saveMonth()">Gem</button>
+    <button onclick="saveMonth()">Gem Måned</button>
   </div>
 </div>
 
 <script>
-
-const VAT=1.25;
-
-const TARGETS={
-  "Helsingør":{salary:35,fb:33},
-  "Hillerød":{salary:35,fb:33},
-  "Farum":{salary:36,fb:33},
-  "Hørsholm":{salary:35,fb:33},
-  "Vanløse":{salary:35,fb:33}
+const VAT = 1.25;
+const LOCATIONS = ["Helsingør", "Hillerød", "Farum", "Hørsholm", "Vanløse"];
+const TARGETS = {
+  "Helsingør": { salary: 35, fb: 33 },
+  "Hillerød": { salary: 35, fb: 33 },
+  "Farum": { salary: 36, fb: 33 },
+  "Hørsholm": { salary: 35, fb: 33 },
+  "Vanløse": { salary: 35, fb: 33 }
 };
+let data = JSON.parse(localStorage.getItem("proKPI")) || {};
+let chartInstance;
 
-let data=JSON.parse(localStorage.getItem("execKPI"))||{};
-
-function save(){localStorage.setItem("execKPI",JSON.stringify(data));}
-
-function openModal(){
-  modal.style.display="flex";
+// --- Core App Logic ---
+function navigate(view, element) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  element.classList.add('active');
+  if (view === 'dashboard') renderDashboardView();
+  if (view === 'group') renderGroupView();
 }
 
-function saveMonth(){
-  const loc=locationSelect.value;
-  if(!data[loc]) data[loc]=[];
+function openModal() {
+  // Nulstil modal
+  document.getElementById('modalLocation').value = LOCATIONS[0];
+  document.getElementById('month').value = '';
+  document.getElementById('revenue').value = '';
+  document.getElementById('salary').value = '';
+  document.getElementById('kitchen').value = '';
+  document.getElementById('bar').value = '';
+  document.getElementById('modal').style.display = 'flex';
+}
 
+function saveMonth() {
+  const loc = document.getElementById('modalLocation').value;
+  if (!data[loc]) data[loc] = [];
   data[loc].push({
-    month:month.value,
-    revenue:+revenue.value,
-    salary:+salary.value,
-    kitchen:+kitchen.value,
-    bar:+bar.value
+    month: document.getElementById('month').value,
+    revenue: +document.getElementById('revenue').value,
+    salary: +document.getElementById('salary').value,
+    kitchen: +document.getElementById('kitchen').value,
+    bar: +document.getElementById('bar').value
   });
-
-  save();
-  modal.style.display="none";
-  render();
+  localStorage.setItem("proKPI", JSON.stringify(data));
+  document.getElementById('modal').style.display = 'none';
+  renderDashboardView(); // Refresh the view
 }
 
-function colorClass(value,target){
-  if(value<=target) return "good";
-  if(value<=target+1) return "warn";
-  return "bad";
+// --- View Renders ---
+function renderDashboardView() {
+  const content = document.getElementById('content-area');
+  content.innerHTML = `
+    <div class="header">
+      <h1>Dashboard</h1>
+      <div class="controls">
+        <select id="locationSelect" onchange="updateDashboard()">${LOCATIONS.map(l => `<option>${l}</option>`).join('')}</select>
+        <button onclick="openModal()">+ Opret Måned</button>
+      </div>
+    </div>
+    <div id="dashboard-content"></div>
+  `;
+  updateDashboard();
 }
 
-function render(){
-  const loc=locationSelect.value;
-  const months=data[loc]||[];
-  if(months.length===0) return;
+function updateDashboard() {
+  const loc = document.getElementById('locationSelect').value;
+  const months = data[loc] || [];
+  if (months.length === 0) {
+    document.getElementById('dashboard-content').innerHTML = "Ingen data for denne lokation endnu.";
+    return;
+  }
+  months.sort((a,b) => new Date(a.month) - new Date(b.month));
+  const latest = months[months.length - 1];
+  const { net, salaryPct, fbPct, score } = calculateKPIs(latest, loc);
 
-  months.sort((a,b)=>new Date(a.month)-new Date(b.month));
-  const latest=months[months.length-1];
-  const net=latest.revenue/VAT;
-
-  const salaryPct=latest.salary/net*100;
-  const fbPct=(latest.kitchen+latest.bar)/net*100;
-
-  const salaryTarget=TARGETS[loc].salary;
-  const fbTarget=TARGETS[loc].fb;
-
-  const salaryDiff=Math.max(salaryPct-salaryTarget,0);
-  const fbDiff=Math.max(fbPct-fbTarget,0);
-
-  const score=Math.max(0,100-(salaryDiff*10)-(fbDiff*10));
-
-  document.getElementById("metrics").innerHTML=`
-    <div class="metric">
-      <span>Omsætning ex moms</span>
-      <h2>${net.toFixed(0)}</h2>
+  document.getElementById('dashboard-content').innerHTML = `
+    <div class="kpi-grid">
+      ${createKpiCard('Omsætning (ex moms)', net.toFixed(0) + ' kr')}
+      ${createKpiCard('Løn %', salaryPct.toFixed(1) + '%', salaryPct, TARGETS[loc].salary)}
+      ${createKpiCard('F&B %', fbPct.toFixed(1) + '%', fbPct, TARGETS[loc].fb)}
+      ${createKpiCard('Performance Index', score.toFixed(0), score, 80, true)}
     </div>
-    <div class="metric">
-      <span>Løn % (Target ${salaryTarget}%)</span>
-      <h2 class="${colorClass(salaryPct,salaryTarget)}">${salaryPct.toFixed(1)}%</h2>
-    </div>
-    <div class="metric">
-      <span>Køkken + Bar % (Target ${fbTarget}%)</span>
-      <h2 class="${colorClass(fbPct,fbTarget)}">${fbPct.toFixed(1)}%</h2>
-    </div>
-    <div class="metric">
-      <span>Performance Index</span>
-      <h2 class="score">${score.toFixed(0)}</h2>
+    <div class="table-container">
+      <canvas id="chart"></canvas>
     </div>
   `;
-
-  document.getElementById("table").innerHTML=
-    "<tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>F&B%</th></tr>"+
-    months.map(m=>{
-      const n=m.revenue/VAT;
-      return `<tr>
-        <td>${m.month}</td>
-        <td>${n.toFixed(0)}</td>
-        <td>${(m.salary/n*100).toFixed(1)}%</td>
-        <td>${((m.kitchen+m.bar)/n*100).toFixed(1)}%</td>
-      </tr>`;
-    }).join("");
+  renderChart(months, loc);
 }
 
-render();
+function renderGroupView() {
+  const content = document.getElementById('content-area');
+  let tableRows = '';
+  let totalScore = 0;
+  let count = 0;
 
+  for (const loc of LOCATIONS) {
+    const months = data[loc] || [];
+    if (months.length > 0) {
+      months.sort((a,b) => new Date(a.month) - new Date(b.month));
+      const latest = months[months.length - 1];
+      const { salaryPct, fbPct, score } = calculateKPIs(latest, loc);
+      totalScore += score;
+      count++;
+      tableRows += `
+        <tr>
+          <td>${loc}</td>
+          <td><span class="${colorClass(salaryPct, TARGETS[loc].salary)}">${salaryPct.toFixed(1)}%</span></td>
+          <td><span class="${colorClass(fbPct, TARGETS[loc].fb)}">${fbPct.toFixed(1)}%</span></td>
+          <td><span class="${colorClass(score, 80, true)}">${score.toFixed(0)}</span></td>
+        </tr>
+      `;
+    }
+  }
+
+  const avgScore = count > 0 ? totalScore / count : 0;
+  content.innerHTML = `
+    <div class="header"><h1>Koncern Overblik</h1></div>
+    <div class="kpi-grid" style="grid-template-columns: 1fr;">
+      ${createKpiCard('Gennemsnitlig Performance', avgScore.toFixed(0), avgScore, 80, true)}
+    </div>
+    <div class="table-container">
+      <table>
+        <thead><tr><th>Lokation</th><th>Løn %</th><th>F&B %</th><th>Score</th></tr></thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// --- Helper & UI Functions ---
+function calculateKPIs(monthData, loc) {
+  const net = monthData.revenue / VAT;
+  const salaryPct = net > 0 ? (monthData.salary / net) * 100 : 0;
+  const fbPct = net > 0 ? ((monthData.kitchen + monthData.bar) / net) * 100 : 0;
+  const salaryDiff = Math.max(0, salaryPct - TARGETS[loc].salary);
+  const fbDiff = Math.max(0, fbPct - TARGETS[loc].fb);
+  const score = Math.max(0, 100 - (salaryDiff * 10) - (fbDiff * 10));
+  return { net, salaryPct, fbPct, score };
+}
+
+function colorClass(value, target, higherIsBetter = false) {
+  if (higherIsBetter) {
+    if (value >= target) return 'good';
+    if (value >= target - 10) return 'warn';
+    return 'bad';
+  }
+  if (value <= target) return 'good';
+  if (value <= target + 1) return 'warn';
+  return 'bad';
+}
+
+function createKpiCard(label, value, actual, target, higherIsBetter = false) {
+  let diffHtml = '';
+  if (target !== undefined) {
+    const diff = actual - target;
+    const cls = colorClass(actual, target, higherIsBetter);
+    diffHtml = `<div class="diff ${cls}">${diff > 0 ? '+' : ''}${diff.toFixed(1)} vs target</div>`;
+  }
+  return `
+    <div class="kpi-card">
+      <div class="label">${label}</div>
+      <div class="value">${value}</div>
+      ${diffHtml}
+    </div>
+  `;
+}
+
+function renderChart(months, loc) {
+  if (chartInstance) chartInstance.destroy();
+  const ctx = document.getElementById('chart').getContext('2d');
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: months.map(m => m.month),
+      datasets: [
+        { label: 'Løn %', data: months.map(m => calculateKPIs(m, loc).salaryPct), borderColor: 'var(--bad)', tension: 0.3, backgroundColor: 'rgba(239, 68, 68, 0.1)' },
+        { label: 'F&B %', data: months.map(m => calculateKPIs(m, loc).fbPct), borderColor: 'var(--warn)', tension: 0.3, backgroundColor: 'rgba(250, 204, 21, 0.1)' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: 'var(--text-secondary)' } } },
+      scales: { x: { ticks: { color: 'var(--text-secondary)' } }, y: { ticks: { color: 'var(--text-secondary)' } } }
+    }
+  });
+}
+
+// --- Initial Load ---
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('modalLocation').innerHTML = LOCATIONS.map(l => `<option>${l}</option>`).join('');
+    renderDashboardView();
+});
 </script>
-
 </body>
 </html>
