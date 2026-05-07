@@ -104,7 +104,9 @@ function render(issues, comments){
 
         <input type="date"
           id="date-${issue.id}"
-          value="${issue.estimatedCompletion || ""}">
+          value="${issue.estimatedCompletion 
+  ? issue.estimatedCompletion.split('T')[0] 
+  : ""}"
 
         <button onclick="saveDate('${issue.id}')">
           Gem dato
