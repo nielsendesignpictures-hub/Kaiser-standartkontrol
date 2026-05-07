@@ -159,6 +159,32 @@ button{
   font-size:14px;
   margin-top:8px;
 }
+
+  @media (max-width: 768px){
+
+  body{
+    display:block;
+  }
+
+  .sidebar{
+    width:100%;
+    height:auto;
+    position:relative;
+  }
+
+  .main{
+    padding:15px;
+  }
+
+  .kpi-grid{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  button{
+    width:100%;
+  }
+}
 </style>
 </head>
 
@@ -233,7 +259,8 @@ function loadData(manual=false){
 
 function handleData(data){
 
-  const issues = data.issues || [];
+  // Hvis echo returnerer array direkte
+  const issues = Array.isArray(data) ? data : (data.issues || []);
   const comments = data.comments || [];
 
   render(issues, comments);
