@@ -233,21 +233,41 @@ button{
 
 <script>
 
-const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnTDzvdfwYx7PmWh6JHXgghKnXv_5Ew3wRvPMTULnJg68QH4jYs-cYkfM-eDTP7AbwvAiM52QPgValpvZBDMKKQSir2i_ttOLVkOQwyOB2n_WGQR1BWVR2hBHmUeH8XdW7FIMbcs4p-jxLfDUaEkM9hjc3VPVuHWdPRO1TzKRXqIGJEWHBvjX0cCvnNAxJsdJZAewiMlObaF0QEPJNaYPTbdZZTOiEK9XN92TRXDylF4d49sh4UujFalEXN8uUbHm50XR1kQijFrpghdP-_7TNbXAjQZ_5lw&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
+const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-function loadData(){
+function loadData(manual=false){
+
+  if(isLoading) return;
+  isLoading=true;
+
+  const old=document.getElementById("jsonp");
+  if(old) old.remove();
 
   const script=document.createElement("script");
-  script.src = API_URL + "&callback=handleData";
+  script.id="jsonp";
+  script.src=API_URL+"?callback=handleData&t="+Date.now();
   document.body.appendChild(script);
 }
-
 function handleData(data){
-  document.body.innerHTML = "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+  console.log("DATA:", data);
+
+  let issues = [];
+
+  if(Array.isArray(data)){
+    issues = data;
+  } else if(data && Array.isArray(data.issues)){
+    issues = data.issues;
+  }
+
+  render(issues, []);
+
+  document.getElementById("liveStatus").innerText="● Live";
+  document.getElementById("lastUpdated").innerText=
+    new Date().toLocaleTimeString();
+
+  isLoading=false;
 }
-
-loadData();
-
 </script>
 
 </body>
