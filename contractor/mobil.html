@@ -3,90 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaiser Håndværker</title>
+<title>Kaiser – Håndværker</title>
 
 <style>
-body{
-  margin:0;
-  font-family:sans-serif;
-  background:#f3f4f6;
-}
-.header{
-  background:#000;
-  color:white;
-  padding:16px;
-}
-.card{
-  background:white;
-  margin:15px;
-  padding:15px;
-  border-radius:12px;
-}
-.loading{
-  padding:40px;
-  text-align:center;
-}
-button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-}
+body{margin:0;font-family:sans-serif;background:#f3f4f6;}
+.header{background:#000;color:white;padding:16px;}
+.card{background:white;margin:15px;padding:15px;border-radius:12px;}
+.loading{text-align:center;padding:40px;}
+button{width:100%;padding:14px;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
 <div class="header">Kaiser – Håndværker</div>
-<div id="issues">
-  <div class="loading">Indlæser...</div>
-</div>
+<div id="issues"><div class="loading">Indlæser...</div></div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
+/* ✅ Echo URL */
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnTDzvdfwYx7PmWh6JHXgghKnXv_5Ew3wRvPMTULnJg68QH4jYs-cYkfM-eDTP7AbwvAiM52QPgValpvZBDMKKQSir2i_ttOLVkOQwyOB2n_WGQR1BWVR2hBHmUeH8XdW7FIMbcs4p-jxLfDUaEkM9hjc3VPVuHWdPRO1TzKRXqIGJEWHBvjX0cCvnNAxJsdJZAewiMlObaF0QEPJNaYPTbdZZTOiEK9XN92TRXDylF4d49sh4Uje4rfMXVbIshWydbNY7n5NtUqa_UmpMtIhDW4LN-IUA&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
 
-async function loadData(){
+function loadData(){
 
-  const container = document.getElementById("issues");
-  container.innerHTML = "<div class='loading'>Indlæser...</div>";
+  const old=document.getElementById("jsonp");
+  if(old) old.remove();
 
-  try {
-
-    const response = await fetch(API_URL + "?t=" + Date.now(), {
-      method: "GET",
-      mode: "cors",
-      cache: "no-store"
-    });
-
-    const data = await response.json();
-
-    render(Array.isArray(data.issues) ? data.issues : []);
-
-  } catch (error) {
-    console.error(error);
-    container.innerHTML = "<div class='loading'>Fejl ved indlæsning</div>";
-  }
+  const script=document.createElement("script");
+  script.id="jsonp";
+  script.src = API_URL + "&callback=handleData&t=" + Date.now();
+  document.body.appendChild(script);
 }
 
-function render(issues){
+function handleData(data){
 
-  const container = document.getElementById("issues");
-  container.innerHTML = "";
+  const issues = Array.isArray(data) ? data : (data.issues || []);
+
+  const container=document.getElementById("issues");
+  container.innerHTML="";
 
   const active = issues.filter(i => i.status !== "Closed");
 
   if(active.length === 0){
-    container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
+    container.innerHTML="<div class='loading'>Ingen aktive sager ✅</div>";
     return;
   }
 
-  active.forEach(issue => {
-
-    container.innerHTML += `
+  active.forEach(issue=>{
+    container.innerHTML+=`
       <div class="card">
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
-
         <button onclick="markDone('${issue.id}')">
           Markér færdig
         </button>
@@ -95,14 +62,16 @@ function render(issues){
   });
 }
 
-async function markDone(id){
+function markDone(id){
 
-  await fetch(
-    API_URL + "?action=update&id=" + id + "&status=Closed",
-    { method: "GET", mode: "cors" }
-  );
+  const script=document.createElement("script");
+  script.src = API_URL +
+    "&action=update&id="+id+
+    "&status=Closed&t="+Date.now();
 
-  setTimeout(loadData, 500);
+  document.body.appendChild(script);
+
+  setTimeout(loadData,800);
 }
 
 document.addEventListener("DOMContentLoaded", loadData);
