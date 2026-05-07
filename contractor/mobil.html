@@ -55,33 +55,30 @@ textarea{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-function loadData(){
+async function loadData(){
 
-  const old = document.getElementById("jsonp");
-  if(old) old.remove();
+  const container = document.getElementById("issues");
+  container.innerHTML = "<div class='loading'>Indlæser...</div>";
 
-  const script = document.createElement("script");
-  script.id = "jsonp";
-  script.src = API_URL + "?callback=handleData&t=" + Date.now();
-  document.body.appendChild(script);
-}
+  try {
 
-function handleData(data){
+    const response = await fetch(API_URL + "?t=" + Date.now(), {
+      method: "GET",
+      mode: "cors"
+    });
 
-  alert("Data loaded");
+    const data = await response.json();
 
-  let issues = [];
+    render(data.issues || []);
 
-  if(Array.isArray(data)){
-    issues = data;
-  } else if(data && Array.isArray(data.issues)){
-    issues = data.issues;
+  } catch (error) {
+
+    container.innerHTML = "<div class='loading'>Fejl ved indlæsning</div>";
+    console.error(error);
   }
-
-  render(issues, []);
 }
 
-function render(issues, comments){
+function render(issues){
 
   const container = document.getElementById("issues");
   container.innerHTML = "";
@@ -95,89 +92,13 @@ function render(issues, comments){
 
   active.forEach(issue => {
 
-    const issueComments = comments.filter(c => c.issueId === issue.id);
-
     container.innerHTML += `
       <div class="card">
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
-
-        <input type="date"
-          id="date-${issue.id}"
-          value="${issue.estimatedCompletion 
-  ? issue.estimatedCompletion.split('T')[0] 
-  : ""}"
-
-        <button onclick="saveDate('${issue.id}')">
-          Gem dato
-        </button>
-
-        <button onclick="markDone('${issue.id}')">
-          Markér færdig
-        </button>
-
-        <textarea id="comment-${issue.id}"
-          placeholder="Skriv status..."></textarea>
-
-        <button onclick="saveComment('${issue.id}','${issue.location}')">
-          Tilføj kommentar
-        </button>
-
-        ${issueComments.map(c => `
-          <div style="margin-top:8px;font-size:14px;">
-            <strong>${c.author}</strong><br>
-            ${c.comment}
-          </div>
-        `).join("")}
       </div>
     `;
   });
-}
-
-function saveDate(id){
-
-  const date = document.getElementById("date-"+id).value;
-  if(!date) return;
-
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&estimatedCompletion=" + encodeURIComponent(date) +
-    "&t=" + Date.now();
-
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
-}
-
-function markDone(id){
-
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&status=Closed&t=" + Date.now();
-
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
-}
-
-function saveComment(id, location){
-
-  const comment = document.getElementById("comment-"+id).value;
-  if(!comment) return;
-
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&comment=" + encodeURIComponent(comment) +
-    "&author=Håndværker" +
-    "&location=" + encodeURIComponent(location) +
-    "&t=" + Date.now();
-
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
 }
 
 document.addEventListener("DOMContentLoaded", loadData);
