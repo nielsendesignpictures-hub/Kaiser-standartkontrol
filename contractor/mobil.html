@@ -8,7 +8,7 @@
 <style>
 body{
   margin:0;
-  font-family:sans-serif;
+  font-family:Arial, sans-serif;
   background:#f3f4f6;
 }
 
@@ -16,6 +16,7 @@ body{
   background:#000;
   color:white;
   padding:16px;
+  font-size:18px;
 }
 
 .card{
@@ -23,6 +24,7 @@ body{
   margin:15px;
   padding:15px;
   border-radius:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
 }
 
 .loading{
@@ -34,9 +36,21 @@ button{
   width:100%;
   padding:14px;
   margin-top:10px;
+  border:none;
+  border-radius:8px;
 }
 
+.btn-save{background:#000;color:white;}
+.btn-done{background:#16a34a;color:white;}
+.btn-comment{background:#333;color:white;}
+
 textarea{
+  width:100%;
+  margin-top:10px;
+  padding:8px;
+}
+
+input[type="date"]{
   width:100%;
   margin-top:10px;
   padding:8px;
@@ -47,43 +61,53 @@ textarea{
 <body>
 
 <div class="header">Kaiser – Håndværker</div>
-<div id="issues">
-  <div class="loading">Indlæser...</div>
-</div>
+<div id="issues"><div class="loading">Indlæser...</div></div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx90unEejk2SC4TVBHA0JZXz7ZSwrKp3tUr92L8gX_JbyhBDsSADsihl-RNf0UvEsda/exec";
 
-async function loadData(){
+let isLoading = false;
 
-  const container = document.getElementById("issues");
-  container.innerHTML = "<div class='loading'>Indlæser...</div>";
+function loadData(){
 
-  try {
+  if(isLoading) return;
+  isLoading = true;
 
-    const response = await fetch(API_URL + "?t=" + Date.now(), {
-      method: "GET",
-      mode: "cors"
-    });
+  const old = document.getElementById("jsonp");
+  if(old) old.remove();
 
-    const data = await response.json();
-
-    render(data.issues || []);
-
-  } catch (error) {
-
-    container.innerHTML = "<div class='loading'>Fejl ved indlæsning</div>";
-    console.error(error);
-  }
+  const script = document.createElement("script");
+  script.id = "jsonp";
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  document.body.appendChild(script);
 }
 
-function render(issues){
+function handleData(data){
+
+  let issues = [];
+  let comments = [];
+
+  if(Array.isArray(data)){
+    issues = data;
+  } else {
+    issues = data.issues || [];
+    comments = data.comments || [];
+  }
+
+  render(issues, comments);
+
+  isLoading = false;
+}
+
+function render(issues, comments){
 
   const container = document.getElementById("issues");
   container.innerHTML = "";
 
-  const active = issues.filter(i => i.status !== "Closed");
+  const active = issues
+    .filter(i => i.status !== "Closed")
+    .sort((a,b)=> a.severity==="High" ? -1 : 1);
 
   if(active.length === 0){
     container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
@@ -92,16 +116,98 @@ function render(issues){
 
   active.forEach(issue => {
 
+    const issueComments = comments.filter(c => c.issueId === issue.id);
+
     container.innerHTML += `
       <div class="card">
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
+
+        <input type="date"
+          id="date-${issue.id}"
+          value="${issue.estimatedCompletion 
+            ? issue.estimatedCompletion.split('T')[0] 
+            : ""}">
+
+        <button class="btn-save"
+          onclick="saveDate('${issue.id}')">
+          Gem dato
+        </button>
+
+        <button class="btn-done"
+          onclick="markDone('${issue.id}')">
+          Markér færdig
+        </button>
+
+        <textarea id="comment-${issue.id}"
+          placeholder="Skriv status..."></textarea>
+
+        <button class="btn-comment"
+          onclick="saveComment('${issue.id}','${issue.location}')">
+          Tilføj kommentar
+        </button>
+
+        ${issueComments.map(c=>`
+          <div style="margin-top:8px;font-size:14px;">
+            <strong>${c.author}</strong><br>
+            ${c.comment}
+          </div>
+        `).join("")}
       </div>
     `;
   });
 }
 
-document.addEventListener("DOMContentLoaded", loadData);
+function saveDate(id){
+
+  const date = document.getElementById("date-"+id).value;
+  if(!date) return;
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&estimatedCompletion=" + encodeURIComponent(date) +
+    "&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function markDone(id){
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&status=Closed&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function saveComment(id, location){
+
+  const comment = document.getElementById("comment-"+id).value;
+  if(!comment) return;
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&comment=" + encodeURIComponent(comment) +
+    "&author=Håndværker" +
+    "&location=" + encodeURIComponent(location) +
+    "&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  loadData();
+  setInterval(loadData,20000);
+});
 
 </script>
 
