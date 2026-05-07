@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaiser Håndværker</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -104,29 +101,31 @@ button{
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
+/* ✅ Brug echo-URL på mobil */
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSJKmpB9EG_eaOYKdTx-IK70l7nOxBb56-Bbxn5Av5h-ejK4q6pcU2mV2NOnaezi43hQH2_SXiGLyNu37yCAdyKQ47de_qOuW_T9APrU0gC0ukCyRKlVS5fjgvqHnHoM_NlYEYgM742w65lAVS1LhKmUSDp35HoAxZpGsOOn3WNyjuFUDOQ4JnqohaL1iOdd5LvyZlgNWn78z35PNhvnJB7V-lJmIsaaLvheuvCN-2uTCL4UujFalEXN8uUbHm50XR1kQijFrpghdP-_7TNbXAjQZ_5lw&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
 
 function loadData(){
 
   document.getElementById("issues").innerHTML =
     "<div class='loading'>Indlæser...</div>";
 
-  const old = document.getElementById("jsonp");
+  const old=document.getElementById("jsonp");
   if(old) old.remove();
 
-  const script = document.createElement("script");
-  script.id = "jsonp";
-  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  const script=document.createElement("script");
+  script.id="jsonp";
+  script.src=API_URL + "&callback=handleData&t=" + Date.now();
   document.body.appendChild(script);
 }
 
 function handleData(data){
 
-  const issues = Array.isArray(data.issues) ? data.issues : [];
-  const comments = Array.isArray(data.comments) ? data.comments : [];
+  const issues = Array.isArray(data) ? data : (data.issues || []);
+  const comments = data.comments || [];
 
   render(issues, comments);
 }
+
 function render(issues, comments){
 
   const container=document.getElementById("issues");
@@ -198,12 +197,10 @@ function saveDate(id){
   const date=document.getElementById("date-"+id).value;
   if(!date) return;
 
-  navigator.vibrate?.(50);
-
   const script=document.createElement("script");
   script.src=
     API_URL+
-    "?action=update&id="+id+
+    "&action=update&id="+id+
     "&estimatedCompletion="+date+
     "&t="+Date.now();
 
@@ -212,13 +209,10 @@ function saveDate(id){
 }
 
 function markDone(id){
-
-  navigator.vibrate?.([50,50,50]);
-
   const script=document.createElement("script");
   script.src=
     API_URL+
-    "?action=update&id="+id+
+    "&action=update&id="+id+
     "&status=Closed&t="+Date.now();
 
   document.body.appendChild(script);
@@ -226,14 +220,13 @@ function markDone(id){
 }
 
 function saveComment(id, location){
-
   const comment=document.getElementById("comment-"+id).value;
   if(!comment) return;
 
   const script=document.createElement("script");
   script.src=
     API_URL+
-    "?action=update&id="+id+
+    "&action=update&id="+id+
     "&comment="+encodeURIComponent(comment)+
     "&author=Håndværker"+
     "&location="+encodeURIComponent(location)+
@@ -245,8 +238,6 @@ function saveComment(id, location){
 
 loadData();
 setInterval(loadData,20000);
-
-
 
 </script>
 
