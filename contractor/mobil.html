@@ -5,59 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaiser Håndværker</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
 body{
   margin:0;
-  font-family:Inter,sans-serif;
+  font-family:sans-serif;
   background:#f3f4f6;
 }
-
 .header{
-  position:sticky;
-  top:0;
   background:#000;
   color:white;
   padding:16px;
-  font-size:18px;
-  font-weight:600;
 }
-
 .card{
   background:white;
   margin:15px;
-  padding:18px;
-  border-radius:14px;
-  border:1px solid #e5e7eb;
+  padding:15px;
+  border-radius:12px;
 }
-
+.loading{
+  padding:40px;
+  text-align:center;
+}
 button{
   width:100%;
-  padding:16px;
-  font-size:16px;
-  margin-top:12px;
-  border:none;
-  border-radius:12px;
-  font-weight:600;
-}
-
-.btn-save{background:black;color:white;}
-.btn-done{background:#16a34a;color:white;}
-
-.loading{
-  text-align:center;
-  padding:40px;
+  padding:14px;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  Kaiser – Håndværker
-</div>
-
+<div class="header">Kaiser – Håndværker</div>
 <div id="issues">
   <div class="loading">Indlæser...</div>
 </div>
@@ -66,59 +45,49 @@ button{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-async function loadData(){
+function loadData(){
 
-  document.getElementById("issues").innerHTML =
-    "<div class='loading'>Indlæser...</div>";
+  const old = document.getElementById("jsonp");
+  if(old) old.remove();
 
-  try {
-
-    const res = await fetch(API_URL + "?t=" + Date.now(), {
-      method: "GET",
-      redirect: "follow",
-      credentials: "omit"
-    });
-
-    const text = await res.text();
-
-    // Apps Script kan sende HTML redirect først
-    const jsonStart = text.indexOf("{");
-    const clean = text.substring(jsonStart);
-
-    const data = JSON.parse(clean);
-
-    render(data.issues || [], data.comments || []);
-
-  } catch(err){
-    console.error(err);
-    document.getElementById("issues").innerHTML =
-      "<div class='loading'>Indlæser fejlede</div>";
-  }
+  const script = document.createElement("script");
+  script.id = "jsonp";
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  document.body.appendChild(script);
 }
 
-function render(issues, comments){
+function handleData(data){
+
+  // Hvis gammel struktur
+  if(Array.isArray(data)){
+    render(data);
+    return;
+  }
+
+  // Hvis ny struktur
+  render(data.issues || []);
+}
+
+function render(issues){
 
   const container = document.getElementById("issues");
   container.innerHTML = "";
 
-  const active = issues
-    .filter(i => i.status !== "Closed")
-    .sort((a,b)=> a.severity==="High" ? -1 : 1);
+  const active = issues.filter(i => i.status !== "Closed");
 
   if(active.length === 0){
     container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
     return;
   }
 
-  active.forEach(issue=>{
+  active.forEach(issue => {
 
     container.innerHTML += `
       <div class="card">
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
 
-        <button class="btn-done"
-          onclick="markDone('${issue.id}')">
+        <button onclick="markDone('${issue.id}')">
           Markér færdig
         </button>
       </div>
@@ -126,13 +95,17 @@ function render(issues, comments){
   });
 }
 
-async function markDone(id){
+function markDone(id){
 
-  await fetch(API_URL + "?action=update&id=" + id + "&status=Closed", {
-    mode:"cors"
-  });
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + id +
+    "&status=Closed&t=" + Date.now();
 
-  setTimeout(loadData,500);
+  document.body.appendChild(script);
+
+  setTimeout(loadData, 800);
 }
 
 loadData();
