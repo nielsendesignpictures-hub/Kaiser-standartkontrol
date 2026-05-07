@@ -107,8 +107,13 @@ button{
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
 function loadData(){
-  const old=document.getElementById("jsonp");
-  if(old) old.remove();
+  document.getElementById("issues").innerHTML =
+    "<div class='loading'>Indlæser...</div>";
+
+  const script = document.createElement("script");
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  document.body.appendChild(script);
+}
 
   const script=document.createElement("script");
   script.id="jsonp";
