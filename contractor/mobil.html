@@ -68,25 +68,31 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a
 
 async function loadData(){
 
-  try{
+  document.getElementById("issues").innerHTML =
+    "<div class='loading'>Indlæser...</div>";
 
-    const res = await fetch(API_URL, {
+  try {
+
+    const res = await fetch(API_URL + "?t=" + Date.now(), {
       method: "GET",
-      mode: "cors",
-      cache: "no-store"
+      redirect: "follow",
+      credentials: "omit"
     });
 
-    const data = await res.json();
+    const text = await res.text();
 
-    render(
-      Array.isArray(data.issues) ? data.issues : [],
-      Array.isArray(data.comments) ? data.comments : []
-    );
+    // Apps Script kan sende HTML redirect først
+    const jsonStart = text.indexOf("{");
+    const clean = text.substring(jsonStart);
+
+    const data = JSON.parse(clean);
+
+    render(data.issues || [], data.comments || []);
 
   } catch(err){
-    document.getElementById("issues").innerHTML =
-      "<div class='loading'>Netværksfejl</div>";
     console.error(err);
+    document.getElementById("issues").innerHTML =
+      "<div class='loading'>Indlæser fejlede</div>";
   }
 }
 
