@@ -22,7 +22,6 @@ body{
   padding:16px;
   font-size:18px;
   font-weight:600;
-  z-index:100;
 }
 
 .card{
@@ -31,29 +30,6 @@ body{
   padding:18px;
   border-radius:14px;
   border:1px solid #e5e7eb;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.severity-high{color:#dc2626;font-weight:600}
-.severity-medium{color:#f59e0b;font-weight:600}
-.severity-low{color:#16a34a;font-weight:600}
-
-textarea{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  font-size:16px;
-  border-radius:10px;
-  border:1px solid #ddd;
-}
-
-input[type="date"]{
-  width:100%;
-  padding:12px;
-  font-size:16px;
-  margin-top:12px;
-  border-radius:10px;
-  border:1px solid #ddd;
 }
 
 button{
@@ -68,23 +44,10 @@ button{
 
 .btn-save{background:black;color:white;}
 .btn-done{background:#16a34a;color:white;}
-.btn-comment{background:#333;color:white;}
-
-.history{
-  margin-top:15px;
-  padding-top:10px;
-  border-top:1px solid #eee;
-}
-
-.history-entry{
-  font-size:14px;
-  margin-top:8px;
-}
 
 .loading{
   text-align:center;
   padding:40px;
-  color:#666;
 }
 </style>
 </head>
@@ -101,143 +64,72 @@ button{
 
 <script>
 
-/* ✅ Brug echo-URL på mobil */
-const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSJKmpB9EG_eaOYKdTx-IK70l7nOxBb56-Bbxn5Av5h-ejK4q6pcU2mV2NOnaezi43hQH2_SXiGLyNu37yCAdyKQ47de_qOuW_T9APrU0gC0ukCyRKlVS5fjgvqHnHoM_NlYEYgM742w65lAVS1LhKmUSDp35HoAxZpGsOOn3WNyjuFUDOQ4JnqohaL1iOdd5LvyZlgNWn78z35PNhvnJB7V-lJmIsaaLvheuvCN-2uTCL4UujFalEXN8uUbHm50XR1kQijFrpghdP-_7TNbXAjQZ_5lw&lib=Mv462BO7g3XA9FBtJ8YosmVhwL89NOhPq";
+const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-function loadData(){
+async function loadData(){
 
-  document.getElementById("issues").innerHTML =
-    "<div class='loading'>Indlæser...</div>";
+  try{
 
-  const old=document.getElementById("jsonp");
-  if(old) old.remove();
+    const res = await fetch(API_URL, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store"
+    });
 
-  const script=document.createElement("script");
-  script.id="jsonp";
-  script.src=API_URL + "&callback=handleData&t=" + Date.now();
-  document.body.appendChild(script);
-}
+    const data = await res.json();
 
-function handleData(data){
+    render(
+      Array.isArray(data.issues) ? data.issues : [],
+      Array.isArray(data.comments) ? data.comments : []
+    );
 
-  const issues = Array.isArray(data) ? data : (data.issues || []);
-  const comments = data.comments || [];
-
-  render(issues, comments);
+  } catch(err){
+    document.getElementById("issues").innerHTML =
+      "<div class='loading'>Netværksfejl</div>";
+    console.error(err);
+  }
 }
 
 function render(issues, comments){
 
-  const container=document.getElementById("issues");
-  container.innerHTML="";
+  const container = document.getElementById("issues");
+  container.innerHTML = "";
 
   const active = issues
-    .filter(i=>i.status!=="Closed")
-    .sort((a,b)=>{
-      if(a.severity==="High") return -1;
-      if(b.severity==="High") return 1;
-      return 0;
-    });
+    .filter(i => i.status !== "Closed")
+    .sort((a,b)=> a.severity==="High" ? -1 : 1);
 
-  if(active.length===0){
-    container.innerHTML="<div class='loading'>Ingen aktive sager ✅</div>";
+  if(active.length === 0){
+    container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
     return;
   }
 
   active.forEach(issue=>{
 
-    const issueComments =
-      comments.filter(c=>c.issueId===issue.id);
-
-    container.innerHTML+=`
+    container.innerHTML += `
       <div class="card">
-
-        <div class="severity-${issue.severity?.toLowerCase()}">
-          ${issue.severity}
-        </div>
-
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
-
-        <input type="date"
-          id="date-${issue.id}"
-          value="${issue.estimatedCompletion || ""}">
-
-        <button class="btn-save"
-          onclick="saveDate('${issue.id}')">
-          Gem dato
-        </button>
 
         <button class="btn-done"
           onclick="markDone('${issue.id}')">
           Markér færdig
         </button>
-
-        <textarea id="comment-${issue.id}"
-          placeholder="Skriv status..."></textarea>
-
-        <button class="btn-comment"
-          onclick="saveComment('${issue.id}','${issue.location}')">
-          Tilføj kommentar
-        </button>
-
-        ${issueComments.map(c=>`
-          <div class="history-entry">
-            <strong>${c.author}</strong><br>
-            ${c.comment}
-          </div>
-        `).join("")}
-
       </div>
     `;
   });
 }
 
-function saveDate(id){
-  const date=document.getElementById("date-"+id).value;
-  if(!date) return;
+async function markDone(id){
 
-  const script=document.createElement("script");
-  script.src=
-    API_URL+
-    "&action=update&id="+id+
-    "&estimatedCompletion="+date+
-    "&t="+Date.now();
+  await fetch(API_URL + "?action=update&id=" + id + "&status=Closed", {
+    mode:"cors"
+  });
 
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
-}
-
-function markDone(id){
-  const script=document.createElement("script");
-  script.src=
-    API_URL+
-    "&action=update&id="+id+
-    "&status=Closed&t="+Date.now();
-
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
-}
-
-function saveComment(id, location){
-  const comment=document.getElementById("comment-"+id).value;
-  if(!comment) return;
-
-  const script=document.createElement("script");
-  script.src=
-    API_URL+
-    "&action=update&id="+id+
-    "&comment="+encodeURIComponent(comment)+
-    "&author=Håndværker"+
-    "&location="+encodeURIComponent(location)+
-    "&t="+Date.now();
-
-  document.body.appendChild(script);
-  setTimeout(loadData,800);
+  setTimeout(loadData,500);
 }
 
 loadData();
-setInterval(loadData,20000);
 
 </script>
 
