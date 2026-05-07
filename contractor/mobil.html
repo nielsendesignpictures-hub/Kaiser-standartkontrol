@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaiser – Håndværker</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Inter,sans-serif;
+  background:#f3f4f6;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  background:white;
+  padding:15px;
+  border-bottom:1px solid #ddd;
+  z-index:100;
+}
+
+h1{
+  margin:0;
+  font-size:20px;
+}
+
+.card{
+  background:white;
+  margin:15px;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid #e5e7eb;
+}
+
+.severity-high{color:#dc2626;font-weight:600}
+.severity-medium{color:#f59e0b;font-weight:600}
+.severity-low{color:#16a34a;font-weight:600}
+
+textarea{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:16px;
+}
+
+input[type="date"]{
+  width:100%;
+  padding:10px;
+  font-size:16px;
+  margin-top:10px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+}
+
+.btn-save{background:black;color:white;}
+.btn-done{background:#16a34a;color:white;}
+.btn-comment{background:#333;color:white;}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Aktive sager</h1>
+</div>
+
+<div id="issues"></div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
+
+function loadData(){
+  const old=document.getElementById("jsonp");
+  if(old) old.remove();
+
+  const script=document.createElement("script");
+  script.id="jsonp";
+  script.src=API_URL+"?callback=handleData&t="+Date.now();
+  document.body.appendChild(script);
+}
+
+function handleData(data){
+  render(data.issues || [], data.comments || []);
+}
+
+function render(issues, comments){
+
+  const container=document.getElementById("issues");
+  container.innerHTML="";
+
+  issues
+    .filter(i=>i.status!=="Closed")
+    .sort((a,b)=>{
+      if(a.severity==="High") return -1;
+      if(b.severity==="High") return 1;
+      return 0;
+    })
+    .forEach(issue=>{
+
+      const issueComments =
+        comments.filter(c=>c.issueId===issue.id);
+
+      container.innerHTML+=`
+        <div class="card">
+
+          <div class="severity-${issue.severity?.toLowerCase()}">
+            ${issue.severity}
+          </div>
+
+          <h3>${issue.location}</h3>
+          <p>${issue.description}</p>
+
+          <input type="date"
+            id="date-${issue.id}"
+            value="${issue.estimatedCompletion || ""}">
+
+          <button class="btn-save"
+            onclick="saveDate('${issue.id}')">
+            Gem dato
+          </button>
+
+          <button class="btn-done"
+            onclick="markDone('${issue.id}')">
+            Markér færdig
+          </button>
+
+          <textarea id="comment-${issue.id}"
+            placeholder="Skriv status..."></textarea>
+
+          <button class="btn-comment"
+            onclick="saveComment('${issue.id}','${issue.location}')">
+            Tilføj kommentar
+          </button>
+
+          ${issueComments.map(c=>`
+            <div style="margin-top:10px;font-size:14px;">
+              <strong>${c.author}</strong><br>
+              ${c.comment}
+            </div>
+          `).join("")}
+
+        </div>
+      `;
+    });
+}
+
+function saveDate(id){
+  const date=document.getElementById("date-"+id).value;
+  if(!date) return;
+
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+id+
+    "&estimatedCompletion="+date+
+    "&t="+Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function markDone(id){
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+id+
+    "&status=Closed&t="+Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function saveComment(id, location){
+  const comment=document.getElementById("comment-"+id).value;
+  if(!comment) return;
+
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+id+
+    "&comment="+encodeURIComponent(comment)+
+    "&author=Håndværker"+
+    "&location="+encodeURIComponent(location)+
+    "&t="+Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+loadData();
+setInterval(loadData,20000);
+
+</script>
+
+</body>
+</html>
