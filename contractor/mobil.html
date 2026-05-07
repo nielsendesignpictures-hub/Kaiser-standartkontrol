@@ -16,7 +16,29 @@ body{
   background:#000;
   color:white;
   padding:16px;
-  font-size:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.badge{
+  background:red;
+  color:white;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.kpi{
+  display:flex;
+  gap:10px;
+  padding:10px;
+}
+
+.kpi div{
+  background:white;
+  padding:8px 12px;
+  border-radius:10px;
 }
 
 .card{
@@ -28,8 +50,8 @@ body{
 }
 
 .loading{
-  padding:40px;
   text-align:center;
+  padding:40px;
 }
 
 button{
@@ -38,6 +60,7 @@ button{
   margin-top:10px;
   border:none;
   border-radius:8px;
+  font-weight:600;
 }
 
 .btn-save{background:#000;color:white;}
@@ -60,29 +83,44 @@ input[type="date"]{
 
 <body>
 
-<div class="header">Kaiser – Håndværker</div>
-<div id="issues"><div class="loading">Indlæser...</div></div>
+<div class="header">
+  <div>Kaiser – Håndværker</div>
+  <div id="commentBadge"></div>
+</div>
+
+<div class="kpi" id="kpiBar"></div>
+
+<div id="issues">
+  <div class="loading">Indlæser...</div>
+</div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbx90unEejk2SC4TVBHA0JZXz7ZSwrKp3tUr92L8gX_JbyhBDsSADsihl-RNf0UvEsda/exec";
 
-let isLoading = false;
+/* Hvis håndværker kun skal se én lokation, indsæt navn her. 
+   Ellers sæt den til null */
+const HANDWERKER_LOCATION = null;
 
+let isLoading = false;
+let lastCommentCheck = localStorage.getItem("lastCommentCheck") || 0;
+
+/* ===== LOAD ===== */
 function loadData(){
 
   if(isLoading) return;
   isLoading = true;
 
-  const old = document.getElementById("jsonp");
+  const old=document.getElementById("jsonp");
   if(old) old.remove();
 
-  const script = document.createElement("script");
-  script.id = "jsonp";
-  script.src = API_URL + "?callback=handleData&t=" + Date.now();
+  const script=document.createElement("script");
+  script.id="jsonp";
+  script.src=API_URL+"?callback=handleData&t="+Date.now();
   document.body.appendChild(script);
 }
 
+/* ===== CALLBACK ===== */
 function handleData(data){
 
   let issues = [];
@@ -96,18 +134,47 @@ function handleData(data){
   }
 
   render(issues, comments);
+  updateBadge(comments);
 
-  isLoading = false;
+  isLoading=false;
 }
 
+/* ===== BADGE ===== */
+function updateBadge(comments){
+
+  const newestComment = comments.length
+    ? Math.max(...comments.map(c => new Date(c.createdAt).getTime()))
+    : 0;
+
+  if(newestComment > lastCommentCheck){
+    document.getElementById("commentBadge").innerHTML =
+      "<span class='badge'>Ny kommentar</span>";
+  } else {
+    document.getElementById("commentBadge").innerHTML = "";
+  }
+
+  localStorage.setItem("lastCommentCheck", newestComment);
+}
+
+/* ===== RENDER ===== */
 function render(issues, comments){
 
   const container = document.getElementById("issues");
   container.innerHTML = "";
 
-  const active = issues
-    .filter(i => i.status !== "Closed")
-    .sort((a,b)=> a.severity==="High" ? -1 : 1);
+  let active = issues
+    .filter(i => i.status !== "Closed");
+
+  if(HANDWERKER_LOCATION){
+    active = active.filter(i => i.location === HANDWERKER_LOCATION);
+  }
+
+  active.sort((a,b)=> a.severity==="High" ? -1 : 1);
+
+  document.getElementById("kpiBar").innerHTML = `
+    <div>Åbne: ${active.length}</div>
+    <div>Kritiske: ${active.filter(i=>i.severity==="High").length}</div>
+  `;
 
   if(active.length === 0){
     container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
@@ -116,10 +183,14 @@ function render(issues, comments){
 
   active.forEach(issue => {
 
-    const issueComments = comments.filter(c => c.issueId === issue.id);
+    const issueComments =
+      comments.filter(c => c.issueId === issue.id);
 
     container.innerHTML += `
-      <div class="card">
+      <div class="card"
+        ontouchstart="startTouch(event,'${issue.id}')"
+        ontouchend="endTouch(event,'${issue.id}')">
+
         <h3>${issue.location}</h3>
         <p>${issue.description}</p>
 
@@ -158,17 +229,18 @@ function render(issues, comments){
   });
 }
 
+/* ===== UPDATE ===== */
 function saveDate(id){
 
   const date = document.getElementById("date-"+id).value;
   if(!date) return;
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&estimatedCompletion=" + encodeURIComponent(date) +
-    "&t=" + Date.now();
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+encodeURIComponent(id)+
+    "&estimatedCompletion="+encodeURIComponent(date)+
+    "&t="+Date.now();
 
   document.body.appendChild(script);
   setTimeout(loadData,800);
@@ -176,11 +248,11 @@ function saveDate(id){
 
 function markDone(id){
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&status=Closed&t=" + Date.now();
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+encodeURIComponent(id)+
+    "&status=Closed&t="+Date.now();
 
   document.body.appendChild(script);
   setTimeout(loadData,800);
@@ -191,19 +263,34 @@ function saveComment(id, location){
   const comment = document.getElementById("comment-"+id).value;
   if(!comment) return;
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + encodeURIComponent(id) +
-    "&comment=" + encodeURIComponent(comment) +
-    "&author=Håndværker" +
-    "&location=" + encodeURIComponent(location) +
-    "&t=" + Date.now();
+  const script=document.createElement("script");
+  script.src=
+    API_URL+
+    "?action=update&id="+encodeURIComponent(id)+
+    "&comment="+encodeURIComponent(comment)+
+    "&author=Håndværker"+
+    "&location="+encodeURIComponent(location)+
+    "&t="+Date.now();
 
   document.body.appendChild(script);
   setTimeout(loadData,800);
 }
 
+/* ===== SWIPE ===== */
+let touchStartX = 0;
+
+function startTouch(e,id){
+  touchStartX = e.changedTouches[0].screenX;
+}
+
+function endTouch(e,id){
+  const diff = e.changedTouches[0].screenX - touchStartX;
+  if(diff < -100){
+    markDone(id);
+  }
+}
+
+/* ===== INIT ===== */
 document.addEventListener("DOMContentLoaded", function(){
   loadData();
   setInterval(loadData,20000);
