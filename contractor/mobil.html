@@ -106,9 +106,27 @@ button{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-function loadData(){
+async function loadData(){
+
   document.getElementById("issues").innerHTML =
     "<div class='loading'>Indlæser...</div>";
+
+  try {
+
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    render(
+      Array.isArray(data.issues) ? data.issues : [],
+      Array.isArray(data.comments) ? data.comments : []
+    );
+
+  } catch(err){
+    document.getElementById("issues").innerHTML =
+      "<div class='loading'>Fejl ved indlæsning</div>";
+    console.error(err);
+  }
+}
 
   const script = document.createElement("script");
   script.src = API_URL + "?callback=handleData&t=" + Date.now();
@@ -121,10 +139,7 @@ function loadData(){
   document.body.appendChild(script);
 }
 
-function handleData(data){
 
-  const issues = Array.isArray(data.issues) ? data.issues : [];
-  const comments = Array.isArray(data.comments) ? data.comments : [];
 
   render(issues, comments);
 }
