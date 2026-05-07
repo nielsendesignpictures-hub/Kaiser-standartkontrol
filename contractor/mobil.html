@@ -3,128 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Kaiser – Håndværker Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Kaiser – Håndværker</title>
 
 <style>
-:root{
-  --sidebar:#000;
-  --border:#e5e7eb;
-  --muted:#6b7280;
-  --danger:#dc2626;
-  --warning:#f59e0b;
-  --success:#16a34a;
-}
-
-*{box-sizing:border-box}
-
 body{
   margin:0;
-  font-family:Inter,sans-serif;
-  display:flex;
+  font-family:sans-serif;
   background:#f3f4f6;
 }
 
-/* Sidebar */
-.sidebar{
-  width:260px;
-  background:var(--sidebar);
-  color:white;
-  height:100vh;
-  padding:30px 20px;
-  overflow-y:auto;
-}
-
-.logo{
-  font-size:20px;
-  font-weight:600;
-  margin-bottom:40px;
-}
-
-.menu-item{
-  padding:10px 14px;
-  border-radius:8px;
-  margin-bottom:6px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.menu-item:hover{background:#1f1f1f}
-.menu-item.active{background:#1f1f1f}
-
-hr{
-  border:none;
-  border-top:1px solid #222;
-  margin:25px 0;
-}
-
-/* Main */
-.main{
-  flex:1;
-  padding:40px;
-}
-
 .header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:25px;
+  background:#000;
+  color:white;
+  padding:16px;
 }
 
-.live{
-  background:#e6f4ea;
-  padding:8px 14px;
-  border-radius:20px;
-  font-size:14px;
-  color:#166534;
-}
-
-/* KPI */
-.kpi-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-  margin-bottom:40px;
-}
-
-.kpi{
-  background:white;
-  padding:20px;
-  border-radius:14px;
-  border:1px solid var(--border);
-}
-
-.kpi h2{
-  margin:10px 0 0 0;
-  font-size:28px;
-}
-
-/* Cards */
 .card{
   background:white;
-  padding:20px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  margin-bottom:20px;
+  margin:15px;
+  padding:15px;
+  border-radius:12px;
 }
 
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.loading{
+  padding:40px;
+  text-align:center;
 }
 
-.severity-high{color:var(--danger);font-weight:600}
-.severity-medium{color:var(--warning);font-weight:600}
-.severity-low{color:var(--success);font-weight:600}
-
-.muted{color:var(--muted);font-size:14px}
-
-.actions{
-  margin-top:15px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
 }
 
 textarea{
@@ -132,144 +41,145 @@ textarea{
   margin-top:10px;
   padding:8px;
 }
-
-input[type="date"]{
-  padding:6px;
-}
-
-button{
-  padding:8px 12px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:500;
-}
-
-.btn-dark{background:black;color:white}
-.btn-success{background:var(--success);color:white}
-.btn-light{background:#ddd}
-
-.history{
-  margin-top:15px;
-  padding-top:10px;
-  border-top:1px solid #eee;
-}
-
-.history-entry{
-  font-size:14px;
-  margin-top:8px;
-}
-
-  @media (max-width: 768px){
-
-  body{
-    display:block;
-  }
-
-  .sidebar{
-    width:100%;
-    height:auto;
-    position:relative;
-  }
-
-  .main{
-    padding:15px;
-  }
-
-  .kpi-grid{
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
-  button{
-    width:100%;
-  }
-}
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
-  <div class="logo">Café Kaiser</div>
-
-  <div id="nav-open" class="menu-item active" onclick="setView('open')">
-    Åbne sager
-  </div>
-
-  <div id="nav-closed" class="menu-item" onclick="setView('closed')">
-    Færdige
-  </div>
-
-  <hr>
-
-  <strong style="font-size:13px;color:#aaa;">Lokationer</strong>
-  <div id="locationList"></div>
-</div>
-
-<div class="main">
-
-  <div class="header">
-    <h1 id="title">Åbne sager</h1>
-    <div>
-      <span id="liveStatus" class="live">● Live</span>
-      <span id="lastUpdated" style="margin-left:10px;color:#6b7280;"></span>
-      <button class="btn-light" onclick="loadData(true)" style="margin-left:20px;">
-        Opdater
-      </button>
-    </div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi">Åbne<h2 id="kpi-open">0</h2></div>
-    <div class="kpi">Kritiske<h2 id="kpi-high">0</h2></div>
-    <div class="kpi">I gang<h2 id="kpi-progress">0</h2></div>
-    <div class="kpi">Færdige<h2 id="kpi-closed">0</h2></div>
-  </div>
-
-  <div id="issues"></div>
-
+<div class="header">Kaiser – Håndværker</div>
+<div id="issues">
+  <div class="loading">Indlæser...</div>
 </div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
-  
-  let isLoading = false;
 
-function loadData(manual=false){
+function loadData(){
 
-  if(isLoading) return;
-  isLoading=true;
-
-  const old=document.getElementById("jsonp");
+  const old = document.getElementById("jsonp");
   if(old) old.remove();
 
-  const script=document.createElement("script");
-  script.id="jsonp";
-  script.src=API_URL+"?callback=handleData&t="+Date.now();
+  const script = document.createElement("script");
+  script.id = "jsonp";
+  script.src = API_URL + "?callback=handleData&t=" + Date.now();
   document.body.appendChild(script);
 }
+
 function handleData(data){
 
-  console.log("DATA:", data);
-
   let issues = [];
+  let comments = [];
 
   if(Array.isArray(data)){
     issues = data;
-  } else if(data && Array.isArray(data.issues)){
-    issues = data.issues;
+  } else if(data){
+    issues = data.issues || [];
+    comments = data.comments || [];
   }
 
-  render(issues, []);
-
-  document.getElementById("liveStatus").innerText="● Live";
-  document.getElementById("lastUpdated").innerText=
-    new Date().toLocaleTimeString();
-
-  isLoading=false;
+  render(issues, comments);
 }
+
+function render(issues, comments){
+
+  const container = document.getElementById("issues");
+  container.innerHTML = "";
+
+  const active = issues.filter(i => i.status !== "Closed");
+
+  if(active.length === 0){
+    container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
+    return;
+  }
+
+  active.forEach(issue => {
+
+    const issueComments = comments.filter(c => c.issueId === issue.id);
+
+    container.innerHTML += `
+      <div class="card">
+        <h3>${issue.location}</h3>
+        <p>${issue.description}</p>
+
+        <input type="date"
+          id="date-${issue.id}"
+          value="${issue.estimatedCompletion || ""}">
+
+        <button onclick="saveDate('${issue.id}')">
+          Gem dato
+        </button>
+
+        <button onclick="markDone('${issue.id}')">
+          Markér færdig
+        </button>
+
+        <textarea id="comment-${issue.id}"
+          placeholder="Skriv status..."></textarea>
+
+        <button onclick="saveComment('${issue.id}','${issue.location}')">
+          Tilføj kommentar
+        </button>
+
+        ${issueComments.map(c => `
+          <div style="margin-top:8px;font-size:14px;">
+            <strong>${c.author}</strong><br>
+            ${c.comment}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  });
+}
+
+function saveDate(id){
+
+  const date = document.getElementById("date-"+id).value;
+  if(!date) return;
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&estimatedCompletion=" + encodeURIComponent(date) +
+    "&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function markDone(id){
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&status=Closed&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+function saveComment(id, location){
+
+  const comment = document.getElementById("comment-"+id).value;
+  if(!comment) return;
+
+  const script = document.createElement("script");
+  script.src =
+    API_URL +
+    "?action=update&id=" + encodeURIComponent(id) +
+    "&comment=" + encodeURIComponent(comment) +
+    "&author=Håndværker" +
+    "&location=" + encodeURIComponent(location) +
+    "&t=" + Date.now();
+
+  document.body.appendChild(script);
+  setTimeout(loadData,800);
+}
+
+document.addEventListener("DOMContentLoaded", loadData);
+
 </script>
 
 </body>
