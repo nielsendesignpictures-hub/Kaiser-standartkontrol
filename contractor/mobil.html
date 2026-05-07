@@ -45,27 +45,27 @@ button{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
 
-function loadData(){
+async function loadData(){
 
-  const old = document.getElementById("jsonp");
-  if(old) old.remove();
+  const container = document.getElementById("issues");
+  container.innerHTML = "<div class='loading'>Indlæser...</div>";
 
-  const script = document.createElement("script");
-  script.id = "jsonp";
-  script.src = API_URL + "?callback=handleData&t=" + Date.now();
-  document.body.appendChild(script);
-}
+  try {
 
-function handleData(data){
+    const response = await fetch(API_URL + "?t=" + Date.now(), {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store"
+    });
 
-  // Hvis gammel struktur
-  if(Array.isArray(data)){
-    render(data);
-    return;
+    const data = await response.json();
+
+    render(Array.isArray(data.issues) ? data.issues : []);
+
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = "<div class='loading'>Fejl ved indlæsning</div>";
   }
-
-  // Hvis ny struktur
-  render(data.issues || []);
 }
 
 function render(issues){
@@ -95,20 +95,17 @@ function render(issues){
   });
 }
 
-function markDone(id){
+async function markDone(id){
 
-  const script = document.createElement("script");
-  script.src =
-    API_URL +
-    "?action=update&id=" + id +
-    "&status=Closed&t=" + Date.now();
+  await fetch(
+    API_URL + "?action=update&id=" + id + "&status=Closed",
+    { method: "GET", mode: "cors" }
+  );
 
-  document.body.appendChild(script);
-
-  setTimeout(loadData, 800);
+  setTimeout(loadData, 500);
 }
 
-loadData();
+document.addEventListener("DOMContentLoaded", loadData);
 
 </script>
 
