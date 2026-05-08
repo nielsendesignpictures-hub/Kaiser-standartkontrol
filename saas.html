@@ -5,33 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Executive Financial Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<style>
 body{
   margin:0;
   font-family:'Plus Jakarta Sans',sans-serif;
   background:#050505;
   color:white;
 }
-
 .container{
   padding:50px;
   max-width:1500px;
   margin:auto;
 }
-
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:40px;
 }
-
 .title{
   font-size:28px;
   font-weight:600;
 }
-
 button{
   background:#FF512F;
   border:none;
@@ -41,63 +38,45 @@ button{
   cursor:pointer;
   margin-left:10px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:25px;
 }
-
 .card{
   background:#111;
   border:1px solid #1f1f1f;
   padding:25px;
   border-radius:18px;
-  transition:0.2s;
 }
-
-.card:hover{
-  border-color:#333;
-}
-
 .kpi{
   font-size:32px;
   font-weight:700;
   margin-top:8px;
 }
-
 .label{
   font-size:12px;
   color:#777;
   text-transform:uppercase;
 }
-
 .sub{
   font-size:14px;
   color:#aaa;
   margin-top:4px;
 }
-
 .green{color:#22C55E;}
 .red{color:#EF4444;}
 .yellow{color:#FACC15;}
-
-.badge-card{
-  cursor:pointer;
-}
-
 table{
   width:100%;
   margin-top:40px;
   border-collapse:collapse;
 }
-
 th,td{
   padding:12px 0;
   border-bottom:1px solid #1f1f1f;
   text-align:left;
 }
-
 .modal{
   display:none;
   position:fixed;
@@ -106,14 +85,12 @@ th,td{
   justify-content:center;
   align-items:center;
 }
-
 .modal-box{
   background:#111;
   padding:30px;
   border-radius:18px;
   width:420px;
 }
-
 .modal-box input, .modal-box select{
   width:100%;
   padding:10px;
@@ -123,13 +100,14 @@ th,td{
   color:white;
   border-radius:8px;
 }
-
 hr{
   border:none;
   border-top:1px solid #1f1f1f;
   margin:20px 0;
 }
-
+canvas{
+  margin-top:40px;
+}
 </style>
 </head>
 <body>
@@ -150,7 +128,7 @@ hr{
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3>Ny Måned</h3>
+    <h3 id="modalTitle">Ny Måned</h3>
 
     <select id="locInput">
       <option>Helsingør</option>
@@ -191,29 +169,57 @@ let data=JSON.parse(localStorage.getItem("finStableFinal"))||{
 };
 
 let activeLocation=null;
+let editIndex=null;
 
 function saveStorage(){
   localStorage.setItem("finStableFinal",JSON.stringify(data));
 }
 
-function openModal(){
-  monthInput.value="";
-  revInput.value="";
-  salInput.value="";
-  kitInput.value="";
-  barInput.value="";
+function openModal(loc=null,index=null){
+
+  editIndex=index;
+
+  if(loc){
+    locInput.value=loc;
+    locInput.disabled=true;
+    const m=data[loc][index];
+    monthInput.value=m.month;
+    revInput.value=m.rev;
+    salInput.value=m.sal;
+    kitInput.value=m.kit;
+    barInput.value=m.bar;
+    modalTitle.innerText="Rediger Måned";
+  } else {
+    locInput.disabled=false;
+    monthInput.value="";
+    revInput.value="";
+    salInput.value="";
+    kitInput.value="";
+    barInput.value="";
+    modalTitle.innerText="Ny Måned";
+  }
+
   modal.style.display="flex";
 }
 
 function saveMonth(){
   const loc=locInput.value;
-  data[loc].push({
+
+  const monthData={
     month:monthInput.value,
     rev:+revInput.value,
     sal:+salInput.value,
     kit:+kitInput.value,
     bar:+barInput.value
-  });
+  };
+
+  if(editIndex!==null){
+    data[loc][editIndex]=monthData;
+  } else {
+    data[loc].push(monthData);
+  }
+
+  editIndex=null;
   saveStorage();
   modal.style.display="none";
   render();
@@ -242,7 +248,7 @@ function renderHome(){
   Object.keys(data).forEach(loc=>{
     const months=data[loc];
     if(months.length===0){
-      html+=`<div class="card badge-card" onclick="openLoc('${loc}')">
+      html+=`<div class="card" onclick="openLoc('${loc}')">
       <div class="label">${loc}</div>
       <div class="kpi">Ingen data</div>
       </div>`;
@@ -255,11 +261,11 @@ function renderHome(){
     const fbPct=(fbTotal/net)*100;
     const score=Math.max(0,100-(Math.max(salPct-TARGETS[loc].salary,0)*10)-(Math.max(fbPct-TARGETS[loc].fb,0)*10));
     html+=`
-    <div class="card badge-card" onclick="openLoc('${loc}')">
+    <div class="card" onclick="openLoc('${loc}')">
       <div class="label">${loc}</div>
       <div class="kpi">${net.toLocaleString("da-DK",{maximumFractionDigits:0})}</div>
-      <div class="${color(salPct,TARGETS[loc].salary)}">Løn ${salPct.toFixed(1)}% · ${latest.sal.toLocaleString("da-DK")} kr</div>
-      <div class="${color(fbPct,TARGETS[loc].fb)}">F&B ${fbPct.toFixed(1)}% · ${fbTotal.toLocaleString("da-DK")} kr</div>
+      <div class="${color(salPct,TARGETS[loc].salary)}">Løn ${salPct.toFixed(1)}%</div>
+      <div class="${color(fbPct,TARGETS[loc].fb)}">F&B ${fbPct.toFixed(1)}%</div>
       <div>Score ${score.toFixed(0)}</div>
     </div>`;
   });
@@ -274,11 +280,13 @@ function openLoc(loc){
 }
 
 function renderLocation(loc){
+
   const months=data[loc];
   if(months.length===0){
     content.innerHTML="<div class='card'>Ingen data endnu</div>";
     return;
   }
+
   const latest=months[months.length-1];
   const net=latest.rev/VAT;
 
@@ -288,7 +296,7 @@ function renderLocation(loc){
   const fbTotal=latest.kit+latest.bar;
   const fbPct=(fbTotal/net)*100;
 
-  content.innerHTML=`
+  let html=`
     <div class="grid">
       <div class="card">
         <div class="label">Omsætning (Ex Moms)</div>
@@ -298,45 +306,69 @@ function renderLocation(loc){
       <div class="card">
         <div class="label">Løn</div>
         <div class="kpi ${color(salPct,TARGETS[loc].salary)}">${salPct.toFixed(1)}%</div>
-        <div class="sub">${latest.sal.toLocaleString("da-DK")} kr</div>
       </div>
 
       <div class="card">
-        <div class="label">Køkken</div>
-        <div class="kpi">${kitPct.toFixed(1)}%</div>
-        <div class="sub">${latest.kit.toLocaleString("da-DK")} kr</div>
-      </div>
-
-      <div class="card">
-        <div class="label">Bar</div>
-        <div class="kpi">${barPct.toFixed(1)}%</div>
-        <div class="sub">${latest.bar.toLocaleString("da-DK")} kr</div>
-      </div>
-
-      <div class="card">
-        <div class="label">Køkken + Bar (Target ${TARGETS[loc].fb}%)</div>
+        <div class="label">Køkken + Bar</div>
         <div class="kpi ${color(fbPct,TARGETS[loc].fb)}">${fbPct.toFixed(1)}%</div>
-        <div class="sub">${fbTotal.toLocaleString("da-DK")} kr</div>
       </div>
     </div>
+
+    <canvas id="scoreChart"></canvas>
 
     <hr>
 
     <table>
-      <tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>Køkken%</th><th>Bar%</th><th>F&B%</th></tr>
-      ${months.map(m=>{
+      <tr><th>Måned</th><th>Oms</th><th>Løn%</th><th>F&B%</th><th></th></tr>
+      ${months.map((m,i)=>{
         const n=m.rev/VAT;
+        const sPct=((m.sal/n)*100);
+        const fbPct=((m.kit+m.bar)/n)*100;
         return `<tr>
           <td>${m.month}</td>
           <td>${n.toLocaleString("da-DK",{maximumFractionDigits:0})}</td>
-          <td>${((m.sal/n)*100).toFixed(1)}%</td>
-          <td>${((m.kit/n)*100).toFixed(1)}%</td>
-          <td>${((m.bar/n)*100).toFixed(1)}%</td>
-          <td>${(((m.kit+m.bar)/n)*100).toFixed(1)}%</td>
+          <td>${sPct.toFixed(1)}%</td>
+          <td>${fbPct.toFixed(1)}%</td>
+          <td><button onclick="openModal('${loc}',${i})">Rediger</button></td>
         </tr>`;
       }).join("")}
     </table>
   `;
+
+  content.innerHTML=html;
+
+  renderChart(loc);
+}
+
+function renderChart(loc){
+
+  const ctx=document.getElementById("scoreChart");
+
+  const scores=data[loc].map(m=>{
+    const n=m.rev/VAT;
+    const sPct=(m.sal/n)*100;
+    const fbPct=((m.kit+m.bar)/n)*100;
+    return Math.max(0,100-(Math.max(sPct-TARGETS[loc].salary,0)*10)-(Math.max(fbPct-TARGETS[loc].fb,0)*10));
+  });
+
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:data[loc].map(m=>m.month),
+      datasets:[{
+        label:"Score",
+        data:scores,
+        borderColor:"#FF512F",
+        backgroundColor:"rgba(255,81,47,0.2)",
+        tension:0.3
+      }]
+    },
+    options:{
+      scales:{
+        y:{min:0,max:100}
+      }
+    }
+  });
 }
 
 render();
