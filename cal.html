@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>Brunch Produktionsberegner</title>
+<style>
+body { font-family: Arial; padding: 40px; background:#111; color:#fff; }
+input, button { padding:10px; font-size:16px; margin-top:10px; }
+button { background:#d4af37; border:none; cursor:pointer; }
+.result { margin-top:30px; background:#222; padding:20px; border-radius:8px; }
+h2 { margin-top:40px; }
+</style>
+</head>
+<body>
+
+<h1>Brunchbuffet – Produktionsberegner</h1>
+
+<label>Antal personer:</label><br>
+<input type="number" id="guests" min="1" value="50"><br>
+<button onclick="calculate()">Beregn råvarebehov</button>
+
+<div class="result" id="result"></div>
+
+<script>
+const brunch = [
+  { name: "Øko brød", amount: 90, unit: "g" },
+  { name: "Mini wienerbrød", amount: 80, unit: "g" },
+  { name: "Smør & Nutella", amount: 18, unit: "g" },
+  { name: "Laks", amount: 45, unit: "g" },
+  { name: "Ost", amount: 55, unit: "g" },
+  { name: "Pålæg", amount: 65, unit: "g" },
+  { name: "Tomat & grøn salat", amount: 90, unit: "g" },
+  { name: "Tunsalat", amount: 45, unit: "g" },
+  { name: "Yoghurt", amount: 110, unit: "g" },
+  { name: "Granola", amount: 20, unit: "g" },
+  { name: "Chiagrød", amount: 90, unit: "g" },
+  { name: "Chokolademousse", amount: 70, unit: "g" },
+  { name: "Frugt", amount: 110, unit: "g" },
+  { name: "Saltkaramelkage", amount: 70, unit: "g" },
+  { name: "Røræg", amount: 110, unit: "g" },
+  { name: "Pølser", amount: 1, unit: "stk" },
+  { name: "Bacon", amount: 35, unit: "g" },
+  { name: "Crispy chicken", amount: 90, unit: "g" },
+  { name: "Rösti", amount: 1, unit: "stk" },
+  { name: "Egg bite", amount: 1, unit: "stk" },
+  { name: "Pandekage", amount: 1, unit: "stk" },
+  { name: "Vaffel", amount: 50, unit: "g" }
+];
+
+function roundUpToHalfKg(valueInGrams) {
+  const kg = valueInGrams / 1000;
+  return Math.ceil(kg * 2) / 2;
+}
+
+function roundUpStk(value) {
+  return Math.ceil(value);
+}
+
+function calculate() {
+  const guests = document.getElementById("guests").value;
+  let output = `<h2>Råvarebehov – ${guests} personer</h2><ul>`;
+
+  brunch.forEach(item => {
+    if (item.unit === "g") {
+      const totalGrams = item.amount * guests;
+      const roundedKg = roundUpToHalfKg(totalGrams);
+      output += `<li>${item.name}: <strong>${roundedKg} kg</strong></li>`;
+    } else {
+      const totalStk = roundUpStk(item.amount * guests);
+      output += `<li>${item.name}: <strong>${totalStk} stk</strong></li>`;
+    }
+  });
+
+  output += "</ul>";
+  document.getElementById("result").innerHTML = output;
+}
+</script>
+
+</body>
+</html>
