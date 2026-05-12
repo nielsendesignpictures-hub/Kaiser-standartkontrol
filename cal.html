@@ -2,72 +2,153 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>Brunch Produktionsberegner</title>
+<title>Byg Selv Buffet – Produktionsberegner</title>
 <style>
-body { font-family: Arial; padding: 40px; background:#111; color:#fff; }
-input, button { padding:10px; font-size:16px; margin-top:10px; }
-button { background:#d4af37; border:none; cursor:pointer; }
-.result { margin-top:30px; background:#222; padding:20px; border-radius:8px; }
-h2 { margin-top:40px; }
+body {
+  background: linear-gradient(145deg,#0f172a,#1e293b);
+  color:#f1f5f9;
+  font-family: sans-serif;
+  padding:40px;
+}
+h1 { font-size:28px; margin-bottom:20px; }
+.section {
+  background:#1e293b;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+label { display:block; margin:5px 0; }
+button {
+  background:#d4af37;
+  color:#000;
+  padding:12px 25px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.result {
+  margin-top:30px;
+  background:#0f172a;
+  padding:25px;
+  border-radius:12px;
+}
 </style>
 </head>
 <body>
 
-<h1>Brunchbuffet – Produktionsberegner</h1>
+<h1>Byg Selv Buffet – Produktionsberegner</h1>
 
-<label>Antal personer:</label><br>
-<input type="number" id="guests" min="1" value="50"><br>
-<button onclick="calculate()">Beregn råvarebehov</button>
+<div class="section">
+Antal personer:
+<input type="number" id="guests" value="50" min="1">
+</div>
+
+<div class="section">
+<h3>🥩 KØD (vælg 2–3)</h3>
+<label><input type="checkbox" value="okse"> Oksefilet / mørbrad</label>
+<label><input type="checkbox" value="frikadeller"> Frikadeller</label>
+<label><input type="checkbox" value="skinke"> Glaseret skinke</label>
+<label><input type="checkbox" value="kylling"> Kyllingebryst</label>
+<label><input type="checkbox" value="laks"> Varmrøget laks</label>
+</div>
+
+<div class="section">
+<h3>🥗 SALATER</h3>
+<label><input type="checkbox" value="100"> Cremet salat</label>
+<label><input type="checkbox" value="90"> Let salat</label>
+<label><input type="checkbox" value="125"> Nudelsalat m. rejer</label>
+</div>
+
+<div class="section">
+<h3>🥔 KARTOFLER</h3>
+<label><input type="checkbox" value="150"> Flødekartofler / ovn</label>
+<label><input type="checkbox" value="bagekartoffel"> Bagekartoffel</label>
+<label><input type="checkbox" value="gratin"> Kartoffelgratin</label>
+</div>
+
+<div class="section">
+<h3>🥣 SAUCE</h3>
+<label><input type="checkbox" value="100"> Klassisk sauce</label>
+<label><input type="checkbox" value="75"> Tzatziki</label>
+</div>
+
+<div class="section">
+<h3>🍰 DESSERT</h3>
+<label><input type="checkbox" value="stk"> Portionsdessert</label>
+<label><input type="checkbox" value="100"> Brownie (100 g)</label>
+<label><input type="checkbox" value="180"> Frugtsalat m. creme</label>
+</div>
+
+<button onclick="calculate()">Beregn</button>
 
 <div class="result" id="result"></div>
 
 <script>
-const brunch = [
-  { name: "Øko brød", amount: 90, unit: "g" },
-  { name: "Mini wienerbrød", amount: 80, unit: "g" },
-  { name: "Smør & Nutella", amount: 18, unit: "g" },
-  { name: "Laks", amount: 45, unit: "g" },
-  { name: "Ost", amount: 55, unit: "g" },
-  { name: "Pålæg", amount: 65, unit: "g" },
-  { name: "Tomat & grøn salat", amount: 90, unit: "g" },
-  { name: "Tunsalat", amount: 45, unit: "g" },
-  { name: "Yoghurt", amount: 110, unit: "g" },
-  { name: "Granola", amount: 20, unit: "g" },
-  { name: "Chiagrød", amount: 90, unit: "g" },
-  { name: "Chokolademousse", amount: 70, unit: "g" },
-  { name: "Frugt", amount: 110, unit: "g" },
-  { name: "Saltkaramelkage", amount: 70, unit: "g" },
-  { name: "Røræg", amount: 110, unit: "g" },
-  { name: "Pølser", amount: 1, unit: "stk" },
-  { name: "Bacon", amount: 35, unit: "g" },
-  { name: "Crispy chicken", amount: 90, unit: "g" },
-  { name: "Rösti", amount: 1, unit: "stk" },
-  { name: "Egg bite", amount: 1, unit: "stk" },
-  { name: "Pandekage", amount: 1, unit: "stk" },
-  { name: "Vaffel", amount: 50, unit: "g" }
-];
-
-function roundUpToHalfKg(valueInGrams) {
-  const kg = valueInGrams / 1000;
-  return Math.ceil(kg * 2) / 2;
+function roundKg(grams){
+  let kg = grams/1000;
+  if(kg < 5){
+    return Math.ceil(kg*10)/10;
+  } else {
+    return Math.ceil(kg*2)/2;
+  }
 }
 
-function roundUpStk(value) {
-  return Math.ceil(value);
-}
+function calculate(){
+  const guests = parseInt(document.getElementById("guests").value);
+  const buffer = 1.10;
+  let output = `<h2>Produktionsliste – ${guests} personer</h2><ul>`;
 
-function calculate() {
-  const guests = document.getElementById("guests").value;
-  let output = `<h2>Råvarebehov – ${guests} personer</h2><ul>`;
-
-  brunch.forEach(item => {
-    if (item.unit === "g") {
-      const totalGrams = item.amount * guests;
-      const roundedKg = roundUpToHalfKg(totalGrams);
-      output += `<li>${item.name}: <strong>${roundedKg} kg</strong></li>`;
+  // KØD
+  const meats = document.querySelectorAll('input[value="okse"],input[value="frikadeller"],input[value="skinke"],input[value="kylling"],input[value="laks"]:checked');
+  const meatCount = meats.length;
+  meats.forEach(meat=>{
+    if(meat.value==="frikadeller"){
+      let total = Math.ceil(guests*2*buffer);
+      output += `<li>Frikadeller: <strong>${total} stk</strong></li>`;
     } else {
-      const totalStk = roundUpStk(item.amount * guests);
-      output += `<li>${item.name}: <strong>${totalStk} stk</strong></li>`;
+      let gramPerPerson = meatCount===3 ? 95 : 130;
+      let total = gramPerPerson*guests*buffer;
+      output += `<li>${meat.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+    }
+  });
+
+  // SALATER
+  document.querySelectorAll('div:nth-of-type(3) input:checked').forEach(s=>{
+    let total = parseInt(s.value)*guests*buffer;
+    output += `<li>${s.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+  });
+
+  // KARTOFLER
+  document.querySelectorAll('div:nth-of-type(4) input:checked').forEach(k=>{
+    if(k.value==="bagekartoffel"){
+      let total = Math.ceil(guests*buffer);
+      output += `<li>Bagekartoffel: <strong>${total} stk</strong></li>`;
+    }
+    else if(k.value==="gratin"){
+      let total = Math.ceil(guests*buffer);
+      output += `<li>Kartoffelgratin: <strong>${total} stk</strong></li>`;
+    }
+    else{
+      let total = parseInt(k.value)*guests*buffer;
+      output += `<li>${k.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+    }
+  });
+
+  // SAUCE
+  document.querySelectorAll('div:nth-of-type(5) input:checked').forEach(s=>{
+    let total = parseInt(s.value)*guests*buffer;
+    output += `<li>${s.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+  });
+
+  // DESSERT
+  document.querySelectorAll('div:nth-of-type(6) input:checked').forEach(d=>{
+    if(d.value==="stk"){
+      let total = Math.ceil(guests*buffer);
+      output += `<li>Portionsdessert: <strong>${total} stk</strong></li>`;
+    } else {
+      let total = parseInt(d.value)*guests*buffer;
+      output += `<li>${d.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
     }
   });
 
