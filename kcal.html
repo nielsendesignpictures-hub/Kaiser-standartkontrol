@@ -2,187 +2,303 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>Build Your Brunch – Nutrition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Byg-Selv-Brunch – Næringsoversigt</title>
 
 <style>
 body{
-  font-family:serif;
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   background:#f7f3ee;
-  padding:40px;
-  color:#222;
-  max-width:800px;
-  margin:auto;
+  color:#1a1a1a;
 }
-h1{text-align:center;}
-.section{margin-bottom:30px;}
-.item{margin:8px 0;}
-.summary{
-  background:#fff;
+
+header{
+  text-align:center;
+  padding:30px 20px 10px;
+}
+
+header img{
+  width:120px;
+}
+
+h1{
+  font-size:20px;
+  margin:10px 0 5px;
+}
+
+.lang-toggle{
+  font-size:14px;
+  cursor:pointer;
+  color:#777;
+}
+
+.section{
   padding:20px;
-  border:1px solid #ddd;
-  position:sticky;
+}
+
+.section h2{
+  font-size:16px;
+  margin-bottom:10px;
+  border-bottom:1px solid #ddd;
+  padding-bottom:4px;
+}
+
+.item{
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+}
+
+.item label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.kcal{
+  font-size:13px;
+  color:#777;
+}
+
+.addon{
+  font-size:12px;
+  color:#999;
+  margin-left:20px;
+}
+
+.sticky-total{
+  position:fixed;
   bottom:0;
+  left:0;
+  right:0;
+  background:#fff;
+  border-top:1px solid #ddd;
+  padding:15px;
+  text-align:center;
 }
-button{
-  padding:8px 14px;
-  margin:5px;
-}
-.counter{
+
+.total-kcal{
+  font-size:18px;
   font-weight:bold;
-  margin:10px 0;
 }
-.small{font-size:12px;color:#666;margin-top:15px;}
+
+.small{
+  font-size:11px;
+  color:#777;
+  margin-top:5px;
+}
 </style>
 </head>
 <body>
 
-<h1>Build Your Brunch</h1>
+<header>
+  <img src="logo.png">
+  <h1 id="title">Byg-Selv-Brunch – Næringsoversigt</h1>
+  <div class="lang-toggle" onclick="toggleLang()">English</div>
+</header>
 
-<p>Select your number of items:</p>
-<button onclick="setLimit(5)">5</button>
-<button onclick="setLimit(6)">6</button>
-<button onclick="setLimit(7)">7</button>
-
-<div class="counter" id="counter">Selected: 0</div>
-
+<!-- MEJERI -->
 <div class="section">
-<h3>Mejeri</h3>
+<h2>Mejeri</h2>
 
 <div class="item">
 <label>
-<input type="checkbox" onchange="toggleItem(this)"
-data-kcal="259.12"
-data-protein="17.6"
-data-carbs="3.41"
-data-fat="19.34">
-Røræg
+<span>Røræg <span class="kcal">(259 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,259)">
 </label>
-
-<div style="margin-left:20px;">
+<div class="addon">
 <label>
-<input type="checkbox" onchange="toggleAddon(this,70,0,0,6)">
-Remove bacon (-70 kcal)
+<input type="checkbox" onchange="updateTotal(this,-70)">
+Fjern bacon (-70 kcal)
 </label>
 </div>
 </div>
-
-</div>
-
-<div class="section">
-<h3>Kød & Fisk</h3>
 
 <div class="item">
 <label>
-<input type="checkbox" onchange="toggleItem(this)"
-data-kcal="410.3"
-data-protein="13.32"
-data-carbs="0.65"
-data-fat="40.02">
-Hjemmelavet hønsesalat
-</label>
-
-<div style="margin-left:20px;">
-<label>
-<input type="checkbox" onchange="toggleAddon(this,70,0,0,6)">
-Remove bacon (-70 kcal)
+<span>Spejlæg <span class="kcal">(230 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,230)">
 </label>
 </div>
-</div>
-
-</div>
-
-<div class="section">
-<h3>Finalen</h3>
 
 <div class="item">
 <label>
-<input type="checkbox" onchange="toggleItem(this)"
-data-kcal="563"
-data-protein="8.84"
-data-carbs="87.21"
-data-fat="18.72">
-2 amerikanske pandekager
+<span>Modnet havarti ost <span class="kcal">(280 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,280)">
 </label>
+</div>
 
-<div style="margin-left:20px;">
+<div class="item">
 <label>
-<input type="checkbox" onchange="toggleAddon(this,160,0,40,0)">
-Remove syrup (-160 kcal)
+<span>Hjemmelavet blåbæryoghurt <span class="kcal">(180 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,180)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Hjemmelavet chiagrød <span class="kcal">(210 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,210)">
+</label>
+</div>
+
+</div>
+
+<!-- KØD & FISK -->
+<div class="section">
+<h2>Kød & Fisk</h2>
+
+<div class="item">
+<label>
+<span>Rösti <span class="kcal">(340 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,340)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Hjemmelavet hønsesalat <span class="kcal">(410 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,410)">
+</label>
+<div class="addon">
+<label>
+<input type="checkbox" onchange="updateTotal(this,-70)">
+Fjern bacon (-70 kcal)
+</label>
+</div>
+</div>
+
+<div class="item">
+<label>
+<span>Crispy chicken <span class="kcal">(320 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,320)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>2 brunchpølser <span class="kcal">(290 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,290)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Koldrøget laks <span class="kcal">(250 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,250)">
+</label>
+</div>
+
+</div>
+
+<!-- PLANTERIGET -->
+<div class="section">
+<h2>Planteriget</h2>
+
+<div class="item">
+<label>
+<span>Avocado & hytteost <span class="kcal">(270 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,270)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Eksotisk frugtskål <span class="kcal">(150 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,150)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Smashed peas <span class="kcal">(190 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,190)">
+</label>
+</div>
+
+</div>
+
+<!-- BAGERIET -->
+<div class="section">
+<h2>Bageriet</h2>
+
+<div class="item">
+<label>
+<span>Pain au chocolat <span class="kcal">(320 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,320)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Øko smørcroissant <span class="kcal">(300 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,300)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Mariagertoba-toast <span class="kcal">(350 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,350)">
+</label>
+</div>
+
+</div>
+
+<!-- FINALEN -->
+<div class="section">
+<h2>Finalen</h2>
+
+<div class="item">
+<label>
+<span>Lun rabarber crumble <span class="kcal">(290 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,290)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>Øllebrød <span class="kcal">(260 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,260)">
+</label>
+</div>
+
+<div class="item">
+<label>
+<span>2 amerikanske pandekager <span class="kcal">(563 kcal)</span></span>
+<input type="checkbox" onchange="updateTotal(this,563)">
+</label>
+<div class="addon">
+<label>
+<input type="checkbox" onchange="updateTotal(this,-160)">
+Uden sirup (-160 kcal)
 </label>
 </div>
 </div>
 
 </div>
 
-<div class="summary">
-<h2>Your Nutritional Total</h2>
-<div id="totalKcal">0 kcal</div>
-<div id="totalMacros">Protein 0g | Carbs 0g | Fat 0g</div>
-
+<div class="sticky-total">
+<div class="total-kcal" id="totalKcal">0 kcal</div>
 <div class="small">
-Nutritional values are estimates based on standard recipes and average portion sizes. Minor variations may occur.
+Næringsværdier er vejledende og kan variere en smule.
 </div>
 </div>
 
 <script>
-let total = {kcal:0, protein:0, carbs:0, fat:0};
-let selectedCount = 0;
-let limit = 5;
+let total = 0;
 
-function setLimit(n){
-  limit = n;
-  updateCounter();
-}
-
-function toggleItem(el){
+function updateTotal(el,value){
   if(el.checked){
-    if(selectedCount >= limit){
-      el.checked=false;
-      alert("You can only select "+limit+" items.");
-      return;
-    }
-    selectedCount++;
-    total.kcal += parseFloat(el.dataset.kcal);
-    total.protein += parseFloat(el.dataset.protein);
-    total.carbs += parseFloat(el.dataset.carbs);
-    total.fat += parseFloat(el.dataset.fat);
+    total += value;
   } else {
-    selectedCount--;
-    total.kcal -= parseFloat(el.dataset.kcal);
-    total.protein -= parseFloat(el.dataset.protein);
-    total.carbs -= parseFloat(el.dataset.carbs);
-    total.fat -= parseFloat(el.dataset.fat);
+    total -= value;
   }
-  update();
+  document.getElementById("totalKcal").innerText = total + " kcal";
 }
 
-function toggleAddon(el,kcal,protein,carbs,fat){
-  if(el.checked){
-    total.kcal -= kcal;
-    total.protein -= protein;
-    total.carbs -= carbs;
-    total.fat -= fat;
-  } else {
-    total.kcal += kcal;
-    total.protein += protein;
-    total.carbs += carbs;
-    total.fat += fat;
-  }
-  update();
-}
-
-function update(){
-  document.getElementById("totalKcal").innerText = Math.round(total.kcal)+" kcal";
-  document.getElementById("totalMacros").innerText =
-    "Protein "+Math.round(total.protein)+"g | Carbs "+
-    Math.round(total.carbs)+"g | Fat "+
-    Math.round(total.fat)+"g";
-  updateCounter();
-}
-
-function updateCounter(){
-  document.getElementById("counter").innerText =
-    "Selected: "+selectedCount+" of "+limit;
+function toggleLang(){
+  alert("Engelsk version kommer i næste version – struktur er klar.");
 }
 </script>
 
