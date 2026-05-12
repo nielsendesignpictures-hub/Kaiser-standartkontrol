@@ -2,31 +2,29 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Kaiser – Håndværker</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
   background:#f3f4f6;
+  overscroll-behavior-y:contain;
 }
 
 .header{
+  position:sticky;
+  top:0;
   background:#000;
   color:white;
   padding:16px;
+  font-size:18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-}
-
-.badge{
-  background:red;
-  color:white;
-  padding:4px 10px;
-  border-radius:20px;
-  font-size:12px;
+  z-index:100;
 }
 
 .kpi{
@@ -39,19 +37,22 @@ body{
   background:white;
   padding:8px 12px;
   border-radius:10px;
+  font-size:14px;
 }
 
 .card{
   background:white;
   margin:15px;
   padding:15px;
-  border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+  border-radius:14px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  transition:transform 0.2s;
 }
 
 .loading{
   text-align:center;
   padding:40px;
+  color:#666;
 }
 
 button{
@@ -59,8 +60,9 @@ button{
   padding:14px;
   margin-top:10px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   font-weight:600;
+  font-size:16px;
 }
 
 .btn-save{background:#000;color:white;}
@@ -70,13 +72,19 @@ button{
 textarea{
   width:100%;
   margin-top:10px;
-  padding:8px;
+  padding:12px;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid #ddd;
 }
 
 input[type="date"]{
   width:100%;
   margin-top:10px;
-  padding:8px;
+  padding:12px;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid #ddd;
 }
 </style>
 </head>
@@ -85,7 +93,7 @@ input[type="date"]{
 
 <div class="header">
   <div>Kaiser – Håndværker</div>
-  <div id="commentBadge"></div>
+  <div id="liveStatus">● Live</div>
 </div>
 
 <div class="kpi" id="kpiBar"></div>
@@ -98,18 +106,34 @@ input[type="date"]{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbx90unEejk2SC4TVBHA0JZXz7ZSwrKp3tUr92L8gX_JbyhBDsSADsihl-RNf0UvEsda/exec";
 
-/* Hvis håndværker kun skal se én lokation, indsæt navn her. 
-   Ellers sæt den til null */
-const HANDWERKER_LOCATION = null;
+let isLoading=false;
+let scrollPos=0;
 
-let isLoading = false;
-let lastCommentCheck = localStorage.getItem("lastCommentCheck") || 0;
+/* ===== Pull to refresh ===== */
+let startY=0;
+
+document.addEventListener("touchstart",e=>{
+  if(window.scrollY===0){
+    startY=e.touches[0].clientY;
+  }
+});
+
+document.addEventListener("touchend",e=>{
+  if(window.scrollY===0){
+    const diff=e.changedTouches[0].clientY-startY;
+    if(diff>120){
+      loadData();
+    }
+  }
+});
 
 /* ===== LOAD ===== */
 function loadData(){
 
   if(isLoading) return;
-  isLoading = true;
+  isLoading=true;
+
+  scrollPos = window.scrollY;
 
   const old=document.getElementById("jsonp");
   if(old) old.remove();
@@ -123,70 +147,50 @@ function loadData(){
 /* ===== CALLBACK ===== */
 function handleData(data){
 
-  let issues = [];
-  let comments = [];
-
-  if(Array.isArray(data)){
-    issues = data;
-  } else {
-    issues = data.issues || [];
-    comments = data.comments || [];
-  }
+  let issues = Array.isArray(data) ? data : (data.issues || []);
+  let comments = data.comments || [];
 
   render(issues, comments);
-  updateBadge(comments);
 
+  window.scrollTo(0,scrollPos);
+
+  document.getElementById("liveStatus").innerText="● Live";
   isLoading=false;
 }
 
-/* ===== BADGE ===== */
-function updateBadge(comments){
-
-  const newestComment = comments.length
-    ? Math.max(...comments.map(c => new Date(c.createdAt).getTime()))
-    : 0;
-
-  if(newestComment > lastCommentCheck){
-    document.getElementById("commentBadge").innerHTML =
-      "<span class='badge'>Ny kommentar</span>";
-  } else {
-    document.getElementById("commentBadge").innerHTML = "";
-  }
-
-  localStorage.setItem("lastCommentCheck", newestComment);
+/* ===== DATE FIX ===== */
+function formatDate(dateString){
+  if(!dateString) return "";
+  const d=new Date(dateString);
+  return d.toISOString().split("T")[0];
 }
 
 /* ===== RENDER ===== */
 function render(issues, comments){
 
-  const container = document.getElementById("issues");
-  container.innerHTML = "";
+  const container=document.getElementById("issues");
+  container.innerHTML="";
 
-  let active = issues
-    .filter(i => i.status !== "Closed");
+  const active = issues
+    .filter(i=>i.status!=="Closed")
+    .sort((a,b)=>a.severity==="High"?-1:1);
 
-  if(HANDWERKER_LOCATION){
-    active = active.filter(i => i.location === HANDWERKER_LOCATION);
-  }
-
-  active.sort((a,b)=> a.severity==="High" ? -1 : 1);
-
-  document.getElementById("kpiBar").innerHTML = `
+  document.getElementById("kpiBar").innerHTML=`
     <div>Åbne: ${active.length}</div>
     <div>Kritiske: ${active.filter(i=>i.severity==="High").length}</div>
   `;
 
-  if(active.length === 0){
-    container.innerHTML = "<div class='loading'>Ingen aktive sager ✅</div>";
+  if(active.length===0){
+    container.innerHTML="<div class='loading'>Ingen aktive sager ✅</div>";
     return;
   }
 
-  active.forEach(issue => {
+  active.forEach(issue=>{
 
-    const issueComments =
-      comments.filter(c => c.issueId === issue.id);
+    const issueComments=
+      comments.filter(c=>c.issueId===issue.id);
 
-    container.innerHTML += `
+    container.innerHTML+=`
       <div class="card"
         ontouchstart="startTouch(event,'${issue.id}')"
         ontouchend="endTouch(event,'${issue.id}')">
@@ -196,9 +200,7 @@ function render(issues, comments){
 
         <input type="date"
           id="date-${issue.id}"
-          value="${issue.estimatedCompletion 
-            ? issue.estimatedCompletion.split('T')[0] 
-            : ""}">
+          value="${formatDate(issue.estimatedCompletion)}">
 
         <button class="btn-save"
           onclick="saveDate('${issue.id}')">
@@ -224,6 +226,7 @@ function render(issues, comments){
             ${c.comment}
           </div>
         `).join("")}
+
       </div>
     `;
   });
@@ -232,8 +235,10 @@ function render(issues, comments){
 /* ===== UPDATE ===== */
 function saveDate(id){
 
-  const date = document.getElementById("date-"+id).value;
+  const date=document.getElementById("date-"+id).value;
   if(!date) return;
+
+  navigator.vibrate?.(50);
 
   const script=document.createElement("script");
   script.src=
@@ -248,6 +253,8 @@ function saveDate(id){
 
 function markDone(id){
 
+  navigator.vibrate?.([50,50]);
+
   const script=document.createElement("script");
   script.src=
     API_URL+
@@ -260,8 +267,10 @@ function markDone(id){
 
 function saveComment(id, location){
 
-  const comment = document.getElementById("comment-"+id).value;
+  const comment=document.getElementById("comment-"+id).value;
   if(!comment) return;
+
+  navigator.vibrate?.(30);
 
   const script=document.createElement("script");
   script.src=
@@ -273,25 +282,24 @@ function saveComment(id, location){
     "&t="+Date.now();
 
   document.body.appendChild(script);
-  setTimeout(loadData,800);
 }
 
-/* ===== SWIPE ===== */
-let touchStartX = 0;
+/* ===== Swipe to close ===== */
+let touchStartX=0;
 
 function startTouch(e,id){
-  touchStartX = e.changedTouches[0].screenX;
+  touchStartX=e.changedTouches[0].screenX;
 }
 
 function endTouch(e,id){
-  const diff = e.changedTouches[0].screenX - touchStartX;
-  if(diff < -100){
+  const diff=e.changedTouches[0].screenX-touchStartX;
+  if(diff<-100){
     markDone(id);
   }
 }
 
 /* ===== INIT ===== */
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded",function(){
   loadData();
   setInterval(loadData,20000);
 });
