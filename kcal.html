@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>Build Your Brunch – Nutrition</title>
+
+<style>
+body{
+  font-family:serif;
+  background:#f7f3ee;
+  padding:40px;
+  color:#222;
+  max-width:800px;
+  margin:auto;
+}
+h1{text-align:center;}
+.section{margin-bottom:30px;}
+.item{margin:8px 0;}
+.summary{
+  background:#fff;
+  padding:20px;
+  border:1px solid #ddd;
+  position:sticky;
+  bottom:0;
+}
+button{
+  padding:8px 14px;
+  margin:5px;
+}
+.counter{
+  font-weight:bold;
+  margin:10px 0;
+}
+.small{font-size:12px;color:#666;margin-top:15px;}
+</style>
+</head>
+<body>
+
+<h1>Build Your Brunch</h1>
+
+<p>Select your number of items:</p>
+<button onclick="setLimit(5)">5</button>
+<button onclick="setLimit(6)">6</button>
+<button onclick="setLimit(7)">7</button>
+
+<div class="counter" id="counter">Selected: 0</div>
+
+<div class="section">
+<h3>Mejeri</h3>
+
+<div class="item">
+<label>
+<input type="checkbox" onchange="toggleItem(this)"
+data-kcal="259.12"
+data-protein="17.6"
+data-carbs="3.41"
+data-fat="19.34">
+Røræg
+</label>
+
+<div style="margin-left:20px;">
+<label>
+<input type="checkbox" onchange="toggleAddon(this,70,0,0,6)">
+Remove bacon (-70 kcal)
+</label>
+</div>
+</div>
+
+</div>
+
+<div class="section">
+<h3>Kød & Fisk</h3>
+
+<div class="item">
+<label>
+<input type="checkbox" onchange="toggleItem(this)"
+data-kcal="410.3"
+data-protein="13.32"
+data-carbs="0.65"
+data-fat="40.02">
+Hjemmelavet hønsesalat
+</label>
+
+<div style="margin-left:20px;">
+<label>
+<input type="checkbox" onchange="toggleAddon(this,70,0,0,6)">
+Remove bacon (-70 kcal)
+</label>
+</div>
+</div>
+
+</div>
+
+<div class="section">
+<h3>Finalen</h3>
+
+<div class="item">
+<label>
+<input type="checkbox" onchange="toggleItem(this)"
+data-kcal="563"
+data-protein="8.84"
+data-carbs="87.21"
+data-fat="18.72">
+2 amerikanske pandekager
+</label>
+
+<div style="margin-left:20px;">
+<label>
+<input type="checkbox" onchange="toggleAddon(this,160,0,40,0)">
+Remove syrup (-160 kcal)
+</label>
+</div>
+</div>
+
+</div>
+
+<div class="summary">
+<h2>Your Nutritional Total</h2>
+<div id="totalKcal">0 kcal</div>
+<div id="totalMacros">Protein 0g | Carbs 0g | Fat 0g</div>
+
+<div class="small">
+Nutritional values are estimates based on standard recipes and average portion sizes. Minor variations may occur.
+</div>
+</div>
+
+<script>
+let total = {kcal:0, protein:0, carbs:0, fat:0};
+let selectedCount = 0;
+let limit = 5;
+
+function setLimit(n){
+  limit = n;
+  updateCounter();
+}
+
+function toggleItem(el){
+  if(el.checked){
+    if(selectedCount >= limit){
+      el.checked=false;
+      alert("You can only select "+limit+" items.");
+      return;
+    }
+    selectedCount++;
+    total.kcal += parseFloat(el.dataset.kcal);
+    total.protein += parseFloat(el.dataset.protein);
+    total.carbs += parseFloat(el.dataset.carbs);
+    total.fat += parseFloat(el.dataset.fat);
+  } else {
+    selectedCount--;
+    total.kcal -= parseFloat(el.dataset.kcal);
+    total.protein -= parseFloat(el.dataset.protein);
+    total.carbs -= parseFloat(el.dataset.carbs);
+    total.fat -= parseFloat(el.dataset.fat);
+  }
+  update();
+}
+
+function toggleAddon(el,kcal,protein,carbs,fat){
+  if(el.checked){
+    total.kcal -= kcal;
+    total.protein -= protein;
+    total.carbs -= carbs;
+    total.fat -= fat;
+  } else {
+    total.kcal += kcal;
+    total.protein += protein;
+    total.carbs += carbs;
+    total.fat += fat;
+  }
+  update();
+}
+
+function update(){
+  document.getElementById("totalKcal").innerText = Math.round(total.kcal)+" kcal";
+  document.getElementById("totalMacros").innerText =
+    "Protein "+Math.round(total.protein)+"g | Carbs "+
+    Math.round(total.carbs)+"g | Fat "+
+    Math.round(total.fat)+"g";
+  updateCounter();
+}
+
+function updateCounter(){
+  document.getElementById("counter").innerText =
+    "Selected: "+selectedCount+" of "+limit;
+}
+</script>
+
+</body>
+</html>
