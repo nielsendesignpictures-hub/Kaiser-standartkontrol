@@ -5,51 +5,31 @@
 <title>Catering Produktionsberegner</title>
 
 <style>
-body {
+body{
   margin:0;
-  font-family: system-ui, sans-serif;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
+  font-family:system-ui;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
   color:#f8fafc;
   padding:40px;
 }
-
-h1 { margin-bottom:30px; }
-
-.cards {
-  display:flex;
-  gap:20px;
-  margin-bottom:40px;
-}
-
-.card {
+h1{margin-bottom:30px;}
+.cards{display:flex;gap:20px;margin-bottom:40px;}
+.card{
   flex:1;
   background:#1e293b;
   padding:30px;
   border-radius:14px;
   cursor:pointer;
   border:2px solid transparent;
-  transition:0.2s;
 }
-
-.card:hover {
-  border:2px solid #d4af37;
-}
-
-.card.active {
-  border:2px solid #d4af37;
-  background:#111827;
-}
-
-.section {
+.card.active{border:2px solid #d4af37;background:#111827;}
+.section{
   background:#1e293b;
   padding:25px;
   border-radius:14px;
   margin-bottom:20px;
 }
-
-h3 { margin-top:0; }
-
-button {
+button{
   background:#d4af37;
   color:#000;
   padding:12px 25px;
@@ -57,18 +37,16 @@ button {
   border-radius:8px;
   font-weight:bold;
   cursor:pointer;
-  margin-top:15px;
 }
-
-.result {
+.result{
   background:#0f172a;
   padding:25px;
   border-radius:14px;
   margin-top:30px;
 }
-.hidden { display:none; }
-label { display:block; margin:6px 0; }
-input[type="number"] { padding:8px; width:100px; }
+.hidden{display:none;}
+label{display:block;margin:6px 0;}
+input[type="number"]{padding:8px;width:100px;}
 </style>
 </head>
 <body>
@@ -78,11 +56,9 @@ input[type="number"] { padding:8px; width:100px; }
 <div class="cards">
   <div class="card active" onclick="showBrunch()" id="brunchCard">
     <h2>Brunchbuffet</h2>
-    <p>Fast standard buffet</p>
   </div>
   <div class="card" onclick="showBuild()" id="buildCard">
     <h2>Byg selv menu</h2>
-    <p>Sammensæt menu efter kundens valg</p>
   </div>
 </div>
 
@@ -98,7 +74,6 @@ Antal personer:
 <div class="result" id="brunchResult"></div>
 </div>
 
-
 <!-- BYG SELV -->
 <div id="buildSection" class="hidden">
 
@@ -108,48 +83,48 @@ Antal personer:
 </div>
 
 <div class="section">
-<h3>🥩 Kød (vælg 2–3)</h3>
-<label><input type="checkbox" value="oksefilet"> Helstegt oksefilet</label>
-<label><input type="checkbox" value="oksemoerbrad"> Helstegt oksemørbrad</label>
-<label><input type="checkbox" value="frikadeller"> Frikadeller</label>
-<label><input type="checkbox" value="skinke"> Glaseret skinke</label>
-<label><input type="checkbox" value="kylling"> Marineret kyllingebryst</label>
-<label><input type="checkbox" value="laks"> Varmrøget laks med sauce verde</label>
+<h3>🥩 Kød</h3>
+<label><input type="checkbox" data-type="kg" data-gram="130"> Helstegt oksefilet</label>
+<label><input type="checkbox" data-type="kg" data-gram="130"> Helstegt oksemørbrad</label>
+<label><input type="checkbox" data-type="stk" data-stk="2"> Frikadeller</label>
+<label><input type="checkbox" data-type="kg" data-gram="120"> Glaseret skinke</label>
+<label><input type="checkbox" data-type="kg" data-gram="130"> Marineret kyllingebryst</label>
+<label><input type="checkbox" data-type="kg" data-gram="110"> Varmrøget laks med sauce verde</label>
 </div>
 
 <div class="section">
-<h3>🥗 Salater (vælg 2)</h3>
-<label><input type="checkbox" value="100"> Broccolisalat</label>
-<label><input type="checkbox" value="125"> Nudelsalat m. tigerrejer</label>
-<label><input type="checkbox" value="100"> Kaisers kartoffelsalat</label>
-<label><input type="checkbox" value="90"> Rustik tomatsalat</label>
-<label><input type="checkbox" value="100"> Couscoussalat</label>
+<h3>🥗 Salater</h3>
+<label><input type="checkbox" data-type="kg" data-gram="100"> Broccolisalat</label>
+<label><input type="checkbox" data-type="kg" data-gram="125"> Nudelsalat med tigerrejer</label>
+<label><input type="checkbox" data-type="kg" data-gram="100"> Kaisers kartoffelsalat</label>
+<label><input type="checkbox" data-type="kg" data-gram="90"> Rustik tomatsalat</label>
+<label><input type="checkbox" data-type="kg" data-gram="100"> Couscoussalat</label>
 </div>
 
 <div class="section">
-<h3>🥔 Kartofler (vælg 2)</h3>
-<label><input type="checkbox" value="150"> Flødekartofler</label>
-<label><input type="checkbox" value="150"> Trøffel flødekartofler</label>
-<label><input type="checkbox" value="150"> Små ovnkartofler</label>
-<label><input type="checkbox" value="bagekartoffel"> Bagekartoffel</label>
-<label><input type="checkbox" value="gratin"> Kartoffelgratin</label>
+<h3>🥔 Kartofler</h3>
+<label><input type="checkbox" data-type="kg" data-gram="150"> Flødekartofler</label>
+<label><input type="checkbox" data-type="kg" data-gram="150"> Trøffel flødekartofler</label>
+<label><input type="checkbox" data-type="kg" data-gram="150"> Små ovnkartofler</label>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Bagekartoffel</label>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Kartoffelgratin</label>
 </div>
 
 <div class="section">
-<h3>🥣 Sauce (vælg 2)</h3>
-<label><input type="checkbox" value="100"> Bearnaise sauce</label>
-<label><input type="checkbox" value="100"> Rødvinssauce</label>
-<label><input type="checkbox" value="100"> Pebersauce</label>
-<label><input type="checkbox" value="75"> Hjemmelavet tzatziki</label>
+<h3>🥣 Sauce</h3>
+<label><input type="checkbox" data-type="liter" data-ml="100"> Bearnaise sauce</label>
+<label><input type="checkbox" data-type="liter" data-ml="100"> Rødvinssauce</label>
+<label><input type="checkbox" data-type="liter" data-ml="100"> Pebersauce</label>
+<label><input type="checkbox" data-type="liter" data-ml="75"> Hjemmelavet tzatziki</label>
 </div>
 
 <div class="section">
-<h3>🍰 Dessert (vælg 1)</h3>
-<label><input type="checkbox" value="stk"> Chokolademousse</label>
-<label><input type="checkbox" value="stk"> Panna cotta</label>
-<label><input type="checkbox" value="100"> Chokolade brownie</label>
-<label><input type="checkbox" value="180"> Frugtsalat m. vaniljecreme</label>
-<label><input type="checkbox" value="stk"> Kaiser’s jordbær/rabarber trifli</label>
+<h3>🍰 Dessert</h3>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Chokolademousse</label>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Panna cotta</label>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Chokolade brownie</label>
+<label><input type="checkbox" data-type="kg" data-gram="180"> Frugtsalat m. vaniljecreme</label>
+<label><input type="checkbox" data-type="stk" data-stk="1"> Kaiser’s jordbær/rabarber trifli</label>
 </div>
 
 <button onclick="calculateBuild()">Beregn</button>
@@ -157,71 +132,105 @@ Antal personer:
 
 </div>
 
-
 <script>
+
 function showBrunch(){
-  document.getElementById("brunchSection").classList.remove("hidden");
-  document.getElementById("buildSection").classList.add("hidden");
-  document.getElementById("brunchCard").classList.add("active");
-  document.getElementById("buildCard").classList.remove("active");
+  brunchSection.classList.remove("hidden");
+  buildSection.classList.add("hidden");
+  brunchCard.classList.add("active");
+  buildCard.classList.remove("active");
 }
 
 function showBuild(){
-  document.getElementById("buildSection").classList.remove("hidden");
-  document.getElementById("brunchSection").classList.add("hidden");
-  document.getElementById("buildCard").classList.add("active");
-  document.getElementById("brunchCard").classList.remove("active");
+  buildSection.classList.remove("hidden");
+  brunchSection.classList.add("hidden");
+  buildCard.classList.add("active");
+  brunchCard.classList.remove("active");
 }
 
-function roundKg(grams){
-  let kg = grams/1000;
-  if(kg < 5) return Math.ceil(kg*10)/10;
+function roundKg(g){
+  let kg=g/1000;
+  if(kg<5) return Math.ceil(kg*10)/10;
   return Math.ceil(kg*2)/2;
 }
 
-function calculateBrunch(){
-  const guests = parseInt(document.getElementById("brunchGuests").value);
-  const buffer = 1.10;
-
-  const brunchItems = [
-    ["Økologisk blandet brød",90],
-    ["Laks",45],
-    ["Ostefad",55],
-    ["Pålægsfad",65],
-    ["Røræg",110],
-    ["Bacon",35]
-  ];
-
-  let output = `<h2>Brunch – ${guests} personer</h2><ul>`;
-
-  brunchItems.forEach(item=>{
-    let total = item[1]*guests*buffer;
-    output += `<li>${item[0]}: <strong>${roundKg(total)} kg</strong></li>`;
-  });
-
-  output += "</ul>";
-  document.getElementById("brunchResult").innerHTML = output;
+function roundLiter(ml){
+  let liter=ml/1000;
+  return Math.ceil(liter*10)/10;
 }
 
-function calculateBuild(){
-  const guests = parseInt(document.getElementById("buildGuests").value);
-  const buffer = 1.10;
-  let output = `<h2>Byg selv – ${guests} personer</h2><ul>`;
+function calculateBrunch(){
+  const guests=parseInt(brunchGuests.value);
+  const buffer=1.10;
 
-  document.querySelectorAll('#buildSection input:checked').forEach(item=>{
-    if(item.value==="stk" || item.value==="bagekartoffel" || item.value==="gratin"){
-      let total = Math.ceil(guests*buffer);
-      output += `<li>${item.parentNode.textContent}: <strong>${total} stk</strong></li>`;
-    } else {
-      let total = parseInt(item.value)*guests*buffer;
-      output += `<li>${item.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+  const items=[
+["Øko brød",90,"kg"],
+["Mini wienerbrød (mix)",80,"kg"],
+["Smør & Nutella",18,"kg"],
+["Laks",45,"kg"],
+["Ost",55,"kg"],
+["Pålæg",65,"kg"],
+["Tomat & grøn salat",90,"kg"],
+["Tunsalat",45,"kg"],
+["Yoghurt",110,"kg"],
+["Granola",20,"kg"],
+["Chiagrød",90,"kg"],
+["Chokolademousse",70,"kg"],
+["Frugt",110,"kg"],
+["Saltkaramelkage",70,"kg"],
+["Røræg",110,"kg"],
+["Pølser",1,"stk"],
+["Bacon",35,"kg"],
+["Crispy chicken",90,"kg"],
+["Rösti",1,"stk"],
+["Egg bite",1,"stk"],
+["Pandekage",1,"stk"],
+["Vaffel",50,"kg"]
+  ];
+
+  let output=`<h2>Brunch – ${guests} personer</h2><ul>`;
+
+  items.forEach(item=>{
+    if(item[2]==="stk"){
+      output+=`<li>${item[0]}: <strong>${Math.ceil(item[1]*guests*buffer)} stk</strong></li>`;
+    }else{
+      output+=`<li>${item[0]}: <strong>${roundKg(item[1]*guests*buffer)} kg</strong></li>`;
     }
   });
 
-  output += "</ul>";
-  document.getElementById("buildResult").innerHTML = output;
+  output+="</ul>";
+  brunchResult.innerHTML=output;
 }
-</script>
 
+function calculateBuild(){
+  const guests=parseInt(buildGuests.value);
+  const buffer=1.10;
+  let output=`<h2>Byg selv – ${guests} personer</h2><ul>`;
+
+  document.querySelectorAll('#buildSection input:checked').forEach(item=>{
+    const type=item.dataset.type;
+
+    if(type==="stk"){
+      let total=Math.ceil(item.dataset.stk*guests*buffer);
+      output+=`<li>${item.parentNode.textContent}: <strong>${total} stk</strong></li>`;
+    }
+
+    if(type==="kg"){
+      let total=item.dataset.gram*guests*buffer;
+      output+=`<li>${item.parentNode.textContent}: <strong>${roundKg(total)} kg</strong></li>`;
+    }
+
+    if(type==="liter"){
+      let total=item.dataset.ml*guests*buffer;
+      output+=`<li>${item.parentNode.textContent}: <strong>${roundLiter(total)} liter</strong></li>`;
+    }
+
+  });
+
+  output+="</ul>";
+  buildResult.innerHTML=output;
+}
+
+</script>
 </body>
 </html>
