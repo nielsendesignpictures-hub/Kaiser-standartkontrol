@@ -4,70 +4,92 @@
 <meta charset="UTF-8">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Kaiser – Håndværker</title>
+<title>Café Kaiser – Håndværker Portal</title>
 
 <style>
+:root{
+  --sidebar:#000;
+  --border:#e5e7eb;
+  --muted:#6b7280;
+  --danger:#dc2626;
+  --warning:#f59e0b;
+  --success:#16a34a;
+}
+
+*{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  display:flex;
   background:#f3f4f6;
-  overscroll-behavior-y:contain;
+}
+
+/* Sidebar */
+.sidebar{
+  width:260px;
+  background:var(--sidebar);
+  color:white;
+  height:100vh;
+  padding:30px 20px;
+  overflow-y:auto;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:40px;
+}
+
+.menu-item{
+  padding:10px 14px;
+  border-radius:8px;
+  margin-bottom:6px;
+  cursor:pointer;
+}
+
+.menu-item.active{
+  background:#1f1f1f;
+}
+
+/* Main */
+.main{
+  flex:1;
+  padding:20px;
 }
 
 .header{
-  position:sticky;
-  top:0;
-  background:#000;
-  color:white;
-  padding:16px;
-  font-size:18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  z-index:100;
+  margin-bottom:20px;
+}
+
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:20px;
 }
 
 .kpi{
-  display:flex;
-  gap:10px;
-  padding:10px;
-}
-
-.kpi div{
   background:white;
-  padding:8px 12px;
-  border-radius:10px;
-  font-size:14px;
+  padding:15px;
+  border-radius:14px;
+  border:1px solid var(--border);
 }
 
 .card{
   background:white;
-  margin:15px;
   padding:15px;
   border-radius:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-  transition:transform 0.2s;
+  border:1px solid var(--border);
+  margin-bottom:15px;
 }
 
-.loading{
-  text-align:center;
-  padding:40px;
-  color:#666;
-}
-
-button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:none;
-  border-radius:10px;
-  font-weight:600;
-  font-size:16px;
-}
-
-.btn-save{background:#000;color:white;}
-.btn-done{background:#16a34a;color:white;}
-.btn-comment{background:#333;color:white;}
+.severity-high{color:var(--danger);font-weight:600}
+.severity-medium{color:var(--warning);font-weight:600}
+.severity-low{color:var(--success);font-weight:600}
 
 textarea{
   width:100%;
@@ -86,54 +108,74 @@ input[type="date"]{
   border-radius:10px;
   border:1px solid #ddd;
 }
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+}
+
+.btn-dark{background:#000;color:white}
+.btn-success{background:var(--success);color:white}
+.btn-light{background:#ddd}
+
+@media(max-width:768px){
+  body{display:block;}
+  .sidebar{width:100%;height:auto;}
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div>Kaiser – Håndværker</div>
-  <div id="liveStatus">● Live</div>
+<div class="sidebar">
+  <div class="logo">Café Kaiser</div>
+
+  <div id="nav-open" class="menu-item active" onclick="setView('open')">
+    Åbne sager
+  </div>
+
+  <div id="nav-closed" class="menu-item" onclick="setView('closed')">
+    Færdige
+  </div>
+
+  <hr>
+
+  <strong style="font-size:13px;color:#aaa;">Lokationer</strong>
+  <div id="locationList"></div>
 </div>
 
-<div class="kpi" id="kpiBar"></div>
+<div class="main">
 
-<div id="issues">
-  <div class="loading">Indlæser...</div>
+  <div class="header">
+    <h2 id="title">Åbne sager</h2>
+    <button class="btn-light" onclick="loadData(true)">Opdater</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">Åbne<br><strong id="kpi-open">0</strong></div>
+    <div class="kpi">Kritiske<br><strong id="kpi-high">0</strong></div>
+  </div>
+
+  <div id="issues"></div>
+
 </div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbx90unEejk2SC4TVBHA0JZXz7ZSwrKp3tUr92L8gX_JbyhBDsSADsihl-RNf0UvEsda/exec";
 
+let CURRENT_VIEW="open";
+let CURRENT_LOCATION=null;
 let isLoading=false;
-let scrollPos=0;
 
-/* ===== Pull to refresh ===== */
-let startY=0;
-
-document.addEventListener("touchstart",e=>{
-  if(window.scrollY===0){
-    startY=e.touches[0].clientY;
-  }
-});
-
-document.addEventListener("touchend",e=>{
-  if(window.scrollY===0){
-    const diff=e.changedTouches[0].clientY-startY;
-    if(diff>120){
-      loadData();
-    }
-  }
-});
-
-/* ===== LOAD ===== */
-function loadData(){
+function loadData(manual=false){
 
   if(isLoading) return;
   isLoading=true;
-
-  scrollPos = window.scrollY;
 
   const old=document.getElementById("jsonp");
   if(old) old.remove();
@@ -144,81 +186,81 @@ function loadData(){
   document.body.appendChild(script);
 }
 
-/* ===== CALLBACK ===== */
 function handleData(data){
 
-  let issues = Array.isArray(data) ? data : (data.issues || []);
-  let comments = data.comments || [];
+  let issues=[];
+  let comments=[];
 
-  render(issues, comments);
+  if(Array.isArray(data)){
+    issues=data;
+  } else {
+    issues=data.issues||[];
+    comments=data.comments||[];
+  }
 
-  window.scrollTo(0,scrollPos);
-
-  document.getElementById("liveStatus").innerText="● Live";
+  render(issues,comments);
   isLoading=false;
 }
 
-/* ===== DATE FIX ===== */
 function formatDate(dateString){
   if(!dateString) return "";
-  const d=new Date(dateString);
-  return d.toISOString().split("T")[0];
+  return new Date(dateString).toISOString().split("T")[0];
 }
 
-/* ===== RENDER ===== */
-function render(issues, comments){
+function render(issues,comments){
 
   const container=document.getElementById("issues");
   container.innerHTML="";
 
-  const active = issues
-    .filter(i=>i.status!=="Closed")
-    .sort((a,b)=>a.severity==="High"?-1:1);
+  let open=0;
+  let high=0;
+  const locationCount={};
 
-  document.getElementById("kpiBar").innerHTML=`
-    <div>Åbne: ${active.length}</div>
-    <div>Kritiske: ${active.filter(i=>i.severity==="High").length}</div>
-  `;
+  issues.forEach(issue=>{
+    if(issue.status!=="Closed") open++;
+    if(issue.severity==="High") high++;
 
-  if(active.length===0){
-    container.innerHTML="<div class='loading'>Ingen aktive sager ✅</div>";
-    return;
-  }
+    if(issue.status!=="Closed"){
+      locationCount[issue.location]=(locationCount[issue.location]||0)+1;
+    }
 
-  active.forEach(issue=>{
+    if(CURRENT_VIEW==="open" && issue.status==="Closed") return;
+    if(CURRENT_VIEW==="closed" && issue.status!=="Closed") return;
+    if(CURRENT_LOCATION && issue.location!==CURRENT_LOCATION) return;
 
-    const issueComments=
-      comments.filter(c=>c.issueId===issue.id);
+    const issueComments=comments.filter(c=>c.issueId===issue.id);
 
     container.innerHTML+=`
-      <div class="card"
-        ontouchstart="startTouch(event,'${issue.id}')"
-        ontouchend="endTouch(event,'${issue.id}')">
-
+      <div class="card">
         <h3>${issue.location}</h3>
-        <p>${issue.description}</p>
+        <div class="severity-${issue.severity?.toLowerCase()}">
+          ${issue.severity||""}
+        </div>
+        <p>${issue.description||""}</p>
 
+        ${CURRENT_VIEW==="open"?`
         <input type="date"
           id="date-${issue.id}"
           value="${formatDate(issue.estimatedCompletion)}">
 
-        <button class="btn-save"
+        <button class="btn-dark"
           onclick="saveDate('${issue.id}')">
           Gem dato
         </button>
 
-        <button class="btn-done"
+        <button class="btn-success"
           onclick="markDone('${issue.id}')">
-          Markér færdig
+          Færdig
         </button>
 
         <textarea id="comment-${issue.id}"
           placeholder="Skriv status..."></textarea>
 
-        <button class="btn-comment"
+        <button class="btn-dark"
           onclick="saveComment('${issue.id}','${issue.location}')">
           Tilføj kommentar
         </button>
+        `:""}
 
         ${issueComments.map(c=>`
           <div style="margin-top:8px;font-size:14px;">
@@ -226,19 +268,29 @@ function render(issues, comments){
             ${c.comment}
           </div>
         `).join("")}
+      </div>
+    `;
+  });
 
+  document.getElementById("kpi-open").innerText=open;
+  document.getElementById("kpi-high").innerText=high;
+
+  const locContainer=document.getElementById("locationList");
+  locContainer.innerHTML="";
+  Object.keys(locationCount).forEach(loc=>{
+    locContainer.innerHTML+=`
+      <div class="menu-item"
+        onclick="filterLocation('${loc}')">
+        ${loc} (${locationCount[loc]})
       </div>
     `;
   });
 }
 
-/* ===== UPDATE ===== */
 function saveDate(id){
 
   const date=document.getElementById("date-"+id).value;
   if(!date) return;
-
-  navigator.vibrate?.(50);
 
   const script=document.createElement("script");
   script.src=
@@ -248,12 +300,10 @@ function saveDate(id){
     "&t="+Date.now();
 
   document.body.appendChild(script);
-  setTimeout(loadData,800);
+  setTimeout(()=>loadData(true),1500);
 }
 
 function markDone(id){
-
-  navigator.vibrate?.([50,50]);
 
   const script=document.createElement("script");
   script.src=
@@ -262,15 +312,13 @@ function markDone(id){
     "&status=Closed&t="+Date.now();
 
   document.body.appendChild(script);
-  setTimeout(loadData,800);
+  setTimeout(()=>loadData(true),1500);
 }
 
-function saveComment(id, location){
+function saveComment(id,location){
 
   const comment=document.getElementById("comment-"+id).value;
   if(!comment) return;
-
-  navigator.vibrate?.(30);
 
   const script=document.createElement("script");
   script.src=
@@ -282,23 +330,21 @@ function saveComment(id, location){
     "&t="+Date.now();
 
   document.body.appendChild(script);
+  setTimeout(()=>loadData(true),1500);
 }
 
-/* ===== Swipe to close ===== */
-let touchStartX=0;
-
-function startTouch(e,id){
-  touchStartX=e.changedTouches[0].screenX;
+function setView(view){
+  CURRENT_VIEW=view;
+  document.getElementById("title").innerText=
+    view==="open"?"Åbne sager":"Færdige";
+  loadData(true);
 }
 
-function endTouch(e,id){
-  const diff=e.changedTouches[0].screenX-touchStartX;
-  if(diff<-100){
-    markDone(id);
-  }
+function filterLocation(loc){
+  CURRENT_LOCATION=loc;
+  loadData(true);
 }
 
-/* ===== INIT ===== */
 document.addEventListener("DOMContentLoaded",function(){
   loadData();
   setInterval(loadData,20000);
