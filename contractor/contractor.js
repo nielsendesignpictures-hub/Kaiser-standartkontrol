@@ -1,6 +1,10 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
 
+let isEditing = false; // ✅ VIGTIG
+
 async function loadFaults() {
+
+  if (isEditing) return; // ✅ Stop hvis han skriver
 
   const res = await fetch(`${SCRIPT_URL}?action=getFaultsIssues&mode=json`);
   const data = await res.json();
@@ -34,7 +38,10 @@ async function loadFaults() {
       </div>
 
       <div class="actions">
-        <input type="date" onchange="setPlanned('${fault.id}', this.value)">
+        <input type="date"
+          onfocus="startEditing()"
+          onblur="stopEditing()"
+          onchange="setPlanned('${fault.id}', this.value)">
         <div class="circle-btn" onclick="markDone('${fault.id}', this)"></div>
       </div>
     `;
@@ -54,7 +61,6 @@ async function markDone(id, el) {
     })
   });
 
-  el.classList.add("done");
   loadFaults();
 }
 
@@ -70,6 +76,7 @@ async function setPlanned(id, date) {
     })
   });
 
+  isEditing = false; // ✅ Reset editing efter gem
   loadFaults();
 }
 
@@ -80,7 +87,20 @@ function formatDate(dateStr) {
          d.toLocaleTimeString("da-DK", {hour:"2-digit", minute:"2-digit"});
 }
 
+function startEditing() {
+  isEditing = true;
+}
+
+function stopEditing() {
+  isEditing = false;
+}
+
+// ✅ Første load
 loadFaults();
 
-// 🔥 Auto refresh hver 15 sek
-setInterval(loadFaults, 15000);
+// ✅ Smart auto refresh
+setInterval(() => {
+  if (!isEditing) {
+    loadFaults();
+  }
+}, 15000);
