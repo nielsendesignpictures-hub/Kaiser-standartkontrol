@@ -534,7 +534,9 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST">
+      <form id="reportForm"
+      method="POST"
+      action="https://formsubmit.co/skiftlederrapport@gmail.com">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -1262,6 +1264,42 @@ form.addEventListener('submit', async function(e) {
   if (next) {
     window.location.href = next;
   }
+});
+
+    const form = document.getElementById('reportForm');
+
+form.addEventListener('submit', async function(e) {
+
+  // Vent lidt og check om FormSubmit fejler
+  setTimeout(async () => {
+
+    try {
+
+      // Test om FormSubmit-side er oppe
+      const test = await fetch('https://formsubmit.co', {
+        method: 'HEAD',
+        mode: 'no-cors'
+      });
+
+    } catch (err) {
+
+      console.log('FormSubmit ser ud til at være nede → sender backup');
+
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      await fetch('DIN_APPS_SCRIPT_URL', {
+        method: 'POST',
+        body: formData
+      });
+
+      alert('Rapport sendt via backup-system');
+
+    }
+
+  }, 1000);
+
 });
 </script>
 
