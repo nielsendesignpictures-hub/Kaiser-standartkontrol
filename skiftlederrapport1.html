@@ -534,7 +534,7 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://formsubmit.co/skiftlederrapport@gmail.com">
+      <form id="reportForm" method="POST">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -1212,6 +1212,57 @@
   }
 
   scheduleAutoSend();
+
+    const form = document.getElementById('reportForm');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  const formSubmitUrl = 'https://formsubmit.co/skiftlederrapport@gmail.com';
+
+  const backupUrl = 'https://script.google.com/macros/s/AKfycbxDoBdpeQ0i_BRje3luSk_PAT7z0J7J0DDTBT5NquAkCzH5rgL8xOAqHdTK-TjApCT2_A/exec';
+
+  try {
+
+    // prøv FormSubmit først
+    let response = await fetch(formSubmitUrl, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('FormSubmit failed');
+    }
+
+    console.log('Sendt via FormSubmit');
+
+  } catch (error) {
+
+    console.log('FormSubmit fejlede → bruger backup');
+
+    // fallback til Apps Script
+    let backupResponse = await fetch(backupUrl, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!backupResponse.ok) {
+      alert('Begge mailsystemer fejlede');
+      return;
+    }
+
+    console.log('Sendt via Apps Script backup');
+  }
+
+  // redirect bagefter
+  const next = document.getElementById('nextField').value;
+
+  if (next) {
+    window.location.href = next;
+  }
+});
 </script>
 
 </body>
