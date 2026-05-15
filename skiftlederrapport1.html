@@ -534,9 +534,7 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm"
-      method="POST"
-      action="https://formsubmit.co/skiftlederrapport@gmail.com">
+      <form id="reportForm" method="POST" action="https://formsubmit.co/skiftlederrapport@gmail.com">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -1214,93 +1212,6 @@
   }
 
   scheduleAutoSend();
-
-    const form = document.getElementById('reportForm');
-
-form.addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const formData = new FormData(form);
-
-  const formSubmitUrl = 'https://formsubmit.co/skiftlederrapport@gmail.com';
-
-  const backupUrl = 'https://script.google.com/macros/s/AKfycbx3SR-Tx131HdosGNePXzz84C7uPwYO3LC7CAVu0H3IX37r8thImTHD76tvK5x-xCM-sg/exec';
-
-  try {
-
-    // prøv FormSubmit først
-    let response = await fetch(formSubmitUrl, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('FormSubmit failed');
-    }
-
-    console.log('Sendt via FormSubmit');
-
-  } catch (error) {
-
-    console.log('FormSubmit fejlede → bruger backup');
-
-    // fallback til Apps Script
-    let backupResponse = await fetch(backupUrl, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!backupResponse.ok) {
-      alert('Begge mailsystemer fejlede');
-      return;
-    }
-
-    console.log('Sendt via Apps Script backup');
-  }
-
-  // redirect bagefter
-  const next = document.getElementById('nextField').value;
-
-  if (next) {
-    window.location.href = next;
-  }
-});
-
-    const form = document.getElementById('reportForm');
-
-form.addEventListener('submit', async function(e) {
-
-  // Vent lidt og check om FormSubmit fejler
-  setTimeout(async () => {
-
-    try {
-
-      // Test om FormSubmit-side er oppe
-      const test = await fetch('https://formsubmit.co', {
-        method: 'HEAD',
-        mode: 'no-cors'
-      });
-
-    } catch (err) {
-
-      console.log('FormSubmit ser ud til at være nede → sender backup');
-
-      e.preventDefault();
-
-      const formData = new FormData(form);
-
-      await fetch('DIN_APPS_SCRIPT_URL', {
-        method: 'POST',
-        body: formData
-      });
-
-      alert('Rapport sendt via backup-system');
-
-    }
-
-  }, 1000);
-
-});
 </script>
 
 </body>
