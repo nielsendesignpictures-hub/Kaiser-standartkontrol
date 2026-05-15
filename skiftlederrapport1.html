@@ -437,13 +437,13 @@
       z-index:30;
     }
 
-    .actionsInner{
-      max-width:1080px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
+.actionsInner{
+  max-width:1080px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+}
 
     .btn{
       width:100%;
@@ -750,10 +750,17 @@
   </div>
 
   <div class="actionsSticky" id="actionsSticky">
-    <div class="actionsInner">
-      <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
-      <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
-    </div>
+<div class="actionsInner">
+  <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
+
+  <button id="backupAction" class="btn btn-dark" type="button">
+    Backup send
+  </button>
+
+  <button id="primaryAction" class="btn btn-blue" type="button">
+    Gem frokost og fortsæt
+  </button>
+</div>
   </div>
 
   <script>
@@ -1212,6 +1219,62 @@
   }
 
   scheduleAutoSend();
+    $("backupAction").addEventListener("click", async function(){
+
+  clearError();
+
+  const err1 = validateStep1();
+
+  if(err1){
+    showError(err1);
+    return;
+  }
+
+  if(currentStep() === 2){
+
+    const err2 = validateStep2();
+
+    if(err2){
+      showError(err2);
+      return;
+    }
+  }
+
+  updateSubject();
+
+  const form = $("reportForm");
+
+  const formData = new FormData(form);
+
+  try {
+
+    $("backupAction").disabled = true;
+    $("backupAction").textContent = "Sender backup...";
+
+    await fetch("https://script.google.com/macros/s/AKfycbxjGiF3SnfR86esopfizq-gWUM8rP98qkNvTHeQfpBjhM-YcMbjJ5NSWkOfkshlxX2x3Q/exec", {
+      method: "POST",
+      body: formData
+    });
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    alert("Rapport sendt via backup-system");
+
+  } catch(err){
+
+    console.error(err);
+
+    alert("Backup-system fejlede");
+
+  } finally {
+
+    $("backupAction").disabled = false;
+    $("backupAction").textContent = "Backup send";
+  }
+
+});
+
+    
 </script>
 
 </body>
