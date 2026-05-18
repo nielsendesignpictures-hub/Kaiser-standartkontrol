@@ -534,7 +534,7 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbwpwXeIFUfz_srVmxfYuMOavRL_Ek5am5sxOpZOvyxfKPslq9SkiEzr6plKmU6Ur8Px8A/exec">
+      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbzTXrie7g_gLqYSLWv7rvXI85xp6cSldLeiTrA6Lj0MR4EGku9Ygh9XWrjd7xlu7NdpSA/exec">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -1096,15 +1096,49 @@
     });
   }
 
-  function doSend(){
-    updateSubject();
-    localStorage.removeItem(STORAGE_KEY);
+async function doSend(){
 
-    $("primaryAction").disabled = true;
-    $("primaryAction").textContent = "Sender...";
+  updateSubject();
 
-    $("reportForm").submit();
+  $("primaryAction").disabled = true;
+  $("primaryAction").textContent = "Sender...";
+
+  try {
+
+    const form = $("reportForm");
+
+    const formData = new FormData(form);
+
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.text();
+
+    if(result.includes("SUCCESS")){
+
+      localStorage.removeItem(STORAGE_KEY);
+
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("actionsSticky").classList.add("hidden");
+
+      return;
+    }
+
+    throw new Error("Afsendelse fejlede");
+
+  } catch(err){
+
+    console.error(err);
+
+    showError("Rapporten kunne ikke sendes.");
+
+    $("primaryAction").disabled = false;
+    $("primaryAction").textContent = "Send rapport";
   }
+}
 
   $("primaryAction").addEventListener("click", function(){
     clearError();
