@@ -534,7 +534,7 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbwW_AcGdFi25qeR4yZFN3pLReDfnRSLqFOcn1oJBs2CDEKWY1ShhrBdkh7Oi7GQyvIeeA/exec">
+      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbw7gaQWVSR20q_nTfx0Dtr8aKK803hwKJL2fYZidD8GWlvAI2e4_lzsMeqPzN0EBfORRg/exec">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -1097,6 +1097,8 @@
   }
 
 async function doSend(){
+  if (window.reportSending) return;
+window.reportSending = true;
 
   updateSubject();
 
@@ -1137,6 +1139,8 @@ async function doSend(){
 
     $("primaryAction").disabled = false;
     $("primaryAction").textContent = "Send rapport";
+
+    window.reportSending = false;
   }
 }
 
