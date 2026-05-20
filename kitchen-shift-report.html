@@ -500,8 +500,10 @@ $("secondaryAction").addEventListener("click", () => {
   if(confirm("Reset entire report?")) resetAll();
 });
 
-$("primaryAction").addEventListener("click", () => {
+$("primaryAction").addEventListener("click", async () => {
+
   const missing = requiredFields().filter(f => !val(f.id));
+
   if(missing.length){
     updateStatusLine();
     scrollToField(missing[0].anchor);
@@ -509,10 +511,45 @@ $("primaryAction").addEventListener("click", () => {
   }
 
   updateSubject();
-  localStorage.removeItem(STORAGE_KEY);
+
   $("primaryAction").disabled = true;
   $("primaryAction").textContent = "Sending...";
-  $("reportForm").submit();
+
+  try {
+
+    const form = $("reportForm");
+
+    const formData = new FormData(form);
+
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.text();
+
+    if(result.includes("SUCCESS")){
+
+      localStorage.removeItem(STORAGE_KEY);
+
+      window.location.href =
+        "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html?sent=1";
+
+      return;
+    }
+
+    throw new Error("Submit failed");
+
+  } catch(err){
+
+    console.error(err);
+
+    alert("Report could not be sent.");
+
+    $("primaryAction").disabled = false;
+    $("primaryAction").textContent = "Send Report";
+  }
+
 });
 
 $("newReportBtn").addEventListener("click", () => {
