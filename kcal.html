@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Kaiser – Brunch Makro</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Café Kaiser – Brunch Makro Beregner</title>
 
 <style>
+
 body{
   margin:0;
-  font-family:"Georgia",serif;
+  padding:0 0 140px;
   background:#f4efe9;
-  color:#1c1c1c;
+  color:#1d1d1d;
+  font-family:Georgia, serif;
 }
 
 header{
@@ -25,48 +27,75 @@ header img{
 h1{
   font-size:22px;
   letter-spacing:2px;
+  margin-top:10px;
 }
 
 .section{
   padding:25px 20px;
-  border-bottom:1px solid #e5ded6;
+  border-bottom:1px solid #e7ddd3;
 }
 
 .section h2{
-  font-size:14px;
+  font-size:13px;
   letter-spacing:3px;
   text-transform:uppercase;
-  margin-bottom:18px;
-}
-
-.item{
   margin-bottom:20px;
 }
 
-.item label{
+.item{
+  background:#fff;
+  border:1px solid #e8dfd6;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  transition:0.2s ease;
+}
+
+.item.active{
+  border-color:#b79f8a;
+  background:#f9f5f1;
+}
+
+.item:hover{
+  transform:translateY(-1px);
+}
+
+.item-top{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  gap:15px;
+}
+
+.item-name{
   font-size:16px;
+  line-height:1.4;
 }
 
 .kcal{
   font-size:13px;
-  color:#7a6f64;
+  color:#85786d;
+  margin-top:4px;
 }
 
 .macros{
   font-size:12px;
-  color:#8c8176;
-  margin-top:4px;
-  display:none;
+  color:#8f8479;
+  margin-top:10px;
 }
 
 .addon{
-  margin-left:25px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #eee4db;
   font-size:13px;
-  color:#9c9187;
-  margin-top:6px;
+  color:#7b7066;
+}
+
+input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:#b5967b;
+  cursor:pointer;
 }
 
 .sticky{
@@ -74,41 +103,329 @@ h1{
   bottom:0;
   left:0;
   right:0;
-  background:#ffffff;
-  border-top:1px solid #e5ded6;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(10px);
+  border-top:1px solid #e7ddd3;
   padding:18px;
   text-align:center;
 }
 
 .total{
-  font-size:18px;
+  font-size:22px;
   font-weight:bold;
 }
 
 .total-macros{
+  margin-top:6px;
   font-size:13px;
-  margin-top:5px;
+  color:#6f655d;
 }
 
 .disclaimer{
+  margin-top:8px;
   font-size:11px;
-  color:#8c8176;
-  margin-top:6px;
+  color:#91867a;
 }
+
 </style>
 </head>
 <body>
 
 <header>
-  <img src="./logo.png">
+  <!-- Sæt evt logo ind -->
+  <!-- <img src="logo.png"> -->
   <h1>BYG-SELV-BRUNCH<br>NÆRINGSOVERSIGT</h1>
 </header>
 
-<script>
-let total = {kcal:0, protein:0, carbs:0, fat:0};
+<div id="menu"></div>
 
-function updateDisplay(){
-  if(total.kcal < 0) total.kcal = 0;
+<div class="sticky">
+  <div class="total" id="totalKcal">0 kcal</div>
+
+  <div class="total-macros" id="totalMacros">
+    Protein 0g | Kulhydrat 0g | Fedt 0g
+  </div>
+
+  <div class="disclaimer">
+    Næringsværdier er vejledende og kan variere en smule.
+  </div>
+</div>
+
+<script>
+
+const menu = [
+
+{
+  category:"Mejeri",
+  items:[
+    {
+      name:"Røræg med bacon",
+      kcal:260,
+      protein:18,
+      carbs:3,
+      fat:19,
+      addon:{
+        name:"Fjern bacon",
+        kcal:-70,
+        protein:-6,
+        carbs:0,
+        fat:-6
+      }
+    },
+
+    {
+      name:"Spejlæg",
+      kcal:180,
+      protein:12,
+      carbs:1,
+      fat:14
+    },
+
+    {
+      name:"Modnet havarti ost",
+      kcal:240,
+      protein:14,
+      carbs:3,
+      fat:18,
+      addon:{
+        name:"Fjern syltetøj",
+        kcal:-45,
+        protein:0,
+        carbs:-11,
+        fat:0
+      }
+    },
+
+    {
+      name:"Hjemmelavet blåbæryoghurt",
+      kcal:290,
+      protein:10,
+      carbs:28,
+      fat:12,
+      addon:{
+        name:"Fjern granola",
+        kcal:-90,
+        protein:-2,
+        carbs:-15,
+        fat:-3
+      }
+    },
+
+    {
+      name:"Hjemmelavet chiagrød",
+      kcal:210,
+      protein:6,
+      carbs:18,
+      fat:11
+    }
+  ]
+},
+
+{
+  category:"Planteriget",
+  items:[
+    {
+      name:"Avocado og hytteost",
+      kcal:280,
+      protein:12,
+      carbs:8,
+      fat:21,
+      addon:{
+        name:"Fjern chili olie",
+        kcal:-60,
+        protein:0,
+        carbs:0,
+        fat:-6
+      }
+    },
+
+    {
+      name:"Eksotisk frugtskål",
+      kcal:160,
+      protein:2,
+      carbs:36,
+      fat:1
+    },
+
+    {
+      name:"Stracciatella med sommerfersken & basilikum",
+      kcal:320,
+      protein:11,
+      carbs:14,
+      fat:24
+    }
+  ]
+},
+
+{
+  category:"Kød & Fisk",
+  items:[
+    {
+      name:"Rösti med trøffel mayo & serrano",
+      kcal:390,
+      protein:11,
+      carbs:28,
+      fat:26,
+      addon:{
+        name:"Fjern trøffel mayo",
+        kcal:-90,
+        protein:0,
+        carbs:-1,
+        fat:-9
+      }
+    },
+
+    {
+      name:"Hjemmelavet hønsesalat toppet med bacon",
+      kcal:410,
+      protein:13,
+      carbs:1,
+      fat:40,
+      addon:{
+        name:"Fjern bacon",
+        kcal:-70,
+        protein:-6,
+        carbs:0,
+        fat:-6
+      }
+    },
+
+    {
+      name:"Crispy chicken med chili mayo",
+      kcal:460,
+      protein:24,
+      carbs:22,
+      fat:30,
+      addon:{
+        name:"Fjern chili mayo",
+        kcal:-80,
+        protein:0,
+        carbs:-1,
+        fat:-8
+      }
+    },
+
+    {
+      name:"2 brunchpølser med ketchup",
+      kcal:340,
+      protein:15,
+      carbs:6,
+      fat:28,
+      addon:{
+        name:"Fjern ketchup",
+        kcal:-20,
+        protein:0,
+        carbs:-5,
+        fat:0
+      }
+    },
+
+    {
+      name:"Koldrøget laks med citron/dild mayo",
+      kcal:300,
+      protein:18,
+      carbs:2,
+      fat:24,
+      addon:{
+        name:"Fjern citron/dild mayo",
+        kcal:-75,
+        protein:0,
+        carbs:-1,
+        fat:-8
+      }
+    }
+  ]
+},
+
+{
+  category:"Finalen",
+  items:[
+    {
+      name:"Jordbærkage",
+      kcal:420,
+      protein:5,
+      carbs:48,
+      fat:22
+    },
+
+    {
+      name:"Koldskål med jordbær & kammerjunker",
+      kcal:310,
+      protein:9,
+      carbs:36,
+      fat:14,
+      addon:{
+        name:"Fjern kammerjunker",
+        kcal:-110,
+        protein:-2,
+        carbs:-20,
+        fat:-3
+      }
+    },
+
+    {
+      name:"2 amerikanske pandekager med flormelis & sirup",
+      kcal:563,
+      protein:9,
+      carbs:87,
+      fat:19,
+      addon:{
+        name:"Fjern sirup",
+        kcal:-160,
+        protein:0,
+        carbs:-40,
+        fat:0
+      }
+    }
+  ]
+},
+
+{
+  category:"Bageriet",
+  items:[
+    {
+      name:"Pain au chocolat fra Meyers",
+      kcal:340,
+      protein:6,
+      carbs:34,
+      fat:19
+    },
+
+    {
+      name:"Øko. smørcroissant fra Meyers",
+      kcal:310,
+      protein:5,
+      carbs:28,
+      fat:19
+    },
+
+    {
+      name:"Margherita-toast",
+      kcal:430,
+      protein:16,
+      carbs:38,
+      fat:24,
+      addon:{
+        name:"Fjern pesto",
+        kcal:-60,
+        protein:0,
+        carbs:-1,
+        fat:-6
+      }
+    }
+  ]
+}
+
+];
+
+let total = {
+  kcal:0,
+  protein:0,
+  carbs:0,
+  fat:0
+};
+
+function updateTotals(){
 
   document.getElementById("totalKcal").innerText =
     Math.round(total.kcal) + " kcal";
@@ -119,155 +436,131 @@ function updateDisplay(){
     "Fedt " + Math.round(total.fat) + "g";
 }
 
-function toggleMain(el,data,macroId,addonId){
-  const addon = document.getElementById(addonId);
-  const macroBox = document.getElementById(macroId);
+function adjustTotals(data, add=true){
 
-  if(el.checked){
-    total.kcal += data.kcal;
-    total.protein += data.protein;
-    total.carbs += data.carbs;
-    total.fat += data.fat;
+  const factor = add ? 1 : -1;
 
-    macroBox.style.display = "block";
-    if(addon) addon.disabled = false;
+  total.kcal += data.kcal * factor;
+  total.protein += data.protein * factor;
+  total.carbs += data.carbs * factor;
+  total.fat += data.fat * factor;
 
-  } else {
+  updateTotals();
+}
 
-    total.kcal -= data.kcal;
-    total.protein -= data.protein;
-    total.carbs -= data.carbs;
-    total.fat -= data.fat;
+function renderMenu(){
 
-    macroBox.style.display = "none";
+  const container = document.getElementById("menu");
 
-    if(addon){
-      if(addon.checked){
-        toggleAddon(addon, JSON.parse(addon.dataset.macro), true);
-        addon.checked = false;
+  menu.forEach(section => {
+
+    const sectionEl = document.createElement("div");
+    sectionEl.className = "section";
+
+    sectionEl.innerHTML = `<h2>${section.category}</h2>`;
+
+    section.items.forEach(item => {
+
+      const itemEl = document.createElement("div");
+      itemEl.className = "item";
+
+      const itemId = Math.random().toString(36).substring(7);
+
+      itemEl.innerHTML = `
+
+        <div class="item-top">
+
+          <div>
+            <div class="item-name">${item.name}</div>
+
+            <div class="kcal">
+              ${item.kcal} kcal
+            </div>
+
+            <div class="macros">
+              Protein ${item.protein}g |
+              Kulhydrat ${item.carbs}g |
+              Fedt ${item.fat}g
+            </div>
+          </div>
+
+          <div>
+            <input type="checkbox" id="${itemId}">
+          </div>
+
+        </div>
+
+        ${
+          item.addon ? `
+          <div class="addon">
+            <label>
+              <input type="checkbox" disabled class="addon-check">
+              ${item.addon.name}
+            </label>
+          </div>
+          ` : ""
+        }
+
+      `;
+
+      const mainCheckbox = itemEl.querySelector(`#${itemId}`);
+
+      const addonCheckbox = itemEl.querySelector(".addon-check");
+
+      mainCheckbox.addEventListener("change", () => {
+
+        if(mainCheckbox.checked){
+
+          itemEl.classList.add("active");
+          adjustTotals(item,true);
+
+          if(addonCheckbox){
+            addonCheckbox.disabled = false;
+          }
+
+        } else {
+
+          itemEl.classList.remove("active");
+          adjustTotals(item,false);
+
+          if(addonCheckbox){
+
+            if(addonCheckbox.checked){
+              adjustTotals(item.addon,false);
+              addonCheckbox.checked = false;
+            }
+
+            addonCheckbox.disabled = true;
+          }
+        }
+      });
+
+      if(addonCheckbox){
+
+        addonCheckbox.addEventListener("change", () => {
+
+          if(addonCheckbox.checked){
+            adjustTotals(item.addon,true);
+          } else {
+            adjustTotals(item.addon,false);
+          }
+
+        });
       }
-      addon.disabled = true;
-    }
-  }
 
-  updateDisplay();
+      sectionEl.appendChild(itemEl);
+
+    });
+
+    container.appendChild(sectionEl);
+
+  });
+
 }
 
-function toggleAddon(el,data,forceRemove=false){
-  if(el.checked && !forceRemove){
-    total.kcal += data.kcal;
-    total.protein += data.protein;
-    total.carbs += data.carbs;
-    total.fat += data.fat;
-  } else {
-    total.kcal -= data.kcal;
-    total.protein -= data.protein;
-    total.carbs -= data.carbs;
-    total.fat -= data.fat;
-  }
-  updateDisplay();
-}
+renderMenu();
+
 </script>
-
-<!-- MEJERI -->
-<div class="section">
-<h2>Mejeri</h2>
-
-<div class="item">
-<label>
-<span>Røræg <span class="kcal">(259 kcal)</span></span>
-<input type="checkbox"
-onchange='toggleMain(this,
-{kcal:259.12,protein:17.6,carbs:3.41,fat:19.34},
-"m1","a1")'>
-</label>
-
-<div class="macros" id="m1">
-Protein 18g | Kulhydrat 3g | Fedt 19g
-</div>
-
-<div class="addon">
-<label>
-<input type="checkbox" id="a1"
-data-macro='{"kcal":-70,"protein":-6,"carbs":0,"fat":-6}'
-disabled
-onchange='toggleAddon(this,JSON.parse(this.dataset.macro))'>
-Fjern bacon (-70 kcal)
-</label>
-</div>
-</div>
-
-</div>
-
-<!-- KØD & FISK -->
-<div class="section">
-<h2>Kød & Fisk</h2>
-
-<div class="item">
-<label>
-<span>Hønsesalat <span class="kcal">(410 kcal)</span></span>
-<input type="checkbox"
-onchange='toggleMain(this,
-{kcal:410.3,protein:13.32,carbs:0.65,fat:40.02},
-"m2","a2")'>
-</label>
-
-<div class="macros" id="m2">
-Protein 13g | Kulhydrat 1g | Fedt 40g
-</div>
-
-<div class="addon">
-<label>
-<input type="checkbox" id="a2"
-data-macro='{"kcal":-70,"protein":-6,"carbs":0,"fat":-6}'
-disabled
-onchange='toggleAddon(this,JSON.parse(this.dataset.macro))'>
-Fjern bacon (-70 kcal)
-</label>
-</div>
-</div>
-
-</div>
-
-<!-- FINALEN -->
-<div class="section">
-<h2>Finalen</h2>
-
-<div class="item">
-<label>
-<span>2 amerikanske pandekager <span class="kcal">(563 kcal)</span></span>
-<input type="checkbox"
-onchange='toggleMain(this,
-{kcal:563,protein:8.84,carbs:87.21,fat:18.72},
-"m3","a3")'>
-</label>
-
-<div class="macros" id="m3">
-Protein 9g | Kulhydrat 87g | Fedt 19g
-</div>
-
-<div class="addon">
-<label>
-<input type="checkbox" id="a3"
-data-macro='{"kcal":-160,"protein":0,"carbs":-40,"fat":0}'
-disabled
-onchange='toggleAddon(this,JSON.parse(this.dataset.macro))'>
-Uden sirup (-160 kcal)
-</label>
-</div>
-</div>
-
-</div>
-
-<div class="sticky">
-<div class="total" id="totalKcal">0 kcal</div>
-<div class="total-macros" id="totalMacros">
-Protein 0g | Kulhydrat 0g | Fedt 0g
-</div>
-<div class="disclaimer">
-Næringsværdier er vejledende og kan variere en smule.
-</div>
-</div>
 
 </body>
 </html>
