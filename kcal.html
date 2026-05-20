@@ -79,7 +79,7 @@ h1{
   margin-top:12px;
   padding-top:12px;
   border-top:1px solid #eee4db;
-  font-size:13px;
+  font-size:12px;
   color:#7b7066;
 }
 
@@ -117,6 +117,7 @@ input[type="checkbox"]{
   margin-top:8px;
   font-size:11px;
   color:#91867a;
+  line-height:1.5;
 }
 
 </style>
@@ -130,15 +131,20 @@ input[type="checkbox"]{
 <div id="menu"></div>
 
 <div class="sticky">
-  <div class="total" id="totalKcal">0 kcal</div>
+
+  <div class="total" id="totalKcal">
+    0 kcal
+  </div>
 
   <div class="total-macros" id="totalMacros">
     Protein 0g | Kulhydrat 0g | Fedt 0g
   </div>
 
   <div class="disclaimer">
-    Vores næringsværdier er vejledende og baseret på standardportioner. Da alle retter tilberedes frisk, kan mindre variationer forekomme.
+    Vores næringsværdier er vejledende og baseret på standardportioner.
+    Da alle retter tilberedes frisk, kan mindre variationer forekomme.
   </div>
+
 </div>
 
 <script>
@@ -156,7 +162,7 @@ const menu = [
       carbs:3.41,
       fat:19,
       addon:{
-        name:"Fjern bacon",
+        name:"Uden bacon",
         kcal:-70,
         protein:-3.25,
         carbs:0,
@@ -179,7 +185,7 @@ const menu = [
       carbs:0,
       fat:6.5,
       addon:{
-        name:"Fjern syltetøj",
+        name:"Uden syltetøj",
         kcal:-37.36,
         protein:0,
         carbs:-8.96,
@@ -194,7 +200,7 @@ const menu = [
       carbs:15.48,
       fat:13.35,
       addon:{
-        name:"Fjern granola",
+        name:"Uden granola",
         kcal:-107.08,
         protein:-2,
         carbs:-6.39,
@@ -209,7 +215,7 @@ const menu = [
       carbs:20.64,
       fat:8.8,
       addon:{
-        name:"Fjern mangopure",
+        name:"Uden mangopure",
         kcal:-54.33,
         protein:-2,
         carbs:-16.25,
@@ -231,7 +237,7 @@ const menu = [
       carbs:12.40,
       fat:37.99,
       addon:{
-        name:"Fjern chili olie",
+        name:"Uden chili olie",
         kcal:-71,
         protein:0,
         carbs:-1,
@@ -269,7 +275,7 @@ const menu = [
       carbs:18.25,
       fat:17.78,
       addon:{
-        name:"Fjern trøffel mayo",
+        name:"Uden trøffel mayo",
         kcal:-84.2,
         protein:0,
         carbs:0,
@@ -284,7 +290,7 @@ const menu = [
       carbs:4.40,
       fat:20,
       addon:{
-        name:"Fjern bacon",
+        name:"Uden bacon",
         kcal:-70,
         protein:-6,
         carbs:0,
@@ -299,7 +305,7 @@ const menu = [
       carbs:8.5,
       fat:20,
       addon:{
-        name:"Fjern chili mayo",
+        name:"Uden chili mayo",
         kcal:-147,
         protein:-0.42,
         carbs:-0.37,
@@ -314,7 +320,7 @@ const menu = [
       carbs:7.64,
       fat:10.8,
       addon:{
-        name:"Fjern ketchup",
+        name:"Uden ketchup",
         kcal:-24.6,
         protein:0,
         carbs:-5.2,
@@ -329,7 +335,7 @@ const menu = [
       carbs:0,
       fat:20.7,
       addon:{
-        name:"Fjern citron/dild mayo",
+        name:"Uden citron/dild mayo",
         kcal:-140,
         protein:0,
         carbs:0,
@@ -359,7 +365,7 @@ const menu = [
       carbs:36,
       fat:14,
       addon:{
-        name:"Fjern kammerjunker",
+        name:"Uden kammerjunker",
         kcal:-110,
         protein:-2,
         carbs:-20,
@@ -374,7 +380,7 @@ const menu = [
       carbs:87,
       fat:19,
       addon:{
-        name:"Fjern sirup",
+        name:"Uden sirup",
         kcal:-160,
         protein:0,
         carbs:-40,
@@ -412,7 +418,7 @@ const menu = [
       carbs:38,
       fat:24,
       addon:{
-        name:"Fjern pesto",
+        name:"Uden pesto",
         kcal:-60,
         protein:0,
         carbs:-1,
@@ -500,7 +506,7 @@ function renderMenu(){
           <div class="addon">
             <label>
               <input type="checkbox" disabled class="addon-check">
-              ${item.addon.name}
+              ${item.addon.name} (${Math.abs(item.addon.kcal)} kcal)
             </label>
           </div>
           ` : ""
