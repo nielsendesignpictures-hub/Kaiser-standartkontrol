@@ -20,10 +20,6 @@ header{
   padding:40px 20px 20px;
 }
 
-header img{
-  width:140px;
-}
-
 h1{
   font-size:22px;
   letter-spacing:2px;
@@ -54,10 +50,6 @@ h1{
 .item.active{
   border-color:#b79f8a;
   background:#f9f5f1;
-}
-
-.item:hover{
-  transform:translateY(-1px);
 }
 
 .item-top{
@@ -132,8 +124,6 @@ input[type="checkbox"]{
 <body>
 
 <header>
-  <!-- Sæt evt logo ind -->
-  <!-- <img src="logo.png"> -->
   <h1>BYG-SELV-BRUNCH<br>NÆRINGSOVERSIGT</h1>
 </header>
 
@@ -158,16 +148,17 @@ const menu = [
 {
   category:"Mejeri",
   items:[
+
     {
       name:"Røræg med bacon",
       kcal:260,
-      protein:19,34,
-      carbs:341,
+      protein:19.34,
+      carbs:3.41,
       fat:19,
       addon:{
         name:"Fjern bacon",
         kcal:-70,
-        protein:-3,25,
+        protein:-3.25,
         carbs:0,
         fat:-6
       }
@@ -176,22 +167,22 @@ const menu = [
     {
       name:"Spejlæg",
       kcal:100,
-      protein:6,2,
-      carbs:0,6,
-      fat:18,2
+      protein:6.2,
+      carbs:0.6,
+      fat:18.2
     },
 
     {
       name:"Modnet havarti ost",
-      kcal:121,25,
+      kcal:121.25,
       protein:6,
       carbs:0,
-      fat:6,5,
+      fat:6.5,
       addon:{
         name:"Fjern syltetøj",
-        kcal:-37,36,
+        kcal:-37.36,
         protein:0,
-        carbs:-8,96,
+        carbs:-8.96,
         fat:0
       }
     },
@@ -199,92 +190,98 @@ const menu = [
     {
       name:"Hjemmelavet blåbæryoghurt",
       kcal:206,
-      protein:4,5,
-      carbs:15,48,
-      fat:13,35,
+      protein:4.5,
+      carbs:15.48,
+      fat:13.35,
       addon:{
         name:"Fjern granola",
-        kcal:-107,08,
+        kcal:-107.08,
         protein:-2,
-        carbs:-6,39,
-        fat:-7,82
+        carbs:-6.39,
+        fat:-7.82
       }
     },
 
     {
       name:"Hjemmelavet chiagrød med mango pure",
       kcal:172,
-      protein:4,4,
-      carbs:20,64,
-      fat:8,8
-        addon:{
-        name:"Fjern mangopure,
-        kcal:-54,33,
+      protein:4.4,
+      carbs:20.64,
+      fat:8.8,
+      addon:{
+        name:"Fjern mangopure",
+        kcal:-54.33,
         protein:-2,
-        carbs:-16,25,
-        fat:-7,82
+        carbs:-16.25,
+        fat:-7.82
+      }
     }
+
+  ]
 },
 
 {
   category:"Planteriget",
   items:[
+
     {
       name:"Avocado og hytteost",
-      kcal:392,53,
-      protein:1,27,
-      carbs:12,40,
-      fat:37,99,
+      kcal:392.53,
+      protein:1.27,
+      carbs:12.40,
+      fat:37.99,
       addon:{
         name:"Fjern chili olie",
         kcal:-71,
         protein:0,
-        carbs:1,
-        fat:-7,1
+        carbs:-1,
+        fat:-7.1
       }
     },
 
     {
       name:"Eksotisk frugtskål",
-      kcal:80,20,
-      protein:1,5,
-      carbs:20,18,
-      fat:0,68
+      kcal:80.20,
+      protein:1.5,
+      carbs:20.18,
+      fat:0.68
     },
 
     {
       name:"Stracciatella med sommerfersken & olivenolie",
-      kcal:82,30,
+      kcal:82.30,
       protein:0,
       carbs:0,
-      fat:9,14
+      fat:9.14
     }
+
   ]
 },
 
 {
   category:"Kød & Fisk",
   items:[
+
     {
       name:"Rosti med trøffel mayo & serrano",
       kcal:268,
-      protein:7,46,
-      carbs:18,25,
-      fat:17,78,
+      protein:7.46,
+      carbs:18.25,
+      fat:17.78,
       addon:{
         name:"Fjern trøffel mayo",
-        kcal:-84,2,
+        kcal:-84.2,
         protein:0,
-        carbs:-0,
-        fat:-9,3
+        carbs:0,
+        fat:-9.3
       }
     },
 
     {
       name:"Hjemmelavet hønsesalat toppet med bacon",
-      kcal:255,23,
+      kcal:255.23,
       protein:17,
-      carbs:4,40,
+      carbs:4.40,
       fat:20,
       addon:{
         name:"Fjern bacon",
@@ -299,58 +296,60 @@ const menu = [
       name:"Crispy chicken med chili mayo",
       kcal:252,
       protein:8,
-      carbs:8,5,
+      carbs:8.5,
       fat:20,
       addon:{
         name:"Fjern chili mayo",
         kcal:-147,
-        protein:0,42,
-        carbs:-0,37,
-        fat:-15,98
+        protein:-0.42,
+        carbs:-0.37,
+        fat:-15.98
       }
     },
 
     {
       name:"2 brunchpølser med ketchup",
-      kcal:166,8,
+      kcal:166.8,
       protein:9,
-      carbs:7,64,
-      fat:10,8,
+      carbs:7.64,
+      fat:10.8,
       addon:{
         name:"Fjern ketchup",
-        kcal:-24,6,
+        kcal:-24.6,
         protein:0,
-        carbs:-5,2,
+        carbs:-5.2,
         fat:0
       }
     },
 
     {
       name:"Koldrøget laks med citron/dild mayo",
-      kcal:222,8,
-      protein:8,4,
+      kcal:222.8,
+      protein:8.4,
       carbs:0,
-      fat:20,7,
+      fat:20.7,
       addon:{
         name:"Fjern citron/dild mayo",
         kcal:-140,
         protein:0,
-        carbs:-0,
-        fat:-17,4
+        carbs:0,
+        fat:-17.4
       }
     }
+
   ]
 },
 
 {
   category:"Finalen",
   items:[
+
     {
       name:"Jordbærkage",
       kcal:200,
-      protein:2,6,
-      carbs:21,28,
-      fat:11,76
+      protein:2.6,
+      carbs:21.28,
+      fat:11.76
     },
 
     {
@@ -382,26 +381,28 @@ const menu = [
         fat:0
       }
     }
+
   ]
 },
 
 {
   category:"Bageriet",
   items:[
+
     {
       name:"Pain au chocolat fra Meyers",
-      kcal:226,05,
-      protein:3,4,
-      carbs:21,23,
+      kcal:226.05,
+      protein:3.4,
+      carbs:21.23,
       fat:13
     },
 
     {
       name:"Øko. smørcroissant fra Meyers",
-      kcal:199,65,
-      protein:3,57,
-      carbs:18,26,
-      fat:12,26
+      kcal:199.65,
+      protein:3.57,
+      carbs:18.26,
+      fat:12.26
     },
 
     {
@@ -418,6 +419,7 @@ const menu = [
         fat:-6
       }
     }
+
   ]
 }
 
@@ -469,8 +471,6 @@ function renderMenu(){
       const itemEl = document.createElement("div");
       itemEl.className = "item";
 
-      const itemId = "item_" + Date.now() + Math.floor(Math.random()*10000);
-
       itemEl.innerHTML = `
 
         <div class="item-top">
@@ -479,7 +479,7 @@ function renderMenu(){
             <div class="item-name">${item.name}</div>
 
             <div class="kcal">
-              ${item.kcal} kcal
+              ${Math.round(item.kcal)} kcal
             </div>
 
             <div class="macros">
@@ -490,7 +490,7 @@ function renderMenu(){
           </div>
 
           <div>
-            <input type="checkbox" id="${itemId}">
+            <input type="checkbox">
           </div>
 
         </div>
@@ -509,7 +509,6 @@ function renderMenu(){
       `;
 
       const mainCheckbox = itemEl.querySelector('input[type="checkbox"]');
-
       const addonCheckbox = itemEl.querySelector(".addon-check");
 
       mainCheckbox.addEventListener("change", () => {
