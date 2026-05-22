@@ -441,7 +441,7 @@
   max-width:1080px;
   margin:0 auto;
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
+  grid-template-columns:1fr 1fr 
   gap:14px;
 }
 
@@ -754,9 +754,7 @@
 <div class="actionsInner">
   <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
 
-  <button id="backupAction" class="btn btn-dark" type="button">
-    Backup send
-  </button>
+ 
 
   <button id="primaryAction" class="btn btn-blue" type="button">
     Gem frokost og fortsæt
@@ -1134,48 +1132,18 @@ function doSend(){
   $("primaryAction").disabled = true;
   $("primaryAction").textContent = "Sender...";
 
-  // send formular normalt
   $("reportForm").submit();
+
+  setTimeout(() => {
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    window.location.href =
+      "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
+
+  }, 1200);
 }
-await fetch(form.action, {
-  method: "POST",
-  mode: "no-cors",
-  body: formData
-});
 
-// antag success hvis fetch ikke fejler
-localStorage.removeItem(STORAGE_KEY);
-
-window.location.href =
-  "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
-
-    const result = await response.text();
-
-    if(result.includes("SUCCESS")){
-
-      localStorage.removeItem(STORAGE_KEY);
-
-      $("formWrap").classList.add("hidden");
-      $("thanksWrap").classList.remove("hidden");
-      $("actionsSticky").classList.add("hidden");
-
-      return;
-    }
-
-    throw new Error("Afsendelse fejlede");
-
-  } catch(err){
-
-    console.error(err);
-
-    showError("Rapporten kunne ikke sendes.");
-
-    $("primaryAction").disabled = false;
-    $("primaryAction").textContent = "Send rapport";
-
-    window.reportSending = false;
-  }
-}
 
   $("primaryAction").addEventListener("click", function(){
     clearError();
