@@ -1116,12 +1116,13 @@ await fetch(form.action, {
   body: formData
 });
 
-// antag success hvis fetch ikke fejler
+// giv browseren tid til at sende request færdig
+await new Promise(resolve => setTimeout(resolve, 1500));
+
 localStorage.removeItem(STORAGE_KEY);
 
 window.location.href =
   "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
-
  
 
     throw new Error("Afsendelse fejlede");
