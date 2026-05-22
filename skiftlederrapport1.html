@@ -1122,18 +1122,7 @@ localStorage.removeItem(STORAGE_KEY);
 window.location.href =
   "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
 
-    const result = await response.text();
-
-    if(result.includes("SUCCESS")){
-
-      localStorage.removeItem(STORAGE_KEY);
-
-      $("formWrap").classList.add("hidden");
-      $("thanksWrap").classList.remove("hidden");
-      $("actionsSticky").classList.add("hidden");
-
-      return;
-    }
+ 
 
     throw new Error("Afsendelse fejlede");
 
