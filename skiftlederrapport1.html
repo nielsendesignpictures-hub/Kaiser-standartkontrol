@@ -534,7 +534,7 @@
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbzCMTtJAufT-d4CtpP-vm1PfybpWJ9uzF8EkkBb9qpRbX6cOdB9MN4YIsXXsVUXkKwinw/exec">
+      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbzTS-3fHw1nTVPAvzEP5ZDGD4Djn3TDBFEiP2t1VVACJM6s7uB-Ukm-eh4IPP01FyFALw/exec">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" id="nextField" value="">
@@ -754,7 +754,9 @@
 <div class="actionsInner">
   <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
 
-
+  <button id="backupAction" class="btn btn-dark" type="button">
+    Backup send
+  </button>
 
   <button id="primaryAction" class="btn btn-blue" type="button">
     Gem frokost og fortsæt
@@ -1116,14 +1118,24 @@ await fetch(form.action, {
   body: formData
 });
 
-// giv browseren tid til at sende request færdig
-await new Promise(resolve => setTimeout(resolve, 1500));
-
+// antag success hvis fetch ikke fejler
 localStorage.removeItem(STORAGE_KEY);
 
 window.location.href =
   "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
- 
+
+    const result = await response.text();
+
+    if(result.includes("SUCCESS")){
+
+      localStorage.removeItem(STORAGE_KEY);
+
+      $("formWrap").classList.add("hidden");
+      $("thanksWrap").classList.remove("hidden");
+      $("actionsSticky").classList.add("hidden");
+
+      return;
+    }
 
     throw new Error("Afsendelse fejlede");
 
