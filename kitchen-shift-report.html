@@ -525,25 +525,38 @@ $("primaryAction").addEventListener("click", async () => {
 
   updateSubject();
 
+$("primaryAction").addEventListener("click", () => {
+
+  const missing = requiredFields().filter(f => !val(f.id));
+
+  if(missing.length){
+
+    updateStatusLine();
+
+    scrollToField(missing[0].anchor);
+
+    return;
+  }
+
+  updateSubject();
+
   $("primaryAction").disabled = true;
   $("primaryAction").textContent = "Sending...";
 
-  try {
+  // submit via hidden iframe
+  $("reportForm").submit();
 
-    const form = $("reportForm");
+  // vent lidt så Apps Script kan skrive til Sheets
+  setTimeout(() => {
 
-    const formData = new FormData(form);
+    localStorage.removeItem(STORAGE_KEY);
 
-$("reportForm").submit();
+    window.location.href =
+      "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html?sent=1";
 
-setTimeout(() => {
+  }, 1500);
 
-  localStorage.removeItem(STORAGE_KEY);
-
-  window.location.href =
-    "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html?sent=1";
-
-}, 1200);
+});
 
     throw new Error("Submit failed");
 
