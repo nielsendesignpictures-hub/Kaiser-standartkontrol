@@ -892,7 +892,9 @@
       step: currentStep()
     };
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    data.savedDate = new Date().toDateString();
+
+localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     if(showSavedPill) $("draftPill").classList.remove("hidden");
   }
 
@@ -910,6 +912,12 @@
 
     try{
       const data = JSON.parse(raw);
+      if (data.savedDate !== new Date().toDateString()) {
+
+  localStorage.removeItem(STORAGE_KEY);
+
+  return;
+}
 
       setVal("department", data.department);
       setVal("dateField", data.dateField || nowLocalString());
@@ -1097,21 +1105,38 @@
     });
   }
 
-async function doSend(){
+function doSend(){
+
+  // stop dobbelt-send
   if (window.reportSending) return;
-window.reportSending = true;
+
+  window.reportSending = true;
+
+  // check om rapport er fra tidligere dag
+  const today = new Date().toLocaleDateString("da-DK");
+
+  if (!val("dateField").includes(today)) {
+
+    const confirmOld = confirm(
+      "Denne rapport ser ud til at være fra en tidligere dag. Send alligevel?"
+    );
+
+    if (!confirmOld) {
+
+      window.reportSending = false;
+
+      return;
+    }
+  }
 
   updateSubject();
 
   $("primaryAction").disabled = true;
   $("primaryAction").textContent = "Sender...";
 
-  try {
-
-    const form = $("reportForm");
-
-    const formData = new FormData(form);
-
+  // send formular normalt
+  $("reportForm").submit();
+}
 await fetch(form.action, {
   method: "POST",
   mode: "no-cors",
