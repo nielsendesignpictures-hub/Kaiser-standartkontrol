@@ -698,42 +698,142 @@
   }
 
   function render(){
-    const list = entries.filter(e => e.status !== "discarded");
 
-    tbody.innerHTML = list.map(e => `
-      <tr>
-        <td>
-          <strong>${escapeHtml(e.cakeName)}</strong><br/>
-          <span class="small" style="color:var(--muted)">
-            ${e.by ? e.by : ""}
-          </span>
-          ${e.note ? `<br><span class="small" style="color:var(--muted)">${escapeHtml(e.note)}</span>` : ``}
-        </td>
-        <td>
-          <strong>${escapeHtml(String(e.qty || 1))}</strong> stk
-        </td>
-        <td>${fmtDateTime(e.addedAt)}</td>
-        <td><strong>${fmtDateTime(e.discardAt)}</strong></td>
-        <td>
-          <div class="actions">
-            <button class="btnEdit mini" type="button" data-action="editqty" data-id="${e.id}">Ret antal</button>
-            <button class="btn mini" type="button" data-action="discard" data-id="${e.id}">Smidt ud</button>
-            <button class="btnDanger mini" type="button" data-action="delete" data-id="${e.id}">Slet</button>
-          </div>
-        </td>
-      </tr>
-    `).join("");
+  const list = entries
+    .filter(e => e.status !== "discarded")
 
-    tbody.querySelectorAll("button[data-action]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        const action = btn.getAttribute("data-action");
-        if (action === "discard") openDiscardModal(id);
-        if (action === "delete") deleteEntry(id);
-        if (action === "editqty") openEditQtyModal(id);
-      });
+    // SORTERING
+    .sort((a, b) => {
+
+      // Gruppér efter kagenavn
+      const cakeCompare =
+        a.cakeName.localeCompare(b.cakeName, "da");
+
+      if(cakeCompare !== 0){
+        return cakeCompare;
+      }
+
+      // Sortér derefter efter udløbsdato
+      return new Date(a.discardAt) - new Date(b.discardAt);
+
     });
-  }
+
+  tbody.innerHTML = "";
+
+  let currentCake = "";
+
+  list.forEach(e => {
+
+    // OVERSKRIFT FOR HVER KAGE-TYPE
+    if(e.cakeName !== currentCake){
+
+      currentCake = e.cakeName;
+
+      const headerRow = document.createElement("tr");
+
+      headerRow.innerHTML = `
+        <td colspan="5"
+            style="
+              padding:18px 10px;
+              background:rgba(217,182,90,.10);
+              color:#d9b65a;
+              font-size:18px;
+              font-weight:1000;
+              letter-spacing:.03em;
+              border-top:1px solid rgba(255,255,255,.12);
+            ">
+          ${escapeHtml(currentCake)}
+        </td>
+      `;
+
+      tbody.appendChild(headerRow);
+    }
+
+    // NORMAL RÆKKE
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>
+        <span class="small" style="color:var(--muted)">
+          ${e.by ? escapeHtml(e.by) : ""}
+        </span>
+
+        ${e.note
+          ? `<br><span class="small" style="color:var(--muted)">
+              ${escapeHtml(e.note)}
+             </span>`
+          : ``}
+      </td>
+
+      <td>
+        <strong>${escapeHtml(String(e.qty || 1))}</strong> stk
+      </td>
+
+      <td>${fmtDateTime(e.addedAt)}</td>
+
+      <td>
+        <strong>${fmtDateTime(e.discardAt)}</strong>
+      </td>
+
+      <td>
+        <div class="actions">
+
+          <button class="btnEdit mini"
+                  type="button"
+                  data-action="editqty"
+                  data-id="${e.id}">
+            Ret antal
+          </button>
+
+          <button class="btn mini"
+                  type="button"
+                  data-action="discard"
+                  data-id="${e.id}">
+            Smidt ud
+          </button>
+
+          <button class="btnDanger mini"
+                  type="button"
+                  data-action="delete"
+                  data-id="${e.id}">
+            Slet
+          </button>
+
+        </div>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  // EVENTS
+  tbody.querySelectorAll("button[data-action]")
+    .forEach(btn => {
+
+      btn.addEventListener("click", () => {
+
+        const id = btn.getAttribute("data-id");
+
+        const action =
+          btn.getAttribute("data-action");
+
+        if(action === "discard"){
+          openDiscardModal(id);
+        }
+
+        if(action === "delete"){
+          deleteEntry(id);
+        }
+
+        if(action === "editqty"){
+          openEditQtyModal(id);
+        }
+
+      });
+
+    });
+
+}
 
   function deleteEntry(id){
     const e = entries.find(x => x.id === id);
