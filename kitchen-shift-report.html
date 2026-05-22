@@ -528,6 +528,9 @@ await fetch(form.action, {
   body: formData
 });
 
+// giv browseren tid til at sende request færdig
+await new Promise(resolve => setTimeout(resolve, 1500));
+
 localStorage.removeItem(STORAGE_KEY);
 
 window.location.href =
