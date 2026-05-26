@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Café Kaiser – Brunch Makro Beregner</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Kaiser – Brunch Næringsoversigt</title>
 
 <style>
 
@@ -23,71 +23,91 @@ header{
 h1{
   font-size:22px;
   letter-spacing:2px;
-  margin-top:10px;
+  margin:0;
 }
 
 .section{
   padding:25px 20px;
-  border-bottom:1px solid #e7ddd3;
+  border-bottom:1px solid #e5ddd5;
 }
 
 .section h2{
   font-size:13px;
-  letter-spacing:3px;
   text-transform:uppercase;
+  letter-spacing:3px;
   margin-bottom:20px;
 }
 
 .item{
   background:#fff;
-  border:1px solid #e8dfd6;
-  border-radius:14px;
-  padding:16px;
+  border:1px solid #e7ddd3;
+  border-radius:16px;
+  padding:18px;
   margin-bottom:14px;
-  transition:0.2s ease;
+  transition:.2s ease;
 }
 
 .item.active{
+  background:#faf6f2;
   border-color:#b79f8a;
-  background:#f9f5f1;
 }
 
 .item-top{
   display:flex;
   justify-content:space-between;
+  align-items:flex-start;
   gap:15px;
 }
 
 .item-name{
-  font-size:16px;
+  font-size:17px;
   line-height:1.4;
 }
 
 .kcal{
+  margin-top:5px;
   font-size:13px;
-  color:#85786d;
-  margin-top:4px;
+  color:#7f7367;
 }
 
 .macros{
-  font-size:12px;
-  color:#8f8479;
   margin-top:10px;
+  font-size:12px;
+  color:#93877b;
+}
+
+.counter{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.counter button{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:10px;
+  background:#ede4da;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.counter-value{
+  min-width:20px;
+  text-align:center;
+  font-size:17px;
 }
 
 .addon{
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid #eee4db;
-  font-size:12px;
-  color:#7b7066;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid #eee5dc;
+  font-size:13px;
+  color:#7f7367;
 }
 
-input[type="checkbox"]{
-  width:18px;
-  height:18px;
-  accent-color:#b5967b;
-  cursor:pointer;
+.addon input{
+  margin-right:8px;
 }
 
 .sticky{
@@ -103,7 +123,7 @@ input[type="checkbox"]{
 }
 
 .total{
-  font-size:22px;
+  font-size:24px;
   font-weight:bold;
 }
 
@@ -449,14 +469,55 @@ function updateTotals(){
     "Fedt " + Math.round(total.fat) + "g";
 }
 
-function adjustTotals(data, add=true){
+function calculateItem(item, quantity, addonEnabled){
 
-  const factor = add ? 1 : -1;
+  let kcal = item.kcal * quantity;
+  let protein = item.protein * quantity;
+  let carbs = item.carbs * quantity;
+  let fat = item.fat * quantity;
 
-  total.kcal += data.kcal * factor;
-  total.protein += data.protein * factor;
-  total.carbs += data.carbs * factor;
-  total.fat += data.fat * factor;
+  if(addonEnabled && item.addon){
+
+    kcal += item.addon.kcal * quantity;
+    protein += item.addon.protein * quantity;
+    carbs += item.addon.carbs * quantity;
+    fat += item.addon.fat * quantity;
+  }
+
+  return {
+    kcal,
+    protein,
+    carbs,
+    fat
+  };
+}
+
+function recalculateTotals(){
+
+  total = {
+    kcal:0,
+    protein:0,
+    carbs:0,
+    fat:0
+  };
+
+  document.querySelectorAll(".item").forEach(itemEl => {
+
+    const itemData = JSON.parse(itemEl.dataset.item);
+    const quantity = parseInt(itemEl.dataset.quantity);
+    const addonEnabled = itemEl.querySelector(".addon-check")?.checked;
+
+    if(quantity > 0){
+
+      const values = calculateItem(itemData, quantity, addonEnabled);
+
+      total.kcal += values.kcal;
+      total.protein += values.protein;
+      total.carbs += values.carbs;
+      total.fat += values.fat;
+    }
+
+  });
 
   updateTotals();
 }
@@ -477,12 +538,18 @@ function renderMenu(){
       const itemEl = document.createElement("div");
       itemEl.className = "item";
 
+      itemEl.dataset.item = JSON.stringify(item);
+      itemEl.dataset.quantity = 0;
+
       itemEl.innerHTML = `
 
         <div class="item-top">
 
           <div>
-            <div class="item-name">${item.name}</div>
+
+            <div class="item-name">
+              ${item.name}
+            </div>
 
             <div class="kcal">
               ${Math.round(item.kcal)} kcal
@@ -493,10 +560,17 @@ function renderMenu(){
               Kulhydrat ${item.carbs}g |
               Fedt ${item.fat}g
             </div>
+
           </div>
 
-          <div>
-            <input type="checkbox">
+          <div class="counter">
+
+            <button class="minus">−</button>
+
+            <div class="counter-value">0</div>
+
+            <button class="plus">+</button>
+
           </div>
 
         </div>
@@ -505,8 +579,9 @@ function renderMenu(){
           item.addon ? `
           <div class="addon">
             <label>
-              <input type="checkbox" disabled class="addon-check">
-              ${item.addon.name} (${Math.abs(item.addon.kcal)} kcal)
+              <input type="checkbox" class="addon-check" disabled>
+              ${item.addon.name}
+              (${Math.abs(item.addon.kcal)} kcal)
             </label>
           </div>
           ` : ""
@@ -514,47 +589,57 @@ function renderMenu(){
 
       `;
 
-      const mainCheckbox = itemEl.querySelector('input[type="checkbox"]');
+      const plusBtn = itemEl.querySelector(".plus");
+      const minusBtn = itemEl.querySelector(".minus");
+      const counterValue = itemEl.querySelector(".counter-value");
       const addonCheckbox = itemEl.querySelector(".addon-check");
 
-      mainCheckbox.addEventListener("change", () => {
+      plusBtn.addEventListener("click", () => {
 
-        if(mainCheckbox.checked){
+        let quantity = parseInt(itemEl.dataset.quantity);
 
-          itemEl.classList.add("active");
-          adjustTotals(item,true);
+        quantity++;
 
-          if(addonCheckbox){
-            addonCheckbox.disabled = false;
-          }
+        itemEl.dataset.quantity = quantity;
+        counterValue.innerText = quantity;
 
-        } else {
+        itemEl.classList.add("active");
+
+        if(addonCheckbox){
+          addonCheckbox.disabled = false;
+        }
+
+        recalculateTotals();
+      });
+
+      minusBtn.addEventListener("click", () => {
+
+        let quantity = parseInt(itemEl.dataset.quantity);
+
+        if(quantity > 0){
+          quantity--;
+        }
+
+        itemEl.dataset.quantity = quantity;
+        counterValue.innerText = quantity;
+
+        if(quantity === 0){
 
           itemEl.classList.remove("active");
-          adjustTotals(item,false);
 
           if(addonCheckbox){
-
-            if(addonCheckbox.checked){
-              adjustTotals(item.addon,false);
-              addonCheckbox.checked = false;
-            }
-
+            addonCheckbox.checked = false;
             addonCheckbox.disabled = true;
           }
         }
+
+        recalculateTotals();
       });
 
       if(addonCheckbox){
 
         addonCheckbox.addEventListener("change", () => {
-
-          if(addonCheckbox.checked){
-            adjustTotals(item.addon,true);
-          } else {
-            adjustTotals(item.addon,false);
-          }
-
+          recalculateTotals();
         });
       }
 
