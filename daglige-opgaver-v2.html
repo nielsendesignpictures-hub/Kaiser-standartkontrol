@@ -679,15 +679,616 @@
     function addClean(loc, dept, bucket, text, rule, note=""){
       TASKS.push({ loc, type:"clean", dept, bucket, text, rule, note });
     }
+/* =========================================================
+   LOKATIONER
+========================================================= */
 
-    /* ---------- opgavelister (samme som i din V2, udeladt her for plads) ----------
-       Brug præcis de addDrift/addClean blokke vi allerede har defineret ovenfor
-       i den fulde fil du fik sidst. 
-       For at svaret ikke bliver for langt har jeg ikke gentaget dem én gang til.
-       ----------------------------------------------------------------------- */
+const L_HEL = "Café Kaiser Helsingør";
+const L_HOR = "Café Kaiser Hørsholm";
+const L_HIL = "Café Kaiser Hillerød";
+const L_FAR = "Café Kaiser Farum";
+const L_VAN = "Café Kaiser Vanløse";
 
-    /* For tests: fjern kommentaren her og indsæt alle addDrift/addClean-blokkene
-       fra svaret lige inden, frem til før "FÆLLES LOGIK". */
+/* =========================================================
+   FÆLLES DRIFT
+========================================================= */
+
+const STANDARD_OPEN = [
+  "Åben kassen",
+  "Åbn udenfor",
+  "Tjek reservationer",
+  "Fyld op",
+  "Sæt varer på plads",
+  "Klargør bar",
+  "Tænd kaffemaskiner",
+  "Tænd servicelovers"
+];
+
+const STANDARD_LUNCH = [
+  "Tjek toiletter",
+  "Fyld op i baren",
+  "Ryd op i caféen",
+  "Pant & flasker",
+  "Fejerunde",
+  "Tæl brunchsedler"
+];
+
+const STANDARD_CLOSE = [
+  "Luk kassen",
+  "Fyld op i baren",
+  "Puds bestik",
+  "Rengør vask",
+  "Tør borde af",
+  "Fej caféen",
+  "Tøm skrald",
+  "Luk udenfor"
+];
+
+function addStandardDrift(loc){
+
+  STANDARD_OPEN.forEach(task => {
+    addDrift(loc, "morning", task);
+  });
+
+  STANDARD_LUNCH.forEach(task => {
+    addDrift(loc, "lunch", task);
+  });
+
+  STANDARD_CLOSE.forEach(task => {
+    addDrift(loc, "evening", task);
+  });
+
+}
+
+/* =========================================================
+   STANDARD DRIFT TIL ALLE CAFÉER
+========================================================= */
+
+[
+  L_HEL,
+  L_HOR,
+  L_HIL,
+  L_FAR,
+  L_VAN
+].forEach(addStandardDrift);
+
+/* =========================================================
+   HELSINGØR – SPECIALE DRIFTOPGAVER
+========================================================= */
+
+addDrift(L_HEL, "morning", "Få varer på køl og frost");
+addDrift(L_HEL, "morning", "Sørge for gangen er tom for varer");
+addDrift(L_HEL, "morning", "Tænde varmelamper");
+
+addDrift(L_HEL, "lunch", "Rydde op i baren inden man går kl. 16");
+addDrift(L_HEL, "lunch", "Give en melding til aftenholdet og mangler på dagen");
+
+addDrift(L_HEL, "evening", "Støvsugning");
+addDrift(L_HEL, "evening", "Ordne toiletter");
+addDrift(L_HEL, "evening", "Tage pant i kælderen");
+addDrift(L_HEL, "evening", "Tælle kasse, lukke dankort, lukke gavekort");
+addDrift(L_HEL, "evening", "Slukke varmelamper og køre markise ind.");
+addDrift(L_HEL, "evening", "Opfyldning af bar inkl. kaffe, sukker og chokolade");
+
+/* =========================================================
+   HØRSHOLM – SPECIALE DRIFTOPGAVER
+========================================================= */
+
+addDrift(L_HOR, "morning", "Rengøre robert");
+addDrift(L_HOR, "morning", "Åbne sodavandsanlæg");
+addDrift(L_HOR, "morning", "Sæt filterkaffe over");
+addDrift(L_HOR, "morning", "Sæt lys på border");
+addDrift(L_HOR, "morning", "Tag stole ned");
+addDrift(L_HOR, "morning", "Tænde for Aircon");
+addDrift(L_HOR, "morning", "Sæt BC-vare på plads");
+addDrift(L_HOR, "morning", "Lav klude til gulv og bar");
+
+addDrift(
+  L_HOR,
+  "morning",
+  "Gøre klar til buffet (mad)",
+  { kind:"weekly", days:[D.sat, D.sun] },
+  "Weekend"
+);
+
+addDrift(
+  L_HOR,
+  "morning",
+  "Gøre klar til buffet (drikkevare)",
+  { kind:"weekly", days:[D.sat, D.sun] },
+  "Weekend"
+);
+
+addDrift(L_HOR, "lunch", "Dæk op til reservationer til aften");
+addDrift(L_HOR, "lunch", "Bestil vare (BC)");
+addDrift(L_HOR, "lunch", "Evt opdatering af kælderliste");
+
+addDrift(
+  L_HOR,
+  "evening",
+  "Sæt buffeten op",
+  { kind:"weekly", days:[D.sat, D.sun] },
+  "Weekend"
+);
+
+addDrift(L_HOR, "evening", "Dæk op til reservationer (til og med frokost)");
+addDrift(L_HOR, "evening", "Gøre toiletter rent");
+addDrift(L_HOR, "evening", "Samle skrald og glas samt flasker");
+addDrift(L_HOR, "evening", "Slukke for Aircon");
+addDrift(L_HOR, "evening", "Fejerunde når Robert skal køre");
+addDrift(L_HOR, "evening", "Samle lys");
+addDrift(L_HOR, "evening", "Lukke bar");
+
+addDrift(
+  L_HOR,
+  "evening",
+  "Støvsugning/Gulvask",
+  { kind:"weekly", days:[D.mon, D.thu] },
+  "Mandag/Torsdag"
+);
+
+addDrift(L_HOR, "evening", "Vande udendørsplanterne");
+
+/* =========================================================
+   HILLERØD – SPECIALE DRIFTOPGAVER
+========================================================= */
+
+addDrift(L_HIL, "morning", "Tænd varme blæsere");
+addDrift(L_HIL, "morning", "Fej caféen");
+addDrift(L_HIL, "morning", "Åbne gulvet");
+addDrift(L_HIL, "morning", "Åben espresso maskinen");
+addDrift(L_HIL, "morning", "Lav filterkaffe");
+addDrift(L_HIL, "morning", "Tænd Køleskabene");
+addDrift(L_HIL, "morning", "Tjek FIFO");
+addDrift(L_HIL, "morning", "Åben sodavanden");
+addDrift(L_HIL, "morning", "Åben Øllen");
+addDrift(L_HIL, "morning", "Lav smoothie og shake");
+addDrift(L_HIL, "morning", "Fyld kagemontren op og skriv datoer");
+
+addDrift(
+  L_HIL,
+  "morning",
+  "Vask gulvet",
+  { kind:"weekly", days:[D.tue, D.fri] },
+  "Tirsdag/Fredag"
+);
+
+addDrift(
+  L_HIL,
+  "morning",
+  "Sæt tomme fustager og kulsyre ud til royal",
+  { kind:"weekly", days:[D.wed] },
+  "Onsdag"
+);
+
+addDrift(L_HIL, "evening", "Send kolber, kander og tilbehør til vask");
+addDrift(L_HIL, "evening", "Rengør espressomaskinen");
+addDrift(L_HIL, "evening", "Sæt steamere i kogende vand");
+addDrift(L_HIL, "evening", "Luk sodavanden");
+addDrift(L_HIL, "evening", "Luk fadølshanerne");
+addDrift(L_HIL, "evening", "Sæt de sorte dutter på fadølsanlægget");
+addDrift(L_HIL, "evening", "Sluk lyset i kagemontren");
+addDrift(L_HIL, "evening", "Dæk op til reservationer dagen efter");
+addDrift(L_HIL, "evening", "Saml lys ind");
+addDrift(L_HIL, "evening", "Stol op");
+addDrift(L_HIL, "evening", "Rens Roberta");
+
+addDrift(
+  L_HIL,
+  "evening",
+  "Tæl kassen, send kasserapporten til Mathilde og Christian"
+);
+
+addDrift(
+  L_HIL,
+  "evening",
+  "Støvsuge gulvet",
+  { kind:"weekly", days:[D.mon, D.thu] },
+  "Mandag/Torsdag"
+);
+
+/* =========================================================
+   FARUM – SPECIALE DRIFTOPGAVER
+========================================================= */
+
+addDrift(L_FAR, "morning", "Sætte BC vare på plads");
+addDrift(L_FAR, "morning", "Klar gøre klude");
+addDrift(L_FAR, "morning", "Fyld is op");
+addDrift(L_FAR, "morning", "Gøre øl anlægget klar");
+addDrift(L_FAR, "morning", "Sætte plastik dutterne på sodavands anlægget");
+addDrift(L_FAR, "morning", "Tag stole ned");
+addDrift(L_FAR, "morning", "Sætte lys på bordene");
+
+addDrift(
+  L_FAR,
+  "morning",
+  "Tøm Bertha futte for beskidt vand og fyld op med rent vand"
+);
+
+addDrift(
+  L_FAR,
+  "morning",
+  "Tag center borde ud + planter og skilt"
+);
+
+addDrift(
+  L_FAR,
+  "morning",
+  "Fyld op med tandstikker, visitkort, slikkepinde, sugerør, sukker og chokolade"
+);
+
+addDrift(
+  L_FAR,
+  "morning",
+  "Åbne udenfor - Parasoller, tage kæder af, planter på bordene & sofa puder ud"
+);
+
+/* =========================================================
+   VANLØSE – SPECIALE DRIFTOPGAVER
+========================================================= */
+
+addDrift(L_VAN, "morning", "Tænd lys i køleskabe & kagemontren");
+addDrift(L_VAN, "morning", "Klargør postmix & fadøl");
+addDrift(L_VAN, "morning", "Læg opladere på lager");
+addDrift(L_VAN, "morning", "Fordel tablets & flatpays");
+addDrift(L_VAN, "morning", "Tag penge ud af pengeskabet");
+addDrift(L_VAN, "morning", "Sæt brunch playlisten på");
+addDrift(L_VAN, "morning", "Sæt A-skilte ud");
+
+addDrift(L_VAN, "lunch", "Skift skraldepose");
+addDrift(L_VAN, "lunch", "Fyld køleskab op med drikkevarer");
+addDrift(L_VAN, "lunch", "Fjern udløbet frugt");
+addDrift(L_VAN, "lunch", "Skyl spildbakker & pantboksen");
+addDrift(L_VAN, "lunch", "Puds bestik");
+addDrift(L_VAN, "lunch", "Bestil varer - ikke lørdag");
+addDrift(L_VAN, "lunch", "Skift til aften playlisten");
+
+addDrift(L_VAN, "evening", "Tjek datoer på drikkevarer");
+addDrift(L_VAN, "evening", "Læg bar ting til vask");
+addDrift(L_VAN, "evening", "Stabel ude borde & stole sammen");
+addDrift(L_VAN, "evening", "Fyld op i kagemontren");
+addDrift(L_VAN, "evening", "Rengør postmix & fadøl");
+addDrift(L_VAN, "evening", "Rengør stempelmaskinen");
+
+addDrift(
+  L_VAN,
+  "evening",
+  "Læg espresso filter i varmt vand & put espresso håndtag til vask"
+);
+
+addDrift(L_VAN, "evening", "Sæt lys ud i opladeren");
+addDrift(L_VAN, "evening", "Smid brugte klude til vask & læg nye klude");
+
+addDrift(
+  L_VAN,
+  "evening",
+  "Luk kassen: Send kasserapport til Christian 30259302 & Rosa 41729920"
+);
+
+addDrift(L_VAN, "evening", "Læg kontanter & drikkepenge i pengeskab");
+addDrift(L_VAN, "evening", "Læg elektronik til opladning");
+
+addDrift(
+  L_VAN,
+  "evening",
+  "Opdel pengekassen & læg det foran hver dør"
+);
+
+addDrift(
+  L_VAN,
+  "evening",
+  "Gå en runde i caféen & tjek at døren i glassalen er låst"
+);
+
+/* =========================================================
+   RENGØRING
+========================================================= */
+
+
+
+    
+    addDrift(L_HEL, "morning", "Åben kassen");
+    addDrift(L_HEL, "morning", "Få varer på køl og frost");
+    addDrift(L_HEL, "morning", "Sørge for gangen er tom for varer");
+    addDrift(L_HEL, "morning", "Tænde varmelamper");
+
+    addDrift(L_HEL, "lunch", "Rydde op i baren inden man går kl. 16");
+    addDrift(L_HEL, "lunch", "Tjek toiletter inden man går kl. 16");
+    addDrift(L_HEL, "lunch", "Give en melding til aftenholdet og mangler på dagen");
+
+    addDrift(L_HEL, "evening", "Støvsugning");
+    addDrift(L_HEL, "evening", "Ordne toiletter");
+    addDrift(L_HEL, "evening", "Opfyldning bar");
+    addDrift(L_HEL, "evening", "Tage pant i kælderen");
+    addDrift(L_HEL, "evening", "Tælle kasse, lukke dankort, lukke gavekort");
+    addDrift(L_HEL, "evening", "Slukke varmelamper og køre markise ind.");
+    addDrift(L_HEL, "evening", "Opfyldning af bar inkl. kaffe, sukker og chokolade");
+
+    addClean(L_HEL, "Bar", "weekly", "Pudse glashylder i baren", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre isknuseren", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre blenderen", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Glasflaske spanden til vask", { kind:"weekly", days:[D.mon] });
+    addClean(L_HEL, "Bar", "weekly", "Skifte klud til espresso maskinen", { kind:"weekly", days:[D.mon, D.thu] }, "Mandag/Torsdag");
+
+    addClean(L_HEL, "Service/Gulv", "weekly", "Rengøre sofaen", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Pudse glasvæggen", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Køkken", "weekly", "Rengøre vasken til isterninger", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bestille Royal", { kind:"weekly", days:[D.tue] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre sorte hylder/overflader", { kind:"weekly", days:[D.tue] });
+
+    addClean(L_HEL, "Bar", "weekly", "Rengøre køleskabene og pudse dørene", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Datotjek i køleskabene", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Gå ud med tomme fustager", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Fylde salt og peber op", { kind:"weekly", days:[D.wed] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre lister og kanter i baren", { kind:"weekly", days:[D.wed] });
+
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære royal i kælderen", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Fjerne støv fra lamper og hjørner om aftenen", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Fjerne spindelvæv om aftenen (kom rundt øverst i alle hjørner!)", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Tørre skærme, telefoner og terminaler af", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre glasrack i baren", { kind:"weekly", days:[D.thu] });
+    addClean(L_HEL, "Bar", "weekly", "Hente klude og viskestykker fra gangen", { kind:"weekly", days:[D.thu] });
+
+    addClean(L_HEL, "Bar", "weekly", "Gøre rent under begge kaffemaskiner", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Bar", "weekly", "Rengøre og pudse kagemontren", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære brunch op", { kind:"weekly", days:[D.fri] });
+    addClean(L_HEL, "Bar", "weekly", "Tjekke om alle reservationer er OK til weekenden", { kind:"weekly", days:[D.fri] });
+
+    addClean(L_HEL, "Lager/Udendørs", "weekly", "Bære brunch ned", { kind:"weekly", days:[D.sun] });
+    addClean(L_HEL, "Service/Gulv", "weekly", "Stumtjener på plads ved personalerum", { kind:"weekly", days:[D.sun] });
+    addClean(L_HEL, "Toilet", "weekly", "Opfyldning af papir i toiletskabet", { kind:"weekly", days:[D.sun] });
+
+    addClean(L_HEL, "Køkken", "daily", "Rengøre ismaskine", { kind:"daily" });
+    addClean(L_HEL, "Køkken", "daily", "Clean the drains dishwashing area", { kind:"daily" });
+    addClean(L_HEL, "Køkken", "daily", "Make sure dishwasher is filled with soap, afspændingsmiddel", { kind:"daily" });
+
+    
+   addClean(L_HOR, "Bar", "weekly", "Ryd op og gør rent i begge pulte", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tør A-skilte af med en våd klud", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør alle sorte hylder i baren (både oppe og nede)", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør ovenpå og under kaffemaskinen samt ved filterkaffen", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør Robert (tjek videoen på messenger gruppen)", { kind:"weekly", days:[D.mon] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Rengør øl-køleskabet på lageret + begge filtre (hver 14. dag)", { kind:"interval", everyDays:14, anchor:"2026-01-05" }, "14. dag");
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengøring af Aircon (1. mandag i måneden)", { kind:"monthlyNthWeekday", weekday:D.mon, nth:1 }, "1. mandag");
+
+    addClean(L_HOR, "Køkken", "weekly", "Rengør den lille fryser i køkkenet", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Bar", "weekly", "Tag en våd klud over fadølsanlæg og sodavandsanlæg", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tæpper skal bankes og foldes pænt", { kind:"weekly", days:[D.tue] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Tør alle sofaer og stole af med en våd klud (husk revner)", { kind:"weekly", days:[D.tue] });
+
+    addClean(L_HOR, "Service/Gulv", "weekly", "Støv hylder af i caféen og på toilettet", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Støv pærer af og udskift defekte", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek datoer på alle kølevarer i baren + fustager og postmix", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør is-knuser (indvendigt og udvendigt)", { kind:"weekly", days:[D.wed] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør de indendørs plantekasser", { kind:"weekly", days:[D.wed] });
+
+    addClean(L_HOR, "Service/Gulv", "weekly", "Puds små vinduer på skillevægge + de sorte kanter", { kind:"weekly", days:[D.thu] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør alle rumdelerne", { kind:"weekly", days:[D.thu] });
+     addClean(L_HOR, "Service/Gulv", "weekly", "Rengøring af vindueskarme ved 20'er bordene", { kind:"weekly", days:[D.thu] });
+    addClean(L_HOR, "Bar", "weekly", "Oprydning i bar (smid alt ud vi ikke bruger)", { kind:"weekly", days:[D.thu] });
+
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Gennemgå om terassen spiller (stole + borde på plads, fejer, spindelvæv, klud over sorte skilte)", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek om der er nok brunch-the til weekenden", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Køkken", "weekly", "Rengøring af alle beholdere (til bestik, teskeer, sukker, osv.)", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Fej gulvet ude ved alle centerborde", { kind:"weekly", days:[D.fri] });
+
+    addClean(L_HOR, "Bar", "weekly", "Rengør kagemontre", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Bar", "weekly", "Fyld salt- og peberkværne op", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Køkken", "weekly", "Fyr alle bakker i opvaskeren", { kind:"weekly", days:[D.sat] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør siruppumper med kogende vand", { kind:"weekly", days:[D.sat] });
+
+    addClean(L_HOR, "Køkken", "weekly", "Rengøring af isterningmaskinen (Noter på E-smiley)", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Rengør køleskabe (puds glas indvendig og udvendig samt tør hylder af)", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Tjek datoer på alle kølevarer i baren + fustager og postmix", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Service/Gulv", "weekly", "Rengør barnestole - evt. en tur i opvaskemaskinen", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Bar", "weekly", "Rengøring af hele blenderen", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Ryd op på lageret", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Ryd op i rummet ude ved toilet- og rengøringsartikler", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Fej gulvet ude ved alle centerborde", { kind:"weekly", days:[D.sun] });
+    addClean(L_HOR, "Toilet", "weekly", "GRUNDIG toiletrengøring (nede bag toiletterne, ved listerne, under vasken, panelerne, m.m.)", { kind:"weekly", days:[D.sun] });
+    
+ // ------------------------------
+// FARUM– RENGØRING
+// ------------------------------
+
+// MANDAG
+addClean(L_FAR, "Service/Gulv",       "weekly", "Rengør ismaskinen",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengøre pærerne - tør klud - skift hvis de er gået ud",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Pudse glas ved sofaerne og de sorte rammer rundt om",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Bar",          "weekly", "Støve gitter, lampeskærme, falske planter af og fjerne spindelvæv",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Sørg for udenforspiller - Stole & borde stå pænt - ",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Bar",          "weekly", "Fej grundit - på terrassen og ved vores asfalts område",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_FAR, "Bar",          "weekly", "Fjern cigaretter fra plabtekasserne",
+         { kind:"weekly", days:[D.mon] });
+
+
+// TIRSDAG
+addClean(L_FAR, "Bar",          "weekly", "Rengør sirupperne efter behob",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_FAR, "Bar",          "weekly", "Rengør alle beholdere i baren med bestik, sukker, chokolade, sugerør. te osv",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengøre glashylder i baren ( Husk under kaffekopperne på espressomaskinen",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Fylde vin op i køleskavet - 2 lag af flasker - ikke overyld!",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Bestil royal, Oskar Davidsen & multiline ( Inden kl 16:00)",
+         { kind:"weekly", days:[D.tue] });
+
+
+// ONSDAG
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør kagemontren & pudse glasset",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_FAR, "Bar",          "weekly", "Tjek menukortet igennem, er de pæne & rene?",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_FAR, "Bar",          "weekly", "Puds vinduerne ud til centeret og døren ud mod parkeringspladsen",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør de hvide hylder i cafeen & rumdelere",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Klude skal på plads - Skal gøre inden i går hjem",
+         { kind:"weekly", days:[D.wed] });
+
+
+
+// TORSDAG
+addClean(L_FAR, "Bar",          "weekly", "Lig spillende pænt og rengør reolen de ligger på",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Tøm postkassen og ryd op i avisbunken",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_FAR, "Bar",          "weekly", "Tag fustage håndtag i varmt vand",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Fyld div ting og sager op fra kælder, chokoade mm",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør de sorte hylder, smid det ud der ikke  bruges",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Sæt vin på plads & fyld vinkøleskabet",
+         { kind:"weekly", days:[D.thu] });
+
+
+// FREDAG
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør Servicelovers, stumtjenere, sprit standere",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør barnestole (Skild dem ad og put i opvasker maskine)",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Vand planter efter behob",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_FAR, "Bar",          "weekly", "Rengør ølstativ & puds øl & sodavands haner",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Tjek om pultene stå skarpt",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Sæt royal på plads",
+         { kind:"weekly", days:[D.fri] });
+
+
+// LØRDAG
+addClean(L_FAR, "Lager/Udendørs","weekly", "Sørge for at der er pænt og ordenligt på lageret, depotet, og rengøringsrummet",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Bank alle tæpper & fold dem pænt",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_FAR, "Bar",          "weekly", "Rengør under alle kaffemaskinerne",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_FAR, "Bar",          "weekly", "Rengør skraldespanden i baren",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_FAR, "Bar",          "weekly", "Rengør kasserne til pant & glasflasker",
+         { kind:"weekly", days:[D.sat] });
+
+
+// SØNDAG
+addClean(L_FAR, "Bar",          "weekly", "Rengør blenderen grundigt",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Rengør køleskabe i baren & tjek dato på alt - alt skal ud og gøres grundigt rent",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Service/Gulv", "weekly", "Sortere vores del af fryseren, så den er pæn & overskuelig",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Bar",          "weekly", "Fylde salt & peber",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Bar","weekly", "Vask sofaerne af grundigt - husk mellem revnerne",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Bar","weekly", "Grundig rengøring af toiellterne, gør det evt kllokken 16. tag hele runden på toielttet",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Bar","weekly", "Rengør gulvet i baren grundigt - kan sagtnes gøres tidligt på dagen, alt skal op fra gulvet, ismaskine ud osv.",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_FAR, "Bar","weekly", "Send et billede til maria af rengørings listen 42215930",
+         { kind:"weekly", days:[D.sun] });
+
+    
+// MANDAG
+addClean(L_VAN, "Køkken",       "weekly", "Rengør ismaskinen",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Tør menukort af",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør tjenerbakkerne",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør sirupspumper & tør sirupsflaskerne af for snask",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør barnestole",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Bar",          "weekly", "Fyld salt & peberkværne op",
+         { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Bar",          "weekly", "Postmix-dutter skal dyppes i varmt vand",
+         { kind:"weekly", days:[D.mon] });
+
+
+// TIRSDAG
+addClean(L_VAN, "Bar",          "weekly", "Rengør barkøleskabene",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør kagemontren (indvendigt & udvendigt)",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør rumdelere",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Tør støv af i caféen (loftdekorationer, barfront osv.)",
+         { kind:"weekly", days:[D.tue] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør alle touchskærme & tegnetablets",
+         { kind:"weekly", days:[D.tue] });
+
+
+// ONSDAG
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør bestikbakkerne",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør alle beholdere i baren & genopfyld",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør baroverflader, under kaffemaskinen, vægge & indhak",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør fødder på borde og stole samt undersiden af bordpladen",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør sofasprækker & stolesprækker samt overflader",
+         { kind:"weekly", days:[D.wed] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør pyntehylderne i caféen",
+         { kind:"weekly", days:[D.wed] });
+
+
+// TORSDAG
+addClean(L_VAN, "Bar",          "weekly", "Rengør hylder i baren & puds spejlene",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør servicelovers-standere, stumtjenere & spritstandere",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør pulterne udvendigt & indvendigt samt organiser tingene",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Puds glas ved sofaerne",
+         { kind:"weekly", days:[D.thu] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Tør pletter af væggene, panelerne & i båsene",
+         { kind:"weekly", days:[D.thu] });
+
+
+// FREDAG
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør bordpynten",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Rengør lamperne",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Bank & fold tæpperne pænt",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør barskraldespand & dens indhak",
+         { kind:"weekly", days:[D.fri] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Fyld spritpistolerne op",
+         { kind:"weekly", days:[D.fri] });
+
+
+// LØRDAG
+addClean(L_VAN, "Lager/Udendørs","weekly", "Puds flag",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Puds glas på alle døre (begge sider)",
+         { kind:"weekly", days:[D.sat] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør nederste hylder i baren & organiser tingene",
+         { kind:"weekly", days:[D.sat] });
+
+
+// SØNDAG
+addClean(L_VAN, "Bar",          "weekly", "Rengør blenderen grundigt",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Flyt alle borde & fej gulvet under",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Tjek om bordene står lige & ret (inkl. vippeborde)",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_VAN, "Bar",          "weekly", "Rengør gulvet i baren – tag tingene ud",
+         { kind:"weekly", days:[D.sun] });
+addClean(L_VAN, "Lager/Udendørs","weekly", "Ryd op på lageret – sortér & smid unyttige ting ud",
+         { kind:"weekly", days:[D.sun] });
+
 
     /* ---------------- FÆLLES LOGIK ---------------- */
 
