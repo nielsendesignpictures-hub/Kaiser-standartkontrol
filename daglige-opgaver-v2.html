@@ -689,6 +689,12 @@ const L_HOR = "Café Kaiser Hørsholm";
 const L_HIL = "Café Kaiser Hillerød";
 const L_FAR = "Café Kaiser Farum";
 const L_VAN = "Café Kaiser Vanløse";
+const L_SYD = "Café Kaiser Sydhavnen";
+
+const NO_TOILETS = [
+  L_HIL,
+  L_VAN
+];
 
 /* =========================================================
    FÆLLES DRIFT
@@ -732,7 +738,16 @@ function addStandardDrift(loc){
   });
 
   STANDARD_LUNCH.forEach(task => {
+
+    if (
+      task === "Tjek toiletter" &&
+      NO_TOILETS.includes(loc)
+    ) {
+      return;
+    }
+
     addDrift(loc, "lunch", task);
+
   });
 
   STANDARD_CLOSE.forEach(task => {
@@ -750,7 +765,8 @@ function addStandardDrift(loc){
   L_HOR,
   L_HIL,
   L_FAR,
-  L_VAN
+  L_VAN,
+  L_SYD
 ].forEach(addStandardDrift);
 
 /* =========================================================
