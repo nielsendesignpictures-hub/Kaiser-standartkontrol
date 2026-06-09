@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYE MENU 🔥</title>
+    <title>Ny Menu 2025 | Kaiser</title>
     <style>
         * {
             margin: 0;
@@ -12,269 +12,666 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #FAFAFA;
+            color: #3B4219;
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .intro-screen {
-            height: 100vh;
+        .hero {
+            background: linear-gradient(135deg, #DCAE96 0%, #C49A82 100%);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            animation: fadeIn 0.8s ease-in;
+            padding: 2rem;
+            position: relative;
         }
 
-        .intro-screen h1 {
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero .emoji {
             font-size: 4rem;
             margin-bottom: 1rem;
-            animation: bounce 1s ease infinite;
         }
 
-        .intro-screen p {
-            font-size: 1.5rem;
-            opacity: 0.9;
+        .hero p {
+            font-size: 1.3rem;
+            color: white;
+            max-width: 600px;
+            margin-bottom: 2rem;
         }
 
         .scroll-hint {
             position: absolute;
             bottom: 30px;
             font-size: 2rem;
-            animation: bounce 2s ease infinite;
+            color: white;
+            animation: bounce 2s infinite;
         }
 
-        .menu-section {
-            min-height: 100vh;
-            padding: 60px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
-        .menu-section:nth-child(even) {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-card {
-            max-width: 1200px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            animation: slideIn 0.6s ease;
-        }
-
-        .menu-card h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .overview {
+            background: #3B4219;
+            color: white;
+            padding: 3rem 1.5rem;
             text-align: center;
         }
 
-        .badge {
-            display: inline-block;
-            background: #ff6b6b;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+        .overview h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .badge.new { background: #51cf66; }
-        .badge.updated { background: #ffd43b; color: #333; }
-        .badge.removed { background: #ff6b6b; }
-
-        .dish-grid {
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .dish-item {
-            background: rgba(255, 255, 255, 0.1);
+        .stat-box {
+            background: rgba(220, 174, 150, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #DCAE96;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #DCAE96;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            padding: 3rem 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-alt {
+            background: #F5F5F5;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            color: #3B4219;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .section-emoji {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p.intro {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .menu-item {
+            background: white;
             border-radius: 20px;
-            padding: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
 
-        .dish-item:hover {
-            transform: translateY(-10px);
+        .menu-item:active {
+            transform: scale(0.98);
         }
 
-        .dish-img {
+        .item-image {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            background: #DCAE96;
         }
 
-        .dish-item h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        .item-content {
+            padding: 1.5rem;
         }
 
-        .dish-item p {
+        .item-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #3B4219;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-desc {
             font-size: 1rem;
-            opacity: 0.9;
-            line-height: 1.5;
+            color: #666;
+            line-height: 1.6;
         }
 
-        .key-points {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+        .tag {
+            display: inline-block;
+            background: #DCAE96;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
         }
 
-        .key-points ul {
+        .tag.new {
+            background: #3B4219;
+        }
+
+        .tag.out {
+            background: #999;
+        }
+
+        .removed-list {
+            background: #FFE5E5;
+            border-left: 4px solid #FF6B6B;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+
+        .removed-list h3 {
+            color: #FF6B6B;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .removed-list ul {
             list-style: none;
             padding-left: 0;
         }
 
-        .key-points li {
-            padding: 10px 0;
-            font-size: 1.2rem;
+        .removed-list li {
+            padding: 0.5rem 0;
+            color: #666;
         }
 
-        .key-points li:before {
-            content: "✅ ";
-            margin-right: 10px;
+        .removed-list li:before {
+            content: "✗ ";
+            color: #FF6B6B;
+            font-weight: bold;
+            margin-right: 0.5rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .highlight-box {
+            background: linear-gradient(135deg, #DCAE96 0%, #C49A82 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            text-align: center;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
+        .highlight-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .wine-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #DCAE96;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .wine-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #3B4219;
+            margin-bottom: 0.3rem;
+        }
+
+        .wine-region {
+            font-size: 0.9rem;
+            color: #DCAE96;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .wine-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .wine-sales {
+            background: #F0F0F0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #3B4219;
+            font-weight: 600;
+        }
+
+        .cocktail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .cocktail-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-top: 4px solid #DCAE96;
+        }
+
+        .cocktail-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #3B4219;
+            margin-bottom: 0.8rem;
+        }
+
+        .cocktail-ingredients {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .important-notice {
+            background: #3B4219;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 3px solid #DCAE96;
+        }
+
+        .important-notice h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .important-notice p {
+            font-size: 1.1rem;
+        }
+
+        .quiz {
+            background: linear-gradient(135deg, #3B4219 0%, #2a2f12 100%);
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .quiz h2 {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question {
+            background: rgba(220, 174, 150, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 2px solid #DCAE96;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #DCAE96;
+        }
+
+        .quiz-answer {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            background: #DCAE96;
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2.2rem;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .section h2 {
+                font-size: 2rem;
             }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .emoji-big {
-            font-size: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .intro-screen h1 { font-size: 2.5rem; }
-            .menu-card h2 { font-size: 2rem; }
-            .dish-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- INTRO SCREEN -->
-    <div class="intro-screen">
-        <h1>🔥 NY MENU ALERT 🔥</h1>
-        <p>Scroll ned for at se hvad der er nyt</p>
-        <div class="scroll-hint">👇</div>
+    <!-- HERO -->
+    <div class="hero">
+        <img src="logo.png" alt="Kaiser Logo" class="logo">
+        <div class="emoji">🌸☀️</div>
+        <h1>Ny Menu er Her!</h1>
+        <p>Sommer 2025 byder på friske retter, nye vine og lækre cocktails. Scroll og lær den nye menu på 5 minutter 👇</p>
+        <div class="scroll-hint">↓</div>
     </div>
 
-    <!-- SEKTION 1: NYE RETTER -->
-    <div class="menu-section">
-        <div class="menu-card">
-            <span class="badge new">NYT</span>
-            <h2>Nye retter på menuen 🚀</h2>
-            
-            <div class="dish-grid">
-                <div class="dish-item">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" alt="Salat" class="dish-img">
-                    <h3>Crispy Chicken Bowl</h3>
-                    <p><strong>Ingredients:</strong> Kylling, quinoa, avocado, edamame<br>
-                    <strong>Allergener:</strong> Gluten, soja<br>
-                    <strong>Pris:</strong> 129 kr</p>
-                </div>
-
-                <div class="dish-item">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" alt="Pizza" class="dish-img">
-                    <h3>Truffle Supreme Pizza</h3>
-                    <p><strong>Ingredients:</strong> Trøffelolie, svampe, mozzarella<br>
-                    <strong>Allergener:</strong> Gluten, mælk<br>
-                    <strong>Pris:</strong> 145 kr</p>
-                </div>
-
-                <div class="dish-item">
-                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400" alt="Dessert" class="dish-img">
-                    <h3>Matcha Cheesecake</h3>
-                    <p><strong>Ingredients:</strong> Matcha, cream cheese, digestive<br>
-                    <strong>Allergener:</strong> Gluten, mælk, æg<br>
-                    <strong>Pris:</strong> 75 kr</p>
-                </div>
+    <!-- OVERVIEW -->
+    <div class="overview">
+        <h2>Hvad er nyt?</h2>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Nye brunchronger</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Nye à la carte</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Nye vine</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Cocktails på kortet</div>
             </div>
         </div>
     </div>
 
-    <!-- SEKTION 2: OPDATEREDE RETTER -->
-    <div class="menu-section">
-        <div class="menu-card">
-            <span class="badge updated">OPDATERET</span>
-            <h2>Ændringer på eksisterende retter 🔄</h2>
-            
-            <div class="key-points">
-                <ul>
-                    <li><strong>Classic Burger:</strong> Ny brioche-bolle, pris ændret til 119 kr</li>
-                    <li><strong>Caesar Salad:</strong> Nu med hjemmelavet dressing + sprøde kyllingestrimler</li>
-                    <li><strong>Pasta Carbonara:</strong> Glutenfri version tilgængelig (+15 kr)</li>
-                </ul>
+    <!-- BRUNCH MENU -->
+    <div class="section">
+        <div class="section-emoji">🥐</div>
+        <h2>Ny Brunch Menu</h2>
+        <p class="intro">Sommerens smagsoplevelser til brunch</p>
+
+        <div class="menu-item">
+            <img src="kaiser-jordbaer-kage.jpg" alt="Kaiser Jordbær Kage" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Kaiser Jordbær Kage</div>
+                <div class="item-desc">En ægte Kaiser-klassiker! Perfekt som dessert eller til kaffen. Vores egen hjemmelavede jordbærkage er sommerens hit.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="koldskal.jpg" alt="Koldskål" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Hjemmelavet Koldskål</div>
+                <div class="item-desc">Med citron kammerjunker & jordbær. Sommeren på en tallerken - fresh, nostalgisk og uimodståelig.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="stracciatella-fersken.jpg" alt="Stracciatella med fersken" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Stracciatella med Fersken</div>
+                <div class="item-desc">Cremet stracciatella ost med sød fersken og lækker olivenolie. Elegant, sommerligt og virkelig lækkert.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="koldroeget-laks.jpg" alt="Koldrøget laks" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Koldrøget Laks - OPDATERET</div>
+                <div class="item-desc">Nu med ny citron/dild mayo! Samme lækre laks, men med frisk og moderne twist.</div>
+                <span class="tag">✨ OPDATERET</span>
+            </div>
+        </div>
+
+        <div class="removed-list">
+            <h3>Farvel til:</h3>
+            <ul>
+                <li>Rabarber crumble</li>
+                <li>Øllebrød</li>
+                <li>Ærtespread</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- À LA CARTE -->
+    <div class="section section-alt">
+        <div class="section-emoji">🍽️</div>
+        <h2>Ny À La Carte</h2>
+        <p class="intro">Friske smagsoplevelser hele dagen</p>
+
+        <div class="menu-item">
+            <img src="bagt-torsk.jpg" alt="Bagt torsk" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Bagt Torsk med Hollandaise</div>
+                <div class="item-desc">Serveret med dildkartofler & smørstegte asparges. Klassisk, elegant og perfekt til sommerens friske fisk-elskere.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="laks-sandwich.jpg" alt="Koldrøget laks sandwich" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Koldrøget Laks Sandwich</div>
+                <div class="item-desc">Med citron dild mayo, rødløg & citron. Frisk, mættende og god til frokost eller let aftensmad.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="kaiser-jordbaer-kage-alacarte.jpg" alt="Kaiser Jordbær Kage" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Kaiser's Jordbær Kage</div>
+                <div class="item-desc">Også på à la carte menuen! Perfekt afslutning på måltidet.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="removed-list">
+            <h3>Farvel til:</h3>
+            <ul>
+                <li>Ærte pasta</li>
+                <li>Rabarber crumble</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- DRINKS - LEMONADER -->
+    <div class="section">
+        <div class="section-emoji">🍋</div>
+        <h2>Nye Lemonader fra Juice</h2>
+        <p class="intro">Friske, hjemmelavede lemonader</p>
+
+        <div class="menu-item">
+            <img src="hindbaer-lime.jpg" alt="Hindbær lime lemonade" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Hindbær/Lime Lemonade</div>
+                <div class="item-desc">Sød hindbær møder syrlig lime. Perfekt til varme dage og til gæster der vil have noget friskt uden alkohol.</div>
+                <span class="tag new">🔥 NYT</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <img src="hyldeblomst-citron.jpg" alt="Hyldeblomst citron lemonade" class="item-image">
+            <div class="item-content">
+                <div class="item-name">Hyldeblomst/Citron Lemonade</div>
+                <div class="item-desc">Sommerens smag! Blomstret hyldeblomst med frisk citron. Elegant og læskende.</div>
+                <span class="tag new">🔥 NYT</span>
             </div>
         </div>
     </div>
 
-    <!-- SEKTION 3: FJERNEDE RETTER -->
-    <div class="menu-section">
-        <div class="menu-card">
-            <span class="badge removed">FJERNET</span>
-            <h2>Disse retter er taget af menuen 👋</h2>
-            
-            <div class="key-points">
-                <ul>
-                    <li>Fish & Chips (dårlig sælger)</li>
-                    <li>Vegetar Lasagne (erstattes af ny variant næste måned)</li>
-                    <li>Chocolate Lava Cake</li>
-                </ul>
-            </div>
+    <!-- VINE -->
+    <div class="section section-alt">
+        <div class="section-emoji">🍷</div>
+        <h2>Nye Vine</h2>
+        <p class="intro">4 nye vine på kortet - lær dem at kende</p>
+
+        <div class="wine-card">
+            <div class="wine-name">PFAFFL SAUVIGNON BLANC (2024)</div>
+            <div class="wine-region">Østrig</div>
+            <div class="wine-desc">En frisk hvidvin med smag af stikkelsbær og citrus. Sprød og let - perfekt til fisk, salater eller bare en solskinsdag. Tænk sommerlig og nem at drikke!</div>
+            <div class="wine-sales">📍 Sælges i glas & flaske</div>
+        </div>
+
+        <div class="wine-card">
+            <div class="wine-name">MIMI ROSÉ (2024)</div>
+            <div class="wine-region">Provence, Frankrig</div>
+            <div class="wine-desc">Classic rosé fra Sydfrankrig - lyserød, tør og super elegant. Smager af jordbær og blomster. Det her er "den franske riviera i et glas". Gammel vinmark (det betyder "Vielles Vignes"), så ekstra god kvalitet.</div>
+            <div class="wine-sales">📍 Sælges i glas & flaske | Erstatter den dyre rosé</div>
+        </div>
+
+        <div class="wine-card">
+            <div class="wine-name">MIMI BRUT ROSÉ</div>
+            <div class="wine-region">Frankrig</div>
+            <div class="wine-desc">Rosé-bobler! Fin og festlig mousserende vin. Fungerer både som aperitif og til hele menuen. Når champagne er for dyrt, men stemningen skal være høj.</div>
+            <div class="wine-sales">📍 Sælges i glas & flaske | Vi prøver med en rosé bobler igen - en meget stærkere kandidat end tidligere!</div>
+        </div>
+
+        <div class="wine-card">
+            <div class="wine-name">BENI DI BATASIOLO BAROLO (2020)</div>
+            <div class="wine-region">Piemonte, Italien</div>
+            <div class="wine-desc">Vores seriøse rødvin. Barolo er "vinenes konge" fra Italien - kraftig, kompleks med kirsebær, roser og lidt læder. Nebbiolo-druen er notoriously krævende, men resultatet er vanvittigt. Til oksekød og mad der kan tåle en ordentlig vin.</div>
+            <div class="wine-sales">📍 Sælges KUN i flasker</div>
         </div>
     </div>
 
-    <!-- SEKTION 4: VIGTIGE PUNKTER -->
-    <div class="menu-section">
-        <div class="menu-card">
-            <h2>⚡ Vigtigt at huske</h2>
-            
-            <div class="key-points">
-                <ul>
-                    <li>Alle priser er inkl. moms</li>
-                    <li>Husk at spørge om allergener ALTID</li>
-                    <li>Nye retter gælder fra i morgen</li>
-                    <li>Ved spørgsmål: Kontakt køkkenchefen</li>
-                    <li>Menukort opdateres på appen i aften kl. 20</li>
-                </ul>
+    <!-- VIGTIG INFO - FREDAGSBAREN -->
+    <div class="section">
+        <div class="important-notice">
+            <h3>⚠️ Vigtig Info: Fredagsbaren Lukker</h3>
+            <p>Vi sælger IKKE længere drinkkander eller fadølskander.</p>
+        </div>
+    </div>
+
+    <!-- COCKTAILS -->
+    <div class="section section-alt">
+        <div class="section-emoji">🍹</div>
+        <h2>Nyt Cocktail Kort</h2>
+        <p class="intro">6 cocktails - lær dem udenad</p>
+
+        <div class="cocktail-grid">
+            <div class="cocktail-card">
+                <div class="cocktail-name">Kaiser Passion</div>
+                <div class="cocktail-ingredients">Vodka, Koskenkorva passion og appelsinvand</div>
             </div>
 
-            <div style="text-align: center; margin-top: 40px; font-size: 2rem;">
-                <p>Klar til at sælge? 💪</p>
-                <p style="font-size: 3rem; margin-top: 20px;">LET'S GO! 🚀</p>
+            <div class="cocktail-card">
+                <div class="cocktail-name">Rabarber Sunset</div>
+                <div class="cocktail-ingredients">Vodka, rabarber, ferskensirup og tranebærjuice</div>
+            </div>
+
+            <div class="cocktail-card">
+                <div class="cocktail-name">Mojito</div>
+                <div class="cocktail-ingredients">Lys rom, rørsukker, lime, mynte, limesirup og danskvand</div>
+            </div>
+
+            <div class="cocktail-card">
+                <div class="cocktail-name">Aperol Spritz</div>
+                <div class="cocktail-ingredients">Aperol, husets bobler, danskvand og appelsinskive</div>
+            </div>
+
+            <div class="cocktail-card">
+                <div class="cocktail-name">Gin Hass</div>
+                <div class="cocktail-ingredients">Gin, mangosirup, lime og lemonsodavand</div>
+            </div>
+
+            <div class="cocktail-card">
+                <div class="cocktail-name">Elderflower Smash</div>
+                <div class="cocktail-ingredients">Vodka, rabarber, hyldeblomst, lime og danskvand</div>
             </div>
         </div>
+
+        <div class="highlight-box" style="margin-top: 3rem;">
+            <h3>💡 Sælg Smart</h3>
+            <p>Anbefal Kaiser Passion & Rabarber Sunset - de er unikke for os! Aperol Spritz er perfekt til gæster der "bare vil have noget let".</p>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz">
+        <h2>Quick Quiz 🧠</h2>
+        <p style="margin-bottom: 2rem;">Test din viden - kan du huske det?</p>
+
+        <div class="quiz-question">
+            <h3>Hvilken nye ret har hollandaise?</h3>
+            <div class="quiz-answer">✅ Bagt torsk med hollandaise, dildkartofler & smørstegte asparges</div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Hvilken vin sælger vi KUN på flaske?</h3>
+            <div class="quiz-answer">✅ BENI DI BATASIOLO BAROLO (2020) - den seriøse rødvin fra Italien</div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Hvad er der i Kaiser Passion?</h3>
+            <div class="quiz-answer">✅ Vodka, Koskenkorva passion og appelsinvand</div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Hvad sælger vi IKKE længere?</h3>
+            <div class="quiz-answer">✅ Drinkkander og fadølskander (Fredagsbaren lukker)</div>
+        </div>
+
+        <div class="quiz-question">
+            <h3>Hvilken ny mayo får koldrøget laks?</h3>
+            <div class="quiz-answer">✅ Citron/dild mayo</div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <h2>Klar til sæsonen? 🌸</h2>
+        <p>Husk: Vær begejstret, vær sikker, og sælg det I selv synes lyder lækkert!</p>
+        <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">Spørgsmål? Tag fat i mig 💬</p>
     </div>
 
 </body>
