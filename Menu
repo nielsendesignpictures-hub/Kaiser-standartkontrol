@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYE MENU 🔥</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .intro-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .intro-screen h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease infinite;
+        }
+
+        .intro-screen p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2rem;
+            animation: bounce 2s ease infinite;
+        }
+
+        .menu-section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-section:nth-child(even) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-card {
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: slideIn 0.6s ease;
+        }
+
+        .menu-card h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff6b6b;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .badge.new { background: #51cf66; }
+        .badge.updated { background: #ffd43b; color: #333; }
+        .badge.removed { background: #ff6b6b; }
+
+        .dish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .dish-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .dish-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .dish-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .dish-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .dish-item p {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .key-points {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .key-points li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .emoji-big {
+            font-size: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .intro-screen h1 { font-size: 2.5rem; }
+            .menu-card h2 { font-size: 2rem; }
+            .dish-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INTRO SCREEN -->
+    <div class="intro-screen">
+        <h1>🔥 NY MENU ALERT 🔥</h1>
+        <p>Scroll ned for at se hvad der er nyt</p>
+        <div class="scroll-hint">👇</div>
+    </div>
+
+    <!-- SEKTION 1: NYE RETTER -->
+    <div class="menu-section">
+        <div class="menu-card">
+            <span class="badge new">NYT</span>
+            <h2>Nye retter på menuen 🚀</h2>
+            
+            <div class="dish-grid">
+                <div class="dish-item">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400" alt="Salat" class="dish-img">
+                    <h3>Crispy Chicken Bowl</h3>
+                    <p><strong>Ingredients:</strong> Kylling, quinoa, avocado, edamame<br>
+                    <strong>Allergener:</strong> Gluten, soja<br>
+                    <strong>Pris:</strong> 129 kr</p>
+                </div>
+
+                <div class="dish-item">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" alt="Pizza" class="dish-img">
+                    <h3>Truffle Supreme Pizza</h3>
+                    <p><strong>Ingredients:</strong> Trøffelolie, svampe, mozzarella<br>
+                    <strong>Allergener:</strong> Gluten, mælk<br>
+                    <strong>Pris:</strong> 145 kr</p>
+                </div>
+
+                <div class="dish-item">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400" alt="Dessert" class="dish-img">
+                    <h3>Matcha Cheesecake</h3>
+                    <p><strong>Ingredients:</strong> Matcha, cream cheese, digestive<br>
+                    <strong>Allergener:</strong> Gluten, mælk, æg<br>
+                    <strong>Pris:</strong> 75 kr</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEKTION 2: OPDATEREDE RETTER -->
+    <div class="menu-section">
+        <div class="menu-card">
+            <span class="badge updated">OPDATERET</span>
+            <h2>Ændringer på eksisterende retter 🔄</h2>
+            
+            <div class="key-points">
+                <ul>
+                    <li><strong>Classic Burger:</strong> Ny brioche-bolle, pris ændret til 119 kr</li>
+                    <li><strong>Caesar Salad:</strong> Nu med hjemmelavet dressing + sprøde kyllingestrimler</li>
+                    <li><strong>Pasta Carbonara:</strong> Glutenfri version tilgængelig (+15 kr)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEKTION 3: FJERNEDE RETTER -->
+    <div class="menu-section">
+        <div class="menu-card">
+            <span class="badge removed">FJERNET</span>
+            <h2>Disse retter er taget af menuen 👋</h2>
+            
+            <div class="key-points">
+                <ul>
+                    <li>Fish & Chips (dårlig sælger)</li>
+                    <li>Vegetar Lasagne (erstattes af ny variant næste måned)</li>
+                    <li>Chocolate Lava Cake</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEKTION 4: VIGTIGE PUNKTER -->
+    <div class="menu-section">
+        <div class="menu-card">
+            <h2>⚡ Vigtigt at huske</h2>
+            
+            <div class="key-points">
+                <ul>
+                    <li>Alle priser er inkl. moms</li>
+                    <li>Husk at spørge om allergener ALTID</li>
+                    <li>Nye retter gælder fra i morgen</li>
+                    <li>Ved spørgsmål: Kontakt køkkenchefen</li>
+                    <li>Menukort opdateres på appen i aften kl. 20</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; font-size: 2rem;">
+                <p>Klar til at sælge? 💪</p>
+                <p style="font-size: 3rem; margin-top: 20px;">LET'S GO! 🚀</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
