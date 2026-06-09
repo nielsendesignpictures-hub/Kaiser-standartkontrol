@@ -1,669 +1,609 @@
+Ja. Hvis målet er en premium, mobil-først oplevelse til GitHub Pages, ville jeg bygge den som en samlet interaktiv landingpage med:
+
+- Sticky progress bar
+- Fuldskærms-sektioner
+- Scroll-animationer
+- Store visuelle "cards"
+- Dusty Rose (#DCAE96) og Olive (#3B4219)
+- Quiz med pointberegning
+- Logo fra logo.png
+- Pladsholdere til billeder, som du selv kan udskifte
+
+Nedenfor er en komplet version, som du kan gemme som index.html.
+
+```html
 <!DOCTYPE html>
 <html lang="da">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ny Menu 2026 🔥</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Ny Menu 2025</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-    --rose:#DCAE96;
-    --olive:#3B4219;
-    --cream:#F8F5F2;
-    --white:#ffffff;
+ --rose:#DCAE96;
+ --olive:#3B4219;
+ --cream:#F8F5F1;
+ --dark:#1e1e1e;
+ --white:#fff;
 }
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+}
+
+html{
+ scroll-behavior:smooth;
 }
 
 body{
-    font-family:'Inter',sans-serif;
-    background:#000;
-    color:var(--olive);
-    overflow-x:hidden;
-    scroll-snap-type: y mandatory;
-    height: 100vh;
-    overflow-y: scroll;
+ font-family:'Inter',sans-serif;
+ background:var(--cream);
+ color:var(--olive);
+ overflow-x:hidden;
 }
 
-.slide{
-    min-height:100vh;
-    scroll-snap-align: start;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    padding:40px 25px;
-    background-size:cover;
-    background-position:center;
+.progress{
+ position:fixed;
+ top:0;
+ left:0;
+ height:5px;
+ background:var(--rose);
+ width:0%;
+ z-index:9999;
+ transition:.15s;
 }
 
-.slide-content{
-    max-width:600px;
-    width:100%;
-    z-index:2;
-    animation: fadeInUp 0.8s ease-out;
+section{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:40px 20px;
+ position:relative;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.container{
+ max-width:900px;
+ width:100%;
+ margin:auto;
+ text-align:center;
 }
 
-.overlay{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    background:rgba(0,0,0,0.4);
-    z-index:1;
-}
-
-.slide.light{
-    background:var(--cream);
-}
-
-.slide.rose{
-    background:var(--rose);
-    color:white;
-}
-
-.slide.olive{
-    background:var(--olive);
-    color:white;
-}
-
-.slide.dark{
-    background:#1a1a1a;
-    color:white;
+.hero{
+ background:
+ linear-gradient(rgba(59,66,25,.75),rgba(59,66,25,.75)),
+ url("hero.jpg");
+ background-size:cover;
+ background-position:center;
+ color:white;
 }
 
 .logo{
-    width:100px;
-    margin-bottom:20px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+ width:140px;
+ margin-bottom:25px;
 }
 
 h1{
-    font-family:'Playfair Display',serif;
-    font-size:3.5rem;
-    margin-bottom:20px;
-    line-height:1.1;
+ font-size:clamp(3rem,8vw,6rem);
+ line-height:1;
+ margin-bottom:20px;
 }
 
 h2{
-    font-family:'Playfair Display',serif;
-    font-size:2.8rem;
-    margin-bottom:20px;
-    line-height:1.2;
+ font-size:clamp(2rem,6vw,4rem);
+ margin-bottom:20px;
 }
 
-h3{
-    font-size:1.4rem;
-    margin-bottom:12px;
-    font-weight:700;
+.subtitle{
+ font-size:1.2rem;
+ max-width:600px;
+ margin:auto;
+ opacity:.9;
 }
 
-p{
-    font-size:1.1rem;
-    line-height:1.7;
-    margin-bottom:15px;
+.scroll{
+ margin-top:40px;
+ opacity:.7;
+ animation:bounce 2s infinite;
 }
 
-.big-text{
-    font-size:1.3rem;
-    font-weight:500;
-}
-
-.emoji{
-    font-size:4rem;
-    margin-bottom:20px;
-    display:block;
-}
-
-.badge{
-    display:inline-block;
-    background:rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-    color:white;
-    padding:10px 20px;
-    border-radius:999px;
-    font-size:0.85rem;
-    font-weight:700;
-    margin-bottom:25px;
-    text-transform:uppercase;
-    letter-spacing:1.5px;
+@keyframes bounce{
+ 50%{transform:translateY(10px);}
 }
 
 .card{
-    background:rgba(255,255,255,0.95);
-    backdrop-filter: blur(20px);
-    border-radius:24px;
-    padding:28px;
-    margin-bottom:20px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.2);
-    color:var(--olive);
+ background:white;
+ border-radius:28px;
+ padding:30px;
+ box-shadow:0 20px 50px rgba(0,0,0,.08);
 }
 
-.card.transparent{
-    background:rgba(255,255,255,0.12);
-    backdrop-filter: blur(20px);
-    color:white;
+.image{
+ width:100%;
+ height:45vh;
+ object-fit:cover;
+ border-radius:24px;
+ margin-bottom:25px;
 }
 
-.card h3{
-    color:var(--olive);
+.badge{
+ display:inline-block;
+ background:var(--rose);
+ color:white;
+ padding:10px 18px;
+ border-radius:999px;
+ font-weight:700;
+ margin-bottom:20px;
 }
 
-.card.transparent h3{
-    color:white;
+.highlight{
+ background:var(--olive);
+ color:white;
+ border-radius:32px;
+ padding:40px;
+}
+
+.list{
+ text-align:left;
+ max-width:500px;
+ margin:auto;
+}
+
+.list li{
+ margin:12px 0;
+ font-size:1.1rem;
+}
+
+.new{
+ color:#2e8b57;
+ font-weight:700;
+}
+
+.old{
+ color:#b22222;
+ font-weight:700;
 }
 
 .grid{
-    display:grid;
-    gap:16px;
+ display:grid;
+ gap:20px;
 }
 
-.split{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
+@media(min-width:768px){
+ .grid{
+  grid-template-columns:1fr 1fr;
+ }
 }
 
-.scroll-hint{
-    position:absolute;
-    bottom:30px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:3;
-    animation: bounce 2s infinite;
-    font-size:2rem;
-    opacity:0.8;
+.fade{
+ opacity:0;
+ transform:translateY(50px);
+ transition:1s;
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-    40% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-    60% {
-        transform: translateX(-50%) translateY(-5px);
-    }
+.fade.show{
+ opacity:1;
+ transform:translateY(0);
 }
 
-.image-bg{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    object-fit:cover;
-    z-index:0;
-}
-
-ul{
-    padding-left:20px;
-}
-
-li{
-    margin-bottom:10px;
-    font-size:1.05rem;
+.quiz-card{
+ background:white;
+ border-radius:24px;
+ padding:25px;
+ margin-bottom:20px;
+ text-align:left;
 }
 
 .quiz-option{
-    background:rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border:2px solid rgba(255,255,255,0.3);
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:12px;
-    cursor:pointer;
-    transition:all 0.3s ease;
-    font-size:1.05rem;
-    font-weight:600;
-    text-align:center;
+ display:block;
+ width:100%;
+ margin-top:10px;
+ border:none;
+ background:#f2f2f2;
+ padding:15px;
+ border-radius:12px;
+ cursor:pointer;
+ font-size:1rem;
 }
 
 .quiz-option:hover{
-    background:rgba(255,255,255,0.25);
-    transform:scale(1.02);
+ background:var(--rose);
+ color:white;
 }
 
-.quiz-option.correct{
-    background:#22c55e;
-    border-color:#22c55e;
-    animation: pulse 0.5s ease;
+.result{
+ display:none;
+ margin-top:30px;
+ padding:30px;
+ border-radius:24px;
+ background:var(--olive);
+ color:white;
 }
 
-.quiz-option.wrong{
-    background:#ef4444;
-    border-color:#ef4444;
-    animation: shake 0.5s ease;
+.footer{
+ background:var(--olive);
+ color:white;
+ text-align:center;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-}
-
-.counter{
-    position:fixed;
-    top:25px;
-    right:25px;
-    background:rgba(0,0,0,0.6);
-    backdrop-filter: blur(10px);
-    color:white;
-    padding:12px 18px;
-    border-radius:999px;
-    font-size:0.9rem;
-    font-weight:600;
-    z-index:999;
-}
-
-.highlight-box{
-    background:linear-gradient(135deg, var(--rose), var(--olive));
-    color:white;
-    padding:35px;
-    border-radius:24px;
-    text-align:center;
-    margin:25px 0;
-    box-shadow:0 20px 60px rgba(0,0,0,0.3);
-}
-
-.product-card{
-    background:white;
-    border-radius:20px;
-    overflow:hidden;
-    margin-bottom:20px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.15);
-}
-
-.product-image{
-    width:100%;
-    height:200px;
-    object-fit:cover;
-}
-
-.product-content{
-    padding:24px;
-    color:var(--olive);
-}
-
-.flag{
-    font-size:1.5rem;
-}
-
-@media(max-width:768px){
-    h1{
-        font-size:2.8rem;
-    }
-    h2{
-        font-size:2.2rem;
-    }
-    .split{
-        grid-template-columns:1fr;
-    }
+.big{
+ font-size:1.4rem;
+ font-weight:700;
 }
 
 </style>
 </head>
 <body>
 
-<div class="counter">
-    <span id="current">1</span> / 12
+<div class="progress" id="progress"></div>
+
+<section class="hero">
+
+<div class="container fade">
+
+<img src="logo.png" class="logo">
+
+<h1>Ny Menu 2025</h1>
+
+<p class="subtitle">
+3 minutter.
+Det er alt du behøver for at være klar til den nye sæson.
+</p>
+
+<div class="scroll">
+↓ Scroll ned
 </div>
 
-<!-- SLIDE 1: HERO -->
-<section class="slide" style="background-image:url('hero.jpg')">
-    <div class="overlay"></div>
-    <div class="slide-content" style="text-align:center; color:white;">
-        <img src="logo.png" class="logo">
-        <h1>Ny Menu<br>2025 🔥</h1>
-        <p class="big-text">
-            3 minutter.<br>
-            Alle ændringer.<br>
-            Let at huske.
-        </p>
-    </div>
-    <div class="scroll-hint">↓</div>
+</div>
+
 </section>
 
-<!-- SLIDE 2: OVERVIEW -->
-<section class="slide olive">
-    <div class="slide-content" style="text-align:center;">
-        <span class="badge">Overblik</span>
-        <h2>Her er hvad<br>der er nyt</h2>
-        
-        <div class="grid">
-            <div class="card transparent">
-                <h3>🍓 Brunch</h3>
-                <p>4 nye ting<br>3 udgår</p>
-            </div>
-            <div class="card transparent">
-                <h3>🐟 A la carte</h3>
-                <p>3 nye retter<br>2 udgår</p>
-            </div>
-            <div class="card transparent">
-                <h3>🍋 Drinks</h3>
-                <p>2 lemonader<br>6 cocktails</p>
-            </div>
-            <div class="card transparent">
-                <h3>🍷 Vin</h3>
-                <p>4 nye vine</p>
-            </div>
-        </div>
-    </div>
+<section>
+
+<div class="container fade">
+
+<div class="highlight">
+
+<h2>Det store overblik</h2>
+
+<p class="big">
+🍓 Nye sommerdesserter<br>
+🐟 Ny fiskeret<br>
+🍋 Nye lemonader<br>
+🍷 Nye vine<br>
+🍸 Nyt cocktailkort
+</p>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 3: BRUNCH NYE -->
-<section class="slide light">
-    <div class="slide-content">
-        <span class="badge" style="background:var(--rose); color:white;">Brunch</span>
-        <h2>Nye stjerner 🌟</h2>
-        
-        <div class="card">
-            <h3>🍰 Kaiser's Jordbærkage</h3>
-            <p>En ægte klassiker! Sælg denne til gæster der ønsker noget sødt og nostalgisk.</p>
-        </div>
+<section>
 
-        <div class="card">
-            <h3>🥣 Hjemmelavet Koldskål</h3>
-            <p>Med citronkammerjunker & jordbær. Sommerens absolute hit.</p>
-        </div>
+<div class="container fade">
 
-        <div class="card">
-            <h3>🍑 Stracciatella</h3>
-            <p>Med fersken & olivenolie. Elegant og let.</p>
-        </div>
+<span class="badge">BRUNCH</span>
 
-        <div class="card">
-            <h3>🐟 Koldrøget Laks</h3>
-            <p>Nu med ny citron/dild mayo!</p>
-        </div>
-    </div>
+<img src="jordbaerkage.jpg" class="image">
+
+<h2>Kaiser's Jordbærkage</h2>
+
+<p class="big">
+En ægte.
+</p>
+
+<p>
+Nu på både brunch og a la carte.
+</p>
+
+</div>
+
 </section>
 
-<!-- SLIDE 4: BRUNCH UDGÅR -->
-<section class="slide" style="background:linear-gradient(135deg, #1a1a1a, #2d2d2d); color:white;">
-    <div class="slide-content" style="text-align:center;">
-        <span class="emoji">👋</span>
-        <h2>Farvel til:</h2>
-        <div class="card transparent">
-            <ul style="list-style:none; padding:0;">
-                <li style="font-size:1.2rem; margin-bottom:15px;">❌ Rabarber Crumble</li>
-                <li style="font-size:1.2rem; margin-bottom:15px;">❌ Øllebrød</li>
-                <li style="font-size:1.2rem; margin-bottom:15px;">❌ Ærtespread</li>
-            </ul>
-        </div>
-    </div>
+<section>
+
+<div class="container fade">
+
+<img src="koldskaal.jpg" class="image">
+
+<h2>Ny Sommerfavorit</h2>
+
+<p class="big">
+Hjemmelavet koldskål
+</p>
+
+<p>
+Citronkammerjunker & jordbær
+</p>
+
+</div>
+
 </section>
 
-<!-- SLIDE 5: A LA CARTE -->
-<section class="slide" style="background-image:url('alacarte.jpg');">
-    <div class="overlay"></div>
-    <div class="slide-content">
-        <span class="badge">A la carte</span>
-        <h2 style="color:white;">Bagt Torsk 🐟</h2>
-        <div class="card">
-            <p>
-                Hollandaise, dildkartofler & smørstegte asparges.
-                <br><br>
-                <strong>Sælg til:</strong> Gæster der ønsker fisk eller noget sommerligt og klassisk.
-            </p>
-        </div>
-    </div>
+<section>
+
+<div class="container fade">
+
+<img src="stracciatella.jpg" class="image">
+
+<h2>Stracciatella</h2>
+
+<p class="big">
+Fersken & olivenolie
+</p>
+
+</div>
+
 </section>
 
-<!-- SLIDE 6: LAKS SANDWICH -->
-<section class="slide rose">
-    <div class="slide-content">
-        <h2>Koldrøget Laks<br>Sandwich 🥪</h2>
-        <div class="card transparent">
-            <p style="font-size:1.15rem;">
-                Citron/dild mayo<br>
-                Rødløg<br>
-                Citron
-            </p>
-        </div>
-        <p class="big-text" style="margin-top:25px;">
-            En frisk frokostfavorit der er nem at sælge!
-        </p>
-    </div>
+<section>
+
+<div class="container fade">
+
+<img src="torsk.jpg" class="image">
+
+<h2>Bagt Torsk</h2>
+
+<p>
+Hollandaise • Dildkartofler • Smørstegte asparges
+</p>
+
+<br>
+
+<div class="highlight">
+🐟 Salgstip:
+Anbefal den til gæster der ønsker en lettere hovedret.
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 7: LEMONADER -->
-<section class="slide" style="background-image:url('lemonade.jpg');">
-    <div class="overlay"></div>
-    <div class="slide-content">
-        <span class="badge">Lemonader</span>
-        <h2 style="color:white;">Fra Juice 🍋</h2>
-        
-        <div class="split">
-            <div class="card">
-                <h3>Hindbær/<br>Lime</h3>
-                <p>Frisk & syrlig</p>
-            </div>
-            <div class="card">
-                <h3>Hyldeblomst/<br>Citron</h3>
-                <p>Let & floral</p>
-            </div>
-        </div>
+<section>
 
-        <div class="highlight-box" style="margin-top:25px;">
-            <p style="font-size:1.1rem; margin:0;">
-                <strong>Mersalg!</strong> Anbefal som alkoholfrit alternativ
-            </p>
-        </div>
-    </div>
+<div class="container fade">
+
+<h2>Vi siger farvel til...</h2>
+
+<div class="card">
+
+<ul class="list">
+<li class="old">❌ Rabarber Crumble</li>
+<li class="old">❌ Øllebrød</li>
+<li class="old">❌ Ærtespread</li>
+<li class="old">❌ Ærtepasta</li>
+</ul>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 8: VIN -->
-<section class="slide light">
-    <div class="slide-content">
-        <span class="badge" style="background:var(--olive); color:white;">Vin</span>
-        <h2>4 nye vine 🍷</h2>
+<section>
 
-        <div class="product-card">
-            <div class="product-content">
-                <h3>PFAFFL Sauvignon Blanc <span class="flag">🇦🇹</span></h3>
-                <p>Stikkelsbær, citrus, frisk. Perfekt til fisk.</p>
-                <p style="font-size:0.9rem; opacity:0.7;">Glas & flaske</p>
-            </div>
-        </div>
+<div class="container fade">
 
-        <div class="product-card">
-            <div class="product-content">
-                <h3>MIMI Rosé <span class="flag">🇫🇷</span></h3>
-                <p>"Fransk riviera i et glas" – jordbær, blomster, elegant.</p>
-                <p style="font-size:0.9rem; opacity:0.7;">Glas & flaske</p>
-            </div>
-        </div>
+<h2>Nye Lemonader</h2>
 
-        <div class="product-card">
-            <div class="product-content">
-                <h3>MIMI Brut Rosé <span class="flag">🇫🇷</span></h3>
-                <p>Rosébobler! Festlig og funker til hele menuen.</p>
-                <p style="font-size:0.9rem; opacity:0.7;">Glas & flaske</p>
-            </div>
-        </div>
+<div class="grid">
 
-        <div class="product-card">
-            <div class="product-content">
-                <h3>Barolo 2020 <span class="flag">🇮🇹</span></h3>
-                <p>Vinenes konge. Kirsebær, roser, læder. Seriøs!</p>
-                <p style="font-size:0.9rem; opacity:0.7;">Kun flaske</p>
-            </div>
-        </div>
-    </div>
+<div class="card">
+<h3>🍋 Hindbær / Lime</h3>
+<p>Frisk og syrlig.</p>
+</div>
+
+<div class="card">
+<h3>🌼 Hyldeblomst / Citron</h3>
+<p>Sommer på flaske.</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 9: COCKTAILS -->
-<section class="slide" style="background-image:url('cocktails.jpg');">
-    <div class="overlay"></div>
-    <div class="slide-content">
-        <span class="badge">Cocktails</span>
-        <h2 style="color:white;">Nyt kort 🍸</h2>
+<section>
 
-        <div class="card" style="background:#ef4444; color:white;">
-            <h3 style="color:white;">⚠️ Vigtigt!</h3>
-            <p style="margin:0;">
-                Fredagsbaren lukker.<br>
-                Ingen drinkkander eller fadølskander mere.
-            </p>
-        </div>
+<div class="container fade">
 
-        <div class="grid" style="margin-top:20px;">
-            <div class="card transparent">
-                <h3>Kaiser Passion</h3>
-            </div>
-            <div class="card transparent">
-                <h3>Rabarber Sunset</h3>
-            </div>
-            <div class="card transparent">
-                <h3>Mojito</h3>
-            </div>
-            <div class="card transparent">
-                <h3>Aperol Spritz</h3>
-            </div>
-            <div class="card transparent">
-                <h3>Gin Hass</h3>
-            </div>
-            <div class="card transparent">
-                <h3>Elderflower Smash</h3>
-            </div>
-        </div>
-    </div>
+<h2>Nye Vine</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>🇦🇹 PFAFFL Sauvignon Blanc</h3>
+<p>Frisk. Citrus. Fisk.</p>
+</div>
+
+<div class="card">
+<h3>🇫🇷 MIMI Rosé</h3>
+<p>Jordbær. Sommer. Terrasse.</p>
+</div>
+
+<div class="card">
+<h3>🥂 MIMI Brut Rosé</h3>
+<p>Rosébobler med wow-effekt.</p>
+</div>
+
+<div class="card">
+<h3>🇮🇹 Barolo</h3>
+<p>KUN flaske.</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 10: QUIZ 1 -->
-<section class="slide olive">
-    <div class="slide-content">
-        <span class="badge">Quiz tid! 🧠</span>
-        <h2>Spørgsmål 1</h2>
-        <p class="big-text" style="margin-bottom:30px;">
-            Hvilken vin sælger vi kun i flaske?
-        </p>
-        
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            PFAFFL Sauvignon Blanc
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            MIMI Rosé
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, true)">
-            Barolo 2020
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            MIMI Brut Rosé
-        </div>
-    </div>
+<section>
+
+<div class="container fade">
+
+<h2>Nyt Cocktailkort</h2>
+
+<div class="grid">
+
+<div class="card">Kaiser Passion</div>
+<div class="card">Rabarber Sunset</div>
+<div class="card">Mojito</div>
+<div class="card">Aperol Spritz</div>
+<div class="card">Gin Hass</div>
+<div class="card">Elderflower Smash</div>
+
+</div>
+
+<br>
+
+<div class="highlight">
+🚫 Fredagsbaren lukker<br><br>
+Ingen drinkkander<br>
+Ingen fadølskander
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 11: QUIZ 2 -->
-<section class="slide rose">
-    <div class="slide-content">
-        <span class="badge">Quiz tid! 🧠</span>
-        <h2>Spørgsmål 2</h2>
-        <p class="big-text" style="margin-bottom:30px;">
-            Hvad serveres bagt torsk med?
-        </p>
-        
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            Bearnaise og pommes frites
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, true)">
-            Hollandaise, dildkartofler & asparges
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            Rødvinssauce og grøntsager
-        </div>
-        <div class="quiz-option" onclick="checkAnswer(this, false)">
-            Smør og persilleris
-        </div>
-    </div>
+<section>
+
+<div class="container fade">
+
+<h2>Quiz Tid 🎯</h2>
+
+<div class="quiz-card">
+
+<h3>1. Hvilken dessert kommer på både brunch og a la carte?</h3>
+
+<button class="quiz-option" onclick="answer(this,false)">Rabarber Crumble</button>
+<button class="quiz-option" onclick="answer(this,true)">Kaiser's Jordbærkage</button>
+<button class="quiz-option" onclick="answer(this,false)">Øllebrød</button>
+
+</div>
+
+<div class="quiz-card">
+
+<h3>2. Hvilken vin sælges kun på flaske?</h3>
+
+<button class="quiz-option" onclick="answer(this,false)">MIMI Rosé</button>
+<button class="quiz-option" onclick="answer(this,true)">Barolo</button>
+<button class="quiz-option" onclick="answer(this,false)">PFAFFL</button>
+
+</div>
+
+<div class="quiz-card">
+
+<h3>3. Hvilken ny hovedret får vi?</h3>
+
+<button class="quiz-option" onclick="answer(this,false)">Ærtepasta</button>
+<button class="quiz-option" onclick="answer(this,true)">Bagt Torsk</button>
+<button class="quiz-option" onclick="answer(this,false)">Rabarber Crumble</button>
+
+</div>
+
+<div class="result" id="result">
+<h2>🎉 Du er klar!</h2>
+<p id="scoreText"></p>
+</div>
+
+</div>
+
 </section>
 
-<!-- SLIDE 12: OUTRO -->
-<section class="slide dark">
-    <div class="slide-content" style="text-align:center;">
-        <span class="emoji">🎯</span>
-        <h2>Fokusér på:</h2>
-        
-        <div class="highlight-box">
-            <p style="font-size:1.25rem; margin:8px 0;">🍰 Jordbærkagen</p>
-            <p style="font-size:1.25rem; margin:8px 0;">🐟 Bagt Torsk</p>
-            <p style="font-size:1.25rem; margin:8px 0;">🍋 Lemonaderne</p>
-            <p style="font-size:1.25rem; margin:8px 0;">🍷 MIMI Rosé</p>
-            <p style="font-size:1.25rem; margin:8px 0;">🍸 Nye cocktails</p>
-        </div>
+<section class="footer">
 
-        <p class="big-text" style="margin-top:30px;">
-            Klar til sæsonen? 💪
-        </p>
-    </div>
+<div class="container">
+
+<h2>Fokusområder denne sæson</h2>
+
+<p class="big">
+🍓 Jordbærkagen<br><br>
+🐟 Bagt Torsk<br><br>
+🍋 Lemonaderne<br><br>
+🍷 Mimi Rosé<br><br>
+🍸 Cocktailkortet
+</p>
+
+</div>
+
 </section>
 
 <script>
-// Slide counter
-let slideIndex = 1;
-const totalSlides = 12;
 
-window.addEventListener('scroll', () => {
-    const scrollPosition = window.scrollY;
-    const slideHeight = window.innerHeight;
-    slideIndex = Math.round(scrollPosition / slideHeight) + 1;
-    document.getElementById('current').textContent = slideIndex;
+const progress = document.getElementById("progress");
+
+window.addEventListener("scroll",()=>{
+
+const winScroll =
+document.documentElement.scrollTop;
+
+const height =
+document.documentElement.scrollHeight -
+document.documentElement.clientHeight;
+
+progress.style.width =
+(winScroll/height)*100 + "%";
+
 });
 
-// Quiz
-function checkAnswer(element, isCorrect) {
-    const allOptions = element.parentElement.querySelectorAll('.quiz-option');
-    
-    allOptions.forEach(opt => {
-        opt.style.pointerEvents = 'none';
-    });
-    
-    if (isCorrect) {
-        element.classList.add('correct');
-        setTimeout(() => {
-            window.scrollBy({
-                top: window.innerHeight,
-                behavior: 'smooth'
-            });
-        }, 1500);
-    } else {
-        element.classList.add('wrong');
-    }
+const fades = document.querySelectorAll(".fade");
+
+const observer = new IntersectionObserver(entries=>{
+
+entries.forEach(entry=>{
+ if(entry.isIntersecting){
+  entry.target.classList.add("show");
+ }
+});
+
+},{threshold:.2});
+
+fades.forEach(el=>observer.observe(el));
+
+let score = 0;
+let answered = 0;
+
+function answer(btn,correct){
+
+const parent = btn.parentElement;
+
+if(parent.dataset.done) return;
+
+parent.dataset.done = true;
+
+answered++;
+
+if(correct){
+ score++;
+ btn.style.background="#3B4219";
+ btn.style.color="white";
+}else{
+ btn.style.background="#b22222";
+ btn.style.color="white";
 }
 
-// Smooth scroll hint removal
-window.addEventListener('scroll', () => {
-    const hints = document.querySelectorAll('.scroll-hint');
-    hints.forEach(hint => {
-        hint.style.opacity = '0';
-    });
-}, { once: true });
+if(answered===3){
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("scoreText").innerHTML =
+`Du fik <strong>${score}/3</strong> rigtige.`;
+
+}
+
+}
+
 </script>
 
 </body>
