@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Allergi Guide</title>
+<meta name="description" content="Allergen-guide til menuen – EU 1169/2011">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Allergi Guide">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#10212e">
+<style>
+:root{
+  --bg:#0e1c27; --card:#16293a; --card2:#1d3349; --text:#eef4f8; --muted:#8fa6b8;
+  --green:#2e9e5b; --green-bg:#143626; --yellow:#e0a82e; --yellow-bg:#3a2f12;
+  --red:#d9484d; --red-bg:#3c1a1c; --grey:#7d8fa0; --grey-bg:#26343f;
+  --orange:#e07b39; --orange-bg:#3a2414;
+  --accent:#3aa0d8; --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--bg); color:var(--text); min-height:100vh;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+header{
+  position:sticky; top:0; z-index:50; background:rgba(14,28,39,.92);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;
+  border-bottom:1px solid #213748;
+}
+h1{font-size:1.15rem; font-weight:700; letter-spacing:.2px}
+h1 small{color:var(--muted); font-weight:500; font-size:.75rem; display:block; margin-top:2px}
+.search{
+  margin-top:10px; display:flex; align-items:center; gap:8px;
+  background:var(--card); border-radius:10px; padding:9px 12px;
+}
+.search svg{flex:none; opacity:.55}
+.search input{
+  flex:1; background:none; border:none; outline:none; color:var(--text);
+  font-size:1rem;
+}
+.search input::placeholder{color:var(--muted)}
+.search .clear{display:none; background:#2a4256; border:none; color:var(--text);
+  border-radius:50%; width:22px; height:22px; font-size:.8rem; line-height:1}
+section{padding:14px 16px 0}
+.label{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:8px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{
+  border:1.5px solid #2c4459; background:var(--card); color:var(--text);
+  border-radius:999px; padding:8px 14px; font-size:.9rem; font-weight:600;
+  transition:all .12s;
+}
+.chip.on{background:var(--accent); border-color:var(--accent); color:#06141d}
+.catbar{
+  display:flex; gap:8px; overflow-x:auto; padding:0 16px 4px; margin-top:12px;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.catbar::-webkit-scrollbar{display:none}
+.cat{
+  flex:none; border:none; background:var(--card); color:var(--muted);
+  border-radius:999px; padding:7px 14px; font-size:.85rem; font-weight:600;
+}
+.cat.on{background:var(--text); color:#0c1822}
+#summary{padding:12px 16px 0; font-size:.9rem; color:var(--muted); display:none}
+#summary b{color:var(--text)}
+.group{padding:16px 16px 0}
+.group-h{
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  font-size:.95rem; font-weight:700;
+}
+.badge{font-size:.75rem; font-weight:700; color:var(--muted); background:var(--card); border-radius:999px; padding:2px 9px}
+.dish{
+  width:100%; text-align:left; border:none; color:var(--text);
+  background:var(--card); border-radius:var(--radius); padding:13px 14px;
+  margin-bottom:8px; display:flex; align-items:center; gap:12px;
+  border-left:4px solid transparent;
+}
+.dish:active{background:var(--card2)}
+.dish .nm{flex:1; min-width:0}
+.dish .nm .t{font-weight:600; font-size:.97rem; line-height:1.3}
+.dish .nm .c{font-size:.75rem; color:var(--muted); margin-top:2px}
+.dish .why{font-size:.72rem; font-weight:700; text-align:right; flex:none; max-width:38%; line-height:1.35}
+.g-green .dish{border-left-color:var(--green)} .g-green .why{color:var(--green)}
+.g-yellow .dish{border-left-color:var(--yellow)} .g-yellow .why{color:var(--yellow)}
+.g-grey .dish{border-left-color:var(--grey)} .g-grey .why{color:var(--grey)}
+.g-red .dish{border-left-color:var(--red)} .g-red .why{color:var(--red)}
+.g-mod .dish{border-left-color:var(--orange); flex-wrap:wrap} .g-mod .why{color:var(--orange)}
+.fixes{width:100%; margin-top:8px; display:flex; flex-direction:column; gap:5px}
+.fix{
+  font-size:.8rem; font-weight:500; line-height:1.4; color:#f0b386;
+  background:var(--orange-bg); border-radius:8px; padding:7px 10px;
+}
+.fix b{color:#f6cba8}
+.tip{
+  font-size:.8rem; font-weight:500; line-height:1.4; color:#ecc566;
+  background:var(--yellow-bg); border-radius:8px; padding:7px 10px;
+}
+.empty{padding:40px 24px; text-align:center; color:var(--muted); font-size:.95rem; line-height:1.5}
+/* Detail sheet */
+#overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:90;
+  opacity:0; pointer-events:none; transition:opacity .2s;
+}
+#overlay.open{opacity:1; pointer-events:auto}
+#sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:100;
+  background:#13263a; border-radius:20px 20px 0 0;
+  max-height:86vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  transform:translateY(105%); transition:transform .25s cubic-bezier(.3,.8,.3,1);
+  padding:10px 18px calc(env(safe-area-inset-bottom) + 24px);
+}
+#sheet.open{transform:translateY(0)}
+.grab{width:40px; height:4px; background:#3b566d; border-radius:2px; margin:4px auto 14px}
+#sheet h2{font-size:1.2rem; line-height:1.3; padding-right:36px}
+#sheet .scat{color:var(--muted); font-size:.82rem; margin:4px 0 14px}
+.verdict{
+  border-radius:12px; padding:12px 14px; font-weight:700; font-size:.95rem;
+  margin-bottom:16px; line-height:1.4;
+}
+.verdict small{display:block; font-weight:500; font-size:.8rem; margin-top:3px; opacity:.85}
+.v-green{background:var(--green-bg); color:#6fe09a}
+.v-yellow{background:var(--yellow-bg); color:#f2c95c}
+.v-grey{background:var(--grey-bg); color:#b8c7d4}
+.v-red{background:var(--red-bg); color:#f08a8e}
+.v-mod{background:var(--orange-bg); color:#f0b386}
+.v-mod .vfix{font-weight:500; font-size:.85rem; margin-top:7px; padding-left:2px}
+.v-mod .vfix b{color:#f6cba8}
+.matrix{display:grid; grid-template-columns:1fr 1fr; gap:7px}
+.cell{
+  border-radius:10px; padding:9px 11px; font-size:.82rem; font-weight:600;
+  display:flex; justify-content:space-between; align-items:center; gap:6px;
+}
+.cell span:last-child{font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.4px; flex:none}
+.c-ja{background:var(--red-bg); color:#f0989b}
+.c-spor{background:var(--yellow-bg); color:#ecc566}
+.c-nej{background:var(--green-bg); color:#84d9a5}
+.c-ukendt{background:var(--grey-bg); color:#9fb1c0}
+.cell.hl{outline:2px solid currentColor}
+.close-x{
+  position:absolute; top:14px; right:14px; width:30px; height:30px;
+  border-radius:50%; border:none; background:#27415a; color:var(--text); font-size:.95rem;
+}
+.foot{padding:28px 16px 40px; text-align:center; color:#5c7387; font-size:.72rem; line-height:1.6}
+.legend{display:flex; flex-wrap:wrap; gap:10px 16px; padding:14px 16px 0; font-size:.75rem; color:var(--muted)}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Allergi Guide <small id="updated"></small></h1>
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Søg ret…" autocomplete="off">
+    <button class="clear" id="qclear">✕</button>
+  </div>
+</header>
+
+<section>
+  <div class="label">Gæstens allergier – vælg én eller flere</div>
+  <div class="chips" id="achips"></div>
+</section>
+
+<div class="catbar" id="catbar"></div>
+
+<div class="legend">
+  <span><i style="background:var(--green)"></i>Kan spises</span>
+  <span><i style="background:var(--orange)"></i>Kan tilpasses</span>
+  <span><i style="background:var(--yellow)"></i>Spor af – advar gæsten</span>
+  <span><i style="background:var(--grey)"></i>Ukendt – spørg køkkenet</span>
+  <span><i style="background:var(--red)"></i>Kan ikke spises</span>
+</div>
+
+<div id="summary"></div>
+<main id="results"></main>
+
+<div class="foot">
+  Baseret på de 14 lovpligtige EU-allergener (forordning 1169/2011, bilag II).<br>
+  Kun retter markeret <b>“Nej”</b> i matrixen vises som grønne. Ved tvivl: spørg altid køkkenet.
+</div>
+
+<div id="overlay"></div>
+<div id="sheet"></div>
+
+<script>
+/* ====== DATA (genereret fra Allergi-Matrix CSV) ====== */
+const ALLERGENS = ["Gluten", "Laktose", "Nødder", "Æg", "Krebsdyr", "Fisk", "Jordnødder", "Soja", "Selleri", "Sesamfrø", "Lupin", "Sulfitter", "Bløddyr", "Sennep"];
+const DISHES = [{"n":"Meyers ølandshvede brød","k":"Øvrige","a":[1,0,0,0,0,0,0,0,0,2,0,0,0,0]},{"n":"Hønsesalat ( KUN HØNSESALATEN )","k":"Øvrige","a":[0,1,0,1,0,1,0,0,0,0,0,0,0,1]},{"n":"Blåbær yoghurt ( KUN YOGHURT! )","k":"Øvrige","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Porre tærte BRUNCHBUFFET","k":"Øvrige","a":[1,1,2,1,2,2,2,2,1,0,0,0,2,0]},{"n":"Ærte spread","k":"Øvrige","a":[0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Stegt flæsk","k":"Aften retter","a":[1,1,0,0,0,0,0,0,0,0,0,0,0,0],"m":{"0":"Servere uden sauce","1":"Servere uden sauce & sig til køkkenet de ikke skal vende kartoflerne i smør"}},{"n":"Black Angus med garniture","k":"Aften retter","a":[0,1,0,1,0,0,0,0,0,0,1,0,0,0],"m":{"1":"Servere uden bearnaise. Sig til køkken de skal stege uden smør","3":"Servere uden bearnaise"}},{"n":"Chili con carne","k":"Aften retter","a":[0,1,0,0,0,0,0,1,1,0,0,0,0,0]},{"n":"Okse mørbrad","k":"Aften retter","a":[0,1,0,1,0,0,0,0,0,0,0,0,0,0],"m":{"1":"Servere uden bearnaise. Sig til køkken de skal stege uden smør","3":"Servere uden bearnaise"}},{"n":"Wienerschnitzel","k":"Aften retter","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Ærte pasta med burrata","k":"Aften retter","a":[1,1,0,0,0,0,0,2,0,0,0,0,0,2]},{"n":"Rabarber crumble","k":"Aften retter","a":[1,1,2,0,0,0,0,0,0,0,0,0,0,0],"m":{"0":"Servere uden crumble","1":"Servere uden crumble","2":"Servere uden crumble"}},{"n":"Bagt torsk","k":"Aften retter","a":[0,1,0,1,0,1,0,0,0,0,0,0,0,1],"m":{"1":"Uden sauce, og sig til køkkenet, uden smør i kartofler","13":"Servere uden hollandaise","3":"Servere uden hollandaise"}},{"n":"Fiskefilet med remo","k":"Børneretter","a":[1,0,0,1,0,1,0,0,1,0,0,1,0,1]},{"n":"Børne burger","k":"Børneretter","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0],"m":{"0":"Servere i glutenfri bolle","1":"Servere i glutenfri bolle"}},{"n":"Nuggets med ketchup","k":"Børneretter","a":[1,1,0,1,0,0,0,0,1,0,0,0,0,0]},{"n":"Kaiser burger","k":"Burger","a":[1,1,0,1,0,0,0,0,0,0,0,1,0,0],"m":{"0":"Servere i glutenfri bolle","1":"Servere i glutenfri bolle & uden mayo","11":"Servere uden syltet agurker","3":"Servere uden mayo"}},{"n":"Mexikansk burger","k":"Burger","a":[1,1,0,1,0,0,0,0,0,2,0,0,0,0],"m":{"0":"Servere i glutenfri bolle","1":"Servere i glutenfri bolle","9":"Servere uden jalapeños","3":"Servere uden dressing"}},{"n":"Signatur burger","k":"Burger","a":[1,1,0,1,0,0,0,0,0,0,0,1,0,0],"m":{"0":"Servere i glutenfri bolle","1":"Servere uden dressing & i glutenfri bolle","11":"Servere uden dressing","3":"Servere uden dressing"}},{"n":"Bearnaise burger","k":"Burger","a":[1,1,0,1,0,0,0,0,0,0,0,1,0,0],"m":{"0":"Servere i glutenfri bolle & uden friteret løgringe","1":"Servere i glutenfri bolle & uden bearnaise","3":"Servere uden bearnaise & uden mayo"}},{"n":"Blåbær yoghurt","k":"Byg selv brunch","a":[1,1,1,0,0,0,2,0,0,0,0,0,0,0],"m":{"0":"Servere uden granola","6":"Servere uden granola","2":"Servere uden granola"}},{"n":"Røræg m. bacon & purløg","k":"Byg selv brunch","a":[0,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Chiagrød med mango","k":"Byg selv brunch","a":[0,1,2,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Spejlæg med purløg","k":"Byg selv brunch","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Havarti med hjemmelavet jordbær syltetøj","k":"Byg selv brunch","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,3]},{"n":"Mini rösti med trøffel & serrano skinke","k":"Byg selv brunch","a":[0,1,0,1,0,0,0,0,0,0,0,1,0,0],"m":{"11":"Servere uden trøffel mayo","3":"Servere uden trøffel mayo"}},{"n":"Hjemmelavet hønsesalat med bacon & tomat","k":"Byg selv brunch","a":[0,1,0,1,0,0,0,0,0,0,0,1,0,1]},{"n":"Avocado med hytteost med syltet rødløg & crispy chili","k":"Byg selv brunch","a":[0,1,0,0,0,0,0,1,0,0,0,1,0,0],"m":{"1":"Uden hytteost","7":"Uden crispy chili","11":"Uden syltet rødløg"}},{"n":"Cæsar salat","k":"Byg selv brunch","a":[1,1,2,1,0,1,0,0,0,0,0,1,0,1],"m":{"5":"Servere uden dressing, vi har ansjoser i vores dressing","0":"Servere uden croutoner","1":"Servere uden ost & dressing, vi har parmesan i vores dressing","2":"Uden dressing","13":"Uden dressing","11":"Uden dressing","3":"Uden dressing"}},{"n":"Frugt skål","k":"Byg selv brunch","a":[0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Brunchpølser med ramsløg & æble","k":"Byg selv brunch","a":[0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Crispy chicken med chili mayo","k":"Byg selv brunch","a":[1,0,0,1,0,0,0,0,1,0,0,1,0,0],"m":{"11":"Servere uden chili mayo","3":"Servere uden chili mayo"}},{"n":"Koldrøget laks med citron mayo & rugbrød","k":"Byg selv brunch","a":[1,0,2,1,0,1,0,0,1,2,0,1,0,1]},{"n":"Bananbite med limecreme & pistage","k":"Byg selv brunch","a":[1,1,1,0,0,0,0,1,0,0,0,1,0,0]},{"n":"Kaffe trifli med kaffe sirup","k":"Byg selv brunch","a":[1,1,1,1,0,0,0,1,0,0,0,0,0,0]},{"n":"Kanelsnurre med vegansk fløde & tørret kornblomst","k":"Byg selv brunch","a":[1,1,0,1,0,0,0,1,0,0,0,0,0,0]},{"n":"Croissaint","k":"Byg selv brunch","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Ølands hvedetoast","k":"Byg selv brunch","a":[1,1,0,0,0,0,0,0,0,0,0,0,0,0],"m":{"1":"Servere uden ost & pesto"}},{"n":"Amerikanske pandekager","k":"Byg selv brunch","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Pølser - BRUNCHBUFFET","k":"Byg selv brunch","a":[1,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Øllebrød - Brunchbræt","k":"Byg selv brunch","a":[1,0,2,0,0,0,2,0,0,0,0,0,0,0]},{"n":"Rabarber crumble - Brunchbræt","k":"Byg selv brunch","a":[1,1,2,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Jordbær kage Brunch byg selv","k":"Byg selv brunch","a":[1,1,1,1,0,0,0,2,0,0,0,0,0,0]},{"n":"Stracciatellaost med fersken byg selv brunch","k":"Byg selv brunch","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0],"m":{"1":"Servere uden ost"}},{"n":"Koldskål med kammerjunker - Byg selv brunch","k":"Byg selv brunch","a":[1,1,2,1,0,0,2,0,0,0,0,0,0,0],"m":{"3":"Servere uden trøffel mayo"}},{"n":"Meyers chokolade brownie","k":"Desserter","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Brownie med chokolade mousse & bær kompot","k":"Desserter","a":[1,1,0,1,0,0,0,1,0,0,0,0,0,3]},{"n":"Pandekager med vanilje is","k":"Desserter","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,3]},{"n":"Æblekage ( Kageskab )","k":"Desserter","a":[1,1,2,1,0,0,0,2,0,0,0,0,0,0]},{"n":"Trøffelkugler med saltkaramel","k":"Desserter","a":[1,1,1,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Hindbær Domé ( Kageskab )","k":"Desserter","a":[1,1,1,1,0,0,2,0,0,0,0,0,0,0]},{"n":"Gulerodskage - KAGESKAB","k":"Desserter","a":[1,1,1,1,0,0,0,2,0,0,0,0,0,0]},{"n":"Prag ckokoladekage - Kageskab","k":"Desserter","a":[1,1,2,1,0,0,0,1,0,2,2,0,0,0]},{"n":"Hvidløgs mayo","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,1,0,0]},{"n":"Chili mayo","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,1,0,0]},{"n":"Remolaude","k":"Dips","a":[1,0,0,1,0,0,0,0,0,0,0,1,0,1]},{"n":"Ketchup","k":"Dips","a":[0,0,0,0,0,0,0,0,0,0,0,1,0,0]},{"n":"Cæsar mayo","k":"Dips","a":[0,1,0,1,0,1,0,0,0,0,0,1,0,0]},{"n":"Honning/senneps dressing ( Lakse salat )","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Pesto","k":"Dips","a":[0,1,1,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Signatur dressing","k":"Dips","a":[0,1,0,1,0,0,0,0,0,0,0,1,0,1]},{"n":"Trøffel mayo","k":"Dips","a":[0,0,0,1,0,1,0,0,0,0,0,1,0,0]},{"n":"Karry dressing","k":"Dips","a":[0,1,0,1,0,0,0,0,0,0,0,1,0,0]},{"n":"Sauce tatar","k":"Dips","a":[0,1,0,1,0,0,0,0,0,0,0,1,0,1]},{"n":"Citron mayo","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,1]},{"n":"1000 island (Stjerneskud)","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,1]},{"n":"Bearnaise sauce","k":"Dips","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Persille sovs til flæsk","k":"Dips","a":[1,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Brun sauce ( Wienersnitzel )","k":"Dips","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Peber sauce","k":"Dips","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Fish and chips","k":"Lune retter","a":[1,1,0,1,0,1,0,0,0,0,0,1,0,1]},{"n":"Stjerneskud","k":"Lune retter","a":[1,1,0,1,1,1,0,0,0,0,0,1,0,0]},{"n":"Pariserbøf","k":"Lune retter","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,1],"m":{"0":"Glutenfrit brød & servere uden pickles, det indeholder gluten","3":"Uden æggeblomme","13":"Servere uden pickles"}},{"n":"Kyllingwrap","k":"Lune retter","a":[1,1,0,1,0,0,0,0,0,0,0,1,0,0]},{"n":"Ostemad","k":"Morgenmad","a":[1,1,0,0,0,0,0,0,0,2,0,0,0,0],"m":{"0":"Glutenfrit brød"}},{"n":"Røræg BRUNCH BUFFET","k":"Morgenmad","a":[0,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Bacon BRUNCH BUFFET","k":"Morgenmad","a":[0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Pølser BRUNCH BUFFET","k":"Morgenmad","a":[1,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Crispy chicken med citron & rosmarin BRUNCHBUFFET","k":"Morgenmad","a":[1,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Hashbrowns med løg - BRUNCH BUFFET","k":"Morgenmad","a":[2,2,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Pandekager BRUNCH BUFFET","k":"Morgenmad","a":[1,1,2,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Vafler BRUNCH BUFFET","k":"Morgenmad","a":[1,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Chokolademousse med crumble BRUNCH BUFFET","k":"Morgenmad","a":[1,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Chiagrød med mango BRUNCH BUFFET","k":"Morgenmad","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Saltkaramel kage BRUNCH BUFFET","k":"Morgenmad","a":[1,1,2,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Tunmousse","k":"Morgenmad","a":[0,1,0,1,0,0,0,0,0,0,0,0,0,1]},{"n":"Røræg BUFFET","k":"Morgenmad","a":[0,1,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Bacon - BUFFET","k":"Morgenmad","a":[0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Crispy chicken - BUFFET","k":"Morgenmad","a":[1,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Cæsar salat","k":"Salater","a":[1,1,2,1,0,1,0,0,0,0,0,1,0,1],"m":{"5":"Servere uden dressing, vi har ansjoser i vores dressing","0":"Servere uden croutoner","1":"Servere uden dressing, vi har parmesan i vores dressing","13":"Servere uden dressing","11":"Servere uden dressing","3":"Servere uden dressing"}},{"n":"Pokebowl","k":"Salater","a":[1,0,1,0,0,0,1,1,0,1,0,1,0,0]},{"n":"Lakse salat","k":"Salater","a":[0,0,0,1,0,1,0,0,0,0,0,0,0,1]},{"n":"Kylling sandwich","k":"Sandwich","a":[1,1,0,1,0,0,0,0,1,0,0,1,0,0],"m":{"0":"Servere i glutenfrit brød","1":"Servere i glutenfrit brød & uden dressing","11":"Servere uden dressing","3":"Servere uden dressing"}},{"n":"Oksemørbrad sandwich","k":"Sandwich","a":[1,1,0,1,0,0,0,0,0,0,0,1,0,0],"m":{"0":"Glutenfrit brød","1":"Servere uden ost og blødeløg","11":"Servere uden dressing + dip til fritter","3":"Servere uden dressing & ost samt dip til fritter"}},{"n":"Tunmousse sandwich","k":"Sandwich","a":[1,1,0,1,0,1,0,0,0,0,0,1,0,0],"m":{"0":"Glutenfrit brød"}},{"n":"Serrano sandwich","k":"Sandwich","a":[1,1,1,0,0,0,0,0,0,0,0,0,0,0]},{"n":"Fiskefilet med remo","k":"Smørrebrød","a":[1,1,0,1,0,1,0,0,0,2,0,1,0,3]},{"n":"Æg & rejer","k":"Smørrebrød","a":[1,1,0,1,1,0,0,0,0,2,0,1,0,3],"m":{"0":"Servere på Glutenfrit brød"}},{"n":"Roastbeef","k":"Smørrebrød","a":[1,1,0,1,0,0,0,0,0,2,0,1,0,3],"m":{"3":"Servere uden æg & mayo"}},{"n":"Hakkebøf med blødeløg & spejlæg","k":"Smørrebrød","a":[1,1,0,1,0,0,0,0,0,2,0,0,0,3],"m":{"0":"Servere på glutenfrit brød","1":"Servere uden blødeløg","3":"Servere uden spejlæg"}},{"n":"Hønsesalat med bacon","k":"Smørrebrød","a":[1,1,0,1,0,0,0,0,0,2,0,1,0,1],"m":{"0":"Servere på glutenfrit brød"}},{"n":"Nachos","k":"Snacks","a":[0,1,0,0,0,0,0,0,0,0,0,0,0,0],"m":{"1":"Servere uden ost & cremefraiche"}},{"n":"Pommes med hvidløg mayo & ketchup","k":"Snacks","a":[0,0,0,1,0,0,0,0,0,0,0,0,0,0]},{"n":"Snack kurv med chili mayo","k":"Snacks","a":[1,1,0,1,0,0,0,0,1,0,0,1,0,0]}];
+const UPDATED = "10/06-2026";
+/* værdier: 0=Nej, 1=Ja, 2=Spor af, 3=Ukendt */
+
+const VAL = {0:"nej",1:"ja",2:"spor",3:"ukendt"};
+const VALTXT = {0:"Nej",1:"JA",2:"Spor af",3:"Ukendt"};
+
+let selAll = new Set();   // valgte allergener (index)
+let selCat = "";          // valgt kategori
+let query = "";
+
+document.getElementById("updated").textContent = "Opdateret " + UPDATED;
+
+/* ---- allergen-chips ---- */
+const achips = document.getElementById("achips");
+ALLERGENS.forEach((a,i)=>{
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = a;
+  b.onclick = ()=>{ selAll.has(i) ? selAll.delete(i) : selAll.add(i); b.classList.toggle("on"); render(); };
+  achips.appendChild(b);
+});
+
+/* ---- kategori-bar ---- */
+const cats = [...new Set(DISHES.map(d=>d.k))];
+const catbar = document.getElementById("catbar");
+const allBtn = document.createElement("button");
+allBtn.className = "cat on"; allBtn.textContent = "Alle";
+allBtn.onclick = ()=>{ selCat=""; setCat(allBtn); };
+catbar.appendChild(allBtn);
+cats.forEach(c=>{
+  const b = document.createElement("button");
+  b.className = "cat"; b.textContent = c;
+  b.onclick = ()=>{ selCat=c; setCat(b); };
+  catbar.appendChild(b);
+});
+function setCat(btn){
+  catbar.querySelectorAll(".cat").forEach(x=>x.classList.remove("on"));
+  btn.classList.add("on"); render();
+}
+
+/* ---- søgning ---- */
+const qEl = document.getElementById("q"), qClear = document.getElementById("qclear");
+qEl.addEventListener("input", ()=>{ query = qEl.value.trim().toLowerCase(); qClear.style.display = query?"block":"none"; render(); });
+qClear.onclick = ()=>{ qEl.value=""; query=""; qClear.style.display="none"; render(); qEl.blur(); };
+
+/* ---- klassificering ----
+   For valgte allergener: værste værdi afgør gruppen.
+   "Ja" UDEN tilpasning = rød. "Ja" MED tilpasning = orange (kan tilpasses).
+   Spor af = gul (evt. med tilpasningstip). Ukendt = grå.
+   Kun "nej" på ALLE valgte = grøn. */
+function classify(d){
+  if (selAll.size === 0) return {grp:"none"};
+  let ja=[], fixes=[], spor=[], ukendt=[], tips=[];
+  for (const i of selAll){
+    const v = d.a[i], m = d.m && d.m[i];
+    if (v===1){ m ? fixes.push([i,m]) : ja.push(ALLERGENS[i]); }
+    else if (v===2){ spor.push(ALLERGENS[i]); if (m) tips.push([i,m]); }
+    else if (v===3) ukendt.push(ALLERGENS[i]);
+  }
+  if (ja.length)     return {grp:"red",    why:"Indeholder: "+ja.join(", ")};
+  if (fixes.length)  return {grp:"mod",    why:"Kan tilpasses: "+fixes.map(f=>ALLERGENS[f[0]]).join(", "), fixes, spor, ukendt, tips};
+  if (spor.length)   return {grp:"yellow", why:"Spor af: "+spor.join(", "), tips};
+  if (ukendt.length) return {grp:"grey",   why:"Ukendt: "+ukendt.join(", ")};
+  return {grp:"green", why:"Fri for valgte allergener"};
+}
+
+/* ---- render ---- */
+const GROUPS = [
+  ["green","✅ Kan spises"],
+  ["mod","🔧 Kan tilpasses"],
+  ["yellow","⚠️ Spor af – advar gæsten"],
+  ["grey","❓ Ukendt – spørg køkkenet"],
+  ["red","⛔ Kan ikke spises"]
+];
+
+function render(){
+  const res = document.getElementById("results");
+  const sum = document.getElementById("summary");
+  res.innerHTML = "";
+
+  let list = DISHES.filter(d =>
+    (!selCat || d.k===selCat) &&
+    (!query || d.n.toLowerCase().includes(query))
+  );
+
+  if (selAll.size === 0){
+    sum.style.display = "none";
+    if (!list.length){ res.innerHTML = '<div class="empty">Ingen retter matcher søgningen.</div>'; return; }
+    // uden valgte allergier: vis liste pr. kategori
+    const byCat = {};
+    list.forEach(d=>{ (byCat[d.k] = byCat[d.k]||[]).push(d); });
+    for (const c of Object.keys(byCat)){
+      const g = document.createElement("div"); g.className="group";
+      g.innerHTML = `<div class="group-h">${c} <span class="badge">${byCat[c].length}</span></div>`;
+      byCat[c].forEach(d=> g.appendChild(card(d,null)));
+      res.appendChild(g);
+    }
+    return;
+  }
+
+  const buckets = {green:[],mod:[],yellow:[],grey:[],red:[]};
+  list.forEach(d=>{ const r = classify(d); buckets[r.grp].push([d,r]); });
+
+  sum.style.display = "block";
+  sum.innerHTML = `Allergi: <b>${[...selAll].map(i=>ALLERGENS[i]).join(", ")}</b> &nbsp;·&nbsp; <b>${buckets.green.length}</b> kan spises &nbsp;·&nbsp; <b>${buckets.mod.length}</b> kan tilpasses`;
+
+  let any = false;
+  for (const [key,title] of GROUPS){
+    if (!buckets[key].length) continue;
+    any = true;
+    const g = document.createElement("div"); g.className = "group g-"+key;
+    g.innerHTML = `<div class="group-h">${title} <span class="badge">${buckets[key].length}</span></div>`;
+    buckets[key].forEach(([d,r])=> g.appendChild(card(d,r)));
+    res.appendChild(g);
+  }
+  if (!any) res.innerHTML = '<div class="empty">Ingen retter matcher søgningen.</div>';
+}
+
+function card(d, r){
+  const b = document.createElement("button");
+  b.className = "dish";
+  let extra = "";
+  if (r && r.grp==="mod"){
+    extra = `<div class="fixes">` +
+      r.fixes.map(([i,m])=>`<div class="fix"><b>${ALLERGENS[i]}:</b> ${m}</div>`).join("") +
+      (r.spor.length ? `<div class="tip">⚠️ Har stadig spor af: ${r.spor.join(", ")}</div>` : "") +
+      (r.ukendt.length ? `<div class="tip">❓ Ukendt for: ${r.ukendt.join(", ")} – spørg køkkenet</div>` : "") +
+      `</div>`;
+  } else if (r && r.grp==="yellow" && r.tips && r.tips.length){
+    extra = `<div class="fixes">` +
+      r.tips.map(([i,m])=>`<div class="tip"><b>${ALLERGENS[i]}:</b> ${m}</div>`).join("") + `</div>`;
+  }
+  b.innerHTML = `<div class="nm"><div class="t">${d.n}</div><div class="c">${d.k}</div></div>` +
+                (r && r.grp!=="none" ? `<div class="why">${r.why}</div>` : "") + extra;
+  b.onclick = ()=> openSheet(d);
+  return b;
+}
+
+/* ---- detalje-sheet ---- */
+const overlay = document.getElementById("overlay"), sheet = document.getElementById("sheet");
+function openSheet(d){
+  const r = classify(d);
+  let verdict = "";
+  if (selAll.size){
+    const names = [...selAll].map(i=>ALLERGENS[i]).join(", ");
+    if (r.grp==="red")    verdict = `<div class="verdict v-red">⛔ Kan IKKE serveres<small>${r.why}</small></div>`;
+    if (r.grp==="mod"){
+      verdict = `<div class="verdict v-mod">🔧 Kan serveres med tilpasning` +
+        r.fixes.map(([i,m])=>`<div class="vfix"><b>${ALLERGENS[i]}:</b> ${m}</div>`).join("") +
+        (r.spor.length ? `<div class="vfix">⚠️ Har stadig spor af: ${r.spor.join(", ")} – advar gæsten.</div>` : "") +
+        (r.ukendt.length ? `<div class="vfix">❓ Ukendt for: ${r.ukendt.join(", ")} – spørg køkkenet.</div>` : "") +
+        `<small>Husk at give besked til køkkenet ved bestilling.</small></div>`;
+    }
+    if (r.grp==="yellow") verdict = `<div class="verdict v-yellow">⚠️ ${r.why}<small>Advar gæsten om risiko for krydskontaminering.</small>` +
+        (r.tips && r.tips.length ? r.tips.map(([i,m])=>`<div class="vfix"><b>${ALLERGENS[i]}:</b> ${m}</div>`).join("") : "") + `</div>`;
+    if (r.grp==="grey")   verdict = `<div class="verdict v-grey">❓ ${r.why}<small>Data mangler – spørg køkkenet før servering.</small></div>`;
+    if (r.grp==="green")  verdict = `<div class="verdict v-green">✅ Fri for: ${names}<small>Iflg. allergen-matrixen. Ved tvivl: bekræft med køkkenet.</small></div>`;
+  }
+  let allMods = "";
+  if (d.m){
+    const keys = Object.keys(d.m);
+    allMods = `<div class="label" style="margin:16px 0 8px">Mulige tilpasninger</div>` +
+      keys.map(k=>`<div class="fix" style="margin-bottom:5px"><b>${ALLERGENS[k]}:</b> ${d.m[k]}</div>`).join("");
+  }
+  let cells = "";
+  ALLERGENS.forEach((a,i)=>{
+    const v = d.a[i];
+    cells += `<div class="cell c-${VAL[v]} ${selAll.has(i)?"hl":""}"><span>${a}</span><span>${VALTXT[v]}</span></div>`;
+  });
+  sheet.innerHTML = `<div class="grab"></div><button class="close-x" id="shx">✕</button>
+    <h2>${d.n}</h2><div class="scat">${d.k}</div>${verdict}
+    <div class="label" style="margin-bottom:8px">Alle 14 allergener</div>
+    <div class="matrix">${cells}</div>${allMods}`;
+  document.getElementById("shx").onclick = closeSheet;
+  overlay.classList.add("open"); sheet.classList.add("open");
+}
+function closeSheet(){ overlay.classList.remove("open"); sheet.classList.remove("open"); }
+overlay.onclick = closeSheet;
+
+render();
+
+/* ---- service worker ---- */
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
