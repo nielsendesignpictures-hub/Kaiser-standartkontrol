@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kaiser – Kitchen Hub</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
   <style>
     :root{
       --bg0:#0d1117;
@@ -23,7 +21,6 @@
       --ok:#62d26f;
       --shadow:0 20px 60px rgba(0,0,0,.40);
     }
-
     *{box-sizing:border-box;}
     html,body{height:100%;margin:0;}
     body{
@@ -44,81 +41,93 @@
       background-size:40px 40px;
       opacity:0.08; pointer-events:none;
     }
+    .shell{max-width:1200px;margin:0 auto;padding:14px 14px 32px;}
 
-    .shell{max-width:1200px;margin:0 auto;padding:12px 12px 28px;}
-    .shell.rush .clockTime{font-size:72px;}
-    .shell.rush .presetBtn{padding:14px 14px;font-size:14px;}
-    .shell.rush .tCard{width:280px;}
-    .shell.rush .tTime{font-size:34px;}
-
+    /* ===== HEADER ===== */
     .top{
       border-radius:22px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:14px 14px 12px;
-    }
-
-    .kicker{
+      padding:18px 16px 16px;
       text-align:center;
+    }
+    .kicker{
       font-size:10px;
-      letter-spacing:.26em;
+      letter-spacing:.30em;
       text-transform:uppercase;
       color:var(--muted2);
       font-weight:900;
     }
-
     .title{
-      text-align:center;
       font-family:"Playfair Display",serif;
-      font-size:clamp(30px,6vw,42px);
+      font-size:clamp(30px,6vw,44px);
       line-height:1;
       margin-top:6px;
       letter-spacing:-.03em;
     }
-
-    .topRow{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin-top:12px;
+    .subtitle{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:600;
+      color:var(--muted);
     }
-
-    .locationPill,.controlBtn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      min-height:42px;
-      padding:10px 12px;
+    .versionPill{
+      display:inline-block;
+      margin-top:12px;
+      padding:5px 12px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(214,178,74,0.4);
+      background:rgba(214,178,74,0.14);
+      color:var(--gold);
       font-size:10px;
       font-weight:800;
-      letter-spacing:.08em;
+      letter-spacing:.10em;
       text-transform:uppercase;
-      color:rgba(255,255,255,0.92);
-      text-align:center;
     }
 
+    /* ===== STATUS STRIP ===== */
+    .statusStrip{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:12px;
+    }
+    @media(max-width:720px){ .statusStrip{grid-template-columns:1fr;} }
+    .stCard{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+    .stLabel{
+      font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
+    }
+    .stLoc{font-size:18px;font-weight:800;margin-top:6px;}
+    .stSub{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600;}
+    .stTime{
+      font-family:"Playfair Display",serif;font-size:34px;font-weight:700;line-height:1;margin-top:6px;
+    }
     .controls{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:8px;
+      margin-top:12px;
     }
-
     .controlBtn{
-      cursor:pointer;
-      transition:.15s ease;
-      user-select:none;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      min-height:42px;
+      padding:10px 8px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:rgba(255,255,255,0.92);
+      cursor:pointer;transition:.15s ease;user-select:none;
     }
     .controlBtn:hover{background:rgba(255,255,255,0.10);}
-    .controlBtn.on{
-      background:rgba(214,178,74,0.18);
-      border-color:rgba(214,178,74,0.42);
-      color:var(--gold);
-    }
+    .controlBtn.on{background:rgba(214,178,74,0.18);border-color:rgba(214,178,74,0.42);color:var(--gold);}
 
     .clockCard{
       margin-top:12px;
@@ -126,127 +135,141 @@
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:16px 12px 14px;
+      padding:18px 12px 16px;
       text-align:center;
       display:none;
     }
     .clockCard.show{display:block;}
-    .clockTime{
-      font-family:"Playfair Display",serif;
-      font-size:60px;
-      line-height:1;
-      letter-spacing:-.03em;
-      font-weight:700;
-    }
-    .clockDate{
-      margin-top:6px;
-      color:var(--muted);
-      font-weight:700;
-      font-size:14px;
-    }
+    .clockTime{font-family:"Playfair Display",serif;font-size:60px;line-height:1;letter-spacing:-.03em;font-weight:700;}
+    .clockDate{margin-top:6px;color:var(--muted);font-weight:700;font-size:14px;}
 
-    .widgetGrid{
+    /* ===== CARD GRID ===== */
+    .gridLabel{
+      margin:20px 4px 10px;
+      display:flex;align-items:center;gap:10px;
+      font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    }
+    .gridLabel .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);}
+    .cardGrid{
       display:grid;
-      grid-template-columns:1fr;
+      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
       gap:12px;
-      margin-top:12px;
     }
-
-    .widget{
-      border-radius:22px;
+    .toolCard{
+      position:relative;
+      border-radius:20px;
       border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       box-shadow:var(--shadow);
-      padding:14px;
-    }
-
-    .widgetHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:10px;
-    }
-
-    .widgetTitle{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:var(--muted);
-    }
-
-    .widgetDot{
-      width:8px;height:8px;border-radius:50%;background:var(--gold);
-    }
-
-    .miniBtn{
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.92);
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
+      padding:18px;
       cursor:pointer;
+      display:flex;flex-direction:column;gap:8px;
+      min-height:172px;
+      transition:.16s ease;
     }
-
-    .kPctBig{
-      font-family:"Playfair Display",serif;
-      font-size:44px;
-      line-height:1;
-      font-weight:700;
+    .toolCard:hover{border-color:rgba(214,178,74,0.42);transform:translateY(-3px);}
+    .toolCard.active{border-color:rgba(214,178,74,0.6);box-shadow:0 0 0 1px rgba(214,178,74,0.3), var(--shadow);}
+    .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+    .cardIcon{font-size:30px;line-height:1;}
+    .cardBadge{
+      padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;
+      border:1px solid rgba(214,178,74,0.35);background:rgba(214,178,74,0.14);color:var(--gold);
+      white-space:nowrap;
     }
+    .cardBadge.alert{border-color:rgba(255,107,107,0.4);background:rgba(255,107,107,0.16);color:var(--danger);}
+    .cardBadge.warn{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.16);color:var(--warn);}
+    .cardBadge.neutral{border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:var(--muted);}
+    .cardTag{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+    .cardTitle{font-size:18px;font-weight:800;line-height:1.15;}
+    .cardDesc{font-size:12.5px;color:var(--muted);line-height:1.4;}
+    .cardOpen{margin-top:auto;font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.04em;}
 
-    .kPctSub{
-      margin-top:6px;
-      font-size:13px;
-      font-weight:700;
-      color:var(--muted);
-    }
-
-    .widgetSubLine{
-      margin-top:8px;
-      font-size:11px;
-      font-weight:700;
-      color:var(--muted2);
-    }
-
-    .errBox{
-      padding:12px;
-      background:rgba(255,107,107,0.15);
-      color:var(--danger);
-      border-radius:12px;
-      font-weight:700;
-      font-size:12px;
+    /* ===== PANELS ===== */
+    .panel{
+      margin-top:14px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);
+      box-shadow:var(--shadow);
+      padding:16px;
       display:none;
-      margin-top:10px;
     }
-
-    .cMiniList{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      max-height:220px;
-      overflow:auto;
+    .panel.open{display:block;}
+    .panelHead{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;
     }
-
-    .cMiniEvent{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:10px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.10);
-      cursor:pointer;
+    .panelTitle{
+      display:flex;align-items:center;gap:10px;
+      font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
     }
+    .panelDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
+    .miniBtn,.closePanelBtn{
+      padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.92);
+      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+    }
+    .panelSub{font-size:11px;font-weight:700;color:var(--muted2);}
 
+    .presetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+    @media(max-width:560px){ .presetGrid{grid-template-columns:repeat(2,1fr);} }
+    .presetBtn{
+      padding:12px 10px;border-radius:16px;border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.95);
+      font-weight:900;font-size:13px;cursor:pointer;text-align:center;
+    }
+    .presetBtn:hover{background:rgba(255,255,255,0.10);}
+    .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
+    .input,.select{
+      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.08);padding:12px 14px;outline:none;color:var(--text);
+      font-weight:700;font-size:14px;
+    }
+    .input::placeholder{color:rgba(255,255,255,0.45);}
+    .input:focus,.select:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+    .select option{background:#161b22;color:#fff;}
+    .actionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .btn{
+      display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 12px;
+      border-radius:14px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.08);
+      color:rgba(255,255,255,0.95);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+      cursor:pointer;text-align:center;
+    }
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
+    .timerList{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin-top:14px;}
+    .tCard{
+      flex:0 0 auto;width:260px;border-radius:18px;border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      padding:12px;position:relative;
+    }
+    .tCard.critical{
+      border-color:rgba(245,158,11,0.45);
+      box-shadow:0 0 0 1px rgba(245,158,11,0.2), 0 0 22px rgba(245,158,11,0.12);
+      animation:pulseWarn 1.2s infinite;
+    }
+    .tCard.expired{border-color:rgba(255,107,107,0.38);box-shadow:0 0 0 1px rgba(255,107,107,0.18);}
+    @keyframes pulseWarn{
+      0%,100%{box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 18px rgba(245,158,11,0.08);}
+      50%{box-shadow:0 0 0 1px rgba(245,158,11,0.32), 0 0 24px rgba(245,158,11,0.20);}
+    }
+    .tTag{position:absolute;top:10px;right:10px;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+    .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
+    .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
+    .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
+    .tTag.alarm{background:rgba(245,158,11,0.22);border:1px solid rgba(245,158,11,0.5);color:#ffd089;}
+    .tName{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:60px;}
+    .tTime{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;margin-top:6px;line-height:1;}
+    .tMeta{font-size:11px;color:var(--muted);margin-top:6px;}
+    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
+    .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));}
+    .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
+    .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
+    .tActions{margin-top:10px;display:flex;justify-content:flex-end;}
+    .smallBtn{padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
+    .emptyState{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
+
+    .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto;}
+    .cMiniEvent{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);cursor:pointer;}
     .cMiniBar{width:5px;height:42px;border-radius:4px;flex:0 0 auto;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
@@ -256,262 +279,54 @@
     .cMiniTitle{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .cMiniMeta{font-size:11px;color:var(--muted);margin-top:3px;}
     .cMiniEmpty{text-align:center;padding:22px;color:var(--muted2);font-size:13px;}
+    .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:700;font-size:12px;display:none;margin-top:10px;}
 
-    .section{
-      margin-top:12px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      overflow:hidden;
-      box-shadow:var(--shadow);
-    }
-
-    .sectionHead{
-      padding:12px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      background:rgba(255,255,255,0.03);
-      cursor:pointer;
-    }
-
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:var(--muted);
-    }
-
-    .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
-    .sectionRight{display:flex;align-items:center;gap:10px;}
-    .sectionCount{font-size:12px;font-weight:800;color:var(--gold);}
-    .sectionArrow{font-size:14px;color:var(--muted);transition:transform .2s;}
-    .sectionArrow.open{transform:rotate(180deg);}
-    .divider{height:1px;background:rgba(255,255,255,0.10);}
-    .sectionBody{display:none;padding:14px;}
-    .sectionBody.open{display:block;}
-
-    .presetGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-      margin-bottom:12px;
-    }
-
-    .presetBtn{
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.95);
-      font-weight:900;
-      font-size:13px;
-      cursor:pointer;
-      text-align:center;
-    }
-
-    .timerRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-bottom:10px;
-    }
-
-    .input, .select{
-      width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.08);
-      padding:12px 14px;
-      outline:none;
-      color:var(--text);
-      font-weight:700;
-      font-size:14px;
-    }
-
-    .input::placeholder{color:rgba(255,255,255,0.45);}
-    .input:focus,.select:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
-    .select option{background:#161b22;color:#fff;}
-
-    .actionGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-    }
-
-    .btn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      min-height:44px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.08);
-      color:rgba(255,255,255,0.95);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-      text-align:center;
-    }
-    .btn.primary{
-      border:none;
-      background:linear-gradient(135deg,var(--gold),var(--gold2));
-      color:#0b0c0f;
-    }
-
-    .timerList{
-      display:flex;
-      gap:10px;
-      overflow-x:auto;
-      padding-bottom:4px;
-      margin-top:10px;
-    }
-
-    .tCard{
-      flex:0 0 auto;
-      width:260px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      padding:12px;
-      position:relative;
-    }
-
-    .tCard.critical{
-      border-color:rgba(245,158,11,0.45);
-      box-shadow:0 0 0 1px rgba(245,158,11,0.2), 0 0 22px rgba(245,158,11,0.12);
-      animation:pulseWarn 1.2s infinite;
-    }
-    .tCard.expired{
-      border-color:rgba(255,107,107,0.38);
-      box-shadow:0 0 0 1px rgba(255,107,107,0.18);
-    }
-
-    @keyframes pulseWarn{
-      0%,100%{box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 18px rgba(245,158,11,0.08);}
-      50%{box-shadow:0 0 0 1px rgba(245,158,11,0.32), 0 0 24px rgba(245,158,11,0.20);}
-    }
-
-    .tTag{
-      position:absolute;
-      top:10px;right:10px;
-      padding:5px 8px;
-      border-radius:999px;
-      font-size:9px;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
-    .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
-    .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
-    .tTag.alarm{background:rgba(245,158,11,0.22);border:1px solid rgba(245,158,11,0.5);color:#ffd089;}
-
-    .tName{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:60px;}
-    .tTime{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;margin-top:6px;line-height:1;}
-    .tMeta{font-size:11px;color:var(--muted);margin-top:6px;}
-    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
-    .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));}
-    .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
-    .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
-
-    .tActions{margin-top:10px;display:flex;justify-content:flex-end;}
-    .smallBtn{
-      padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);
-      font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
-    }
-    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
-
-    .toolsGrid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-    }
-
-    .toolItem{
-      padding:14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      display:flex;
-      align-items:center;
-      gap:12px;
-      cursor:pointer;
-    }
-
-    .toolIcon{font-size:24px;}
-    .toolName{font-size:14px;font-weight:800;}
-    .toolDesc{font-size:12px;color:var(--muted);margin-top:3px;}
-
+    /* ===== TOOL VIEWER ===== */
     .toolViewer{display:none;margin-top:14px;}
     .toolViewer.open{display:block;}
     .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;}
+    .toolNamePill{
+      display:flex;align-items:center;gap:6px;min-height:42px;padding:10px 14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);
+      font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.92);
+    }
     .frame{width:100%;height:68vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.25);}
 
-    .emptyState{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
-
-    .modalBack{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.6);
-      display:none; align-items:center; justify-content:center;
-      padding:20px; z-index:9999;
-    }
+    /* ===== MODAL ===== */
+    .modalBack{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999;}
     .modalBack.open{display:flex;}
-    .modal{
-      width:min(700px, 100%);
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .modalHead{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:14px 16px;
-      border-bottom:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.03);
-    }
-    .modalTitle{
-      font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
-    }
+    .modal{width:min(700px,100%);border-radius:22px;border:1px solid rgba(255,255,255,0.14);background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));box-shadow:var(--shadow);overflow:hidden;}
+    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.03);}
+    .modalTitle{font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
     .modalBody{padding:16px;}
     .mTitle{font-family:"Playfair Display",serif;font-size:26px;font-weight:700;line-height:1.08;}
     .mMeta{margin-top:8px;font-size:13px;color:var(--muted);font-weight:700;}
-    .mBox{
-      margin-top:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.10);
-      background:rgba(255,255,255,0.04);
-      padding:12px;
-    }
-    .mLabel{
-      font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;
-    }
+    .mBox{margin-top:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);padding:12px;}
+    .mLabel{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;}
     .mNote{white-space:pre-wrap;line-height:1.5;color:var(--text);font-size:14px;}
   </style>
 </head>
-
 <body>
   <div class="shell" id="shell">
 
+    <!-- HEADER -->
     <div class="top">
       <div class="kicker">KAISER</div>
       <div class="title">Kitchen Hub</div>
+      <div class="subtitle">Prep, timers and reporting — all in one place</div>
+      <div class="versionPill">Version 3.0</div>
+    </div>
 
-      <div class="topRow">
-        <div class="locationPill" id="locPill">📍 Location: —</div>
-
+    <!-- STATUS STRIP -->
+    <div class="statusStrip">
+      <div class="stCard">
+        <div class="stLabel">Location</div>
+        <div class="stLoc" id="locValue">Not set</div>
+        <div class="stSub">Hub follows the selected location</div>
+      </div>
+      <div class="stCard">
+        <div class="stLabel">Now</div>
+        <div class="stTime" id="nowTime">--:--</div>
         <div class="controls">
           <button class="controlBtn" id="clockToggle" type="button">🕐 Clock</button>
           <button class="controlBtn" id="fsBtn" type="button">⛶ Full</button>
@@ -520,173 +335,171 @@
       </div>
     </div>
 
+    <!-- BIG CLOCK -->
     <div class="clockCard" id="clockWrap">
       <div class="clockTime" id="clockTime">--:--</div>
       <div class="clockDate" id="clockDate">--</div>
     </div>
 
-    <div class="widgetGrid">
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot"></span> Kitchen %</div>
-          <button class="miniBtn" id="refreshKBtn" type="button">Refresh</button>
+    <!-- CARD GRID -->
+    <div class="gridLabel"><span class="dot"></span> Tools</div>
+    <div class="cardGrid" id="cardGrid">
+
+      <div class="toolCard" data-panel="timers" id="card-timers">
+        <div class="cardTop">
+          <div class="cardIcon">🍳</div>
+          <div class="cardBadge neutral" id="badge-timers">0 active</div>
         </div>
-        <div class="kPctBig" id="kPct">—</div>
-        <div class="kPctSub" id="kMeta">Loading...</div>
-        <div class="widgetSubLine" id="kUpdatedLine">Last update: —</div>
-        <div class="errBox" id="kErr"></div>
+        <div class="cardTag">Live</div>
+        <div class="cardTitle">Cooking Timers</div>
+        <div class="cardDesc">Start prep timers with quick presets and alarms.</div>
+        <div class="cardOpen">Open →</div>
       </div>
 
-      <div class="widget">
-        <div class="widgetHead">
-          <div class="widgetTitle"><span class="widgetDot"></span> Catering Events</div>
-          <button class="miniBtn" id="refreshCBtn" type="button">Refresh</button>
+      <div class="toolCard" data-panel="catering" id="card-catering">
+        <div class="cardTop">
+          <div class="cardIcon">🍽️</div>
+          <div class="cardBadge neutral" id="badge-catering">0 today</div>
         </div>
-        <div class="cMiniList" id="cMiniList">
-          <div class="cMiniEmpty">Loading...</div>
-        </div>
-        <div class="widgetSubLine" id="cUpdatedLine">Last update: —</div>
+        <div class="cardTag">Events</div>
+        <div class="cardTitle">Catering</div>
+        <div class="cardDesc">Today's and upcoming catering orders.</div>
+        <div class="cardOpen">Open →</div>
       </div>
+
+      <div class="toolCard" data-panel="supplier" id="card-supplier">
+        <div class="cardTop">
+          <div class="cardIcon">📦</div>
+          <div class="cardBadge neutral" id="badge-supplier">0 open</div>
+        </div>
+        <div class="cardTag">Report</div>
+        <div class="cardTitle">Supplier Issues</div>
+        <div class="cardDesc">Log missing, wrong or poor-quality deliveries.</div>
+        <div class="cardOpen">Open →</div>
+      </div>
+
+      <div class="toolCard" data-url="./MIS.html">
+        <div class="cardTop">
+          <div class="cardIcon">📋</div>
+          <div class="cardBadge neutral">List</div>
+        </div>
+        <div class="cardTag">Prep</div>
+        <div class="cardTitle">Mise en Place</div>
+        <div class="cardDesc">Mise en place overview for the day.</div>
+        <div class="cardOpen">Open →</div>
+      </div>
+
+      <div class="toolCard" data-url="./cleaning-kitchen.html">
+        <div class="cardTop">
+          <div class="cardIcon">✨</div>
+          <div class="cardBadge neutral">Daily</div>
+        </div>
+        <div class="cardTag">Hygiene</div>
+        <div class="cardTitle">Cleaning</div>
+        <div class="cardDesc">Daily &amp; weekly cleaning checklists.</div>
+        <div class="cardOpen">Open →</div>
+      </div>
+
+      <div class="toolCard" data-url="./kitchen-shift-report.html">
+        <div class="cardTop">
+          <div class="cardIcon">📝</div>
+          <div class="cardBadge neutral">Handover</div>
+        </div>
+        <div class="cardTag">Report</div>
+        <div class="cardTitle">Kitchen Report</div>
+        <div class="cardDesc">Daily kitchen report and shift handover.</div>
+        <div class="cardOpen">Open →</div>
+      </div>
+
+      <div class="toolCard" data-url="./cal.html">
+        <div class="cardTop">
+          <div class="cardIcon">🧮</div>
+          <div class="cardBadge neutral">Ordering</div>
+        </div>
+        <div class="cardTag">Calculator</div>
+        <div class="cardTitle">Takeaway Calculator</div>
+        <div class="cardDesc">Helps you size takeaway orders.</div>
+        <div class="cardOpen">Open →</div>
+      </div>
+
     </div>
 
-    <section class="section">
-      <div class="sectionHead" id="timerHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Timers</div>
-        <div class="sectionRight">
-          <span class="sectionCount" id="timerCount">0 active</span>
-          <span class="sectionArrow open" id="timerArrow">▼</span>
-        </div>
+    <!-- PANEL: TIMERS -->
+    <section class="panel" id="panel-timers">
+      <div class="panelHead">
+        <div class="panelTitle"><span class="panelDot"></span> Cooking Timers</div>
+        <button class="closePanelBtn" data-close-panel type="button">✕ Close</button>
       </div>
-      <div class="divider"></div>
-      <div class="sectionBody open" id="timerBody">
-
-        <div class="presetGrid">
-          <button class="presetBtn" type="button" data-preset="Pandekager">🥞 Pandekager</button>
-          <button class="presetBtn" type="button" data-preset="Bacon">🥓 Bacon</button>
-          <button class="presetBtn" type="button" data-preset="Flæsk">🥩 Flæsk</button>
-          <button class="presetBtn" type="button" data-preset="Pølser">🌭 Pølser</button>
-          <button class="presetBtn" type="button" data-preset="Toast">🍞 Toast</button>
-          <button class="presetBtn" type="button" data-preset="Smør">🧈 Smør</button>
-          <button class="presetBtn" type="button" data-preset="Mayo">🥣 Mayo</button>
-          <button class="presetBtn" type="button" data-preset="Pomfritter">🍟 Pomfritter</button>
-          <button class="presetBtn" type="button" data-preset="Friske æg">🥚 Friske æg</button>
-        </div>
-
-        <div class="timerRow">
-          <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
-        </div>
-
-        <div class="actionGrid">
-          <button class="btn primary" id="startFreeBtn" type="button">⏰ Start Free</button>
-          <button class="btn" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
-        </div>
-
-        <div class="timerList" id="timerList">
-          <div class="emptyState">No active timers — start one above</div>
-        </div>
+      <div class="presetGrid">
+        <button class="presetBtn" type="button" data-preset="Pancakes">🥞 Pancakes</button>
+        <button class="presetBtn" type="button" data-preset="Bacon">🥓 Bacon</button>
+        <button class="presetBtn" type="button" data-preset="Pork">🥩 Pork</button>
+        <button class="presetBtn" type="button" data-preset="Sausages">🌭 Sausages</button>
+        <button class="presetBtn" type="button" data-preset="Toast">🍞 Toast</button>
+        <button class="presetBtn" type="button" data-preset="Butter">🧈 Butter</button>
+        <button class="presetBtn" type="button" data-preset="Mayo">🥣 Mayo</button>
+        <button class="presetBtn" type="button" data-preset="Fries">🍟 Fries</button>
+        <button class="presetBtn" type="button" data-preset="Fresh Eggs">🥚 Fresh Eggs</button>
+      </div>
+      <div class="timerRow">
+        <input id="textInput" class="input" placeholder="Optional note (e.g. tray 2)" />
+      </div>
+      <div class="actionGrid">
+        <button class="btn primary" id="startFreeBtn" type="button">⏰ Start Free</button>
+        <button class="btn" id="clearExpBtn" type="button">🗑️ Clear Expired</button>
+      </div>
+      <div class="timerList" id="timerList">
+        <div class="emptyState">No active timers — start one above</div>
       </div>
     </section>
 
-    <!-- SUPPLIER ISSUES -->
-    <section class="section">
-      <div class="sectionHead" id="supplierHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Supplier Issues</div>
-        <div class="sectionRight">
-          <span class="sectionArrow" id="supplierArrow">▼</span>
+    <!-- PANEL: CATERING -->
+    <section class="panel" id="panel-catering">
+      <div class="panelHead">
+        <div class="panelTitle"><span class="panelDot"></span> Catering Events</div>
+        <div style="display:flex;gap:8px;">
+          <button class="miniBtn" id="refreshCBtn" type="button">Refresh</button>
+          <button class="closePanelBtn" data-close-panel type="button">✕ Close</button>
         </div>
       </div>
-      <div class="divider"></div>
-      <div class="sectionBody" id="supplierBody">
-        <div class="timerRow">
-          <input id="supplierNameInput" class="input" placeholder="Supplier name" />
-        </div>
-
-        <div class="timerRow">
-          <input id="supplierProductInput" class="input" placeholder="Product / item" />
-        </div>
-
-        <div class="timerRow">
-          <select id="supplierTypeInput" class="select">
-            <option value="">Select issue type</option>
-            <option value="Missing item">Missing item</option>
-            <option value="Wrong item">Wrong item</option>
-            <option value="Poor quality">Poor quality</option>
-            <option value="Damaged item">Damaged item</option>
-            <option value="Wrong quantity">Wrong quantity</option>
-            <option value="Late delivery">Late delivery</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="timerRow">
-          <input id="supplierQtyInput" class="input" placeholder="Quantity affected (optional)" />
-        </div>
-
-        <div class="timerRow">
-          <input id="supplierDescInput" class="input" placeholder="Short description (optional)" />
-        </div>
-
-        <div class="timerRow">
-          <button class="btn primary" id="submitSupplierBtn" type="button">📦 Report Issue</button>
-        </div>
-
-        <div class="errBox" id="supplierMsg" style="display:none;"></div>
-
-        <div class="widgetSubLine" style="margin-top:14px;">Latest issues</div>
-        <div class="cMiniList" id="supplierList">
-          <div class="cMiniEmpty">No supplier issues yet</div>
-        </div>
+      <div class="cMiniList" id="cMiniList">
+        <div class="cMiniEmpty">Loading...</div>
       </div>
+      <div class="panelSub" id="cUpdatedLine" style="margin-top:10px;">Last update: —</div>
     </section>
 
-    <section class="section">
-      <div class="sectionHead" id="toolsHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Quick Tools</div>
-        <div class="sectionRight">
-          <span class="sectionArrow" id="toolsArrow">▼</span>
-        </div>
+    <!-- PANEL: SUPPLIER -->
+    <section class="panel" id="panel-supplier">
+      <div class="panelHead">
+        <div class="panelTitle"><span class="panelDot"></span> Supplier Issues</div>
+        <button class="closePanelBtn" data-close-panel type="button">✕ Close</button>
       </div>
-      <div class="divider"></div>
-      <div class="sectionBody" id="toolsBody">
-        <div class="toolsGrid">
-          <div class="toolItem" data-url="./MIS.html">
-            <div class="toolIcon">📋</div>
-            <div>
-              <div class="toolName">MIS</div>
-              <div class="toolDesc">Mise en place overview</div>
-            </div>
-          </div>
-          <div class="toolItem" data-url="./cleaning-kitchen.html">
-            <div class="toolIcon">✨</div>
-            <div>
-              <div class="toolName">Cleaning</div>
-              <div class="toolDesc">Daily & weekly lists</div>
-            </div>
-          </div>
-          
-      <div class="toolItem" data-url="./kitchen-shift-report.html">
-        <div class="toolIcon">📝</div>
-        <div>
-          <div class="toolName">Kitchen report</div>
-          <div class="toolDesc">Kitchen daily report</div>
-        </div>
+      <div class="timerRow"><input id="supplierNameInput" class="input" placeholder="Supplier name" /></div>
+      <div class="timerRow"><input id="supplierProductInput" class="input" placeholder="Product / item" /></div>
+      <div class="timerRow">
+        <select id="supplierTypeInput" class="select">
+          <option value="">Select issue type</option>
+          <option value="Missing item">Missing item</option>
+          <option value="Wrong item">Wrong item</option>
+          <option value="Poor quality">Poor quality</option>
+          <option value="Damaged item">Damaged item</option>
+          <option value="Wrong quantity">Wrong quantity</option>
+          <option value="Late delivery">Late delivery</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
-
-                <div class="toolItem" data-url="./cal.html">
-        <div class="toolIcon">📝</div>
-        <div>
-          <div class="toolName">Calculater</div>
-          <div class="toolDesc">Takeaway calculater to helping ordering</div>
-        </div>
-      </div>
-          
-        </div>
-      </div>
+      <div class="timerRow"><input id="supplierQtyInput" class="input" placeholder="Quantity affected (optional)" /></div>
+      <div class="timerRow"><input id="supplierDescInput" class="input" placeholder="Short description (optional)" /></div>
+      <div class="timerRow"><button class="btn primary" id="submitSupplierBtn" type="button">📦 Report Issue</button></div>
+      <div class="errBox" id="supplierMsg" style="display:none;"></div>
+      <div class="panelSub" style="margin-top:14px;">Latest issues</div>
+      <div class="cMiniList" id="supplierList"><div class="cMiniEmpty">No supplier issues yet</div></div>
     </section>
 
+    <!-- TOOL VIEWER -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
-        <div class="locationPill" id="toolName">—</div>
+        <div class="toolNamePill" id="toolName">—</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="controlBtn" id="closeToolBtn" type="button">← Back</button>
           <button class="controlBtn" id="newTabBtn" type="button">↗ New Tab</button>
@@ -697,6 +510,7 @@
 
   </div>
 
+  <!-- CATERING MODAL -->
   <div class="modalBack" id="cModalBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cModalTitle">
       <div class="modalHead">
@@ -706,21 +520,9 @@
       <div class="modalBody">
         <div class="mTitle" id="mTitle">—</div>
         <div class="mMeta" id="mMeta">—</div>
-
-        <div class="mBox">
-          <div class="mLabel">Customer</div>
-          <div class="mNote" id="mCustomer">—</div>
-        </div>
-
-        <div class="mBox">
-          <div class="mLabel">Guests</div>
-          <div class="mNote" id="mGuests">—</div>
-        </div>
-
-        <div class="mBox">
-          <div class="mLabel">Note</div>
-          <div class="mNote" id="mNote">—</div>
-        </div>
+        <div class="mBox"><div class="mLabel">Customer</div><div class="mNote" id="mCustomer">—</div></div>
+        <div class="mBox"><div class="mLabel">Guests</div><div class="mNote" id="mGuests">—</div></div>
+        <div class="mBox"><div class="mLabel">Note</div><div class="mNote" id="mNote">—</div></div>
       </div>
     </div>
   </div>
@@ -729,311 +531,169 @@
 
  <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
-  const VAT_FACTOR = 1.25;
-
   const LOC_KEY = "kaiser_kitchenpct_loc";
   const TIMER_KEY = "kaiser_3timer_v5_supplier";
   const CLOCK_KEY = "kaiser_clock_visible_v5_supplier";
   const TIMER_ALARM_KEY = "kaiser_timer_alarm_fired_v5_supplier";
-  const CACHE_K_KEY = "kaiser_cache_kitchenpct_v5_supplier";
   const CACHE_C_KEY = "kaiser_cache_catering_v5_supplier";
-
   const DEFAULT_DURATION_MS = 3 * 60 * 60 * 1000;
   const WARN_30_MS = 30 * 60 * 1000;
   const WARN_15_MS = 15 * 60 * 1000;
-  const ALARM_AT_MS = 15 * 60 * 1000;
   const AUTO_REMOVE_EXPIRED_AFTER_MS = 3 * 60 * 60 * 1000;
-
   const GREEN_HOURS = 48;
   const YELLOW_HOURS = 168;
+  const LOCALE = "en-GB";
 
   const $ = id => document.getElementById(id);
   const nowTs = () => Date.now();
   const clamp01 = x => Math.max(0, Math.min(1, x));
 
-  function escapeHtml(s) {
-    return String(s || "").replace(/[&<>"']/g, c =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, c =>
+      ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
   }
-
-  function fmtHHMMSS(ms) {
-    const s = Math.max(0, Math.floor(ms / 1000));
-    const hh = String(Math.floor(s / 3600)).padStart(2, "0");
-    const mm = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
-    const ss = String(s % 60).padStart(2, "0");
+  function fmtHHMMSS(ms){
+    const s = Math.max(0, Math.floor(ms/1000));
+    const hh = String(Math.floor(s/3600)).padStart(2,"0");
+    const mm = String(Math.floor((s%3600)/60)).padStart(2,"0");
+    const ss = String(s%60).padStart(2,"0");
     return `${hh}:${mm}:${ss}`;
   }
-
-  function isoTodayLocal() {
+  function isoTodayLocal(){
     const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
   }
-
-  function monthKey(iso) {
-    return String(iso || "").slice(0, 7);
-  }
-
-  function pctStr(p) {
-    if (p === null || !isFinite(p)) return "—";
-    return (p * 100).toFixed(1).replace(".", ",") + "%";
-  }
-
-  function fmtDKK(n) {
-    return Number(n || 0).toLocaleString("da-DK", {
-      style: "currency",
-      currency: "DKK",
-      maximumFractionDigits: 0
-    });
-  }
-
-  function fmtDateTime(ts) {
+  function fmtDateTime(ts){
     if (!ts || !isFinite(ts)) return "—";
-    return new Date(ts).toLocaleString("da-DK", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+    return new Date(ts).toLocaleString(LOCALE, {
+      day:"2-digit", month:"2-digit", year:"numeric", hour:"2-digit", minute:"2-digit", hour12:false
     });
   }
-
-  function colorFor(h) {
+  function colorFor(h){
     if (!isFinite(h) || h < 0) return "gray";
     if (h <= GREEN_HOURS) return "green";
     if (h <= YELLOW_HOURS) return "yellow";
     return "red";
   }
-
-  function parseLocalDateTime(dateStr, timeStr) {
+  function parseLocalDateTime(dateStr, timeStr){
     if (!dateStr) return NaN;
     const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
-    const [y, m, d] = String(dateStr).split("-").map(Number);
-    const [hh, mm] = String(t).split(":").map(Number);
+    const [y,m,d] = String(dateStr).split("-").map(Number);
+    const [hh,mm] = String(t).split(":").map(Number);
     if (!y || !m || !d) return NaN;
-    return new Date(y, m - 1, d, hh || 0, mm || 0, 0, 0).getTime();
+    return new Date(y, m-1, d, hh||0, mm||0, 0, 0).getTime();
   }
-
-  function sameYMD(dateStr, ymd) {
-    return String(dateStr || "").trim() === String(ymd || "").trim();
+  function sameYMD(a,b){ return String(a||"").trim() === String(b||"").trim(); }
+  function normalizeLoc(s){
+    return String(s||"").toLowerCase()
+      .replace(/café/g,"cafe").replace(/kaiser/g,"")
+      .replace(/[^\p{L}\p{N}]+/gu," ").trim();
   }
-
-  function normalizeLoc(s) {
-    return String(s || "")
-      .toLowerCase()
-      .replace(/café/g, "cafe")
-      .replace(/kaiser/g, "")
-      .replace(/[^\p{L}\p{N}]+/gu, " ")
-      .trim();
-  }
-
-  function locMatches(a, b) {
-    const na = normalizeLoc(a);
-    const nb = normalizeLoc(b);
+  function locMatches(a,b){
+    const na = normalizeLoc(a), nb = normalizeLoc(b);
     return na === nb || na.includes(nb) || nb.includes(na);
   }
-
-  function saveCache(key, data) {
-    try {
-      localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data }));
-    } catch (_) {}
-  }
-
-  function loadCache(key) {
-    try {
+  function saveCache(key,data){ try{ localStorage.setItem(key, JSON.stringify({ts:Date.now(),data})); }catch(_){} }
+  function loadCache(key){
+    try{
       const raw = localStorage.getItem(key);
       if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (!parsed || !parsed.data) return null;
       return parsed;
-    } catch (_) {
-      return null;
-    }
+    }catch(_){ return null; }
   }
-
-  function getLoc() {
+  function getLoc(){
     const qsLoc = new URLSearchParams(location.search).get("loc");
-    if (qsLoc && qsLoc.trim()) {
-      localStorage.setItem(LOC_KEY, qsLoc.trim());
-    }
+    if (qsLoc && qsLoc.trim()) localStorage.setItem(LOC_KEY, qsLoc.trim());
     return localStorage.getItem(LOC_KEY) || "";
   }
-
-  function jsonp(url, params = {}) {
-    return new Promise((resolve, reject) => {
+  function jsonp(url, params = {}){
+    return new Promise((resolve,reject)=>{
       const cb = "__cb_" + Math.random().toString(16).slice(2);
       const qs = new URLSearchParams({ ...params, callback: cb }).toString();
       const src = url + (url.includes("?") ? "&" : "?") + qs;
-
       const s = document.createElement("script");
-      const t = setTimeout(() => {
-        cleanup();
-        reject(new Error("timeout"));
-      }, 15000);
-
-      function cleanup() {
+      const t = setTimeout(()=>{ cleanup(); reject(new Error("timeout")); }, 15000);
+      function cleanup(){
         clearTimeout(t);
-        try { delete window[cb]; } catch (_) {}
+        try{ delete window[cb]; }catch(_){}
         if (s.parentNode) s.parentNode.removeChild(s);
       }
-
-      window[cb] = (data) => {
-        cleanup();
-        resolve(data);
-      };
-
-      s.src = src;
-      s.async = true;
-      s.onerror = () => {
-        cleanup();
-        reject(new Error("load error"));
-      };
-
+      window[cb] = data => { cleanup(); resolve(data); };
+      s.src = src; s.async = true;
+      s.onerror = ()=>{ cleanup(); reject(new Error("load error")); };
       document.body.appendChild(s);
     });
   }
 
+  /* ===== CLOCK ===== */
   let clockVisible = localStorage.getItem(CLOCK_KEY) !== "false";
-
-  function updateClock() {
+  function updateClock(){
     const d = new Date();
-    $("clockTime").textContent = d.toLocaleTimeString("da-DK", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-    $("clockDate").textContent = d.toLocaleDateString("da-DK", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
+    const t = d.toLocaleTimeString(LOCALE, { hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false });
+    $("clockTime").textContent = t;
+    $("nowTime").textContent = d.toLocaleTimeString(LOCALE, { hour:"2-digit", minute:"2-digit", hour12:false });
+    $("clockDate").textContent = d.toLocaleDateString(LOCALE, { weekday:"long", day:"numeric", month:"long", year:"numeric" });
   }
-
-  function toggleClock() {
+  function toggleClock(){
     clockVisible = !clockVisible;
     localStorage.setItem(CLOCK_KEY, String(clockVisible));
     updateClockUI();
   }
-
-  function updateClockUI() {
+  function updateClockUI(){
     $("clockWrap").classList.toggle("show", clockVisible);
     $("clockToggle").classList.toggle("on", clockVisible);
   }
 
-  async function loadKitchenPct() {
-    const loc = getLoc();
-    const fullLoc = loc ? ("Café Kaiser " + loc) : "";
-
-    if (!loc) {
-      $("kPct").textContent = "—";
-      $("kMeta").textContent = "Missing ?loc= in URL";
-      $("kUpdatedLine").textContent = "Last update: —";
-      $("kErr").style.display = "none";
-      return;
-    }
-
-    $("kErr").style.display = "none";
-
-    try {
-      const m = monthKey(isoTodayLocal());
-      const data = await jsonp(SCRIPT_URL, {
-        action: "getKitchenMTD",
-        loc: fullLoc,
-        month: m
-      });
-
-      if (!data || !data.ok) throw new Error(data?.error || "No data");
-
-      const totalGross = Number(data?.totals?.revenueGross || 0);
-      const totalBuy = Number(data?.totals?.purchases || 0);
-      const totalNet = totalGross / VAT_FACTOR;
-      const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
-
-      $("kPct").textContent = pctStr(pct);
-      $("kMeta").textContent = "MTD Purchases: " + fmtDKK(totalBuy);
-
-      let latestUpdatedTs = 0;
-      if (Array.isArray(data.rows) && data.rows.length) {
-        latestUpdatedTs = data.rows
-          .map(r => r.updatedAt ? new Date(r.updatedAt).getTime() : 0)
-          .filter(Boolean)
-          .sort((a, b) => b - a)[0] || 0;
-      }
-
-      $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(latestUpdatedTs || Date.now());
-      saveCache(CACHE_K_KEY, data);
-    } catch (e) {
-      const cached = loadCache(CACHE_K_KEY);
-      if (cached && cached.data) {
-        const totalGross = Number(cached.data?.totals?.revenueGross || 0);
-        const totalBuy = Number(cached.data?.totals?.purchases || 0);
-        const totalNet = totalGross / VAT_FACTOR;
-        const pct = totalNet > 0 ? (totalBuy / totalNet) : null;
-
-        $("kPct").textContent = pctStr(pct);
-        $("kMeta").textContent = "Offline • MTD Purchases: " + fmtDKK(totalBuy);
-        $("kUpdatedLine").textContent = "Last update: " + fmtDateTime(cached.ts) + " (cached)";
-        $("kErr").textContent = "Live load failed. Showing cached data.";
-        $("kErr").style.display = "block";
-      } else {
-        $("kPct").textContent = "—";
-        $("kMeta").textContent = "Error loading";
-        $("kUpdatedLine").textContent = "Last update: —";
-        $("kErr").textContent = "Kitchen % could not be loaded.";
-        $("kErr").style.display = "block";
-      }
-    }
-  }
-
+  /* ===== CATERING ===== */
   let currentCateringEvents = [];
-
-  function transformOrdersToEvents(orders, loc) {
+  function transformOrdersToEvents(orders, loc){
     const todayYMD = isoTodayLocal();
     const startOfToday = parseLocalDateTime(todayYMD, "00:00");
-
     return (orders || [])
       .filter(o => locMatches(o.location, loc))
       .map(o => {
         const date = String(o.deliveryDate || "").trim();
         const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
         const ts = parseLocalDateTime(date, time);
-
         return {
           title: o.customerName || "Catering",
           customerName: o.customerName || "—",
-          date,
-          time,
+          date, time,
           guests: o.guests || 0,
           note: o.note || "",
-          status: o.status || "Bekræftet",
+          status: o.status || "Confirmed",
           location: o.location || "",
           ts,
           isToday: sameYMD(date, todayYMD)
         };
       })
       .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
-      .sort((a, b) => a.ts - b.ts)
-      .slice(0, 3);
+      .sort((a,b)=> a.ts - b.ts)
+      .slice(0,5);
   }
-
-  function renderCateringEvents(events, sourceLabel = "Live", updatedTs = Date.now()) {
+  function setBadge(id, text, cls){
+    const el = $(id);
+    el.textContent = text;
+    el.className = "cardBadge " + (cls || "neutral");
+  }
+  function renderCateringEvents(events, sourceLabel = "Live", updatedTs = Date.now()){
     currentCateringEvents = Array.isArray(events) ? events : [];
+    const todayCount = currentCateringEvents.filter(e => e.isToday).length;
+    if (todayCount > 0) setBadge("badge-catering", todayCount + " today", "warn");
+    else setBadge("badge-catering", currentCateringEvents.length + " upcoming", "neutral");
 
-    if (!currentCateringEvents.length) {
-      $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No events today/upcoming</div>';
+    if (!currentCateringEvents.length){
+      $("cMiniList").innerHTML = '<div class="cMiniEmpty">📅 No events today / upcoming</div>';
       $("cUpdatedLine").textContent = "Last update: " + fmtDateTime(updatedTs) + (sourceLabel === "Offline" ? " (cached)" : "");
       return;
     }
-
-    $("cMiniList").innerHTML = currentCateringEvents.map((ev, index) => {
-      const h = (ev.ts - Date.now()) / (3600 * 1000);
+    $("cMiniList").innerHTML = currentCateringEvents.map((ev, index)=>{
+      const h = (ev.ts - Date.now()) / (3600*1000);
       const col = colorFor(h);
       const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--/----";
       const todayBadge = ev.isToday ? " • Today" : "";
-
       return `
         <div class="cMiniEvent" data-catering-index="${index}">
           <div class="cMiniBar ${col}"></div>
@@ -1041,363 +701,238 @@
             <div class="cMiniTitle">${escapeHtml(ev.customerName || ev.title || "Catering")}</div>
             <div class="cMiniMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${todayBadge}</div>
           </div>
-        </div>
-      `;
+        </div>`;
     }).join("");
-
     $("cUpdatedLine").textContent = "Last update: " + fmtDateTime(updatedTs) + (sourceLabel === "Offline" ? " (cached)" : "");
   }
-
-  async function loadCateringMini() {
+  async function loadCateringMini(){
     const loc = getLoc();
-
-    if (!loc) {
+    if (!loc){
       $("cMiniList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
       $("cUpdatedLine").textContent = "Last update: —";
+      setBadge("badge-catering", "no loc", "neutral");
       return;
     }
-
-    try {
+    try{
       const data = await jsonp(SCRIPT_URL, { action: "getOrders" });
       if (!data || !data.ok || !Array.isArray(data.orders)) throw new Error("No catering data");
-
       const events = transformOrdersToEvents(data.orders, loc);
       renderCateringEvents(events, "Live", Date.now());
       saveCache(CACHE_C_KEY, { orders: data.orders, loc });
-    } catch (e) {
+    }catch(e){
       const cached = loadCache(CACHE_C_KEY);
-      if (cached && cached.data && Array.isArray(cached.data.orders)) {
+      if (cached && cached.data && Array.isArray(cached.data.orders)){
         const events = transformOrdersToEvents(cached.data.orders, loc);
         renderCateringEvents(events, "Offline", cached.ts);
-      } else {
+      }else{
         $("cMiniList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
         $("cUpdatedLine").textContent = "Last update: —";
+        setBadge("badge-catering", "error", "alert");
       }
     }
   }
-
-  function openCateringModal(index) {
+  function openCateringModal(index){
     const ev = currentCateringEvents[index];
     if (!ev) return;
-
     $("mTitle").textContent = ev.location ? `Café Kaiser ${ev.location}` : "Catering";
-    $("mMeta").textContent = `${ev.date ? ev.date.split("-").reverse().join("/") : "—"} kl. ${ev.time || "—"} • Status: ${ev.status || "Bekræftet"}`;
+    $("mMeta").textContent = `${ev.date ? ev.date.split("-").reverse().join("/") : "—"} at ${ev.time || "—"} • Status: ${ev.status || "Confirmed"}`;
     $("mCustomer").textContent = ev.customerName || "—";
     $("mGuests").textContent = String(ev.guests || "—");
     $("mNote").textContent = ev.note || "No note";
-
     $("cModalBack").classList.add("open");
-    $("cModalBack").setAttribute("aria-hidden", "false");
+    $("cModalBack").setAttribute("aria-hidden","false");
   }
-
-  function closeCateringModal() {
+  function closeCateringModal(){
     $("cModalBack").classList.remove("open");
-    $("cModalBack").setAttribute("aria-hidden", "true");
+    $("cModalBack").setAttribute("aria-hidden","true");
   }
 
+  /* ===== TIMERS ===== */
   let audioReady = false;
-
-  function loadTimers() {
-    try {
+  function loadTimers(){
+    try{
       const raw = localStorage.getItem(TIMER_KEY);
       if (!raw) return [];
       const obj = JSON.parse(raw);
       return Array.isArray(obj.timers) ? obj.timers : [];
-    } catch (e) {
-      return [];
-    }
+    }catch(e){ return []; }
   }
-
-  function saveTimers(timers) {
-    localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] }));
-  }
-
-  function loadAlarmState() {
-    try {
+  function saveTimers(timers){ localStorage.setItem(TIMER_KEY, JSON.stringify({ timers: timers || [] })); }
+  function loadAlarmState(){
+    try{
       const parsed = JSON.parse(localStorage.getItem(TIMER_ALARM_KEY) || "{}");
       return parsed && typeof parsed === "object" ? parsed : {};
-    } catch (e) {
-      return {};
-    }
+    }catch(e){ return {}; }
   }
-
-  function saveAlarmState(state) {
-    localStorage.setItem(TIMER_ALARM_KEY, JSON.stringify(state || {}));
-  }
-
-  function cleanupAlarmState(timers) {
-    const ids = new Set((timers || []).map(t => t.id));
+  function saveAlarmState(state){ localStorage.setItem(TIMER_ALARM_KEY, JSON.stringify(state || {})); }
+  function cleanupAlarmState(timers){
+    const ids = new Set((timers||[]).map(t => t.id));
     const state = loadAlarmState();
     let changed = false;
-
-    Object.keys(state).forEach(id => {
-      if (!ids.has(id)) {
-        delete state[id];
-        changed = true;
-      }
-    });
-
+    Object.keys(state).forEach(id => { if (!ids.has(id)){ delete state[id]; changed = true; } });
     if (changed) saveAlarmState(state);
   }
-
-  function autoRemoveVeryOldExpiredTimers() {
+  function autoRemoveVeryOldExpiredTimers(){
     const timers = loadTimers();
     const cutoff = nowTs() - AUTO_REMOVE_EXPIRED_AFTER_MS;
     const kept = timers.filter(t => (t.expiresAt || 0) > cutoff);
-    if (kept.length !== timers.length) {
-      saveTimers(kept);
-      cleanupAlarmState(kept);
-    }
+    if (kept.length !== timers.length){ saveTimers(kept); cleanupAlarmState(kept); }
   }
-
-  function uid() {
-    return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-  }
-
-  function addTimer(durationMs, forcedName = "") {
+  function uid(){ return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
+  function addTimer(durationMs, forcedName = ""){
     const text = ($("textInput").value || "").trim();
     const name = forcedName ? (text ? `${forcedName} – ${text}` : forcedName) : (text || "Free timer");
-
     const timers = loadTimers();
-    const newTimer = {
-      id: uid(),
-      name: name || "Unnamed",
-      startedAt: nowTs(),
-      durationMs: durationMs,
-      expiresAt: nowTs() + durationMs
-    };
-
+    const newTimer = { id: uid(), name: name || "Unnamed", startedAt: nowTs(), durationMs, expiresAt: nowTs() + durationMs };
     timers.push(newTimer);
     saveTimers(timers);
-
     const fired = loadAlarmState();
-    fired[newTimer.id] = { warn30: false, warn15: false };
+    fired[newTimer.id] = { warn30:false, warn15:false };
     saveAlarmState(fired);
-
     $("textInput").value = "";
     renderTimers();
   }
-
-  function stopTimer(id) {
-    if (confirm("Stop this timer?")) {
-      const next = loadTimers().filter(t => t.id !== id);
-      saveTimers(next);
-
+  function stopTimer(id){
+    if (confirm("Stop this timer?")){
+      saveTimers(loadTimers().filter(t => t.id !== id));
       const fired = loadAlarmState();
-      delete fired[id];
-      saveAlarmState(fired);
-
+      delete fired[id]; saveAlarmState(fired);
       renderTimers();
     }
   }
-
-  function clearExpired() {
+  function clearExpired(){
     const timers = loadTimers();
     const active = timers.filter(t => (t.expiresAt || 0) > nowTs());
     const removed = timers.length - active.length;
-
     saveTimers(active);
     cleanupAlarmState(active);
     renderTimers();
-
-    if (removed > 0) {
-      alert(`Removed ${removed} expired timer(s)`);
-    }
+    if (removed > 0) alert(`Removed ${removed} expired timer(s)`);
   }
-
-  function timerState(t) {
+  function timerState(t){
     const left = (t.expiresAt || 0) - nowTs();
     if (left <= 0) return "exp";
     if (left <= WARN_15_MS) return "alarm";
     if (left <= WARN_30_MS) return "warn";
     return "ok";
   }
-
-  function timerPriority(t) {
+  function timerPriority(t){
     const left = (t.expiresAt || 0) - nowTs();
     if (left <= 0) return 0;
     if (left <= WARN_15_MS) return 1;
     if (left <= WARN_30_MS) return 2;
     return 3;
   }
-
-  function renderTimers() {
+  function renderTimers(){
     autoRemoveVeryOldExpiredTimers();
-
     const list = $("timerList");
-    const timers = loadTimers().sort((a, b) => {
-      const pa = timerPriority(a);
-      const pb = timerPriority(b);
+    const timers = loadTimers().sort((a,b)=>{
+      const pa = timerPriority(a), pb = timerPriority(b);
       if (pa !== pb) return pa - pb;
       return (a.expiresAt || 0) - (b.expiresAt || 0);
     });
-
-    $("timerCount").textContent = `${timers.length} active`;
-
-    if (!timers.length) {
+    const activeCount = timers.filter(t => (t.expiresAt||0) > nowTs()).length;
+    setBadge("badge-timers", activeCount + " active", activeCount > 0 ? "" : "neutral");
+    if (!timers.length){
       list.innerHTML = '<div class="emptyState">No active timers — start one above</div>';
       return;
     }
-
     list.innerHTML = timers.map(t => {
       const left = (t.expiresAt || 0) - nowTs();
       const st = timerState(t);
       const pct = clamp01(left / (t.durationMs || DEFAULT_DURATION_MS)) * 100;
       const cardClass = st === "alarm" ? "critical" : st === "exp" ? "expired" : "";
-      const tagText = st === "exp"
-        ? "EXPIRED"
-        : st === "alarm"
-          ? "🔔 15 MIN"
-          : st === "warn"
-            ? "⚠️ 30 MIN"
-            : "✓ OK";
-
+      const tagText = st === "exp" ? "EXPIRED" : st === "alarm" ? "🔔 15 MIN" : st === "warn" ? "⚠️ 30 MIN" : "✓ OK";
       return `
         <div class="tCard ${cardClass}">
           <div class="tTag ${st === "exp" ? "exp" : st === "alarm" ? "alarm" : st === "warn" ? "warn" : "ok"}">${tagText}</div>
           <div class="tName">${escapeHtml(t.name)}</div>
           <div class="tTime">${st === "exp" ? "00:00:00" : fmtHHMMSS(left)}</div>
-          <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" })}</div>
+          <div class="tMeta">Ends: ${new Date(t.expiresAt).toLocaleTimeString(LOCALE, { hour:"2-digit", minute:"2-digit", hour12:false })}</div>
           <div class="barWrap">
             <div class="barFill ${st === "exp" ? "exp" : (st === "warn" || st === "alarm") ? "warn" : ""}" style="width:${st === "exp" ? 100 : pct}%"></div>
           </div>
           <div class="tActions">
             <button class="smallBtn danger" type="button" data-stop-id="${escapeHtml(t.id)}">🛑 Stop</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }).join("");
   }
-
-  function enableAudio() {
+  function enableAudio(){
     if (audioReady) return;
     audioReady = true;
-
-    try {
+    try{
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
-
       const ctx = new AudioCtx();
-      if (ctx.state === "suspended") {
-        ctx.resume().catch(() => {});
-      }
-
+      if (ctx.state === "suspended") ctx.resume().catch(()=>{});
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-
       gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.01);
-
-      setTimeout(() => {
-        try { ctx.close(); } catch (_) {}
-      }, 100);
-    } catch (_) {}
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.01);
+      setTimeout(()=>{ try{ ctx.close(); }catch(_){} }, 100);
+    }catch(_){}
   }
-
-  function vibrateIfPossible() {
-    if ("vibrate" in navigator) {
-      try { navigator.vibrate([180, 80, 180]); } catch (_) {}
-    }
-  }
-
-  function playAlarmPattern() {
+  function vibrateIfPossible(){ if ("vibrate" in navigator){ try{ navigator.vibrate([180,80,180]); }catch(_){} } }
+  function playAlarmPattern(){
     if (!audioReady) return;
-
-    try {
+    try{
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
-
       const ctx = new AudioCtx();
-      if (ctx.state === "suspended") ctx.resume().catch(() => {});
-
+      if (ctx.state === "suspended") ctx.resume().catch(()=>{});
       const notes = [
-        { f: 1047, d: 0.18, g: 0.28 },
-        { f: 1318, d: 0.18, g: 0.28 },
-        { f: 1568, d: 0.22, g: 0.30 },
-        { f: 1318, d: 0.18, g: 0.28 },
-        { f: 1047, d: 0.25, g: 0.30 }
+        { f:1047, d:0.18, g:0.28 }, { f:1318, d:0.18, g:0.28 }, { f:1568, d:0.22, g:0.30 },
+        { f:1318, d:0.18, g:0.28 }, { f:1047, d:0.25, g:0.30 }
       ];
-
       let start = ctx.currentTime;
       notes.forEach(n => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
         osc.type = "square";
         osc.frequency.setValueAtTime(n.f, start);
         gain.gain.setValueAtTime(0.0001, start);
         gain.gain.exponentialRampToValueAtTime(n.g, start + 0.01);
         gain.gain.exponentialRampToValueAtTime(0.0001, start + n.d);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(start);
-        osc.stop(start + n.d);
-
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(start); osc.stop(start + n.d);
         start += n.d + 0.04;
       });
-
-      setTimeout(() => { try { ctx.close(); } catch (_) {} }, 1800);
-    } catch (_) {}
+      setTimeout(()=>{ try{ ctx.close(); }catch(_){} }, 1800);
+    }catch(_){}
   }
-
-  function playAlarm() {
-    vibrateIfPossible();
-    playAlarmPattern();
-  }
-
-  function checkTimerAlarms() {
+  function playAlarm(){ vibrateIfPossible(); playAlarmPattern(); }
+  function checkTimerAlarms(){
     const timers = loadTimers();
     const fired = loadAlarmState();
     let changed = false;
-
     timers.forEach(t => {
       const left = (t.expiresAt || 0) - nowTs();
-
-      if (!fired[t.id] || typeof fired[t.id] !== "object") {
-        fired[t.id] = { warn30: false, warn15: false };
-        changed = true;
-      }
-
-      if (left > WARN_15_MS && left <= WARN_30_MS && !fired[t.id].warn30) {
-        playAlarm();
-        fired[t.id].warn30 = true;
-        changed = true;
-      }
-
-      if (left > 0 && left <= WARN_15_MS && !fired[t.id].warn15) {
-        playAlarm();
-        fired[t.id].warn15 = true;
-        changed = true;
-      }
+      if (!fired[t.id] || typeof fired[t.id] !== "object"){ fired[t.id] = { warn30:false, warn15:false }; changed = true; }
+      if (left > WARN_15_MS && left <= WARN_30_MS && !fired[t.id].warn30){ playAlarm(); fired[t.id].warn30 = true; changed = true; }
+      if (left > 0 && left <= WARN_15_MS && !fired[t.id].warn15){ playAlarm(); fired[t.id].warn15 = true; changed = true; }
     });
-
     if (changed) saveAlarmState(fired);
     cleanupAlarmState(timers);
   }
 
-  async function loadSupplierIssues() {
+  /* ===== SUPPLIER ISSUES ===== */
+  async function loadSupplierIssues(){
     const loc = getLoc();
-
-    if (!loc) {
+    if (!loc){
       $("supplierList").innerHTML = '<div class="cMiniEmpty">📍 No location set</div>';
+      setBadge("badge-supplier", "no loc", "neutral");
       return;
     }
-
-    try {
+    try{
       const data = await jsonp(SCRIPT_URL, { action: "getSupplierIssues", loc: "Café Kaiser " + loc });
-
-      if (!data || !data.ok || !Array.isArray(data.issues) || !data.issues.length) {
+      if (!data || !data.ok || !Array.isArray(data.issues) || !data.issues.length){
         $("supplierList").innerHTML = '<div class="cMiniEmpty">📦 No supplier issues yet</div>';
+        setBadge("badge-supplier", "0 open", "neutral");
         return;
       }
-
+      setBadge("badge-supplier", data.issues.length + " open", "alert");
       $("supplierList").innerHTML = data.issues.map(issue => `
         <div class="cMiniEvent">
           <div class="cMiniBar red"></div>
@@ -1405,23 +940,20 @@
             <div class="cMiniTitle">${escapeHtml(issue.supplierName)} – ${escapeHtml(issue.productName)}</div>
             <div class="cMiniMeta">⚠️ ${escapeHtml(issue.issueType)}${issue.quantityAffected ? " • Qty: " + escapeHtml(issue.quantityAffected) : ""}</div>
           </div>
-        </div>
-      `).join("");
-
-    } catch (e) {
+        </div>`).join("");
+    }catch(e){
       $("supplierList").innerHTML = '<div class="cMiniEmpty">❌ Error loading</div>';
+      setBadge("badge-supplier", "error", "alert");
     }
   }
-
-  function showSupplierMsg(msg, isErr = false) {
+  function showSupplierMsg(msg, isErr = false){
     const box = $("supplierMsg");
     box.textContent = msg;
     box.style.display = "block";
     box.style.background = isErr ? "rgba(255,107,107,0.15)" : "rgba(98,210,111,0.15)";
     box.style.color = isErr ? "var(--danger)" : "var(--ok)";
   }
-
-  function submitSupplierIssue() {
+  function submitSupplierIssue(){
     const loc = getLoc();
     const supplierName = ($("supplierNameInput").value || "").trim();
     const productName = ($("supplierProductInput").value || "").trim();
@@ -1429,209 +961,154 @@
     const quantityAffected = ($("supplierQtyInput").value || "").trim();
     const description = ($("supplierDescInput").value || "").trim();
     const date = isoTodayLocal();
-
-    if (!loc) {
-      showSupplierMsg("No location set", true);
-      return;
-    }
-
-    if (!supplierName || !productName || !issueType) {
-      showSupplierMsg("Please fill supplier, product and issue type", true);
-      return;
-    }
-
+    if (!loc){ showSupplierMsg("No location set", true); return; }
+    if (!supplierName || !productName || !issueType){ showSupplierMsg("Please fill supplier, product and issue type", true); return; }
     const form = document.createElement("form");
-    form.method = "POST";
-    form.action = SCRIPT_URL;
-    form.target = "saveTarget";
-    form.style.display = "none";
-
+    form.method = "POST"; form.action = SCRIPT_URL; form.target = "saveTarget"; form.style.display = "none";
     const fields = {
-      action: "addSupplierIssue",
-      date: date,
+      action: "addSupplierIssue", date,
       location: "Café Kaiser " + loc,
-      supplierName: supplierName,
-      productName: productName,
-      issueType: issueType,
-      quantityAffected: quantityAffected,
-      description: description
+      supplierName, productName, issueType, quantityAffected, description
     };
-
     Object.keys(fields).forEach(key => {
       const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = fields[key];
+      input.type = "hidden"; input.name = key; input.value = fields[key];
       form.appendChild(input);
     });
-
     document.body.appendChild(form);
     form.submit();
-
-    setTimeout(() => {
+    setTimeout(()=>{
       form.remove();
-      $("supplierNameInput").value = "";
-      $("supplierProductInput").value = "";
-      $("supplierTypeInput").value = "";
-      $("supplierQtyInput").value = "";
-      $("supplierDescInput").value = "";
+      $("supplierNameInput").value = ""; $("supplierProductInput").value = "";
+      $("supplierTypeInput").value = ""; $("supplierQtyInput").value = ""; $("supplierDescInput").value = "";
       showSupplierMsg("✅ Supplier issue reported");
       loadSupplierIssues();
     }, 1200);
   }
 
-  function setupCollapsible(headId, bodyId, arrowId) {
-    $(headId).addEventListener("click", () => {
-      $(bodyId).classList.toggle("open");
-      $(arrowId).classList.toggle("open");
-    });
-  }
-
+  /* ===== CARDS / PANELS / TOOLS ===== */
+  let activePanel = "";
   let currentToolUrl = "";
 
-  function openTool(url) {
+  function closeAllPanels(){
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("open"));
+    document.querySelectorAll(".toolCard").forEach(c => c.classList.remove("active"));
+    activePanel = "";
+  }
+  function openPanel(name){
+    closeTool();
+    if (activePanel === name){ closeAllPanels(); return; }
+    closeAllPanels();
+    const panel = $("panel-" + name);
+    if (!panel) return;
+    panel.classList.add("open");
+    $("card-" + name).classList.add("active");
+    activePanel = name;
+    panel.scrollIntoView({ behavior:"smooth", block:"start" });
+    if (name === "catering") loadCateringMini();
+    if (name === "supplier") loadSupplierIssues();
+  }
+  function openTool(url){
     if (!url) return;
+    closeAllPanels();
     currentToolUrl = url;
-    $("toolName").textContent = url.replace("./", "");
+    $("toolName").textContent = url.replace("./","");
     $("toolFrame").src = url;
     $("toolViewer").classList.add("open");
-    $("toolViewer").scrollIntoView({ behavior: "smooth" });
+    $("toolViewer").scrollIntoView({ behavior:"smooth" });
   }
-
-  function closeTool() {
+  function closeTool(){
     $("toolViewer").classList.remove("open");
     $("toolFrame").src = "about:blank";
     currentToolUrl = "";
   }
 
+  /* ===== FULLSCREEN / WAKE ===== */
   let wakeLock = null;
-
-  async function toggleFullscreen() {
-    try {
+  async function toggleFullscreen(){
+    try{
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
       else await document.exitFullscreen();
-    } catch (_) {}
+    }catch(_){}
   }
-
-  async function toggleWakeLock() {
-    try {
-      if (!("wakeLock" in navigator)) {
-        alert("Wake Lock not supported on this device");
-        return;
-      }
-
-      if (wakeLock) {
-        await wakeLock.release();
-        wakeLock = null;
-        $("wakeBtn").classList.remove("on");
-        return;
-      }
-
+  async function toggleWakeLock(){
+    try{
+      if (!("wakeLock" in navigator)){ alert("Wake Lock not supported on this device"); return; }
+      if (wakeLock){ await wakeLock.release(); wakeLock = null; $("wakeBtn").classList.remove("on"); return; }
       wakeLock = await navigator.wakeLock.request("screen");
       $("wakeBtn").classList.add("on");
-
-      wakeLock.onrelease = () => {
-        wakeLock = null;
-        $("wakeBtn").classList.remove("on");
-      };
-    } catch (_) {
-      alert("Could not enable wake lock");
-    }
+      wakeLock.onrelease = ()=>{ wakeLock = null; $("wakeBtn").classList.remove("on"); };
+    }catch(_){ alert("Could not enable wake lock"); }
   }
 
-  document.addEventListener("click", enableAudio, { once: true });
-  document.addEventListener("touchstart", enableAudio, { once: true });
+  /* ===== EVENT WIRING ===== */
+  document.addEventListener("click", enableAudio, { once:true });
+  document.addEventListener("touchstart", enableAudio, { once:true });
+
+  document.querySelectorAll(".toolCard").forEach(card => {
+    card.addEventListener("click", () => {
+      if (card.dataset.panel) openPanel(card.dataset.panel);
+      else if (card.dataset.url) openTool(card.dataset.url);
+    });
+  });
+  document.querySelectorAll("[data-close-panel]").forEach(btn => {
+    btn.addEventListener("click", (e)=>{ e.stopPropagation(); closeAllPanels(); });
+  });
 
   document.querySelectorAll(".presetBtn").forEach(btn => {
     btn.addEventListener("click", () => addTimer(DEFAULT_DURATION_MS, btn.dataset.preset || "Timer"));
   });
-
   $("startFreeBtn").addEventListener("click", () => addTimer(DEFAULT_DURATION_MS, ""));
   $("clearExpBtn").addEventListener("click", clearExpired);
-
   $("submitSupplierBtn").addEventListener("click", submitSupplierIssue);
-
-  $("refreshKBtn").addEventListener("click", loadKitchenPct);
-  $("refreshCBtn").addEventListener("click", loadCateringMini);
-
+  $("refreshCBtn").addEventListener("click", (e)=>{ e.stopPropagation(); loadCateringMini(); });
   $("clockToggle").addEventListener("click", toggleClock);
   $("fsBtn").addEventListener("click", toggleFullscreen);
   $("wakeBtn").addEventListener("click", toggleWakeLock);
 
-  setupCollapsible("timerHead", "timerBody", "timerArrow");
-  setupCollapsible("supplierHead", "supplierBody", "supplierArrow");
-  setupCollapsible("toolsHead", "toolsBody", "toolsArrow");
-
-  $("toolsBody").classList.remove("open");
-  $("toolsArrow").classList.remove("open");
-
-  document.querySelectorAll(".toolItem").forEach(item => {
-    item.addEventListener("click", () => openTool(item.dataset.url));
-  });
-
   $("closeToolBtn").addEventListener("click", closeTool);
-  $("newTabBtn").addEventListener("click", () => {
-    if (currentToolUrl) window.open(currentToolUrl, "_blank", "noopener,noreferrer");
-  });
+  $("newTabBtn").addEventListener("click", () => { if (currentToolUrl) window.open(currentToolUrl, "_blank", "noopener,noreferrer"); });
 
-  $("timerList").addEventListener("click", (e) => {
+  $("timerList").addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-stop-id]");
     if (!btn) return;
     stopTimer(btn.getAttribute("data-stop-id"));
   });
-
-  $("cMiniList").addEventListener("click", (e) => {
+  $("cMiniList").addEventListener("click", (e)=>{
     const row = e.target.closest("[data-catering-index]");
     if (!row) return;
     openCateringModal(Number(row.getAttribute("data-catering-index")));
   });
-
   $("closeCModalBtn").addEventListener("click", closeCateringModal);
-  $("cModalBack").addEventListener("click", (e) => {
-    if (e.target === $("cModalBack")) closeCateringModal();
-  });
+  $("cModalBack").addEventListener("click", (e)=>{ if (e.target === $("cModalBack")) closeCateringModal(); });
+  document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeCateringModal(); });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeCateringModal();
-  });
-
-  document.addEventListener("visibilitychange", async () => {
-    if (document.visibilityState === "visible" && wakeLock === null) {
-      if ($("wakeBtn").classList.contains("on") && "wakeLock" in navigator) {
-        try {
+  document.addEventListener("visibilitychange", async ()=>{
+    if (document.visibilityState === "visible" && wakeLock === null){
+      if ($("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
+        try{
           wakeLock = await navigator.wakeLock.request("screen");
-          wakeLock.onrelease = () => {
-            wakeLock = null;
-            $("wakeBtn").classList.remove("on");
-          };
-        } catch (_) {}
+          wakeLock.onrelease = ()=>{ wakeLock = null; $("wakeBtn").classList.remove("on"); };
+        }catch(_){}
       }
     }
   });
 
-  (function init() {
+  /* ===== INIT ===== */
+  (function init(){
     const loc = getLoc();
-    $("locPill").textContent = "📍 Location: " + (loc || "Missing ?loc=");
-
+    $("locValue").textContent = loc || "Not set (add ?loc=)";
     updateClockUI();
     updateClock();
-
     renderTimers();
     checkTimerAlarms();
-
-    loadKitchenPct();
     loadCateringMini();
     loadSupplierIssues();
-
     setInterval(updateClock, 1000);
-    setInterval(() => {
-      renderTimers();
-      checkTimerAlarms();
-    }, 1000);
-    setInterval(loadKitchenPct, 60000);
+    setInterval(()=>{ renderTimers(); checkTimerAlarms(); }, 1000);
     setInterval(loadCateringMini, 60000);
     setInterval(loadSupplierIssues, 60000);
   })();
-</script>
+ </script>
 </body>
 </html>
