@@ -1,14 +1,12 @@
-<!doctype html> 
+<!doctype html>
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kaiser – Café Hub</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
   <style>
     :root{
       --bg0:#0d1117;
@@ -21,9 +19,9 @@
       --green:#62d26f;
       --red:#ff6b6b;
       --blue:#5ea7ff;
+      --warn:#f59e0b;
       --shadow:0 20px 60px rgba(0,0,0,.40);
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0; height: 100%;}
     body{
@@ -37,9 +35,7 @@
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
       padding:14px;
     }
-
     .shell{max-width:1180px;margin:0 auto;}
-
     .hero{
       border-radius:28px;
       border:1px solid rgba(255,255,255,0.12);
@@ -53,625 +49,337 @@
       position:relative;
       overflow:hidden;
     }
-
     .heroTop{text-align:center;}
-
     .kicker{
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.26em;
-      text-transform:uppercase;
-      color:var(--muted2);
+      font-size:10px;font-weight:900;letter-spacing:.26em;text-transform:uppercase;color:var(--muted2);
     }
-
     .title{
-      font-family:"Playfair Display",serif;
-      font-size:clamp(30px,6vw,48px);
-      line-height:1;
-      margin-top:8px;
-      letter-spacing:-.03em;
+      font-family:"Playfair Display",serif;font-size:clamp(30px,6vw,48px);line-height:1;margin-top:8px;letter-spacing:-.03em;
     }
-
-    .sub{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:800;
-      margin-top:10px;
+    .sub{color:var(--muted);font-size:13px;font-weight:800;margin-top:10px;}
+    .versionPill{
+      display:inline-block;margin-top:12px;padding:5px 12px;border-radius:999px;
+      border:1px solid rgba(214,178,74,0.4);background:rgba(214,178,74,0.14);
+      color:var(--gold);font-size:10px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;
     }
-
     .goldline{
-      height:2px;
-      margin:18px auto 0;
-      max-width:820px;
-      border-radius:999px;
-      background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent);
-      opacity:.95;
+      height:2px;margin:16px auto 0;max-width:820px;border-radius:999px;
+      background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent);opacity:.95;
     }
-
-    .heroMeta{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      align-items:stretch;
-    }
-
-    @media (max-width: 760px){
-      .heroMeta{grid-template-columns:1fr;}
-    }
-
-    .metaCard{
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      padding:14px;
-    }
-
-    .metaLabel{
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:var(--muted2);
-    }
-
-    .metaValue{
-      margin-top:8px;
-      font-size:18px;
-      font-weight:900;
-      color:rgba(255,255,255,0.96);
-      line-height:1.2;
-    }
-
-    .metaSub{
-      margin-top:6px;
-      font-size:12px;
-      font-weight:700;
-      color:var(--muted);
-    }
-
-    .controlRow{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-      margin-top:12px;
-    }
-
+    .heroMeta{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;}
+    @media (max-width: 760px){ .heroMeta{grid-template-columns:1fr;} }
+    .metaCard{border-radius:20px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);padding:14px;}
+    .metaLabel{font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);}
+    .metaValue{margin-top:8px;font-size:18px;font-weight:900;color:rgba(255,255,255,0.96);line-height:1.2;}
+    .metaSub{margin-top:6px;font-size:12px;font-weight:700;color:var(--muted);}
+    .controlRow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+    @media (max-width: 600px){ .controlRow{grid-template-columns:repeat(2,1fr);} }
     .btn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      min-height:44px;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.92);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      cursor:pointer;
-      transition:.15s ease;
-      text-align:center;
+      display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:10px 12px;
+      border-radius:999px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.92);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+      cursor:pointer;transition:.15s ease;text-align:center;
     }
-
     .btn:hover{background:rgba(255,255,255,0.10);}
-    .btn.on{
-      background:rgba(214,178,74,0.18);
-      border-color:rgba(214,178,74,0.42);
-      color:var(--gold);
-    }
-
-    .clockWrap{
-      display:none;
-      margin-top:14px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      padding:16px;
-      text-align:center;
-    }
+    .btn.on{background:rgba(214,178,74,0.18);border-color:rgba(214,178,74,0.42);color:var(--gold);}
+    .clockWrap{display:none;margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);padding:16px;text-align:center;}
     .clockWrap.show{display:block;}
+    .clockTime{font-family:"Playfair Display",serif;font-size:54px;line-height:1;letter-spacing:-.03em;font-weight:700;}
+    .clockDate{margin-top:6px;font-size:14px;color:var(--muted);font-weight:700;}
 
-    .clockTime{
-      font-family:"Playfair Display",serif;
-      font-size:54px;
-      line-height:1;
-      letter-spacing:-.03em;
-      font-weight:700;
+    /* ATTENTION BAR */
+    .attn{margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);box-shadow:var(--shadow);padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    @media (max-width: 760px){ .attn{grid-template-columns:repeat(2,1fr);} }
+    .attnChip{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);cursor:pointer;transition:.15s ease;}
+    .attnChip:hover{background:rgba(255,255,255,0.08);}
+    .attnChip.alert{border-color:rgba(255,107,107,0.42);background:rgba(255,107,107,0.12);}
+    .attnIcon{font-size:26px;line-height:1;}
+    .attnNum{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;line-height:1;}
+    .attnChip.alert .attnNum{color:#ff9494;}
+    .attnLabel{font-size:11px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);margin-top:4px;}
+
+    /* DAGENS CATERING */
+    .todayStrip{
+      margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.04);box-shadow:var(--shadow);overflow:hidden;
     }
-
-    .clockDate{
-      margin-top:6px;
-      font-size:14px;
-      color:var(--muted);
-      font-weight:700;
+    .todayHead{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;
+      background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.10);
     }
-
-    .section{
-      margin-top:14px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      overflow:hidden;
-      box-shadow:var(--shadow);
+    .todayTitle{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;}
+    .todayDot{width:10px;height:10px;border-radius:50%;background:var(--blue);}
+    .todayCount{font-size:11px;font-weight:800;color:var(--muted2);}
+    .todayBody{padding:14px;display:flex;gap:10px;overflow-x:auto;}
+    .evChip{
+      flex:0 0 auto;min-width:200px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));padding:12px 14px;
+      display:flex;gap:10px;align-items:center;
     }
+    .evBar{width:5px;height:46px;border-radius:4px;flex:0 0 auto;background:var(--blue);}
+    .evBar.today{background:var(--warn);}
+    .evInfo{min-width:0;}
+    .evName{font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .evMeta{font-size:12px;color:var(--muted);margin-top:4px;font-weight:700;}
+    .evEmpty{color:var(--muted2);font-size:13px;font-weight:700;padding:6px 2px;}
 
-    .sectionHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding:14px 16px;
-      background:rgba(255,255,255,0.03);
-      border-bottom:1px solid rgba(255,255,255,0.10);
-    }
-
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color:var(--muted);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-
-    .sectionDot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--gold);
-    }
-
-    .sectionInfo{
-      font-size:11px;
-      font-weight:800;
-      color:var(--muted2);
-    }
-
+    .section{margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);overflow:hidden;box-shadow:var(--shadow);}
+    .sectionHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.10);}
+    .sectionTitle{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;}
+    .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
+    .sectionDot.blue{background:var(--blue);}
+    .sectionDot.green{background:var(--green);}
+    .sectionInfo{font-size:11px;font-weight:800;color:var(--muted2);}
     .sectionBody{padding:16px;}
-
-    /* GRID OPBYGNING - 3 KOLONNER */
-    .toolGrid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-    }
-
-    @media (max-width: 1024px){
-      .toolGrid{grid-template-columns:repeat(2,1fr);}
-    }
-    @media (max-width: 600px){
-      .toolGrid{grid-template-columns:1fr;}
-    }
-
+    .toolGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+    @media (max-width: 1024px){ .toolGrid{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width: 600px){ .toolGrid{grid-template-columns:1fr;} }
     .toolCard{
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
+      border-radius:22px;border:1px solid rgba(255,255,255,0.12);
       background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      padding:18px;
-      min-height:220px; /* Gjort lidt højere så de er mere kvadratiske */
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      cursor:pointer;
-      transition:.15s ease;
-      position:relative;
-      overflow:hidden;
+      padding:18px;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;
+      cursor:pointer;transition:.15s ease;position:relative;overflow:hidden;
     }
-
-    .toolCard:hover{
-      background:rgba(255,255,255,0.08);
-      transform:translateY(-2px);
-    }
-
-    .toolTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-    }
-
-    .toolIcon{
-      font-size:30px;
-    }
-
+    .toolCard:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px);}
+    .toolTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+    .toolIcon{font-size:30px;}
     .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--muted);
-      white-space:nowrap;
+      display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);
+      font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;
     }
-
-    .badge.red{ background:rgba(255,107,107,0.12); border-color:rgba(255,107,107,0.30); color:#ff9494; }
+    .badge.red{ background:rgba(255,107,107,0.14); border-color:rgba(255,107,107,0.34); color:#ff9494; }
     .badge.blue{ background:rgba(94,167,255,0.12); border-color:rgba(94,167,255,0.30); color:#8cc1ff; }
     .badge.green{ background:rgba(98,210,111,0.12); border-color:rgba(98,210,111,0.30); color:#93e49c; }
+    .toolName{margin-top:12px;font-size:18px;font-weight:900;line-height:1.15;}
+    .toolDesc{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.4;font-weight:700;}
+    .toolBottom{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+    .toolMeta{display:flex;flex-wrap:wrap;gap:6px;}
+    .metaChip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+    .launchText{color:rgba(255,255,255,0.90);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
 
-    .toolName{
-      margin-top:12px;
-      font-size:18px;
-      font-weight:900;
-      line-height:1.15;
-    }
-
-    .toolDesc{
-      margin-top:8px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-      font-weight:700;
-    }
-
-    .toolBottom{
-      margin-top:18px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .toolMeta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-    }
-
-    .metaChip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--muted);
-    }
-
-    .launchText{
-      color:rgba(255,255,255,0.90);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-
-    /* FULLSCREEN VIEWER MODAL */
-    .toolViewer{
-      display:none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg0);
-      z-index: 9999;
-      padding: 14px;
-      flex-direction: column;
-    }
+    .toolViewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg0);z-index:9999;padding:14px;flex-direction:column;}
     .toolViewer.open{display:flex;}
-
-    .toolBar{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-
-    .toolPill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:44px;
-      padding:8px 20px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);
-      font-size:14px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--text);
-    }
-
-    .frame{
-      width:100%;
-      flex-grow: 1; /* Fylder hele resten af skærmen */
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius:20px;
-      background:rgba(0,0,0,0.25);
-    }
-
-    /* Stor rød Luk knap til touch */
-    #closeToolBtn {
-        background: rgba(255, 107, 107, 0.2);
-        border-color: rgba(255, 107, 107, 0.4);
-        color: #ff6b6b;
-        font-size: 14px;
-        padding: 0 30px;
-    }
+    .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;}
+    .toolPill{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 20px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);font-size:14px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text);}
+    .frame{width:100%;flex-grow:1;border:1px solid rgba(255,255,255,0.12);border-radius:20px;background:rgba(0,0,0,0.25);}
+    #closeToolBtn{background:rgba(255,107,107,0.2);border-color:rgba(255,107,107,0.4);color:#ff6b6b;font-size:14px;padding:0 30px;}
   </style>
 </head>
-
 <body>
   <div class="shell">
-
     <header class="hero">
       <div class="heroTop">
         <div class="kicker">KAISER</div>
         <div class="title">Café Hub</div>
         <div class="sub">Daglig drift, opgaver og rapportering samlet ét sted</div>
-        <div class="sub">Version 2.1</div>
+        <div class="versionPill">Version 3.0</div>
         <div class="goldline"></div>
       </div>
-
       <div class="heroMeta">
         <div class="metaCard">
           <div class="metaLabel">Lokation</div>
           <div class="metaValue" id="locPill">Ikke sat</div>
           <div class="metaSub">Hub følger valgt afdeling</div>
         </div>
-
         <div class="metaCard">
           <div class="metaLabel">Nu</div>
           <div class="metaValue" id="timePill">--:--</div>
-          <div class="metaSub">Brug værktøjerne nedenfor</div>
+          <div class="metaSub" id="updatedSub">Opdaterer…</div>
         </div>
       </div>
-
       <div class="controlRow">
         <button class="btn" id="clockToggle" type="button">🕐 Vis ur</button>
         <button class="btn" id="fsBtn" type="button">⛶ Fuldskærm</button>
+        <button class="btn" id="wakeBtn" type="button">☀️ Vågen</button>
         <button class="btn" id="refreshBtn" type="button">↻ Opdater</button>
       </div>
-
       <div class="clockWrap" id="clockWrap">
         <div class="clockTime" id="clockTime">--:--</div>
         <div class="clockDate" id="clockDate">--</div>
       </div>
     </header>
 
+    <!-- KRÆVER HANDLING NU -->
+    <section class="attn" id="attnBar">
+      <div class="attnChip" data-open="./soldout-products.html">
+        <div class="attnIcon">🍽️</div>
+        <div><div class="attnNum" id="attnSoldout">–</div><div class="attnLabel">Udsolgte</div></div>
+      </div>
+      <div class="attnChip" data-open="./guest-complaints.html">
+        <div class="attnIcon">💬</div>
+        <div><div class="attnNum" id="attnComplaints">–</div><div class="attnLabel">Klager</div></div>
+      </div>
+      <div class="attnChip" data-open="./faults-issues.html">
+        <div class="attnIcon">🛠️</div>
+        <div><div class="attnNum" id="attnFaults">–</div><div class="attnLabel">Fejl</div></div>
+      </div>
+      <div class="attnChip" data-scroll="cateringAnchor">
+        <div class="attnIcon">📅</div>
+        <div><div class="attnNum" id="attnCatering">–</div><div class="attnLabel">Catering i dag</div></div>
+      </div>
+    </section>
+
+    <!-- DAGENS CATERING -->
+    <section class="todayStrip" id="cateringAnchor">
+      <div class="todayHead">
+        <div class="todayTitle"><span class="todayDot"></span> Dagens catering</div>
+        <div class="todayCount" id="cateringCount">—</div>
+      </div>
+      <div class="todayBody" id="cateringBody">
+        <div class="evEmpty">Indlæser…</div>
+      </div>
+    </section>
+
+    <!-- DAGLIG DRIFT -->
     <section class="section">
       <div class="sectionHead">
-        <div class="sectionTitle"><span class="sectionDot"></span> Værktøjer</div>
+        <div class="sectionTitle"><span class="sectionDot green"></span> Daglig drift</div>
         <div class="sectionInfo">Tryk for at åbne fuldskærm</div>
       </div>
-
       <div class="sectionBody">
         <div class="toolGrid">
-
           <div class="toolCard" data-url="./daglige-opgaver-v2.html">
             <div>
-              <div class="toolTop">
-                <div class="toolIcon">✅</div>
-                <div class="badge green">Drift</div>
-              </div>
+              <div class="toolTop"><div class="toolIcon">✅</div><div class="badge green">Drift</div></div>
               <div class="toolName">Daglige opgaver</div>
               <div class="toolDesc">Tjenernes tjekliste og faste opgaver.</div>
             </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Checklist</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Checklist</div></div><div class="launchText">Åbn →</div></div>
           </div>
-
           <div class="toolCard" data-url="./shiftleader-checklist.html">
             <div>
-              <div class="toolTop">
-                <div class="toolIcon">🧭</div>
-                <div class="badge green">Skiftleder</div>
-              </div>
+              <div class="toolTop"><div class="toolIcon">🧭</div><div class="badge green">Skiftleder</div></div>
               <div class="toolName">Dagsansvarlig</div>
               <div class="toolDesc">Rapportering før/efter skift samlet her.</div>
             </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Skift</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Skift</div></div><div class="launchText">Åbn →</div></div>
           </div>
-
           <div class="toolCard" data-url="./skiftlederrapport1.html">
             <div>
-              <div class="toolTop">
-                <div class="toolIcon">📝</div>
-                <div class="badge blue">Rapport</div>
-              </div>
+              <div class="toolTop"><div class="toolIcon">📝</div><div class="badge blue" id="reportBadge">Rapport</div></div>
               <div class="toolName">Rapport</div>
               <div class="toolDesc">Daglig overlevering mellem vagter.</div>
             </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Daglig</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Daglig</div></div><div class="launchText">Åbn →</div></div>
           </div>
-
-          <div class="toolCard" data-url="./rabat-guidelines.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">🏷️</div>
-                <div class="badge blue">Info</div>
-              </div>
-              <div class="toolName">Rabat & tilbud</div>
-              <div class="toolDesc">Oversigt over Ældresagen, personalerabat m.m.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Guide</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-
-          <div class="toolCard" data-url="./idehub.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">💡</div>
-                <div class="badge blue">Feedback</div>
-              </div>
-              <div class="toolName">Rapportere fejl & ider</div>
-              <div class="toolDesc">Send idéer og FEJL direkte til Stefan.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Input</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./soldout-products.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">🍽️</div>
-                <div class="badge red" id="soldoutBadge">0 udsolgte</div>
-              </div>
-              <div class="toolName">Udsolgte varer</div>
-              <div class="toolDesc">Registrér hvad der mangler i service.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Live</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./guest-complaints.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">💬</div>
-                <div class="badge red" id="complaintBadge">0 klager</div>
-              </div>
-              <div class="toolName">Gæsteklager</div>
-              <div class="toolDesc">Registrér klager hurtigt og struktureret.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Service</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./faults-issues.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">🛠️</div>
-                <div class="badge blue" id="faultBadge">0 fejl</div>
-              </div>
-              <div class="toolName">Fejl & mangler</div>
-              <div class="toolDesc">Rapportér udstyr der er gået i stykker direkte til Rasmus.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Drift</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./kage-koeleskab.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">🍰</div>
-                <div class="badge red">KØL</div>
-              </div>
-              <div class="toolName">Kagekøleskab</div>
-              <div class="toolDesc">Registrér dato ind og udløb automatisk.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Udløb</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./kaffe-timer.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">☕</div>
-                <div class="badge blue">Timer</div>
-              </div>
-              <div class="toolName">Kaffe Timer</div>
-              <div class="toolDesc">Hold styr på udløb for Batch Brew kander.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Drift</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-             <div class="toolCard" data-url="./kontaktliste.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">📇</div>
-                <div class="badge green">Kontakt</div>
-              </div>
-              <div class="toolName">Kontaktliste</div>
-              <div class="toolDesc">Oversigt over HQ og Cafechefer.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">HQ</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
-          <div class="toolCard" data-url="./Telefonliste.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">📇</div>
-                <div class="badge green">Kontakt</div>
-              </div>
-              <div class="toolName">Telefon liste</div>
-              <div class="toolDesc">Oversigt leverandøre telefon listen.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">HQ</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-            <div class="toolCard" data-url="./guides.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">🧰</div>
-                <div class="badge green">Guides</div>
-              </div>
-              <div class="toolName">Guides</div>
-              <div class="toolDesc">Oversigt over guides.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Drift</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-           <div class="toolCard"
-     data-url="/Kaiser-standartkontrol/contractor/cafe.html">
-            <div>
-              <div class="toolTop">
-                <div class="toolIcon">⚒️</div>
-                <div class="badge green"></div>
-              </div>
-              <div class="toolName">Håndværker</div>
-              <div class="toolDesc">Oversigt over håndværker.</div>
-            </div>
-            <div class="toolBottom">
-              <div class="toolMeta"><div class="metaChip">Drift</div></div>
-              <div class="launchText">Åbn →</div>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>
 
-    <!-- VIEWER DER OVERLAPPER ALT (FULLSCREEN) -->
+    <!-- LIVE / SERVICE -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot"></span> Live / service</div>
+        <div class="sectionInfo">Rødt = kræver handling</div>
+      </div>
+      <div class="sectionBody">
+        <div class="toolGrid">
+          <div class="toolCard" data-url="./soldout-products.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🍽️</div><div class="badge" id="soldoutBadge">0 udsolgte</div></div>
+              <div class="toolName">Udsolgte varer</div>
+              <div class="toolDesc">Registrér hvad der mangler i service.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Live</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./guest-complaints.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">💬</div><div class="badge" id="complaintBadge">0 klager</div></div>
+              <div class="toolName">Gæsteklager</div>
+              <div class="toolDesc">Registrér klager hurtigt og struktureret.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Service</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./faults-issues.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🛠️</div><div class="badge" id="faultBadge">0 fejl</div></div>
+              <div class="toolName">Fejl & mangler</div>
+              <div class="toolDesc">Rapportér udstyr der er gået i stykker direkte til Rasmus.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Drift</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./kage-koeleskab.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🍰</div><div class="badge blue">Køl</div></div>
+              <div class="toolName">Kagekøleskab</div>
+              <div class="toolDesc">Registrér dato ind og udløb automatisk.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Udløb</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./kaffe-timer.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">☕</div><div class="badge blue">Timer</div></div>
+              <div class="toolName">Kaffe Timer</div>
+              <div class="toolDesc">Hold styr på udløb for Batch Brew kander.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Drift</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFO & KONTAKT -->
+    <section class="section">
+      <div class="sectionHead">
+        <div class="sectionTitle"><span class="sectionDot blue"></span> Info & kontakt</div>
+        <div class="sectionInfo">Opslag og hjælp</div>
+      </div>
+      <div class="sectionBody">
+        <div class="toolGrid">
+          <div class="toolCard" data-url="./rabat-guidelines.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🏷️</div><div class="badge blue">Info</div></div>
+              <div class="toolName">Rabat & tilbud</div>
+              <div class="toolDesc">Oversigt over Ældresagen, personalerabat m.m.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Guide</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./idehub.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">💡</div><div class="badge blue">Feedback</div></div>
+              <div class="toolName">Rapportere fejl & ider</div>
+              <div class="toolDesc">Send idéer og FEJL direkte til Stefan.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Input</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./guides.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🧰</div><div class="badge green">Guides</div></div>
+              <div class="toolName">Guides</div>
+              <div class="toolDesc">Oversigt over guides.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Drift</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./kontaktliste.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">📇</div><div class="badge green">Kontakt</div></div>
+              <div class="toolName">Kontaktliste</div>
+              <div class="toolDesc">Oversigt over HQ og Cafechefer.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">HQ</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./Telefonliste.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">📇</div><div class="badge green">Kontakt</div></div>
+              <div class="toolName">Telefon liste</div>
+              <div class="toolDesc">Oversigt leverandøre telefon listen.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">HQ</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="/Kaiser-standartkontrol/contractor/cafe.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">⚒️</div><div class="badge green">Drift</div></div>
+              <div class="toolName">Håndværker</div>
+              <div class="toolDesc">Oversigt over håndværker.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Drift</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULLSCREEN VIEWER -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
         <div class="toolPill" id="toolName">—</div>
@@ -682,129 +390,298 @@
       </div>
       <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
     </div>
-
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
     const LOC_KEY = "kaiser_kitchenpct_loc";
     const CLOCK_KEY = "kaiser_drift_clock_visible_v41";
-
+    const CACHE_BADGE_KEY = "kaiser_drift_badge_cache_v3";
+    const CACHE_CAT_KEY = "kaiser_drift_catering_cache_v3";
+    const RELOAD_HOUR = 4;            // genindlæs kl. 04:00
     const $ = id => document.getElementById(id);
 
+    function escapeHtml(s){
+      return String(s||"").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+    }
     function getLoc() {
       const fromQS = new URLSearchParams(location.search).get("loc");
       if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
       return localStorage.getItem(LOC_KEY) || "";
     }
-
-    function updateClockMeta() {
-      const now = new Date();
-      $("timePill").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" });
-      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    function saveCache(key, data){ try{ localStorage.setItem(key, JSON.stringify({ts:Date.now(), data})); }catch(_){} }
+    function loadCache(key){
+      try{ const p = JSON.parse(localStorage.getItem(key)||"null"); return (p && p.data!==undefined) ? p : null; }catch(_){ return null; }
     }
 
-    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
-
-    function updateClockUI() {
-      $("clockWrap").classList.toggle("show", clockVisible);
-      $("clockToggle").classList.toggle("on", clockVisible);
-      $("clockToggle").textContent = clockVisible ? "🕐 Skjul ur" : "🕐 Vis ur";
+    /* ===== ATTENTION BAR ===== */
+    const counts = { soldout:null, complaints:null, faults:null, cateringToday:null };
+    function setAttn(elId, val){
+      const el = $(elId); if (!el) return;
+      const chip = el.closest(".attnChip");
+      el.textContent = (val == null) ? "–" : val;
+      if (chip) chip.classList.toggle("alert", typeof val === "number" && val > 0);
+    }
+    function renderAttention(){
+      setAttn("attnSoldout", counts.soldout);
+      setAttn("attnComplaints", counts.complaints);
+      setAttn("attnFaults", counts.faults);
+      setAttn("attnCatering", counts.cateringToday);
     }
 
-    function toggleClock() {
-      clockVisible = !clockVisible;
-      localStorage.setItem(CLOCK_KEY, String(clockVisible));
-      updateClockUI();
-    }
-
+    /* ===== ROBUST JSONP (timeout + onerror + cleanup) ===== */
     function jsonp(url, params = {}) {
       return new Promise((resolve, reject) => {
         const cb = "__cb_" + Math.random().toString(16).slice(2);
         const qs = new URLSearchParams({ ...params, callback: cb }).toString();
         const src = url + (url.includes("?") ? "&" : "?") + qs;
         const s = document.createElement("script");
+        const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 15000);
+        function cleanup(){
+          clearTimeout(t);
+          try{ delete window[cb]; }catch(_){}
+          if (s.parentNode) s.parentNode.removeChild(s);
+        }
         window[cb] = (data) => { cleanup(); resolve(data); };
-        function cleanup() { try { delete window[cb]; } catch (_) {} if (s.parentNode) s.parentNode.removeChild(s); }
-        s.src = src; document.body.appendChild(s);
+        s.async = true;
+        s.onerror = () => { cleanup(); reject(new Error("load error")); };
+        s.src = src;
+        document.body.appendChild(s);
       });
     }
 
-    async function refreshAll() {
-        updateClockMeta();
-        const loc = getLoc();
-        if (!loc) return;
-        
-        // Hent data og opdater badges (Soldout, Complaints, Faults)
-        const fetchBadge = async (action, badgeId, label) => {
-            try {
-                const data = await jsonp(SCRIPT_URL, { action, loc: "Café Kaiser " + loc });
-                const count = (data && data.ok && Array.isArray(data.items || data.complaints)) ? (data.items || data.complaints).length : 0;
-                $(badgeId).textContent = `${count} ${label}`;
-            } catch (e) { $(badgeId).textContent = "Fejl"; }
-        };
-
-        fetchBadge("getSoldoutProducts", "soldoutBadge", "udsolgte");
-        fetchBadge("getGuestComplaints", "complaintBadge", "klager");
-        fetchBadge("getFaultsIssues", "faultBadge", "fejl");
+    /* ===== CLOCK ===== */
+    function pad(n){ return String(n).padStart(2,"0"); }
+    function updateClock() {
+      const now = new Date();
+      $("timePill").textContent = now.toLocaleTimeString("da-DK", { hour:"2-digit", minute:"2-digit" });
+      $("clockTime").textContent = now.toLocaleTimeString("da-DK", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+      $("clockDate").textContent = now.toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+    }
+    let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";
+    function updateClockUI() {
+      $("clockWrap").classList.toggle("show", clockVisible);
+      $("clockToggle").classList.toggle("on", clockVisible);
+      $("clockToggle").textContent = clockVisible ? "🕐 Skjul ur" : "🕐 Vis ur";
+    }
+    function toggleClock() {
+      clockVisible = !clockVisible;
+      localStorage.setItem(CLOCK_KEY, String(clockVisible));
+      updateClockUI();
     }
 
-    let currentToolUrl = "";
+    /* ===== BADGES (rolige ved 0, robuste array-navne) ===== */
+    function pickArray(data){
+      if (!data || !data.ok) return null;
+      return data.items || data.complaints || data.faults || data.issues || data.products || data.list || data.rows || null;
+    }
+    function setCountBadge(id, count, label){
+      const el = $(id);
+      if (!el) return;
+      el.textContent = `${count} ${label}`;
+      el.className = "badge" + (count > 0 ? " red" : "");
+    }
+    async function fetchBadge(action, badgeId, label, cacheSlot){
+      const loc = getLoc();
+      try{
+        const data = await jsonp(SCRIPT_URL, { action, loc: "Café Kaiser " + loc });
+        const arr = pickArray(data);
+        const count = Array.isArray(arr) ? arr.length : 0;
+        setCountBadge(badgeId, count, label);
+        counts[cacheSlot] = count; renderAttention();
+        const cache = loadCache(CACHE_BADGE_KEY)?.data || {};
+        cache[cacheSlot] = count;
+        saveCache(CACHE_BADGE_KEY, cache);
+      }catch(e){
+        const cached = loadCache(CACHE_BADGE_KEY)?.data;
+        if (cached && typeof cached[cacheSlot] === "number"){
+          setCountBadge(badgeId, cached[cacheSlot], label);
+          counts[cacheSlot] = cached[cacheSlot]; renderAttention();
+        }else{
+          const el = $(badgeId);
+          if (el){ el.textContent = "Fejl"; el.className = "badge red"; }
+        }
+      }
+    }
 
+    /* ===== DAGENS CATERING ===== */
+    function normalizeLoc(s){
+      return String(s||"").toLowerCase().replace(/café/g,"cafe").replace(/kaiser/g,"").replace(/[^\p{L}\p{N}]+/gu," ").trim();
+    }
+    function locMatches(a,b){ const na=normalizeLoc(a), nb=normalizeLoc(b); return na===nb || na.includes(nb) || nb.includes(na); }
+    function isoToday(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+    function parseLocalDateTime(dateStr, timeStr){
+      if (!dateStr) return NaN;
+      const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
+      const [y,m,d] = String(dateStr).split("-").map(Number);
+      const [hh,mm] = String(t).split(":").map(Number);
+      if (!y||!m||!d) return NaN;
+      return new Date(y,m-1,d,hh||0,mm||0,0,0).getTime();
+    }
+    function renderCatering(orders){
+      const loc = getLoc();
+      const todayYMD = isoToday();
+      const startOfToday = parseLocalDateTime(todayYMD,"00:00");
+      const events = (orders||[])
+        .filter(o => locMatches(o.location, loc))
+        .map(o => {
+          const date = String(o.deliveryDate||"").trim();
+          const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
+          return { customerName:o.customerName||"Catering", date, time, guests:o.guests||0,
+                   ts:parseLocalDateTime(date,time), isToday:(date===todayYMD) };
+        })
+        .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
+        .sort((a,b)=>a.ts-b.ts)
+        .slice(0,6);
+      const todayCount = events.filter(e=>e.isToday).length;
+      counts.cateringToday = todayCount; renderAttention();
+      $("cateringCount").textContent = todayCount > 0 ? `${todayCount} i dag` : (events.length ? `${events.length} kommende` : "Ingen");
+      if (!events.length){
+        $("cateringBody").innerHTML = '<div class="evEmpty">📅 Ingen catering i dag eller på vej</div>';
+        return;
+      }
+      $("cateringBody").innerHTML = events.map(ev => {
+        const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--";
+        const tag = ev.isToday ? " • I DAG" : "";
+        return `<div class="evChip">
+          <div class="evBar ${ev.isToday?"today":""}"></div>
+          <div class="evInfo">
+            <div class="evName">${escapeHtml(ev.customerName)}</div>
+            <div class="evMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${tag}</div>
+          </div></div>`;
+      }).join("");
+    }
+    async function loadCatering(){
+      const loc = getLoc();
+      if (!loc){ $("cateringBody").innerHTML = '<div class="evEmpty">📍 Ingen lokation valgt</div>'; $("cateringCount").textContent="—"; return; }
+      try{
+        const data = await jsonp(SCRIPT_URL, { action:"getOrders" });
+        if (!data || !data.ok || !Array.isArray(data.orders)) throw new Error("no data");
+        renderCatering(data.orders);
+        saveCache(CACHE_CAT_KEY, data.orders);
+      }catch(e){
+        const cached = loadCache(CACHE_CAT_KEY)?.data;
+        if (Array.isArray(cached)) renderCatering(cached);
+        else { $("cateringBody").innerHTML = '<div class="evEmpty">❌ Kunne ikke hente catering</div>'; $("cateringCount").textContent="—"; }
+      }
+    }
+
+    /* ===== RAPPORT-STATUS (klar til endpoint – ufarlig hvis det mangler) ===== */
+    function fmtTime(t){
+      if (!t) return "";
+      if (/^\d{2}:\d{2}/.test(t)) return String(t).slice(0,5);
+      const d = new Date(t);
+      return isNaN(d) ? "" : d.toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+    }
+    async function updateReportStatus(){
+      const loc = getLoc(); if (!loc) return;
+      try{
+        const data = await jsonp(SCRIPT_URL, { action:"getReportStatus", loc:"Café Kaiser " + loc });
+        if (!data || !data.ok) return; // endpoint ikke klar endnu → lad kortet være som det er
+        const el = $("reportBadge"); if (!el) return;
+        const sent = data.sent === true || data.submitted === true || String(data.status||"").toLowerCase() === "sent";
+        const t = fmtTime(data.time || data.submittedAt || data.timestamp || "");
+        if (sent){ el.textContent = "✓ Sendt" + (t ? " " + t : ""); el.className = "badge green"; }
+        else { el.textContent = "⚠ Ikke sendt"; el.className = "badge red"; }
+      }catch(_){ /* endpoint mangler/fejler → ingen ændring, kortet beholder "Rapport" */ }
+    }
+
+    /* ===== REFRESH ===== */
+    async function refreshAll() {
+      updateClock();
+      const loc = getLoc();
+      if (!loc) { $("updatedSub").textContent = "Sæt lokation med ?loc="; return; }
+      await Promise.allSettled([
+        fetchBadge("getSoldoutProducts", "soldoutBadge", "udsolgte", "soldout"),
+        fetchBadge("getGuestComplaints", "complaintBadge", "klager", "complaints"),
+        fetchBadge("getFaultsIssues", "faultBadge", "fejl", "faults"),
+        loadCatering(),
+        updateReportStatus()
+      ]);
+      $("updatedSub").textContent = "Opdateret kl. " + new Date().toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+    }
+
+    /* ===== TOOL VIEWER ===== */
+    let currentToolUrl = "";
     function openTool(url, title) {
       if (!url) return;
       currentToolUrl = url;
       $("toolName").textContent = title;
       $("toolFrame").src = url + (url.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
       $("toolViewer").classList.add("open");
-      document.body.style.overflow = "hidden"; // Stop scroll i baggrunden
+      document.body.style.overflow = "hidden";
     }
-
     function closeTool() {
       $("toolViewer").classList.remove("open");
       $("toolFrame").src = "about:blank";
       document.body.style.overflow = "auto";
       currentToolUrl = "";
     }
-
-document.querySelectorAll(".toolCard[data-url]").forEach(card => {
-  card.addEventListener("click", () => {
-    let url = card.dataset.url;
-    const title = card.querySelector(".toolName")?.textContent?.trim() || "Værktøj";
-
-    // ✅ Cache-bust: tving nyeste version hver gang (GitHub Pages/iframe cache)
-    url = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now();
-
-    openTool(url, title);
-  });
-});
-
+    document.querySelectorAll(".toolCard[data-url]").forEach(card => {
+      card.addEventListener("click", () => {
+        let url = card.dataset.url;
+        const title = card.querySelector(".toolName")?.textContent?.trim() || "Værktøj";
+        url = url + (url.includes("?") ? "&" : "?") + "v=" + Date.now(); // cache-bust
+        openTool(url, title);
+      });
+    });
+    document.querySelectorAll(".attnChip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        if (chip.dataset.open){
+          const base = chip.dataset.open;
+          const title = chip.querySelector(".attnLabel")?.textContent?.trim() || "Værktøj";
+          openTool(base + (base.includes("?") ? "&" : "?") + "v=" + Date.now(), title);
+        } else if (chip.dataset.scroll){
+          $(chip.dataset.scroll)?.scrollIntoView({ behavior:"smooth", block:"center" });
+        }
+      });
+    });
     $("closeToolBtn").addEventListener("click", closeTool);
     $("newTabBtn").addEventListener("click", () => {
       if (!currentToolUrl) return;
       const url = currentToolUrl + (currentToolUrl.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
       window.open(url, "_blank");
     });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && $("toolViewer").classList.contains("open")) closeTool(); });
 
+    /* ===== FULLSCREEN + WAKE LOCK ===== */
     $("fsBtn").addEventListener("click", () => {
-      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-      else document.exitFullscreen();
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    });
+    let wakeLock = null;
+    async function toggleWakeLock(){
+      try{
+        if (!("wakeLock" in navigator)){ alert("Wake Lock understøttes ikke på denne enhed"); return; }
+        if (wakeLock){ await wakeLock.release(); wakeLock = null; $("wakeBtn").classList.remove("on"); return; }
+        wakeLock = await navigator.wakeLock.request("screen");
+        $("wakeBtn").classList.add("on");
+        wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); };
+      }catch(_){ alert("Kunne ikke holde skærmen vågen"); }
+    }
+    $("wakeBtn").addEventListener("click", toggleWakeLock);
+    document.addEventListener("visibilitychange", async () => {
+      if (document.visibilityState === "visible" && wakeLock === null && $("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
+        try{ wakeLock = await navigator.wakeLock.request("screen"); wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); }; }catch(_){}
+      }
     });
 
     $("clockToggle").addEventListener("click", toggleClock);
     $("refreshBtn").addEventListener("click", refreshAll);
 
-    // AUTO REFRESH HVER DAG (Kl 04:00 f.eks., eller bare hver 24. time)
-    setInterval(() => { location.reload(); }, 24 * 60 * 60 * 1000);
-
+    /* ===== INIT ===== */
     (function init() {
       const loc = getLoc();
       $("locPill").textContent = loc || "Ikke sat";
       updateClockUI();
+      updateClock();
       refreshAll();
-      setInterval(updateClockMeta, 30000);
-      setInterval(refreshAll, 60000);
+      setInterval(updateClock, 1000);          // ur tikker hvert sekund
+      setInterval(refreshAll, 60000);          // data hvert minut
+      setInterval(() => {                      // genindlæs på fast stille tidspunkt (04:00)
+        const now = new Date();
+        if (now.getHours() === RELOAD_HOUR && now.getMinutes() === 0) location.reload();
+      }, 60000);
     })();
   </script>
 </body>
