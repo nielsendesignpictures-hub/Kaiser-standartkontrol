@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaiser · Bar &amp; Drinks</title>
+<style>
+  :root{
+    --wine:#6e1423;
+    --wine-deep:#5a1019;
+    --gold:#b8862f;
+    --gold-soft:#d8b66a;
+    --ink:#241a13;
+    --muted:#6b5d4f;
+    --cream:#faf6ee;
+    --paper:#fffdf9;
+    --line:#e7ddcc;
+    --shadow:0 1px 2px rgba(40,25,15,.05), 0 8px 24px rgba(40,25,15,.06);
+
+    --font-display:"Helvetica Neue",Arial,sans-serif;
+    --font-serif:Georgia,"Times New Roman",serif;
+    --font-mono:"SFMono-Regular",ui-monospace,"Courier New",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-display);
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 80% -10%, #fbeede 0%, transparent 60%),
+      var(--cream);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* ---------- HEADER ---------- */
+  header.top{
+    background:linear-gradient(150deg,var(--wine) 0%, var(--wine-deep) 100%);
+    color:#fff;position:relative;overflow:hidden;
+  }
+  header.top:after{
+    content:"";position:absolute;right:-60px;top:-80px;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle,rgba(216,182,106,.30),transparent 65%);
+  }
+  .top .wrap{padding:30px 20px 34px;position:relative;z-index:1;}
+  .crest{
+    display:inline-block;border:1.5px solid var(--gold-soft);color:var(--gold-soft);
+    font-size:11px;letter-spacing:3px;font-weight:700;text-transform:uppercase;
+    padding:5px 13px;border-radius:30px;margin-bottom:14px;
+  }
+  .top h1{font-family:var(--font-serif);font-size:42px;line-height:1.02;letter-spacing:-.5px;}
+  .top h1 .amp{color:var(--gold-soft);}
+  .top p.lead{color:#f3e7d4;font-size:15px;margin-top:8px;max-width:560px;}
+
+  /* ---------- STANDARD STRIP ---------- */
+  .standard{
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);margin-top:-18px;position:relative;z-index:2;
+    padding:14px 18px;display:flex;gap:22px;flex-wrap:wrap;align-items:center;
+  }
+  .standard .lab{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--wine);}
+  .standard .it{font-size:13.5px;color:var(--ink);display:flex;align-items:center;gap:7px;}
+  .standard .it b{font-weight:700;}
+  .standard .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky;top:0;z-index:20;background:rgba(250,246,238,.92);
+    backdrop-filter:blur(8px);padding:14px 0 12px;margin-top:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .controls .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .filters{display:flex;gap:7px;flex-wrap:wrap;}
+  .fbtn{
+    font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:7px 14px;border-radius:30px;transition:all .15s ease;
+  }
+  .fbtn:hover{border-color:var(--gold-soft);color:var(--ink);}
+  .fbtn.active{background:var(--wine);border-color:var(--wine);color:#fff;}
+  .search{
+    margin-left:auto;display:flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);border-radius:30px;padding:7px 14px;min-width:210px;
+  }
+  .search:focus-within{border-color:var(--gold);}
+  .search input{border:none;outline:none;font-family:inherit;font-size:13.5px;width:100%;background:transparent;color:var(--ink);}
+  .search svg{flex:0 0 16px;opacity:.5;}
+  .count{font-size:12px;color:var(--muted);margin-top:9px;}
+
+  /* ---------- GRID ---------- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px;}
+  .empty{display:none;text-align:center;color:var(--muted);padding:50px 0;font-size:15px;}
+
+  /* ---------- DRINK CARD ---------- */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(40,25,15,.06),0 14px 32px rgba(40,25,15,.10);}
+  .card .accent{height:6px;background:var(--c,#999);}
+  .card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;}
+
+  .card .name{
+    font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.3px;
+    text-transform:uppercase;line-height:1.05;color:var(--ink);
+  }
+  .card .badges{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px;}
+  .badge{
+    font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:.3px;
+    background:var(--c-bg,#f3eee5);color:var(--c-dk,#555);border:1px solid var(--c-bd,transparent);
+  }
+  .badge.glass{background:#fff;border:1px solid var(--line);color:var(--muted);font-weight:600;}
+
+  .h{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 7px;}
+
+  /* spec list */
+  .spec{list-style:none;margin:0 0 4px;}
+  .spec li{display:flex;align-items:baseline;gap:12px;padding:4px 0;border-bottom:1px dotted var(--line);}
+  .spec li:last-child{border-bottom:none;}
+  .spec .amt{
+    font-family:var(--font-mono);font-size:13.5px;font-weight:600;color:var(--c-dk,var(--wine));
+    min-width:48px;text-align:right;flex:0 0 48px;letter-spacing:-.3px;
+  }
+  .spec .ing{font-size:13.5px;color:var(--ink);}
+  .spec li.top{margin-top:2px;}
+  .spec li.top .amt{font-size:11px;color:var(--muted);}
+  .spec li.top .ing{font-style:italic;color:var(--muted);}
+
+  .pynt{
+    margin-top:13px;background:var(--cream);border-radius:9px;padding:10px 12px;
+  }
+  .pynt .h{margin-bottom:5px;}
+  .pynt .v{font-size:13px;color:var(--ink);}
+
+  .steps{margin-top:14px;list-style:none;counter-reset:s;}
+  .steps li{
+    position:relative;padding:5px 0 5px 30px;font-size:13px;color:var(--ink);counter-increment:s;
+    border-bottom:1px solid transparent;
+  }
+  .steps li:before{
+    content:counter(s);position:absolute;left:0;top:4px;
+    width:20px;height:20px;border-radius:50%;background:var(--c,#999);color:#fff;
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);
+  }
+  .note-inline{
+    margin-top:12px;font-size:12px;color:var(--muted);font-style:italic;
+    border-left:3px solid var(--c,#999);padding:6px 0 6px 11px;background:linear-gradient(90deg,var(--c-bg,#f6f6f6),transparent);
+    border-radius:0 6px 6px 0;
+  }
+
+  /* ---------- SECTION DIVIDER ---------- */
+  .divider{display:flex;align-items:center;gap:14px;margin:36px 0 4px;}
+  .divider h2{font-family:var(--font-serif);font-size:24px;color:var(--ink);white-space:nowrap;}
+  .divider .ln{height:1px;background:var(--line);flex:1;}
+  .divider .pill{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+
+  /* lemonade note */
+  .lemo-note{
+    background:var(--paper);border:1px dashed var(--gold-soft);border-radius:12px;
+    padding:16px 18px;margin-top:16px;font-size:13.5px;color:var(--muted);
+  }
+  .lemo-note b{color:var(--ink);}
+
+  footer.foot{margin-top:40px;text-align:center;font-size:12px;color:var(--muted);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:720px){
+    .grid{grid-template-columns:1fr;}
+    .top h1{font-size:32px;}
+    .search{margin-left:0;width:100%;}
+    .standard{gap:14px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;scroll-behavior:auto!important;}
+  }
+  @media print{
+    .controls{display:none;}
+    .card{break-inside:avoid;box-shadow:none;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="top">
+    <div class="wrap">
+      <span class="crest">Café Kaiser · Bar</span>
+      <h1>Drinks <span class="amp">&amp;</span> lemonader</h1>
+      <p class="lead">Opskrifter på vores nye drinks — sat op til hurtig brug bag baren. Find drinken med filtrene eller søgefeltet, og følg trinene.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- Fælles standard -->
+    <div class="standard">
+      <span class="lab">Fælles standard</span>
+      <span class="it"><span class="dot"></span><b>Anarkist-glas</b> (undt. Mojito)</span>
+      <span class="it"><span class="dot"></span><b>5 store isterninger</b> i bunden</span>
+      <span class="it"><span class="dot"></span>Pynt som regel: <b>myntesprig + 2 limebåde</b></span>
+      <span class="it"><span class="dot"></span>Top altid op <b>forsigtigt</b></span>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="row">
+        <div class="filters" id="filters">
+          <button class="fbtn active" data-f="all">Alle</button>
+          <button class="fbtn" data-f="vodka">Vodka</button>
+          <button class="fbtn" data-f="gin">Gin</button>
+          <button class="fbtn" data-f="passoa">Passoã</button>
+          <button class="fbtn" data-f="aperol">Aperol &amp; bobler</button>
+          <button class="fbtn" data-f="rom">Rom</button>
+          <button class="fbtn" data-f="lemonade">Lemonader</button>
+        </div>
+        <label class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="q" type="text" placeholder="Søg drink eller ingrediens…" autocomplete="off">
+        </label>
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+
+    <!-- ============ DRINKS ============ -->
+    <div class="grid" id="grid">
+
+      <!-- Rabarber Sunset -->
+      <article class="card" data-base="vodka" data-name="Rabarber Sunset" data-ing="vodka rabarbersaft peach giffard lime tranebær"
+        style="--c:#e0567a;--c-bg:#fce7ee;--c-dk:#c23a5e;--c-bd:#f6cdd9;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Rabarber Sunset</div>
+          <div class="badges"><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Rabarbersaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Giffard Peach sirup</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Tranebærjuice til opfyldning</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
+            <li>Fyld glasset med 5 store isterninger.</li>
+            <li>Hæld vodka, rabarbersaft, peach- og lime sirup over isen.</li>
+            <li>Top forsigtigt op med tranebærjuice.</li>
+            <li>Pynt med myntesprig og 2 limebåde.</li>
+          </ol>
+        </div>
+      </article>
+
+      <!-- Gin Hass -->
+      <article class="card" data-base="gin" data-name="Gin Hass" data-ing="gin mango giffard lime lemon sodavand"
+        style="--c:#cf9a2c;--c-bg:#f8efd6;--c-dk:#a87a1c;--c-bd:#ecdca8;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Gin Hass</div>
+          <div class="badges"><span class="badge">Gin</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Gin</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Giffard Mango sirup</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Lemon sodavand til opfyldning</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
+            <li>Fyld glasset med 5 store isterninger.</li>
+            <li>Hæld gin, mango- og lime sirup over isen.</li>
+            <li>Top forsigtigt op med lemon sodavand.</li>
+            <li>Pynt med myntesprig og 2 limebåde.</li>
+          </ol>
+        </div>
+      </article>
+
+      <!-- Kaiser Passion -->
+      <article class="card" data-base="passoa vodka" data-name="Kaiser Passion" data-ing="vodka passoa passion passionsfrugt mirinda lemon"
+        style="--c:#e0732b;--c-bg:#fbe9d8;--c-dk:#bd571a;--c-bd:#f4cba6;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Kaiser Passion</div>
+          <div class="badges"><span class="badge">Passoã</span><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Passoã</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Mirinda Lemon til opfyldning</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · ½ passionsfrugt skåret i 4 stykker</div></div>
+          <ol class="steps">
+            <li>Fyld glasset med 5 store isterninger.</li>
+            <li>Hæld vodka og Passoã over isen.</li>
+            <li>Top forsigtigt op med Mirinda Lemon.</li>
+            <li>Pynt med myntesprig og passionsfrugt.</li>
+          </ol>
+        </div>
+      </article>
+
+      <!-- Elderflower Smash -->
+      <article class="card" data-base="vodka" data-name="Elderflower Smash" data-ing="vodka hyldeblomst hyldeblomstsaft rabarbersaft lime danskvand"
+        style="--c:#7fa64f;--c-bg:#eef4e0;--c-dk:#5f8235;--c-bd:#d3e3b6;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Elderflower Smash</div>
+          <div class="badges"><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">6 cl</span><span class="ing">Hyldeblomstsaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Rabarbersaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Danskvand til opfyldning</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
+            <li>Fyld glasset med 5 store isterninger.</li>
+            <li>Hæld vodka, hyldeblomstsaft, rabarbersaft og lime sirup over isen.</li>
+            <li>Top forsigtigt op med danskvand.</li>
+            <li>Pynt med myntesprig og 2 limebåde.</li>
+          </ol>
+        </div>
+      </article>
+
+      <!-- Aperol Spritz -->
+      <article class="card" data-base="aperol" data-name="Aperol Spritz" data-ing="aperol bobler danskvand appelsin spritz"
+        style="--c:#ef5f23;--c-bg:#fde4d6;--c-dk:#c84713;--c-bd:#f7c2a4;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Aperol Spritz</div>
+          <div class="badges"><span class="badge">Aperol</span><span class="badge">Bobler</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">6 cl</span><span class="ing">Aperol</span></li>
+            <li class="top"><span class="amt">fyld</span><span class="ing">Husets bobler — op til ca. 2 cm fra kanten</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Danskvand til opfyldning</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">1 appelsinskive</div></div>
+          <ol class="steps">
+            <li>Fyld glasset med 5 store isterninger.</li>
+            <li>Hæld Aperol over isen.</li>
+            <li>Læg appelsinskiven i glasset.</li>
+            <li>Fyld op med husets bobler til ca. 2 cm fra kanten.</li>
+            <li>Top forsigtigt op med danskvand.</li>
+          </ol>
+          <div class="note-inline">Drikken må gerne dele sig i lag — det er helt fint.</div>
+        </div>
+      </article>
+
+      <!-- Mojito -->
+      <article class="card" data-base="rom" data-name="Mojito" data-ing="mojito rom rørsukker lime mynte knust is hane"
+        style="--c:#33a878;--c-bg:#dff2e8;--c-dk:#1f8159;--c-bd:#aedfc7;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Mojito</div>
+          <div class="badges"><span class="badge">Rom</span><span class="badge glass">Highball / højt krystalglas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">fyld</span><span class="ing">Knust is (fyld glasset)</span></li>
+            <li><span class="amt">1 pose</span><span class="ing">Rørsukker</span></li>
+            <li><span class="amt">4 stk</span><span class="ing">Limebåde</span></li>
+            <li><span class="amt">5–8</span><span class="ing">Mynteblade</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Mojito fra hanen</span></li>
+          </ul>
+          <div class="pynt"><p class="h">Pynt</p><div class="v">2 knæksugerør · myntesprig · limebåde</div></div>
+          <ol class="steps">
+            <li>Drys rørsukker i glasset.</li>
+            <li>Squeeze limene og læg dem i glasset.</li>
+            <li>Twist myntebladene og læg dem i glasset.</li>
+            <li>Fyld glasset med knust is.</li>
+            <li>Fyld op med mojito fra hanen.</li>
+            <li>Pynt med 2 knæksugerør, myntesprig og limebåde.</li>
+          </ol>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ============ LEMONADER ============ -->
+    <div class="divider" data-base="lemonade">
+      <h2>Lemonader</h2>
+      <span class="ln"></span>
+      <span class="pill">Alkoholfri</span>
+    </div>
+
+    <div class="grid">
+      <article class="card" data-base="lemonade" data-name="Lemonade Standard" data-ing="lemonade standard alkoholfri"
+        style="--c:#d9b528;--c-bg:#f8f0cf;--c-dk:#a8881a;--c-bd:#ecdd9c;">
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Standard</div>
+          <div class="badges"><span class="badge">Lemonade</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Servering</p>
+          <ul class="spec">
+            <li><span class="amt">2–3</span><span class="ing">Isterninger</span></li>
+            <li><span class="amt">+</span><span class="ing">Sugerør</span></li>
+            <li><span class="amt">+</span><span class="ing">Myntesprig</span></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="lemo-note" data-base="lemonade">
+      <b>Plads til flere lemonader.</b> Den her sektion ser ud til at være sat op som skabelon (kun "Standard" er med). Send mig resten af lemonade-varianterne — smag, mængder og evt. egen pynt — så føjer jeg dem ind som kort i samme stil.
+    </div>
+
+    <div class="empty" id="empty">Ingen drinks matcher. Prøv et andet filter eller søgeord.</div>
+
+    <footer class="foot">
+      Café Kaiser · Bar &amp; Drinks · Ligger på drift-hubben — spørg en kollega, hvis du er i tvivl.
+    </footer>
+
+  </div>
+
+<script>
+  (function(){
+    var grid = document.getElementById('grid');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+    var lemoCards = cards.filter(function(c){return c.dataset.base.indexOf('lemonade')>-1;});
+    var drinkCards = cards.filter(function(c){return c.dataset.base.indexOf('lemonade')===-1;});
+    var filters = document.getElementById('filters');
+    var q = document.getElementById('q');
+    var countEl = document.getElementById('count');
+    var emptyEl = document.getElementById('empty');
+    var lemoSection = document.querySelectorAll('[data-base="lemonade"]'); // divider + lemo note + lemo cards
+    var activeFilter = 'all';
+
+    function apply(){
+      var term = q.value.trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function(c){
+        var matchFilter = activeFilter === 'all' || c.dataset.base.indexOf(activeFilter) > -1;
+        var hay = (c.dataset.name + ' ' + c.dataset.ing).toLowerCase();
+        var matchTerm = !term || hay.indexOf(term) > -1;
+        var show = matchFilter && matchTerm;
+        c.style.display = show ? '' : 'none';
+        if(show) shown++;
+      });
+
+      // Show/hide the lemonade divider + note depending on whether any lemo card is visible
+      var anyLemoVisible = lemoCards.some(function(c){return c.style.display !== 'none';});
+      document.querySelectorAll('.divider[data-base="lemonade"], .lemo-note[data-base="lemonade"]').forEach(function(el){
+        el.style.display = anyLemoVisible ? '' : 'none';
+      });
+
+      emptyEl.style.display = shown === 0 ? 'block' : 'none';
+      countEl.textContent = shown + (shown === 1 ? ' opskrift' : ' opskrifter');
+    }
+
+    filters.addEventListener('click', function(e){
+      var b = e.target.closest('.fbtn');
+      if(!b) return;
+      filters.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      activeFilter = b.dataset.f;
+      apply();
+    });
+    q.addEventListener('input', apply);
+    apply();
+  })();
+</script>
+</body>
+</html>
