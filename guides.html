@@ -1,15 +1,17 @@
+
+Guides · HTML
 <!doctype html>
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kaiser – Café Hub | Guides</title>
-
+ 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
+ 
   <style>
     :root{
       --bg0:#0d1117;--bg1:#161b22;
@@ -30,7 +32,7 @@
         linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
     }
     .shell{max-width:1180px;margin:0 auto;}
-
+ 
     /* Hero */
     .hero{
       border-radius:28px;border:1px solid rgba(255,255,255,0.12);
@@ -42,7 +44,7 @@
     .sub{color:var(--muted);font-size:13px;font-weight:800;margin-top:8px;}
     .goldline{height:2px;background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent);
       margin:18px auto;border-radius:999px;opacity:.9;max-width:700px;}
-
+ 
     /* Section */
     .section{border-radius:22px;border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.04);box-shadow:var(--shadow);}
@@ -53,7 +55,7 @@
     .sectionDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
     .sectionInfo{font-size:11px;font-weight:800;color:var(--muted2);}
     .sectionBody{padding:16px;}
-
+ 
     /* Grid + cards */
     .toolGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
     .toolCard{
@@ -73,9 +75,9 @@
     .toolDesc{margin-top:8px;color:var(--muted);font-size:13px;font-weight:700;}
     .toolBottom{margin-top:18px;display:flex;justify-content:space-between;align-items:center;}
     .metaChip{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.05);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+      background:rgba(255,255,255,0.05);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:inline-block;}
     .launchText{color:rgba(255,255,255,0.90);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
-
+ 
     /* viewer */
     .toolViewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
       backdrop-filter: blur(8px);
@@ -86,12 +88,28 @@
     .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;}
     .toolPill{padding:8px 20px;border:1px solid rgba(255,255,255,0.12);
       background:rgba(255,255,255,0.05);border-radius:999px;font-size:14px;font-weight:900;text-transform:uppercase;color:var(--text);}
-    #closeToolBtn{background:rgba(255,107,107,0.2);border-color:rgba(255,107,107,0.4);color:#ff6b6b;}
-    #pdf-viewer{flex-grow:1;overflow:auto;border:1px solid rgba(255,255,255,0.15);
-      border-radius:20px;background:rgba(0,0,0,0.25);padding:20px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+    #closeToolBtn{background:rgba(255,107,107,0.2);border-color:rgba(255,107,107,0.4);color:#ff6b6b;cursor:pointer;}
+ 
+    /* shared viewer stage holds either PDF canvases or an HTML iframe */
+    #viewerStage{flex-grow:1;overflow:hidden;border:1px solid rgba(255,255,255,0.15);
+      border-radius:20px;background:rgba(0,0,0,0.25);box-shadow:0 8px 24px rgba(0,0,0,0.4);
+      display:flex;flex-direction:column;}
+ 
+    /* PDF mode: scrollable canvas stack with padding */
+    #pdf-viewer{flex-grow:1;overflow:auto;padding:20px;display:none;}
+    #pdf-viewer canvas{display:block;margin:0 auto 16px;max-width:100%;height:auto;
+      border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.5);}
+ 
+    /* HTML mode: full-bleed iframe */
+    #html-viewer{flex-grow:1;border:none;width:100%;height:100%;display:none;
+      background:#fff;border-radius:20px;}
+ 
+    .viewerMsg{margin:auto;text-align:center;color:var(--muted);font-weight:800;
+      font-size:14px;padding:40px;display:none;}
+    .viewerMsg a{color:var(--blue);}
   </style>
 </head>
-
+ 
 <body>
   <div class="shell">
     <header class="hero">
@@ -100,16 +118,16 @@
       <div class="sub">Guides & Manualer</div>
       <div class="goldline"></div>
     </header>
-
+ 
     <section class="section">
       <div class="sectionHead">
         <div class="sectionTitle"><span class="sectionDot"></span> GUIDES</div>
         <div class="sectionInfo">Tryk på et kort for at åbne</div>
       </div>
-
+ 
       <div class="sectionBody">
         <div class="toolGrid">
-
+ 
           <div class="toolCard" data-file="aeldresagen.pdf">
             <div>
               <div class="toolTop"><div class="toolIcon">👵</div><div class="badge green">Guide</div></div>
@@ -118,7 +136,7 @@
             </div>
             <div class="toolBottom"><div class="metaChip">HQ</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
           <div class="toolCard" data-file="kaffe.pdf">
             <div>
               <div class="toolTop"><div class="toolIcon">☕</div><div class="badge green">Guide</div></div>
@@ -127,7 +145,7 @@
             </div>
             <div class="toolBottom"><div class="metaChip">Drift</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
           <div class="toolCard" data-file="mb.pdf">
             <div>
               <div class="toolTop"><div class="toolIcon">💰</div><div class="badge green">Guide</div></div>
@@ -136,113 +154,164 @@
             </div>
             <div class="toolBottom"><div class="metaChip">Vedligehold</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
             <div class="toolCard" data-file="qr.pdf">
             <div>
-              <div class="toolTop">📲<div class="toolIcon">
-                </div><div class="badge green">Guide</div></div>
+              <div class="toolTop"><div class="toolIcon">📲</div><div class="badge green">Guide</div></div>
               <div class="toolName">Drift</div>
               <div class="toolDesc">Scan QR kode til app</div>
             </div>
             <div class="toolBottom"><div class="metaChip">Vedligehold</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
             <div class="toolCard" data-file="master.pdf">
             <div>
-              <div class="toolTop">🍽️<div class="toolIcon">
-                </div><div class="badge green">Guide</div></div>
+              <div class="toolTop"><div class="toolIcon">🍽️</div><div class="badge green">Guide</div></div>
               <div class="toolName">Buffet guide</div>
               <div class="toolDesc">Buffet guide</div>
             </div>
             <div class="toolBottom"><div class="metaChip">Info</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
             <div class="toolCard" data-file="Kaiser-Vinguide.pdf">
             <div>
-              <div class="toolTop">🍷<div class="toolIcon">
-                </div><div class="badge green">Guide</div></div>
+              <div class="toolTop"><div class="toolIcon">🍷</div><div class="badge green">Guide</div></div>
               <div class="toolName">Vin guide</div>
               <div class="toolDesc">Vores vinkort forklaret i et sprog, du nemt kan bruge over for gæsten — og
 et par forslag til menukortet til sidst.</div>
             </div>
             <div class="toolBottom"><div class="metaChip">Info</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
                       <div class="toolCard" data-file="kaffe1.pdf">
             <div>
-              <div class="toolTop">☕️<div class="toolIcon">
-                </div><div class="badge green">Guide</div></div>
+              <div class="toolTop"><div class="toolIcon">☕️</div><div class="badge green">Guide</div></div>
               <div class="toolName">Kaffekværn indstilling</div>
               <div class="toolDesc">Sådan indstiller du vores kaffekværn.</div>
             </div>
             <div class="toolBottom"><div class="metaChip">Info</div><div class="launchText">Åbn →</div></div>
           </div>
-
+ 
                             <div class="toolCard" data-file="drinks.html">
             <div>
-              <div class="toolTop">🍹<div class="toolIcon">
-                </div><div class="badge green">Guide</div></div>
-              <div class="toolName">drinks opskrifter</div>
-              <div class="toolDesc">Sådan laver du kaiser drinks.</div>
+              <div class="toolTop"><div class="toolIcon">🍹</div><div class="badge green">Guide</div></div>
+              <div class="toolName">Drinks opskrifter</div>
+              <div class="toolDesc">Sådan laver du Kaiser drinks &amp; lemonader.</div>
             </div>
             <div class="toolBottom"><div class="metaChip">Info</div><div class="launchText">Åbn →</div></div>
-          </div>    
-
+          </div>
+ 
         </div>
       </div>
     </section>
-
+ 
     <div style="text-align:center;margin-top:20px;">
       <a href="../index.html" class="metaChip">← Tilbage til Hub</a>
     </div>
   </div>
-
-  <!-- PDF Viewer -->
+ 
+  <!-- Viewer (PDF + HTML) -->
   <div class="toolViewer" id="toolViewer">
     <div class="toolBar">
       <div class="toolPill" id="guideTitle">GUIDE VISNING</div>
       <button id="closeToolBtn" class="toolPill">✖ Luk Værktøj</button>
     </div>
-    <div id="pdf-viewer"></div>
+    <div id="viewerStage">
+      <div id="pdf-viewer"></div>
+      <iframe id="html-viewer" title="Guide"></iframe>
+      <div class="viewerMsg" id="viewerMsg"></div>
+    </div>
   </div>
-
+ 
   <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    // Basic interaktiv logik
-    const cards = document.querySelectorAll('.toolCard');
-    const viewer = document.getElementById('toolViewer');
-    const closeBtn = document.getElementById('closeToolBtn');
+    const cards        = document.querySelectorAll('.toolCard');
+    const viewer       = document.getElementById('toolViewer');
+    const closeBtn     = document.getElementById('closeToolBtn');
     const pdfContainer = document.getElementById('pdf-viewer');
-    const titleEl = document.getElementById('guideTitle');
-
-    async function loadPDF(url, name){
+    const htmlFrame    = document.getElementById('html-viewer');
+    const msgEl        = document.getElementById('viewerMsg');
+    const titleEl      = document.getElementById('guideTitle');
+ 
+    // point PDF.js at its worker (same version as the library above)
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+ 
+    function resetStage(){
+      pdfContainer.style.display = 'none';
       pdfContainer.innerHTML = '';
+      htmlFrame.style.display = 'none';
+      htmlFrame.removeAttribute('src');
+      msgEl.style.display = 'none';
+      msgEl.innerHTML = '';
+    }
+ 
+    function showMessage(html){
+      msgEl.innerHTML = html;
+      msgEl.style.display = 'block';
+    }
+ 
+    // Decide PDF vs HTML by file extension
+    function openFile(file, name){
       titleEl.textContent = name;
-      const pdf = await pdfjsLib.getDocument(url).promise;
-      for(let i=1;i<=pdf.numPages;i++){
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({scale:1.4});
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        pdfContainer.appendChild(canvas);
-        await page.render({canvasContext:ctx,viewport}).promise;
+      viewer.classList.add('open');
+      resetStage();
+ 
+      const lower = (file || '').toLowerCase();
+      if (lower.endsWith('.html') || lower.endsWith('.htm')) {
+        htmlFrame.style.display = 'block';
+        htmlFrame.src = file;
+      } else if (lower.endsWith('.pdf')) {
+        pdfContainer.style.display = 'block';
+        loadPDF(file, name);
+      } else {
+        showMessage('Ukendt filtype. <a href="'+file+'" target="_blank" rel="noopener">Åbn i nyt vindue →</a>');
       }
     }
-
+ 
+    async function loadPDF(url, name){
+      try{
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        for(let i=1;i<=pdf.numPages;i++){
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({scale:1.4});
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          pdfContainer.appendChild(canvas);
+          await page.render({canvasContext:ctx,viewport}).promise;
+        }
+      }catch(err){
+        pdfContainer.style.display = 'none';
+        showMessage('Kunne ikke åbne "'+name+'".<br>Tjek at filen <b>'+url+
+          '</b> ligger i samme mappe.<br><br><a href="'+url+
+          '" target="_blank" rel="noopener">Prøv at åbne i nyt vindue →</a>');
+        console.error(err);
+      }
+    }
+ 
+    function closeViewer(){
+      viewer.classList.remove('open');
+      resetStage();
+    }
+ 
     cards.forEach(card=>{
       card.addEventListener('click',()=>{
-        const file=card.dataset.file;
-        const title=card.querySelector('.toolName').textContent;
-        if(file){
-          viewer.classList.add('open');
-          loadPDF(file,title);
-        }
+        const file  = card.dataset.file;
+        const title = card.querySelector('.toolName').textContent.trim();
+        if(file) openFile(file, title);
       });
     });
-    closeBtn.addEventListener('click',()=>viewer.classList.remove('open'));
+ 
+    closeBtn.addEventListener('click', closeViewer);
+    // close on Escape, and on click of the dark backdrop
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeViewer(); });
+    viewer.addEventListener('click', e=>{ if(e.target === viewer) closeViewer(); });
   </script>
 </body>
 </html>
+ 
