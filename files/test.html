@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaiser data-test</title>
+<style>
+  body{font-family:-apple-system,system-ui,sans-serif;padding:16px;font-size:16px;line-height:1.5;background:#fafafa;color:#18181b}
+  h2{margin:0 0 4px}
+  .sub{color:#71717a;font-size:13px;margin-bottom:16px}
+  .box{padding:12px 14px;margin:8px 0;border-radius:10px;border:1px solid #ddd;background:#fff;white-space:pre-wrap;word-break:break-word}
+  .ok{background:#e7f8ef;border-color:#9ae6b4}
+  .err{background:#fdecec;border-color:#f5b5b5}
+  .wait{background:#fffbeb;border-color:#fde68a}
+  code{font-size:13px}
+</style>
+</head>
+<body>
+<h2>Kaiser data-test</h2>
+<div class="sub">Åbn denne side på telefonen. Den prøver de to metoder appen bruger og viser resultatet herunder.</div>
+<div id="out"></div>
+
+<script>
+const BASE = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+const out = document.getElementById('out');
+function log(id, msg, cls){
+  let el = document.getElementById(id);
+  if(!el){ el = document.createElement('div'); el.id = id; el.className='box'; out.appendChild(el); }
+  el.className = 'box ' + (cls||'');
+  el.innerHTML = msg;
+}
+
+/* ---- Metode A: almindeligt fetch (ren JSON) ---- */
+log('a', 'A) FETCH — starter…', 'wait');
+const ctrl = new AbortController();
+const to = setTimeout(()=>ctrl.abort(), 16000);
+fetch(BASE + "?action=fbPortalBundle&_t=" + Date.now(), {cache:"no-store", credentials:"omit", signal:ctrl.signal})
+  .then(r => { clearTimeout(to); return r.text().then(t => ({status:r.status, body:t})); })
+  .then(res => {
+    let info = 'A) FETCH svarede · HTTP ' + res.status + '<br><code>' + res.body.slice(0,120).replace(/</g,'&lt;') + '…</code>';
+    try {
+      const d = JSON.parse(res.body);
+      if (d && d.ok) log('a', 'A) FETCH VIRKER ✓<br>ok=true · complaints=' + (d.complaints?d.complaints.length:'?'), 'ok');
+      else log('a', info, 'err');
+    } catch(e) {
+      log('a', 'A) FETCH fik svar, men det er ikke JSON (sandsynligvis en login-/HTML-side):<br>' + info, 'err');
+    }
+  })
+  .catch(e => { clearTimeout(to); log('a', 'A) FETCH FEJL ✗<br><code>' + e.name + ': ' + e.message + '</code><br>(typisk CORS — browseren blokerer kaldet)', 'err'); });
+
+/* ---- Metode B: JSONP via <script> ---- */
+log('b', 'B) JSONP — starter…', 'wait');
+let jsonpDone = false;
+window.__kaisertest = function(d){
+  jsonpDone = true;
+  log('b', 'B) JSONP VIRKER ✓<br>ok=' + (d && d.ok) + ' · complaints=' + (d && d.complaints ? d.complaints.length : '?'), 'ok');
+};
+const s = document.createElement('script');
+s.onerror = function(){ jsonpDone = true; log('b', 'B) JSONP FEJL ✗ — Safari ville ikke køre scriptet', 'err'); };
+s.src = BASE + "?action=fbPortalBundle&callback=__kaisertest&_t=" + Date.now();
+document.body.appendChild(s);
+setTimeout(()=>{ if(!jsonpDone) log('b', 'B) JSONP TIMEOUT ✗ — intet svar inden for 16 sek', 'err'); }, 16000);
+</script>
+</body>
+</html>
