@@ -290,7 +290,7 @@
     </form>
 
     <div class="login-error" id="loginError">Forkert email eller adgangskode</div>
-    <div class="login-version">Kaiser Operations Hub v2.2.0</div>
+    <div class="login-version">Kaiser Operations Hub v2.2.1</div>
   </div>
 </div>
 
@@ -681,7 +681,7 @@
   </main>
 </div>
 
-<div class="version-badge">v2.2.0</div>
+<div class="version-badge">v2.2.1</div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -692,7 +692,7 @@ const COMPLETED_SIGNALS_KEY = "kaiser_completed_signals_v1";
 const AUTH_KEY = "kaiser_auth_session";
 const DATA_CACHE_KEY = "kaiser_data_cache_v1";
 const CATERING_CACHE_KEY = "kaiser_catering_cache_v1";
-const APP_VERSION = "2.2.0";
+const APP_VERSION = "2.2.1";
 const VALID_EMAIL = "stefan@cafekaiser.dk";
 const VALID_PASSWORD = "Jegergenial1!";
 const KITCHEN_TARGET = 30;     // %
@@ -825,14 +825,23 @@ function exportToExcel(){
 }
 
 /* ---------- Data fetch (JSONP) ---------- */
-function fetchData(){
+const MAX_FETCH_ATTEMPTS=3;
+function fetchData(attempt){
+  attempt=attempt||0;
   const cache=loadDataCache();
-  setStatus(cache?"Opdaterer i baggrunden...":"Henter driftsdata...","warning");
+  if(attempt===0){setStatus(cache?"Opdaterer i baggrunden...":"Henter driftsdata...","warning")}
+  else{setStatus("Forbindelsen er langsom – forsøger igen ("+(attempt+1)+"/"+MAX_FETCH_ATTEMPTS+")...","warning")}
   const cb="__cb_"+Date.now()+"_"+Math.random().toString(16).slice(2);
   const script=document.createElement("script");
   let settled=false;
+  const retryOrFail=reason=>{
+    if(settled)return;settled=true;
+    delete window[cb];script.remove();
+    if(attempt<MAX_FETCH_ATTEMPTS-1){setTimeout(()=>fetchData(attempt+1),1500)}
+    else{handleFetchFailure(reason)}
+  };
   window[cb]=data=>{
-    settled=true;delete window[cb];script.remove();
+    if(settled)return;settled=true;delete window[cb];script.remove();
     if(data&&data.ok){
       globalData=data;
       saveDataCache(data);
@@ -843,14 +852,16 @@ function fetchData(){
       if(currentView==='locations')renderLocationsView(data);
       updateSignalCounts();
     }else{
-      handleFetchFailure((data&&data.error)||"Ukendt fejl");
+      // gyldigt svar men ikke ok – prøv igen, fald så tilbage
+      settled=false;retryOrFail((data&&data.error)||"Ukendt fejl");
     }
   };
-  script.onerror=()=>{settled=true;delete window[cb];script.remove();handleFetchFailure("Netværksfejl")};
+  script.onerror=()=>retryOrFail("Netværksfejl");
+  script.referrerPolicy="no-referrer-when-downgrade";
   const params=new URLSearchParams({action:"fbPortalBundle",month:monthISO(),callback:cb,_t:Date.now()}).toString();
   script.src=`${SCRIPT_URL}?${params}`;
   document.body.appendChild(script);
-  setTimeout(()=>{if(!settled&&window[cb]){delete window[cb];script.remove();handleFetchFailure("Timeout")}},20000);
+  setTimeout(()=>retryOrFail("Timeout"),15000);
 }
 function handleFetchFailure(reason){
   const cache=loadDataCache();
