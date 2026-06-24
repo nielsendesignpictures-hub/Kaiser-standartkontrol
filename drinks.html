@@ -3,68 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaiser · Drinks &amp; lemonader</title>
-<link rel="stylesheet" href="kaiser-guide.css">
-</head>
-<body class="kg-body">
+<title>Kaiser · Bar &amp; Drinks</title>
+<style>
+  :root{
+    --wine:#6e1423;
+    --wine-deep:#5a1019;
+    --gold:#b8862f;
+    --gold-soft:#d8b66a;
+    --ink:#241a13;
+    --muted:#6b5d4f;
+    --cream:#faf6ee;
+    --paper:#fffdf9;
+    --line:#e7ddcc;
+    --shadow:0 1px 2px rgba(40,25,15,.05), 0 8px 24px rgba(40,25,15,.06);
 
-  <header class="kg-header">
-    <div class="kg-wrap">
-      <a class="kg-back" href="guides.html">← Tilbage til Biblen</a><br>
-      <span class="kg-crest">Café Kaiser · Bar</span>
-      <h1 class="kg-title">Drinks <span class="kg-amp">&amp;</span> lemonader</h1>
-      <p class="kg-lead">Opskrifter på vores nye drinks — sat op til hurtig brug bag baren. Find drinken med filtrene eller søgefeltet, og følg trinene.</p>
+    --font-display:"Helvetica Neue",Arial,sans-serif;
+    --font-serif:Georgia,"Times New Roman",serif;
+    --font-mono:"SFMono-Regular",ui-monospace,"Courier New",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-display);
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 80% -10%, #fbeede 0%, transparent 60%),
+      var(--cream);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* ---------- HEADER ---------- */
+  header.top{
+    background:linear-gradient(150deg,var(--wine) 0%, var(--wine-deep) 100%);
+    color:#fff;position:relative;overflow:hidden;
+  }
+  header.top:after{
+    content:"";position:absolute;right:-60px;top:-80px;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle,rgba(216,182,106,.30),transparent 65%);
+  }
+  .top .wrap{padding:30px 20px 34px;position:relative;z-index:1;}
+  .crest{
+    display:inline-block;border:1.5px solid var(--gold-soft);color:var(--gold-soft);
+    font-size:11px;letter-spacing:3px;font-weight:700;text-transform:uppercase;
+    padding:5px 13px;border-radius:30px;margin-bottom:14px;
+  }
+  .top h1{font-family:var(--font-serif);font-size:42px;line-height:1.02;letter-spacing:-.5px;}
+  .top h1 .amp{color:var(--gold-soft);}
+  .top p.lead{color:#f3e7d4;font-size:15px;margin-top:8px;max-width:560px;}
+
+  /* ---------- STANDARD STRIP ---------- */
+  .standard{
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);margin-top:-18px;position:relative;z-index:2;
+    padding:14px 18px;display:flex;gap:22px;flex-wrap:wrap;align-items:center;
+  }
+  .standard .lab{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--wine);}
+  .standard .it{font-size:13.5px;color:var(--ink);display:flex;align-items:center;gap:7px;}
+  .standard .it b{font-weight:700;}
+  .standard .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky;top:0;z-index:20;background:rgba(250,246,238,.92);
+    backdrop-filter:blur(8px);padding:14px 0 12px;margin-top:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .controls .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .filters{display:flex;gap:7px;flex-wrap:wrap;}
+  .fbtn{
+    font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:7px 14px;border-radius:30px;transition:all .15s ease;
+  }
+  .fbtn:hover{border-color:var(--gold-soft);color:var(--ink);}
+  .fbtn.active{background:var(--wine);border-color:var(--wine);color:#fff;}
+  .search{
+    margin-left:auto;display:flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);border-radius:30px;padding:7px 14px;min-width:210px;
+  }
+  .search:focus-within{border-color:var(--gold);}
+  .search input{border:none;outline:none;font-family:inherit;font-size:13.5px;width:100%;background:transparent;color:var(--ink);}
+  .search svg{flex:0 0 16px;opacity:.5;}
+  .count{font-size:12px;color:var(--muted);margin-top:9px;}
+
+  /* ---------- GRID ---------- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px;}
+  .empty{display:none;text-align:center;color:var(--muted);padding:50px 0;font-size:15px;}
+
+  /* ---------- DRINK CARD ---------- */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(40,25,15,.06),0 14px 32px rgba(40,25,15,.10);}
+  .card .accent{height:6px;background:var(--c,#999);}
+  .card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1;}
+
+  .card .name{
+    font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.3px;
+    text-transform:uppercase;line-height:1.05;color:var(--ink);
+  }
+  .card .badges{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px;}
+  .badge{
+    font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:.3px;
+    background:var(--c-bg,#f3eee5);color:var(--c-dk,#555);border:1px solid var(--c-bd,transparent);
+  }
+  .badge.glass{background:#fff;border:1px solid var(--line);color:var(--muted);font-weight:600;}
+
+  .h{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 7px;}
+
+  /* spec list */
+  .spec{list-style:none;margin:0 0 4px;}
+  .spec li{display:flex;align-items:baseline;gap:12px;padding:4px 0;border-bottom:1px dotted var(--line);}
+  .spec li:last-child{border-bottom:none;}
+  .spec .amt{
+    font-family:var(--font-mono);font-size:13.5px;font-weight:600;color:var(--c-dk,var(--wine));
+    min-width:48px;text-align:right;flex:0 0 48px;letter-spacing:-.3px;
+  }
+  .spec .ing{font-size:13.5px;color:var(--ink);}
+  .spec li.top{margin-top:2px;}
+  .spec li.top .amt{font-size:11px;color:var(--muted);}
+  .spec li.top .ing{font-style:italic;color:var(--muted);}
+
+  .pynt{
+    margin-top:13px;background:var(--cream);border-radius:9px;padding:10px 12px;
+  }
+  .pynt .h{margin-bottom:5px;}
+  .pynt .v{font-size:13px;color:var(--ink);}
+
+  .steps{margin-top:14px;list-style:none;counter-reset:s;}
+  .steps li{
+    position:relative;padding:5px 0 5px 30px;font-size:13px;color:var(--ink);counter-increment:s;
+    border-bottom:1px solid transparent;
+  }
+  .steps li:before{
+    content:counter(s);position:absolute;left:0;top:4px;
+    width:20px;height:20px;border-radius:50%;background:var(--c,#999);color:#fff;
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono);
+  }
+  .note-inline{
+    margin-top:12px;font-size:12px;color:var(--muted);font-style:italic;
+    border-left:3px solid var(--c,#999);padding:6px 0 6px 11px;background:linear-gradient(90deg,var(--c-bg,#f6f6f6),transparent);
+    border-radius:0 6px 6px 0;
+  }
+
+  /* ---------- SECTION DIVIDER ---------- */
+  .divider{display:flex;align-items:center;gap:14px;margin:36px 0 4px;}
+  .divider h2{font-family:var(--font-serif);font-size:24px;color:var(--ink);white-space:nowrap;}
+  .divider .ln{height:1px;background:var(--line);flex:1;}
+  .divider .pill{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+
+  /* lemonade note */
+  .lemo-note{
+    background:var(--paper);border:1px dashed var(--gold-soft);border-radius:12px;
+    padding:16px 18px;margin-top:16px;font-size:13.5px;color:var(--muted);
+  }
+  .lemo-note b{color:var(--ink);}
+
+  footer.foot{margin-top:40px;text-align:center;font-size:12px;color:var(--muted);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:720px){
+    .grid{grid-template-columns:1fr;}
+    .top h1{font-size:32px;}
+    .search{margin-left:0;width:100%;}
+    .standard{gap:14px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;scroll-behavior:auto!important;}
+  }
+  @media print{
+    .controls{display:none;}
+    .card{break-inside:avoid;box-shadow:none;}
+    body{background:#fff;}
+  }
+
+  /* ---------- TABS (Mojito: FAD / Byg selv) ---------- */
+  .tabs{display:flex;gap:6px;margin:2px 0 14px;background:var(--cream);
+    padding:4px;border-radius:10px;border:1px solid var(--line);}
+  .tab{flex:1;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:var(--muted);
+    padding:7px 10px;border-radius:7px;transition:all .15s ease;}
+  .tab:hover{color:var(--ink);}
+  .tab.active{background:#fff;color:var(--c-dk,var(--wine));box-shadow:0 1px 2px rgba(40,25,15,.10);}
+  .tabpane[hidden]{display:none;}
+</style>
+</head>
+<body>
+
+  <header class="top">
+    <div class="wrap">
+      <span class="crest">Café Kaiser · Bar</span>
+      <h1>Drinks <span class="amp">&amp;</span> lemonader</h1>
+      <p class="lead">Opskrifter på vores nye drinks — sat op til hurtig brug bag baren. Find drinken med filtrene eller søgefeltet, og følg trinene.</p>
     </div>
   </header>
 
-  <div class="kg-wrap">
+  <div class="wrap">
 
-    <div class="kg-strip">
-      <span class="kg-lab">Fælles standard</span>
-      <span class="kg-it"><span class="kg-dot"></span><b>Anarkist-glas</b> (undt. Mojito)</span>
-      <span class="kg-it"><span class="kg-dot"></span><b>5 store isterninger</b> i bunden</span>
-      <span class="kg-it"><span class="kg-dot"></span>Pynt som regel: <b>myntesprig + 2 limebåde</b></span>
-      <span class="kg-it"><span class="kg-dot"></span>Top altid op <b>forsigtigt</b></span>
+    <!-- Fælles standard -->
+    <div class="standard">
+      <span class="lab">Fælles standard</span>
+      <span class="it"><span class="dot"></span><b>Anarkist-glas</b> (undt. Mojito)</span>
+      <span class="it"><span class="dot"></span><b>5 store isterninger</b> i bunden</span>
+      <span class="it"><span class="dot"></span>Pynt som regel: <b>myntesprig + 2 limebåde</b></span>
+      <span class="it"><span class="dot"></span>Top altid op <b>forsigtigt</b></span>
     </div>
 
-    <div class="kg-controls">
-      <div class="kg-row">
-        <div class="kg-filters" id="filters">
-          <button class="kg-fbtn kg-active" data-f="all">Alle</button>
-          <button class="kg-fbtn" data-f="vodka">Vodka</button>
-          <button class="kg-fbtn" data-f="gin">Gin</button>
-          <button class="kg-fbtn" data-f="passoa">Passoã</button>
-          <button class="kg-fbtn" data-f="aperol">Aperol &amp; bobler</button>
-          <button class="kg-fbtn" data-f="rom">Rom</button>
-          <button class="kg-fbtn" data-f="lemonade">Lemonader</button>
+    <!-- Controls -->
+    <div class="controls">
+      <div class="row">
+        <div class="filters" id="filters">
+          <button class="fbtn active" data-f="all">Alle</button>
+          <button class="fbtn" data-f="vodka">Vodka</button>
+          <button class="fbtn" data-f="gin">Gin</button>
+          <button class="fbtn" data-f="passoa">Passoã</button>
+          <button class="fbtn" data-f="aperol">Aperol &amp; bobler</button>
+          <button class="fbtn" data-f="rom">Rom</button>
+          <button class="fbtn" data-f="lemonade">Lemonader</button>
         </div>
-        <label class="kg-search">
+        <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="q" type="text" placeholder="Søg drink eller ingrediens…" autocomplete="off">
         </label>
       </div>
-      <div class="kg-count" id="count"></div>
+      <div class="count" id="count"></div>
     </div>
 
-    <div class="kg-grid" id="grid">
+    <!-- ============ DRINKS ============ -->
+    <div class="grid" id="grid">
 
-      <article class="kg-card" data-base="vodka" data-name="Rabarber Sunset" data-ing="vodka rabarbersaft peach giffard lime tranebær"
+      <!-- Rabarber Sunset -->
+      <article class="card" data-base="vodka" data-name="Rabarber Sunset" data-ing="vodka rabarbersaft peach giffard lime tranebær"
         style="--c:#e0567a;--c-bg:#fce7ee;--c-dk:#c23a5e;--c-bd:#f6cdd9;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Rabarber Sunset</div>
-          <div class="kg-badges"><span class="kg-badge">Vodka</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Ingredienser</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">5 stk</span><span class="kg-ing">store isterninger</span></li>
-            <li><span class="kg-amt">4 cl</span><span class="kg-ing">Vodka</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Rabarbersaft</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Giffard Peach sirup</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Lime sirup</span></li>
-            <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Tranebærjuice til opfyldning</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Rabarber Sunset</div>
+          <div class="badges"><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Rabarbersaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Giffard Peach sirup</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Tranebærjuice til opfyldning</span></li>
           </ul>
-          <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">Myntesprig · 2 limebåde</div></div>
-          <ol class="kg-steps">
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
             <li>Fyld glasset med 5 store isterninger.</li>
             <li>Hæld vodka, rabarbersaft, peach- og lime sirup over isen.</li>
             <li>Top forsigtigt op med tranebærjuice.</li>
@@ -73,22 +264,23 @@
         </div>
       </article>
 
-      <article class="kg-card" data-base="gin" data-name="Gin Hass" data-ing="gin mango giffard lime lemon sodavand"
+      <!-- Gin Hass -->
+      <article class="card" data-base="gin" data-name="Gin Hass" data-ing="gin mango giffard lime lemon sodavand"
         style="--c:#cf9a2c;--c-bg:#f8efd6;--c-dk:#a87a1c;--c-bd:#ecdca8;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Gin Hass</div>
-          <div class="kg-badges"><span class="kg-badge">Gin</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Ingredienser</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">5 stk</span><span class="kg-ing">store isterninger</span></li>
-            <li><span class="kg-amt">4 cl</span><span class="kg-ing">Gin</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Giffard Mango sirup</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Lime sirup</span></li>
-            <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Lemon sodavand til opfyldning</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Gin Hass</div>
+          <div class="badges"><span class="badge">Gin</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Gin</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Giffard Mango sirup</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Lemon sodavand til opfyldning</span></li>
           </ul>
-          <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">Myntesprig · 2 limebåde</div></div>
-          <ol class="kg-steps">
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
             <li>Fyld glasset med 5 store isterninger.</li>
             <li>Hæld gin, mango- og lime sirup over isen.</li>
             <li>Top forsigtigt op med lemon sodavand.</li>
@@ -97,21 +289,22 @@
         </div>
       </article>
 
-      <article class="kg-card" data-base="passoa vodka" data-name="Kaiser Passion" data-ing="vodka passoa passion passionsfrugt mirinda lemon"
+      <!-- Kaiser Passion -->
+      <article class="card" data-base="passoa vodka" data-name="Kaiser Passion" data-ing="vodka passoa passion passionsfrugt mirinda lemon"
         style="--c:#e0732b;--c-bg:#fbe9d8;--c-dk:#bd571a;--c-bd:#f4cba6;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Kaiser Passion</div>
-          <div class="kg-badges"><span class="kg-badge">Passoã</span><span class="kg-badge">Vodka</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Ingredienser</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">5 stk</span><span class="kg-ing">store isterninger</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Vodka</span></li>
-            <li><span class="kg-amt">4 cl</span><span class="kg-ing">Passoã</span></li>
-            <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Mirinda Lemon til opfyldning</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Kaiser Passion</div>
+          <div class="badges"><span class="badge">Passoã</span><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Passoã</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Mirinda Lemon til opfyldning</span></li>
           </ul>
-          <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">Myntesprig · ½ passionsfrugt skåret i 4 stykker</div></div>
-          <ol class="kg-steps">
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · ½ passionsfrugt skåret i 4 stykker</div></div>
+          <ol class="steps">
             <li>Fyld glasset med 5 store isterninger.</li>
             <li>Hæld vodka og Passoã over isen.</li>
             <li>Top forsigtigt op med Mirinda Lemon.</li>
@@ -120,23 +313,24 @@
         </div>
       </article>
 
-      <article class="kg-card" data-base="vodka" data-name="Elderflower Smash" data-ing="vodka hyldeblomst hyldeblomstsaft rabarbersaft lime danskvand"
+      <!-- Elderflower Smash -->
+      <article class="card" data-base="vodka" data-name="Elderflower Smash" data-ing="vodka hyldeblomst hyldeblomstsaft rabarbersaft lime danskvand"
         style="--c:#7fa64f;--c-bg:#eef4e0;--c-dk:#5f8235;--c-bd:#d3e3b6;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Elderflower Smash</div>
-          <div class="kg-badges"><span class="kg-badge">Vodka</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Ingredienser</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">5 stk</span><span class="kg-ing">store isterninger</span></li>
-            <li><span class="kg-amt">4 cl</span><span class="kg-ing">Vodka</span></li>
-            <li><span class="kg-amt">6 cl</span><span class="kg-ing">Hyldeblomstsaft</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Rabarbersaft</span></li>
-            <li><span class="kg-amt">2 cl</span><span class="kg-ing">Lime sirup</span></li>
-            <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Danskvand til opfyldning</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Elderflower Smash</div>
+          <div class="badges"><span class="badge">Vodka</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">4 cl</span><span class="ing">Vodka</span></li>
+            <li><span class="amt">6 cl</span><span class="ing">Hyldeblomstsaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Rabarbersaft</span></li>
+            <li><span class="amt">2 cl</span><span class="ing">Lime sirup</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Danskvand til opfyldning</span></li>
           </ul>
-          <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">Myntesprig · 2 limebåde</div></div>
-          <ol class="kg-steps">
+          <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig · 2 limebåde</div></div>
+          <ol class="steps">
             <li>Fyld glasset med 5 store isterninger.</li>
             <li>Hæld vodka, hyldeblomstsaft, rabarbersaft og lime sirup over isen.</li>
             <li>Top forsigtigt op med danskvand.</li>
@@ -145,55 +339,57 @@
         </div>
       </article>
 
-      <article class="kg-card" data-base="aperol" data-name="Aperol Spritz" data-ing="aperol bobler danskvand appelsin spritz"
+      <!-- Aperol Spritz -->
+      <article class="card" data-base="aperol" data-name="Aperol Spritz" data-ing="aperol bobler danskvand appelsin spritz"
         style="--c:#ef5f23;--c-bg:#fde4d6;--c-dk:#c84713;--c-bd:#f7c2a4;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Aperol Spritz</div>
-          <div class="kg-badges"><span class="kg-badge">Aperol</span><span class="kg-badge">Bobler</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Ingredienser</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">5 stk</span><span class="kg-ing">store isterninger</span></li>
-            <li><span class="kg-amt">6 cl</span><span class="kg-ing">Aperol</span></li>
-            <li class="kg-top"><span class="kg-amt">fyld</span><span class="kg-ing">Husets bobler — op til ca. 2 cm fra kanten</span></li>
-            <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Danskvand til opfyldning</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Aperol Spritz</div>
+          <div class="badges"><span class="badge">Aperol</span><span class="badge">Bobler</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Ingredienser</p>
+          <ul class="spec">
+            <li><span class="amt">5 stk</span><span class="ing">store isterninger</span></li>
+            <li><span class="amt">6 cl</span><span class="ing">Aperol</span></li>
+            <li class="top"><span class="amt">fyld</span><span class="ing">Husets bobler — op til ca. 2 cm fra kanten</span></li>
+            <li class="top"><span class="amt">top</span><span class="ing">Danskvand til opfyldning</span></li>
           </ul>
-          <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">1 appelsinskive</div></div>
-          <ol class="kg-steps">
+          <div class="pynt"><p class="h">Pynt</p><div class="v">1 appelsinskive</div></div>
+          <ol class="steps">
             <li>Fyld glasset med 5 store isterninger.</li>
             <li>Hæld Aperol over isen.</li>
             <li>Læg appelsinskiven i glasset.</li>
             <li>Fyld op med husets bobler til ca. 2 cm fra kanten.</li>
             <li>Top forsigtigt op med danskvand.</li>
           </ol>
-          <div class="kg-note-inline">Drikken må gerne dele sig i lag — det er helt fint.</div>
+          <div class="note-inline">Drikken må gerne dele sig i lag — det er helt fint.</div>
         </div>
       </article>
 
-      <article class="kg-card" data-base="rom" data-name="Mojito" data-ing="mojito rom rørsukker lime mynte knust is hane danskvand lys byg selv fad"
+      <!-- Mojito -->
+      <article class="card" data-base="rom" data-name="Mojito" data-ing="mojito rom rørsukker lime mynte knust is hane danskvand lys byg selv fad"
         style="--c:#33a878;--c-bg:#dff2e8;--c-dk:#1f8159;--c-bd:#aedfc7;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Mojito</div>
-          <div class="kg-badges"><span class="kg-badge">Rom</span><span class="kg-badge glass">Highball-glas</span></div>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Mojito</div>
+          <div class="badges"><span class="badge">Rom</span><span class="badge glass">Highball-glas</span></div>
 
-          <div class="kg-tabs">
-            <button class="kg-tab kg-active" data-tab="fad">FAD</button>
-            <button class="kg-tab" data-tab="byg">Byg selv</button>
+          <div class="tabs">
+            <button class="tab active" data-tab="fad">FAD</button>
+            <button class="tab" data-tab="byg">Byg selv</button>
           </div>
 
           <!-- FAD -->
-          <div class="kg-tabpane" data-pane="fad">
-            <p class="kg-h">Ingredienser</p>
-            <ul class="kg-spec">
-              <li><span class="kg-amt">fyld</span><span class="kg-ing">Knust is (fyld glasset)</span></li>
-              <li><span class="kg-amt">1 pose</span><span class="kg-ing">Rørsukker</span></li>
-              <li><span class="kg-amt">4 stk</span><span class="kg-ing">Limebåde</span></li>
-              <li><span class="kg-amt">5–8</span><span class="kg-ing">Mynteblade</span></li>
-              <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Mojito fra hanen</span></li>
+          <div class="tabpane" data-pane="fad">
+            <p class="h">Ingredienser</p>
+            <ul class="spec">
+              <li><span class="amt">fyld</span><span class="ing">Knust is (fyld glasset)</span></li>
+              <li><span class="amt">1 pose</span><span class="ing">Rørsukker</span></li>
+              <li><span class="amt">4 stk</span><span class="ing">Limebåde</span></li>
+              <li><span class="amt">5–8</span><span class="ing">Mynteblade</span></li>
+              <li class="top"><span class="amt">top</span><span class="ing">Mojito fra hanen</span></li>
             </ul>
-            <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">2 knæksugerør · myntesprig · limebåde</div></div>
-            <ol class="kg-steps">
+            <div class="pynt"><p class="h">Pynt</p><div class="v">2 knæksugerør · myntesprig · limebåde</div></div>
+            <ol class="steps">
               <li>Drys rørsukker i glasset.</li>
               <li>Squeeze limene og læg dem i glasset.</li>
               <li>Twist myntebladene og læg dem i glasset.</li>
@@ -204,17 +400,17 @@
           </div>
 
           <!-- BYG SELV -->
-          <div class="kg-tabpane" data-pane="byg" hidden>
-            <p class="kg-h">Ingredienser</p>
-            <ul class="kg-spec">
-              <li><span class="kg-amt">fyld</span><span class="kg-ing">Knust is — fyld glasset</span></li>
-              <li><span class="kg-amt">4 cl</span><span class="kg-ing">Lys rom</span></li>
-              <li><span class="kg-amt">1 pk</span><span class="kg-ing">Rørsukker</span></li>
-              <li><span class="kg-amt">4 stk</span><span class="kg-ing">Limebåde</span></li>
-              <li class="kg-top"><span class="kg-amt">top</span><span class="kg-ing">Dansk vand</span></li>
+          <div class="tabpane" data-pane="byg" hidden>
+            <p class="h">Ingredienser</p>
+            <ul class="spec">
+              <li><span class="amt">fyld</span><span class="ing">Knust is — fyld glasset</span></li>
+              <li><span class="amt">4 cl</span><span class="ing">Lys rom</span></li>
+              <li><span class="amt">1 pk</span><span class="ing">Rørsukker</span></li>
+              <li><span class="amt">4 stk</span><span class="ing">Limebåde</span></li>
+              <li class="top"><span class="amt">top</span><span class="ing">Dansk vand</span></li>
             </ul>
-            <div class="kg-pynt"><p class="kg-h">Pynt</p><div class="kg-v">Myntesprig + limebåde</div></div>
-            <ol class="kg-steps">
+            <div class="pynt"><p class="h">Pynt</p><div class="v">Myntesprig + limebåde</div></div>
+            <ol class="steps">
               <li>Læg 4 limebåde i glasset og drys rørsukker over.</li>
               <li>Muddle lime og sukker godt — pres saften ud af limen.</li>
               <li>Fyld glasset op med knust is.</li>
@@ -228,34 +424,37 @@
 
     </div>
 
-    <div class="kg-divider" data-base="lemonade">
+    <!-- ============ LEMONADER ============ -->
+    <div class="divider" data-base="lemonade">
       <h2>Lemonader</h2>
-      <span class="kg-ln"></span>
-      <span class="kg-pill">Alkoholfri</span>
+      <span class="ln"></span>
+      <span class="pill">Alkoholfri</span>
     </div>
 
-    <div class="kg-grid">
-      <article class="kg-card" data-base="lemonade" data-name="Lemonade Standard" data-ing="lemonade standard alkoholfri"
+    <div class="grid">
+      <article class="card" data-base="lemonade" data-name="Lemonade Standard" data-ing="lemonade standard alkoholfri"
         style="--c:#d9b528;--c-bg:#f8f0cf;--c-dk:#a8881a;--c-bd:#ecdd9c;">
-        <div class="kg-accent"></div>
-        <div class="kg-cardbody">
-          <div class="kg-name">Standard</div>
-          <div class="kg-badges"><span class="kg-badge">Lemonade</span><span class="kg-badge glass">Anarkist-glas</span></div>
-          <p class="kg-h">Servering</p>
-          <ul class="kg-spec">
-            <li><span class="kg-amt">2–3</span><span class="kg-ing">Isterninger</span></li>
-            <li><span class="kg-amt">+</span><span class="kg-ing">Sugerør</span></li>
-            <li><span class="kg-amt">+</span><span class="kg-ing">Myntesprig</span></li>
+        <div class="accent"></div>
+        <div class="body">
+          <div class="name">Standard</div>
+          <div class="badges"><span class="badge">Lemonade</span><span class="badge glass">Anarkist-glas</span></div>
+          <p class="h">Servering</p>
+          <ul class="spec">
+            <li><span class="amt">2–3</span><span class="ing">Isterninger</span></li>
+            <li><span class="amt">+</span><span class="ing">Sugerør</span></li>
+            <li><span class="amt">+</span><span class="ing">Myntesprig</span></li>
           </ul>
         </div>
       </article>
     </div>
 
+    <div class="lemo-note" data-base="lemonade">
+      <b>Plads til flere lemonader.</b> Den her sektion ser ud til at være sat op som skabelon (kun "Standard" er med). Send mig resten af lemonade-varianterne — smag, mængder og evt. egen pynt — så føjer jeg dem ind som kort i samme stil.
+    </div>
 
+    <div class="empty" id="empty">Ingen drinks matcher. Prøv et andet filter eller søgeord.</div>
 
-    <div class="kg-empty" id="empty">Ingen drinks matcher. Prøv et andet filter eller søgeord.</div>
-
-    <footer class="kg-foot">
+    <footer class="foot">
       Café Kaiser · Bar &amp; Drinks · Ligger på drift-hubben — spørg en kollega, hvis du er i tvivl.
     </footer>
 
@@ -263,12 +462,15 @@
 
 <script>
   (function(){
-    var cards = Array.prototype.slice.call(document.querySelectorAll('.kg-card'));
+    var grid = document.getElementById('grid');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
     var lemoCards = cards.filter(function(c){return c.dataset.base.indexOf('lemonade')>-1;});
+    var drinkCards = cards.filter(function(c){return c.dataset.base.indexOf('lemonade')===-1;});
     var filters = document.getElementById('filters');
     var q = document.getElementById('q');
     var countEl = document.getElementById('count');
     var emptyEl = document.getElementById('empty');
+    var lemoSection = document.querySelectorAll('[data-base="lemonade"]'); // divider + lemo note + lemo cards
     var activeFilter = 'all';
 
     function apply(){
@@ -282,33 +484,36 @@
         c.style.display = show ? '' : 'none';
         if(show) shown++;
       });
+
+      // Show/hide the lemonade divider + note depending on whether any lemo card is visible
       var anyLemoVisible = lemoCards.some(function(c){return c.style.display !== 'none';});
-      document.querySelectorAll('.kg-divider[data-base="lemonade"], .kg-note[data-base="lemonade"]').forEach(function(el){
+      document.querySelectorAll('.divider[data-base="lemonade"], .lemo-note[data-base="lemonade"]').forEach(function(el){
         el.style.display = anyLemoVisible ? '' : 'none';
       });
+
       emptyEl.style.display = shown === 0 ? 'block' : 'none';
       countEl.textContent = shown + (shown === 1 ? ' opskrift' : ' opskrifter');
     }
 
     filters.addEventListener('click', function(e){
-      var b = e.target.closest('.kg-fbtn');
+      var b = e.target.closest('.fbtn');
       if(!b) return;
-      filters.querySelectorAll('.kg-fbtn').forEach(function(x){x.classList.remove('kg-active');});
-      b.classList.add('kg-active');
+      filters.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
       activeFilter = b.dataset.f;
       apply();
     });
     q.addEventListener('input', apply);
 
-    // Faner (fx Mojito: FAD / Byg selv)
-    document.querySelectorAll('.kg-tabs').forEach(function(tabs){
+    // Faner (Mojito: FAD / Byg selv)
+    document.querySelectorAll('.tabs').forEach(function(tabs){
       tabs.addEventListener('click', function(e){
-        var btn = e.target.closest('.kg-tab'); if(!btn) return;
-        var card = tabs.closest('.kg-card');
-        tabs.querySelectorAll('.kg-tab').forEach(function(t){t.classList.remove('kg-active');});
-        btn.classList.add('kg-active');
+        var btn = e.target.closest('.tab'); if(!btn) return;
+        var card = tabs.closest('.card');
+        tabs.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+        btn.classList.add('active');
         var which = btn.dataset.tab;
-        card.querySelectorAll('.kg-tabpane').forEach(function(p){
+        card.querySelectorAll('.tabpane').forEach(function(p){
           p.hidden = (p.dataset.pane !== which);
         });
       });
