@@ -7,7 +7,7 @@
      Data-friskhed håndteres af appen selv via localStorage-cache.
 
    Når du ændrer index.html: bump VERSION her, så gamle caches ryddes. */
-const VERSION = "2.2.1";
+const VERSION = "2.2.2";
 const SHELL_CACHE = "kaiser-shell-" + VERSION;
 const ASSET_CACHE = "kaiser-assets-" + VERSION;
 
@@ -77,7 +77,5 @@ self.addEventListener("fetch", (event) => {
         .catch(() => hit);
       return hit || fetchPromise;
     })
-  );
-});
   );
 });
