@@ -290,7 +290,7 @@
     </form>
 
     <div class="login-error" id="loginError">Forkert email eller adgangskode</div>
-    <div class="login-version">Kaiser Operations Hub v2.2.1</div>
+    <div class="login-version">Kaiser Operations Hub v2.2.2</div>
   </div>
 </div>
 
@@ -681,7 +681,7 @@
   </main>
 </div>
 
-<div class="version-badge">v2.2.1</div>
+<div class="version-badge">v2.2.2</div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -692,7 +692,7 @@ const COMPLETED_SIGNALS_KEY = "kaiser_completed_signals_v1";
 const AUTH_KEY = "kaiser_auth_session";
 const DATA_CACHE_KEY = "kaiser_data_cache_v1";
 const CATERING_CACHE_KEY = "kaiser_catering_cache_v1";
-const APP_VERSION = "2.2.1";
+const APP_VERSION = "2.2.2";
 const VALID_EMAIL = "stefan@cafekaiser.dk";
 const VALID_PASSWORD = "Jegergenial1!";
 const KITCHEN_TARGET = 30;     // %
@@ -824,44 +824,69 @@ function exportToExcel(){
   document.body.appendChild(link);link.click();document.body.removeChild(link);
 }
 
-/* ---------- Data fetch (JSONP) ---------- */
+/* ---------- Data fetch ----------
+   Primært: almindeligt fetch (virker på mobil – ren JSON).
+   Reserve: JSONP via <script> (sikrer ældre/desktop-tilfælde).
+*/
 const MAX_FETCH_ATTEMPTS=3;
+const FETCH_TIMEOUT=15000;
+
+function apiCall(params, onSuccess, onFail){
+  let done=false;
+  const finish=(ok,payload)=>{if(done)return;done=true;ok?onSuccess(payload):onFail(payload)};
+
+  // 1) Forsøg almindeligt fetch (ingen callback => ren JSON)
+  const url=`${SCRIPT_URL}?${new URLSearchParams({...params,_t:Date.now()}).toString()}`;
+  let ctrl=null,to=null;
+  try{
+    ctrl=new AbortController();
+    to=setTimeout(()=>{try{ctrl.abort()}catch(e){}},FETCH_TIMEOUT);
+    fetch(url,{signal:ctrl.signal,cache:"no-store",credentials:"omit"})
+      .then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+      .then(data=>{clearTimeout(to);finish(true,data)})
+      .catch(()=>{clearTimeout(to);jsonpFallback()});
+  }catch(e){jsonpFallback()}
+
+  // 2) JSONP-reserve
+  function jsonpFallback(){
+    if(done)return;
+    const cb="__cb_"+Date.now()+"_"+Math.random().toString(16).slice(2);
+    const script=document.createElement("script");
+    const t=setTimeout(()=>{if(done)return;try{delete window[cb]}catch(e){}script.remove();finish(false,{error:"Timeout"})},FETCH_TIMEOUT);
+    window[cb]=data=>{clearTimeout(t);try{delete window[cb]}catch(e){}script.remove();finish(true,data)};
+    script.onerror=()=>{clearTimeout(t);try{delete window[cb]}catch(e){}script.remove();finish(false,{error:"Netværksfejl"})};
+    script.src=`${SCRIPT_URL}?${new URLSearchParams({...params,callback:cb,_t:Date.now()}).toString()}`;
+    document.body.appendChild(script);
+  }
+}
+
 function fetchData(attempt){
   attempt=attempt||0;
   const cache=loadDataCache();
   if(attempt===0){setStatus(cache?"Opdaterer i baggrunden...":"Henter driftsdata...","warning")}
   else{setStatus("Forbindelsen er langsom – forsøger igen ("+(attempt+1)+"/"+MAX_FETCH_ATTEMPTS+")...","warning")}
-  const cb="__cb_"+Date.now()+"_"+Math.random().toString(16).slice(2);
-  const script=document.createElement("script");
-  let settled=false;
-  const retryOrFail=reason=>{
-    if(settled)return;settled=true;
-    delete window[cb];script.remove();
-    if(attempt<MAX_FETCH_ATTEMPTS-1){setTimeout(()=>fetchData(attempt+1),1500)}
-    else{handleFetchFailure(reason)}
-  };
-  window[cb]=data=>{
-    if(settled)return;settled=true;delete window[cb];script.remove();
-    if(data&&data.ok){
-      globalData=data;
-      saveDataCache(data);
-      setStatus("Live · opdateret "+fmtClock(Date.now()),"live");
-      processNotifications(data);
-      renderAll(data);
-      if(currentView==='signals')renderSignalsView(data);
-      if(currentView==='locations')renderLocationsView(data);
-      updateSignalCounts();
-    }else{
-      // gyldigt svar men ikke ok – prøv igen, fald så tilbage
-      settled=false;retryOrFail((data&&data.error)||"Ukendt fejl");
+  apiCall(
+    {action:"fbPortalBundle",month:monthISO()},
+    data=>{
+      if(data&&data.ok){
+        globalData=data;
+        saveDataCache(data);
+        setStatus("Live · opdateret "+fmtClock(Date.now()),"live");
+        processNotifications(data);
+        renderAll(data);
+        if(currentView==='signals')renderSignalsView(data);
+        if(currentView==='locations')renderLocationsView(data);
+        updateSignalCounts();
+      }else{
+        if(attempt<MAX_FETCH_ATTEMPTS-1){setTimeout(()=>fetchData(attempt+1),1500)}
+        else{handleFetchFailure((data&&data.error)||"Ukendt fejl")}
+      }
+    },
+    err=>{
+      if(attempt<MAX_FETCH_ATTEMPTS-1){setTimeout(()=>fetchData(attempt+1),1500)}
+      else{handleFetchFailure((err&&err.error)||"Netværksfejl")}
     }
-  };
-  script.onerror=()=>retryOrFail("Netværksfejl");
-  script.referrerPolicy="no-referrer-when-downgrade";
-  const params=new URLSearchParams({action:"fbPortalBundle",month:monthISO(),callback:cb,_t:Date.now()}).toString();
-  script.src=`${SCRIPT_URL}?${params}`;
-  document.body.appendChild(script);
-  setTimeout(()=>retryOrFail("Timeout"),15000);
+  );
 }
 function handleFetchFailure(reason){
   const cache=loadDataCache();
@@ -873,20 +898,18 @@ function handleFetchFailure(reason){
 }
 
 function fetchCatering(){
-  const cb="__cb_cat_"+Date.now();
-  const script=document.createElement("script");
-  window[cb]=data=>{
-    delete window[cb];script.remove();
-    if(data&&data.ok&&Array.isArray(data.orders)){
-      globalCatering=data.orders;
-      saveCateringCache(data.orders);
-      renderCateringOverview(data.orders);
-      if(currentView==='catering')renderCateringView(data.orders);
-    }
-  };
-  script.onerror=()=>{delete window[cb];script.remove()};
-  script.src=`${SCRIPT_URL}?${new URLSearchParams({action:"getOrders",callback:cb,_t:Date.now()}).toString()}`;
-  document.body.appendChild(script);
+  apiCall(
+    {action:"getOrders"},
+    data=>{
+      if(data&&data.ok&&Array.isArray(data.orders)){
+        globalCatering=data.orders;
+        saveCateringCache(data.orders);
+        renderCateringOverview(data.orders);
+        if(currentView==='catering')renderCateringView(data.orders);
+      }
+    },
+    ()=>{}
+  );
 }
 
 /* ---------- Notifications ---------- */
