@@ -523,6 +523,19 @@ function updateQueueBanner(){
   }
 }
 
+/* Opdateringer sendes med fetch i no-cors mode:
+   - Requesten når serveren præcis som før (samme GET-kontrakt).
+   - Svaret er "opaque" og ignoreres — vi behøver det ikke.
+   - fetch fejler KUN ved ægte netværksfejl → køen bruges kun når der reelt er offline. */
+function fireUpdate(qs){
+  return fetch(API_URL + "?action=update&" + qs + "&t=" + Date.now(), {
+    method: "GET",
+    mode: "no-cors",
+    keepalive: true,
+    cache: "no-store"
+  });
+}
+
 function sendUpdate(params, onDone){
   const qs = new URLSearchParams(params).toString();
 
@@ -533,37 +546,38 @@ function sendUpdate(params, onDone){
     return;
   }
 
-  const script = document.createElement("script");
-  script.src = API_URL + "?action=update&" + qs + "&t=" + Date.now();
-  script.onload = () => { script.remove(); if(onDone) onDone(true); };
-  script.onerror = () => {
-    script.remove();
-    const q = queue(); q.push(qs); saveQueue(q);
-    toast("Kunne ikke sende – prøver igen automatisk");
-    if(onDone) onDone(false);
-  };
-  document.body.appendChild(script);
+  fireUpdate(qs)
+    .then(() => { if(onDone) onDone(true); })
+    .catch(() => {
+      const q = queue(); q.push(qs); saveQueue(q);
+      toast("Kunne ikke sende – prøver igen automatisk");
+      if(onDone) onDone(false);
+    });
 }
 
-function flushQueue(){
+let isFlushing = false;
+async function flushQueue(){
+  if(isFlushing || !navigator.onLine) return;
   const q = queue();
-  if(!q.length || !navigator.onLine) return;
-  saveQueue([]);
-  let sent = 0;
-  const next = () => {
-    if(sent >= q.length){
-      toast("Ændringer sendt ✓");
-      setTimeout(()=>loadData(), 800);
-      return;
+  if(!q.length) return;
+  isFlushing = true;
+
+  const remaining = q.slice();
+  while(remaining.length){
+    try{
+      await fireUpdate(remaining[0]);
+      remaining.shift();
+      saveQueue(remaining);
+    }catch(e){
+      break; // stadig ingen forbindelse — prøver igen senere
     }
-    const qs = q[sent++];
-    const s = document.createElement("script");
-    s.src = API_URL + "?action=update&" + qs + "&t=" + Date.now();
-    s.onload = () => { s.remove(); next(); };
-    s.onerror = () => { s.remove(); const rest = queue().concat(q.slice(sent-1)); saveQueue(rest); };
-    document.body.appendChild(s);
-  };
-  next();
+  }
+  isFlushing = false;
+
+  if(!remaining.length){
+    toast("Ændringer sendt ✓");
+    setTimeout(()=>loadData(), 800);
+  }
 }
 
 window.addEventListener("online", () => { setSync("","Live"); flushQueue(); loadData(); });
@@ -766,7 +780,10 @@ function setView(v){
 function startPolling(){
   stopPolling();
   pollTimer = setInterval(() => {
-    if(document.visibilityState === "visible" && !isEditing) loadData();
+    if(document.visibilityState === "visible" && !isEditing){
+      flushQueue();   // send evt. ventende ændringer først
+      loadData();
+    }
   }, POLL_MS);
 }
 function stopPolling(){ if(pollTimer) clearInterval(pollTimer); }
