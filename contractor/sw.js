@@ -7,7 +7,7 @@
    Bump CACHE_VERSION når du deployer en ny version → gammel cache ryddes automatisk.
 */
 
-const CACHE_VERSION = "kaiser-hv-v1";
+const CACHE_VERSION = "kaiser-hv-v2";
 
 const SHELL = [
   "./",
