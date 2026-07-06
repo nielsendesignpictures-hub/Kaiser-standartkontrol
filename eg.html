@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#3E2F23">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Kaiser Kontrol · Kampagnekalender 2026</title>
+<style>
+/* ============================================================
+   KAISER KONTROL — Kampagnekalender 2026 (v1.0)
+   Self-contained. No external dependencies. GitHub Pages ready.
+   ============================================================ */
+:root{
+  --paper:#F7F2E9;
+  --card:#FFFDF8;
+  --ink:#2B2620;
+  --ink-soft:#6E6154;
+  --espresso:#3E2F23;
+  --line:#DCD1BE;
+  --kontrol-green:#1F7A4D;
+  --kontrol-green-soft:#E4F0E8;
+  --alert-red:#B3402F;
+  --alert-red-soft:#F7E6E2;
+  --amber:#C08A2D;
+  --amber-soft:#F6EDDB;
+  --taupe:#8A7A63;
+  --taupe-soft:#EFE9DD;
+  --gray:#9A9186;
+  --radius:14px;
+  --shadow:0 1px 3px rgba(62,47,35,.08),0 4px 14px rgba(62,47,35,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.5;
+  padding-bottom:60px;
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- Header ---------- */
+header{
+  background:var(--espresso);
+  color:var(--paper);
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 18px 16px;
+}
+.hd-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;max-width:860px;margin:0 auto}
+.hd-brand{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#C9B99F;font-weight:600}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:26px;font-weight:700;letter-spacing:.01em;line-height:1.15;margin-top:4px}
+.hd-sub{font-size:13px;color:#BFB1A0;margin-top:6px;max-width:520px}
+.lang-toggle{
+  display:flex;border:1px solid #6B5847;border-radius:999px;overflow:hidden;flex-shrink:0;margin-top:2px;
+}
+.lang-toggle button{
+  background:transparent;border:0;color:#C9B99F;font:inherit;font-size:12px;font-weight:700;
+  padding:7px 13px;cursor:pointer;letter-spacing:.06em;
+}
+.lang-toggle button.on{background:var(--paper);color:var(--espresso)}
+.lang-toggle button:focus-visible{outline:2px solid var(--paper);outline-offset:-2px}
+
+/* ---------- Layout ---------- */
+main{max-width:860px;margin:0 auto;padding:0 14px}
+section{margin-top:26px}
+.sec-label{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ink-soft);
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.sec-label::after{content:"";flex:1;border-top:1px solid var(--line)}
+
+/* ---------- Alert banner ---------- */
+.alerts{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.alert{
+  border-radius:var(--radius);padding:12px 14px;font-size:14px;display:flex;gap:10px;align-items:flex-start;
+  box-shadow:var(--shadow);border:1px solid transparent;
+}
+.alert .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.alert.red{background:var(--alert-red-soft);border-color:#E4C4BC;color:#6E271B}
+.alert.red .dot{background:var(--alert-red);animation:pulse 2s ease-in-out infinite}
+.alert.amber{background:var(--amber-soft);border-color:#E5D3A9;color:#6B4A12}
+.alert.amber .dot{background:var(--amber)}
+.alert b{font-weight:700}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- Year strip (årshjul) ---------- */
+.year-wrap{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px 0 10px;overflow:hidden;
+}
+.year-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 14px}
+.year-grid{position:relative;min-width:640px}
+.yr-months{display:grid;grid-template-columns:repeat(12,1fr);border-bottom:1px solid var(--line);padding-bottom:6px}
+.yr-months span{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);text-align:center;
+}
+.yr-rows{position:relative;padding:8px 0 4px}
+.yr-row{position:relative;height:30px;margin-bottom:6px}
+.yr-bar{
+  position:absolute;top:3px;bottom:3px;border-radius:6px;
+  display:flex;align-items:center;padding:0 8px;overflow:hidden;
+  font-size:10.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap;color:#fff;
+  cursor:pointer;border:0;text-align:left;font-family:inherit;
+}
+.yr-bar:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.yr-bar.r-krit{background:var(--alert-red)}
+.yr-bar.r-hoj{background:var(--amber)}
+.yr-bar.r-mel{background:var(--taupe)}
+.yr-bar.r-lav{background:#B7AC9C;color:#4A4238}
+.yr-gridlines{position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,1fr);pointer-events:none}
+.yr-gridlines i{border-left:1px dashed #EAE2D2}
+.yr-gridlines i:first-child{border-left:0}
+.today-line{
+  position:absolute;top:-6px;bottom:0;width:2px;background:var(--kontrol-green);z-index:3;pointer-events:none;
+}
+.today-flag{
+  position:absolute;top:-6px;transform:translateX(-50%);z-index:4;pointer-events:none;
+  background:var(--kontrol-green);color:#fff;font-size:9px;font-weight:800;letter-spacing:.1em;
+  padding:2px 6px;border-radius:4px;
+}
+.yr-legend{display:flex;flex-wrap:wrap;gap:12px;padding:10px 14px 2px;font-size:11px;color:var(--ink-soft)}
+.yr-legend span{display:inline-flex;align-items:center;gap:5px}
+.yr-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* ---------- Location picker ---------- */
+.loc-bar{
+  display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px;
+}
+.loc-bar button{
+  flex-shrink:0;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+  font:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:999px;cursor:pointer;
+}
+.loc-bar button.on{background:var(--espresso);border-color:var(--espresso);color:var(--paper)}
+.loc-bar button:focus-visible{outline:2px solid var(--espresso);outline-offset:2px}
+.loc-hint{font-size:11.5px;color:var(--ink-soft);margin-top:7px}
+
+/* ---------- Campaign cards ---------- */
+.camps{display:flex;flex-direction:column;gap:12px}
+.camp{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.camp.past{opacity:.62}
+.camp-head{
+  width:100%;background:transparent;border:0;font:inherit;text-align:left;cursor:pointer;
+  padding:14px 14px 12px;display:block;color:inherit;
+}
+.camp-head:focus-visible{outline:2px solid var(--espresso);outline-offset:-2px}
+.camp-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:7px}
+.tag{
+  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:5px;
+}
+.tag.r-krit{background:var(--alert-red-soft);color:var(--alert-red)}
+.tag.r-hoj{background:var(--amber-soft);color:#8A6215}
+.tag.r-mel{background:var(--taupe-soft);color:var(--taupe)}
+.tag.r-lav{background:#EDEAE3;color:var(--gray)}
+.tag.live{background:var(--kontrol-green);color:#fff}
+.tag.done{background:#EDEAE3;color:var(--gray)}
+.tag.hist{background:var(--espresso);color:var(--paper)}
+.camp-title{font-family:Georgia,"Times New Roman",serif;font-size:17.5px;font-weight:700;line-height:1.25}
+.camp-period{font-size:12px;color:var(--ink-soft);margin-top:3px;font-weight:600}
+.camp-body{padding:0 14px 14px;display:none}
+.camp.open .camp-body{display:block}
+.camp-why{
+  font-size:13.5px;color:var(--ink);background:var(--paper);border-left:3px solid var(--espresso);
+  padding:10px 12px;border-radius:0 8px 8px 0;margin-bottom:12px;
+}
+.camp-why b{font-weight:700}
+.chk-label{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline}
+.chk-count{font-size:11px;font-weight:700;color:var(--kontrol-green);letter-spacing:0}
+.chk{list-style:none}
+.chk li{border-top:1px dashed var(--line)}
+.chk li:first-child{border-top:0}
+.chk label{
+  display:flex;gap:11px;align-items:flex-start;padding:10px 2px;font-size:14px;cursor:pointer;
+}
+.chk input{
+  appearance:none;-webkit-appearance:none;width:21px;height:21px;flex-shrink:0;margin-top:1px;
+  border:2px solid var(--taupe);border-radius:6px;background:#fff;cursor:pointer;position:relative;
+}
+.chk input:checked{background:var(--kontrol-green);border-color:var(--kontrol-green)}
+.chk input:checked::after{
+  content:"";position:absolute;left:5px;top:1px;width:6px;height:11px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(42deg);
+}
+.chk input:focus-visible{outline:2px solid var(--espresso);outline-offset:2px}
+.chk input:checked + span{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:#C5BBA9}
+.camp-chevron{float:right;color:var(--taupe);font-size:13px;transition:transform .18s ease;margin-top:2px}
+.camp.open .camp-chevron{transform:rotate(180deg)}
+
+/* ---------- Smiley section ---------- */
+.smiley-cards{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:640px){.smiley-cards{grid-template-columns:1fr 1fr}}
+.sm-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px;
+}
+.sm-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sm-face{width:34px;height:34px;flex-shrink:0}
+.sm-name{font-family:Georgia,serif;font-size:16.5px;font-weight:700;flex:1}
+.sm-elite{
+  font-size:9px;font-weight:800;letter-spacing:.12em;background:var(--kontrol-green);color:#fff;
+  padding:3px 7px;border-radius:4px;
+}
+.sm-leader{
+  display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--ink-soft);margin:4px 0;
+}
+.sm-leader .dots{flex:1;border-bottom:2px dotted #C9BDA8;transform:translateY(-3px)}
+.sm-leader .val{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.sm-status{
+  margin-top:9px;font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;display:inline-block;
+}
+.sm-status.ok{background:var(--kontrol-green-soft);color:var(--kontrol-green)}
+.sm-status.soon{background:var(--amber-soft);color:#8A6215}
+.sm-status.due{background:var(--alert-red-soft);color:var(--alert-red)}
+.sm-status.none{background:#EDEAE3;color:var(--gray)}
+.sm-form{display:flex;gap:8px;margin-top:12px}
+.sm-form label{flex:1;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.sm-form input,.sm-form select{
+  display:block;width:100%;margin-top:4px;font:inherit;font-size:14px;padding:8px 9px;
+  border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);
+}
+.sm-form input:focus-visible,.sm-form select:focus-visible{outline:2px solid var(--espresso);outline-offset:1px}
+
+/* ---------- Footer ---------- */
+footer{
+  max-width:860px;margin:34px auto 0;padding:18px 14px 0;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink-soft);
+}
+footer a{color:var(--espresso);font-weight:600}
+.f-links{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.f-ver{letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-top">
+    <div>
+      <div class="hd-brand">Café Kaiser · Kitchen Hub</div>
+      <h1 id="t-title"></h1>
+      <p class="hd-sub" id="t-sub"></p>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Sprog / Language">
+      <button id="btn-da" onclick="setLang('da')">DA</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="alerts" id="alerts"></div>
+
+  <section>
+    <div class="sec-label" id="t-yearlabel"></div>
+    <div class="year-wrap">
+      <div class="year-scroll">
+        <div class="year-grid">
+          <div class="yr-months" id="yr-months"></div>
+          <div class="yr-rows" id="yr-rows"></div>
+        </div>
+      </div>
+      <div class="yr-legend" id="yr-legend"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label" id="t-loclabel"></div>
+    <div class="loc-bar" id="loc-bar"></div>
+    <div class="loc-hint" id="t-lochint"></div>
+  </section>
+
+  <section>
+    <div class="sec-label" id="t-camplabel"></div>
+    <div class="camps" id="camps"></div>
+  </section>
+
+  <section>
+    <div class="sec-label" id="t-smileylabel"></div>
+    <div class="loc-hint" id="t-smileyhint" style="margin:-4px 0 12px"></div>
+    <div class="smiley-cards" id="smiley-cards"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="f-links">
+    <a id="lnk-fvst" href="https://foedevarestyrelsen.dk/kost-og-foedevarer/kontrol/typer-af-kontrol/kontrolkampagner/kontrolkampagner-foedevarer-2026" target="_blank" rel="noopener"></a>
+    <a id="lnk-smiley" href="https://www.findsmiley.dk/Sider/Search.aspx?k=Cafe%20kaiser" target="_blank" rel="noopener"></a>
+  </div>
+  <div class="f-ver">Kaiser Kontrol v1.0 · 2026</div>
+</footer>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+var LOCATIONS = [
+  {id:"helsingor", name:"Helsingør"},
+  {id:"hillerod",  name:"Hillerød"},
+  {id:"farum",     name:"Farum"},
+  {id:"horsholm",  name:"Hørsholm"},
+  {id:"vanlose",   name:"Vanløse"},
+  {id:"enghave",   name:"Enghave Brygge"}
+];
+
+/* relevance: krit / hoj / mel / lav  ·  months are 1-12 inclusive */
+var CAMPAIGNS = [
+  {
+    id:"anprisninger", start:2, end:6, rel:"krit", history:true,
+    name:{da:"Anprisninger – herunder økologi", en:"Claims & marketing – incl. organic"},
+    short:{da:"Anprisninger", en:"Claims/organic"},
+    why:{
+      da:"<b>Vi fik 3 kontrolbesøg på denne kampagne i foråret 2026.</b> Menukortet er fyldt med anprisninger: økologisk Mariagerbrød og rugbrød fra Meyers, økologisk burgerbolle, samt hjemmelavet/hjemmerørt/hjemmesyltet på mange retter. Alt skal kunne dokumenteres på stedet.",
+      en:"<b>This campaign gave us 3 inspection visits in spring 2026.</b> Our menu is full of claims: organic Meyers bread and rolls, organic burger bun, plus homemade/house-made/house-pickled on many dishes. Everything must be documentable on site."
+    },
+    check:{
+      da:[
+        "Økologi-dokumentation: fakturaer på Meyers brød/boller/rugbrød samlet og let at finde (seneste 3 mdr.)",
+        "Menukort stemmer med faktiske varer – ved leverandørskift rettes menukortet SAMME dag",
+        "\u201EHjemmelavet/hjemmerørt/hjemmesyltet\u201C: opskrift + produktion kan vises for hver ret der bærer ordet",
+        "Trøffelmayo: indeholder den ægte trøffel eller aroma? Aroma = ret navnet",
+        "Skilte, tavler og SoMe: ingen anprisninger der ikke kan dokumenteres",
+        "Vagthavende ved hvor dokumentationsmappen står"
+      ],
+      en:[
+        "Organic documentation: Meyers bread/rolls invoices collected and easy to find (last 3 months)",
+        "Menu matches actual goods – if supplier changes, fix the menu the SAME day",
+        "\u201CHomemade/house-made/house-pickled\u201D: recipe + on-site production can be shown for every dish carrying the word",
+        "Truffle mayo: real truffle or aroma? Aroma = rename the item",
+        "Signs, boards and social media: no claims that can't be documented",
+        "Shift manager knows where the documentation binder is"
+      ]
+    }
+  },
+  {
+    id:"risiko", start:9, end:12, rel:"krit", history:false,
+    name:{da:"Dækkende risikoanalyse & egenkontrol", en:"Risk analysis & self-inspection coverage"},
+    short:{da:"Risikoanalyse", en:"Risk analysis"},
+    why:{
+      da:"Fokus på om egenkontrol og risikoanalyse dækker <b>alle</b> kritiske aktiviteter: nedkøling af hjemmelavede dressinger, hønsesalat og tunmousse, varmholdelse af stegt flæsk ad libitum, genopvarmning. Catering skal også være dækket.",
+      en:"Focus on whether self-inspection and risk analysis cover <b>all</b> critical activities: cooling of homemade dressings, chicken salad and tuna mousse, hot-holding of the all-you-can-eat pork belly, reheating. Catering must be covered too."
+    },
+    check:{
+      da:[
+        "Egenkontrolprogram opdateret med ALLE aktiviteter pr. lokation (inkl. catering og events)",
+        "Nedkølingsskemaer føres konsekvent: dressinger, mayo, hønsesalat, tunmousse",
+        "Stegt flæsk: varmholdelsestemperatur og -tid dokumenteres hver serviceaften",
+        "Genopvarmningsprocedure (min. 75°C) kendt af alle på vagt",
+        "Risikoanalysen opdateret ved nye retter, nyt udstyr eller ny indretning",
+        "Seneste 3 måneders egenkontrol kan fremvises uden at lede"
+      ],
+      en:[
+        "Self-inspection programme updated with ALL activities per location (incl. catering and events)",
+        "Cooling logs kept consistently: dressings, mayo, chicken salad, tuna mousse",
+        "Pork belly: hot-holding temperature and time documented every service night",
+        "Reheating procedure (min. 75°C) known by everyone on shift",
+        "Risk analysis updated for new dishes, new equipment or new layout",
+        "Last 3 months of self-inspection records can be produced without searching"
+      ]
+    }
+  },
+  {
+    id:"festival", start:4, end:12, rel:"hoj", history:false,
+    name:{da:"Markeder, festivaler & midlertidige aktiviteter", en:"Markets, festivals & temporary activities"},
+    short:{da:"Events/festival", en:"Events/festival"},
+    why:{
+      da:"Light-kampagne mod udendørs og midlertidig servering: hygiejne, temperaturstyring, håndvask, afdækning og sporbarhed. Rammer os ved <b>Kaiser Catering, åbningsarrangementer og udendørs events</b> – fx åbningen på Enghave Brygge.",
+      en:"Light campaign targeting outdoor and temporary food service: hygiene, temperature control, hand washing, covering and traceability. Hits us at <b>Kaiser Catering, opening events and outdoor events</b> – e.g. the Enghave Brygge opening."
+    },
+    check:{
+      da:[
+        "Midlertidig aktivitet uden for autorisationen? Anmeldt til Fødevarestyrelsen inden",
+        "Kølekæde-plan for udendørs servering: køleboks + termometer + logning",
+        "Håndvask med sæbe og papir tilgængelig ved udendørs station",
+        "Mad afdækket og hævet fra jorden – skadedyrssikret",
+        "Følgesedler/sporbarhed medbringes til eventet",
+        "Ansvarlig for egenkontrol på dagen er udpeget ved navn"
+      ],
+      en:[
+        "Temporary activity outside the authorisation? Notified to the DVFA in advance",
+        "Cold-chain plan for outdoor service: cool box + thermometer + logging",
+        "Hand wash with soap and paper available at the outdoor station",
+        "Food covered and raised off the ground – pest-proofed",
+        "Delivery notes/traceability brought to the event",
+        "Person responsible for self-inspection on the day named in advance"
+      ]
+    }
+  },
+  {
+    id:"autorisation", start:1, end:6, rel:"hoj", history:false,
+    name:{da:"Aktiviteter & risici i autoriserede virksomheder", en:"Activities & risks in authorised businesses"},
+    short:{da:"Autorisation", en:"Authorisation"},
+    why:{
+      da:"Kontrol af om registrering/autorisation stadig dækker de faktiske aktiviteter, indretning og sortiment. Relevant for os med <b>ny lokation på Enghave Brygge (eget CVR)</b> og catering-aktiviteter på tværs af husene.",
+      en:"Checks whether registration/authorisation still covers actual activities, layout and product range. Relevant for us with the <b>new Enghave Brygge location (own CVR)</b> and catering activities across the houses."
+    },
+    check:{
+      da:[
+        "Registrering dækker alle aktiviteter pr. lokation (servering, take-away, catering)",
+        "CVR/P-nr. oplysninger er korrekte hos Fødevarestyrelsen",
+        "Ny lokation: registrering bekræftet FØR første åbningsdag",
+        "Væsentlige ændringer (nyt køkken, nye aktiviteter) er meldt ind",
+        "Risikoanalyse afspejler den faktiske drift på hver lokation"
+      ],
+      en:[
+        "Registration covers all activities per location (dine-in, take-away, catering)",
+        "CVR/P-number details are correct with the DVFA",
+        "New location: registration confirmed BEFORE the first opening day",
+        "Significant changes (new kitchen, new activities) have been reported",
+        "Risk analysis reflects the actual operation at each location"
+      ]
+    }
+  },
+  {
+    id:"fisk", start:4, end:7, rel:"mel", history:false,
+    name:{da:"Mærkning af fiskevarer & akvakultur", en:"Labelling of fish & aquaculture products"},
+    short:{da:"Fiskemærkning", en:"Fish labelling"},
+    why:{
+      da:"Korrekt art og sporbarhed på fisk. På vores kort: <b>stjerneskud, fish'n'chips (sej), fiskefilet, varmrøget laks, tunmousse og rejer</b>. Kampagnen retter sig mest mod detail, men art og dokumentation skal være på plads hos os.",
+      en:"Correct species and traceability on fish. On our menu: <b>stjerneskud, fish'n'chips (saithe), fish fillet, hot-smoked salmon, tuna mousse and prawns</b>. The campaign mainly targets retail, but species and documentation must be in order with us."
+    },
+    check:{
+      da:[
+        "Arten på menukortet matcher fakturaen (sej er sej – ikke \u201Etorsk\u201C)",
+        "Optøet fisk markedsføres ikke som fersk",
+        "Leverandørdokumentation på laks, rejer og tun kan fremvises",
+        "Allergen-info (fisk, skaldyr) er opdateret alle steder"
+      ],
+      en:[
+        "Species on the menu matches the invoice (saithe is saithe – not \u201Ccod\u201D)",
+        "Thawed fish is not marketed as fresh",
+        "Supplier documentation for salmon, prawns and tuna can be produced",
+        "Allergen info (fish, shellfish) is up to date everywhere"
+      ]
+    }
+  },
+  {
+    id:"opson", start:1, end:6, rel:"lav", history:false,
+    name:{da:"OPSON XV – Fødevaresvindel", en:"OPSON XV – Food fraud"},
+    short:{da:"OPSON XV", en:"OPSON XV"},
+    why:{
+      da:"International svindelkampagne – rammer primært engros og import. For os: køb kun fra registrerede leverandører og gem følgesedler.",
+      en:"International fraud campaign – mainly targets wholesale and import. For us: buy only from registered suppliers and keep delivery notes."
+    },
+    check:{
+      da:[
+        "Alle leverandører er registrerede fødevarevirksomheder",
+        "Følgesedler og fakturaer gemmes systematisk"
+      ],
+      en:[
+        "All suppliers are registered food businesses",
+        "Delivery notes and invoices are filed systematically"
+      ]
+    }
+  },
+  {
+    id:"beriget", start:2, end:5, rel:"lav", history:false,
+    name:{da:"Berigede fødevarer (engros)", en:"Fortified foods (wholesale)"},
+    short:{da:"Berigede", en:"Fortified"},
+    why:{
+      da:"Kontrol af vitaminer/mineraler tilsat fødevarer – retter sig mod virksomheder med første markedsføring i DK. <b>Ingen handling nødvendig for os.</b>",
+      en:"Checks vitamins/minerals added to foods – targets businesses placing products on the Danish market. <b>No action needed for us.</b>"
+    },
+    check:{
+      da:["Kun relevant hvis vi selv begynder at producere/importere berigede produkter"],
+      en:["Only relevant if we start producing/importing fortified products ourselves"]
+    }
+  },
+  {
+    id:"tilsaetning", start:4, end:6, rel:"lav", history:false,
+    name:{da:"Tilsætningsstoffer (produktionsvirksomheder)", en:"Additives (production businesses)"},
+    short:{da:"Tilsætning", en:"Additives"},
+    why:{
+      da:"Light-kampagne mod engros-produktion med tilsætningsstoffer. <b>Ingen handling nødvendig for os.</b>",
+      en:"Light campaign targeting wholesale production using additives. <b>No action needed for us.</b>"
+    },
+    check:{
+      da:["Kun relevant ved evt. fremtidig engrosproduktion"],
+      en:["Only relevant for potential future wholesale production"]
+    }
+  }
+];
+
+/* ============================================================
+   UI TEXT
+   ============================================================ */
+var T = {
+  da:{
+    title:"Kontrolkampagner 2026",
+    sub:"Fødevarestyrelsens kampagner holdt op mod vores menukort og drift – med tjeklister pr. lokation.",
+    yearlabel:"Årshjul",
+    loclabel:"Lokation",
+    lochint:"Tjeklisterne gemmes pr. lokation på denne enhed.",
+    camplabel:"Kampagner & tjeklister",
+    smileylabel:"Smiley-status",
+    smileyhint:"Indtast seneste kontrolbesøg pr. lokation (v1 – manuel). Data gemmes på denne enhed.",
+    active:"Aktiv nu",
+    upcoming:"Kommer",
+    done:"Afsluttet",
+    hist:"3 besøg i 2026",
+    rel:{krit:"Kritisk", hoj:"Høj", mel:"Mellem", lav:"Lav"},
+    months:["JAN","FEB","MAR","APR","MAJ","JUN","JUL","AUG","SEP","OKT","NOV","DEC"],
+    monthNames:["januar","februar","marts","april","maj","juni","juli","august","september","oktober","november","december"],
+    today:"I DAG",
+    checklist:"Tjekliste",
+    ofDone:"udført",
+    lastVisit:"Seneste besøg",
+    result:"Resultat",
+    daysSince:"Dage siden besøg",
+    noData:"Ingen data – indtast seneste besøg",
+    stOk:"OK – normal frekvens",
+    stSoon:"Forvent besøg snart",
+    stDue:"Besøg kan komme når som helst",
+    resNames:{elite:"Elite", s1:"Glad smiley (1)", s2:"Smiley 2", s3:"Smiley 3", s4:"Sur smiley (4)"},
+    alertCamps:"kampagne(r) er aktive nu med høj eller kritisk relevans:",
+    alertEnghave:"<b>Åbning Enghave Brygge 9. juli:</b> Nyåbnede steder får ofte tidligt kontrolbesøg, og event-kampagnen er aktiv. Kør event-tjeklisten og hav registrering + egenkontrol klar fra dag ét.",
+    lnkFvst:"Fødevarestyrelsen: Kontrolkampagner 2026 →",
+    lnkSmiley:"Findsmiley: Café Kaiser →",
+    period:function(a,b){return T.da.monthNames[a-1].charAt(0).toUpperCase()+T.da.monthNames[a-1].slice(1)+" – "+T.da.monthNames[b-1];}
+  },
+  en:{
+    title:"Inspection campaigns 2026",
+    sub:"The Danish food authority's campaigns mapped against our menu and operations – with checklists per location.",
+    yearlabel:"Year wheel",
+    loclabel:"Location",
+    lochint:"Checklists are saved per location on this device.",
+    camplabel:"Campaigns & checklists",
+    smileylabel:"Smiley status",
+    smileyhint:"Enter the latest inspection visit per location (v1 – manual). Data is saved on this device.",
+    active:"Active now",
+    upcoming:"Upcoming",
+    done:"Finished",
+    hist:"3 visits in 2026",
+    rel:{krit:"Critical", hoj:"High", mel:"Medium", lav:"Low"},
+    months:["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"],
+    monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],
+    today:"TODAY",
+    checklist:"Checklist",
+    ofDone:"done",
+    lastVisit:"Last visit",
+    result:"Result",
+    daysSince:"Days since visit",
+    noData:"No data – enter last visit",
+    stOk:"OK – normal frequency",
+    stSoon:"Expect a visit soon",
+    stDue:"A visit can come any time",
+    resNames:{elite:"Elite", s1:"Happy smiley (1)", s2:"Smiley 2", s3:"Smiley 3", s4:"Sad smiley (4)"},
+    alertCamps:"campaign(s) active now with high or critical relevance:",
+    alertEnghave:"<b>Enghave Brygge opening July 9:</b> Newly opened sites often get an early inspection, and the events campaign is active. Run the event checklist and have registration + self-inspection ready from day one.",
+    lnkFvst:"Danish food authority: Inspection campaigns 2026 →",
+    lnkSmiley:"Findsmiley: Café Kaiser →",
+    period:function(a,b){return T.en.monthNames[a-1]+" – "+T.en.monthNames[b-1];}
+  }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+var LS = "kk26.";
+function lsGet(k,f){try{var v=localStorage.getItem(LS+k);return v===null?f:v;}catch(e){return f;}}
+function lsSet(k,v){try{localStorage.setItem(LS+k,v);}catch(e){}}
+
+var lang = lsGet("lang","da");
+var loc  = lsGet("loc","helsingor");
+var openCamps = {};
+var NOW = new Date();
+var YEAR = 2026;
+
+function t(){return T[lang];}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function campStatus(c){
+  var y = NOW.getFullYear(), m = NOW.getMonth()+1;
+  if(y < YEAR) return "upcoming";
+  if(y > YEAR) return "done";
+  if(m < c.start) return "upcoming";
+  if(m > c.end) return "done";
+  return "active";
+}
+
+/* fraction of the 2026 calendar year elapsed (for today-line) */
+function yearFraction(){
+  var start = new Date(YEAR,0,1).getTime();
+  var end = new Date(YEAR+1,0,1).getTime();
+  var f = (NOW.getTime()-start)/(end-start);
+  return Math.max(0,Math.min(1,f));
+}
+
+/* ============================================================
+   SMILEY faces (inline SVG)
+   ============================================================ */
+function smileyFace(res){
+  var mouth, color="#1F7A4D";
+  if(res==="elite"||res==="s1"){mouth='<path d="M10 20 Q17 27 24 20" stroke-width="2.6" fill="none"/>';}
+  else if(res==="s2"){mouth='<path d="M11 21 Q17 24 23 21" stroke-width="2.6" fill="none"/>';color="#7BA05B";}
+  else if(res==="s3"){mouth='<line x1="11" y1="22" x2="23" y2="22" stroke-width="2.6"/>';color="#C08A2D";}
+  else if(res==="s4"){mouth='<path d="M10 24 Q17 17 24 24" stroke-width="2.6" fill="none"/>';color="#B3402F";}
+  else {mouth='<line x1="12" y1="22" x2="22" y2="22" stroke-width="2.6"/>';color="#B7AC9C";}
+  return '<svg class="sm-face" viewBox="0 0 34 34" aria-hidden="true">'+
+    '<circle cx="17" cy="17" r="15" fill="none" stroke="'+color+'" stroke-width="2.6"/>'+
+    '<circle cx="11.5" cy="13" r="1.9" fill="'+color+'"/>'+
+    '<circle cx="22.5" cy="13" r="1.9" fill="'+color+'"/>'+
+    '<g stroke="'+color+'" stroke-linecap="round">'+mouth+'</g></svg>';
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render(){
+  document.documentElement.lang = lang;
+  document.getElementById("btn-da").className = lang==="da"?"on":"";
+  document.getElementById("btn-en").className = lang==="en"?"on":"";
+  document.getElementById("t-title").textContent = t().title;
+  document.getElementById("t-sub").textContent = t().sub;
+  document.getElementById("t-yearlabel").textContent = t().yearlabel;
+  document.getElementById("t-loclabel").textContent = t().loclabel;
+  document.getElementById("t-lochint").textContent = t().lochint;
+  document.getElementById("t-camplabel").textContent = t().camplabel;
+  document.getElementById("t-smileylabel").textContent = t().smileylabel;
+  document.getElementById("t-smileyhint").textContent = t().smileyhint;
+  document.getElementById("lnk-fvst").textContent = t().lnkFvst;
+  document.getElementById("lnk-smiley").textContent = t().lnkSmiley;
+  renderAlerts();
+  renderYear();
+  renderLocBar();
+  renderCamps();
+  renderSmiley();
+}
+
+function renderAlerts(){
+  var el = document.getElementById("alerts");
+  var html = "";
+  var act = CAMPAIGNS.filter(function(c){return campStatus(c)==="active" && (c.rel==="krit"||c.rel==="hoj");});
+  if(act.length){
+    var names = act.map(function(c){return "<b>"+esc(c.name[lang])+"</b>";}).join(" · ");
+    html += '<div class="alert red"><span class="dot"></span><span>'+act.length+" "+t().alertCamps+" "+names+"</span></div>";
+  }
+  if(NOW.getTime() < new Date(2026,6,17).getTime()){
+    html += '<div class="alert amber"><span class="dot"></span><span>'+t().alertEnghave+"</span></div>";
+  }
+  el.innerHTML = html;
+}
+
+function renderYear(){
+  var mEl = document.getElementById("yr-months");
+  mEl.innerHTML = t().months.map(function(m){return "<span>"+m+"</span>";}).join("");
+
+  var rows = document.getElementById("yr-rows");
+  var html = '<div class="yr-gridlines">'+"<i></i>".repeat(12)+"</div>";
+  CAMPAIGNS.forEach(function(c){
+    var left = ((c.start-1)/12*100).toFixed(2);
+    var width = ((c.end-c.start+1)/12*100).toFixed(2);
+    var st = campStatus(c);
+    html += '<div class="yr-row">'+
+      '<button class="yr-bar r-'+c.rel+'" style="left:'+left+"%;width:"+width+'%;'+(st==="done"?"opacity:.45;":"")+'" '+
+      'onclick="jumpToCamp(\''+c.id+'\')" title="'+esc(c.name[lang])+'">'+esc(c.short[lang])+"</button></div>";
+  });
+  var f = yearFraction();
+  if(NOW.getFullYear()===YEAR){
+    html += '<div class="today-line" style="left:'+(f*100).toFixed(3)+'%"></div>'+
+            '<div class="today-flag" style="left:'+(f*100).toFixed(3)+'%">'+t().today+"</div>";
+  }
+  rows.innerHTML = html;
+
+  var lg = document.getElementById("yr-legend");
+  lg.innerHTML =
+    '<span><i style="background:var(--alert-red)"></i>'+t().rel.krit+"</span>"+
+    '<span><i style="background:var(--amber)"></i>'+t().rel.hoj+"</span>"+
+    '<span><i style="background:var(--taupe)"></i>'+t().rel.mel+"</span>"+
+    '<span><i style="background:#B7AC9C"></i>'+t().rel.lav+"</span>"+
+    '<span><i style="background:var(--kontrol-green);border-radius:1px;width:3px"></i>'+t().today+"</span>";
+}
+
+function jumpToCamp(id){
+  openCamps[id] = true;
+  renderCamps();
+  var el = document.getElementById("camp-"+id);
+  if(el){el.scrollIntoView({behavior:"smooth",block:"start"});}
+}
+
+function renderLocBar(){
+  var el = document.getElementById("loc-bar");
+  el.innerHTML = LOCATIONS.map(function(L){
+    return '<button class="'+(L.id===loc?"on":"")+'" onclick="setLoc(\''+L.id+'\')">'+esc(L.name)+"</button>";
+  }).join("");
+}
+
+function chkKey(campId,i){return "check."+loc+"."+campId+"."+i;}
+
+function renderCamps(){
+  var order = {active:0, upcoming:1, done:2};
+  var sorted = CAMPAIGNS.slice().sort(function(a,b){
+    var s = order[campStatus(a)]-order[campStatus(b)];
+    if(s) return s;
+    var relOrd = {krit:0,hoj:1,mel:2,lav:3};
+    var r = relOrd[a.rel]-relOrd[b.rel];
+    if(r) return r;
+    return a.start-b.start;
+  });
+  var el = document.getElementById("camps");
+  el.innerHTML = sorted.map(function(c){
+    var st = campStatus(c);
+    var items = c.check[lang];
+    var doneCount = 0;
+    items.forEach(function(_,i){ if(lsGet(chkKey(c.id,i),"0")==="1") doneCount++; });
+    var stTag = st==="active" ? '<span class="tag live">● '+t().active+"</span>"
+              : st==="upcoming" ? '<span class="tag done">'+t().upcoming+"</span>"
+              : '<span class="tag done">'+t().done+"</span>";
+    var histTag = c.history ? '<span class="tag hist">'+t().hist+"</span>" : "";
+    return '<article class="camp '+(openCamps[c.id]?"open ":"")+(st==="done"?"past":"")+'" id="camp-'+c.id+'">'+
+      '<button class="camp-head" onclick="toggleCamp(\''+c.id+'\')" aria-expanded="'+(!!openCamps[c.id])+'">'+
+        '<span class="camp-chevron">▾</span>'+
+        '<span class="camp-tags"><span class="tag r-'+c.rel+'">'+t().rel[c.rel]+"</span>"+stTag+histTag+"</span>"+
+        '<span class="camp-title">'+esc(c.name[lang])+"</span>"+
+        '<span class="camp-period" style="display:block">'+t().period(c.start,c.end)+" · "+doneCount+"/"+items.length+" "+t().ofDone+"</span>"+
+      "</button>"+
+      '<div class="camp-body">'+
+        '<div class="camp-why">'+c.why[lang]+"</div>"+
+        '<div class="chk-label"><span>'+t().checklist+" · "+esc(LOCATIONS.find(function(L){return L.id===loc;}).name)+"</span>"+
+        '<span class="chk-count">'+doneCount+"/"+items.length+"</span></div>"+
+        '<ul class="chk">'+items.map(function(item,i){
+          var on = lsGet(chkKey(c.id,i),"0")==="1";
+          return "<li><label><input type=\"checkbox\" "+(on?"checked ":"")+
+            'onchange="toggleChk(\''+c.id+"',"+i+',this.checked)"><span>'+esc(item)+"</span></label></li>";
+        }).join("")+"</ul>"+
+      "</div></article>";
+  }).join("");
+}
+
+function toggleCamp(id){ openCamps[id]=!openCamps[id]; renderCamps(); }
+function toggleChk(campId,i,on){ lsSet(chkKey(campId,i), on?"1":"0"); renderCamps(); }
+
+/* ---------- Smiley ---------- */
+function smKey(locId){return "smiley."+locId;}
+function getSm(locId){
+  try{ return JSON.parse(lsGet(smKey(locId),"null")) || {date:"",result:""}; }
+  catch(e){ return {date:"",result:""}; }
+}
+function setSm(locId, field, val){
+  var d = getSm(locId); d[field]=val;
+  lsSet(smKey(locId), JSON.stringify(d));
+  renderSmiley();
+}
+
+function renderSmiley(){
+  var el = document.getElementById("smiley-cards");
+  el.innerHTML = LOCATIONS.map(function(L){
+    var d = getSm(L.id);
+    var days = null, status = "none", stTxt = t().noData;
+    if(d.date){
+      days = Math.floor((NOW.getTime() - new Date(d.date+"T12:00:00").getTime())/86400000);
+      if(days < 0) days = 0;
+      if(days > 365){ status="due"; stTxt=t().stDue; }
+      else if(days > 270){ status="soon"; stTxt=t().stSoon; }
+      else { status="ok"; stTxt=t().stOk; }
+    }
+    var opts = ["","elite","s1","s2","s3","s4"].map(function(r){
+      var label = r==="" ? "–" : t().resNames[r];
+      return '<option value="'+r+'"'+(d.result===r?" selected":"")+">"+esc(label)+"</option>";
+    }).join("");
+    return '<div class="sm-card">'+
+      '<div class="sm-head">'+smileyFace(d.result)+
+        '<span class="sm-name">'+esc(L.name)+"</span>"+
+        (d.result==="elite"?'<span class="sm-elite">ELITE</span>':"")+
+      "</div>"+
+      '<div class="sm-leader"><span>'+t().daysSince+'</span><span class="dots"></span><span class="val">'+(days===null?"–":days)+"</span></div>"+
+      '<span class="sm-status '+status+'">'+esc(stTxt)+"</span>"+
+      '<div class="sm-form">'+
+        "<label>"+t().lastVisit+'<input type="date" value="'+esc(d.date)+'" onchange="setSm(\''+L.id+'\',\'date\',this.value)"></label>'+
+        "<label>"+t().result+'<select onchange="setSm(\''+L.id+'\',\'result\',this.value)">'+opts+"</select></label>"+
+      "</div></div>";
+  }).join("");
+}
+
+/* ---------- Actions ---------- */
+function setLang(l){ lang=l; lsSet("lang",l); render(); }
+function setLoc(l){ loc=l; lsSet("loc",l); renderLocBar(); renderCamps(); }
+
+render();
+</script>
+</body>
+</html>
