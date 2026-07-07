@@ -2,201 +2,422 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Café Kaiser – Drift Status</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1D1712">
 
 <style>
+/* ============================================================
+   KAISER DRIFT STATUS · samme designsystem som håndværker-appen
+   ============================================================ */
+:root{
+  --espresso:#1D1712;
+  --espresso-2:#2A211A;
+  --paper:#F3EFE8;
+  --card:#FFFDF9;
+  --ink:#26201A;
+  --muted:#8A7F73;
+  --line:#E4DCD0;
+  --red:#C4442E;
+  --red-soft:#F9E8E4;
+  --amber:#D9903F;
+  --amber-soft:#F8EEDF;
+  --green:#2E7D4F;
+  --green-soft:#E5F0E9;
+  --radius:14px;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
 body{
   margin:0;
-  font-family:Inter,sans-serif;
-  background:#f3f4f6;
-  padding:40px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-text-size-adjust:100%;
 }
 
-h1{
-  margin-bottom:20px;
+/* ---------- Topbar ---------- */
+.topbar{
+  background:var(--espresso);
+  color:#F3EDE4;
+  padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
+  position:sticky; top:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.brand{ display:flex; align-items:center; gap:10px; }
+.brand .mark{
+  width:34px; height:34px; border-radius:9px; flex:none;
+  background:var(--espresso-2);
+  display:grid; place-items:center;
+  border:1px solid rgba(255,255,255,.12);
+}
+.brand .mark svg{ width:20px; height:20px; }
+.brand h1{ margin:0; font-size:16px; font-weight:700; letter-spacing:.3px; }
+.brand small{ display:block; font-size:11px; font-weight:400; color:#B9AC9C; letter-spacing:.6px; text-transform:uppercase; }
+
+.sync{ display:flex; align-items:center; gap:8px; font-size:12px; color:#CFC4B6; }
+.sync .dot{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--green); box-shadow:0 0 0 3px rgba(46,125,79,.25);
+}
+.sync.offline .dot{ background:var(--amber); box-shadow:0 0 0 3px rgba(217,144,63,.25); }
+.sync.busy .dot{ background:#CFC4B6; animation:pulse 1s infinite; }
+@keyframes pulse{ 50%{ opacity:.35; } }
+
+/* ---------- Lokations-chips ---------- */
+.chips{
+  display:flex; gap:8px; overflow-x:auto; padding:14px 16px 4px;
+  scrollbar-width:none; max-width:760px; margin:0 auto;
+}
+.chips::-webkit-scrollbar{ display:none; }
+.chip{
+  flex:none; border:1px solid var(--line); background:var(--card);
+  color:var(--ink); border-radius:999px; padding:9px 15px;
+  font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap;
+}
+.chip .n{ color:var(--muted); font-weight:400; font-size:12px; margin-left:4px; }
+.chip.active{ background:var(--espresso); color:#F3EDE4; border-color:var(--espresso); }
+.chip.active .n{ color:#B9AC9C; }
+.chip.clear{ background:var(--green-soft); border-color:#CBE0D2; color:var(--green); }
+.chip.clear.active{ background:var(--green); color:#fff; border-color:var(--green); }
+
+/* ---------- Statuslinje ---------- */
+.summary{
+  max-width:760px; margin:0 auto; padding:12px 16px 0;
+  font-size:13.5px; color:var(--muted);
 }
 
-select{
-  padding:8px 12px;
-  margin-bottom:30px;
-  font-size:16px;
-}
+/* ---------- Kort ---------- */
+.list{ padding:12px 16px 40px; max-width:760px; margin:0 auto; }
 
 .card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:20px;
-  border:1px solid #e5e7eb;
+  position:relative;
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px 16px 16px 22px;
+  margin-bottom:14px;
+  overflow:hidden;
 }
-
-.status-open{color:#dc2626;font-weight:600;}
-.status-inprogress{color:#f59e0b;font-weight:600;}
-
-.deadline{
-  margin-top:10px;
-  font-size:14px;
+.card::before{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
+  background:var(--muted);
 }
+.card.sev-high::before{ background:var(--red); }
+.card.sev-medium::before{ background:var(--amber); }
+.card.sev-low::before{ background:var(--green); }
 
-.overdue{
-  color:#dc2626;
-  font-weight:600;
+.card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.card-top h3{ margin:0; font-size:15.5px; font-weight:800; line-height:1.35; overflow-wrap:anywhere; }
+.meta{ margin:3px 0 0; font-size:12.5px; color:var(--muted); }
+
+.badge{
+  flex:none; font-size:11px; font-weight:700; letter-spacing:.4px;
+  padding:4px 10px; border-radius:999px; text-transform:uppercase;
 }
+.badge.open{ background:var(--red-soft); color:var(--red); }
+.badge.progress{ background:var(--amber-soft); color:#9A6320; }
 
-.history{
-  margin-top:15px;
-  padding-top:10px;
-  border-top:1px solid #eee;
+/* Dotted leader line — samme signatur som håndværker-appen */
+.leader{
+  display:flex; align-items:baseline; gap:8px;
+  margin-top:12px; font-size:13.5px;
 }
+.leader .lbl{ color:var(--muted); flex:none; }
+.leader .dots{ flex:1; border-bottom:2px dotted var(--line); transform:translateY(-3px); }
+.leader .val{ flex:none; font-weight:700; }
+.leader .val.overdue{ color:var(--red); }
+.leader .val.none{ color:var(--muted); font-weight:400; font-style:italic; }
 
-.history-entry{
-  font-size:14px;
-  margin-top:8px;
+/* ---------- Historik ---------- */
+.thread{ margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
+.thread-title{
+  font-size:11.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.5px; color:var(--muted); margin:0 0 8px;
+}
+.msg{
+  background:var(--paper); border-radius:10px;
+  padding:10px 12px; margin-bottom:8px; font-size:14px;
+}
+.msg.hv{ background:var(--green-soft); }
+.msg .who{ font-weight:700; font-size:12.5px; }
+.msg .when{ color:var(--muted); font-size:11.5px; margin-left:6px; }
+.msg p{ margin:4px 0 0; overflow-wrap:anywhere; }
+
+/* ---------- Tom tilstand / skeleton ---------- */
+.empty{ text-align:center; color:var(--muted); padding:56px 20px; }
+.empty .big{ font-size:40px; }
+.skeleton .card{ min-height:110px; }
+.skeleton .bar{
+  height:12px; border-radius:6px; background:var(--line);
+  margin-bottom:10px; animation:pulse 1.2s infinite;
+}
+.skeleton .bar.w60{ width:60%; } .skeleton .bar.w90{ width:90%; } .skeleton .bar.w40{ width:40%; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
 }
 </style>
 </head>
-
 <body>
 
-<h1>Drift Status</h1>
+<header class="topbar">
+  <div class="brand">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#F3EDE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a4.5 4.5 0 0 0-6.4 5.6L3 17.2V21h3.8l5.3-5.3a4.5 4.5 0 0 0 5.6-6.4l-2.9 2.9-2.5-.6-.6-2.5 2.9-2.8z"/>
+      </svg>
+    </div>
+    <h1>Drift Status<small>Café Kaiser</small></h1>
+  </div>
+  <div class="sync" id="sync"><span class="dot"></span><span id="syncText">Live</span></div>
+</header>
 
-<select id="locationSelect">
-  <option value="">Vælg lokation</option>
-</select>
+<div class="chips" id="chips"></div>
+<div class="summary" id="summary"></div>
 
-<div id="issues"></div>
+<main class="list" id="list">
+  <div class="skeleton">
+    <div class="card"><div class="bar w40"></div><div class="bar w90"></div><div class="bar w60"></div></div>
+    <div class="card"><div class="bar w40"></div><div class="bar w90"></div><div class="bar w60"></div></div>
+  </div>
+</main>
 
 <script>
-
+/* ==========================================================
+   KONFIGURATION
+   Samme backend-kontrakt som før: GET ?callback=cb → { issues, comments }
+   OBS: Denne side er read-only — caféen melder fejl via drifthubben.
+   ========================================================== */
 const API_URL = "https://script.google.com/macros/s/AKfycbxAGsOfZaupooAVQv7u3X4a_HKVlZIaAyjgAdKU-Wdys8N8ghCcqYlIv6srdoPWkGMM/exec";
+const POLL_MS       = 30000;
+const JSONP_TIMEOUT = 12000;
+const LS_DATA       = "kaiserCafe.data.v1";
+const LS_LOC        = "kaiserCafe.location.v1";
 
-let ALL_ISSUES = [];
-let ALL_COMMENTS = [];
-let CURRENT_LOCATION = null;
+let ISSUES = [], COMMENTS = [];
+let LOCATION = localStorage.getItem(LS_LOC) || null;
+let isLoading = false, pollTimer = null;
 
-/* LOAD */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function fmtDate(str){
+  if(!str) return "";
+  const d = new Date(str);
+  if(isNaN(d)) return "";
+  return d.toLocaleDateString("da-DK",{day:"numeric",month:"short"});
+}
+function fmtDateTime(str){
+  if(!str) return "";
+  const d = new Date(str);
+  if(isNaN(d)) return "";
+  return d.toLocaleDateString("da-DK",{day:"numeric",month:"short"}) + " " +
+         d.toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+}
+function isoDay(str){
+  if(!str) return "";
+  const d = new Date(str);
+  if(isNaN(d)) return "";
+  return d.toISOString().split("T")[0];
+}
+function setSync(state, text){
+  $("sync").className = "sync" + (state ? " " + state : "");
+  $("syncText").textContent = text;
+}
+
+/* ---------- Øjeblikkelig start fra cache ---------- */
+(function boot(){
+  try{
+    const cached = JSON.parse(localStorage.getItem(LS_DATA) || "null");
+    if(cached && Array.isArray(cached.issues)){
+      ISSUES = cached.issues;
+      COMMENTS = cached.comments || [];
+      render();
+      setSync("busy","Opdaterer…");
+    }
+  }catch(e){}
+  loadData();
+})();
+
+/* ---------- JSONP med timeout ---------- */
 function loadData(){
+  if(isLoading) return;
+  if(!navigator.onLine){ setSync("offline","Offline – viser gemte data"); return; }
+  isLoading = true;
+  setSync("busy","Synker…");
 
-  const old=document.getElementById("jsonp");
-  if(old) old.remove();
+  const cbName = "__kaiser_cafe_cb_" + Date.now();
+  const script = document.createElement("script");
+  let done = false;
 
-  const script=document.createElement("script");
-  script.id="jsonp";
-  script.src=API_URL+"?callback=handleData&t="+Date.now();
+  const cleanup = () => { delete window[cbName]; script.remove(); isLoading = false; };
+
+  const timeout = setTimeout(() => {
+    if(done) return;
+    done = true; cleanup();
+    setSync("offline","Serveren svarer ikke");
+  }, JSONP_TIMEOUT);
+
+  window[cbName] = (data) => {
+    if(done) return;
+    done = true;
+    clearTimeout(timeout);
+
+    ISSUES   = Array.isArray(data) ? data : (data.issues || []);
+    COMMENTS = Array.isArray(data) ? []   : (data.comments || []);
+
+    try{
+      localStorage.setItem(LS_DATA, JSON.stringify({issues:ISSUES, comments:COMMENTS, at:Date.now()}));
+    }catch(e){}
+
+    render();
+    setSync("", "Live · " + new Date().toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"}));
+    cleanup();
+  };
+
+  script.src = API_URL + "?callback=" + cbName + "&t=" + Date.now();
+  script.onerror = () => {
+    if(done) return;
+    done = true; clearTimeout(timeout); cleanup();
+    setSync("offline","Fejl ved hentning");
+  };
   document.body.appendChild(script);
 }
 
-function handleData(data){
+/* ---------- Render ---------- */
+function severityRank(s){ return s==="High" ? 0 : s==="Medium" ? 1 : 2; }
 
-  // Sikkerhed hvis noget ændres igen senere
-  ALL_ISSUES = Array.isArray(data.issues) ? data.issues : [];
-  ALL_COMMENTS = Array.isArray(data.comments) ? data.comments : [];
-
-  populateLocations();
-}
-
-/* Populate dropdown */
-function populateLocations(){
-
-  const select=document.getElementById("locationSelect");
-
-  const locations=[...new Set(ALL_ISSUES.map(i=>i.location))];
-
-  select.innerHTML='<option value="">Vælg lokation</option>';
-
-  locations.forEach(loc=>{
-    select.innerHTML+=`<option value="${loc}">${loc}</option>`;
-  });
-
-  select.onchange=function(){
-    CURRENT_LOCATION=this.value;
-    render();
-  };
-}
-
-/* Render */
 function render(){
-
-  const container=document.getElementById("issues");
-  container.innerHTML="";
-
-  if(!CURRENT_LOCATION) return;
-
   const today = new Date().toISOString().split("T")[0];
 
-  const filtered = ALL_ISSUES
-    .filter(issue =>
-      issue.location===CURRENT_LOCATION &&
-      issue.status!=="Closed"
-    )
-    .sort((a,b)=>{
-      if(a.severity==="High") return -1;
-      if(b.severity==="High") return 1;
-      return 0;
-    });
+  /* Chips med antal åbne pr. lokation */
+  const locCount = {};
+  ISSUES.forEach(i => {
+    if(i.status !== "Closed"){
+      locCount[i.location] = (locCount[i.location]||0) + 1;
+    } else if(!(i.location in locCount)){
+      locCount[i.location] = locCount[i.location] || 0;
+    }
+  });
 
-  if(filtered.length===0){
-    container.innerHTML="<p>Ingen aktive sager ✅</p>";
+  const chips = $("chips");
+  chips.innerHTML = "";
+  Object.keys(locCount).sort().forEach(loc => {
+    const n = locCount[loc];
+    const c = document.createElement("button");
+    c.className = "chip" + (n === 0 ? " clear" : "") + (LOCATION === loc ? " active" : "");
+    c.innerHTML = esc(loc) + '<span class="n">' + (n === 0 ? "✓" : n) + '</span>';
+    c.onclick = () => {
+      LOCATION = loc;
+      localStorage.setItem(LS_LOC, loc);
+      render();
+    };
+    chips.appendChild(c);
+  });
+
+  const list = $("list");
+  const summary = $("summary");
+
+  if(!LOCATION){
+    summary.textContent = "";
+    list.innerHTML = '<div class="empty"><div class="big">👆</div><p>Vælg jeres lokation ovenfor</p></div>';
     return;
   }
 
-  filtered.forEach(issue=>{
+  const rows = ISSUES
+    .filter(i => i.location === LOCATION && i.status !== "Closed")
+    .sort((a,b) =>
+      severityRank(a.severity) - severityRank(b.severity) ||
+      new Date(b.createdAt||0) - new Date(a.createdAt||0)
+    );
 
-    const issueComments =
-      ALL_COMMENTS.filter(c=>c.issueId===issue.id);
+  if(!rows.length){
+    summary.textContent = "";
+    list.innerHTML = '<div class="empty"><div class="big">✅</div><p>Ingen aktive sager i ' + esc(LOCATION) + '</p></div>';
+    return;
+  }
 
-    const statusClass =
-      issue.status==="In Progress"
-        ? "status-inprogress"
-        : "status-open";
+  const overdueCount = rows.filter(i => {
+    const p = isoDay(i.estimatedCompletion);
+    return p && p < today;
+  }).length;
 
-    const overdue =
-      issue.estimatedCompletion &&
-      issue.estimatedCompletion.split("T")[0] < today;
+  summary.textContent =
+    rows.length + (rows.length === 1 ? " aktiv sag" : " aktive sager") +
+    (overdueCount ? " · " + overdueCount + " forsinket" : "");
 
-    container.innerHTML+=`
-      <div class="card">
+  const frag = document.createDocumentFragment();
 
-        <h3>${issue.description}</h3>
+  rows.forEach(issue => {
+    const sev = (issue.severity || "").toLowerCase();
+    const planned = isoDay(issue.estimatedCompletion);
+    const overdue = planned && planned < today;
+    const inProgress = issue.status === "In Progress";
+    const thread = COMMENTS
+      .filter(c => String(c.issueId) === String(issue.id))
+      .sort((a,b) => new Date(a.createdAt||0) - new Date(b.createdAt||0));
 
-        <p class="${statusClass}">
-          ${issue.status}
-        </p>
+    const card = document.createElement("article");
+    card.className = "card sev-" + (sev || "none");
 
-        ${issue.estimatedCompletion ? `
-          <div class="deadline">
-            Forventet færdig: ${issue.estimatedCompletion.split("T")[0]}
-            ${overdue ? "<span class='overdue'> (Forsinket)</span>" : ""}
-          </div>
-        ` : `
-          <div class="deadline">
-            Ikke planlagt endnu
-          </div>
-        `}
-
-        ${issueComments.length ? `
-          <div class="history">
-            <strong>Historik:</strong>
-            ${issueComments.map(c=>`
-              <div class="history-entry">
-                <strong>${c.author}</strong>
-                (${new Date(c.createdAt).toLocaleString()}):
-                <br>${c.comment}
-              </div>
-            `).join("")}
-          </div>
-        ` : ""}
-
+    card.innerHTML = `
+      <div class="card-top">
+        <div>
+          <h3>${esc(issue.description || "")}</h3>
+          <p class="meta">${esc(issue.area || "")}${issue.area && issue.issueType ? " · " : ""}${esc(issue.issueType || "")}${issue.createdAt ? " · meldt " + fmtDate(issue.createdAt) : ""}</p>
+        </div>
+        <span class="badge ${inProgress ? "progress" : "open"}">${inProgress ? "I gang" : "Åben"}</span>
       </div>
+
+      <div class="leader">
+        <span class="lbl">Forventet færdig</span>
+        <span class="dots"></span>
+        ${planned
+          ? `<span class="val${overdue ? " overdue" : ""}">${fmtDate(planned)}${overdue ? " · forsinket" : ""}</span>`
+          : `<span class="val none">ikke planlagt endnu</span>`}
+      </div>
+
+      ${thread.length ? `
+      <div class="thread">
+        <p class="thread-title">Status fra håndværker</p>
+        ${thread.map(c => `
+          <div class="msg${c.author === "Håndværker" ? " hv" : ""}">
+            <span class="who">${esc(c.author)}</span><span class="when">${fmtDateTime(c.createdAt)}</span>
+            <p>${esc(c.comment)}</p>
+          </div>`).join("")}
+      </div>` : ""}
     `;
+    frag.appendChild(card);
   });
+
+  list.innerHTML = "";
+  list.appendChild(frag);
 }
 
-loadData();
-setInterval(loadData,20000);
+/* ---------- Smart polling: kun når siden er synlig ---------- */
+function startPolling(){
+  stopPolling();
+  pollTimer = setInterval(() => {
+    if(document.visibilityState === "visible") loadData();
+  }, POLL_MS);
+}
+function stopPolling(){ if(pollTimer) clearInterval(pollTimer); }
 
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible"){
+    loadData();
+    startPolling();
+  } else {
+    stopPolling();
+  }
+});
+
+window.addEventListener("online",  () => { setSync("","Live"); loadData(); });
+window.addEventListener("offline", () => setSync("offline","Offline – viser gemte data"));
+
+startPolling();
 </script>
 
 </body>
