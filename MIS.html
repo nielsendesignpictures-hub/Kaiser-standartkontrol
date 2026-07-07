@@ -2,1084 +2,444 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kaiser – Mise en place</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser · Mise en place</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg:#17181c;
-      --panel:rgba(28, 30, 36, 0.90);
+      --panel:rgba(28,30,36,0.90);
       --border:rgba(255,255,255,0.10);
-
       --text:rgba(255,255,255,0.93);
       --muted:rgba(255,255,255,0.70);
-      --muted2:rgba(255,255,255,0.50);
-
+      --muted2:rgba(255,255,255,0.48);
       --gold:#d6b24a;
       --gold2:#b9921f;
       --goldGlow:rgba(214,178,74,0.22);
-
-      --danger:#ff6b6b;
       --ok:#62d26f;
+      --danger:#ff6b6b;
     }
 
-    html,body{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);background:var(--bg);
-    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
     body{
+      min-height:100vh;
+      padding: 0 14px calc(28px + env(safe-area-inset-bottom));
       background:
         radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
         radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
         radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
         linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
+      background-attachment: fixed;
     }
+    .shell{max-width:720px;margin:0 auto;}
 
-    .shell{max-width:900px}
-    .topbar{
-      border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
-      border-radius:22px;padding:22px 18px;
-      backdrop-filter: blur(10px);
-      box-shadow:0 28px 70px rgba(0,0,0,.45);
-      text-align:center;
+    /* ---------- Header ---------- */
+    .brand{text-align:center;padding:22px 0 12px;}
+    .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .title{font-family:"Playfair Display",serif;font-size:32px;line-height:1.05;letter-spacing:-.015em;font-weight:700;margin-top:6px;}
+    .goldline{height:2px;margin:14px auto 0;max-width:220px;border-radius:999px;background:linear-gradient(90deg,transparent,rgba(214,178,74,.95),transparent);}
+
+    /* ---------- Sticky control bar ---------- */
+    .sticky{
+      position:sticky;top:0;z-index:20;
+      margin:0 -14px 14px;
+      padding: max(8px, env(safe-area-inset-top)) 14px 12px;
+      background:linear-gradient(180deg, rgba(23,24,28,.96), rgba(23,24,28,.86));
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
     }
-    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
-    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
-    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
-    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
-
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
-    .divider{height:1px;background:rgba(255,255,255,.10);}
-
-    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select, textarea{
-      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
+    .setup{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .field label{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);font-weight:900;margin-bottom:5px;}
+    select,input{
+      width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);padding:11px 12px;outline:none;color:var(--text);
+      font-size:15px;font-weight:600;font-family:inherit;
     }
     select option{color:#0b0c0f;}
-    .input:focus, select:focus, textarea:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px var(--goldGlow);
-      background: rgba(255,255,255,0.08);
-    }
+    select:focus,input:focus{border-color:rgba(214,178,74,.55);box-shadow:0 0 0 4px var(--goldGlow);}
 
-    .btn{
-      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
-      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
+    .seg{display:flex;gap:6px;margin-top:10px;}
+    .seg button{
+      flex:1;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);
+      color:var(--muted);border-radius:12px;padding:9px 8px;font-weight:900;font-size:13px;
+      cursor:pointer;font-family:inherit;letter-spacing:.02em;
     }
-    .btn:active{transform:translateY(1px);}
-    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
-    .btn-primary:hover{filter:brightness(1.04);}
-    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+    .seg button.on{border-color:rgba(214,178,74,.45);background:rgba(214,178,74,.13);color:var(--text);}
+    .seg button .sub{display:block;font-size:10px;font-weight:700;color:var(--muted2);margin-top:1px;letter-spacing:0;}
+    .seg button.on .sub{color:var(--muted);}
 
-    .muted{color:var(--muted);font-weight:600;font-size:13px;}
-    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+    .progRow{display:flex;align-items:center;gap:10px;margin-top:12px;}
+    .progWrap{flex:1;height:9px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);}
+    .progBar{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .25s ease;}
+    .progWrap.allDone .progBar{background:linear-gradient(90deg,var(--ok),#3fae4d);}
+    .progNum{font-weight:900;font-size:14px;font-variant-numeric:tabular-nums;min-width:48px;text-align:right;}
 
-    .tabs7{display:grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap:8px;}
-    .tabBtn{
-      border-radius:14px;
-      padding:10px 8px;
-      font-weight:900;
-      letter-spacing:.02em;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.90);
-      cursor:pointer;
-      font-size:12px;
+    .barTools{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;}
+    .gps{font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .toggleHide{
+      display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+      border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);
+      border-radius:999px;padding:6px 11px;font-weight:800;font-size:12px;color:var(--muted);white-space:nowrap;
     }
-    .tabBtn.on{
-      border-color: rgba(214,178,74,0.38);
-      background: rgba(214,178,74,0.10);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
-    }
+    .toggleHide.on{border-color:rgba(214,178,74,.4);background:rgba(214,178,74,.12);color:var(--text);}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);}
+    .toggleHide.on .dot{background:var(--gold);}
 
-    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
-    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+    /* ---------- Stations ---------- */
+    .station{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.03);border-radius:16px;overflow:hidden;margin-bottom:10px;}
+    .stationHead{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;user-select:none;
+      padding:13px 14px;background:rgba(255,255,255,.02);
+    }
+    .stationName{font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:rgba(255,255,255,.86);}
+    .stationMeta{display:flex;align-items:center;gap:10px;}
+    .miniCount{font-size:12px;font-weight:900;color:var(--muted);font-variant-numeric:tabular-nums;}
+    .chev{width:9px;height:9px;border-right:2px solid var(--muted2);border-bottom:2px solid var(--muted2);transform:rotate(45deg);transition:transform .2s ease;}
+    .station.closed .chev{transform:rotate(-45deg);}
+    .station.closed .stationBody{display:none;}
+    .stationBody{padding:10px;display:flex;flex-direction:column;gap:8px;}
+    .station.complete .stationName{color:var(--ok);}
 
-    /* Accordion categories */
-    .acc{
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
-      border-radius:16px;
-      overflow:hidden;
-    }
-    .acc summary{
-      list-style:none;
-      cursor:pointer;
-      user-select:none;
-      padding:14px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:12px;
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.02);
-    }
-    .acc summary::-webkit-details-marker{ display:none; }
-    .acc .accMeta{
-      letter-spacing:0;
-      text-transform:none;
-      font-size:12px;
-      font-weight:800;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-    .accBody{
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+    /* ---------- Task rows ---------- */
+    .task{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.03);
+      cursor:pointer;transition:background .15s,border-color .15s,opacity .15s;touch-action:manipulation;}
+    .task:active{transform:translateY(1px);}
+    .check{width:26px;height:26px;border-radius:9px;border:2px solid rgba(255,255,255,.22);flex:0 0 auto;
+      display:flex;align-items:center;justify-content:center;transition:all .15s;}
+    .check svg{width:15px;height:15px;opacity:0;transform:scale(.6);transition:all .15s;}
+    .taskText{flex:1;font-weight:800;letter-spacing:-.01em;font-size:15px;line-height:1.25;}
+    .skipBtn{flex:0 0 auto;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);
+      color:var(--muted2);border-radius:999px;width:30px;height:30px;font-weight:900;font-size:16px;line-height:1;
+      cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;}
+    .skipBtn:active{transform:scale(.92);}
 
-    /* Task row */
-    .task{
-      display:flex;align-items:flex-start;gap:12px;
-      padding:14px 14px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
-      cursor:pointer;transition: background .18s ease, border-color .18s ease;
-      user-select:none; touch-action: manipulation;
-    }
-    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
-    .badge{
-      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
-      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
-    }
-    .taskTitle{font-weight:900; letter-spacing:-0.01em;}
-    .taskSub{margin-top:2px;font-size:12px;color:rgba(255,255,255,0.65);font-weight:700;}
+    .task.done{border-color:rgba(98,210,111,.32);background:rgba(98,210,111,.08);}
+    .task.done .check{border-color:var(--ok);background:var(--ok);}
+    .task.done .check svg{opacity:1;transform:scale(1);color:#0b0c0f;}
+    .task.done .taskText{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:rgba(255,255,255,.28);color:var(--muted);}
 
-    .pill{
-      margin-left:auto; padding:6px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      font-weight:900; font-size:12px; flex:0 0 auto; white-space:nowrap;
-    }
-    .pill.na{border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.70);}
-    .pill.in{border-color: rgba(214,178,74,0.35); background: rgba(214,178,74,0.12); color: rgba(255,255,255,0.92);}
-    .pill.done{border-color: rgba(98,210,111,0.50); background: rgba(98,210,111,0.15); color: rgba(255,255,255,0.95);}
+    .task.skip{opacity:.5;border-style:dashed;}
+    .task.skip .check{border-radius:50%;border-color:rgba(255,255,255,.2);}
+    .task.skip .taskText{color:var(--muted2);}
+    .task.skip .skipBtn{border-color:rgba(214,178,74,.4);background:rgba(214,178,74,.12);color:var(--gold);}
+    .skipTag{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);}
 
-    .rowDone{
-      opacity:.72;
-      border-color: rgba(98,210,111,0.28);
-      background: rgba(98,210,111,0.07);
-    }
-    .strike{text-decoration:line-through; text-decoration-thickness:2px; text-decoration-color: rgba(255,255,255,0.28);}
+    /* ---------- Footer ---------- */
+    .celebrate{border:1px solid rgba(98,210,111,.35);background:rgba(98,210,111,.10);border-radius:16px;padding:16px;text-align:center;margin:6px 0 14px;}
+    .celebrate .big{font-family:"Playfair Display",serif;font-size:20px;font-weight:700;}
+    .celebrate .small{color:var(--muted);font-weight:600;font-size:13px;margin-top:3px;}
 
-    /* Hold-to-reset */
-    .holdWrap{ position:relative; overflow:hidden; }
-    .holdBar{ position:absolute; left:0; top:0; height:100%; width:0%; background: rgba(255,255,255,0.14); pointer-events:none; transition: width .08s linear; }
-    .btnText{ position:relative; z-index:1; }
+    .reset{position:relative;overflow:hidden;width:100%;border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);color:var(--muted);border-radius:14px;padding:13px;font-weight:900;
+      font-size:14px;cursor:pointer;font-family:inherit;user-select:none;margin-top:6px;}
+    .reset .fill{position:absolute;left:0;top:0;height:100%;width:0%;background:rgba(255,107,107,.28);transition:width .06s linear;}
+    .reset span{position:relative;z-index:1;}
 
-    .chip{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      font-weight:800;font-size:12px;color:rgba(255,255,255,0.85);
-    }
+    .hint{color:var(--muted2);font-size:12px;font-weight:700;text-align:center;margin-top:12px;line-height:1.5;}
+
+    .empty{border:1px dashed rgba(255,255,255,.16);border-radius:16px;padding:24px 16px;text-align:center;color:var(--muted);font-weight:700;}
   </style>
 </head>
 
-<body class="min-h-screen flex justify-center p-4">
-  <div class="shell w-full">
+<body>
+  <div class="shell">
 
-    <header class="topbar mt-6 mb-5">
-      <div class="kicker">KAISER</div>
+    <div class="brand">
+      <div class="kicker">Café Kaiser</div>
       <div class="title">Mise en place</div>
-      <div class="subtitle">Create MIS for a day → then use the generated to‑do list</div>
       <div class="goldline"></div>
-    </header>
+    </div>
 
-    <!-- =========================
-         PAGE A: CREATE MIS
-         ========================= -->
-    <section id="createWrap" class="space-y-4">
-
-      <section class="panel p-5 space-y-4">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-lg font-extrabold">Setup</div>
-          <div class="hint" id="weekKeyText">—</div>
+    <!-- Sticky controls -->
+    <div class="sticky">
+      <div class="setup">
+        <div class="field">
+          <label>Lokation</label>
+          <select id="loc">
+            <option value="">Vælg…</option>
+            <option>Café Kaiser Helsingør</option>
+            <option>Café Kaiser Hillerød</option>
+            <option>Café Kaiser Farum</option>
+            <option>Café Kaiser Hørsholm</option>
+            <option>Café Kaiser Vanløse</option>
+            <option>Café Kaiser Enghave</option>
+          </select>
         </div>
-
-        <div class="divider"></div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="space-y-2">
-            <div class="label">Location</div>
-            <select id="locationSelect" required>
-              <option value="">Select location…</option>
-              <option>Café Kaiser Helsingør</option>
-              <option>Café Kaiser Hillerød</option>
-              <option>Café Kaiser Farum</option>
-              <option>Café Kaiser Hørsholm</option>
-              <option>Café Kaiser Vanløse</option>
-            </select>
-            <div class="hint" id="gpsStatus">GPS: not checked</div>
-          </div>
-
-          <div class="space-y-2">
-            <div class="label">Performed by</div>
-            <input id="doneBy" class="input" placeholder="Name (required)" />
-            <div class="hint">Saved per date</div>
-          </div>
+        <div class="field">
+          <label>Lavet af</label>
+          <input id="who" placeholder="Navn" autocomplete="off" />
         </div>
+      </div>
 
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="space-y-2">
-            <div class="label">Date / time</div>
-            <input class="input" id="timeField" readonly>
-            <div class="hint" id="dateText">—</div>
-          </div>
+      <div class="seg" id="daySeg">
+        <button data-day="today" class="on">I dag<span class="sub" id="todayLbl">—</span></button>
+        <button data-day="tomorrow">I morgen<span class="sub" id="tomorrowLbl">—</span></button>
+      </div>
 
-          <div class="space-y-2">
-            <div class="label">Target day (the day the MIS is for)</div>
-            <div class="tabs7" id="dayTabs"></div>
-            <div class="hint">Default = tomorrow</div>
-          </div>
-        </div>
+      <div class="progRow">
+        <div class="progWrap" id="progWrap"><div class="progBar" id="progBar"></div></div>
+        <div class="progNum" id="progNum">0/0</div>
+      </div>
 
-        <div class="space-y-2">
-          <div class="label">Selected items (will become your MIS to‑do list)</div>
-          <div class="progressWrap"><div id="progressBarCreate" class="progressBar"></div></div>
-          <div class="muted" id="progressTextCreate">0 selected</div>
-          <div class="hint">All items start as N/A — tap items to include them</div>
-        </div>
-      </section>
+      <div class="barTools">
+        <div class="gps" id="gps">GPS: tjekker…</div>
+        <div class="toggleHide" id="hideDone"><span class="dot"></span>Skjul færdige</div>
+      </div>
+    </div>
 
-      <section class="panel p-5 space-y-4">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-lg font-extrabold">Select items (N/A → MIS)</div>
-          <div class="hint" id="selectedHint">—</div>
-        </div>
-        <div class="divider"></div>
+    <!-- The list -->
+    <div id="list"></div>
 
-        <div id="createTaskList" class="space-y-3"></div>
-      </section>
+    <div class="celebrate" id="celebrate" style="display:none">
+      <div class="big">Alt er klar ✦</div>
+      <div class="small">Godt gået — mise en place er på plads.</div>
+    </div>
 
-      <section class="space-y-3">
-        <button id="makeMisBtn" class="btn btn-primary" type="button">Make MIS</button>
-        <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
-      </section>
-    </section>
-
-
-    <!-- =========================
-         PAGE B: MIS TO-DO
-         ========================= -->
-    <section id="misWrap" class="hidden space-y-4">
-
-      <section class="panel p-5 space-y-3">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-lg font-extrabold" id="misTitle">MIS to‑do</div>
-          <div class="hint" id="misRemainingHint">—</div>
-        </div>
-        <div class="divider"></div>
-
-        <div class="flex flex-wrap gap-2">
-          <div class="chip" id="chipLoc">Location: —</div>
-          <div class="chip" id="chipDay">Day: —</div>
-          <div class="chip" id="chipDate">Date: —</div>
-          <div class="chip" id="chipWho">By: —</div>
-        </div>
-      </section>
-
-      <section class="panel p-5 space-y-4">
-        <div class="space-y-2">
-          <div class="label">Progress</div>
-          <div class="progressWrap"><div id="progressBarMis" class="progressBar"></div></div>
-          <div class="muted" id="progressTextMis">0/0</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div id="misTaskList" class="space-y-3"></div>
-
-        <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-          <div style="font-weight:900;">MIS completed.</div>
-          <div class="muted" style="margin-top:4px;">Your prep makes the difference.</div>
-        </div>
-
-        <div id="emptyMisBox" class="hidden" style="border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); border-radius:16px; padding:14px;">
-          <div style="font-weight:900;">No items in this MIS.</div>
-          <div class="muted" style="margin-top:4px;">Go back and select items first.</div>
-        </div>
-      </section>
-
-      <section class="space-y-3">
-        <button id="editBtn" class="btn btn-secondary" type="button">Edit MIS selection</button>
-
-        <button id="resetBtn" class="btn btn-primary holdWrap" type="button">
-          <div id="resetHoldBar" class="holdBar"></div>
-          <div class="btnText" id="resetBtnText">Hold 5s to reset (new MIS)</div>
-        </button>
-
-        <div class="muted" style="text-align:center;">Reset clears this location + date on this device.</div>
-      </section>
-    </section>
+    <button class="reset" id="reset"><div class="fill" id="resetFill"></div><span id="resetLbl">Hold for at nulstille dagen</span></button>
+    <div class="hint">Tryk på en linje = udført · <b>–</b> = ikke i dag<br>Gemmes automatisk pr. lokation og dag på denne enhed.</div>
 
   </div>
 
   <script>
-    // =========================
-    // DATA
-    // =========================
-    const GPS_AUTOSELECT_M = 900;
-    const RESET_HOLD_MS = 5000;
+  // ===== Data (dine egne varer, uændret) =====
+  const STATIONS = [
+    { id:"gront", title:"Grønt & frugt", tasks:[
+      "Cut lettuce for burger","Cut lettuce for salad","Cut lettuce for Julie plate",
+      "Cut tomatoes (burger & salad)","Cut radishes","Cut red onions","Cut cucumbers",
+      "Cut lemon","Cut spring onions","Cut chives","Cut cress","Cut mix cress","Cut fruits (mix & buffet)"
+    ]},
+    { id:"kod", title:"Kød & kartofler", tasks:[
+      "Cut and marinate chicken","Cut Tenderloin","Cut Black Angus",
+      "Cut potatoes for Wienerschnitzel","Cut potatoes for smørrebrød",
+      "Fry bacon",'Fry "stegt flæsk"',"Fry sausages"
+    ]},
+    { id:"ost", title:"Ost & mejeri", tasks:[
+      "Cut cheese for sandwiches","Cut Vesterhavsost","Cut Chili cheese","Cut Blue cheese",
+      "Prepare Chiagrød","Prepare Blueberry Yogurt","Fill up yogurt"
+    ]},
+    { id:"sauce", title:"Saucer & dressinger", tasks:[
+      "Refill Thousand Island dressing","Refill Tatar sauce","Refill Remoulade","Refill Chili Mayo",
+      "Refill Garlic Mayo","Refill Truffle Mayo","Refill Curry Mayo","Refill BBQ Mayo",
+      "Refill Signature dressing","Refill Caesar dressing","Refill Rævesovs","Refill Mayo & Ketchup"
+    ]},
+    { id:"prep", title:"Prep & bagning", tasks:[
+      "Boil eggs","Cook rice","Cook Mango Jam","Cook Mix Berries Jam","Cook Apple Jam",
+      "Make garlic paste","Make caramelized onions","Make Øland toast","Bake tomatoes",
+      "Bake Apple tart","Prepare Chocolate Mousse","Prepare Crème brûlée"
+    ]},
+    { id:"setup", title:"Opsætning & lager", tasks:[
+      "Setup Brunch","Setup Julie plate","Defrost Mango & Edamame","Defrost Chocolate cake","Refill Freezer"
+    ]}
+  ];
 
-    const LOCATION_COORDS = {
-      "Café Kaiser Helsingør": { lat: 56.033919, lng: 12.610563 },
-      "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
-      "Café Kaiser Farum": { lat: 55.814500, lng: 12.379595 },
-      "Café Kaiser Hørsholm": { lat: 55.881489, lng: 12.497737 },
-      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
-    };
+  const COORDS = {
+    "Café Kaiser Helsingør":{lat:56.033919,lng:12.610563},
+    "Café Kaiser Hillerød":{lat:55.928199,lng:12.298147},
+    "Café Kaiser Farum":{lat:55.814500,lng:12.379595},
+    "Café Kaiser Hørsholm":{lat:55.881489,lng:12.497737},
+    "Café Kaiser Vanløse":{lat:55.687849,lng:12.490876}
+  };
+  const GPS_RANGE_M = 900;
+  const RESET_HOLD_MS = 1800;
 
-    const MEP_SECTIONS = [
-      { secId:"veg", title:"Vegetables & Fruit", tasks:[
-        "Cut lettuce for burger",
-        "Cut lettuce for salad",
-        "Cut lettuce for Julie plate",
-        "Cut tomatoes (burger & salad)",
-        "Cut radishes",
-        "Cut red onions",
-        "Cut cucumbers",
-        "Cut lemon",
-        "Cut spring onions",
-        "Cut chives",
-        "Cut cress",
-        "Cut mix cress",
-        "Cut fruits (mix & buffet)"
-      ]},
-      { secId:"meat", title:"Meat & Potatoes", tasks:[
-        "Cut and marinate chicken",
-        "Cut Tenderloin",
-        "Cut Black Angus",
-        "Cut potatoes for Wienerschnitzel",
-        "Cut potatoes for smørrebrød",
-        "Fry bacon",
-        'Fry "stegt flæsk"',
-        "Fry sausages"
-      ]},
-      { secId:"dairy", title:"Cheese & Dairy", tasks:[
-        "Cut cheese for sandwiches",
-        "Cut Vesterhavsost",
-        "Cut Chili cheese",
-        "Cut Blue cheese",
-        "Prepare Chiagrød",
-        "Prepare Blueberry Yogurt",
-        "Fill up yogurt"
-      ]},
-      { secId:"sauces", title:"Sauces & Dressings", tasks:[
-        "Refill Thousand Island dressing",
-        "Refill Tatar sauce",
-        "Refill Remoulade",
-        "Refill Chili Mayo",
-        "Refill Garlic Mayo",
-        "Refill Truffle Mayo",
-        "Refill Curry Mayo",
-        "Refill BBQ Mayo",
-        "Refill Signature dressing",
-        "Refill Caesar dressing",
-        "Refill Rævesovs",
-        "Refill Mayo & Ketchup"
-      ]},
-      { secId:"prep", title:"Prep & Baking", tasks:[
-        "Boil eggs",
-        "Cook rice",
-        "Cook Mango Jam",
-        "Cook Mix Berries Jam",
-        "Cook Apple Jam",
-        "Make garlic paste",
-        "Make caramelized onions",
-        "Make Øland toast",
-        "Bake tomatoes",
-        "Bake Apple tart",
-        "Prepare Chocolate Mousse",
-        "Prepare Crème brûlée"
-      ]},
-      { secId:"setup", title:"Setup & Storage", tasks:[
-        "Setup Brunch",
-        "Setup Julie plate",
-        "Defrost Mango & Edamame",
-        "Defrost Chocolate cake",
-        "Refill Freezer"
-      ]}
-    ];
+  // ===== Helpers =====
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  const DAY_DK = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"];
 
-    const DAYS = [
-      { key:"mon", label:"Mon", full:"Monday", js:1 },
-      { key:"tue", label:"Tue", full:"Tuesday", js:2 },
-      { key:"wed", label:"Wed", full:"Wednesday", js:3 },
-      { key:"thu", label:"Thu", full:"Thursday", js:4 },
-      { key:"fri", label:"Fri", full:"Friday", js:5 },
-      { key:"sat", label:"Sat", full:"Saturday", js:6 },
-      { key:"sun", label:"Sun", full:"Sunday", js:0 }
-    ];
+  function isoLocal(d){
+    const x = new Date(d); x.setHours(12,0,0,0);
+    return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  }
+  function itemId(sid,i){ return sid+"-"+String(i+1).padStart(2,"0"); }
 
-    // =========================
-    // HELPERS
-    // =========================
-    function $(id){ return document.getElementById(id); }
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+  // ===== State =====
+  const state = {
+    loc:"", who:"", day:"today",
+    collapsed:{}, hideDone:false,
+    status:{}   // { itemId: "done" | "skip" }
+  };
+
+  function todayDate(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+  function tomorrowDate(){ const d=todayDate(); d.setDate(d.getDate()+1); return d; }
+  function activeDate(){ return state.day==="today" ? todayDate() : tomorrowDate(); }
+  function activeISO(){ return isoLocal(activeDate()); }
+
+  // ===== Storage (pr. lokation + dato) =====
+  const KEY = "kaiser_mep_v3";
+  const kStatus = () => `${KEY}_${state.loc}_${activeISO()}`;
+  const kWho    = () => `${KEY}_who_${state.loc}`;
+
+  function loadContext(){
+    if(!state.loc){ state.status={}; return; }
+    try{ state.status = JSON.parse(localStorage.getItem(kStatus())||"{}")||{}; }catch(e){ state.status={}; }
+    const w = localStorage.getItem(kWho());
+    if(w && !$("who").value){ $("who").value=w; state.who=w; }
+  }
+  function saveStatus(){ if(state.loc) localStorage.setItem(kStatus(), JSON.stringify(state.status)); }
+  function saveWho(){ if(state.loc) localStorage.setItem(kWho(), state.who); }
+
+  // ===== Counts =====
+  function counts(){
+    let total=0, done=0, skip=0;
+    STATIONS.forEach(s=>s.tasks.forEach((_,i)=>{
+      const st = state.status[itemId(s.id,i)];
+      if(st==="skip"){ skip++; return; }
+      total++; if(st==="done") done++;
+    }));
+    return { total, done, remaining: total-done, skip };
+  }
+
+  // ===== Render =====
+  function labels(){
+    $("todayLbl").textContent = DAY_DK[todayDate().getDay()];
+    $("tomorrowLbl").textContent = DAY_DK[tomorrowDate().getDay()];
+  }
+
+  function renderProgress(){
+    const c = counts();
+    $("progNum").textContent = c.done+"/"+c.total;
+    const pct = c.total ? Math.round(c.done/c.total*100) : 0;
+    $("progBar").style.width = pct+"%";
+    const all = c.total>0 && c.remaining===0;
+    $("progWrap").classList.toggle("allDone", all);
+    $("celebrate").style.display = all ? "block":"none";
+  }
+
+  function renderList(){
+    const list = $("list");
+    if(!state.loc){
+      list.innerHTML = '<div class="empty">Vælg en lokation for at se dagens mise en place.</div>';
+      return;
     }
+    list.innerHTML = "";
+    STATIONS.forEach(sec=>{
+      let secTotal=0, secDone=0;
+      const rows = sec.tasks.map((text,i)=>{
+        const id = itemId(sec.id,i);
+        const st = state.status[id];
+        const isDone = st==="done", isSkip = st==="skip";
+        if(!isSkip){ secTotal++; if(isDone) secDone++; }
+        if(state.hideDone && isDone) return "";
+        const cls = isDone?"done":(isSkip?"skip":"");
+        return `<div class="task ${cls}" data-id="${id}">
+          <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="taskText">${esc(text)}${isSkip?' <span class="skipTag">· ikke i dag</span>':''}</div>
+          <button class="skipBtn" data-skip="${id}" aria-label="Ikke i dag">${isSkip?'↺':'–'}</button>
+        </div>`;
+      }).join("");
 
-    function nowDK(){ return new Date().toLocaleString("da-DK"); }
+      const complete = secTotal>0 && secDone===secTotal;
+      const closed = !!state.collapsed[sec.id];
+      const st = document.createElement("div");
+      st.className = "station"+(closed?" closed":"")+(complete?" complete":"");
+      st.innerHTML = `
+        <div class="stationHead" data-station="${sec.id}">
+          <div class="stationName">${esc(sec.title)}</div>
+          <div class="stationMeta"><span class="miniCount">${secDone}/${secTotal}</span><span class="chev"></span></div>
+        </div>
+        <div class="stationBody">${rows || '<div class="empty" style="padding:14px">Alt færdigt her ✦</div>'}</div>`;
+      list.appendChild(st);
+    });
+  }
 
-    // Safer local ISO date
-    function dateISOFromLocal(d){
-      const x = new Date(d);
-      x.setHours(12,0,0,0);
-      const off = x.getTimezoneOffset();
-      const local = new Date(x.getTime() - off * 60000);
-      return local.toISOString().slice(0,10);
+  function render(){ labels(); renderList(); renderProgress(); }
+
+  // ===== Events =====
+  $("loc").addEventListener("change", e=>{
+    state.loc = e.target.value||"";
+    loadContext();
+    render();
+  });
+  $("who").addEventListener("input", e=>{ state.who=e.target.value.trim(); saveWho(); });
+
+  $("daySeg").addEventListener("click", e=>{
+    const b = e.target.closest("button"); if(!b) return;
+    state.day = b.dataset.day;
+    $("daySeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on", x===b));
+    loadContext();
+    render();
+  });
+
+  $("hideDone").addEventListener("click", ()=>{
+    state.hideDone = !state.hideDone;
+    $("hideDone").classList.toggle("on", state.hideDone);
+    renderList(); renderProgress();
+  });
+
+  $("list").addEventListener("click", e=>{
+    const skip = e.target.closest("[data-skip]");
+    if(skip){
+      const id = skip.dataset.skip;
+      state.status[id] = state.status[id]==="skip" ? undefined : "skip";
+      if(state.status[id]===undefined) delete state.status[id];
+      saveStatus(); render(); return;
     }
-
-    function isoWeekKey(date){
-      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
-      const year = d.getUTCFullYear();
-      const ww = String(weekNo).padStart(2,"0");
-      return year + "-W" + ww;
+    const head = e.target.closest("[data-station]");
+    if(head){
+      const s = head.dataset.station;
+      state.collapsed[s] = !state.collapsed[s];
+      renderList(); return;
     }
-
-    function getDayKeyToday(){
-      const js = new Date().getDay();
-      return (DAYS.find(d => d.js === js) || DAYS[0]).key;
+    const task = e.target.closest(".task");
+    if(task){
+      const id = task.dataset.id;
+      state.status[id] = state.status[id]==="done" ? undefined : "done";
+      if(state.status[id]===undefined) delete state.status[id];
+      saveStatus(); render();
     }
+  });
 
-    // Next occurrence of weekday (including today)
-    function nextDateForDayKey(dayKey){
-      const target = DAYS.find(d => d.key === dayKey);
-      const targetJs = target ? target.js : 1;
-
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
-      for (let i=0; i<7; i++){
-        const cand = new Date(today);
-        cand.setDate(today.getDate() + i);
-        if (cand.getDay() === targetJs) return cand;
+  // ===== Hold-to-reset =====
+  let rTimer=null, rStart=0;
+  function rClear(){ if(rTimer)clearInterval(rTimer); rTimer=null; $("resetFill").style.width="0%"; $("resetLbl").textContent="Hold for at nulstille dagen"; }
+  function rGo(){
+    if(!state.loc) return;
+    rClear(); rStart=Date.now(); $("resetLbl").textContent="Bliv ved med at holde…";
+    rTimer=setInterval(()=>{
+      const p=Math.min(100,Math.round((Date.now()-rStart)/RESET_HOLD_MS*100));
+      $("resetFill").style.width=p+"%";
+      if(p>=100){ clearInterval(rTimer); rTimer=null;
+        localStorage.removeItem(kStatus()); state.status={}; rClear(); render();
       }
-      return today;
-    }
+    },40);
+  }
+  ["pointerdown"].forEach(ev=>$("reset").addEventListener(ev,e=>{e.preventDefault();rGo();}));
+  ["pointerup","pointercancel","pointerleave"].forEach(ev=>$("reset").addEventListener(ev,rClear));
+  window.addEventListener("blur",rClear);
 
-    function dayKeyFromDateISO(dateISO){
-      const d = new Date(dateISO + "T12:00:00");
-      const js = d.getDay();
-      return (DAYS.find(x => x.js === js) || DAYS[0]).key;
-    }
-
-    function distanceM(lat1, lon1, lat2, lon2){
-      const R = 6371000;
-      const toRad = (x) => x * Math.PI / 180;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a =
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-        Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
-    }
-
-    function getGPS(){
-      return new Promise((resolve) => {
-        if (!navigator.geolocation) return resolve({ ok:false, msg:"GPS not supported" });
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve({
-            ok:true,
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            acc: Math.round(pos.coords.accuracy || 0)
-          }),
-          (err) => resolve({ ok:false, msg: err && err.message ? err.message : "GPS denied" }),
-          { enableHighAccuracy:false, timeout:8000, maximumAge:300000 }
-        );
-      });
-    }
-
-    function buildSections(){
-      return MEP_SECTIONS.map(sec => ({
-        secId: sec.secId,
-        title: sec.title,
-        tasks: sec.tasks.map((text, i) => ({
-          id: `${sec.secId.toUpperCase()}-${String(i+1).padStart(2,"0")}`,
-          text
-        }))
-      }));
-    }
-
-    // =========================
-    // STORAGE
-    // =========================
-    const keyBase = "kaiser_mis_2026_v1";
-    const kSel  = (loc, dateISO) => `${keyBase}_sel_${loc}_${dateISO}`;   // { createdAt, createdBy, selected: {id:true} }
-    const kDone = (loc, dateISO) => `${keyBase}_done_${loc}_${dateISO}`;  // { id:true }
-    const kWho  = (loc, dateISO) => `${keyBase}_who_${loc}_${dateISO}`;   // string
-
-    function loadJSON(key, fallback){
-      const raw = localStorage.getItem(key);
-      if (!raw) return fallback;
-      try { return JSON.parse(raw); } catch(e){ return fallback; }
-    }
-
-    // =========================
-    // DOM
-    // =========================
-    const createWrap = $("createWrap");
-    const misWrap = $("misWrap");
-
-    // Setup fields
-    const weekKeyText = $("weekKeyText");
-    const dateText = $("dateText");
-    const timeField = $("timeField");
-    const locationSelect = $("locationSelect");
-    const doneBy = $("doneBy");
-    const gpsStatus = $("gpsStatus");
-    const dayTabs = $("dayTabs");
-
-    // Create view
-    const createTaskList = $("createTaskList");
-    const progressBarCreate = $("progressBarCreate");
-    const progressTextCreate = $("progressTextCreate");
-    const selectedHint = $("selectedHint");
-    const makeMisBtn = $("makeMisBtn");
-    const errorText = $("errorText");
-
-    // MIS view
-    const misTitle = $("misTitle");
-    const misRemainingHint = $("misRemainingHint");
-    const misTaskList = $("misTaskList");
-    const progressBarMis = $("progressBarMis");
-    const progressTextMis = $("progressTextMis");
-    const doneBox = $("doneBox");
-    const emptyMisBox = $("emptyMisBox");
-    const chipLoc = $("chipLoc");
-    const chipDay = $("chipDay");
-    const chipDate = $("chipDate");
-    const chipWho = $("chipWho");
-    const editBtn = $("editBtn");
-    const resetBtn = $("resetBtn");
-    const resetBtnText = $("resetBtnText");
-    const resetHoldBar = $("resetHoldBar");
-
-    function setError(msg){
-      if (!msg){
-        errorText.classList.add("hidden");
-        errorText.textContent = "";
-        return;
+  // ===== GPS autoselect =====
+  function autoLocate(){
+    if(!navigator.geolocation){ $("gps").textContent="GPS: ikke understøttet"; return; }
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const {latitude:la,longitude:lo}=pos.coords;
+      let best=null,bd=Infinity;
+      for(const n in COORDS){
+        const c=COORDS[n], R=6371000, tr=x=>x*Math.PI/180;
+        const dLa=tr(c.lat-la),dLo=tr(c.lng-lo);
+        const a=Math.sin(dLa/2)**2+Math.cos(tr(la))*Math.cos(tr(c.lat))*Math.sin(dLo/2)**2;
+        const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+        if(d<bd){bd=d;best=n;}
       }
-      errorText.textContent = msg;
-      errorText.classList.remove("hidden");
-    }
-
-    // =========================
-    // STATE
-    // =========================
-    const state = {
-      view: "create",                 // create | mis
-      loc: "",
-      who: "",
-      dayKey: getDayKeyToday(),
-      targetDate: nextDateForDayKey(getDayKeyToday()), // default = tomorrow
-      dateISO: "",                    // computed
-      weekKey: "",
-      selected: {},                   // {id:true}
-      done: {}                        // {id:true}
-    };
-
-    function syncDerived(){
-      state.dateISO = dateISOFromLocal(state.targetDate);
-      state.weekKey = isoWeekKey(state.targetDate);
-    }
-
-    function loadForCurrentContext(){
-      if (!state.loc || !state.dateISO) { state.selected = {}; state.done = {}; return; }
-      const selObj = loadJSON(kSel(state.loc, state.dateISO), null);
-      state.selected = (selObj && selObj.selected && typeof selObj.selected === "object") ? selObj.selected : {};
-      state.done = loadJSON(kDone(state.loc, state.dateISO), {}) || {};
-      const savedWho = localStorage.getItem(kWho(state.loc, state.dateISO)) || "";
-      if (savedWho && !doneBy.value) doneBy.value = savedWho;
-    }
-
-    function saveSelectionMeta(){
-      if (!state.loc || !state.dateISO) return;
-      const who = (doneBy.value || "").trim();
-      localStorage.setItem(kWho(state.loc, state.dateISO), who);
-      const existing = loadJSON(kSel(state.loc, state.dateISO), {});
-      const obj = {
-        createdAt: existing.createdAt || nowDK(),
-        createdBy: who || existing.createdBy || "",
-        selected: state.selected
-      };
-      localStorage.setItem(kSel(state.loc, state.dateISO), JSON.stringify(obj));
-    }
-
-    function saveDone(){
-      if (!state.loc || !state.dateISO) return;
-      localStorage.setItem(kDone(state.loc, state.dateISO), JSON.stringify(state.done));
-    }
-
-    function selectedCount(){
-      return Object.keys(state.selected).length;
-    }
-
-    function totalCount(){
-      return buildSections().reduce((sum, s) => sum + s.tasks.length, 0);
-    }
-
-    // =========================
-    // RENDER: DAY TABS
-    // =========================
-    function renderDayTabs(){
-      dayTabs.innerHTML = "";
-      DAYS.forEach(d => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "tabBtn" + (state.dayKey === d.key ? " on" : "");
-        b.textContent = d.label;
-
-        b.addEventListener("click", () => {
-          state.dayKey = d.key;
-          state.targetDate = nextDateForDayKey(state.dayKey);
-          syncDerived();
-
-          // Reload saved selection for that day
-          loadForCurrentContext();
-          updateAllUI();
-          renderDayTabs();
-        });
-
-        dayTabs.appendChild(b);
-      });
-    }
-
-    // =========================
-    // RENDER: CREATE LIST
-    // =========================
-    function renderCreateList(){
-      const sections = buildSections();
-
-      // remember open state
-      const openMap = {};
-      createTaskList.querySelectorAll("details[data-sec]").forEach(d => openMap[d.dataset.sec] = d.open);
-
-      createTaskList.innerHTML = "";
-
-      sections.forEach((sec, idx) => {
-        const selInSection = sec.tasks.filter(t => !!state.selected[t.id]).length;
-        const total = sec.tasks.length;
-
-        const details = document.createElement("details");
-        details.className = "acc";
-        details.dataset.sec = sec.secId;
-        details.open = (openMap[sec.secId] !== undefined) ? openMap[sec.secId] : (idx === 0);
-
-        const summary = document.createElement("summary");
-        summary.innerHTML = `
-          <span>${escapeHtml(sec.title)}</span>
-          <span class="accMeta">${selInSection}/${total} selected</span>
-        `;
-        details.appendChild(summary);
-
-        const body = document.createElement("div");
-        body.className = "accBody";
-
-        sec.tasks.forEach((t, i) => {
-          const isSel = !!state.selected[t.id];
-          const row = document.createElement("div");
-          row.className = "task";
-          row.innerHTML = `
-            <div class="badge">${String(i+1)}</div>
-            <div style="flex:1;">
-              <div class="taskTitle">${escapeHtml(t.text)}</div>
-              <div class="taskSub">Tap to include / remove from MIS</div>
-            </div>
-            <div class="pill ${isSel ? "in" : "na"}">${isSel ? "IN MIS" : "N/A"}</div>
-          `;
-
-          row.addEventListener("click", () => {
-            if (state.selected[t.id]) {
-              delete state.selected[t.id];
-              // also remove any done state if it was previously done
-              if (state.done[t.id]) delete state.done[t.id];
-              saveDone();
-            } else {
-              state.selected[t.id] = true;
-            }
-            saveSelectionMeta();
-            updateAllUI();
-          });
-
-          body.appendChild(row);
-        });
-
-        details.appendChild(body);
-        createTaskList.appendChild(details);
-      });
-
-      selectedHint.textContent = "Selected: " + selectedCount();
-    }
-
-    function renderCreateProgress(){
-      const sel = selectedCount();
-      const total = totalCount();
-      progressTextCreate.textContent = sel + " selected";
-      const pct = total ? Math.round((sel/total)*100) : 0;
-      progressBarCreate.style.width = pct + "%";
-      makeMisBtn.disabled = sel === 0;
-      makeMisBtn.style.opacity = sel === 0 ? "0.55" : "1";
-      makeMisBtn.textContent = sel === 0 ? "Make MIS" : ("Make MIS (" + sel + ")");
-    }
-
-    // =========================
-    // RENDER: MIS LIST
-    // =========================
-    function renderMisHeader(){
-      const dayFull = (DAYS.find(x => x.key === state.dayKey) || {}).full || state.dayKey;
-      misTitle.textContent = "MIS to‑do • " + dayFull;
-
-      chipLoc.textContent = "Location: " + (state.loc || "—");
-      chipDay.textContent = "Day: " + dayFull;
-      chipDate.textContent = "Date: " + (state.dateISO || "—");
-      chipWho.textContent = "By: " + ((doneBy.value || "").trim() || "—");
-    }
-
-    function renderMisList(){
-      const sections = buildSections();
-
-      // selected tasks only
-      const selectedIds = new Set(Object.keys(state.selected));
-      const selectedTotal = selectedIds.size;
-
-      emptyMisBox.classList.toggle("hidden", selectedTotal !== 0);
-
-      // remember open state
-      const openMap = {};
-      misTaskList.querySelectorAll("details[data-sec]").forEach(d => openMap[d.dataset.sec] = d.open);
-
-      misTaskList.innerHTML = "";
-
-      if (selectedTotal === 0) {
-        renderMisProgress();
-        return;
-      }
-
-      sections.forEach((sec, idx) => {
-        const selectedTasks = sec.tasks.filter(t => selectedIds.has(t.id));
-        if (selectedTasks.length === 0) return; // hide empty categories
-
-        const doneInSection = selectedTasks.filter(t => !!state.done[t.id]).length;
-
-        const details = document.createElement("details");
-        details.className = "acc";
-        details.dataset.sec = sec.secId;
-        details.open = (openMap[sec.secId] !== undefined) ? openMap[sec.secId] : (idx === 0);
-
-        const summary = document.createElement("summary");
-        summary.innerHTML = `
-          <span>${escapeHtml(sec.title)}</span>
-          <span class="accMeta">${doneInSection}/${selectedTasks.length} done</span>
-        `;
-        details.appendChild(summary);
-
-        const body = document.createElement("div");
-        body.className = "accBody";
-
-        selectedTasks.forEach((t, i) => {
-          const isDone = !!state.done[t.id];
-          const row = document.createElement("div");
-          row.className = "task" + (isDone ? " rowDone" : "");
-          row.innerHTML = `
-            <div class="badge">${String(i+1)}</div>
-            <div style="flex:1;">
-              <div class="taskTitle ${isDone ? "strike" : ""}">${escapeHtml(t.text)}</div>
-              <div class="taskSub">Tap to mark ${isDone ? "not done" : "done"}</div>
-            </div>
-            <div class="pill ${isDone ? "done" : "na"}">${isDone ? "DONE ✓" : "TO DO"}</div>
-          `;
-
-          row.addEventListener("click", () => {
-            if (state.done[t.id]) delete state.done[t.id];
-            else state.done[t.id] = true;
-            saveDone();
-            updateAllUI();
-          });
-
-          body.appendChild(row);
-        });
-
-        details.appendChild(body);
-        misTaskList.appendChild(details);
-      });
-
-      renderMisProgress();
-    }
-
-    function renderMisProgress(){
-      const selectedIds = Object.keys(state.selected);
-      const total = selectedIds.length;
-      const done = selectedIds.filter(id => !!state.done[id]).length;
-      const remaining = total - done;
-
-      progressTextMis.textContent = done + "/" + total;
-      progressBarMis.style.width = total ? Math.round((done/total)*100) + "%" : "0%";
-
-      misRemainingHint.textContent = total ? ("Remaining: " + remaining) : "—";
-
-      const completed = (total > 0 && remaining === 0);
-      doneBox.classList.toggle("hidden", !completed);
-    }
-
-    // =========================
-    // VIEW SWITCH
-    // =========================
-    function showCreate(){
-      state.view = "create";
-      createWrap.classList.remove("hidden");
-      misWrap.classList.add("hidden");
-      setError("");
-    }
-
-    function showMis(){
-      state.view = "mis";
-      createWrap.classList.add("hidden");
-      misWrap.classList.remove("hidden");
-      setError("");
-    }
-
-    // =========================
-    // UPDATE UI (global)
-    // =========================
-    function updateSetupUI(){
-      weekKeyText.textContent = "Week: " + state.weekKey;
-      dateText.textContent = state.dateISO;
-      timeField.value = nowDK();
-    }
-
-    function updateAllUI(){
-      state.loc = locationSelect.value || "";
-      state.who = (doneBy.value || "").trim();
-
-      updateSetupUI();
-
-      // create view UI
-      renderCreateList();
-      renderCreateProgress();
-
-      // mis view UI
-      renderMisHeader();
-      renderMisList();
-    }
-
-    // =========================
-    // NAVIGATION (new "page")
-    // We use URL param ?view=mis to behave like a new page.
-    // =========================
-    function baseUrl(){
-      return window.location.origin + window.location.pathname;
-    }
-
-    function goToMis(){
-      const url = new URL(baseUrl());
-      url.searchParams.set("view", "mis");
-      url.searchParams.set("loc", state.loc);
-      url.searchParams.set("date", state.dateISO);
-      window.location.href = url.toString();
-    }
-
-    function goToCreate(){
-      const url = new URL(baseUrl());
-      // keep context so you land back on same date/location
-      if (state.loc) url.searchParams.set("loc", state.loc);
-      if (state.dateISO) url.searchParams.set("date", state.dateISO);
-      window.location.href = url.toString();
-    }
-
-    // =========================
-    // RESET (hold 5s)
-    // =========================
-    let resetTimer = null;
-    let resetStart = 0;
-
-    function resetHoldClear(){
-      if (resetTimer) clearInterval(resetTimer);
-      resetTimer = null;
-      resetStart = 0;
-      resetHoldBar.style.width = "0%";
-      resetBtnText.textContent = "Hold 5s to reset (new MIS)";
-    }
-
-    function doReset(){
-      if (!state.loc || !state.dateISO) return;
-
-      localStorage.removeItem(kSel(state.loc, state.dateISO));
-      localStorage.removeItem(kDone(state.loc, state.dateISO));
-      localStorage.removeItem(kWho(state.loc, state.dateISO));
-
-      state.selected = {};
-      state.done = {};
-
-      resetHoldClear();
-      goToCreate();
-    }
-
-    function resetHoldStart(){
-      if (!state.loc || !state.dateISO) return;
-      resetHoldClear();
-
-      resetStart = Date.now();
-      resetBtnText.textContent = "Keep holding…";
-
-      resetTimer = setInterval(() => {
-        const elapsed = Date.now() - resetStart;
-        const pct = Math.min(100, Math.round((elapsed / RESET_HOLD_MS) * 100));
-        resetHoldBar.style.width = pct + "%";
-        resetBtnText.textContent = "Hold to reset… " + pct + "%";
-        if (elapsed >= RESET_HOLD_MS) {
-          clearInterval(resetTimer);
-          resetTimer = null;
-          resetBtnText.textContent = "Resetting…";
-          doReset();
-        }
-      }, 50);
-    }
-
-    // =========================
-    // INIT from URL params
-    // =========================
-    function initFromUrl(){
-      const params = new URLSearchParams(window.location.search);
-      const view = params.get("view");
-      const loc = params.get("loc");
-      const date = params.get("date");
-
-      if (loc) {
-        locationSelect.value = loc;
-        state.loc = loc;
-      }
-
-      if (date) {
-        state.dateISO = date;
-        state.targetDate = new Date(date + "T12:00:00");
-        state.dayKey = dayKeyFromDateISO(date);
+      if(best && bd<=GPS_RANGE_M && !$("loc").value){
+        $("loc").value=best; state.loc=best; loadContext(); render();
+        $("gps").textContent="GPS: "+best.replace("Café Kaiser ","")+" ("+Math.round(bd)+" m)";
       } else {
-        // DEFAULT: tomorrow
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0,0,0,0);
-        state.targetDate = tomorrow;
-        state.dayKey = dayKeyFromDateISO(dateISOFromLocal(tomorrow));
+        $("gps").textContent = $("loc").value ? "GPS: klar" : "GPS: vælg lokation manuelt";
       }
+    }, ()=>{ $("gps").textContent="GPS: vælg lokation manuelt"; },
+    {enableHighAccuracy:false,timeout:8000,maximumAge:300000});
+  }
 
-      syncDerived();
-
-      // set active dayKey based on chosen date
-      if (!date) state.dayKey = getDayKeyToday(); // already
-      if (date) state.dayKey = dayKeyFromDateISO(date);
-
-      // load saved data for context
-      loadForCurrentContext();
-
-      // show view
-      if (view === "mis") showMis();
-      else showCreate();
-    }
-
-    // =========================
-    // EVENTS
-    // =========================
-    locationSelect.addEventListener("change", () => {
-      state.loc = locationSelect.value || "";
-      syncDerived();
-      loadForCurrentContext();
-      updateAllUI();
-    });
-
-    doneBy.addEventListener("input", () => {
-      saveSelectionMeta(); // keeps createdBy updated
-      updateAllUI();
-    });
-
-    makeMisBtn.addEventListener("click", () => {
-      setError("");
-
-      state.loc = locationSelect.value || "";
-      const who = (doneBy.value || "").trim();
-
-      if (!state.loc) return setError("Select a location.");
-      if (!who) return setError("Performed by is required.");
-      if (selectedCount() === 0) return setError("Select at least 1 item before making MIS.");
-
-      // Save selection snapshot
-      saveSelectionMeta();
-      goToMis();
-    });
-
-    editBtn.addEventListener("click", () => {
-      goToCreate();
-    });
-
-    resetBtn.addEventListener("pointerdown", (e) => { e.preventDefault(); resetHoldStart(); });
-    resetBtn.addEventListener("pointerup", resetHoldClear);
-    resetBtn.addEventListener("pointercancel", resetHoldClear);
-    resetBtn.addEventListener("pointerleave", resetHoldClear);
-    window.addEventListener("blur", resetHoldClear);
-
-    // =========================
-    // GPS autoselect (optional)
-    // =========================
-    async function tryAutoSelectLocation(){
-      gpsStatus.textContent = "GPS: checking…";
-      const gps = await getGPS();
-      if (!gps.ok) {
-        gpsStatus.textContent = "GPS: not available (" + (gps.msg || "") + ")";
-        return;
-      }
-
-      let bestName = null;
-      let bestDist = Infinity;
-      for (const name in LOCATION_COORDS) {
-        const c = LOCATION_COORDS[name];
-        const dist = distanceM(gps.lat, gps.lng, c.lat, c.lng);
-        if (dist < bestDist) { bestDist = dist; bestName = name; }
-      }
-
-      const distM = Math.round(bestDist);
-      if (bestName && distM <= GPS_AUTOSELECT_M && !locationSelect.value) {
-        gpsStatus.textContent = "GPS: near " + bestName + " (" + distM + "m) → selected";
-        locationSelect.value = bestName;
-        state.loc = bestName;
-        loadForCurrentContext();
-        updateAllUI();
-      } else {
-        gpsStatus.textContent = "GPS: select location manually";
-      }
-    }
-
-    // =========================
-    // START
-    // =========================
-    initFromUrl();
-    renderDayTabs();
-    updateAllUI();
-    tryAutoSelectLocation();
+  // ===== Start =====
+  render();
+  autoLocate();
   </script>
 </body>
 </html>
