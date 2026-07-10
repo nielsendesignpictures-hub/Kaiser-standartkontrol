@@ -81,12 +81,31 @@
       background:linear-gradient(90deg,transparent,var(--gold),transparent);
     }
 
+    /* Language toggle */
+    .langRow{display:flex;justify-content:center;margin-top:16px;}
+    .langToggle{
+      display:inline-flex;
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.05);
+    }
+    .langToggle button{
+      border:none;background:transparent;color:var(--muted);
+      font-weight:900;font-size:12px;letter-spacing:.10em;
+      padding:8px 18px;cursor:pointer;font-family:inherit;
+    }
+    .langToggle button.on{
+      background:linear-gradient(135deg,var(--gold),var(--gold2));
+      color:#0b0c0f;
+    }
+
     .pillRow{
       display:flex;
       justify-content:center;
       flex-wrap:wrap;
       gap:10px;
-      margin-top:18px;
+      margin-top:16px;
     }
 
     .pill{
@@ -287,18 +306,25 @@
   <div class="wrap">
     <div class="card">
       <div class="kicker">KAISER</div>
-      <h1>Fejl & Mangler</h1>
-      <div class="sub">Hurtig registrering af fejl og mangler i driften</div>
+      <h1 data-i18n="title">Fejl & Mangler</h1>
+      <div class="sub" data-i18n="sub">Hurtig registrering af fejl og mangler i driften</div>
       <div class="goldline"></div>
 
+      <div class="langRow">
+        <div class="langToggle" id="langToggle">
+          <button type="button" data-lang="da" class="on">DA</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+      </div>
+
       <div class="pillRow">
-        <div class="pill" id="locPill">📍 Lokation: —</div>
-        <div class="pill" id="datePill">📅 Dato: —</div>
+        <div class="pill" id="locPill">📍 —</div>
+        <div class="pill" id="datePill">📅 —</div>
       </div>
 
       <div class="grid">
         <div>
-          <label for="locSelect">Lokation</label>
+          <label for="locSelect" data-i18n="locLabel">Lokation</label>
           <select id="locSelect">
             <option value="Café Kaiser Helsingør">Café Kaiser Helsingør</option>
             <option value="Café Kaiser Hillerød">Café Kaiser Hillerød</option>
@@ -310,13 +336,13 @@
         </div>
 
         <div>
-          <label for="dateInput">Dato</label>
+          <label for="dateInput" data-i18n="dateLabel">Dato</label>
           <input id="dateInput" type="date" />
         </div>
 
         <div>
-          <label for="areaInput">Område</label>
-          <select id="areaInput">
+          <label for="areaInput" data-i18n="areaLabel">Område</label>
+          <select id="areaInput" data-optgroup="area">
             <option value="">Vælg område</option>
             <option value="Restaurant">Restaurant</option>
             <option value="Bar">Bar</option>
@@ -330,8 +356,8 @@
         </div>
 
         <div>
-          <label for="issueTypeInput">Fejltype</label>
-          <select id="issueTypeInput">
+          <label for="issueTypeInput" data-i18n="issueTypeLabel">Fejltype</label>
+          <select id="issueTypeInput" data-optgroup="issueType">
             <option value="">Vælg type</option>
             <option value="Equipment">Udstyr</option>
             <option value="Electricity">El</option>
@@ -345,8 +371,8 @@
         </div>
 
         <div>
-          <label for="severityInput">Alvorlighed</label>
-          <select id="severityInput">
+          <label for="severityInput" data-i18n="severityLabel">Alvorlighed</label>
+          <select id="severityInput" data-optgroup="severity">
             <option value="">Vælg alvorlighed</option>
             <option value="Low">Lav</option>
             <option value="Medium">Mellem</option>
@@ -355,28 +381,28 @@
         </div>
 
         <div>
-          <label for="sourceInput">Kilde</label>
-          <select id="sourceInput">
+          <label for="sourceInput" data-i18n="sourceLabel">Kilde</label>
+          <select id="sourceInput" data-optgroup="source">
             <option value="Drift">Drift</option>
             <option value="Kitchen">Køkken</option>
           </select>
         </div>
 
         <div class="full">
-          <label for="descriptionInput">Beskrivelse</label>
-          <textarea id="descriptionInput" placeholder="Beskriv fejlen eller manglen..."></textarea>
+          <label for="descriptionInput" data-i18n="descLabel">Beskrivelse</label>
+          <textarea id="descriptionInput" data-i18n-ph="descPlaceholder" placeholder="Beskriv fejlen eller manglen..."></textarea>
         </div>
       </div>
 
       <div class="actions">
-        <button class="btn ghost" id="refreshBtn" type="button">Opdater liste</button>
-        <button class="btn primary" id="submitBtn" type="button">Send fejl</button>
+        <button class="btn ghost" id="refreshBtn" type="button" data-i18n="refresh">Opdater liste</button>
+        <button class="btn primary" id="submitBtn" type="button" data-i18n="submit">Send fejl</button>
       </div>
 
       <div class="status" id="statusBox"></div>
 
       <div class="listWrap">
-        <div class="listTitle">Seneste fejl & mangler</div>
+        <div class="listTitle" id="listTitle" data-i18n="listTitle">Seneste fejl & mangler</div>
         <div class="itemList" id="itemList">
           <div class="empty">Indlæser...</div>
         </div>
@@ -391,6 +417,76 @@
 
     const $ = id => document.getElementById(id);
 
+    // ===== i18n =====
+    // NOTE: only display text changes. Option VALUES stay identical, so
+    // whatever is sent to the sheet is the same in DA and EN.
+    const I18N = {
+      da: {
+        title: "Fejl & Mangler",
+        sub: "Hurtig registrering af fejl og mangler i driften",
+        locLabel: "Lokation",
+        dateLabel: "Dato",
+        areaLabel: "Område",
+        issueTypeLabel: "Fejltype",
+        severityLabel: "Alvorlighed",
+        sourceLabel: "Kilde",
+        descLabel: "Beskrivelse",
+        descPlaceholder: "Beskriv fejlen eller manglen...",
+        refresh: "Opdater liste",
+        submit: "Send fejl",
+        submitting: "Sender...",
+        listTitle: "Seneste fejl & mangler",
+        loading: "Indlæser...",
+        empty: "Ingen fejl eller mangler registreret endnu",
+        loadError: "❌ Fejl ved indlæsning",
+        locPillPrefix: "📍 ",
+        datePillPrefix: "📅 ",
+        validation: "Udfyld dato, lokation, område, fejltype, alvorlighed og beskrivelse.",
+        saved: "✅ Fejl/mangel gemt.",
+        statusLbl: "Status",
+        sourceMetaLbl: "Kilde",
+        area:      { "":"Vælg område", Restaurant:"Restaurant", Bar:"Bar", Kitchen:"Køkken", Toilets:"Toiletter", Storage:"Lager", Outdoor:"Udeservering", Technical:"Teknisk", Other:"Andet" },
+        issueType: { "":"Vælg type", Equipment:"Udstyr", Electricity:"El", Water:"Vand", "IT / POS":"IT / POS", Furniture:"Møbler", "Cleaning / Hygiene":"Rengøring / hygiejne", "Missing item":"Mangel på udstyr", Other:"Andet" },
+        severity:  { "":"Vælg alvorlighed", Low:"Lav", Medium:"Mellem", High:"Høj" },
+        source:    { Drift:"Drift", Kitchen:"Køkken" },
+        sevText:   { low:"Lav", medium:"Mellem", high:"Høj" }
+      },
+      en: {
+        title: "Faults & Issues",
+        sub: "Quick logging of faults and issues in operations",
+        locLabel: "Location",
+        dateLabel: "Date",
+        areaLabel: "Area",
+        issueTypeLabel: "Fault type",
+        severityLabel: "Severity",
+        sourceLabel: "Source",
+        descLabel: "Description",
+        descPlaceholder: "Describe the fault or issue...",
+        refresh: "Refresh list",
+        submit: "Submit fault",
+        submitting: "Sending...",
+        listTitle: "Latest faults & issues",
+        loading: "Loading...",
+        empty: "No faults or issues logged yet",
+        loadError: "❌ Error loading",
+        locPillPrefix: "📍 ",
+        datePillPrefix: "📅 ",
+        validation: "Fill in date, location, area, fault type, severity and description.",
+        saved: "✅ Fault/issue saved.",
+        statusLbl: "Status",
+        sourceMetaLbl: "Source",
+        area:      { "":"Select area", Restaurant:"Restaurant", Bar:"Bar", Kitchen:"Kitchen", Toilets:"Toilets", Storage:"Storage", Outdoor:"Outdoor seating", Technical:"Technical", Other:"Other" },
+        issueType: { "":"Select type", Equipment:"Equipment", Electricity:"Electricity", Water:"Water", "IT / POS":"IT / POS", Furniture:"Furniture", "Cleaning / Hygiene":"Cleaning / Hygiene", "Missing item":"Missing item", Other:"Other" },
+        severity:  { "":"Select severity", Low:"Low", Medium:"Medium", High:"High" },
+        source:    { Drift:"Operations", Kitchen:"Kitchen" },
+        sevText:   { low:"Low", medium:"Medium", high:"High" }
+      }
+    };
+
+    const state = { lang: "da" };
+    const t = () => I18N[state.lang];
+
+    // ===== Helpers =====
     function isoToday() {
       const d = new Date();
       const y = d.getFullYear();
@@ -415,8 +511,8 @@
     }
 
     function updatePills() {
-      $("locPill").textContent = "📍 Lokation: " + $("locSelect").value.replace("Café Kaiser ", "");
-      $("datePill").textContent = "📅 Dato: " + ($("dateInput").value || "—");
+      $("locPill").textContent = t().locPillPrefix + ($("locSelect").value.replace("Café Kaiser ", "") || "—");
+      $("datePill").textContent = t().datePillPrefix + ($("dateInput").value || "—");
     }
 
     function jsonp(url, params = {}) {
@@ -467,40 +563,45 @@
 
     function severityText(sev) {
       const s = String(sev || "").toLowerCase();
-      if (s === "low") return "Lav";
-      if (s === "medium") return "Mellem";
-      if (s === "high") return "Høj";
-      return sev || "—";
+      return t().sevText[s] || sev || "—";
+    }
+
+    // ===== List rendering =====
+    let lastItems = null;   // null = loading, [] = none
+    let loadFailed = false;
+
+    function renderItems() {
+      const box = $("itemList");
+      if (loadFailed) { box.innerHTML = `<div class="empty">${t().loadError}</div>`; return; }
+      if (lastItems === null) { box.innerHTML = `<div class="empty">${t().loading}</div>`; return; }
+      if (!lastItems.length) { box.innerHTML = `<div class="empty">${t().empty}</div>`; return; }
+
+      box.innerHTML = lastItems.map(item => `
+        <div class="item">
+          <div class="bar ${severityClass(item.severity)}"></div>
+          <div class="itemInfo">
+            <div class="itemTitle">${escapeHtml(item.area)} • ${escapeHtml(item.issueType)} • ${escapeHtml(severityText(item.severity))}</div>
+            <div class="itemMeta">📅 ${escapeHtml(item.date)} • ${t().statusLbl}: ${escapeHtml(item.status)} • ${t().sourceMetaLbl}: ${escapeHtml(item.source)}</div>
+            <div class="itemDesc">${escapeHtml(item.description)}</div>
+          </div>
+        </div>
+      `).join("");
     }
 
     async function loadItems() {
       clearStatus();
+      loadFailed = false;
+      lastItems = null;
+      renderItems();
+
       const loc = $("locSelect").value;
-
       try {
-        const data = await jsonp(SCRIPT_URL, {
-          action: "getFaultsIssues",
-          loc
-        });
-
-        if (!data || !data.ok || !Array.isArray(data.items) || !data.items.length) {
-          $("itemList").innerHTML = '<div class="empty">Ingen fejl eller mangler registreret endnu</div>';
-          return;
-        }
-
-        $("itemList").innerHTML = data.items.map(item => `
-          <div class="item">
-            <div class="bar ${severityClass(item.severity)}"></div>
-            <div class="itemInfo">
-              <div class="itemTitle">${escapeHtml(item.area)} • ${escapeHtml(item.issueType)} • ${escapeHtml(severityText(item.severity))}</div>
-              <div class="itemMeta">📅 ${escapeHtml(item.date)} • Status: ${escapeHtml(item.status)} • Kilde: ${escapeHtml(item.source)}</div>
-              <div class="itemDesc">${escapeHtml(item.description)}</div>
-            </div>
-          </div>
-        `).join("");
-
+        const data = await jsonp(SCRIPT_URL, { action: "getFaultsIssues", loc });
+        lastItems = (data && data.ok && Array.isArray(data.items)) ? data.items : [];
+        renderItems();
       } catch (e) {
-        $("itemList").innerHTML = '<div class="empty">❌ Fejl ved indlæsning</div>';
+        loadFailed = true;
+        renderItems();
       }
     }
 
@@ -516,13 +617,13 @@
       const source = ($("sourceInput").value || "").trim();
 
       if (!date || !location || !area || !issueType || !severity || !description) {
-        setStatus("Udfyld dato, lokation, område, fejltype, alvorlighed og beskrivelse.", "err");
+        setStatus(t().validation, "err");
         return;
       }
 
       const btn = $("submitBtn");
       btn.disabled = true;
-      btn.textContent = "Sender...";
+      btn.textContent = t().submitting;
 
       const form = document.createElement("form");
       form.method = "POST";
@@ -532,13 +633,7 @@
 
       const fields = {
         action: "addFaultIssue",
-        date,
-        location,
-        area,
-        issueType,
-        severity,
-        description,
-        source
+        date, location, area, issueType, severity, description, source
       };
 
       Object.keys(fields).forEach(key => {
@@ -555,19 +650,56 @@
       setTimeout(() => {
         form.remove();
         btn.disabled = false;
-        btn.textContent = "Send fejl";
+        btn.textContent = t().submit;
         $("areaInput").value = "";
         $("issueTypeInput").value = "";
         $("severityInput").value = "";
         $("descriptionInput").value = "";
         $("sourceInput").value = "Drift";
-        setStatus("✅ Fejl/mangel gemt.", "ok");
+        setStatus(t().saved, "ok");
         loadItems();
       }, 1200);
     }
 
+    // ===== Apply language =====
+    function applyLang(lang) {
+      if (!I18N[lang]) lang = "da";
+      state.lang = lang;
+      try { localStorage.setItem("kaiser_faults_lang", lang); } catch (_) {}
+      document.documentElement.lang = lang;
+      const d = I18N[lang];
+
+      document.querySelectorAll("#langToggle button").forEach(b =>
+        b.classList.toggle("on", b.dataset.lang === lang));
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.dataset.i18n;
+        if (d[k] != null) el.textContent = d[k];
+      });
+      document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+        const k = el.dataset.i18nPh;
+        if (d[k] != null) el.placeholder = d[k];
+      });
+
+      document.title = "Kaiser – " + d.title;
+
+      document.querySelectorAll("[data-optgroup]").forEach(sel => {
+        const g = d[sel.dataset.optgroup] || {};
+        Array.from(sel.options).forEach(o => {
+          if (g[o.value] != null) o.textContent = g[o.value];
+        });
+      });
+
+      updatePills();
+      renderItems();
+    }
+
+    // ===== Init =====
     (function init() {
       $("dateInput").value = isoToday();
+
+      let savedLang = "da";
+      try { savedLang = localStorage.getItem("kaiser_faults_lang") || "da"; } catch (_) {}
 
       const locQS = getLocFromQS();
       if (locQS) {
@@ -577,17 +709,18 @@
         if (match) $("locSelect").value = match.value;
       }
 
-      updatePills();
+      applyLang(savedLang);
       loadItems();
 
-      $("locSelect").addEventListener("change", () => {
-        updatePills();
-        loadItems();
-      });
-
+      $("locSelect").addEventListener("change", () => { updatePills(); loadItems(); });
       $("dateInput").addEventListener("change", updatePills);
       $("refreshBtn").addEventListener("click", loadItems);
       $("submitBtn").addEventListener("click", submitItem);
+
+      $("langToggle").addEventListener("click", e => {
+        const b = e.target.closest("button");
+        if (b) applyLang(b.dataset.lang);
+      });
     })();
   </script>
 </body>
