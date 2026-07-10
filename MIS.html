@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -63,15 +63,13 @@
     select option{color:#0b0c0f;}
     select:focus,input:focus{border-color:rgba(214,178,74,.55);box-shadow:0 0 0 4px var(--goldGlow);}
 
-    .seg{display:flex;gap:6px;margin-top:10px;}
-    .seg button{
-      flex:1;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);
-      color:var(--muted);border-radius:12px;padding:9px 8px;font-weight:900;font-size:13px;
-      cursor:pointer;font-family:inherit;letter-spacing:.02em;
-    }
-    .seg button.on{border-color:rgba(214,178,74,.45);background:rgba(214,178,74,.13);color:var(--text);}
-    .seg button .sub{display:block;font-size:10px;font-weight:700;color:var(--muted2);margin-top:1px;letter-spacing:0;}
-    .seg button.on .sub{color:var(--muted);}
+    /* ---------- Day bar ---------- */
+    .dayBar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:12px;}
+    .dayEyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .dayName{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;line-height:1.1;margin-top:2px;}
+    .backToday{background:none;border:none;color:var(--gold);font-weight:800;font-size:12px;cursor:pointer;padding:3px 0 0;font-family:inherit;text-decoration:underline;text-underline-offset:3px;}
+    .nextDay{border:1px solid rgba(214,178,74,.4);background:rgba(214,178,74,.13);color:var(--text);border-radius:12px;padding:10px 14px;font-weight:900;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;flex:0 0 auto;}
+    .nextDay:active{transform:translateY(1px);}
 
     .progRow{display:flex;align-items:center;gap:10px;margin-top:12px;}
     .progWrap{flex:1;height:9px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);}
@@ -160,26 +158,29 @@
     <div class="sticky">
       <div class="setup">
         <div class="field">
-          <label>Lokation</label>
+          <label>Location</label>
           <select id="loc">
-            <option value="">Vælg…</option>
+            <option value="">Select…</option>
             <option>Café Kaiser Helsingør</option>
             <option>Café Kaiser Hillerød</option>
             <option>Café Kaiser Farum</option>
             <option>Café Kaiser Hørsholm</option>
             <option>Café Kaiser Vanløse</option>
-            <option>Café Kaiser Enghave</option>
           </select>
         </div>
         <div class="field">
-          <label>Lavet af</label>
-          <input id="who" placeholder="Navn" autocomplete="off" />
+          <label>Made by</label>
+          <input id="who" placeholder="Name" autocomplete="off" />
         </div>
       </div>
 
-      <div class="seg" id="daySeg">
-        <button data-day="today" class="on">I dag<span class="sub" id="todayLbl">—</span></button>
-        <button data-day="tomorrow">I morgen<span class="sub" id="tomorrowLbl">—</span></button>
+      <div class="dayBar">
+        <div>
+          <div class="dayEyebrow">Mise for</div>
+          <div class="dayName" id="dayName">—</div>
+          <button class="backToday" id="backToday" style="display:none">← Back to today</button>
+        </div>
+        <button class="nextDay" id="nextDay">Make mise for next day →</button>
       </div>
 
       <div class="progRow">
@@ -188,8 +189,8 @@
       </div>
 
       <div class="barTools">
-        <div class="gps" id="gps">GPS: tjekker…</div>
-        <div class="toggleHide" id="hideDone"><span class="dot"></span>Skjul færdige</div>
+        <div class="gps" id="gps">GPS: checking…</div>
+        <div class="toggleHide" id="hideDone"><span class="dot"></span>Hide done</div>
       </div>
     </div>
 
@@ -197,43 +198,43 @@
     <div id="list"></div>
 
     <div class="celebrate" id="celebrate" style="display:none">
-      <div class="big">Alt er klar ✦</div>
-      <div class="small">Godt gået — mise en place er på plads.</div>
+      <div class="big">All set ✦</div>
+      <div class="small">Nicely done — mise en place is ready.</div>
     </div>
 
-    <button class="reset" id="reset"><div class="fill" id="resetFill"></div><span id="resetLbl">Hold for at nulstille dagen</span></button>
-    <div class="hint">Tryk på en linje = udført · <b>–</b> = ikke i dag<br>Gemmes automatisk pr. lokation og dag på denne enhed.</div>
+    <button class="reset" id="reset"><div class="fill" id="resetFill"></div><span id="resetLbl">Hold to reset this day</span></button>
+    <div class="hint">Tap a line = done · <b>–</b> = not today<br>Saved automatically per location and day on this device.</div>
 
   </div>
 
   <script>
-  // ===== Data (dine egne varer, uændret) =====
+  // ===== Data (your items, unchanged) =====
   const STATIONS = [
-    { id:"gront", title:"Grønt & frugt", tasks:[
+    { id:"veg", title:"Vegetables & fruit", tasks:[
       "Cut lettuce for burger","Cut lettuce for salad","Cut lettuce for Julie plate",
       "Cut tomatoes (burger & salad)","Cut radishes","Cut red onions","Cut cucumbers",
       "Cut lemon","Cut spring onions","Cut chives","Cut cress","Cut mix cress","Cut fruits (mix & buffet)"
     ]},
-    { id:"kod", title:"Kød & kartofler", tasks:[
+    { id:"meat", title:"Meat & potatoes", tasks:[
       "Cut and marinate chicken","Cut Tenderloin","Cut Black Angus",
       "Cut potatoes for Wienerschnitzel","Cut potatoes for smørrebrød",
       "Fry bacon",'Fry "stegt flæsk"',"Fry sausages"
     ]},
-    { id:"ost", title:"Ost & mejeri", tasks:[
+    { id:"dairy", title:"Cheese & dairy", tasks:[
       "Cut cheese for sandwiches","Cut Vesterhavsost","Cut Chili cheese","Cut Blue cheese",
       "Prepare Chiagrød","Prepare Blueberry Yogurt","Fill up yogurt"
     ]},
-    { id:"sauce", title:"Saucer & dressinger", tasks:[
+    { id:"sauce", title:"Sauces & dressings", tasks:[
       "Refill Thousand Island dressing","Refill Tatar sauce","Refill Remoulade","Refill Chili Mayo",
       "Refill Garlic Mayo","Refill Truffle Mayo","Refill Curry Mayo","Refill BBQ Mayo",
       "Refill Signature dressing","Refill Caesar dressing","Refill Rævesovs","Refill Mayo & Ketchup"
     ]},
-    { id:"prep", title:"Prep & bagning", tasks:[
+    { id:"prep", title:"Prep & baking", tasks:[
       "Boil eggs","Cook rice","Cook Mango Jam","Cook Mix Berries Jam","Cook Apple Jam",
       "Make garlic paste","Make caramelized onions","Make Øland toast","Bake tomatoes",
       "Bake Apple tart","Prepare Chocolate Mousse","Prepare Crème brûlée"
     ]},
-    { id:"setup", title:"Opsætning & lager", tasks:[
+    { id:"setup", title:"Setup & storage", tasks:[
       "Setup Brunch","Setup Julie plate","Defrost Mango & Edamame","Defrost Chocolate cake","Refill Freezer"
     ]}
   ];
@@ -251,27 +252,27 @@
   // ===== Helpers =====
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-  const DAY_DK = ["Søndag","Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag"];
+  const DAY_EN = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const MON_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   function isoLocal(d){
     const x = new Date(d); x.setHours(12,0,0,0);
     return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10);
   }
   function itemId(sid,i){ return sid+"-"+String(i+1).padStart(2,"0"); }
+  function today(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
 
   // ===== State =====
   const state = {
-    loc:"", who:"", day:"today",
+    loc:"", who:"",
+    activeDate: today(),
     collapsed:{}, hideDone:false,
     status:{}   // { itemId: "done" | "skip" }
   };
+  function activeISO(){ return isoLocal(state.activeDate); }
+  function isToday(){ return activeISO()===isoLocal(today()); }
 
-  function todayDate(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
-  function tomorrowDate(){ const d=todayDate(); d.setDate(d.getDate()+1); return d; }
-  function activeDate(){ return state.day==="today" ? todayDate() : tomorrowDate(); }
-  function activeISO(){ return isoLocal(activeDate()); }
-
-  // ===== Storage (pr. lokation + dato) =====
+  // ===== Storage (per location + date) =====
   const KEY = "kaiser_mep_v3";
   const kStatus = () => `${KEY}_${state.loc}_${activeISO()}`;
   const kWho    = () => `${KEY}_who_${state.loc}`;
@@ -297,9 +298,10 @@
   }
 
   // ===== Render =====
-  function labels(){
-    $("todayLbl").textContent = DAY_DK[todayDate().getDay()];
-    $("tomorrowLbl").textContent = DAY_DK[tomorrowDate().getDay()];
+  function renderDay(){
+    const d = state.activeDate;
+    $("dayName").textContent = DAY_EN[d.getDay()]+" · "+d.getDate()+" "+MON_EN[d.getMonth()];
+    $("backToday").style.display = isToday() ? "none" : "inline-block";
   }
 
   function renderProgress(){
@@ -315,7 +317,7 @@
   function renderList(){
     const list = $("list");
     if(!state.loc){
-      list.innerHTML = '<div class="empty">Vælg en lokation for at se dagens mise en place.</div>';
+      list.innerHTML = '<div class="empty">Select a location to see the day\u2019s mise en place.</div>';
       return;
     }
     list.innerHTML = "";
@@ -330,8 +332,8 @@
         const cls = isDone?"done":(isSkip?"skip":"");
         return `<div class="task ${cls}" data-id="${id}">
           <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="taskText">${esc(text)}${isSkip?' <span class="skipTag">· ikke i dag</span>':''}</div>
-          <button class="skipBtn" data-skip="${id}" aria-label="Ikke i dag">${isSkip?'↺':'–'}</button>
+          <div class="taskText">${esc(text)}${isSkip?' <span class="skipTag">· not today</span>':''}</div>
+          <button class="skipBtn" data-skip="${id}" aria-label="Not today">${isSkip?'↺':'–'}</button>
         </div>`;
       }).join("");
 
@@ -344,12 +346,12 @@
           <div class="stationName">${esc(sec.title)}</div>
           <div class="stationMeta"><span class="miniCount">${secDone}/${secTotal}</span><span class="chev"></span></div>
         </div>
-        <div class="stationBody">${rows || '<div class="empty" style="padding:14px">Alt færdigt her ✦</div>'}</div>`;
+        <div class="stationBody">${rows || '<div class="empty" style="padding:14px">All done here ✦</div>'}</div>`;
       list.appendChild(st);
     });
   }
 
-  function render(){ labels(); renderList(); renderProgress(); }
+  function render(){ renderDay(); renderList(); renderProgress(); }
 
   // ===== Events =====
   $("loc").addEventListener("change", e=>{
@@ -359,12 +361,15 @@
   });
   $("who").addEventListener("input", e=>{ state.who=e.target.value.trim(); saveWho(); });
 
-  $("daySeg").addEventListener("click", e=>{
-    const b = e.target.closest("button"); if(!b) return;
-    state.day = b.dataset.day;
-    $("daySeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on", x===b));
-    loadContext();
-    render();
+  $("nextDay").addEventListener("click", ()=>{
+    const d = new Date(state.activeDate); d.setDate(d.getDate()+1);
+    state.activeDate = d;
+    loadContext(); render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+  $("backToday").addEventListener("click", ()=>{
+    state.activeDate = today();
+    loadContext(); render();
   });
 
   $("hideDone").addEventListener("click", ()=>{
@@ -377,8 +382,8 @@
     const skip = e.target.closest("[data-skip]");
     if(skip){
       const id = skip.dataset.skip;
-      state.status[id] = state.status[id]==="skip" ? undefined : "skip";
-      if(state.status[id]===undefined) delete state.status[id];
+      if(state.status[id]==="skip") delete state.status[id];
+      else state.status[id]="skip";
       saveStatus(); render(); return;
     }
     const head = e.target.closest("[data-station]");
@@ -390,18 +395,18 @@
     const task = e.target.closest(".task");
     if(task){
       const id = task.dataset.id;
-      state.status[id] = state.status[id]==="done" ? undefined : "done";
-      if(state.status[id]===undefined) delete state.status[id];
+      if(state.status[id]==="done") delete state.status[id];
+      else state.status[id]="done";
       saveStatus(); render();
     }
   });
 
   // ===== Hold-to-reset =====
   let rTimer=null, rStart=0;
-  function rClear(){ if(rTimer)clearInterval(rTimer); rTimer=null; $("resetFill").style.width="0%"; $("resetLbl").textContent="Hold for at nulstille dagen"; }
+  function rClear(){ if(rTimer)clearInterval(rTimer); rTimer=null; $("resetFill").style.width="0%"; $("resetLbl").textContent="Hold to reset this day"; }
   function rGo(){
     if(!state.loc) return;
-    rClear(); rStart=Date.now(); $("resetLbl").textContent="Bliv ved med at holde…";
+    rClear(); rStart=Date.now(); $("resetLbl").textContent="Keep holding…";
     rTimer=setInterval(()=>{
       const p=Math.min(100,Math.round((Date.now()-rStart)/RESET_HOLD_MS*100));
       $("resetFill").style.width=p+"%";
@@ -416,7 +421,7 @@
 
   // ===== GPS autoselect =====
   function autoLocate(){
-    if(!navigator.geolocation){ $("gps").textContent="GPS: ikke understøttet"; return; }
+    if(!navigator.geolocation){ $("gps").textContent="GPS: not supported"; return; }
     navigator.geolocation.getCurrentPosition(pos=>{
       const {latitude:la,longitude:lo}=pos.coords;
       let best=null,bd=Infinity;
@@ -431,9 +436,9 @@
         $("loc").value=best; state.loc=best; loadContext(); render();
         $("gps").textContent="GPS: "+best.replace("Café Kaiser ","")+" ("+Math.round(bd)+" m)";
       } else {
-        $("gps").textContent = $("loc").value ? "GPS: klar" : "GPS: vælg lokation manuelt";
+        $("gps").textContent = $("loc").value ? "GPS: ready" : "GPS: select location manually";
       }
-    }, ()=>{ $("gps").textContent="GPS: vælg lokation manuelt"; },
+    }, ()=>{ $("gps").textContent="GPS: select location manually"; },
     {enableHighAccuracy:false,timeout:8000,maximumAge:300000});
   }
 
