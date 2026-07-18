@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser · Today</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#17181c;
+      --surface:#fffdf8;
+      --surface2:#fbf6ec;
+      --text:#241f18;
+      --muted:#6f6656;
+      --muted2:#9a917f;
+      --gold:#c69a34;
+      --goldDeep:#9c7412;
+      --red:#d64545;
+      --amber:#c67c12;
+      --green:#3f9e4d;
+      --taupe:#8a7a63;
+      --line:rgba(45,38,26,0.10);
+      --shadow:0 16px 44px rgba(90,74,44,0.14);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
+    body{
+      min-height:100vh;padding:0 14px calc(24px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.16), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
+        linear-gradient(180deg, #f7f2e8, #efe7d6 55%, #f7f2e8);
+      background-attachment:fixed;
+    }
+    .shell{max-width:720px;margin:0 auto;}
+
+    .brand{text-align:center;padding:18px 0 8px;}
+    .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .title{font-family:"Playfair Display",serif;font-size:28px;line-height:1.05;letter-spacing:-.015em;font-weight:700;margin-top:5px;}
+    .place{margin-top:6px;font-weight:800;font-size:13px;color:var(--muted);text-transform:capitalize;}
+    .goldline{height:2px;margin:12px auto 0;max-width:200px;border-radius:999px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+
+    .card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+
+    /* Staffing hero */
+    .load{display:flex;align-items:center;gap:14px;margin-top:12px;}
+    .loadBadge{flex:0 0 auto;border-radius:14px;padding:12px 16px;text-align:center;color:#fff;min-width:96px;}
+    .loadBadge .lvl{font-family:"Playfair Display",serif;font-size:22px;font-weight:700;line-height:1;}
+    .loadBadge .sub{font-size:10px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;margin-top:3px;opacity:.95;}
+    .load.red .loadBadge{background:var(--red);} .load.amber .loadBadge{background:var(--amber);}
+    .load.green .loadBadge{background:var(--green);} .load.none .loadBadge{background:var(--taupe);}
+    .advice{flex:1;font-size:13.5px;font-weight:700;color:var(--muted);line-height:1.45;}
+    .advice b{color:var(--text);}
+
+    .ev{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);}
+    .ev:first-of-type{border-top:none;margin-top:6px;}
+    .ev-time{font-weight:900;font-size:13px;color:var(--goldDeep);min-width:44px;font-variant-numeric:tabular-nums;padding-top:1px;}
+    .ev-info{flex:1;min-width:0;}
+    .ev-title{font-weight:800;font-size:14px;line-height:1.3;}
+    .ev-meta{font-size:12px;color:var(--muted2);font-weight:600;margin-top:2px;}
+    .ev-imp{flex:0 0 auto;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:6px;align-self:center;}
+    .ev-imp.red{background:rgba(214,69,69,.14);color:#b83a3a;} .ev-imp.amber{background:rgba(198,124,18,.16);color:#a5670f;} .ev-imp.green{background:rgba(63,158,77,.15);color:#2e7d3a;}
+
+    .quiet{color:var(--muted2);font-weight:800;font-size:14px;margin-top:10px;}
+
+    /* rows (busy days / calendar) */
+    .row{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);}
+    .row:first-of-type{border-top:none;}
+    .rDate{flex:0 0 auto;width:46px;text-align:center;}
+    .rDay{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;line-height:1;}
+    .rWd{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-top:2px;}
+    .rInfo{flex:1;min-width:0;}
+    .rTitle{font-weight:800;font-size:14px;line-height:1.3;}
+    .rSub{font-size:12px;color:var(--muted2);font-weight:600;margin-top:2px;}
+    .rTag{flex:0 0 auto;font-size:10px;font-weight:800;color:var(--muted);white-space:nowrap;}
+    .tdot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+
+    .foot{font-size:11px;color:var(--muted2);font-weight:700;text-align:center;line-height:1.6;margin-top:4px;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <div class="kicker">Café Kaiser</div>
+      <div class="title">Today</div>
+      <div class="place" id="placeLbl">—</div>
+      <div class="goldline"></div>
+    </div>
+    <div id="content"></div>
+  </div>
+
+  <script>
+  // =========================================================
+  //  TODAY — aggregates staffing (live events.json) + the
+  //  annual calendar. ?loc=<café> selects the location.
+  //  Same self-contained pattern as the waste card.
+  // =========================================================
+  const EVENTS_JSON_URL = "https://nielsendesignpictures-hub.github.io/Event/events.json";
+  const REFRESH_MS = 30 * 60 * 1000;
+
+  // Hub location name → event-app café id
+  const CAFE_ID = {
+    "helsingør":"helsingor","hillerød":"hillerod","farum":"farum",
+    "hørsholm":"horsholm","vanløse":"vanlose","sydhavnen":"sydhavnen","enghave brygge":"sydhavnen"
+  };
+
+  // Annual calendar (from the year-calendar module). English titles used.
+  // type: stor | menu | info | lukket ; loc: "Alle" or a café name.
+  const YEAR = [
+    {date:"2026-07-09", type:"stor", t:"Enghave Brygge opening", loc:"Enghave Brygge"},
+    {date:"2026-08-10", type:"stor", t:"First school day – secure staffing on the rota", loc:"Alle"},
+    {date:"2026-08-24", type:"stor", t:"DHL relay in Fælledparken", loc:"Alle"},
+    {date:"2026-09-12", type:"stor", t:"Vanløse birthday: 2 years", loc:"Vanløse"},
+    {date:"2026-09-17", type:"stor", t:"Farum birthday: 4 years", loc:"Farum"},
+    {date:"2026-09-28", type:"menu", t:"Cafés receive menus, brunch sheets and posters", loc:"Alle"},
+    {date:"2026-10-05", type:"menu", t:"New menu: swap menus, posters, brunch sheets", loc:"Alle"},
+    {date:"2026-10-11", type:"info", t:"Halloween decorations up", loc:"Alle"},
+    {date:"2026-10-12", end:"2026-10-18", type:"stor", t:"Autumn holiday – week 42", loc:"Alle"},
+    {date:"2026-10-19", end:"2026-10-21", type:"stor", t:"KNÆK CANCER: Stegt flæsk (charity)", loc:"Alle"},
+    {date:"2026-11-03", type:"info", t:"Santa's mailbox in place", loc:"Alle"},
+    {date:"2026-11-10", type:"info", t:"St. Martin's Eve (no event)", loc:"Alle"},
+    {date:"2026-11-15", type:"info", t:"Christmas decorations up", loc:"Alle"},
+    {date:"2026-11-16", type:"menu", t:"Launch of build-your-own Christmas platter", loc:"Alle"},
+    {date:"2026-11-27", type:"stor", t:"Black Friday", loc:"Alle"},
+    {date:"2026-12-22", type:"stor", t:"Christmas aid deliveries", loc:"Alle"},
+    {date:"2026-12-23", type:"stor", t:"Christmas for the homeless · Dec 23", loc:"Alle"},
+    {date:"2026-12-27", type:"info", t:"Take Christmas decorations down", loc:"Alle"},
+    {date:"2026-12-28", type:"menu", t:"Cafés receive menus, brunch sheets and posters", loc:"Alle"}
+  ];
+  const TYPE_COLOR = { stor:"var(--green)", menu:"var(--amber)", info:"var(--taupe)", lukket:"var(--red)" };
+  const TYPE_LABEL = { stor:"Big day", menu:"Menu", info:"Note", lukket:"Closed" };
+
+  const LOAD = {
+    3:{cls:"red",   lvl:"HIGH",   sub:"load", advice:"<b>Staff up.</b> Consider +1 in the kitchen and +1 on the floor — and check stock the day before."},
+    2:{cls:"amber", lvl:"RAISED", sub:"load", advice:"<b>Raised pressure.</b> Consider +1 on the floor during the peak around the event start."},
+    1:{cls:"green", lvl:"MINOR",  sub:"event",advice:"Minor event in town — normal staffing, but keep an eye out."},
+    0:{cls:"none",  lvl:"NORMAL", sub:"day",  advice:"No known events today. Normal staffing looks fine."}
+  };
+
+  const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+
+  function isoLocal(d){ const x=new Date(d); x.setHours(12,0,0,0); return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+  function addDays(iso,n){ const d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+n); return isoLocal(d); }
+  function fmtDay(iso){ const d=new Date(iso+"T12:00:00"); return {day:d.getDate(), wd:DOW[d.getDay()], mon:MON[d.getMonth()]}; }
+  function soon(iso, today){
+    const n = Math.round((new Date(iso+"T12:00:00") - new Date(today+"T12:00:00"))/86400000);
+    return n<=0 ? "today" : n===1 ? "tomorrow" : "in "+n+" days";
+  }
+
+  const getLocName = () => (new URLSearchParams(location.search).get("loc") || "").trim();
+  function yearVisible(e, locName){
+    const l=(e.loc||"").toLowerCase().trim(), n=(locName||"").toLowerCase();
+    if(!l || l==="alle" || l==="all") return true;
+    if((l.includes("enghave")||l.includes("sydhavn")) && (n.includes("sydhavn")||n.includes("enghave"))) return true;
+    return l.includes(n) || (n && n.includes(l));
+  }
+
+  let staffing = null;   // events.json payload, or null if unavailable
+
+  function render(){
+    const locName = getLocName();
+    $("placeLbl").textContent = locName || "Location not set";
+    const cafeId = CAFE_ID[locName.toLowerCase()] || "";
+    const today = isoLocal(new Date());
+    const box = $("content");
+    let html = "";
+
+    // ---- Staffing today ----
+    let level = 0, todays = [];
+    if(staffing && Array.isArray(staffing.events) && cafeId){
+      todays = staffing.events
+        .filter(e => e.cafe===cafeId && e.date===today)
+        .sort((a,b)=>(a.time||"").localeCompare(b.time||""));
+      level = todays.reduce((m,e)=>Math.max(m, e.impact||0), 0);
+    }
+    const L = LOAD[level];
+    const impCls = i => i===3?"red":i===2?"amber":"green";
+    html += `<div class="card">
+      <div class="eyebrow">Staffing today · ${esc(fmtDay(today).wd)} ${new Date().getDate()} ${MON[new Date().getMonth()]}</div>
+      <div class="load ${L.cls}">
+        <div class="loadBadge"><div class="lvl">${L.lvl}</div><div class="sub">${L.sub}</div></div>
+        <div class="advice">${L.advice}</div>
+      </div>
+      ${todays.map(e=>`
+        <div class="ev">
+          <div class="ev-time">${esc(e.time||"")}</div>
+          <div class="ev-info"><div class="ev-title">${esc(e.title)}</div>
+            <div class="ev-meta">${esc(e.venue||"")}${e.note?" · "+esc(e.note):""}</div></div>
+          <div class="ev-imp ${impCls(e.impact)}">${e.impact===3?"High":e.impact===2?"Med":"Low"}</div>
+        </div>`).join("")}
+      ${(!staffing) ? `<div class="quiet">Couldn't load live staffing data right now.</div>` : ""}
+    </div>`;
+
+    // ---- Busy days ahead (next 14 days, level ≥ 2) ----
+    if(staffing && cafeId){
+      const until = addDays(today,14);
+      const byDate = {};
+      staffing.events.filter(e=>e.cafe===cafeId && e.date>today && e.date<=until)
+        .forEach(e=>{ (byDate[e.date]=byDate[e.date]||[]).push(e); });
+      const busy = Object.keys(byDate)
+        .map(d=>({d, lvl:Math.max(...byDate[d].map(e=>e.impact||0)), top:byDate[d].sort((a,b)=>(b.impact||0)-(a.impact||0))[0]}))
+        .filter(x=>x.lvl>=2).sort((a,b)=>a.d.localeCompare(b.d)).slice(0,4);
+      if(busy.length){
+        html += `<div class="card"><div class="eyebrow">Busy days ahead</div>` +
+          busy.map(x=>{ const f=fmtDay(x.d); return `
+            <div class="row">
+              <div class="rDate"><div class="rDay">${f.day}</div><div class="rWd">${f.wd}</div></div>
+              <div class="rInfo"><div class="rTitle">${esc(x.top.title)}</div>
+                <div class="rSub">${esc(x.top.venue||"")} · ${soon(x.d,today)}</div></div>
+              <div class="ev-imp ${impCls(x.lvl)}">${x.lvl===3?"High":"Med"}</div>
+            </div>`; }).join("") + `</div>`;
+      }
+    }
+
+    // ---- On the calendar (annual) ----
+    const upcoming = YEAR
+      .filter(e => (e.end||e.date) >= today && yearVisible(e, locName))
+      .sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+    if(upcoming.length){
+      html += `<div class="card"><div class="eyebrow">On the calendar</div>` +
+        upcoming.map(e=>{ const f=fmtDay(e.date); return `
+          <div class="row">
+            <div class="rDate"><div class="rDay">${f.day}</div><div class="rWd">${f.mon}</div></div>
+            <div class="rInfo"><div class="rTitle">${esc(e.t)}</div>
+              <div class="rSub">${soon(e.date,today)}${e.loc&&e.loc.toLowerCase()!=="alle"?" · "+esc(e.loc):""}</div></div>
+            <div class="rTag"><span class="tdot" style="background:${TYPE_COLOR[e.type]||'var(--taupe)'};display:inline-block;margin-right:5px"></span>${TYPE_LABEL[e.type]||""}</div>
+          </div>`; }).join("") + `</div>`;
+    }
+
+    html += `<div class="foot">Staffing: live from the event calendar · Annual plan: management calendar<br>Updates through the day on its own.</div>`;
+    box.innerHTML = html;
+  }
+
+  async function loadStaffing(){
+    try{
+      const r = await fetch(EVENTS_JSON_URL + "?t=" + Date.now());
+      if(!r.ok) throw new Error(r.status);
+      const data = await r.json();
+      if(data && Array.isArray(data.events)) staffing = data;
+    }catch(e){ /* keep last data / null */ }
+    render();
+  }
+
+  // start + keep fresh
+  let lastDay = isoLocal(new Date());
+  render();
+  loadStaffing();
+  setInterval(loadStaffing, REFRESH_MS);
+  setInterval(()=>{ const d=isoLocal(new Date()); if(d!==lastDay){ lastDay=d; render(); } }, 60000);
+  </script>
+</body>
+</html>
