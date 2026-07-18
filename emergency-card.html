@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser · Emergency</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#f6f1e7;
+      --bg1:#efe7d6;
+      --surface:#fffdf8;
+      --surface2:#fbf6ec;
+      --text:#241f18;
+      --muted:#6f6656;
+      --muted2:#9a917f;
+      --gold:#c69a34;
+      --goldDeep:#9c7412;
+      --red:#d63a3a;
+      --redDeep:#b22a2a;
+      --ok:#3f9e4d;
+      --line:rgba(45,38,26,0.10);
+      --line2:rgba(45,38,26,0.16);
+      --shadow:0 16px 44px rgba(90,74,44,0.14);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
+    body{
+      min-height:100vh;
+      padding:0 14px calc(28px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.16), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,58,58,0.08), transparent 50%),
+        linear-gradient(180deg, #f7f2e8, #efe7d6 55%, #f7f2e8);
+      background-attachment:fixed;
+    }
+    .shell{max-width:760px;margin:0 auto;}
+
+    .brand{text-align:center;padding:20px 0 10px;}
+    .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .title{font-family:"Playfair Display",serif;font-size:30px;line-height:1.05;letter-spacing:-.015em;font-weight:700;margin-top:6px;}
+    .place{margin-top:8px;font-weight:800;font-size:13px;color:var(--muted);}
+    .goldline{height:2px;margin:14px auto 0;max-width:220px;border-radius:999px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+
+    .card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;margin-bottom:10px;}
+
+    /* 112 */
+    .call112{
+      display:flex;align-items:center;justify-content:center;gap:14px;
+      width:100%;border:none;border-radius:20px;cursor:pointer;
+      background:linear-gradient(135deg,var(--red),var(--redDeep));
+      color:#fff;padding:22px;margin-bottom:12px;text-decoration:none;
+      box-shadow:0 14px 34px rgba(214,58,58,0.32);
+    }
+    .call112 .big{font-family:"Playfair Display",serif;font-size:40px;font-weight:700;line-height:1;}
+    .call112 .lbl{text-align:left;font-weight:800;font-size:13px;letter-spacing:.02em;opacity:.95;}
+    .call112 .lbl b{display:block;font-size:16px;letter-spacing:.14em;text-transform:uppercase;}
+
+    .callRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px;}
+    @media(max-width:560px){ .callRow{grid-template-columns:1fr;} }
+    .callBtn{
+      display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-decoration:none;
+      border:1px solid var(--line2);background:var(--surface2);border-radius:14px;padding:12px 14px;color:var(--text);
+    }
+    .callBtn .n{font-family:"Playfair Display",serif;font-size:22px;font-weight:700;line-height:1;}
+    .callBtn .t{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.02em;}
+    .callBtn .s{font-size:10px;color:var(--muted2);font-weight:700;line-height:1.3;margin-top:2px;}
+
+    /* Location block */
+    .addr{
+      border-radius:14px;border:1px dashed rgba(214,58,58,0.4);background:rgba(214,58,58,0.06);
+      padding:14px;margin-bottom:12px;
+    }
+    .addr .lbl{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--redDeep);}
+    .addr .val{font-size:18px;font-weight:900;margin-top:4px;line-height:1.25;}
+    .addr .hint{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px;}
+
+    .rowBtn{
+      display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);
+      border:1px solid var(--line);background:var(--surface2);border-radius:14px;padding:13px 14px;margin-bottom:8px;
+    }
+    .rowBtn .ic{font-size:20px;flex:0 0 auto;}
+    .rowBtn .info{flex:1;min-width:0;}
+    .rowBtn .who{font-weight:900;font-size:14px;}
+    .rowBtn .num{font-size:13px;color:var(--muted);font-weight:800;margin-top:1px;}
+    .rowBtn .go{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--goldDeep);white-space:nowrap;}
+
+    .eqGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    @media(max-width:520px){ .eqGrid{grid-template-columns:1fr;} }
+    .eq{border:1px solid var(--line);background:rgba(45,38,26,0.02);border-radius:12px;padding:11px 12px;}
+    .eq .k{font-size:10px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);}
+    .eq .v{font-size:14px;font-weight:800;margin-top:3px;line-height:1.3;}
+
+    /* Procedures */
+    .proc{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:14px;margin-bottom:10px;}
+    .proc.red{border-color:rgba(214,58,58,0.30);background:rgba(214,58,58,0.04);}
+    .proc h3{margin:0;font-size:15px;font-weight:900;display:flex;align-items:center;gap:8px;}
+    .proc ol{margin:10px 0 0;padding-left:18px;}
+    .proc li{font-size:13.5px;line-height:1.5;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .proc .call{margin-top:10px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:900;font-size:12px;letter-spacing:.04em;color:#fff;background:var(--red);padding:9px 14px;border-radius:999px;}
+    .proc .call.amber{background:var(--goldDeep);}
+
+    .foot{font-size:11px;color:var(--muted2);font-weight:700;text-align:center;line-height:1.6;margin-top:6px;}
+    .todo{color:var(--redDeep);font-weight:800;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <div class="kicker">Café Kaiser</div>
+      <div class="title">Emergency</div>
+      <div class="place" id="placeLbl">—</div>
+      <div class="goldline"></div>
+    </div>
+    <div id="content"></div>
+  </div>
+
+  <script>
+  // =========================================================
+  //  EMERGENCY CARD
+  //  National numbers are correct for Denmark / Region H.
+  //  Fill in each location's details in EMERGENCY below —
+  //  anything left as «...» is a placeholder to complete.
+  //  Weekday-independent; ?loc= selects the location.
+  // =========================================================
+
+  // National / regional numbers (Denmark, Capital Region)
+  const NATIONAL = {
+    emergency: { n:"112", t:"Life-threatening emergency", s:"Fire · serious injury · unconscious · crime in progress" },
+    medical:   { n:"1813", t:"Medical Helpline (Region H)", s:"Acute but not life-threatening. Call BEFORE going to an ER." },
+    poison:    { n:"82121212", show:"82 12 12 12", t:"Poison Control", s:"Swallowed / exposed to something harmful" }
+  };
+  const POLICE_NONEMERGENCY = { n:"114", t:"Police (non-emergency)" };
+
+  const EMERGENCY = {
+    "Helsingør": {
+      address: "«Street + number, postcode» Helsingør",
+      manager: { name:"Duty manager", phone:"«+45 ........»" },
+      contacts: [
+        { ic:"⚡", who:"Electrician (on-call)", phone:"«+45 ........»" },
+        { ic:"🔧", who:"Plumber (on-call)",     phone:"«+45 ........»" },
+        { ic:"❄️", who:"Refrigeration service", phone:"«+45 ........»" },
+        { ic:"🏢", who:"Landlord / property",   phone:"«+45 ........»" }
+      ],
+      equipment: {
+        "First-aid kit":"«where»", "Fire extinguisher":"«where»", "Fire blanket":"«where»",
+        "Gas shut-off":"«where»", "Water shut-off":"«where»", "Electrical panel / fuses":"«where»",
+        "Emergency exit":"«where»", "Assembly point":"«where»"
+      }
+    }
+    // ── Add the other locations with the same shape when ready ──
+    // "Hillerød": { ... }, "Farum": { ... }, "Hørsholm": { ... },
+    // "Vanløse": { ... }, "Sydhavnen": { ... }
+  };
+
+  const PROCEDURES = [
+    { icon:"🔥", title:"Fire", red:true, call:"112", steps:[
+      "Get everyone out — people before anything else.",
+      "Only fight a small fire with the extinguisher / fire blanket if safe. Never a deep-fat fire with water.",
+      "Shut off gas if reachable safely.",
+      "Call 112. Go to the assembly point and account for staff."
+    ]},
+    { icon:"🩸", title:"Severe bleeding / deep cut", red:true, call:"112", steps:[
+      "Press firmly on the wound with a clean cloth and keep pressing.",
+      "Raise the injured limb if you can.",
+      "Don't remove a soaked cloth — add another on top.",
+      "Call 112 for heavy bleeding that won't stop; otherwise call 1813."
+    ]},
+    { icon:"🔥", title:"Burn / scald", call:"1813", steps:[
+      "Cool under cool running water for at least 20 minutes.",
+      "Remove rings/watches near the burn before it swells; leave stuck clothing.",
+      "Cover loosely with cling film or a clean cloth. No creams/ice.",
+      "Large, deep, or facial burns → 112."
+    ]},
+    { icon:"😶", title:"Choking", red:true, call:"112", steps:[
+      "If they can cough, encourage coughing.",
+      "Can't breathe: 5 firm back blows between the shoulder blades.",
+      "Then 5 abdominal thrusts. Alternate until clear.",
+      "Call 112 if it doesn't clear or they collapse."
+    ]},
+    { icon:"⚠️", title:"Severe allergic reaction", red:true, call:"112", steps:[
+      "Call 112 immediately — say 'anaphylaxis'.",
+      "If they have an adrenaline auto-injector (EpiPen), help them use it into the outer thigh.",
+      "Help them sit up if breathing is hard; lie flat with legs raised if faint.",
+      "A second injector can be given after 5 min if no better."
+    ]},
+    { icon:"🔌", title:"Electric shock", red:true, call:"112", steps:[
+      "Do NOT touch the person while they're in contact with the source.",
+      "Switch off power at the panel / unplug first.",
+      "Call 112 — cardiac effects can be delayed.",
+      "Don't use water near live electrical equipment."
+    ]},
+    { icon:"💨", title:"Gas smell", red:true, call:"112", steps:[
+      "No flames, no switches — don't turn anything on or off.",
+      "Shut off the gas at the main valve if safe.",
+      "Open doors/windows and get everyone out.",
+      "Call 112 from outside."
+    ]},
+    { icon:"❄️", title:"Fridge / freezer down overnight", call:null, steps:[
+      "Keep doors shut — check temperature before opening fully.",
+      "Chilled food above 5°C for over ~4 hours: discard, don't serve.",
+      "Log it and call the refrigeration service (below).",
+      "When in doubt, throw it out — never risk guests."
+    ]}
+  ];
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  const telHref = n => "tel:" + String(n).replace(/[^0-9+]/g,"");
+  const getLoc = () => (new URLSearchParams(location.search).get("loc") || "").trim();
+  const findLoc = loc => {
+    if(!loc) return null;
+    const key = Object.keys(EMERGENCY).find(k => k.toLowerCase() === loc.toLowerCase());
+    return key ? { key, data:EMERGENCY[key] } : null;
+  };
+
+  function callBtn(o){
+    return `<a class="callBtn" href="${telHref(o.n)}">
+      <span class="n">${esc(o.show||o.n)}</span>
+      <span class="t">${esc(o.t)}</span>
+      ${o.s?`<span class="s">${esc(o.s)}</span>`:""}
+    </a>`;
+  }
+
+  function render(){
+    const loc = getLoc();
+    const found = findLoc(loc);
+    $("placeLbl").textContent = found ? found.key : (loc || "Location not set");
+    const box = $("content");
+
+    // National numbers (always)
+    let html = `
+      <div class="card">
+        <div class="eyebrow">If in doubt, call — it is always better to call</div>
+        <a class="call112" href="${telHref(NATIONAL.emergency.n)}">
+          <span class="big">112</span>
+          <span class="lbl"><b>Call now</b>${esc(NATIONAL.emergency.t)}<br><span style="opacity:.85">${esc(NATIONAL.emergency.s)}</span></span>
+        </a>
+        <div class="callRow">
+          ${callBtn(NATIONAL.medical)}
+          ${callBtn(NATIONAL.poison)}
+          ${callBtn({ n:POLICE_NONEMERGENCY.n, t:POLICE_NONEMERGENCY.t, s:"Theft, damage, non-urgent" })}
+        </div>
+      </div>`;
+
+    // Location block
+    if(found){
+      const d = found.data;
+      html += `
+        <div class="card">
+          <div class="eyebrow">This location · ${esc(found.key)}</div>
+          <div class="addr">
+            <div class="lbl">Read this address to the operator</div>
+            <div class="val">${esc(d.address)}</div>
+            <div class="hint">Say the location, what happened, and how many people are hurt.</div>
+          </div>
+          <a class="rowBtn" href="${telHref(d.manager.phone)}">
+            <span class="ic">📞</span>
+            <span class="info"><div class="who">${esc(d.manager.name)}</div><div class="num">${esc(d.manager.phone)}</div></span>
+            <span class="go">Call</span>
+          </a>
+          ${d.contacts.map(c=>`
+            <a class="rowBtn" href="${telHref(c.phone)}">
+              <span class="ic">${c.ic}</span>
+              <span class="info"><div class="who">${esc(c.who)}</div><div class="num">${esc(c.phone)}</div></span>
+              <span class="go">Call</span>
+            </a>`).join("")}
+        </div>
+
+        <div class="card">
+          <div class="eyebrow">Where things are</div>
+          <div class="eqGrid">
+            ${Object.entries(d.equipment).map(([k,v])=>`
+              <div class="eq"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join("")}
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="card">
+          <div class="eyebrow">This location</div>
+          <div class="addr">
+            <div class="lbl">Not configured</div>
+            <div class="val">Add this location's details</div>
+            <div class="hint">Open the file and fill in the location in the <b>EMERGENCY</b> object (address, duty manager, on-call trades, where the extinguisher / first-aid / shut-offs are).</div>
+          </div>
+        </div>`;
+    }
+
+    // Procedures
+    html += `<div class="card"><div class="eyebrow">What to do</div>`;
+    html += PROCEDURES.map(p=>`
+      <div class="proc ${p.red?"red":""}">
+        <h3>${p.icon} ${esc(p.title)}</h3>
+        <ol>${p.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+        ${p.call?`<a class="call ${p.call==="1813"?"amber":""}" href="${telHref(p.call)}">📞 Call ${esc(p.call)}</a>`:""}
+      </div>`).join("");
+    html += `</div>`;
+
+    html += `<div class="foot">Life-threatening → 112. Acute but not life-threatening → 1813 (they direct you).<br>Stay calm, keep people safe first, then property.</div>`;
+
+    box.innerHTML = html;
+  }
+
+  render();
+  </script>
+</body>
+</html>
