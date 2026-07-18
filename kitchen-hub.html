@@ -9,17 +9,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg0:#0d1117;
-      --bg1:#161b22;
-      --text:rgba(255,255,255,0.95);
-      --muted:rgba(255,255,255,0.78);
-      --muted2:rgba(255,255,255,0.58);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --danger:#ff6b6b;
-      --warn:#f59e0b;
-      --ok:#62d26f;
-      --shadow:0 20px 60px rgba(0,0,0,.40);
+      --bg0:#f6f1e7;
+      --bg1:#efe7d6;
+      --surface:#fffdf8;
+      --surface2:#fbf6ec;
+      --text:#241f18;
+      --muted:#6f6656;
+      --muted2:#9a917f;
+      --gold:#c69a34;
+      --gold2:#a67f1c;
+      --goldDeep:#9c7412;
+      --danger:#d64545;
+      --warn:#c67c12;
+      --ok:#3f9e4d;
+      --line:rgba(45,38,26,0.10);
+      --line2:rgba(45,38,26,0.16);
+      --shadow:0 16px 44px rgba(90,74,44,0.14);
     }
     *{box-sizing:border-box;}
     html,body{height:100%;margin:0;}
@@ -27,281 +32,206 @@
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% -8%, rgba(167,139,250,0.12), transparent 55%),
-        radial-gradient(1000px 650px at 105% 0%, rgba(56,189,248,0.10), transparent 55%),
-        radial-gradient(900px 700px at 25% 110%, rgba(245,158,11,0.12), transparent 55%),
+        radial-gradient(1100px 700px at 12% -8%, rgba(214,178,74,0.16), transparent 55%),
+        radial-gradient(1000px 650px at 105% 0%, rgba(214,178,74,0.10), transparent 55%),
+        radial-gradient(900px 700px at 25% 110%, rgba(180,140,60,0.10), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1) 50%, var(--bg0));
       overflow-x:hidden;
     }
     body:before{
       content:""; position:fixed; inset:0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(45,38,26,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,38,26,0.035) 1px, transparent 1px);
       background-size:40px 40px;
-      opacity:0.08; pointer-events:none;
+      opacity:0.6; pointer-events:none;
     }
-    .shell{max-width:1200px;margin:0 auto;padding:14px 14px 32px;}
+    .shell{max-width:1200px;margin:0 auto;padding:14px 14px 32px;position:relative;}
 
     /* ===== HEADER ===== */
     .top{
       border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--surface), var(--surface2));
       box-shadow:var(--shadow);
       padding:18px 16px 16px;
       text-align:center;
     }
-    .kicker{
-      font-size:10px;
-      letter-spacing:.30em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      font-weight:900;
-    }
-    .title{
-      font-family:"Playfair Display",serif;
-      font-size:clamp(30px,6vw,44px);
-      line-height:1;
-      margin-top:6px;
-      letter-spacing:-.03em;
-    }
-    .subtitle{
-      margin-top:10px;
-      font-size:13px;
-      font-weight:600;
-      color:var(--muted);
-    }
+    .kicker{font-size:10px;letter-spacing:.30em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .title{font-family:"Playfair Display",serif;font-size:clamp(30px,6vw,44px);line-height:1;margin-top:6px;letter-spacing:-.03em;}
+    .subtitle{margin-top:10px;font-size:13px;font-weight:600;color:var(--muted);}
     .versionPill{
-      display:inline-block;
-      margin-top:12px;
-      padding:5px 12px;
-      border-radius:999px;
-      border:1px solid rgba(214,178,74,0.4);
-      background:rgba(214,178,74,0.14);
-      color:var(--gold);
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.10em;
-      text-transform:uppercase;
+      display:inline-block;margin-top:12px;padding:5px 12px;border-radius:999px;
+      border:1px solid rgba(198,154,52,0.45);background:rgba(214,178,74,0.16);
+      color:var(--goldDeep);font-size:10px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;
     }
 
     /* ===== STATUS STRIP ===== */
-    .statusStrip{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns:1.4fr 1fr;
-      gap:12px;
-    }
+    .statusStrip{margin-top:12px;display:grid;grid-template-columns:1.4fr 1fr;gap:12px;}
     @media(max-width:720px){ .statusStrip{grid-template-columns:1fr;} }
     .stCard{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow:var(--shadow);
-      padding:14px;
+      border-radius:18px;border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--surface), var(--surface2));
+      box-shadow:var(--shadow);padding:14px;
     }
-    .stLabel{
-      font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
-    }
+    .stLabel{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);}
     .stLoc{font-size:18px;font-weight:800;margin-top:6px;}
+    .locSelect{
+      width:100%;margin-top:6px;border-radius:12px;border:1px solid var(--line2);
+      background:rgba(45,38,26,0.03);padding:10px 12px;outline:none;color:var(--text);
+      font-weight:800;font-size:17px;font-family:inherit;cursor:pointer;
+    }
+    .locSelect:focus{border-color:var(--gold);background:#fff;}
+    .locSelect option{background:#fff;color:var(--text);font-weight:700;}
     .stSub{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600;}
-    .stTime{
-      font-family:"Playfair Display",serif;font-size:34px;font-weight:700;line-height:1;margin-top:6px;
-    }
-    .controls{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-      margin-top:12px;
-    }
+    .stTime{font-family:"Playfair Display",serif;font-size:34px;font-weight:700;line-height:1;margin-top:6px;}
+    .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
     .controlBtn{
-      display:flex;align-items:center;justify-content:center;gap:6px;
-      min-height:42px;
-      padding:10px 8px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-      color:rgba(255,255,255,0.92);
+      display:flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:10px 8px;
+      border-radius:14px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
+      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);
       cursor:pointer;transition:.15s ease;user-select:none;
     }
-    .controlBtn:hover{background:rgba(255,255,255,0.10);}
-    .controlBtn.on{background:rgba(214,178,74,0.18);border-color:rgba(214,178,74,0.42);color:var(--gold);}
+    .controlBtn:hover{background:rgba(45,38,26,0.07);}
+    .controlBtn.on{background:rgba(214,178,74,0.20);border-color:rgba(198,154,52,0.5);color:var(--goldDeep);}
 
     .clockCard{
-      margin-top:12px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow:var(--shadow);
-      padding:18px 12px 16px;
-      text-align:center;
-      display:none;
+      margin-top:12px;border-radius:22px;border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--surface), var(--surface2));
+      box-shadow:var(--shadow);padding:18px 12px 16px;text-align:center;display:none;
     }
     .clockCard.show{display:block;}
     .clockTime{font-family:"Playfair Display",serif;font-size:60px;line-height:1;letter-spacing:-.03em;font-weight:700;}
     .clockDate{margin-top:6px;color:var(--muted);font-weight:700;font-size:14px;}
 
-    /* ===== CARD GRID ===== */
+    /* ===== SECTION LABEL ===== */
     .gridLabel{
-      margin:20px 4px 10px;
-      display:flex;align-items:center;gap:10px;
+      margin:20px 4px 10px;display:flex;align-items:center;gap:10px;
       font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
     }
     .gridLabel .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);}
-    .cardGrid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-      gap:12px;
-    }
+
+    /* ===== WASTE CARD ===== */
+    .wasteCard{border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface);}
+    .wasteFrame{width:100%;height:700px;border:0;display:block;background:transparent;}
+
+    /* ===== CARD GRID ===== */
+    .cardGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
     .toolCard{
-      position:relative;
-      border-radius:20px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow:var(--shadow);
-      padding:18px;
-      cursor:pointer;
-      display:flex;flex-direction:column;gap:8px;
-      min-height:172px;
-      transition:.16s ease;
+      position:relative;border-radius:20px;border:1px solid var(--line);
+      background:linear-gradient(180deg, var(--surface), var(--surface2));
+      box-shadow:var(--shadow);padding:18px;cursor:pointer;
+      display:flex;flex-direction:column;gap:8px;min-height:172px;transition:.16s ease;
     }
-    .toolCard:hover{border-color:rgba(214,178,74,0.42);transform:translateY(-3px);}
-    .toolCard.active{border-color:rgba(214,178,74,0.6);box-shadow:0 0 0 1px rgba(214,178,74,0.3), var(--shadow);}
+    .toolCard:hover{border-color:rgba(198,154,52,0.5);transform:translateY(-3px);}
+    .toolCard.active{border-color:rgba(198,154,52,0.7);box-shadow:0 0 0 1px rgba(198,154,52,0.35), var(--shadow);}
     .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
     .cardIcon{font-size:30px;line-height:1;}
     .cardBadge{
       padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;
-      border:1px solid rgba(214,178,74,0.35);background:rgba(214,178,74,0.14);color:var(--gold);
-      white-space:nowrap;
+      border:1px solid rgba(198,154,52,0.45);background:rgba(214,178,74,0.16);color:var(--goldDeep);white-space:nowrap;
     }
-    .cardBadge.alert{border-color:rgba(255,107,107,0.4);background:rgba(255,107,107,0.16);color:var(--danger);}
-    .cardBadge.warn{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.16);color:var(--warn);}
-    .cardBadge.neutral{border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:var(--muted);}
-    .cardTag{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+    .cardBadge.alert{border-color:rgba(214,69,69,0.4);background:rgba(214,69,69,0.12);color:var(--danger);}
+    .cardBadge.warn{border-color:rgba(198,124,18,0.4);background:rgba(198,124,18,0.14);color:var(--warn);}
+    .cardBadge.neutral{border-color:var(--line2);background:rgba(45,38,26,0.04);color:var(--muted);}
+    .cardTag{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--goldDeep);}
     .cardTitle{font-size:18px;font-weight:800;line-height:1.15;}
     .cardDesc{font-size:12.5px;color:var(--muted);line-height:1.4;}
-    .cardOpen{margin-top:auto;font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.04em;}
+    .cardOpen{margin-top:auto;font-size:12px;font-weight:800;color:var(--goldDeep);letter-spacing:.04em;}
 
     /* ===== PANELS ===== */
     .panel{
-      margin-top:14px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.04);
-      box-shadow:var(--shadow);
-      padding:16px;
-      display:none;
+      margin-top:14px;border-radius:22px;border:1px solid var(--line);
+      background:var(--surface);box-shadow:var(--shadow);padding:16px;display:none;
     }
     .panel.open{display:block;}
-    .panelHead{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;
-    }
-    .panelTitle{
-      display:flex;align-items:center;gap:10px;
-      font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
-    }
+    .panelHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+    .panelTitle{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
     .panelDot{width:10px;height:10px;border-radius:50%;background:var(--gold);}
     .miniBtn,.closePanelBtn{
-      padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.92);
-      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+      padding:8px 12px;border-radius:999px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
+      color:var(--text);font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
     }
     .panelSub{font-size:11px;font-weight:700;color:var(--muted2);}
 
     .presetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
     @media(max-width:560px){ .presetGrid{grid-template-columns:repeat(2,1fr);} }
     .presetBtn{
-      padding:12px 10px;border-radius:16px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.95);
-      font-weight:900;font-size:13px;cursor:pointer;text-align:center;
+      padding:12px 10px;border-radius:16px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
+      color:var(--text);font-weight:900;font-size:13px;cursor:pointer;text-align:center;
     }
-    .presetBtn:hover{background:rgba(255,255,255,0.10);}
+    .presetBtn:hover{background:rgba(45,38,26,0.07);}
     .timerRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
     .input,.select{
-      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.15);
-      background:rgba(255,255,255,0.08);padding:12px 14px;outline:none;color:var(--text);
-      font-weight:700;font-size:14px;
+      width:100%;border-radius:14px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
+      padding:12px 14px;outline:none;color:var(--text);font-weight:700;font-size:14px;
     }
-    .input::placeholder{color:rgba(255,255,255,0.45);}
-    .input:focus,.select:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
-    .select option{background:#161b22;color:#fff;}
+    .input::placeholder{color:var(--muted2);}
+    .input:focus,.select:focus{border-color:var(--gold);background:#fff;}
+    .select option{background:#fff;color:var(--text);}
     .actionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
     .btn{
       display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 12px;
-      border-radius:14px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.08);
-      color:rgba(255,255,255,0.95);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+      border-radius:14px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
+      color:var(--text);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
       cursor:pointer;text-align:center;
     }
-    .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;}
+    .btn.primary{border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a2208;}
     .timerList{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;margin-top:14px;}
     .tCard{
-      flex:0 0 auto;width:260px;border-radius:18px;border:1px solid rgba(255,255,255,0.12);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-      padding:12px;position:relative;
+      flex:0 0 auto;width:260px;border-radius:18px;border:1px solid var(--line);
+      background:var(--surface2);padding:12px;position:relative;box-shadow:var(--shadow);
     }
     .tCard.critical{
-      border-color:rgba(245,158,11,0.45);
-      box-shadow:0 0 0 1px rgba(245,158,11,0.2), 0 0 22px rgba(245,158,11,0.12);
+      border-color:rgba(198,124,18,0.5);
+      box-shadow:0 0 0 1px rgba(198,124,18,0.22), 0 0 22px rgba(198,124,18,0.14);
       animation:pulseWarn 1.2s infinite;
     }
-    .tCard.expired{border-color:rgba(255,107,107,0.38);box-shadow:0 0 0 1px rgba(255,107,107,0.18);}
+    .tCard.expired{border-color:rgba(214,69,69,0.45);box-shadow:0 0 0 1px rgba(214,69,69,0.2);}
     @keyframes pulseWarn{
-      0%,100%{box-shadow:0 0 0 1px rgba(245,158,11,0.15), 0 0 18px rgba(245,158,11,0.08);}
-      50%{box-shadow:0 0 0 1px rgba(245,158,11,0.32), 0 0 24px rgba(245,158,11,0.20);}
+      0%,100%{box-shadow:0 0 0 1px rgba(198,124,18,0.18), 0 0 18px rgba(198,124,18,0.10);}
+      50%{box-shadow:0 0 0 1px rgba(198,124,18,0.36), 0 0 24px rgba(198,124,18,0.22);}
     }
     .tTag{position:absolute;top:10px;right:10px;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
-    .tTag.ok{background:rgba(98,210,111,0.18);border:1px solid rgba(98,210,111,0.35);color:var(--ok);}
-    .tTag.warn{background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.35);color:var(--warn);}
-    .tTag.exp{background:rgba(255,107,107,0.18);border:1px solid rgba(255,107,107,0.35);color:var(--danger);}
-    .tTag.alarm{background:rgba(245,158,11,0.22);border:1px solid rgba(245,158,11,0.5);color:#ffd089;}
+    .tTag.ok{background:rgba(63,158,77,0.16);border:1px solid rgba(63,158,77,0.4);color:#2e7d3a;}
+    .tTag.warn{background:rgba(198,124,18,0.16);border:1px solid rgba(198,124,18,0.4);color:#a5670f;}
+    .tTag.exp{background:rgba(214,69,69,0.16);border:1px solid rgba(214,69,69,0.4);color:#b83a3a;}
+    .tTag.alarm{background:rgba(198,124,18,0.22);border:1px solid rgba(198,124,18,0.5);color:#8a5a0c;}
     .tName{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:60px;}
     .tTime{font-family:"Playfair Display",serif;font-size:32px;font-weight:700;margin-top:6px;line-height:1;}
     .tMeta{font-size:11px;color:var(--muted);margin-top:6px;}
-    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(255,255,255,0.10);overflow:hidden;}
+    .barWrap{margin-top:10px;height:8px;border-radius:999px;background:rgba(45,38,26,0.10);overflow:hidden;}
     .barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));}
     .barFill.warn{background:linear-gradient(90deg,var(--warn),var(--gold));}
     .barFill.exp{background:linear-gradient(90deg,var(--danger),var(--warn));}
     .tActions{margin-top:10px;display:flex;justify-content:flex-end;}
-    .smallBtn{padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.90);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
-    .smallBtn.danger{border-color:rgba(255,107,107,0.35);background:rgba(255,107,107,0.15);color:var(--danger);}
+    .smallBtn{padding:8px 10px;border-radius:999px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);color:var(--text);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+    .smallBtn.danger{border-color:rgba(214,69,69,0.4);background:rgba(214,69,69,0.12);color:var(--danger);}
     .emptyState{text-align:center;padding:24px;color:var(--muted2);font-size:13px;}
 
     .cMiniList{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto;}
-    .cMiniEvent{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);cursor:pointer;}
+    .cMiniEvent{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(45,38,26,0.03);border:1px solid var(--line);cursor:pointer;}
     .cMiniBar{width:5px;height:42px;border-radius:4px;flex:0 0 auto;}
     .cMiniBar.green{background:var(--ok);}
     .cMiniBar.yellow{background:var(--warn);}
     .cMiniBar.red{background:var(--danger);}
-    .cMiniBar.gray{background:rgba(255,255,255,0.3);}
+    .cMiniBar.gray{background:rgba(45,38,26,0.3);}
     .cMiniInfo{flex:1;min-width:0;}
     .cMiniTitle{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .cMiniMeta{font-size:11px;color:var(--muted);margin-top:3px;}
     .cMiniEmpty{text-align:center;padding:22px;color:var(--muted2);font-size:13px;}
-    .errBox{padding:12px;background:rgba(255,107,107,0.15);color:var(--danger);border-radius:12px;font-weight:700;font-size:12px;display:none;margin-top:10px;}
-
-    /* ===== TOOL VIEWER ===== */
-    .toolViewer{display:none;margin-top:14px;}
-    .toolViewer.open{display:block;}
-    .toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;}
-    .toolNamePill{
-      display:flex;align-items:center;gap:6px;min-height:42px;padding:10px 14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);
-      font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.92);
-    }
-    .frame{width:100%;height:68vh;border:1px solid rgba(255,255,255,0.12);border-radius:18px;background:rgba(0,0,0,0.25);}
+    .errBox{padding:12px;background:rgba(214,69,69,0.12);color:var(--danger);border-radius:12px;font-weight:700;font-size:12px;display:none;margin-top:10px;}
 
     /* ===== MODAL ===== */
-    .modalBack{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999;}
+    .modalBack{position:fixed;inset:0;background:rgba(40,32,18,0.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999;}
     .modalBack.open{display:flex;}
-    .modal{width:min(700px,100%);border-radius:22px;border:1px solid rgba(255,255,255,0.14);background:linear-gradient(180deg, rgba(22,27,34,0.98), rgba(13,17,23,0.98));box-shadow:var(--shadow);overflow:hidden;}
-    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.03);}
+    .modal{width:min(700px,100%);border-radius:22px;border:1px solid var(--line2);background:var(--surface);box-shadow:var(--shadow);overflow:hidden;}
+    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--surface2);}
     .modalTitle{font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
     .modalBody{padding:16px;}
     .mTitle{font-family:"Playfair Display",serif;font-size:26px;font-weight:700;line-height:1.08;}
     .mMeta{margin-top:8px;font-size:13px;color:var(--muted);font-weight:700;}
-    .mBox{margin-top:12px;border-radius:14px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.04);padding:12px;}
+    .mBox{margin-top:12px;border-radius:14px;border:1px solid var(--line);background:rgba(45,38,26,0.03);padding:12px;}
     .mLabel{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;}
     .mNote{white-space:pre-wrap;line-height:1.5;color:var(--text);font-size:14px;}
   </style>
@@ -314,15 +244,23 @@
       <div class="kicker">KAISER</div>
       <div class="title">Kitchen Hub</div>
       <div class="subtitle">Prep, timers and reporting — all in one place</div>
-      <div class="versionPill">Version 3.0</div>
+      <div class="versionPill">Version 3.1</div>
     </div>
 
     <!-- STATUS STRIP -->
     <div class="statusStrip">
       <div class="stCard">
         <div class="stLabel">Location</div>
-        <div class="stLoc" id="locValue">Not set</div>
-        <div class="stSub">Hub follows the selected location</div>
+        <select id="locSelect" class="locSelect">
+          <option value="">Select location…</option>
+          <option>Helsingør</option>
+          <option>Hillerød</option>
+          <option>Farum</option>
+          <option>Hørsholm</option>
+          <option>Vanløse</option>
+          <option>Sydhavnen</option>
+        </select>
+        <div class="stSub" id="locSub">Saved on this device</div>
       </div>
       <div class="stCard">
         <div class="stLabel">Now</div>
@@ -335,11 +273,19 @@
       </div>
     </div>
 
-    <!-- BIG CLOCK -->
+    <!-- BIG CLOCK (opt-in) -->
     <div class="clockCard" id="clockWrap">
       <div class="clockTime" id="clockTime">--:--</div>
       <div class="clockDate" id="clockDate">--</div>
     </div>
+
+    <!-- WASTE (Helsingør only) -->
+    <section id="wasteSection" style="display:none">
+      <div class="gridLabel"><span class="dot"></span> Waste Collection · Helsingør</div>
+      <div class="wasteCard">
+        <iframe id="wasteFrame" class="wasteFrame" src="about:blank" title="Waste collection" referrerpolicy="no-referrer"></iframe>
+      </div>
+    </section>
 
     <!-- CARD GRID -->
     <div class="gridLabel"><span class="dot"></span> Tools</div>
@@ -422,25 +368,25 @@
         <div class="cardOpen">Open →</div>
       </div>
 
-            <div class="toolCard" data-url="./opskrifter.html">
+      <div class="toolCard" data-url="./opskrifter.html">
         <div class="cardTop">
           <div class="cardIcon">📖</div>
           <div class="cardBadge neutral">Recipes</div>
         </div>
-        <div class="cardTag">Kaiser recipce book</div>
-        <div class="cardTitle">Kaiser recipce book</div>
-        <div class="cardDesc">All our recipes</div>
+        <div class="cardTag">Kaiser recipe book</div>
+        <div class="cardTitle">Kaiser Recipe Book</div>
+        <div class="cardDesc">All our recipes.</div>
         <div class="cardOpen">Open →</div>
       </div>
 
-                  <div class="toolCard" data-url="./faults-issues.html">
+      <div class="toolCard" data-url="./faults-issues.html">
         <div class="cardTop">
           <div class="cardIcon">⚒️</div>
-          <div class="cardBadge neutral">Errors and omissions</div>
+          <div class="cardBadge neutral">Faults</div>
         </div>
-        <div class="cardTag">errors and omissions</div>
-        <div class="cardTitle">Errors and omissions kitchen</div>
-        <div class="cardDesc">Report Kitchen IssuesPlease describe any defects or deficiencies in the kitchen below.</div>
+        <div class="cardTag">Report</div>
+        <div class="cardTitle">Faults &amp; Issues</div>
+        <div class="cardDesc">Report defects or missing items in the kitchen.</div>
         <div class="cardOpen">Open →</div>
       </div>
 
@@ -518,18 +464,6 @@
       <div class="cMiniList" id="supplierList"><div class="cMiniEmpty">No supplier issues yet</div></div>
     </section>
 
-    <!-- TOOL VIEWER -->
-    <div class="toolViewer" id="toolViewer">
-      <div class="toolBar">
-        <div class="toolNamePill" id="toolName">—</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="controlBtn" id="closeToolBtn" type="button">← Back</button>
-          <button class="controlBtn" id="newTabBtn" type="button">↗ New Tab</button>
-        </div>
-      </div>
-      <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
-    </div>
-
   </div>
 
   <!-- CATERING MODAL -->
@@ -565,6 +499,7 @@
   const GREEN_HOURS = 48;
   const YELLOW_HOURS = 168;
   const LOCALE = "en-GB";
+  const WASTE_URL = "./waste-collection.html";   // rename the waste file to this, or change here
 
   const $ = id => document.getElementById(id);
   const nowTs = () => Date.now();
@@ -625,10 +560,34 @@
       return parsed;
     }catch(_){ return null; }
   }
+  const LOCATIONS = ["Helsingør","Hillerød","Farum","Hørsholm","Vanløse","Sydhavnen"];
   function getLoc(){
+    // Priority: ?loc= in the URL wins and is remembered; otherwise use the saved location.
     const qsLoc = new URLSearchParams(location.search).get("loc");
     if (qsLoc && qsLoc.trim()) localStorage.setItem(LOC_KEY, qsLoc.trim());
     return localStorage.getItem(LOC_KEY) || "";
+  }
+  function setLoc(loc){
+    loc = (loc || "").trim();
+    if (loc) localStorage.setItem(LOC_KEY, loc);
+    else localStorage.removeItem(LOC_KEY);
+    refreshLocation();
+  }
+  // Point the dropdown at the current location, then refresh everything that depends on it.
+  function syncLocPicker(){
+    const loc = getLoc();
+    const sel = $("locSelect");
+    if (!sel) return;
+    // match case-insensitively so a saved "helsingør" still selects the right option
+    const match = LOCATIONS.find(l => l.toLowerCase() === loc.toLowerCase());
+    sel.value = match || "";
+    $("locSub").textContent = loc ? "Saved on this device" : "Pick a location to start";
+  }
+  function refreshLocation(){
+    syncLocPicker();
+    initWasteCard();
+    loadCateringMini();
+    loadSupplierIssues();
   }
   function jsonp(url, params = {}){
     return new Promise((resolve,reject)=>{
@@ -649,8 +608,22 @@
     });
   }
 
+  /* ===== WASTE CARD (Helsingør only) ===== */
+  function initWasteCard(){
+    const loc = getLoc();
+    const section = $("wasteSection");
+    if (!section) return;
+    if (loc && locMatches(loc, "Helsingør")){
+      $("wasteFrame").src = WASTE_URL + "?loc=" + encodeURIComponent("Helsingør");
+      section.style.display = "block";
+    } else {
+      section.style.display = "none";
+      $("wasteFrame").src = "about:blank";
+    }
+  }
+
   /* ===== CLOCK ===== */
-  let clockVisible = localStorage.getItem(CLOCK_KEY) !== "false";
+  let clockVisible = localStorage.getItem(CLOCK_KEY) === "true";  // big clock is opt-in; the status strip always shows the time
   function updateClock(){
     const d = new Date();
     const t = d.toLocaleTimeString(LOCALE, { hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false });
@@ -972,7 +945,7 @@
     const box = $("supplierMsg");
     box.textContent = msg;
     box.style.display = "block";
-    box.style.background = isErr ? "rgba(255,107,107,0.15)" : "rgba(98,210,111,0.15)";
+    box.style.background = isErr ? "rgba(214,69,69,0.12)" : "rgba(63,158,77,0.14)";
     box.style.color = isErr ? "var(--danger)" : "var(--ok)";
   }
   function submitSupplierIssue(){
@@ -1010,7 +983,6 @@
 
   /* ===== CARDS / PANELS / TOOLS ===== */
   let activePanel = "";
-  let currentToolUrl = "";
 
   function closeAllPanels(){
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("open"));
@@ -1018,7 +990,6 @@
     activePanel = "";
   }
   function openPanel(name){
-    closeTool();
     if (activePanel === name){ closeAllPanels(); return; }
     closeAllPanels();
     const panel = $("panel-" + name);
@@ -1030,19 +1001,12 @@
     if (name === "catering") loadCateringMini();
     if (name === "supplier") loadSupplierIssues();
   }
+  // Tools are full-page modules — open them as a page, carrying the location through.
   function openTool(url){
     if (!url) return;
-    closeAllPanels();
-    currentToolUrl = url;
-    $("toolName").textContent = url.replace("./","");
-    $("toolFrame").src = url;
-    $("toolViewer").classList.add("open");
-    $("toolViewer").scrollIntoView({ behavior:"smooth" });
-  }
-  function closeTool(){
-    $("toolViewer").classList.remove("open");
-    $("toolFrame").src = "about:blank";
-    currentToolUrl = "";
+    const loc = getLoc();
+    const full = url + (loc ? (url.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(loc) : "");
+    window.location.href = full;
   }
 
   /* ===== FULLSCREEN / WAKE ===== */
@@ -1087,9 +1051,7 @@
   $("clockToggle").addEventListener("click", toggleClock);
   $("fsBtn").addEventListener("click", toggleFullscreen);
   $("wakeBtn").addEventListener("click", toggleWakeLock);
-
-  $("closeToolBtn").addEventListener("click", closeTool);
-  $("newTabBtn").addEventListener("click", () => { if (currentToolUrl) window.open(currentToolUrl, "_blank", "noopener,noreferrer"); });
+  $("locSelect").addEventListener("change", (e)=> setLoc(e.target.value));
 
   $("timerList").addEventListener("click", (e)=>{
     const btn = e.target.closest("[data-stop-id]");
@@ -1118,8 +1080,9 @@
 
   /* ===== INIT ===== */
   (function init(){
-    const loc = getLoc();
-    $("locValue").textContent = loc || "Not set (add ?loc=)";
+    getLoc();            // persists ?loc= if present in the URL
+    syncLocPicker();     // auto-selects it (or the saved location) in the dropdown
+    initWasteCard();
     updateClockUI();
     updateClock();
     renderTimers();
