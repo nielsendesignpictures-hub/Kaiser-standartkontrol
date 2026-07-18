@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser · Waste Collection · Helsingør</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#f6f1e7;
+      --bg1:#efe7d6;
+      --surface:#fffdf8;
+      --text:#241f18;
+      --muted:#6f6656;
+      --muted2:#9a917f;
+      --gold:#c69a34;
+      --goldDeep:#9c7412;
+      --line:rgba(45,38,26,0.10);
+      --goldGlow:rgba(198,154,52,0.20);
+      --shadow:0 16px 44px rgba(90,74,44,0.14);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
+    body{
+      min-height:100vh;
+      padding: 0 14px calc(24px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.16), transparent 55%),
+        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
+        linear-gradient(180deg, #f7f2e8, #efe7d6 55%, #f7f2e8);
+      background-attachment: fixed;
+    }
+    .shell{max-width:720px;margin:0 auto;}
+
+    .brand{text-align:center;padding:20px 0 10px;}
+    .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+    .title{font-family:"Playfair Display",serif;font-size:30px;line-height:1.05;letter-spacing:-.015em;font-weight:700;margin-top:6px;}
+    .place{margin-top:8px;font-weight:800;font-size:13px;color:var(--muted);letter-spacing:.02em;}
+    .goldline{height:2px;margin:14px auto 0;max-width:220px;border-radius:999px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+
+    .card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
+
+    /* ===== TONIGHT banner (the star) ===== */
+    .tonight{
+      border:1px solid rgba(198,154,52,.5);
+      background:linear-gradient(180deg, rgba(214,178,74,.20), rgba(214,178,74,.07));
+      box-shadow:0 0 0 3px var(--goldGlow), var(--shadow);
+      border-radius:22px;padding:20px;margin-bottom:14px;
+    }
+    .tonight .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:var(--goldDeep);}
+    .tonight .headline{font-family:"Playfair Display",serif;font-size:27px;font-weight:700;margin-top:5px;line-height:1.05;}
+    .tonight .forday{font-size:13px;color:var(--muted);font-weight:800;margin-top:4px;}
+    .tonight.calm{border-color:var(--line);background:var(--surface);box-shadow:var(--shadow);}
+    .tonight.calm .label{color:var(--muted2);}
+    .tonight.calm .headline{font-size:22px;color:var(--muted);}
+
+    .bigChips{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+    .binChip{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.7);}
+    .binSwatch{width:8px;align-self:stretch;min-height:44px;border-radius:6px;flex:0 0 auto;}
+    .binName{font-weight:900;font-size:17px;letter-spacing:-.01em;}
+    .binCode{font-size:11px;font-weight:900;letter-spacing:.10em;color:var(--muted2);margin-left:8px;}
+    .binSize{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+    .nextLine{margin-top:12px;font-size:14px;font-weight:800;color:var(--muted);line-height:1.5;}
+    .nextLine b{color:var(--text);}
+
+    /* ===== Today (secondary) ===== */
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+    .tag{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.03);font-weight:800;font-size:13px;}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto;}
+    .note{margin-top:10px;font-size:12px;color:var(--muted2);font-weight:700;line-height:1.5;}
+    .note b{color:var(--muted);}
+    .quiet{color:var(--muted2);font-weight:800;font-size:14px;margin-top:8px;}
+
+    /* ===== Week strip ===== */
+    .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px;}
+    .day{border:1px solid var(--line);background:rgba(0,0,0,.02);border-radius:12px;padding:10px 4px;text-align:center;min-height:90px;}
+    .day.today{border-color:rgba(198,154,52,.55);background:rgba(214,178,74,.12);box-shadow:0 0 0 3px var(--goldGlow);}
+    .dayName{font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+    .day.today .dayName{color:var(--goldDeep);}
+    .dayDots{display:flex;flex-direction:column;align-items:center;gap:5px;margin-top:8px;}
+    .wd{width:12px;height:12px;border-radius:50%;}
+    .wd.extra{background:transparent!important;border:2px solid;}
+    .dayEmpty{color:var(--muted2);font-size:16px;margin-top:8px;line-height:1;}
+    .legendKey{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:11px;font-weight:800;color:var(--muted2);}
+    .legendKey span{display:inline-flex;align-items:center;gap:6px;}
+    .keyDot{width:11px;height:11px;border-radius:50%;background:var(--muted);}
+    .keyRing{width:11px;height:11px;border-radius:50%;border:2px solid var(--muted);}
+
+    /* ===== Legend ===== */
+    .legendItem{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
+    .legendItem:first-child{border-top:none;}
+    .legSwatch{width:14px;height:14px;border-radius:5px;flex:0 0 auto;margin-top:3px;}
+    .legName{font-weight:900;font-size:15px;}
+    .legSize{font-size:12px;color:var(--muted2);font-weight:700;}
+    .legSched{font-size:13px;color:var(--muted);font-weight:700;margin-top:4px;line-height:1.5;}
+    .legSched .ex{color:var(--muted2);}
+
+    .foot{font-size:11px;color:var(--muted2);font-weight:700;text-align:center;line-height:1.6;margin-top:6px;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <div class="kicker">Café Kaiser</div>
+      <div class="title">Waste Collection</div>
+      <div class="place" id="placeLbl">Helsingør</div>
+      <div class="goldline"></div>
+    </div>
+    <div id="content"></div>
+  </div>
+
+  <script>
+  // =========================================================
+  //  Waste collection · Helsingør only
+  //  Fixed reference data from HCS (Indudrift Renovation).
+  //  HCS changes the frequency? Edit only SCHEDULES below.
+  //  Weekdays: 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
+  // =========================================================
+  const SCHEDULES = {
+    "Helsingør": [
+      { id:"pap",   name:"Cardboard",            code:"PAP",       size:"1 × 1000L", color:"#3f7fc0", days:[2,5] },
+      { id:"rest",  name:"Residual waste",       code:"REST",      size:"2 × 660L",  color:"#7a828c", days:[5], extraDays:[2] },
+      { id:"glas",  name:"Glass",                code:"GLAS",      size:"1 × 660L",  color:"#1f9e90", onCall:true, callDays:[2,5] },
+      { id:"bio",   name:"Organic waste",        code:"BIO",       size:"2 × 660L",  color:"#4f8f37", days:[4], extraDays:[1] },
+      { id:"plast", name:"Plastic / Metal / Cartons", code:"PLAST/MDK", size:"2 × 770L", color:"#cf8420", days:[5], extraDays:[2] }
+    ]
+  };
+
+  const EN_FULL  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const EN_SHORT = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const MONTHS   = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const WEEK_ORDER = [1,2,3,4,5,6,0]; // Mon → Sun
+
+  const $ = id => document.getElementById(id);
+  const getLoc = () => (new URLSearchParams(location.search).get("loc") || "").trim() || "Helsingør";
+
+  function daysToText(arr){
+    const n = arr.map(d => EN_FULL[d]);
+    if(n.length <= 1) return n.join("");
+    if(n.length === 2) return n.join(" & ");
+    return n.slice(0,-1).join(", ") + " & " + n.slice(-1);
+  }
+  function forDay(bins, d){
+    return {
+      fast:    bins.filter(b => b.days && b.days.includes(d)),
+      extra:   bins.filter(b => b.extraDays && b.extraDays.includes(d)),
+      tilkald: bins.filter(b => b.onCall && b.callDays && b.callDays.includes(d))
+    };
+  }
+  function nextCollection(bins, fromDay){
+    for(let i=1;i<=7;i++){
+      const d = (fromDay + i) % 7;
+      const f = forDay(bins, d).fast;
+      if(f.length) return { d, bins:f, inDays:i };
+    }
+    return null;
+  }
+  function chip(b){
+    return `<div class="binChip">
+      <div class="binSwatch" style="background:${b.color}"></div>
+      <div>
+        <div class="binName">${b.name}<span class="binCode">${b.code}</span></div>
+        <div class="binSize">${b.size}</div>
+      </div>
+    </div>`;
+  }
+
+  function render(){
+    const loc = getLoc();
+    $("placeLbl").textContent = loc;
+    const bins = SCHEDULES[loc];
+    const box = $("content");
+
+    if(!bins){
+      box.innerHTML = `<div class="card"><div class="quiet" style="text-align:center">No collection schedule set up for this location yet.</div></div>`;
+      return;
+    }
+
+    const now = new Date();
+    const today = now.getDay();
+    const tmr = (today + 1) % 7;
+    const td = forDay(bins, today);
+    const tm = forDay(bins, tmr);
+
+    // ---- TONIGHT banner ----
+    let tonight;
+    if(tm.fast.length){
+      tonight = `
+        <div class="tonight">
+          <div class="label">🗑 Take out tonight</div>
+          <div class="headline">${tm.fast.map(b=>b.name).join(", ")}</div>
+          <div class="forday">For pickup tomorrow · ${EN_FULL[tmr]}</div>
+          <div class="bigChips">${tm.fast.map(chip).join("")}</div>
+        </div>`;
+    } else {
+      const nx = nextCollection(bins, today);
+      const nxText = nx
+        ? `Next pickup: <b>${EN_FULL[nx.d]}</b> — ${nx.bins.map(b=>b.name).join(", ")}`
+        : "No upcoming pickups scheduled.";
+      tonight = `
+        <div class="tonight calm">
+          <div class="label">Tonight</div>
+          <div class="headline">Nothing to take out</div>
+          <div class="nextLine">${nxText}</div>
+        </div>`;
+    }
+
+    // ---- Today (secondary) ----
+    let todayInner;
+    if(td.fast.length){
+      todayInner = `<div class="tags">${td.fast.map(b=>`<span class="tag"><span class="dot" style="background:${b.color}"></span>${b.name}</span>`).join("")}</div>
+        <div class="note"><b>Should already be at the curb</b> for today's pickup.</div>`;
+    } else {
+      todayInner = `<div class="quiet">No scheduled pickup today.</div>`;
+    }
+    let todayNotes = "";
+    if(td.tilkald.length){
+      todayNotes += `<div class="note">${td.tilkald.map(b=>`<b>${b.name}</b> — on-call collection day. Put out only if a pickup was booked.`).join("<br>")}</div>`;
+    }
+    if(td.extra.length){
+      todayNotes += `<div class="note">Optional extra pickup available today (on request): ${td.extra.map(b=>b.name).join(", ")}.</div>`;
+    }
+
+    // ---- Week strip ----
+    const week = WEEK_ORDER.map(d=>{
+      const dd = forDay(bins, d);
+      const dots = dd.fast.map(b=>`<span class="wd" style="background:${b.color}"></span>`).join("")
+                 + dd.extra.map(b=>`<span class="wd extra" style="border-color:${b.color}"></span>`).join("");
+      const inner = (dd.fast.length || dd.extra.length) ? `<div class="dayDots">${dots}</div>` : `<div class="dayEmpty">–</div>`;
+      return `<div class="day ${d===today?'today':''}"><div class="dayName">${EN_SHORT[d]}</div>${inner}</div>`;
+    }).join("");
+
+    // ---- Legend ----
+    const legend = bins.map(b=>{
+      let s = "";
+      if(b.days && b.days.length) s += `Fixed: ${daysToText(b.days)}`;
+      if(b.onCall) s += `On call (${daysToText(b.callDays)})`;
+      if(b.extraDays && b.extraDays.length) s += `<br><span class="ex">Optional extra on request: ${daysToText(b.extraDays)}</span>`;
+      return `<div class="legendItem">
+        <div class="legSwatch" style="background:${b.color}"></div>
+        <div>
+          <div class="legName">${b.name} <span class="legSize">· ${b.code} · ${b.size}</span></div>
+          <div class="legSched">${s}</div>
+        </div>
+      </div>`;
+    }).join("");
+
+    box.innerHTML = `
+      ${tonight}
+
+      <div class="card">
+        <div class="eyebrow">Today · ${EN_FULL[today]} ${now.getDate()} ${MONTHS[now.getMonth()]}</div>
+        ${todayInner}
+        ${todayNotes}
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">This week</div>
+        <div class="week">${week}</div>
+        <div class="legendKey">
+          <span><span class="keyDot"></span>Fixed pickup</span>
+          <span><span class="keyRing"></span>Optional extra</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Containers</div>
+        <div style="margin-top:8px">${legend}</div>
+      </div>
+
+      <div class="foot">
+        Provider: HCS A/S · Indudrift Renovation<br>
+        Extra pickups on request. Glass is collected on call only.
+      </div>`;
+  }
+
+  let lastDay = new Date().getDay();
+  render();
+  setInterval(()=>{
+    const d = new Date().getDay();
+    if(d !== lastDay){ lastDay = d; render(); }
+  }, 60000);
+  </script>
+</body>
+</html>
