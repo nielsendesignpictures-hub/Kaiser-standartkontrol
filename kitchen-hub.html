@@ -78,8 +78,8 @@
     .stLoc{font-size:18px;font-weight:800;margin-top:6px;}
     .locSelect{
       width:100%;margin-top:6px;border-radius:12px;border:1px solid var(--line2);
-      background:rgba(45,38,26,0.03);padding:10px 12px;outline:none;color:var(--text);
-      font-weight:800;font-size:17px;font-family:inherit;cursor:pointer;
+      background:rgba(45,38,26,0.03);padding:13px 14px;outline:none;color:var(--text);
+      font-weight:800;font-size:19px;font-family:inherit;cursor:pointer;
     }
     .locSelect:focus{border-color:var(--gold);background:#fff;}
     .locSelect option{background:#fff;color:var(--text);font-weight:700;}
@@ -87,9 +87,9 @@
     .stTime{font-family:"Playfair Display",serif;font-size:34px;font-weight:700;line-height:1;margin-top:6px;}
     .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
     .controlBtn{
-      display:flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:10px 8px;
+      display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:11px 8px;
       border-radius:14px;border:1px solid var(--line2);background:rgba(45,38,26,0.03);
-      font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);
+      font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);
       cursor:pointer;transition:.15s ease;user-select:none;
     }
     .controlBtn:hover{background:rgba(45,38,26,0.07);}
@@ -112,21 +112,24 @@
     .gridLabel .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);}
 
     /* ===== WASTE CARD ===== */
+    .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:14px;align-items:start;}
+    .glance section{min-width:0;}
     .wasteCard{border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface);}
-    .wasteFrame{width:100%;height:700px;border:0;display:block;background:transparent;}
+    .wasteFrame{width:100%;height:600px;border:0;display:block;background:transparent;}
+    .todayFrame{width:100%;height:540px;border:0;display:block;background:transparent;}
 
     /* ===== CARD GRID ===== */
-    .cardGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+    .cardGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
     .toolCard{
       position:relative;border-radius:20px;border:1px solid var(--line);
       background:linear-gradient(180deg, var(--surface), var(--surface2));
-      box-shadow:var(--shadow);padding:18px;cursor:pointer;
-      display:flex;flex-direction:column;gap:8px;min-height:172px;transition:.16s ease;
+      box-shadow:var(--shadow);padding:20px;cursor:pointer;
+      display:flex;flex-direction:column;gap:8px;min-height:190px;transition:.16s ease;
     }
     .toolCard:hover{border-color:rgba(198,154,52,0.5);transform:translateY(-3px);}
     .toolCard.active{border-color:rgba(198,154,52,0.7);box-shadow:0 0 0 1px rgba(198,154,52,0.35), var(--shadow);}
     .cardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-    .cardIcon{font-size:30px;line-height:1;}
+    .cardIcon{font-size:34px;line-height:1;}
     .cardBadge{
       padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;
       border:1px solid rgba(198,154,52,0.45);background:rgba(214,178,74,0.16);color:var(--goldDeep);white-space:nowrap;
@@ -135,9 +138,9 @@
     .cardBadge.warn{border-color:rgba(198,124,18,0.4);background:rgba(198,124,18,0.14);color:var(--warn);}
     .cardBadge.neutral{border-color:var(--line2);background:rgba(45,38,26,0.04);color:var(--muted);}
     .cardTag{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--goldDeep);}
-    .cardTitle{font-size:18px;font-weight:800;line-height:1.15;}
-    .cardDesc{font-size:12.5px;color:var(--muted);line-height:1.4;}
-    .cardOpen{margin-top:auto;font-size:12px;font-weight:800;color:var(--goldDeep);letter-spacing:.04em;}
+    .cardTitle{font-size:19.5px;font-weight:800;line-height:1.15;}
+    .cardDesc{font-size:13.5px;color:var(--muted);line-height:1.4;}
+    .cardOpen{margin-top:auto;font-size:13px;font-weight:800;color:var(--goldDeep);letter-spacing:.04em;}
 
     /* ===== PANELS ===== */
     .panel{
@@ -279,17 +282,29 @@
       <div class="clockDate" id="clockDate">--</div>
     </div>
 
-    <!-- WASTE (Helsingør only) -->
-    <section id="wasteSection" style="display:none">
-      <div class="gridLabel"><span class="dot"></span> Waste Collection · Helsingør</div>
-      <div class="wasteCard">
-        <iframe id="wasteFrame" class="wasteFrame" src="about:blank" title="Waste collection" referrerpolicy="no-referrer"></iframe>
-      </div>
-    </section>
+    <!-- GLANCE ROW (Today + Waste side by side on the tablet) -->
+    <div class="glance">
+      <!-- TODAY (any location) -->
+      <section id="todaySection" style="display:none">
+        <div class="gridLabel"><span class="dot"></span> Today</div>
+        <div class="wasteCard">
+          <iframe id="todayFrame" class="todayFrame" src="about:blank" title="Today" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+
+      <!-- WASTE (Helsingør only) -->
+      <section id="wasteSection" style="display:none">
+        <div class="gridLabel"><span class="dot"></span> Waste Collection · Helsingør</div>
+        <div class="wasteCard">
+          <iframe id="wasteFrame" class="wasteFrame" src="about:blank" title="Waste collection" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+    </div>
 
     <!-- CARD GRID -->
-    <div class="gridLabel"><span class="dot"></span> Tools</div>
-    <div class="cardGrid" id="cardGrid">
+
+    <div class="gridLabel"><span class="dot"></span> Prep &amp; service</div>
+    <div class="cardGrid">
 
       <div class="toolCard" data-panel="timers" id="card-timers">
         <div class="cardTop">
@@ -299,29 +314,7 @@
         <div class="cardTag">Live</div>
         <div class="cardTitle">Cooking Timers</div>
         <div class="cardDesc">Start prep timers with quick presets and alarms.</div>
-        <div class="cardOpen">Open →</div>
-      </div>
-
-      <div class="toolCard" data-panel="catering" id="card-catering">
-        <div class="cardTop">
-          <div class="cardIcon">🍽️</div>
-          <div class="cardBadge neutral" id="badge-catering">0 today</div>
-        </div>
-        <div class="cardTag">Events</div>
-        <div class="cardTitle">Catering</div>
-        <div class="cardDesc">Today's and upcoming catering orders.</div>
-        <div class="cardOpen">Open →</div>
-      </div>
-
-      <div class="toolCard" data-panel="supplier" id="card-supplier">
-        <div class="cardTop">
-          <div class="cardIcon">📦</div>
-          <div class="cardBadge neutral" id="badge-supplier">0 open</div>
-        </div>
-        <div class="cardTag">Report</div>
-        <div class="cardTitle">Supplier Issues</div>
-        <div class="cardDesc">Log missing, wrong or poor-quality deliveries.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Opens below ▾</div>
       </div>
 
       <div class="toolCard" data-url="./MIS.html">
@@ -332,7 +325,7 @@
         <div class="cardTag">Prep</div>
         <div class="cardTitle">Mise en Place</div>
         <div class="cardDesc">Mise en place overview for the day.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Open ↗</div>
       </div>
 
       <div class="toolCard" data-url="./cleaning-kitchen.html">
@@ -343,18 +336,7 @@
         <div class="cardTag">Hygiene</div>
         <div class="cardTitle">Cleaning</div>
         <div class="cardDesc">Daily &amp; weekly cleaning checklists.</div>
-        <div class="cardOpen">Open →</div>
-      </div>
-
-      <div class="toolCard" data-url="./kitchen-shift-report.html">
-        <div class="cardTop">
-          <div class="cardIcon">📝</div>
-          <div class="cardBadge neutral">Handover</div>
-        </div>
-        <div class="cardTag">Report</div>
-        <div class="cardTitle">Kitchen Report</div>
-        <div class="cardDesc">Daily kitchen report and shift handover.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Open ↗</div>
       </div>
 
       <div class="toolCard" data-url="./cal.html">
@@ -365,8 +347,13 @@
         <div class="cardTag">Calculator</div>
         <div class="cardTitle">Takeaway Calculator</div>
         <div class="cardDesc">Helps you size takeaway orders.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Open ↗</div>
       </div>
+
+    </div>
+
+    <div class="gridLabel"><span class="dot"></span> Reference &amp; safety</div>
+    <div class="cardGrid">
 
       <div class="toolCard" data-url="./opskrifter.html">
         <div class="cardTop">
@@ -376,7 +363,56 @@
         <div class="cardTag">Kaiser recipe book</div>
         <div class="cardTitle">Kaiser Recipe Book</div>
         <div class="cardDesc">All our recipes.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Open ↗</div>
+      </div>
+
+      <div class="toolCard" data-url="https://nielsendesignpictures-hub.github.io/Allergi/index.html">
+        <div class="cardTop">
+          <div class="cardIcon">🌿</div>
+          <div class="cardBadge neutral">Allergens</div>
+        </div>
+        <div class="cardTag">Safety</div>
+        <div class="cardTitle">Allergy Guide</div>
+        <div class="cardDesc">Check the 14 EU allergens per dish, with safe swaps.</div>
+        <div class="cardOpen">Open ↗</div>
+      </div>
+
+      <div class="toolCard" data-url="./emergency-card.html">
+        <div class="cardTop">
+          <div class="cardIcon">🚨</div>
+          <div class="cardBadge alert">112</div>
+        </div>
+        <div class="cardTag">Safety</div>
+        <div class="cardTitle">Emergency</div>
+        <div class="cardDesc">Who to call, addresses, and what to do — fast.</div>
+        <div class="cardOpen">Open ↗</div>
+      </div>
+
+    </div>
+
+    <div class="gridLabel"><span class="dot"></span> Orders &amp; reporting</div>
+    <div class="cardGrid">
+
+      <div class="toolCard" data-panel="catering" id="card-catering">
+        <div class="cardTop">
+          <div class="cardIcon">🍽️</div>
+          <div class="cardBadge neutral" id="badge-catering">0 today</div>
+        </div>
+        <div class="cardTag">Events</div>
+        <div class="cardTitle">Catering</div>
+        <div class="cardDesc">Today's and upcoming catering orders.</div>
+        <div class="cardOpen">Opens below ▾</div>
+      </div>
+
+      <div class="toolCard" data-url="./kitchen-shift-report.html">
+        <div class="cardTop">
+          <div class="cardIcon">📝</div>
+          <div class="cardBadge neutral">Handover</div>
+        </div>
+        <div class="cardTag">Report</div>
+        <div class="cardTitle">Kitchen Report</div>
+        <div class="cardDesc">Daily kitchen report and shift handover.</div>
+        <div class="cardOpen">Open ↗</div>
       </div>
 
       <div class="toolCard" data-url="./faults-issues.html">
@@ -387,7 +423,18 @@
         <div class="cardTag">Report</div>
         <div class="cardTitle">Faults &amp; Issues</div>
         <div class="cardDesc">Report defects or missing items in the kitchen.</div>
-        <div class="cardOpen">Open →</div>
+        <div class="cardOpen">Open ↗</div>
+      </div>
+
+      <div class="toolCard" data-panel="supplier" id="card-supplier">
+        <div class="cardTop">
+          <div class="cardIcon">📦</div>
+          <div class="cardBadge neutral" id="badge-supplier">0 open</div>
+        </div>
+        <div class="cardTag">Report</div>
+        <div class="cardTitle">Supplier Issues</div>
+        <div class="cardDesc">Log missing, wrong or poor-quality deliveries.</div>
+        <div class="cardOpen">Opens below ▾</div>
       </div>
 
     </div>
@@ -500,6 +547,7 @@
   const YELLOW_HOURS = 168;
   const LOCALE = "en-GB";
   const WASTE_URL = "./waste-collection.html";   // rename the waste file to this, or change here
+  const TODAY_URL = "./today.html";              // the Today aggregator card
 
   const $ = id => document.getElementById(id);
   const nowTs = () => Date.now();
@@ -585,6 +633,7 @@
   }
   function refreshLocation(){
     syncLocPicker();
+    initTodayCard();
     initWasteCard();
     loadCateringMini();
     loadSupplierIssues();
@@ -606,6 +655,20 @@
       s.onerror = ()=>{ cleanup(); reject(new Error("load error")); };
       document.body.appendChild(s);
     });
+  }
+
+  /* ===== TODAY CARD (any location) ===== */
+  function initTodayCard(){
+    const loc = getLoc();
+    const section = $("todaySection");
+    if (!section) return;
+    if (loc){
+      $("todayFrame").src = TODAY_URL + "?loc=" + encodeURIComponent(loc);
+      section.style.display = "block";
+    } else {
+      section.style.display = "none";
+      $("todayFrame").src = "about:blank";
+    }
   }
 
   /* ===== WASTE CARD (Helsingør only) ===== */
@@ -1082,6 +1145,7 @@
   (function init(){
     getLoc();            // persists ?loc= if present in the URL
     syncLocPicker();     // auto-selects it (or the saved location) in the dropdown
+    initTodayCard();
     initWasteCard();
     updateClockUI();
     updateClock();
