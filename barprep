@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kaiser – Bar prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#071019;
+  --panel:rgba(15,22,34,.88);
+  --border:rgba(145,205,255,.14);
+  --text:rgba(255,255,255,.95);
+  --muted:rgba(213,231,248,.72);
+  --muted2:rgba(184,210,234,.48);
+  --gold:#d6b24a;
+  --gold2:#b9921f;
+  --blue2:#66b7ff;
+  --blueGlow:rgba(102,183,255,.20);
+  --ok:#62d26f;
+  --warn:#ffc94d;
+  --bad:#ff6b6b;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+    radial-gradient(1000px 720px at 100% 0%, rgba(102,183,255,.18), transparent 52%),
+    linear-gradient(180deg,#071019,#0c1625 52%,#071019);
+  background-attachment:fixed;
+  padding:16px;
+}
+.shell{max-width:980px;margin:0 auto;padding-bottom:60px}
+
+.topbar{
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border-radius:22px;padding:22px 18px;text-align:center;
+  box-shadow:0 28px 70px rgba(0,0,0,.45);margin:8px 0 18px;
+}
+.kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800}
+.title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;font-weight:700;margin-top:8px}
+.subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px}
+.goldline{height:2px;margin-top:16px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(214,178,74,.95),rgba(102,183,255,.65),transparent)}
+
+.panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 26px 72px rgba(0,0,0,.55);padding:20px;margin-bottom:16px;
+}
+.panel h2{margin:0 0 14px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2);font-weight:900}
+.divider{height:1px;background:rgba(145,205,255,.10);margin:16px 0}
+
+.label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
+  font-weight:900;margin-bottom:8px;display:block}
+
+input,select,textarea{
+  width:100%;border-radius:14px;border:1px solid rgba(145,205,255,.14);
+  background:rgba(255,255,255,.05);padding:14px;outline:none;
+  color:rgba(255,255,255,.94);font-size:16px;font-family:inherit;
+}
+input:focus,select:focus{border-color:rgba(102,183,255,.55);box-shadow:0 0 0 4px var(--blueGlow)}
+select option{color:#0b0c0f}
+
+.itemGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:760px){.itemGrid{grid-template-columns:repeat(2,1fr)}}
+.itemBtn{
+  padding:16px 14px;border-radius:18px;cursor:pointer;user-select:none;text-align:left;
+  background:rgba(255,255,255,.05);border:1px solid rgba(145,205,255,.12);
+  transition:background .15s ease,border-color .15s ease;
+}
+.itemBtn:hover{background:rgba(102,183,255,.07)}
+.itemBtn.active{
+  border-color:rgba(214,178,74,.45);
+  background:linear-gradient(135deg,rgba(214,178,74,.12),rgba(102,183,255,.08));
+  box-shadow:0 0 0 4px rgba(214,178,74,.08);
+}
+.itemBtn .nm{font-weight:900;font-size:16px}
+.itemBtn .mt{color:var(--muted2);font-size:12px;margin-top:4px;font-weight:700}
+
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:200px}
+
+.btn{
+  width:100%;border:none;border-radius:16px;padding:15px 16px;cursor:pointer;
+  font-weight:900;font-size:15px;font-family:inherit;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;
+  box-shadow:0 18px 40px rgba(214,178,74,.18);
+}
+.btn:active{transform:translateY(1px)}
+.btnGhost{
+  width:100%;border-radius:16px;padding:13px 16px;cursor:pointer;
+  font-weight:900;font-size:14px;font-family:inherit;
+  background:rgba(255,255,255,.06);border:1px solid rgba(145,205,255,.14);
+  color:rgba(255,255,255,.9);
+}
+.btnDanger{
+  border-radius:16px;padding:11px 14px;cursor:pointer;font-weight:900;font-size:13px;
+  font-family:inherit;background:rgba(255,107,107,.12);
+  border:1px solid rgba(255,107,107,.30);color:rgba(255,255,255,.92);
+}
+.btnSmall{
+  border-radius:16px;padding:11px 14px;cursor:pointer;font-weight:900;font-size:13px;
+  font-family:inherit;background:rgba(214,178,74,.14);
+  border:1px solid rgba(214,178,74,.30);color:rgba(255,255,255,.94);
+}
+
+.preview{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;text-align:center}
+
+.groupHead{
+  display:flex;align-items:baseline;gap:10px;
+  padding:14px 4px 8px;margin-top:6px;
+  border-bottom:1px solid rgba(145,205,255,.10);
+}
+.groupHead .g{font-family:"Playfair Display",serif;font-size:21px;font-weight:700;color:var(--gold)}
+.groupHead .c{color:var(--muted2);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+
+.batch{
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  padding:14px;border-radius:16px;margin-top:10px;
+  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03);
+  border-left:4px solid var(--ok);
+}
+.batch.dueToday{border-left-color:var(--warn);background:rgba(255,201,77,.06)}
+.batch.expired{border-left-color:var(--bad);background:rgba(255,107,107,.08)}
+.batch .info{flex:1;min-width:200px}
+.batch .line1{font-weight:900;font-size:15px}
+.batch .line2{color:var(--muted);font-size:13px;margin-top:4px;font-weight:600}
+.batch .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.pill{
+  display:inline-block;padding:4px 10px;border-radius:999px;font-size:11px;
+  font-weight:900;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;
+  border:1px solid rgba(145,205,255,.16);background:rgba(255,255,255,.05);
+}
+.pill.ok{border-color:rgba(98,210,111,.35);background:rgba(98,210,111,.12)}
+.pill.dueToday{border-color:rgba(255,201,77,.40);background:rgba(255,201,77,.14)}
+.pill.expired{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.16)}
+
+.empty{
+  border:1px dashed rgba(145,205,255,.18);border-radius:16px;padding:22px;
+  text-align:center;color:var(--muted);font-weight:600;font-size:14px;
+}
+
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:999;
+}
+.overlay.on{display:flex}
+.modal{
+  width:min(560px,100%);border-radius:24px;padding:20px;
+  background:linear-gradient(180deg,rgba(24,34,50,.98),rgba(15,22,34,.98));
+  border:1px solid rgba(145,205,255,.18);box-shadow:0 30px 90px rgba(0,0,0,.7);
+}
+.modal.alarm{border-color:rgba(255,107,107,.42)}
+.modal h3{margin:0;font-size:20px;font-family:"Playfair Display",serif;font-weight:700}
+.modal p{margin:8px 0 0;color:var(--muted);font-size:14px}
+.modalFoot{display:flex;gap:10px;margin-top:18px}
+.modalFoot>*{flex:1}
+.alarmTitle{font-size:24px;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
+.alarmBanner{
+  margin-top:10px;padding:10px 12px;border-radius:14px;font-weight:900;font-size:13px;
+  background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.30);
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="kicker">KAISER</div>
+    <div class="title">Bar prep</div>
+    <div class="subtitle">Skåret frugt & åbnet mynte • holdbarhed regnes fra det tidspunkt du skærer</div>
+    <div class="goldline"></div>
+  </div>
+
+  <!-- TILFØJ -->
+  <div class="panel">
+    <h2>Registrér ny</h2>
+
+    <label class="label">Vare</label>
+    <div class="itemGrid" id="itemGrid"></div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <div>
+        <label class="label" for="qty" id="qtyLabel">Antal bøtter</label>
+        <input id="qty" type="number" min="1" step="1" value="1" inputmode="numeric"/>
+      </div>
+      <div>
+        <label class="label" for="by">Navn</label>
+        <input id="by" placeholder="Fx Mads" autocomplete="off"/>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:14px">
+      <div>
+        <label class="label" for="whenMode">Hvornår skåret / åbnet</label>
+        <select id="whenMode">
+          <option value="now">Lige nu</option>
+          <option value="custom">Vælg tidspunkt…</option>
+        </select>
+      </div>
+      <div id="customTimeWrap" style="display:none">
+        <label class="label" for="whenAt">Tidspunkt</label>
+        <input id="whenAt" type="datetime-local"/>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <button class="btn" id="addBtn" type="button">Registrér</button>
+      <div class="preview" id="preview"></div>
+    </div>
+  </div>
+
+  <!-- AKTIVE -->
+  <div class="panel">
+    <h2>På køl lige nu</h2>
+    <div id="list"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Indstillinger</h2>
+    <label class="label">Holdbarhed pr. vare (timer)</label>
+    <div id="settings"></div>
+    <div class="divider"></div>
+    <button class="btnGhost" id="clearBtn" type="button">Ryd alt (leder)</button>
+  </div>
+
+</div>
+
+<!-- ALARM -->
+<div class="overlay" id="alarmOverlay">
+  <div class="modal alarm">
+    <div class="alarmTitle">Skal smides ud</div>
+    <div class="alarmBanner" id="alarmBanner">–</div>
+    <div id="alarmList" style="margin-top:14px"></div>
+    <div class="modalFoot">
+      <button class="btnGhost" id="snoozeBtn" type="button">Slumre 30 min</button>
+      <button class="btn" id="closeAlarmBtn" type="button">Luk</button>
+    </div>
+  </div>
+</div>
+
+<!-- KASSÉR -->
+<div class="overlay" id="discardOverlay">
+  <div class="modal">
+    <h3>Smid ud</h3>
+    <p id="discardSub">–</p>
+    <div style="margin-top:16px">
+      <label class="label" for="wasteQty" id="wasteLabel">Hvor mange smider du ud?</label>
+      <input id="wasteQty" type="number" min="1" step="1" inputmode="numeric"/>
+    </div>
+    <div class="modalFoot">
+      <button class="btnGhost" id="discardCancel" type="button">Annuller</button>
+      <button class="btn" id="discardSave" type="button">Bekræft</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const KEY_ENTRIES = "kaiser.barprep.entries.v1";
+const KEY_PREFS   = "kaiser.barprep.prefs.v1";
+const KEY_SHELF   = "kaiser.barprep.shelf.v1";
+
+/* Holdbarhed i TIMER. Citrus = 2 døgn (jf. Hillerød-listen). */
+const DEFAULT_SHELF = {
+  lime:     { name:"Lime",     hours:48, unit:"bøtte" },
+  appelsin: { name:"Appelsin", hours:48, unit:"bøtte" },
+  citron:   { name:"Citron",   hours:48, unit:"bøtte" },
+  mynte:    { name:"Mynte",    hours:48, unit:"bøtte" }
+};
+
+/* Ental/flertal. Tåler også gamle poster hvor flertal blev gemt. */
+const PLURAL = { "bøtte":"bøtter", "bundt":"bundter", "stk":"stk", "pose":"poser" };
+function unitLabel(n, unit){
+  const u = String(unit || "stk").toLowerCase().trim();
+  const sing = Object.keys(PLURAL).find(k => PLURAL[k] === u) || u;
+  return Number(n) === 1 ? sing : (PLURAL[sing] || sing);
+}
+
+const $ = id => document.getElementById(id);
+const parse = r => { try { return r ? JSON.parse(r) : null; } catch { return null; } };
+
+let shelf   = { ...DEFAULT_SHELF, ...(parse(localStorage.getItem(KEY_SHELF)) || {}) };
+let entries = parse(localStorage.getItem(KEY_ENTRIES)) || [];
+let prefs   = { lastBy:"", lastItem:"lime", snoozeUntil:0, ...(parse(localStorage.getItem(KEY_PREFS)) || {}) };
+
+let selected = prefs.lastItem in shelf ? prefs.lastItem : "lime";
+let pendingDiscard = null;
+
+const saveEntries = () => localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries));
+const savePrefs   = () => localStorage.setItem(KEY_PREFS, JSON.stringify(prefs));
+const saveShelf   = () => localStorage.setItem(KEY_SHELF, JSON.stringify(shelf));
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+
+const uuid = () => (crypto?.randomUUID?.() || "id-" + Math.random().toString(16).slice(2) + Date.now());
+
+function fmt(iso){
+  return new Date(iso).toLocaleString("da-DK",
+    { weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
+
+function hoursLabel(h){
+  if (h % 24 === 0) return (h/24) + (h === 24 ? " døgn" : " døgn");
+  if (h < 24) return h + " timer";
+  return Math.floor(h/24) + " døgn " + (h%24) + " t";
+}
+
+function timeLeft(iso){
+  const ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "udløbet";
+  const mins = Math.round(ms/60000);
+  const h = Math.floor(mins/60), m = mins%60;
+  if (h >= 24) { const d = Math.floor(h/24); return d + " døgn " + (h%24) + " t tilbage"; }
+  if (h >= 1)  return h + " t " + m + " min tilbage";
+  return m + " min tilbage";
+}
+
+function sameDay(a,b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function statusOf(e){
+  const disc = new Date(e.discardAt).getTime();
+  if (Date.now() >= disc) return "expired";
+  if (sameDay(new Date(), new Date(e.discardAt))) return "dueToday";
+  return "ok";
+}
+
+const STATUS_TEXT = { ok:"OK", dueToday:"Udløber i dag", expired:"Smid ud" };
+
+/* ---------- Vare-knapper ---------- */
+function renderItems(){
+  $("itemGrid").innerHTML = Object.entries(shelf).map(([id,s]) => `
+    <div class="itemBtn ${id===selected?"active":""}" data-id="${id}">
+      <div class="nm">${esc(s.name)}</div>
+      <div class="mt">${esc(hoursLabel(s.hours))}</div>
+    </div>`).join("");
+
+  $("itemGrid").querySelectorAll(".itemBtn").forEach(b =>
+    b.addEventListener("click", () => {
+      selected = b.dataset.id;
+      prefs.lastItem = selected; savePrefs();
+      renderItems(); updatePreview();
+    }));
+}
+
+/* ---------- Preview ---------- */
+function chosenStart(){
+  if ($("whenMode").value === "custom" && $("whenAt").value){
+    return new Date($("whenAt").value);
+  }
+  return new Date();
+}
+
+function updatePreview(){
+  const s = shelf[selected];
+  const start = chosenStart();
+  const out = new Date(start.getTime() + s.hours*3600*1000);
+  const q = parseInt($("qty").value, 10);
+
+  $("qtyLabel").textContent = "Antal " + unitLabel(2, s.unit);
+  $("preview").textContent =
+    `${Number.isFinite(q) && q > 0 ? q + " " + unitLabel(q, s.unit) + " " : ""}` +
+    `${s.name} skåret ${fmt(start)} → smides ud ${fmt(out)}`;
+}
+
+/* ---------- Tilføj ---------- */
+function addEntry(){
+  const s = shelf[selected];
+  const q = parseInt($("qty").value, 10);
+  if (!Number.isFinite(q) || q < 1) return alert("Udfyld antal (mindst 1).");
+
+  const start = chosenStart();
+  if (isNaN(start.getTime())) return alert("Ugyldigt tidspunkt.");
+
+  entries.unshift({
+    id: uuid(),
+    itemId: selected,
+    itemName: s.name,
+    unit: s.unit,
+    qty: q,
+    by: ($("by").value || "").trim(),
+    cutAt: start.toISOString(),
+    discardAt: new Date(start.getTime() + s.hours*3600*1000).toISOString(),
+    status: "active"
+  });
+
+  saveEntries();
+  prefs.lastBy = ($("by").value || "").trim(); savePrefs();
+
+  $("qty").value = "1";
+  $("whenMode").value = "now";
+  $("customTimeWrap").style.display = "none";
+
+  render(); updatePreview(); checkAlarm(true);
+}
+
+/* ---------- Liste ---------- */
+function render(){
+  const active = entries.filter(e => e.status === "active");
+
+  if (!active.length){
+    $("list").innerHTML = `<div class="empty">Ingen registreringer. Alt er tomt på køl.</div>`;
+    return;
+  }
+
+  const rank = { expired:0, dueToday:1, ok:2 };
+  const groups = {};
+  active.forEach(e => (groups[e.itemName] ||= []).push(e));
+
+  const order = Object.keys(groups).sort((a,b) => {
+    const wa = Math.min(...groups[a].map(e => rank[statusOf(e)]));
+    const wb = Math.min(...groups[b].map(e => rank[statusOf(e)]));
+    return wa - wb || a.localeCompare(b,"da");
+  });
+
+  $("list").innerHTML = order.map(name => {
+    const rows = groups[name]
+      .sort((a,b) => new Date(a.discardAt) - new Date(b.discardAt))
+      .map(e => {
+        const st = statusOf(e);
+        return `
+        <div class="batch ${st}">
+          <div class="info">
+            <div class="line1">
+              ${e.qty} ${esc(unitLabel(e.qty, e.unit))}
+              <span class="pill ${st}">${STATUS_TEXT[st]}</span>
+            </div>
+            <div class="line2">
+              Skåret ${esc(fmt(e.cutAt))}${e.by ? " • " + esc(e.by) : ""}<br>
+              Smides ud <strong>${esc(fmt(e.discardAt))}</strong> • ${esc(timeLeft(e.discardAt))}
+            </div>
+          </div>
+          <div class="acts">
+            <button class="btnSmall" data-act="discard" data-id="${e.id}">Smidt ud</button>
+            <button class="btnDanger" data-act="delete" data-id="${e.id}">Slet</button>
+          </div>
+        </div>`;
+      }).join("");
+
+    const total = groups[name].reduce((n,e) => n + e.qty, 0);
+    const unit = groups[name][0].unit;
+    return `
+      <div class="groupHead">
+        <div class="g">${esc(name)}</div>
+        <div class="c">${total} ${esc(unitLabel(total, unit))} i alt</div>
+      </div>${rows}`;
+  }).join("");
+
+  $("list").querySelectorAll("button[data-act]").forEach(b =>
+    b.addEventListener("click", () => {
+      if (b.dataset.act === "discard") openDiscard(b.dataset.id);
+      else deleteEntry(b.dataset.id);
+    }));
+}
+
+function deleteEntry(id){
+  const e = entries.find(x => x.id === id);
+  if (!e || !confirm(`Slet registrering af ${e.itemName}?`)) return;
+  entries = entries.filter(x => x.id !== id);
+  saveEntries(); render();
+}
+
+/* ---------- Kassér ---------- */
+function openDiscard(id){
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  pendingDiscard = id;
+  $("discardSub").innerHTML =
+    `<strong>${esc(e.itemName)}</strong> • ${e.qty} ${esc(unitLabel(e.qty, e.unit))} • skåret ${esc(fmt(e.cutAt))}`;
+  $("wasteLabel").textContent =
+    `Hvor mange ${unitLabel(2, e.unit)} smider du ud?`;
+  $("wasteQty").value = String(e.qty);
+  $("discardOverlay").classList.add("on");
+  setTimeout(() => $("wasteQty").focus(), 40);
+}
+
+function closeDiscard(){
+  pendingDiscard = null;
+  $("discardOverlay").classList.remove("on");
+}
+
+function saveDiscard(){
+  const e = entries.find(x => x.id === pendingDiscard);
+  if (!e) return;
+  const q = parseInt($("wasteQty").value, 10);
+  if (!Number.isFinite(q) || q < 1) return alert("Angiv antal.");
+
+  if (q >= e.qty){
+    e.status = "discarded";
+    e.wasteQty = e.qty;
+  } else {
+    e.qty -= q;
+    entries.push({ ...e, id: uuid(), qty: q, status: "discarded", wasteQty: q,
+                   discardedAt: new Date().toISOString() });
+  }
+  e.discardedAt = new Date().toISOString();
+  saveEntries(); closeDiscard(); render();
+}
+
+/* ---------- Alarm ---------- */
+function alarmList(){
+  return entries.filter(e => e.status === "active" &&
+    ["expired","dueToday"].includes(statusOf(e)));
+}
+
+function checkAlarm(force){
+  if (!force && Date.now() < Number(prefs.snoozeUntil || 0)) return;
+  const list = alarmList();
+  if (!list.length) return;
+
+  const expired = list.filter(e => statusOf(e) === "expired").length;
+  $("alarmBanner").textContent = expired
+    ? `${expired} skal smides ud NU`
+    : `${list.length} udløber i dag`;
+
+  $("alarmList").innerHTML = list.map(e => `
+    <div class="batch ${statusOf(e)}" style="margin-top:8px">
+      <div class="info">
+        <div class="line1">${esc(e.itemName)} • ${e.qty} ${esc(unitLabel(e.qty, e.unit))}</div>
+        <div class="line2">Udløb ${esc(fmt(e.discardAt))}${e.by ? " • " + esc(e.by) : ""}</div>
+      </div>
+      <div class="acts">
+        <button class="btnSmall" data-alarm="${e.id}">Smidt ud</button>
+      </div>
+    </div>`).join("");
+
+  $("alarmList").querySelectorAll("button[data-alarm]").forEach(b =>
+    b.addEventListener("click", () => {
+      $("alarmOverlay").classList.remove("on");
+      openDiscard(b.dataset.alarm);
+    }));
+
+  $("alarmOverlay").classList.add("on");
+}
+
+/* ---------- Indstillinger ---------- */
+function renderSettings(){
+  $("settings").innerHTML = Object.entries(shelf).map(([id,s]) => `
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px">
+      <div style="flex:1;font-weight:900;font-size:14px">${esc(s.name)}</div>
+      <input type="number" min="1" step="1" value="${s.hours}" data-shelf="${id}"
+             style="width:110px;padding:10px;font-size:15px"/>
+      <div style="color:var(--muted2);font-size:12px;font-weight:900;width:46px">TIMER</div>
+    </div>`).join("");
+
+  $("settings").querySelectorAll("input[data-shelf]").forEach(inp =>
+    inp.addEventListener("change", () => {
+      const h = parseInt(inp.value, 10);
+      if (!Number.isFinite(h) || h < 1) { inp.value = shelf[inp.dataset.shelf].hours; return; }
+      shelf[inp.dataset.shelf].hours = h;
+      saveShelf(); renderItems(); updatePreview();
+    }));
+}
+
+/* ---------- Init ---------- */
+$("by").value = prefs.lastBy || "";
+
+$("whenMode").addEventListener("change", () => {
+  const custom = $("whenMode").value === "custom";
+  $("customTimeWrap").style.display = custom ? "" : "none";
+  if (custom && !$("whenAt").value){
+    const d = new Date(Date.now() - new Date().getTimezoneOffset()*60000);
+    $("whenAt").value = d.toISOString().slice(0,16);
+  }
+  updatePreview();
+});
+$("whenAt").addEventListener("input", updatePreview);
+$("qty").addEventListener("input", updatePreview);
+$("addBtn").addEventListener("click", addEntry);
+$("by").addEventListener("input", () => { prefs.lastBy = $("by").value; savePrefs(); });
+
+$("discardCancel").addEventListener("click", closeDiscard);
+$("discardSave").addEventListener("click", saveDiscard);
+$("discardOverlay").addEventListener("click", e => { if (e.target === $("discardOverlay")) closeDiscard(); });
+
+$("closeAlarmBtn").addEventListener("click", () => $("alarmOverlay").classList.remove("on"));
+$("snoozeBtn").addEventListener("click", () => {
+  prefs.snoozeUntil = Date.now() + 30*60*1000; savePrefs();
+  $("alarmOverlay").classList.remove("on");
+});
+
+$("clearBtn").addEventListener("click", () => {
+  if (!confirm("Slet ALLE registreringer på denne enhed?")) return;
+  entries = []; saveEntries(); render();
+});
+
+renderItems();
+renderSettings();
+updatePreview();
+render();
+checkAlarm(false);
+
+setInterval(() => { render(); checkAlarm(false); }, 60000);
+})();
+</script>
+</body>
+</html>
