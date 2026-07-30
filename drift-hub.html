@@ -93,10 +93,55 @@
     .attnChip{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);cursor:pointer;transition:.15s ease;}
     .attnChip:hover{background:rgba(255,255,255,0.08);}
     .attnChip.alert{border-color:rgba(255,107,107,0.42);background:rgba(255,107,107,0.12);}
+    .attnChip.warn{border-color:rgba(245,158,11,0.45);background:rgba(245,158,11,0.12);}
     .attnIcon{font-size:26px;line-height:1;}
     .attnNum{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;line-height:1;}
     .attnChip.alert .attnNum{color:#ff9494;}
+    .attnChip.warn .attnNum{color:#ffc86b;}
     .attnLabel{font-size:11px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);margin-top:4px;}
+
+    /* SMID UD-MODAL */
+    .expOverlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.74);
+      align-items:center;justify-content:center;padding:18px;z-index:10000;
+    }
+    .expOverlay.open{display:flex;}
+    .expModal{
+      width:min(640px,100%);max-height:86vh;overflow:auto;border-radius:26px;padding:22px;
+      background:linear-gradient(180deg, rgba(28,36,48,.99), rgba(16,22,31,.99));
+      border:1px solid rgba(255,255,255,0.16);box-shadow:0 30px 90px rgba(0,0,0,.72);
+    }
+    .expHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+    .expTitle{font-family:"Playfair Display",serif;font-size:24px;font-weight:700;line-height:1.1;}
+    .expSub{color:var(--muted);font-size:13px;font-weight:700;margin-top:6px;}
+    .expGroup{margin-top:18px;}
+    .expGroupHead{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--muted2);padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .expRow{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      padding:12px 14px;border-radius:14px;margin-top:8px;
+      border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);
+      border-left:4px solid var(--warn);
+    }
+    .expRow.over{border-left-color:var(--red);background:rgba(255,107,107,.09);}
+    .expName{font-weight:900;font-size:15px;}
+    .expMeta{color:var(--muted);font-size:12px;font-weight:700;margin-top:3px;}
+    .expTag{
+      padding:4px 10px;border-radius:999px;font-size:10px;font-weight:900;
+      letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+      border:1px solid rgba(245,158,11,.40);background:rgba(245,158,11,.14);color:#ffc86b;
+    }
+    .expTag.over{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.16);color:#ff9494;}
+    .expEmpty{
+      margin-top:16px;padding:26px;border-radius:16px;text-align:center;
+      border:1px dashed rgba(98,210,111,.30);background:rgba(98,210,111,.07);
+      color:var(--muted);font-weight:800;font-size:14px;
+    }
+    .expFoot{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+    .expFoot>*{flex:1;min-width:150px;}
 
     /* DAGENS CATERING */
     .todayStrip{
@@ -151,6 +196,7 @@
     .badge.red{ background:rgba(255,107,107,0.14); border-color:rgba(255,107,107,0.34); color:#ff9494; }
     .badge.blue{ background:rgba(94,167,255,0.12); border-color:rgba(94,167,255,0.30); color:#8cc1ff; }
     .badge.green{ background:rgba(98,210,111,0.12); border-color:rgba(98,210,111,0.30); color:#93e49c; }
+    .badge.warn{ background:rgba(245,158,11,0.14); border-color:rgba(245,158,11,0.36); color:#ffc86b; }
     .toolName{margin-top:12px;font-size:18px;font-weight:900;line-height:1.15;}
     .toolDesc{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.4;font-weight:700;}
     .toolBottom{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -173,7 +219,7 @@
         <div class="kicker">KAISER</div>
         <div class="title">Café Hub</div>
         <div class="sub">Daglig drift, opgaver og rapportering samlet ét sted</div>
-        <div class="versionPill">Version 3.0</div>
+        <div class="versionPill">Version 3.1</div>
         <div class="goldline"></div>
       </div>
       <div class="heroMeta">
@@ -214,9 +260,9 @@
         <div class="attnIcon">🛠️</div>
         <div><div class="attnNum" id="attnFaults">–</div><div class="attnLabel">Fejl</div></div>
       </div>
-      <div class="attnChip" data-scroll="cateringAnchor">
-        <div class="attnIcon">📅</div>
-        <div><div class="attnNum" id="attnCatering">–</div><div class="attnLabel">Catering i dag</div></div>
+      <div class="attnChip" data-expiry="1">
+        <div class="attnIcon">🗑️</div>
+        <div><div class="attnNum" id="attnExpiry">–</div><div class="attnLabel">Smid ud</div></div>
       </div>
     </section>
 
@@ -301,9 +347,17 @@
           </div>
           <div class="toolCard" data-url="./kage-koeleskab.html">
             <div>
-              <div class="toolTop"><div class="toolIcon">🍰</div><div class="badge blue">Køl</div></div>
+              <div class="toolTop"><div class="toolIcon">🍰</div><div class="badge blue" id="cakeBadge">Køl</div></div>
               <div class="toolName">Kagekøleskab</div>
               <div class="toolDesc">Registrér dato ind og udløb automatisk.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Udløb</div></div><div class="launchText">Åbn →</div></div>
+          </div>
+          <div class="toolCard" data-url="./barprep.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🍋</div><div class="badge blue" id="barprepBadge">Køl</div></div>
+              <div class="toolName">Bar prep</div>
+              <div class="toolDesc">Skåret citrus og åbnet mynte med udløb.</div>
             </div>
             <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Udløb</div></div><div class="launchText">Åbn →</div></div>
           </div>
@@ -379,6 +433,24 @@
       </div>
     </section>
 
+    <!-- SMID UD-OVERSIGT -->
+    <div class="expOverlay" id="expOverlay">
+      <div class="expModal">
+        <div class="expHead">
+          <div>
+            <div class="expTitle">Skal smides ud</div>
+            <div class="expSub" id="expSub">—</div>
+          </div>
+          <button class="btn" id="expCloseBtn" type="button" style="min-height:40px;">✖ Luk</button>
+        </div>
+        <div id="expBody"></div>
+        <div class="expFoot">
+          <button class="btn" id="expOpenCake" type="button">🍰 Åbn kagekøleskab</button>
+          <button class="btn" id="expOpenBar" type="button">🍋 Åbn bar prep</button>
+        </div>
+      </div>
+    </div>
+
     <!-- FULLSCREEN VIEWER -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
@@ -415,19 +487,164 @@
     }
 
     /* ===== ATTENTION BAR ===== */
-    const counts = { soldout:null, complaints:null, faults:null, cateringToday:null };
-    function setAttn(elId, val){
+    const counts = { soldout:null, complaints:null, faults:null, expiry:null };
+    function setAttn(elId, val, cls){
       const el = $(elId); if (!el) return;
       const chip = el.closest(".attnChip");
       el.textContent = (val == null) ? "–" : val;
-      if (chip) chip.classList.toggle("alert", typeof val === "number" && val > 0);
+      if (chip){
+        chip.classList.remove("alert","warn");
+        if (typeof val === "number" && val > 0) chip.classList.add(cls || "alert");
+      }
     }
     function renderAttention(){
       setAttn("attnSoldout", counts.soldout);
       setAttn("attnComplaints", counts.complaints);
       setAttn("attnFaults", counts.faults);
-      setAttn("attnCatering", counts.cateringToday);
+      setAttn("attnExpiry", counts.expiry, expiryHasOverdue ? "alert" : "warn");
     }
+
+    /* =========================================================
+       SMID UD – læser modulernes localStorage direkte.
+       Modulerne kører i iframe fra samme domæne, så de deler
+       localStorage med hubben. Ingen backend nødvendig.
+    ========================================================= */
+    const CAKE_KEYS = [
+      "kagekoeleskab.entries.v6","kagekoeleskab.entries.v5",
+      "kagekoeleskab.entries.v4","kagekoeleskab.entries.v3"
+    ];
+    const BARPREP_KEYS = ["kaiser.barprep.entries.v1"];
+
+    let expiryHasOverdue = false;
+
+    /* Ental/flertal – tåler både ental og flertal gemt i modulerne */
+    const PLURAL = { "bøtte":"bøtter", "bundt":"bundter", "stk":"stk", "pose":"poser" };
+    function unitLabel(n, unit){
+      const u = String(unit || "stk").toLowerCase().trim();
+      const sing = Object.keys(PLURAL).find(k => PLURAL[k] === u) || u;
+      return Number(n) === 1 ? sing : (PLURAL[sing] || sing);
+    }
+
+    function readJson(key){
+      try{ const v = JSON.parse(localStorage.getItem(key) || "null"); return v; }catch(_){ return null; }
+    }
+    function firstArray(keys){
+      for (const k of keys){
+        const v = readJson(k);
+        if (Array.isArray(v)) return v;
+      }
+      return [];
+    }
+    function sameLocalDate(a,b){
+      return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+    function expiryState(iso){
+      const t = new Date(iso).getTime();
+      if (!isFinite(t)) return null;
+      if (Date.now() >= t) return "over";
+      if (sameLocalDate(new Date(), new Date(iso))) return "today";
+      return null;                       // ikke relevant endnu
+    }
+    function fmtWhen(iso){
+      return new Date(iso).toLocaleString("da-DK",
+        { weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+
+    function collectExpiring(){
+      const out = [];
+
+      firstArray(CAKE_KEYS).forEach(e => {
+        if (!e || e.status === "discarded") return;
+        const st = expiryState(e.discardAt);
+        if (!st) return;
+        out.push({ src:"cake", name: e.cakeName || "Kage",
+                   qty: e.qty || 1, unit:"stk", when: e.discardAt, state: st });
+      });
+
+      firstArray(BARPREP_KEYS).forEach(e => {
+        if (!e || e.status !== "active") return;
+        const st = expiryState(e.discardAt);
+        if (!st) return;
+        out.push({ src:"bar", name: e.itemName || "Vare",
+                   qty: e.qty || 1, unit: e.unit || "stk", when: e.discardAt, state: st });
+      });
+
+      out.sort((a,b) => new Date(a.when) - new Date(b.when));
+      return out;
+    }
+
+    function refreshExpiry(){
+      const items = collectExpiring();
+      expiryHasOverdue = items.some(i => i.state === "over");
+      counts.expiry = items.length;
+      renderAttention();
+
+      // kortenes badges
+      const cakeN = items.filter(i => i.src === "cake").length;
+      const barN  = items.filter(i => i.src === "bar").length;
+      const cb = $("cakeBadge");
+      if (cb){
+        cb.textContent = cakeN ? cakeN + " udløber" : "Køl";
+        cb.className = "badge" + (cakeN ? " warn" : " blue");
+      }
+      const bb = $("barprepBadge");
+      if (bb){
+        bb.textContent = barN ? barN + " udløber" : "Køl";
+        bb.className = "badge" + (barN ? " warn" : " blue");
+      }
+      return items;
+    }
+
+    function openExpiryModal(){
+      const items = refreshExpiry();
+      const over  = items.filter(i => i.state === "over");
+      const today = items.filter(i => i.state === "today");
+
+      $("expSub").textContent = items.length
+        ? `${over.length} over tid • ${today.length} udløber i dag`
+        : "Alt er inden for holdbarhed";
+
+      if (!items.length){
+        $("expBody").innerHTML = '<div class="expEmpty">✓ Intet skal smides ud lige nu</div>';
+      } else {
+        const row = i => `
+          <div class="expRow ${i.state === "over" ? "over" : ""}">
+            <div>
+              <div class="expName">${escapeHtml(i.name)} • ${escapeHtml(String(i.qty))} ${escapeHtml(unitLabel(i.qty, i.unit))}</div>
+              <div class="expMeta">${i.src === "cake" ? "🍰 Kagekøleskab" : "🍋 Bar prep"} • ${escapeHtml(fmtWhen(i.when))}</div>
+            </div>
+            <div class="expTag ${i.state === "over" ? "over" : ""}">${i.state === "over" ? "Over tid" : "I dag"}</div>
+          </div>`;
+
+        let html = "";
+        if (over.length){
+          html += `<div class="expGroup">
+            <div class="expGroupHead"><span>Over tid</span><span>${over.length}</span></div>
+            ${over.map(row).join("")}</div>`;
+        }
+        if (today.length){
+          html += `<div class="expGroup">
+            <div class="expGroupHead"><span>Udløber i dag</span><span>${today.length}</span></div>
+            ${today.map(row).join("")}</div>`;
+        }
+        $("expBody").innerHTML = html;
+      }
+
+      $("expOverlay").classList.add("open");
+    }
+
+    function closeExpiryModal(){ $("expOverlay").classList.remove("open"); }
+
+    $("expCloseBtn").addEventListener("click", closeExpiryModal);
+    $("expOverlay").addEventListener("click", e => { if (e.target === $("expOverlay")) closeExpiryModal(); });
+    $("expOpenCake").addEventListener("click", () => {
+      closeExpiryModal();
+      openTool("./kage-koeleskab.html?v=" + Date.now(), "Kagekøleskab");
+    });
+    $("expOpenBar").addEventListener("click", () => {
+      closeExpiryModal();
+      openTool("./barprep.html?v=" + Date.now(), "Bar prep");
+    });
 
     /* ===== ROBUST JSONP (timeout + onerror + cleanup) ===== */
     function jsonp(url, params = {}) {
@@ -534,7 +751,6 @@
         .sort((a,b)=>a.ts-b.ts)
         .slice(0,6);
       const todayCount = events.filter(e=>e.isToday).length;
-      counts.cateringToday = todayCount; renderAttention();
       $("cateringCount").textContent = todayCount > 0 ? `${todayCount} i dag` : (events.length ? `${events.length} kommende` : "Ingen");
       if (!events.length){
         $("cateringBody").innerHTML = '<div class="evEmpty">📅 Ingen catering i dag eller på vej</div>';
@@ -589,6 +805,7 @@
     /* ===== REFRESH ===== */
     async function refreshAll() {
       updateClock();
+      refreshExpiry();                 // lokal – virker altid, også uden net
       const loc = getLoc();
       if (!loc) { $("updatedSub").textContent = "Sæt lokation med ?loc="; return; }
       await Promise.allSettled([
@@ -616,6 +833,7 @@
       $("toolFrame").src = "about:blank";
       document.body.style.overflow = "auto";
       currentToolUrl = "";
+      refreshExpiry();                 // personalet har måske lige kasseret noget
     }
     document.querySelectorAll(".toolCard[data-url]").forEach(card => {
       card.addEventListener("click", () => {
@@ -627,7 +845,9 @@
     });
     document.querySelectorAll(".attnChip").forEach(chip => {
       chip.addEventListener("click", () => {
-        if (chip.dataset.open){
+        if (chip.dataset.expiry){
+          openExpiryModal();
+        } else if (chip.dataset.open){
           const base = chip.dataset.open;
           const title = chip.querySelector(".attnLabel")?.textContent?.trim() || "Værktøj";
           openTool(base + (base.includes("?") ? "&" : "?") + "v=" + Date.now(), title);
@@ -642,7 +862,11 @@
       const url = currentToolUrl + (currentToolUrl.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc());
       window.open(url, "_blank");
     });
-    document.addEventListener("keydown", e => { if (e.key === "Escape" && $("toolViewer").classList.contains("open")) closeTool(); });
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Escape") return;
+      if ($("expOverlay").classList.contains("open")) return closeExpiryModal();
+      if ($("toolViewer").classList.contains("open")) closeTool();
+    });
 
     /* ===== FULLSCREEN + WAKE LOCK ===== */
     $("fsBtn").addEventListener("click", () => {
@@ -661,9 +885,18 @@
     }
     $("wakeBtn").addEventListener("click", toggleWakeLock);
     document.addEventListener("visibilitychange", async () => {
-      if (document.visibilityState === "visible" && wakeLock === null && $("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
-        try{ wakeLock = await navigator.wakeLock.request("screen"); wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); }; }catch(_){}
+      if (document.visibilityState === "visible"){
+        refreshExpiry();
+        if (wakeLock === null && $("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
+          try{ wakeLock = await navigator.wakeLock.request("screen"); wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); }; }catch(_){}
+        }
       }
+    });
+
+    // Hvis modulet åbnes i et andet faneblad, opdaterer hubben sig selv
+    window.addEventListener("storage", e => {
+      if (!e.key) return;
+      if (CAKE_KEYS.includes(e.key) || BARPREP_KEYS.includes(e.key)) refreshExpiry();
     });
 
     $("clockToggle").addEventListener("click", toggleClock);
@@ -675,8 +908,10 @@
       $("locPill").textContent = loc || "Ikke sat";
       updateClockUI();
       updateClock();
+      refreshExpiry();
       refreshAll();
       setInterval(updateClock, 1000);          // ur tikker hvert sekund
+      setInterval(refreshExpiry, 30000);       // smid ud-tæller hvert 30. sek (lokal, gratis)
       setInterval(refreshAll, 60000);          // data hvert minut
       setInterval(() => {                      // genindlæs på fast stille tidspunkt (04:00)
         const now = new Date();
