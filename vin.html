@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kaiser – Vin (åbnet)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#071019;
+  --panel:rgba(15,22,34,.88);
+  --border:rgba(145,205,255,.14);
+  --text:rgba(255,255,255,.95);
+  --muted:rgba(213,231,248,.72);
+  --muted2:rgba(184,210,234,.48);
+  --gold:#d6b24a;
+  --gold2:#b9921f;
+  --blue2:#66b7ff;
+  --blueGlow:rgba(102,183,255,.20);
+  --ok:#62d26f;
+  --warn:#ffc94d;
+  --bad:#ff6b6b;
+  --red:#c62b3e;
+  --rose:#e6a3a3;
+  --white:#efe0a0;
+  --bubbles:#f7d774;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+    radial-gradient(1000px 720px at 100% 0%, rgba(198,43,62,.14), transparent 52%),
+    linear-gradient(180deg,#071019,#0c1625 52%,#071019);
+  background-attachment:fixed;
+  padding:16px;
+}
+.shell{max-width:980px;margin:0 auto;padding-bottom:60px}
+
+.topbar{
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border-radius:22px;padding:22px 18px;text-align:center;
+  box-shadow:0 28px 70px rgba(0,0,0,.45);margin:8px 0 18px;
+}
+.kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800}
+.title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;font-weight:700;margin-top:8px}
+.subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px}
+.goldline{height:2px;margin-top:16px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(214,178,74,.95),rgba(198,43,62,.65),transparent)}
+
+.panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 26px 72px rgba(0,0,0,.55);padding:20px;margin-bottom:16px;
+}
+.panel h2{margin:0 0 14px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2);font-weight:900}
+.divider{height:1px;background:rgba(145,205,255,.10);margin:16px 0}
+
+.label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
+  font-weight:900;margin-bottom:8px;display:block}
+
+input,select,textarea{
+  width:100%;border-radius:14px;border:1px solid rgba(145,205,255,.14);
+  background:rgba(255,255,255,.05);padding:14px;outline:none;
+  color:rgba(255,255,255,.94);font-size:16px;font-family:inherit;
+}
+input:focus,select:focus{border-color:rgba(102,183,255,.55);box-shadow:0 0 0 4px var(--blueGlow)}
+select option{color:#0b0c0f}
+
+/* Kategori-tabs */
+.catTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:640px){.catTabs{grid-template-columns:repeat(2,1fr)}}
+.catTab{
+  padding:12px 10px;border-radius:16px;cursor:pointer;user-select:none;text-align:center;
+  background:rgba(255,255,255,.05);border:1px solid rgba(145,205,255,.12);
+  transition:.15s;font-weight:900;font-size:13px;font-family:inherit;color:var(--text);
+}
+.catTab:hover{background:rgba(255,255,255,.09)}
+.catTab.on{border-color:rgba(214,178,74,.5);
+  background:linear-gradient(135deg,rgba(214,178,74,.14),rgba(255,255,255,.04));
+  box-shadow:0 0 0 4px rgba(214,178,74,.08)}
+.catTab .dot{
+  display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;
+  vertical-align:middle;box-shadow:0 0 8px currentColor;
+}
+.catTab.red .dot{background:var(--red);color:var(--red)}
+.catTab.white .dot{background:var(--white);color:var(--white)}
+.catTab.rose .dot{background:var(--rose);color:var(--rose)}
+.catTab.bubbles .dot{background:var(--bubbles);color:var(--bubbles)}
+
+.wineGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:640px){.wineGrid{grid-template-columns:1fr}}
+.wineBtn{
+  padding:14px;border-radius:16px;cursor:pointer;user-select:none;text-align:left;
+  background:rgba(255,255,255,.04);border:1px solid rgba(145,205,255,.10);
+  transition:.15s;
+}
+.wineBtn:hover{background:rgba(255,255,255,.08)}
+.wineBtn.active{border-color:rgba(214,178,74,.45);
+  background:linear-gradient(135deg,rgba(214,178,74,.10),rgba(255,255,255,.03));
+  box-shadow:0 0 0 4px rgba(214,178,74,.06)}
+.wineBtn .nm{font-weight:900;font-size:15px;line-height:1.3}
+.wineBtn .mt{color:var(--muted2);font-size:12px;margin-top:6px;font-weight:700}
+
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.row>*{flex:1;min-width:200px}
+
+.btn{
+  width:100%;border:none;border-radius:16px;padding:15px 16px;cursor:pointer;
+  font-weight:900;font-size:15px;font-family:inherit;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;
+  box-shadow:0 18px 40px rgba(214,178,74,.18);
+}
+.btn:active{transform:translateY(1px)}
+.btnGhost{
+  width:100%;border-radius:16px;padding:13px 16px;cursor:pointer;
+  font-weight:900;font-size:14px;font-family:inherit;
+  background:rgba(255,255,255,.06);border:1px solid rgba(145,205,255,.14);
+  color:rgba(255,255,255,.9);
+}
+.btnDanger{
+  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
+  font-family:inherit;background:rgba(255,107,107,.12);
+  border:1px solid rgba(255,107,107,.30);color:rgba(255,255,255,.92);
+}
+.btnSmall{
+  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
+  font-family:inherit;background:rgba(214,178,74,.14);
+  border:1px solid rgba(214,178,74,.30);color:rgba(255,255,255,.94);
+}
+
+.preview{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;text-align:center;
+  padding:10px;border-radius:12px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(145,205,255,.08)}
+
+.groupHead{
+  display:flex;align-items:baseline;gap:10px;padding:14px 4px 8px;margin-top:6px;
+  border-bottom:1px solid rgba(145,205,255,.10);
+}
+.groupHead .g{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;color:var(--gold)}
+.groupHead .g .catDot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.groupHead .g.red   .catDot{background:var(--red)}
+.groupHead .g.white .catDot{background:var(--white)}
+.groupHead .g.rose  .catDot{background:var(--rose)}
+.groupHead .g.bubbles .catDot{background:var(--bubbles)}
+.groupHead .c{color:var(--muted2);font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+
+.bottle{
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  padding:14px;border-radius:16px;margin-top:10px;
+  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03);
+  border-left:4px solid var(--ok);
+}
+.bottle.dueToday{border-left-color:var(--warn);background:rgba(255,201,77,.06)}
+.bottle.expired{border-left-color:var(--bad);background:rgba(255,107,107,.08)}
+.bottle .info{flex:1;min-width:200px}
+.bottle .line1{font-weight:900;font-size:14px;line-height:1.3}
+.bottle .line2{color:var(--muted);font-size:12px;margin-top:4px;font-weight:600}
+.bottle .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.pill{
+  display:inline-block;padding:3px 9px;border-radius:999px;font-size:10px;
+  font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-left:8px;
+  border:1px solid rgba(145,205,255,.16);background:rgba(255,255,255,.05);
+}
+.pill.ok{border-color:rgba(98,210,111,.35);background:rgba(98,210,111,.12)}
+.pill.dueToday{border-color:rgba(255,201,77,.40);background:rgba(255,201,77,.14)}
+.pill.expired{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.16)}
+
+.empty{
+  border:1px dashed rgba(145,205,255,.18);border-radius:16px;padding:22px;
+  text-align:center;color:var(--muted);font-weight:600;font-size:14px;
+}
+
+.settingRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding:10px 0;border-bottom:1px solid rgba(145,205,255,.06)}
+.settingRow:last-child{border-bottom:none}
+.settingRow .nm{flex:1;font-weight:900;font-size:13px;min-width:180px}
+.settingRow .cat{font-size:10px;color:var(--muted2);font-weight:900;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 8px;border-radius:999px;
+  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03)}
+.settingRow input{width:80px;padding:8px 10px;font-size:14px;text-align:center}
+.settingRow .unit{font-size:11px;color:var(--muted2);font-weight:900}
+
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:999;
+}
+.overlay.on{display:flex}
+.modal{
+  width:min(560px,100%);border-radius:24px;padding:20px;
+  background:linear-gradient(180deg,rgba(24,34,50,.98),rgba(15,22,34,.98));
+  border:1px solid rgba(145,205,255,.18);box-shadow:0 30px 90px rgba(0,0,0,.7);
+}
+.modal.alarm{border-color:rgba(255,107,107,.42)}
+.modal h3{margin:0;font-size:20px;font-family:"Playfair Display",serif;font-weight:700}
+.modal p{margin:8px 0 0;color:var(--muted);font-size:14px}
+.modalFoot{display:flex;gap:10px;margin-top:18px}
+.modalFoot>*{flex:1}
+.alarmTitle{font-size:24px;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
+.alarmBanner{
+  margin-top:10px;padding:10px 12px;border-radius:14px;font-weight:900;font-size:13px;
+  background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.30);
+}
+
+.hint{
+  padding:12px 14px;border-radius:14px;margin-top:14px;
+  background:rgba(102,183,255,.06);border:1px solid rgba(102,183,255,.16);
+  color:var(--muted);font-size:12px;font-weight:600;line-height:1.5;
+}
+.hint b{color:var(--text);font-weight:900}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="kicker">KAISER</div>
+    <div class="title">Vin — åbnet</div>
+    <div class="subtitle">Registrér hver enkelt flaske når den åbnes • hold styr på hvornår den skal drikkes op</div>
+    <div class="goldline"></div>
+  </div>
+
+  <!-- TILFØJ -->
+  <div class="panel">
+    <h2>Registrér åbnet flaske</h2>
+
+    <div class="catTabs" id="catTabs"></div>
+    <div class="wineGrid" id="wineGrid"></div>
+
+    <div class="row">
+      <div>
+        <label class="label" for="by">Åbnet af (valgfri)</label>
+        <input id="by" placeholder="Fx Mads" autocomplete="off"/>
+      </div>
+      <div>
+        <label class="label" for="whenMode">Hvornår åbnet</label>
+        <select id="whenMode">
+          <option value="now">Lige nu</option>
+          <option value="custom">Vælg tidspunkt…</option>
+        </select>
+      </div>
+      <div id="customTimeWrap" style="display:none">
+        <label class="label" for="whenAt">Tidspunkt</label>
+        <input id="whenAt" type="datetime-local"/>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <button class="btn" id="addBtn" type="button">Registrér åbnet flaske</button>
+      <div class="preview" id="preview">Vælg en vin</div>
+    </div>
+
+    <div class="hint">
+      <b>Vejledende holdbarhed efter åbning:</b>
+      Rød- og hvidvin holder 2–4 dage i køleskab med prop.
+      Rosévin taber hurtigt frugtsmagen (2–4 dage).
+      Mousserende holder 1–2 dage med champagneprop før boblerne er væk.
+      Systemet bruger det korteste tal som standard.
+    </div>
+  </div>
+
+  <!-- ÅBNE FLASKER -->
+  <div class="panel">
+    <h2>Åbne flasker</h2>
+    <div id="list"></div>
+  </div>
+
+  <!-- INDSTILLINGER -->
+  <div class="panel">
+    <h2>Holdbarhed pr. vin</h2>
+    <div id="settings"></div>
+    <div class="divider"></div>
+    <button class="btnGhost" id="clearBtn" type="button">Ryd alle åbne flasker (leder)</button>
+  </div>
+
+</div>
+
+<!-- ALARM -->
+<div class="overlay" id="alarmOverlay">
+  <div class="modal alarm">
+    <div class="alarmTitle">Skal drikkes op</div>
+    <div class="alarmBanner" id="alarmBanner">–</div>
+    <div id="alarmList" style="margin-top:14px"></div>
+    <div class="modalFoot">
+      <button class="btnGhost" id="snoozeBtn" type="button">Slumre 30 min</button>
+      <button class="btn" id="closeAlarmBtn" type="button">Luk</button>
+    </div>
+  </div>
+</div>
+
+<!-- KASSÉR -->
+<div class="overlay" id="discardOverlay">
+  <div class="modal">
+    <h3>Flaske drukket / smidt ud</h3>
+    <p id="discardSub">–</p>
+    <div class="modalFoot">
+      <button class="btnGhost" id="discardCancel" type="button">Annuller</button>
+      <button class="btn" id="discardSave" type="button">Bekræft</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const KEY_ENTRIES = "kaiser.wine.entries.v1";
+const KEY_PREFS   = "kaiser.wine.prefs.v1";
+const KEY_SHELF   = "kaiser.wine.shelf.v1";
+
+/* Vinkortet. Hver vin har sin egen holdbarhed i timer.
+   Kan justeres i indstillingerne uden at redigere koden. */
+const CATEGORIES = {
+  hvid:    { name:"Hvidvin",       hours:48 },   // 2 døgn (kort ende af 2-4)
+  rod:     { name:"Rødvin",        hours:48 },   // 2 døgn (kort ende af 2-4)
+  rose:    { name:"Rosé",          hours:48 },   // 2 døgn (kort ende af 2-4)
+  bubbles: { name:"Husets bobler", hours:24 }    // 1 døgn (kort ende af 1-2)
+};
+
+const DEFAULT_SHELF = {
+  // HVIDVIN
+  h_rosario:  { cat:"hvid", name:"Rosario Estate, Chardonnay, Chile" },
+  h_simply:   { cat:"hvid", name:"Simply Fruity, Riesling, Tyskland" },
+  h_pfaffl:   { cat:"hvid", name:"Pfaffl Sauvignon Blanc, Østrig" },
+  h_macon:    { cat:"hvid", name:"Macon-Villages, Bourgogne, Frankrig" },
+  // RØDVIN
+  r_maison:   { cat:"rod",  name:"La Maisonnée, Cabernet Sauvignon, Frankrig" },
+  r_badet:    { cat:"rod",  name:"Badet Clement, Pinot Noir, Frankrig" },
+  r_ripasso:  { cat:"rod",  name:"Ripasso, Italien" },
+  r_barolo:   { cat:"rod",  name:"Barolo Beni Di B., Italien" },
+  // BOBLER
+  b_borgo:    { cat:"bubbles", name:"Borgo Imperiale Cuvée Brut, Italien" },
+  b_mimi_rose:{ cat:"bubbles", name:"Mimi Brut Rosé, Frankrig" },
+  // ROSÉ
+  p_cuvee:    { cat:"rose", name:"Cuvée Prestige Rosé, Frankrig" },
+  p_mimi:     { cat:"rose", name:"Mimi Rosé, Frankrig" }
+};
+
+const $ = id => document.getElementById(id);
+const parse = r => { try { return r ? JSON.parse(r) : null; } catch { return null; } };
+
+/* Migrer: gamle poster med 'hours' på selve vinen flyttes til kategorien.
+   Nye vine får ikke egne timer — de arver fra kategori-defaultet, men
+   kan overskrives i indstillingerne. */
+let shelfRaw = parse(localStorage.getItem(KEY_SHELF)) || {};
+let shelf = {};
+for (const [id, def] of Object.entries(DEFAULT_SHELF)){
+  shelf[id] = { ...def, ...(shelfRaw[id] || {}) };
+}
+
+let entries = parse(localStorage.getItem(KEY_ENTRIES)) || [];
+let prefs = { lastBy:"", lastCat:"rod", lastWine:"", snoozeUntil:0,
+              ...(parse(localStorage.getItem(KEY_PREFS)) || {}) };
+
+let selectedCat  = prefs.lastCat in CATEGORIES ? prefs.lastCat : "rod";
+let selectedWine = (prefs.lastWine && shelf[prefs.lastWine]?.cat === selectedCat) ? prefs.lastWine : "";
+let pendingDiscard = null;
+
+const saveEntries = () => localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries));
+const savePrefs   = () => localStorage.setItem(KEY_PREFS, JSON.stringify(prefs));
+const saveShelf   = () => localStorage.setItem(KEY_SHELF, JSON.stringify(shelf));
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+
+const uuid = () => (crypto?.randomUUID?.() || "id-" + Math.random().toString(16).slice(2) + Date.now());
+
+function hoursFor(wineId){
+  const w = shelf[wineId];
+  if (!w) return 24;
+  if (typeof w.hours === "number" && w.hours > 0) return w.hours;
+  return CATEGORIES[w.cat]?.hours || 24;
+}
+
+function fmt(iso){
+  return new Date(iso).toLocaleString("da-DK",
+    { weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
+
+function hoursLabel(h){
+  if (h % 24 === 0) return (h/24) + " døgn";
+  if (h < 24) return h + " timer";
+  return Math.floor(h/24) + " døgn " + (h%24) + " t";
+}
+
+function timeLeft(iso){
+  const ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "udløbet";
+  const mins = Math.round(ms/60000);
+  const h = Math.floor(mins/60), m = mins%60;
+  if (h >= 24) { const d = Math.floor(h/24); return d + " døgn " + (h%24) + " t tilbage"; }
+  if (h >= 1)  return h + " t " + m + " min tilbage";
+  return m + " min tilbage";
+}
+
+function sameDay(a,b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function statusOf(e){
+  const disc = new Date(e.discardAt).getTime();
+  if (Date.now() >= disc) return "expired";
+  if (sameDay(new Date(), new Date(e.discardAt))) return "dueToday";
+  return "ok";
+}
+
+const STATUS_TEXT = { ok:"OK", dueToday:"Udløber i dag", expired:"Skal drikkes op" };
+
+/* ---------- Kategori-tabs ---------- */
+function renderCats(){
+  $("catTabs").innerHTML = Object.entries(CATEGORIES).map(([id,c]) => {
+    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
+    return `
+      <div class="catTab ${clsMap[id]} ${id===selectedCat?"on":""}" data-id="${id}">
+        <span class="dot"></span>${esc(c.name)}
+      </div>`;
+  }).join("");
+
+  $("catTabs").querySelectorAll(".catTab").forEach(b =>
+    b.addEventListener("click", () => {
+      selectedCat = b.dataset.id;
+      selectedWine = "";
+      prefs.lastCat = selectedCat; savePrefs();
+      renderCats(); renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Vin-knapper for valgt kategori ---------- */
+function renderWines(){
+  const wines = Object.entries(shelf).filter(([_,w]) => w.cat === selectedCat);
+  $("wineGrid").innerHTML = wines.map(([id,w]) => `
+    <div class="wineBtn ${id===selectedWine?"active":""}" data-id="${id}">
+      <div class="nm">${esc(w.name)}</div>
+      <div class="mt">Holdbarhed: ${esc(hoursLabel(hoursFor(id)))}</div>
+    </div>`).join("");
+
+  $("wineGrid").querySelectorAll(".wineBtn").forEach(b =>
+    b.addEventListener("click", () => {
+      selectedWine = b.dataset.id;
+      prefs.lastWine = selectedWine; savePrefs();
+      renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Preview ---------- */
+function chosenStart(){
+  if ($("whenMode").value === "custom" && $("whenAt").value){
+    return new Date($("whenAt").value);
+  }
+  return new Date();
+}
+
+function updatePreview(){
+  if (!selectedWine){ $("preview").textContent = "Vælg en vin"; return; }
+  const w = shelf[selectedWine];
+  const start = chosenStart();
+  const h = hoursFor(selectedWine);
+  const out = new Date(start.getTime() + h*3600*1000);
+  $("preview").textContent = `${w.name} — åbnet ${fmt(start)} → drikkes op senest ${fmt(out)}`;
+}
+
+/* ---------- Registrér ---------- */
+function addEntry(){
+  if (!selectedWine){ alert("Vælg en vin først."); return; }
+  const w = shelf[selectedWine];
+  const start = chosenStart();
+  if (isNaN(start.getTime())) return alert("Ugyldigt tidspunkt.");
+
+  const h = hoursFor(selectedWine);
+
+  entries.unshift({
+    id: uuid(),
+    wineId: selectedWine,
+    wineName: w.name,
+    cat: w.cat,
+    by: ($("by").value || "").trim(),
+    openedAt: start.toISOString(),
+    discardAt: new Date(start.getTime() + h*3600*1000).toISOString(),
+    status: "active"
+  });
+
+  saveEntries();
+  prefs.lastBy = ($("by").value || "").trim(); savePrefs();
+
+  $("whenMode").value = "now";
+  $("customTimeWrap").style.display = "none";
+
+  render(); updatePreview(); checkAlarm(true);
+}
+
+/* ---------- Liste ---------- */
+function render(){
+  const active = entries.filter(e => e.status === "active");
+
+  if (!active.length){
+    $("list").innerHTML = `<div class="empty">Ingen åbne flasker. Alt er lukket.</div>`;
+    return;
+  }
+
+  const rank = { expired:0, dueToday:1, ok:2 };
+  const catOrder = ["rod","hvid","rose","bubbles"];
+  const groups = {};
+  active.forEach(e => (groups[e.cat] ||= []).push(e));
+
+  const order = catOrder.filter(c => groups[c]);
+
+  $("list").innerHTML = order.map(cat => {
+    const rows = groups[cat]
+      .sort((a,b) => {
+        const sa = rank[statusOf(a)], sb = rank[statusOf(b)];
+        if (sa !== sb) return sa - sb;
+        return new Date(a.discardAt) - new Date(b.discardAt);
+      })
+      .map(e => {
+        const st = statusOf(e);
+        return `
+        <div class="bottle ${st}">
+          <div class="info">
+            <div class="line1">
+              ${esc(e.wineName)}
+              <span class="pill ${st}">${STATUS_TEXT[st]}</span>
+            </div>
+            <div class="line2">
+              Åbnet ${esc(fmt(e.openedAt))}${e.by ? " • " + esc(e.by) : ""}<br>
+              Drikkes op <strong>${esc(fmt(e.discardAt))}</strong> • ${esc(timeLeft(e.discardAt))}
+            </div>
+          </div>
+          <div class="acts">
+            <button class="btnSmall" data-act="discard" data-id="${e.id}">Færdig / kasseret</button>
+            <button class="btnDanger" data-act="delete" data-id="${e.id}">Slet</button>
+          </div>
+        </div>`;
+      }).join("");
+
+    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
+    return `
+      <div class="groupHead">
+        <div class="g ${clsMap[cat]}"><span class="catDot"></span>${esc(CATEGORIES[cat].name)}</div>
+        <div class="c">${groups[cat].length} åbne</div>
+      </div>${rows}`;
+  }).join("");
+
+  $("list").querySelectorAll("button[data-act]").forEach(b =>
+    b.addEventListener("click", () => {
+      if (b.dataset.act === "discard") openDiscard(b.dataset.id);
+      else deleteEntry(b.dataset.id);
+    }));
+}
+
+function deleteEntry(id){
+  const e = entries.find(x => x.id === id);
+  if (!e || !confirm(`Slet registrering af "${e.wineName}"?`)) return;
+  entries = entries.filter(x => x.id !== id);
+  saveEntries(); render();
+}
+
+/* ---------- Kassér (færdig / smidt ud) ---------- */
+function openDiscard(id){
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  pendingDiscard = id;
+  $("discardSub").innerHTML =
+    `<strong>${esc(e.wineName)}</strong><br>Åbnet ${esc(fmt(e.openedAt))}`;
+  $("discardOverlay").classList.add("on");
+}
+
+function closeDiscard(){
+  pendingDiscard = null;
+  $("discardOverlay").classList.remove("on");
+}
+
+function saveDiscard(){
+  const e = entries.find(x => x.id === pendingDiscard);
+  if (!e) return;
+  e.status = "discarded";
+  e.discardedAt = new Date().toISOString();
+  saveEntries(); closeDiscard(); render();
+}
+
+/* ---------- Alarm ---------- */
+function alarmList(){
+  return entries.filter(e => e.status === "active" &&
+    ["expired","dueToday"].includes(statusOf(e)));
+}
+
+function checkAlarm(force){
+  if (!force && Date.now() < Number(prefs.snoozeUntil || 0)) return;
+  const list = alarmList();
+  if (!list.length) return;
+
+  const expired = list.filter(e => statusOf(e) === "expired").length;
+  $("alarmBanner").textContent = expired
+    ? `${expired} skal drikkes op NU`
+    : `${list.length} udløber i dag`;
+
+  $("alarmList").innerHTML = list.map(e => `
+    <div class="bottle ${statusOf(e)}" style="margin-top:8px">
+      <div class="info">
+        <div class="line1">${esc(e.wineName)}</div>
+        <div class="line2">Udløb ${esc(fmt(e.discardAt))}${e.by ? " • " + esc(e.by) : ""}</div>
+      </div>
+      <div class="acts">
+        <button class="btnSmall" data-alarm="${e.id}">Færdig / kasseret</button>
+      </div>
+    </div>`).join("");
+
+  $("alarmList").querySelectorAll("button[data-alarm]").forEach(b =>
+    b.addEventListener("click", () => {
+      $("alarmOverlay").classList.remove("on");
+      openDiscard(b.dataset.alarm);
+    }));
+
+  $("alarmOverlay").classList.add("on");
+}
+
+/* ---------- Indstillinger ---------- */
+function renderSettings(){
+  const order = ["rod","hvid","rose","bubbles"];
+  const list = [];
+  order.forEach(cat => {
+    Object.entries(shelf).filter(([_,w]) => w.cat === cat).forEach(([id,w]) => {
+      list.push({ id, w });
+    });
+  });
+
+  $("settings").innerHTML = list.map(({id,w}) => `
+    <div class="settingRow">
+      <div class="nm">${esc(w.name)}</div>
+      <div class="cat">${esc(CATEGORIES[w.cat].name)}</div>
+      <input type="number" min="1" step="1" value="${hoursFor(id)}" data-shelf="${id}"/>
+      <div class="unit">TIMER</div>
+    </div>`).join("");
+
+  $("settings").querySelectorAll("input[data-shelf]").forEach(inp =>
+    inp.addEventListener("change", () => {
+      const h = parseInt(inp.value, 10);
+      if (!Number.isFinite(h) || h < 1) { inp.value = hoursFor(inp.dataset.shelf); return; }
+      shelf[inp.dataset.shelf].hours = h;
+      saveShelf(); renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Init ---------- */
+$("by").value = prefs.lastBy || "";
+
+$("whenMode").addEventListener("change", () => {
+  const custom = $("whenMode").value === "custom";
+  $("customTimeWrap").style.display = custom ? "" : "none";
+  if (custom && !$("whenAt").value){
+    const d = new Date(Date.now() - new Date().getTimezoneOffset()*60000);
+    $("whenAt").value = d.toISOString().slice(0,16);
+  }
+  updatePreview();
+});
+$("whenAt").addEventListener("input", updatePreview);
+$("addBtn").addEventListener("click", addEntry);
+$("by").addEventListener("input", () => { prefs.lastBy = $("by").value; savePrefs(); });
+
+$("discardCancel").addEventListener("click", closeDiscard);
+$("discardSave").addEventListener("click", saveDiscard);
+$("discardOverlay").addEventListener("click", e => { if (e.target === $("discardOverlay")) closeDiscard(); });
+
+$("closeAlarmBtn").addEventListener("click", () => $("alarmOverlay").classList.remove("on"));
+$("snoozeBtn").addEventListener("click", () => {
+  prefs.snoozeUntil = Date.now() + 30*60*1000; savePrefs();
+  $("alarmOverlay").classList.remove("on");
+});
+
+$("clearBtn").addEventListener("click", () => {
+  if (!confirm("Slet ALLE åbne flasker på denne enhed? (Til rengøring / nulstilling)")) return;
+  entries = []; saveEntries(); render();
+});
+
+renderCats();
+renderWines();
+renderSettings();
+updatePreview();
+render();
+checkAlarm(false);
+
+setInterval(() => { render(); checkAlarm(false); }, 60000);
+})();
+</script>
+</body>
+</html>
