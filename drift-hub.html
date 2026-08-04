@@ -88,16 +88,21 @@
     .clockDate{margin-top:6px;font-size:14px;color:var(--muted);font-weight:700;}
 
     /* ATTENTION BAR */
-    .attn{margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);box-shadow:var(--shadow);padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-    @media (max-width: 760px){ .attn{grid-template-columns:repeat(2,1fr);} }
+    .attn{margin-top:14px;border-radius:22px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);box-shadow:var(--shadow);padding:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+    @media (max-width: 900px){ .attn{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width: 600px){ .attn{grid-template-columns:repeat(2,1fr);} }
     .attnChip{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);cursor:pointer;transition:.15s ease;}
     .attnChip:hover{background:rgba(255,255,255,0.08);}
     .attnChip.alert{border-color:rgba(255,107,107,0.42);background:rgba(255,107,107,0.12);}
     .attnChip.warn{border-color:rgba(245,158,11,0.45);background:rgba(245,158,11,0.12);}
+    .attnChip.wineAlert{border-color:rgba(198,43,62,0.50);background:rgba(198,43,62,0.16);}
+    .attnChip.wineWarn{border-color:rgba(198,43,62,0.30);background:rgba(198,43,62,0.09);}
     .attnIcon{font-size:26px;line-height:1;}
     .attnNum{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;line-height:1;}
     .attnChip.alert .attnNum{color:#ff9494;}
     .attnChip.warn .attnNum{color:#ffc86b;}
+    .attnChip.wineAlert .attnNum{color:#ff8fa0;}
+    .attnChip.wineWarn .attnNum{color:#e6a3a3;}
     .attnLabel{font-size:11px;font-weight:900;letter-spacing:.10em;text-transform:uppercase;color:var(--muted2);margin-top:4px;}
 
     /* SMID UD-MODAL */
@@ -264,6 +269,10 @@
         <div class="attnIcon">🗑️</div>
         <div><div class="attnNum" id="attnExpiry">–</div><div class="attnLabel">Smid ud</div></div>
       </div>
+      <div class="attnChip" data-wine="1">
+        <div class="attnIcon">🍷</div>
+        <div><div class="attnNum" id="attnWine">–</div><div class="attnLabel">Vin åben</div></div>
+      </div>
     </section>
 
     <!-- DAGENS CATERING -->
@@ -361,6 +370,14 @@
             </div>
             <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Udløb</div></div><div class="launchText">Åbn →</div></div>
           </div>
+          <div class="toolCard" data-url="./vin.html">
+            <div>
+              <div class="toolTop"><div class="toolIcon">🍷</div><div class="badge blue" id="wineBadge">Vin</div></div>
+              <div class="toolName">Vin — åbnet</div>
+              <div class="toolDesc">Hold styr på hvornår åbne flasker skal drikkes op.</div>
+            </div>
+            <div class="toolBottom"><div class="toolMeta"><div class="metaChip">Udløb</div></div><div class="launchText">Åbn →</div></div>
+          </div>
           <div class="toolCard" data-url="./kaffe-timer.html">
             <div>
               <div class="toolTop"><div class="toolIcon">☕</div><div class="badge blue">Timer</div></div>
@@ -451,6 +468,23 @@
       </div>
     </div>
 
+    <!-- VIN-OVERSIGT -->
+    <div class="expOverlay" id="wineOverlay">
+      <div class="expModal">
+        <div class="expHead">
+          <div>
+            <div class="expTitle">Vin — åbne flasker</div>
+            <div class="expSub" id="wineSub">—</div>
+          </div>
+          <button class="btn" id="wineCloseBtn" type="button" style="min-height:40px;">✖ Luk</button>
+        </div>
+        <div id="wineBody"></div>
+        <div class="expFoot">
+          <button class="btn" id="wineOpenBtn" type="button">🍷 Åbn vinmodul</button>
+        </div>
+      </div>
+    </div>
+
     <!-- FULLSCREEN VIEWER -->
     <div class="toolViewer" id="toolViewer">
       <div class="toolBar">
@@ -487,13 +521,13 @@
     }
 
     /* ===== ATTENTION BAR ===== */
-    const counts = { soldout:null, complaints:null, faults:null, expiry:null };
+    const counts = { soldout:null, complaints:null, faults:null, expiry:null, wine:null };
     function setAttn(elId, val, cls){
       const el = $(elId); if (!el) return;
       const chip = el.closest(".attnChip");
       el.textContent = (val == null) ? "–" : val;
       if (chip){
-        chip.classList.remove("alert","warn");
+        chip.classList.remove("alert","warn","wineAlert","wineWarn");
         if (typeof val === "number" && val > 0) chip.classList.add(cls || "alert");
       }
     }
@@ -502,6 +536,7 @@
       setAttn("attnComplaints", counts.complaints);
       setAttn("attnFaults", counts.faults);
       setAttn("attnExpiry", counts.expiry, expiryHasOverdue ? "alert" : "warn");
+      setAttn("attnWine", counts.wine, wineHasOverdue ? "wineAlert" : "wineWarn");
     }
 
     /* =========================================================
@@ -514,8 +549,10 @@
       "kagekoeleskab.entries.v4","kagekoeleskab.entries.v3"
     ];
     const BARPREP_KEYS = ["kaiser.barprep.entries.v1"];
+    const WINE_KEYS = ["kaiser.wine.entries.v1"];
 
     let expiryHasOverdue = false;
+    let wineHasOverdue = false;
 
     /* Ental/flertal – tåler både ental og flertal gemt i modulerne */
     const PLURAL = { "bøtte":"bøtter", "bundt":"bundter", "stk":"stk", "pose":"poser" };
@@ -644,6 +681,92 @@
     $("expOpenBar").addEventListener("click", () => {
       closeExpiryModal();
       openTool("./barprep.html?v=" + Date.now(), "Bar prep");
+    });
+
+    /* =========================================================
+       VIN — egen tæller, adskilt fra "Smid ud".
+       Vin har en anden hastegrad end kage/citrus (drik den op
+       vs. skal smides ud), så den blandes bevidst ikke ind i
+       samme tal på forsiden.
+    ========================================================= */
+    const WINE_CAT_NAMES = { hvid:"Hvidvin", rod:"Rødvin", rose:"Rosé", bubbles:"Bobler" };
+
+    function collectWine(){
+      const out = [];
+      firstArray(WINE_KEYS).forEach(e => {
+        if (!e || e.status !== "active") return;
+        const st = expiryState(e.discardAt);
+        if (!st) return;
+        out.push({
+          name: e.wineName || "Vin",
+          cat: e.cat || "",
+          when: e.discardAt,
+          state: st
+        });
+      });
+      out.sort((a,b) => new Date(a.when) - new Date(b.when));
+      return out;
+    }
+
+    function refreshWine(){
+      const items = collectWine();
+      wineHasOverdue = items.some(i => i.state === "over");
+      counts.wine = items.length;
+      renderAttention();
+
+      const wb = $("wineBadge");
+      if (wb){
+        wb.textContent = items.length ? items.length + " haster" : "Vin";
+        wb.className = "badge" + (items.length ? " warn" : " blue");
+      }
+      return items;
+    }
+
+    function openWineModal(){
+      const items = refreshWine();
+      const over  = items.filter(i => i.state === "over");
+      const today = items.filter(i => i.state === "today");
+
+      $("wineSub").textContent = items.length
+        ? `${over.length} skal drikkes nu • ${today.length} udløber i dag`
+        : "Alle åbne flasker er inden for holdbarhed";
+
+      if (!items.length){
+        $("wineBody").innerHTML = '<div class="expEmpty">✓ Ingen åbne flasker haster lige nu</div>';
+      } else {
+        const row = i => `
+          <div class="expRow ${i.state === "over" ? "over" : ""}">
+            <div>
+              <div class="expName">${escapeHtml(i.name)}</div>
+              <div class="expMeta">🍷 ${escapeHtml(WINE_CAT_NAMES[i.cat] || "Vin")} • ${escapeHtml(fmtWhen(i.when))}</div>
+            </div>
+            <div class="expTag ${i.state === "over" ? "over" : ""}">${i.state === "over" ? "Skal drikkes nu" : "I dag"}</div>
+          </div>`;
+
+        let html = "";
+        if (over.length){
+          html += `<div class="expGroup">
+            <div class="expGroupHead"><span>Skal drikkes nu</span><span>${over.length}</span></div>
+            ${over.map(row).join("")}</div>`;
+        }
+        if (today.length){
+          html += `<div class="expGroup">
+            <div class="expGroupHead"><span>Udløber i dag</span><span>${today.length}</span></div>
+            ${today.map(row).join("")}</div>`;
+        }
+        $("wineBody").innerHTML = html;
+      }
+
+      $("wineOverlay").classList.add("open");
+    }
+
+    function closeWineModal(){ $("wineOverlay").classList.remove("open"); }
+
+    $("wineCloseBtn").addEventListener("click", closeWineModal);
+    $("wineOverlay").addEventListener("click", e => { if (e.target === $("wineOverlay")) closeWineModal(); });
+    $("wineOpenBtn").addEventListener("click", () => {
+      closeWineModal();
+      openTool("./vin.html?v=" + Date.now(), "Vin");
     });
 
     /* ===== ROBUST JSONP (timeout + onerror + cleanup) ===== */
@@ -806,6 +929,7 @@
     async function refreshAll() {
       updateClock();
       refreshExpiry();                 // lokal – virker altid, også uden net
+      refreshWine();                    // lokal – virker altid, også uden net
       const loc = getLoc();
       if (!loc) { $("updatedSub").textContent = "Sæt lokation med ?loc="; return; }
       await Promise.allSettled([
@@ -834,6 +958,7 @@
       document.body.style.overflow = "auto";
       currentToolUrl = "";
       refreshExpiry();                 // personalet har måske lige kasseret noget
+      refreshWine();
     }
     document.querySelectorAll(".toolCard[data-url]").forEach(card => {
       card.addEventListener("click", () => {
@@ -847,6 +972,8 @@
       chip.addEventListener("click", () => {
         if (chip.dataset.expiry){
           openExpiryModal();
+        } else if (chip.dataset.wine){
+          openWineModal();
         } else if (chip.dataset.open){
           const base = chip.dataset.open;
           const title = chip.querySelector(".attnLabel")?.textContent?.trim() || "Værktøj";
@@ -887,6 +1014,7 @@
     document.addEventListener("visibilitychange", async () => {
       if (document.visibilityState === "visible"){
         refreshExpiry();
+        refreshWine();
         if (wakeLock === null && $("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
           try{ wakeLock = await navigator.wakeLock.request("screen"); wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); }; }catch(_){}
         }
@@ -897,6 +1025,7 @@
     window.addEventListener("storage", e => {
       if (!e.key) return;
       if (CAKE_KEYS.includes(e.key) || BARPREP_KEYS.includes(e.key)) refreshExpiry();
+      if (WINE_KEYS.includes(e.key)) refreshWine();
     });
 
     $("clockToggle").addEventListener("click", toggleClock);
@@ -909,9 +1038,10 @@
       updateClockUI();
       updateClock();
       refreshExpiry();
+      refreshWine();
       refreshAll();
       setInterval(updateClock, 1000);          // ur tikker hvert sekund
-      setInterval(refreshExpiry, 30000);       // smid ud-tæller hvert 30. sek (lokal, gratis)
+      setInterval(() => { refreshExpiry(); refreshWine(); }, 30000); // lokale tællere, gratis
       setInterval(refreshAll, 60000);          // data hvert minut
       setInterval(() => {                      // genindlæs på fast stille tidspunkt (04:00)
         const now = new Date();
