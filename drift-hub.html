@@ -69,6 +69,9 @@
     .heroMeta{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;}
     @media (max-width: 760px){ .heroMeta{grid-template-columns:1fr;} }
     .metaCard{border-radius:20px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);padding:14px;}
+    .metaCard.clickable{cursor:pointer;transition:.15s ease;}
+    .metaCard.clickable:hover{background:rgba(255,255,255,0.08);}
+    .metaCard.unset{border-color:rgba(245,158,11,0.45);background:rgba(245,158,11,0.10);}
     .metaLabel{font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);}
     .metaValue{margin-top:8px;font-size:18px;font-weight:900;color:rgba(255,255,255,0.96);line-height:1.2;}
     .metaSub{margin-top:6px;font-size:12px;font-weight:700;color:var(--muted);}
@@ -146,6 +149,42 @@
       color:var(--muted);font-weight:800;font-size:14px;
     }
     .expFoot{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+
+    /* LOKATIONSVÆLGER */
+    .locOverlay{
+      position:fixed;inset:0;background:rgba(6,9,13,0.92);display:none;
+      align-items:center;justify-content:center;padding:18px;z-index:20000;
+    }
+    .locOverlay.open{display:flex;}
+    .locOverlay.forced{backdrop-filter:blur(6px);}
+    .locModal{
+      width:min(620px,100%);border-radius:26px;padding:24px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border:1px solid rgba(255,255,255,0.16);box-shadow:0 30px 90px rgba(0,0,0,.7);
+    }
+    .locModalHead{text-align:center;margin-bottom:18px;}
+    .locModalTitle{font-family:"Playfair Display",serif;font-size:26px;font-weight:700;}
+    .locModalSub{margin-top:8px;font-size:13px;font-weight:800;color:var(--muted2);}
+    .locGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media (max-width:560px){ .locGrid{grid-template-columns:1fr;} }
+    .locOption{
+      min-height:64px;padding:14px 16px;border-radius:18px;cursor:pointer;
+      border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.05);
+      color:var(--text);font-size:15px;font-weight:900;letter-spacing:-.01em;
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      transition:.15s ease;
+    }
+    .locOption:hover{background:rgba(255,255,255,0.10);}
+    .locOption.current{
+      border-color:rgba(214,178,74,0.55);
+      background:linear-gradient(135deg, rgba(214,178,74,.18), rgba(255,255,255,.04));
+      box-shadow:0 0 0 4px rgba(214,178,74,0.12);
+    }
+    .locModalFoot{margin-top:16px;text-align:center;}
+    .locCancelBtn{
+      margin-top:10px;background:none;border:none;color:var(--muted2);
+      font-size:12px;font-weight:800;cursor:pointer;text-decoration:underline;
+    }
     .expFoot>*{flex:1;min-width:150px;}
 
     /* DAGENS CATERING */
@@ -218,6 +257,19 @@
   </style>
 </head>
 <body>
+  <div class="locOverlay" id="locOverlay">
+    <div class="locModal">
+      <div class="locModalHead">
+        <div class="locModalTitle">Vælg lokation</div>
+        <div class="locModalSub" id="locModalSub">Hvilken café er dette?</div>
+      </div>
+      <div class="locGrid" id="locGrid"></div>
+      <div class="locModalFoot">
+        <button class="locCancelBtn" id="locCancelBtn" type="button">Annuller</button>
+      </div>
+    </div>
+  </div>
+
   <div class="shell">
     <header class="hero">
       <div class="heroTop">
@@ -228,10 +280,10 @@
         <div class="goldline"></div>
       </div>
       <div class="heroMeta">
-        <div class="metaCard">
+        <div class="metaCard clickable" id="locCard">
           <div class="metaLabel">Lokation</div>
           <div class="metaValue" id="locPill">Ikke sat</div>
-          <div class="metaSub">Hub følger valgt afdeling</div>
+          <div class="metaSub">Tryk for at skifte café</div>
         </div>
         <div class="metaCard">
           <div class="metaLabel">Nu</div>
@@ -515,6 +567,60 @@
       if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
       return localStorage.getItem(LOC_KEY) || "";
     }
+
+    /* =========================================================
+       LOKATIONSVÆLGER
+       Løser: enheden mister/har aldrig sat lokation (fx efter
+       cache-ryd, ny enhed, eller browseren er lukket ned).
+       Uden en lokation er hele hubben blind — så modalen kan
+       ikke lukkes uden at vælge første gang.
+    ========================================================= */
+    const LOCATIONS = [
+      "Helsingør","Hillerød","Farum","Hørsholm","Vanløse","Sydhavnen"
+    ];
+
+    function updateLocUI(){
+      const loc = getLoc();
+      const card = $("locCard");
+      $("locPill").textContent = loc || "Ikke sat";
+      if (card) card.classList.toggle("unset", !loc);
+    }
+
+    function renderLocGrid(){
+      const current = getLoc();
+      $("locGrid").innerHTML = LOCATIONS.map(name => `
+        <div class="locOption ${name===current?"current":""}" data-loc="${escapeHtml(name)}">
+          ${escapeHtml(name)}
+        </div>`).join("");
+
+      $("locGrid").querySelectorAll(".locOption").forEach(opt => {
+        opt.addEventListener("click", () => {
+          localStorage.setItem(LOC_KEY, opt.dataset.loc);
+          closeLocModal();
+          updateLocUI();
+          refreshAll();
+          refreshExpiry();
+          refreshWine();
+        });
+      });
+    }
+
+    function openLocModal(forced){
+      renderLocGrid();
+      $("locModalSub").textContent = forced
+        ? "Vælg hvilken café dette er, før du fortsætter"
+        : "Hvilken café er dette?";
+      $("locCancelBtn").style.display = forced ? "none" : "";
+      $("locOverlay").classList.toggle("forced", !!forced);
+      $("locOverlay").classList.add("open");
+    }
+
+    function closeLocModal(){
+      $("locOverlay").classList.remove("open","forced");
+    }
+
+    $("locCard").addEventListener("click", () => openLocModal(false));
+    $("locCancelBtn").addEventListener("click", closeLocModal);
     function saveCache(key, data){ try{ localStorage.setItem(key, JSON.stringify({ts:Date.now(), data})); }catch(_){} }
     function loadCache(key){
       try{ const p = JSON.parse(localStorage.getItem(key)||"null"); return (p && p.data!==undefined) ? p : null; }catch(_){ return null; }
@@ -931,7 +1037,7 @@
       refreshExpiry();                 // lokal – virker altid, også uden net
       refreshWine();                    // lokal – virker altid, også uden net
       const loc = getLoc();
-      if (!loc) { $("updatedSub").textContent = "Sæt lokation med ?loc="; return; }
+      if (!loc) { $("updatedSub").textContent = "Vælg lokation ovenfor"; return; }
       await Promise.allSettled([
         fetchBadge("getSoldoutProducts", "soldoutBadge", "udsolgte", "soldout"),
         fetchBadge("getGuestComplaints", "complaintBadge", "klager", "complaints"),
@@ -1034,7 +1140,7 @@
     /* ===== INIT ===== */
     (function init() {
       const loc = getLoc();
-      $("locPill").textContent = loc || "Ikke sat";
+      updateLocUI();
       updateClockUI();
       updateClock();
       refreshExpiry();
@@ -1047,6 +1153,8 @@
         const now = new Date();
         if (now.getHours() === RELOAD_HOUR && now.getMinutes() === 0) location.reload();
       }, 60000);
+
+      if (!loc) openLocModal(true);            // ingen lokation sat → tving valg
     })();
   </script>
 </body>
