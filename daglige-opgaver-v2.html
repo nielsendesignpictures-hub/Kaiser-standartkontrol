@@ -795,11 +795,13 @@ const STANDARD_LUNCH = [
 ];
 
 const STANDARD_CLOSE = [
-  "Opfyldning i køleskabene i baren",
+  "Fyld op i baren",
   "Puds bestik og sæt glas på plads",
   "Rengør vask & hæld kogende vand i håndvask afløb",
-  "Dæk op til reservationer til aften",
+  "Dæk op til reservationer",
+  "Tør borde af",
   "Fej caféen",
+  "Tøm skrald",
   "Luk udenfor"
 ];
 
@@ -890,8 +892,8 @@ addDrift(
   "Weekend"
 );
 
+addDrift(L_HOR, "lunch", "Dæk op til reservationer til aften");
 addDrift(L_HOR, "lunch", "Bestil vare (BC)");
-addDrift(L_HOR, "lunch", "fejer/oprydning på terassen");
 addDrift(L_HOR, "lunch", "Evt opdatering af kælderliste");
 addDrift(L_HOR, "lunch", "Fej gulvet ude ved alle centerborde");
 
@@ -909,11 +911,11 @@ addDrift(L_HOR, "evening", "Samle skrald og glas samt flasker");
 addDrift(L_HOR, "evening", "Slukke for Aircon");
 addDrift(L_HOR, "evening", "Støvsugning");
 addDrift(L_HOR, "evening", "Fej gulvet ude ved alle centerborde");
-addDrift(L_HOR, "evening", "fejer/oprydning på terassen");    
 addDrift(L_HOR, "evening", "Samle lys");
 addDrift(L_HOR, "evening", "Lukke bar");
 addDrift(L_HOR, "evening", "Opfyldning af servietter, sukker, chokolade og kagetallerkener");
 addDrift(L_HOR, "evening", "Opfyldning af kager i kagemontre - Husk at smid dem ind i kaiser hub");
+addDrift(L_HOR, "evening", "Opfyldning i køleskabene i baren");
 addDrift(L_HOR, "evening", "Sluk for musikanlæg");
 
 addDrift(L_HOR, "evening", "Vande udendørsplanterne");
@@ -1184,7 +1186,7 @@ addDrift(L_VAN, "morning", "Hæld kogende vand i håndvask afløb");
 
 addDrift(L_VAN, "lunch", "Skift skraldepose");
 addDrift(L_VAN, "lunch", "Dæk op til resevationer");
-
+addDrift(L_VAN, "lunch", "Fjern udløbet frugt");
 addDrift(L_VAN, "lunch", "Skyl spildbakker & pantboksen");
 addDrift(L_VAN, "lunch", "Puds bestik");
 addDrift(L_VAN, "lunch", "Bestil varer - ikke lørdag");
@@ -1928,7 +1930,7 @@ addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstet
       return meta.lastDoneDate >= dueIso;
     }
 
-    function setDone(task, val){
+    function setDone(task, val, dueIso){
       const key = taskKey(task);
 
       if (!val) {
@@ -1955,8 +1957,14 @@ addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstet
       setError("");
 
       const todayIso = dayKey();
+      // Almindelige/overførte opgaver (dueIso <= i dag): dækket til og med i dag, som hidtil.
+      // Forhåndsgodkendte FREMTIDIGE opgaver (dueIso > i dag): dækket til og med den dato
+      // opgaven rent faktisk gælder for — ellers slår afkrydsningen straks fra igen,
+      // og opgaven ville stå som "ikke gjort" når dagen skifter.
+      const effectiveDate = (dueIso && dueIso > todayIso) ? dueIso : todayIso;
+
       state.doneMap[key] = {
-        lastDoneDate: todayIso,
+        lastDoneDate: effectiveDate,
         doneAt: nowDK(),
         doneBy: who
       };
@@ -2037,7 +2045,7 @@ addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstet
         setError("");
         if (!state.loc) return setError("Vælg lokation.");
         if (future && !isOverrideOn()) return setError("Denne opgave ligger i fremtiden. (Leder kan override.)");
-        const ok = setDone(t, !done);
+        const ok = setDone(t, !done, dueIso);
         if (!ok) return;
         updateUI();
       });
