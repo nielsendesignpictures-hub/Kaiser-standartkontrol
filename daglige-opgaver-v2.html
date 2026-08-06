@@ -896,6 +896,7 @@ addDrift(L_HOR, "lunch", "Dæk op til reservationer til aften");
 addDrift(L_HOR, "lunch", "Bestil vare (BC)");
 addDrift(L_HOR, "lunch", "Evt opdatering af kælderliste");
 addDrift(L_HOR, "lunch", "Fej gulvet ude ved alle centerborde");
+addDrift(L_HOR, "lunch", "Stil borde og stole pænt på terrassen");
 
 addDrift(
   L_HOR,
@@ -911,6 +912,7 @@ addDrift(L_HOR, "evening", "Samle skrald og glas samt flasker");
 addDrift(L_HOR, "evening", "Slukke for Aircon");
 addDrift(L_HOR, "evening", "Støvsugning");
 addDrift(L_HOR, "evening", "Fej gulvet ude ved alle centerborde");
+addDrift(L_HOR, "evening", "Stil borde og stole pænt på terrassen");
 addDrift(L_HOR, "evening", "Samle lys");
 addDrift(L_HOR, "evening", "Lukke bar");
 addDrift(L_HOR, "evening", "Opfyldning af servietter, sukker, chokolade og kagetallerkener");
@@ -1203,6 +1205,7 @@ addDrift(L_VAN, "evening", "Rengør postmix & fadøl");
 addDrift(L_VAN, "evening", "Rengør kaffemaskinerne & stempelmaskinen");
 addDrift(L_VAN, "evening", "Ryd op i baren – stil tingene pænt på plads & sorter");
 addDrift(L_VAN, "evening", "Smid gammel frugt ud");
+addDrift(L_VAN, "evening", "Vand udendørs planter");
 
 
 addDrift(
@@ -1399,7 +1402,7 @@ addDrift(L_SYD, "evening", "Tage A skiltet og champagne rack ind (spørg køkken
      addClean(L_HOR, "Service/Gulv", "weekly", "Rengøring af vindueskarme ved 20'er bordene", { kind:"weekly", days:[D.thu] });
     addClean(L_HOR, "Bar", "weekly", "Oprydning i bar (smid alt ud vi ikke bruger)", { kind:"weekly", days:[D.thu] });
 
-    addClean(L_HOR, "Lager/Udendørs", "weekly", "Gennemgå om terassen spiller (stole + borde på plads, spindelvæv, klud over sorte skilte)", { kind:"weekly", days:[D.fri] });
+    addClean(L_HOR, "Lager/Udendørs", "weekly", "Gennemgå om terassen spiller (spindelvæv, klud over sorte skilte)", { kind:"weekly", days:[D.fri] });
     addClean(L_HOR, "Bar", "weekly", "Tjek om der er nok brunch-the til weekenden", { kind:"weekly", days:[D.fri] });
     addClean(L_HOR, "Køkken", "weekly", "Rengøring af alle beholdere (til bestik, teskeer, sukker, osv.)", { kind:"weekly", days:[D.fri] });
 
@@ -1832,6 +1835,34 @@ addClean(L_SYD, "Service/Gulv", "weekly", "Rengør alle barnestole – Fyr dem e
 addClean(L_SYD, "Bar", "weekly", "Rengøring af hele blenderen", { kind:"weekly", days:[D.sun] });
 addClean(L_SYD, "Lager/Udendørs", "weekly", "Ryd op i kælder, personalerum og på lageret", { kind:"weekly", days:[D.sun] });
 addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstetoiletter (tjek guide i baren)", { kind:"weekly", days:[D.sun] });
+
+/* =========================================================
+   HØRSHOLM – FJERN DUBLETTER FRA STANDARDSKABELONEN
+   Hørsholm får STANDARD_CLOSE via addStandardDrift() ligesom de
+   øvrige caféer, men har også sine egne mere detaljerede aften-
+   opgaver der dækker det samme. Disse fire generiske opgaver
+   fjernes derfor igen her, så personalet ikke ser samme opgave
+   to gange med forskellig ordlyd.
+========================================================= */
+{
+  const HOR_REMOVE_EVENING = [
+    "Fyld op i baren",
+    "Dæk op til reservationer",
+    "Tøm skrald",
+    "Fej caféen"
+  ];
+  for (let i = TASKS.length - 1; i >= 0; i--) {
+    const t = TASKS[i];
+    if (
+      t.loc === L_HOR &&
+      t.type === "drift" &&
+      t.shift === "evening" &&
+      HOR_REMOVE_EVENING.includes(t.text)
+    ) {
+      TASKS.splice(i, 1);
+    }
+  }
+}
 
     /* ---------------- FÆLLES LOGIK ---------------- */
 
