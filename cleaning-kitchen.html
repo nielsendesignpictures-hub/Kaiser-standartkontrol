@@ -5,168 +5,192 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kaiser – Cleaning list kitchen</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --bg:#17181c;
-      --panel:rgba(28, 30, 36, 0.90);
-      --border:rgba(255,255,255,0.10);
-      --text:rgba(255,255,255,0.93);
-      --muted:rgba(255,255,255,0.70);
-      --muted2:rgba(255,255,255,0.50);
-      --gold:#d6b24a;
-      --gold2:#b9921f;
-      --goldGlow:rgba(214,178,74,.22);
-      --danger:#ff6b6b;
-    }
+  :root {
+    --bg:        #f6f4ef;
+    --card:      #ffffff;
+    --border:    #e3ded4;
+    --ink:       #26241f;
+    --muted:     #8a857a;
+    --gold:      #a8842c;
+    --gold-bg:   #f5edd8;
+    --green:     #3e7a4e;
+    --green-bg:  #e8f2ea;
+    --danger:    #c0392b;
+    --danger-bg: #fbe9e7;
+    --shadow:    0 1px 3px rgba(60,50,30,.08);
+  }
 
-    html,body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
-    body{
-      background:
-        radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.12), transparent 55%),
-        radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.08), transparent 50%),
-        radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.05), transparent 55%),
-        linear-gradient(180deg, #17181c, #1b1d24 55%, #17181c);
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
 
-    .shell{max-width:900px}
-    .topbar{
-      border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
-      border-radius:22px;padding:22px 18px;
-      backdrop-filter: blur(10px);
-      box-shadow:0 28px 70px rgba(0,0,0,.45);
-      text-align:center;
-    }
-    .kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800;}
-    .title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;letter-spacing:-0.015em;font-weight:700;margin-top:8px;}
-    .subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px;}
-    .goldline{height:2px;margin-top:16px;border-radius:999px;background:linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);opacity:.9;}
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px 16px 60px;
+  }
 
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:0 26px 72px rgba(0,0,0,.55);backdrop-filter: blur(12px);}
-    .divider{height:1px;background:rgba(255,255,255,.10);}
+  .shell { max-width: 720px; margin: 0 auto; }
+  .hidden { display: none !important; }
 
-    .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);font-weight:900;}
-    .input, select, textarea{
-      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      padding:14px 14px;outline:none;color:rgba(255,255,255,0.92);
-    }
-    select option{color:#0b0c0f;}
-    .input:focus, select:focus, textarea:focus{
-      border-color: rgba(214,178,74,0.55);
-      box-shadow: 0 0 0 4px var(--goldGlow);
-      background: rgba(255,255,255,0.08);
-    }
+  /* ═══════════ HEADER ═══════════ */
+  header.topbar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 22px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .kicker {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .14em; color: var(--gold);
+  }
+  .title {
+    font-size: 26px; font-weight: 800; letter-spacing: -.02em;
+    margin-top: 8px; line-height: 1.15;
+  }
+  .subtitle { color: var(--muted); font-weight: 600; font-size: 13px; margin-top: 10px; }
+  .goldline {
+    height: 2px; margin-top: 16px; border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: .55;
+  }
 
-    .btn{
-      width:100%;border-radius:16px;font-weight:900;letter-spacing:.02em;padding:14px 16px;
-      transition:transform .08s ease,filter .18s ease;user-select:none;border:none;
-    }
-    .btn:active{transform:translateY(1px);}
-    .btn-primary{background:linear-gradient(135deg, var(--gold), var(--gold2));color:#0b0c0f;box-shadow:0 18px 40px rgba(214,178,74,0.18);}
-    .btn-primary:hover{filter:brightness(1.04);}
-    .btn-secondary{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+  /* ═══════════ PANELS ═══════════ */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .divider { height: 1px; background: var(--border); margin: 14px 0; }
 
-    .muted{color:var(--muted);font-weight:600;font-size:13px;}
-    .hint{color:var(--muted2);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;}
+  .row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .panel-title { font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
 
-    .tabs7{display:grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap:8px;}
-    .tabBtn{
-      border-radius:14px;
-      padding:10px 8px;
-      font-weight:900;
-      letter-spacing:.02em;
-      border:1px solid rgba(255,255,255,0.14);
-      background:rgba(255,255,255,0.06);
-      color:rgba(255,255,255,0.90);
-      cursor:pointer;
-      font-size:12px;
-    }
-    .tabBtn.on{
-      border-color: rgba(214,178,74,0.38);
-      background: rgba(214,178,74,0.10);
-      box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
-    }
+  .label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--muted); margin-bottom: 8px; display: block;
+  }
+  .hint { color: var(--muted); font-weight: 600; font-size: 12px; margin-top: 6px; }
+  .muted { color: var(--muted); font-weight: 600; font-size: 13px; }
 
-    .task{
-      display:flex;align-items:flex-start;gap:12px;padding:14px 14px;border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.03);
-      cursor:pointer;transition: background .18s ease, border-color .18s ease;user-select:none;
-    }
-    .task:hover{background:rgba(214,178,74,0.06);border-color:rgba(214,178,74,0.22);}
-    .task.locked{opacity:.55; cursor:not-allowed;}
-    .taskNum{
-      width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-      border:1px solid rgba(214,178,74,0.22);background:rgba(214,178,74,0.08);
-      font-weight:900;color:rgba(255,255,255,0.90);flex:0 0 auto;
-    }
-    .taskTitle{font-weight:900; letter-spacing:-0.01em;}
-    .check{
-      margin-left:auto;width:24px;height:24px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
-    }
-    .check.on{border-color: rgba(98, 210, 111, 0.55);background: rgba(98, 210, 111, 0.18);color: rgba(255,255,255,0.92);}
+  .grid2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 640px) { .grid2 { grid-template-columns: 1fr 1fr; } }
 
-    .progressWrap{border:1px solid rgba(255,255,255,0.10);background: rgba(255,255,255,0.04);border-radius: 999px;overflow:hidden;height: 10px;}
-    .progressBar{height: 10px;width: 0%;background: linear-gradient(90deg, var(--gold), var(--gold2));}
+  .input, select {
+    width: 100%; font-size: 16px; padding: 13px 14px;
+    border: 2px solid var(--border); border-radius: 12px;
+    background: var(--bg); color: var(--ink); outline: none;
+    transition: border-color .15s;
+  }
+  .input:focus, select:focus { border-color: var(--gold); background: #fff; }
+  .input[readonly] { color: var(--muted); }
+  select option { color: var(--ink); }
 
-    /* Accordion (dropdown sections) */
-    .acc{
-      border:1px solid rgba(255,255,255,0.12);
-      background:rgba(255,255,255,0.03);
-      border-radius:16px;
-      overflow:hidden;
-    }
-    .acc summary{
-      list-style:none;
-      cursor:pointer;
-      user-select:none;
-      padding:14px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:12px;
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.02);
-    }
-    .acc summary::-webkit-details-marker{ display:none; }
-    .acc .accMeta{
-      letter-spacing:0;
-      text-transform:none;
-      font-size:12px;
-      font-weight:800;
-      color: var(--muted);
-    }
-    .accBody{
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+  /* ═══════════ DAY TABS ═══════════ */
+  .tabs7 { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; }
+  .tabBtn {
+    border-radius: 10px; padding: 9px 4px; font-weight: 700; font-size: 12px;
+    border: 2px solid var(--border); background: var(--card); color: var(--muted);
+    cursor: pointer; transition: all .15s;
+  }
+  .tabBtn.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+  /* ═══════════ PROGRESS ═══════════ */
+  .progressWrap {
+    border: 1px solid var(--border); background: var(--bg);
+    border-radius: 999px; overflow: hidden; height: 10px;
+  }
+  .progressBar { height: 10px; width: 0%; background: linear-gradient(90deg, var(--gold), #c9a84f); }
+
+  /* ═══════════ ACCORDION SECTIONS ═══════════ */
+  .acc {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: var(--card); margin-bottom: 10px;
+  }
+  .acc summary {
+    list-style: none; cursor: pointer; user-select: none;
+    padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-weight: 800; letter-spacing: .06em; text-transform: uppercase; font-size: 12px;
+    color: var(--ink); background: var(--gold-bg);
+  }
+  .acc summary::-webkit-details-marker { display: none; }
+  .accMeta { letter-spacing: 0; text-transform: none; font-size: 12.5px; font-weight: 700; color: var(--gold); }
+  .accBody { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+  /* ═══════════ TASK ROWS ═══════════ */
+  .task {
+    display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--bg);
+    cursor: pointer; transition: background .15s, border-color .15s; user-select: none;
+  }
+  .task:hover { border-color: var(--gold); }
+  .task.locked { opacity: .55; cursor: not-allowed; }
+  .taskNum {
+    width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border); background: var(--card);
+    font-weight: 800; font-size: 12px; color: var(--muted); flex: 0 0 auto;
+  }
+  .taskTitle { font-weight: 700; font-size: 15px; letter-spacing: -.005em; }
+  .check {
+    margin-left: auto; width: 26px; height: 26px; border-radius: 8px;
+    border: 2px solid var(--border); background: var(--card);
+    display: flex; align-items: center; justify-content: center; font-weight: 800; flex: 0 0 auto; color: transparent;
+  }
+  .check.on { border-color: var(--green); background: var(--green); color: #fff; }
+
+  #doneBox {
+    border: 1.5px solid #b7dcc2; background: var(--green-bg); border-radius: 14px; padding: 16px;
+  }
+  #doneBox .doneTitle { font-weight: 800; color: var(--green); font-size: 15px; }
+
+  /* ═══════════ BUTTONS ═══════════ */
+  .btn {
+    width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: .01em;
+    padding: 14px 16px; border: none; cursor: pointer; transition: filter .15s, transform .08s; font-size: 15px;
+  }
+  .btn:active { transform: scale(.99); }
+  .btn:disabled { cursor: not-allowed; }
+  .btn-primary { background: var(--gold); color: #fff; }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
+  .btn-secondary { background: var(--card); border: 2px solid var(--border); color: var(--ink); }
+  .btn-secondary:hover:not(:disabled) { border-color: var(--muted); }
+
+  .space-y > * + * { margin-top: 14px; }
+  #errorText {
+    color: var(--danger); background: var(--danger-bg); border: 1px solid #f0c4bc;
+    border-radius: 10px; padding: 11px 14px; font-weight: 700; font-size: 13.5px;
+  }
+
+  #thanksWrap .panel { text-align: center; }
+  #quoteText { font-style: italic; margin-top: 8px; }
+  .backLink {
+    display: inline-block; margin-top: 14px; text-decoration: none;
+  }
   </style>
 </head>
 
-<body class="min-h-screen flex justify-center p-4">
-  <div class="shell w-full">
+<body>
+  <div class="shell">
 
-    <header class="topbar mt-6 mb-5">
+    <header class="topbar">
       <div class="kicker">KAISER</div>
       <div class="title">Cleaning list – kitchen</div>
       <div class="subtitle">Weekly (Mon–Sun) • Per location • Only sends email if items are missing</div>
       <div class="goldline"></div>
     </header>
 
-    <section id="formWrap" class="space-y-4">
-      <form id="kitchenForm" class="space-y-4" method="POST"
+    <section id="formWrap" class="space-y">
+      <form id="kitchenForm" class="space-y" method="POST"
         action="https://formsubmit.co/6a45e9587d47fb185f4ab36d6632672b">
 
         <input type="hidden" name="_captcha" value="false">
@@ -176,17 +200,17 @@
         <input type="text" name="_honey" style="display:none">
         <textarea name="Report" id="reportPayload" style="display:none"></textarea>
 
-        <section class="panel p-5 space-y-4">
-          <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="text-lg font-extrabold">Setup</div>
+        <section class="panel space-y">
+          <div class="row-between">
+            <div class="panel-title">Setup</div>
             <div class="hint" id="weekKeyText">—</div>
           </div>
 
           <div class="divider"></div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Location</div>
+          <div class="grid2">
+            <div>
+              <label class="label">Location</label>
               <select id="locationSelect" required>
                 <option value="">Select location…</option>
                 <option>Café Kaiser Helsingør</option>
@@ -194,70 +218,68 @@
                 <option>Café Kaiser Farum</option>
                 <option>Café Kaiser Hørsholm</option>
                 <option>Café Kaiser Vanløse</option>
-                
+                <option>Café Kaiser Sydhavnen</option>
               </select>
               <div class="hint" id="gpsStatus">GPS: not checked</div>
             </div>
 
-            <div class="space-y-2">
-              <div class="label">Performed by</div>
+            <div>
+              <label class="label">Performed by</label>
               <input id="doneBy" class="input" placeholder="Name (required)" />
               <div class="hint">Stored per day</div>
             </div>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <div class="label">Date / time</div>
+          <div class="grid2">
+            <div>
+              <label class="label">Date / time</label>
               <input class="input" id="timeField" readonly>
               <div class="hint" id="dateText">—</div>
             </div>
 
-            <div class="space-y-2">
-              <div class="label">Day</div>
+            <div>
+              <label class="label">Day</label>
               <div class="tabs7" id="dayTabs"></div>
               <div class="hint">Auto-selects today</div>
             </div>
           </div>
 
-          <div class="space-y-2">
-            <div class="label">Progress</div>
+          <div>
+            <label class="label">Progress</label>
             <div class="progressWrap"><div id="progressBar" class="progressBar"></div></div>
-            <div class="muted" id="progressText">0/0</div>
+            <div class="muted" id="progressText" style="margin-top:6px">0/0</div>
           </div>
         </section>
 
-        <section class="panel p-5 space-y-4">
-          <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div class="text-lg font-extrabold" id="listTitle">Checklist</div>
+        <section class="panel space-y">
+          <div class="row-between">
+            <div class="panel-title" id="listTitle">Checklist</div>
             <div class="hint" id="missingHint">—</div>
           </div>
           <div class="divider"></div>
 
-          <div id="taskList" class="space-y-3"></div>
+          <div id="taskList"></div>
 
-          <div id="doneBox" class="hidden" style="border:1px solid rgba(98,210,111,0.35); background: rgba(98,210,111,0.10); border-radius:16px; padding:14px;">
-            <div style="font-weight:900;">Completed for the day.</div>
+          <div id="doneBox" class="hidden">
+            <div class="doneTitle">Completed for the day.</div>
             <div class="muted" id="doneText" style="margin-top:4px;"></div>
           </div>
         </section>
 
-        <section class="space-y-3">
+        <section class="space-y">
           <button id="submitBtn" class="btn btn-primary" type="submit">Send missing items</button>
           <button id="resetBtn" class="btn btn-secondary" type="button">Reset (this device only)</button>
-          <div id="errorText" class="hidden" style="color:var(--danger);font-weight:900;"></div>
+          <div id="errorText" class="hidden"></div>
         </section>
       </form>
     </section>
 
-    <section id="thanksWrap" class="hidden space-y-4">
-      <div class="panel p-6 text-center space-y-4">
+    <section id="thanksWrap" class="hidden space-y">
+      <div class="panel" style="text-align:center">
         <div class="hint">Sent</div>
-        <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Missing items were sent.</div>
+        <div style="font-size:18px; font-weight:800; letter-spacing:-0.01em; margin-top:6px;">Missing items were sent.</div>
         <div id="quoteText" class="muted" style="margin-top:6px;"></div>
-        <div class="pt-2 space-y-3">
-          <a class="btn btn-primary inline-block text-center" href="./cleaning-kitchen.html">Back</a>
-        </div>
+        <a class="btn btn-primary backLink" href="./cleaning-kitchen.html">Back</a>
       </div>
     </section>
 
@@ -273,8 +295,8 @@
       "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
       "Café Kaiser Farum": { lat: 55.814500, lng: 12.379595 },
       "Café Kaiser Hørsholm": { lat: 55.881489, lng: 12.497737 },
-      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
-      "Café Kaiser Enghave": { lat: 55.6475, lng: 12.5625 }
+      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 },
+      "Café Kaiser Sydhavnen": { lat: 55.6475, lng: 12.5625 }
     };
 
     const QUOTES = [
@@ -435,14 +457,15 @@
       }
     };
 
-    // Vanløse keeps list1, Hillerød same list1, Hørsholm/Farum custom
+    // Vanløse keeps list1, Hillerød same list1, Hørsholm/Farum custom.
+    // Sydhavnen points at the SAME list object as Farum — 1:1, always in sync.
     const LOCATION_TO_LIST = {
       "Café Kaiser Vanløse": "list1",
       "Café Kaiser Hillerød": "list1",
-      
 
       "Café Kaiser Hørsholm": "list_horsholm",
       "Café Kaiser Farum": "list_farum",
+      "Café Kaiser Sydhavnen": "list_farum",
 
       "Café Kaiser Helsingør": "list1"
     };
