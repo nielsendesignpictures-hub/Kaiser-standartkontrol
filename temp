@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaiser – Cooling &amp; Reheating Log</title>
+
+<style>
+:root {
+  --bg:        #f6f4ef;
+  --card:      #ffffff;
+  --border:    #e3ded4;
+  --ink:       #26241f;
+  --muted:     #8a857a;
+  --gold:      #a8842c;
+  --gold-bg:   #f5edd8;
+  --green:     #3e7a4e;
+  --green-bg:  #e8f2ea;
+  --red:       #b3402f;
+  --red-bg:    #fbe9e6;
+  --amber:     #a5730f;
+  --amber-bg:  #fbf1d9;
+  --shadow:    0 1px 3px rgba(60,50,30,.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Inter','Segoe UI',system-ui,sans-serif;
+  font-size: 16px; line-height: 1.55; min-height: 100vh; padding: 20px 16px 70px;
+}
+.shell { max-width: 760px; margin: 0 auto; }
+.hidden { display: none !important; }
+
+header.topbar {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  box-shadow: var(--shadow); padding: 22px 20px; text-align: center; margin-bottom: 16px;
+}
+.kicker { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--gold); }
+.title { font-size: 25px; font-weight: 800; letter-spacing: -.02em; margin-top: 8px; }
+.subtitle { color: var(--muted); font-weight: 600; font-size: 13px; margin-top: 10px; }
+.goldline { height: 2px; margin-top: 16px; border-radius: 999px; background: linear-gradient(90deg,transparent,var(--gold),transparent); opacity: .55; }
+
+.typeTabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.typeTab {
+  border: 2px solid var(--border); background: var(--card); border-radius: 12px;
+  padding: 13px; font-weight: 800; font-size: 14.5px; color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.typeTab.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.typeTab:disabled { opacity: .5; cursor: not-allowed; }
+
+.resumeBanner {
+  background: var(--amber-bg); border: 1.5px solid #e4cd94; border-radius: 12px;
+  padding: 13px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.resumeBanner .txt { flex: 1; font-size: 13.5px; font-weight: 700; color: var(--amber); min-width: 180px; }
+.resumeBanner button {
+  border: none; background: none; color: var(--amber); font-weight: 800; font-size: 13px;
+  text-decoration: underline; cursor: pointer;
+}
+
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.panel-title { font-size: 16.5px; font-weight: 800; letter-spacing: -.01em; }
+
+.label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 8px; display: block; }
+.req { color: var(--red); font-weight: 700; }
+.hint { color: var(--muted); font-weight: 600; font-size: 12px; margin-top: 6px; }
+
+.sectionLabel { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin: 4px 0 2px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 620px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+
+.input, select, textarea {
+  width: 100%; font-size: 16px; padding: 13px 14px; border: 2px solid var(--border);
+  border-radius: 12px; background: var(--bg); color: var(--ink); outline: none; transition: border-color .15s;
+  font-family: inherit;
+}
+.input:focus, select:focus, textarea:focus { border-color: var(--gold); background: #fff; }
+.input:disabled, select:disabled { opacity: .6; cursor: not-allowed; }
+textarea { resize: vertical; min-height: 70px; }
+
+.statusBox {
+  border-radius: 14px; padding: 16px 18px; margin-top: 4px; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--border); background: var(--bg); color: var(--muted);
+}
+.statusBox .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--border); flex: none; }
+.statusBox.ok { background: var(--green-bg); border-color: #b7dcc2; color: var(--green); }
+.statusBox.ok .dot { background: var(--green); }
+.statusBox.fail { background: var(--red-bg); border-color: #edc0b6; color: var(--red); }
+.statusBox.fail .dot { background: var(--red); }
+
+.space-y > * + * { margin-top: 14px; }
+
+.btnRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .btnRow { grid-template-columns: 1fr; } }
+.btn { width: 100%; border-radius: 12px; font-weight: 800; padding: 14px 16px; border: none; cursor: pointer; font-size: 15px; transition: filter .15s; }
+.btn-primary { background: var(--gold); color: #fff; }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-secondary { background: var(--card); border: 2px solid var(--border); color: var(--ink); }
+.btn-secondary:hover { border-color: var(--muted); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+#errorText { color: var(--red); background: var(--red-bg); border: 1px solid #edc0b6; border-radius: 10px; padding: 11px 14px; font-weight: 700; font-size: 13.5px; }
+#savedText { color: var(--green); background: var(--green-bg); border: 1px solid #b7dcc2; border-radius: 10px; padding: 11px 14px; font-weight: 700; font-size: 13.5px; }
+
+/* ═══════ LOG ═══════ */
+.logHead { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.logFilters { display: flex; gap: 8px; flex: 1; min-width: 200px; }
+.logFilters select { font-size: 13.5px; padding: 9px 10px; }
+.printBtn {
+  border: 2px solid var(--border); background: var(--card); border-radius: 10px;
+  padding: 9px 14px; font-weight: 700; font-size: 13px; color: var(--ink); cursor: pointer; white-space: nowrap;
+}
+.printBtn:hover { border-color: var(--gold); }
+
+.logList { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.logRow {
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; background: var(--bg);
+  display: grid; grid-template-columns: auto 1fr auto; gap: 10px 14px; align-items: center;
+}
+.logRow.ok { border-left: 4px solid var(--green); }
+.logRow.fail { border-left: 4px solid var(--red); background: var(--red-bg); }
+.logRow.pending { border-left: 4px solid var(--amber); background: var(--amber-bg); cursor: pointer; }
+.logRow.pending:hover { border-color: var(--amber); }
+.logBadge {
+  font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+}
+.logBadge.ok { background: var(--green-bg); color: var(--green); }
+.logBadge.fail { background: var(--red-bg); color: var(--red); border: 1px solid #edc0b6; }
+.logBadge.pending { background: var(--amber-bg); color: var(--amber); border: 1px solid #e4cd94; }
+.logMain { min-width: 0; }
+.logName { font-weight: 800; font-size: 14.5px; }
+.logMeta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.logTemps { font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: right; white-space: nowrap; }
+.logEmpty { text-align: center; padding: 30px 10px; color: var(--muted); font-size: 14px; }
+.logCount { font-size: 12.5px; color: var(--muted); font-weight: 700; }
+
+@media print {
+  body { background: #fff; padding: 0; }
+  header.topbar, .typeTabs, #formPanel, .printBtn, .logFilters, .resumeBanner { display: none !important; }
+  .panel { box-shadow: none; border: 1px solid #ccc; }
+  .shell { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="topbar">
+    <div class="kicker">KAISER</div>
+    <div class="title">Cooling &amp; Reheating Log</div>
+    <div class="subtitle">Food temperature documentation — self-inspection</div>
+    <div class="goldline"></div>
+  </header>
+
+  <div class="typeTabs" id="typeTabs">
+    <button type="button" class="typeTab on" data-type="cool">Cooling</button>
+    <button type="button" class="typeTab" data-type="heat">Reheating</button>
+  </div>
+
+  <div class="resumeBanner hidden" id="resumeBanner">
+    <span class="txt" id="resumeText"></span>
+    <button type="button" id="cancelResumeBtn">Cancel</button>
+  </div>
+
+  <section class="panel space-y" id="formPanel">
+    <div class="row-between">
+      <div class="panel-title" id="formTitle">Cooling food</div>
+    </div>
+    <div class="hint" id="ruleHint">Must be ≤ 10 °C within 4 hours of cooking</div>
+    <div class="divider"></div>
+
+    <div class="grid2">
+      <div>
+        <label class="label">Location <span class="req">*</span></label>
+        <select id="fLoc" required>
+          <option value="">Select location…</option>
+          <option>Café Kaiser Helsingør</option>
+          <option>Café Kaiser Hillerød</option>
+          <option>Café Kaiser Farum</option>
+          <option>Café Kaiser Hørsholm</option>
+          <option>Café Kaiser Vanløse</option>
+          <option>Café Kaiser Sydhavnen</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">Dish name <span class="req">*</span></label>
+        <input class="input" id="fDish" placeholder="e.g. Chili con carne">
+      </div>
+    </div>
+
+    <div class="sectionLabel">First reading</div>
+    <div class="grid2">
+      <div>
+        <label class="label">Start time <span class="req">*</span></label>
+        <input class="input" id="fStartTime" type="time">
+      </div>
+      <div>
+        <label class="label">Start temperature (°C) <span class="req">*</span></label>
+        <input class="input" id="fStartTemp" type="number" step="0.1" inputmode="decimal" placeholder="e.g. 82">
+      </div>
+    </div>
+
+    <div class="sectionLabel" id="endSectionLabel">Final reading</div>
+    <div class="grid2">
+      <div>
+        <label class="label">End time</label>
+        <input class="input" id="fEndTime" type="time">
+      </div>
+      <div>
+        <label class="label">End temperature (°C)</label>
+        <input class="input" id="fEndTemp" type="number" step="0.1" inputmode="decimal" placeholder="e.g. 8">
+      </div>
+    </div>
+    <div class="hint">Leave the final reading empty for now if you're just logging the first measurement — you can come back and complete it later.</div>
+
+    <div>
+      <label class="label">Status</label>
+      <div class="statusBox" id="statusBox"><span class="dot"></span><span id="statusText">Fill in times and temperatures to see status</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <label class="label">Recorded by <span class="req">*</span></label>
+        <input class="input" id="fBy" placeholder="Name">
+      </div>
+      <div>
+        <label class="label">Date</label>
+        <input class="input" id="fDate" type="date">
+      </div>
+    </div>
+
+    <div>
+      <label class="label">Note</label>
+      <textarea id="fNote" placeholder="Optional"></textarea>
+    </div>
+
+    <div id="errorText" class="hidden"></div>
+    <div id="savedText" class="hidden"></div>
+
+    <div class="btnRow">
+      <button class="btn btn-secondary" id="tempSaveBtn" type="button">Save temporarily</button>
+      <button class="btn btn-primary" id="saveBtn" type="button">Save &amp; complete</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="logHead">
+      <div class="panel-title" style="flex:1">Log</div>
+      <button class="printBtn" id="printBtn" type="button">🖨 Print log</button>
+    </div>
+    <div class="logFilters" style="margin-top:12px">
+      <select id="filterLoc">
+        <option value="">All locations</option>
+        <option>Café Kaiser Helsingør</option>
+        <option>Café Kaiser Hillerød</option>
+        <option>Café Kaiser Farum</option>
+        <option>Café Kaiser Hørsholm</option>
+        <option>Café Kaiser Vanløse</option>
+        <option>Café Kaiser Sydhavnen</option>
+      </select>
+      <select id="filterType">
+        <option value="">Cooling &amp; reheating</option>
+        <option value="cool">Cooling only</option>
+        <option value="heat">Reheating only</option>
+      </select>
+    </div>
+    <div class="row-between" style="margin-top:10px">
+      <span class="logCount" id="logCount">0 entries</span>
+    </div>
+    <div class="logList" id="logList"></div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];}); }
+
+  var LOG_KEY = "kaiser_temp_log_v1";
+  function loadLog(){ try{ return JSON.parse(lsGet(LOG_KEY)||"[]"); }catch(e){ return []; } }
+  function saveLog(arr){ lsSet(LOG_KEY, JSON.stringify(arr)); }
+  var log = loadLog();
+
+  var RULES = {
+    cool: { title:"Cooling food", hint:"Must be ≤ 10 °C within 4 hours of cooking", limitHours:4, limitTemp:10, dir:"max", okLabel:"Cooled correctly", failLabel:"Not cooled correctly — temperature or time exceeded" },
+    heat: { title:"Reheating food", hint:"Must reach at least 75 °C when reheating", limitHours:null, limitTemp:75, dir:"min", okLabel:"Reheated correctly", failLabel:"Not reheated correctly — temperature not reached" }
+  };
+
+  var state = { type:"cool", editingId:null };
+
+  function todayISO(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  function timeDiffHours(startHHMM, endHHMM){
+    if(!startHHMM || !endHHMM) return null;
+    var sp = startHHMM.split(":").map(Number), ep = endHHMM.split(":").map(Number);
+    var startMin = sp[0]*60+sp[1], endMin = ep[0]*60+ep[1];
+    var diff = endMin - startMin;
+    if(diff < 0) diff += 24*60; // crossed midnight
+    return diff/60;
+  }
+
+  function evaluate(){
+    var rule = RULES[state.type];
+    var endTemp = parseFloat($("fEndTemp").value);
+    var hours = timeDiffHours($("fStartTime").value, $("fEndTime").value);
+    if(isNaN(endTemp) || hours===null){
+      return { known:false };
+    }
+    var tempOk = rule.dir==="max" ? endTemp <= rule.limitTemp : endTemp >= rule.limitTemp;
+    var timeOk = rule.limitHours ? hours <= rule.limitHours : true;
+    var ok = tempOk && timeOk;
+    return { known:true, ok:ok, hours:hours, endTemp:endTemp };
+  }
+
+  function renderStatus(){
+    var box = $("statusBox"), txt = $("statusText"), rule = RULES[state.type];
+    var res = evaluate();
+    if(!res.known){
+      box.className = "statusBox";
+      txt.textContent = "Fill in times and temperatures to see status";
+      return;
+    }
+    box.className = "statusBox " + (res.ok ? "ok" : "fail");
+    txt.textContent = res.ok ? rule.okLabel : rule.failLabel;
+  }
+
+  function applyType(){
+    var rule = RULES[state.type];
+    $("formTitle").textContent = rule.title;
+    $("ruleHint").textContent = rule.hint;
+    document.querySelectorAll(".typeTab").forEach(function(b){ b.classList.toggle("on", b.dataset.type===state.type); });
+    renderStatus();
+  }
+
+  function setError(msg){
+    var e = $("errorText");
+    if(!msg){ e.classList.add("hidden"); e.textContent=""; return; }
+    e.textContent = msg; e.classList.remove("hidden");
+    $("savedText").classList.add("hidden");
+  }
+  function setSaved(msg){
+    var s = $("savedText");
+    s.textContent = msg; s.classList.remove("hidden");
+    $("errorText").classList.add("hidden");
+  }
+
+  function clearForm(){
+    $("fDish").value=""; $("fStartTime").value=""; $("fStartTemp").value="";
+    $("fEndTime").value=""; $("fEndTemp").value=""; $("fNote").value="";
+    $("fLoc").value=""; $("fBy").value=""; $("fDate").value = todayISO();
+  }
+
+  function exitResume(){
+    state.editingId = null;
+    $("resumeBanner").classList.add("hidden");
+    $("fLoc").disabled = false;
+    document.querySelectorAll(".typeTab").forEach(function(b){ b.disabled = false; });
+    $("tempSaveBtn").classList.remove("hidden");
+  }
+
+  function beginResume(entry){
+    state.type = entry.type;
+    applyType();
+    $("fLoc").value = entry.loc;
+    $("fDish").value = entry.dish;
+    $("fStartTime").value = entry.startTime;
+    $("fStartTemp").value = entry.startTemp;
+    $("fEndTime").value = entry.endTime || "";
+    $("fEndTemp").value = entry.endTemp || "";
+    $("fBy").value = entry.by;
+    $("fDate").value = entry.date;
+    $("fNote").value = entry.note || "";
+    state.editingId = entry.id;
+
+    // lock the fields that define the original reading — only completing the end reading now
+    $("fLoc").disabled = true;
+    document.querySelectorAll(".typeTab").forEach(function(b){ b.disabled = true; });
+    $("tempSaveBtn").classList.add("hidden");
+
+    $("resumeBanner").classList.remove("hidden");
+    $("resumeText").textContent = "Completing entry for \"" + entry.dish + "\" — started at " + entry.startTime + " (" + entry.startTemp + "°C)";
+    renderStatus();
+    window.scrollTo(0,0);
+  }
+
+  function renderLog(){
+    var locF = $("filterLoc").value, typeF = $("filterType").value;
+    var rows = log.filter(function(r){
+      if(locF && r.loc!==locF) return false;
+      if(typeF && r.type!==typeF) return false;
+      return true;
+    }).sort(function(a,b){ return (b.savedAt||"").localeCompare(a.savedAt||""); });
+
+    $("logCount").textContent = rows.length + (rows.length===1 ? " entry" : " entries");
+
+    var host = $("logList");
+    if(!rows.length){
+      host.innerHTML = '<div class="logEmpty">No entries yet.</div>';
+      return;
+    }
+    host.innerHTML = rows.map(function(r){
+      var typeLabel = r.type==="cool" ? "Cooling" : "Reheating";
+      var cls = r.pending ? "pending" : (r.ok ? "ok" : "fail");
+      var badgeTxt = r.pending ? "In progress" : (r.ok ? "OK" : "Deviation");
+      var temps = r.pending
+        ? (esc(r.startTemp) + '°C at ' + esc(r.startTime) + '<br><span style="color:var(--amber)">awaiting final reading</span>')
+        : (esc(r.startTemp) + '°C → ' + esc(r.endTemp) + '°C<br>' + esc(r.startTime) + '–' + esc(r.endTime));
+      return '<div class="logRow ' + cls + '" data-id="' + esc(r.id) + '" data-pending="' + (r.pending?"1":"0") + '">' +
+        '<span class="logBadge ' + cls + '">' + badgeTxt + '</span>' +
+        '<div class="logMain">' +
+          '<div class="logName">' + esc(r.dish) + '</div>' +
+          '<div class="logMeta">' + esc(typeLabel) + ' · ' + esc(r.loc) + ' · ' + esc(r.date) + ' · ' + esc(r.by) + (r.note ? ' · ' + esc(r.note) : '') + '</div>' +
+        '</div>' +
+        '<div class="logTemps">' + temps + '</div>' +
+      '</div>';
+    }).join("");
+
+    host.querySelectorAll('.logRow[data-pending="1"]').forEach(function(row){
+      row.addEventListener("click", function(){
+        var entry = log.find(function(x){ return x.id===row.dataset.id; });
+        if(entry) beginResume(entry);
+      });
+    });
+  }
+
+  function validateCommon(){
+    var loc = $("fLoc").value, dish = $("fDish").value.trim(), by = $("fBy").value.trim();
+    var st = $("fStartTime").value, stemp = $("fStartTemp").value;
+    if(!loc){ setError("Select a location."); return null; }
+    if(!dish){ setError("Enter the dish name."); $("fDish").focus(); return null; }
+    if(!st){ setError("Enter the start time."); return null; }
+    if(stemp==="" || isNaN(parseFloat(stemp))){ setError("Enter the start temperature."); return null; }
+    if(!by){ setError("Enter who is recording this."); $("fBy").focus(); return null; }
+    return { loc:loc, dish:dish, by:by, st:st, stemp:stemp };
+  }
+
+  function saveTemp(){
+    setError("");
+    var v = validateCommon();
+    if(!v) return;
+
+    log.unshift({
+      id: uid(), type: state.type, pending: true,
+      loc: v.loc, dish: v.dish,
+      startTime: v.st, startTemp: v.stemp,
+      endTime: "", endTemp: "",
+      by: v.by, date: $("fDate").value || todayISO(), note: $("fNote").value.trim(),
+      ok: null, savedAt: new Date().toISOString()
+    });
+    saveLog(log);
+    setSaved("✅ Saved temporarily. Come back after the final reading to complete this entry from the log below.");
+    clearForm();
+    renderStatus();
+    renderLog();
+  }
+
+  function saveComplete(){
+    setError("");
+    var v = validateCommon();
+    if(!v) return;
+
+    var et = $("fEndTime").value, etemp = $("fEndTemp").value;
+    if(!et){ setError("Enter the end time."); return; }
+    if(etemp==="" || isNaN(parseFloat(etemp))){ setError("Enter the end temperature."); return; }
+
+    var res = evaluate();
+    var record = {
+      id: state.editingId || uid(), type: state.type, pending: false,
+      loc: v.loc, dish: v.dish,
+      startTime: v.st, startTemp: v.stemp,
+      endTime: et, endTemp: etemp,
+      by: v.by, date: $("fDate").value || todayISO(), note: $("fNote").value.trim(),
+      ok: res.known ? res.ok : null, savedAt: new Date().toISOString()
+    };
+
+    if(state.editingId){
+      var idx = log.findIndex(function(x){ return x.id===state.editingId; });
+      if(idx>=0) log[idx] = record; else log.unshift(record);
+    } else {
+      log.unshift(record);
+    }
+    saveLog(log);
+
+    setSaved("✅ Saved and completed.");
+    exitResume();
+    clearForm();
+    renderStatus();
+    renderLog();
+  }
+
+  document.getElementById("typeTabs").addEventListener("click", function(e){
+    var b = e.target.closest("[data-type]"); if(!b || b.disabled) return;
+    state.type = b.dataset.type;
+    applyType();
+  });
+
+  ["fStartTime","fEndTime","fEndTemp","fStartTemp"].forEach(function(id){
+    $(id).addEventListener("input", renderStatus);
+  });
+
+  $("tempSaveBtn").addEventListener("click", saveTemp);
+  $("saveBtn").addEventListener("click", saveComplete);
+  $("cancelResumeBtn").addEventListener("click", function(){ exitResume(); clearForm(); renderStatus(); });
+  $("filterLoc").addEventListener("change", renderLog);
+  $("filterType").addEventListener("change", renderLog);
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+
+  $("fDate").value = todayISO();
+  applyType();
+  renderLog();
+})();
+</script>
+</body>
+</html>
