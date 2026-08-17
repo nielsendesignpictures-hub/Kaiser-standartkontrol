@@ -266,6 +266,33 @@
     .filter-btn:hover{background:var(--border-light)}
     .filter-btn.active{background:var(--text-1);color:#fff;border-color:var(--text-1)}
 
+    /* ---- Varenummer-opslag ---- */
+    .vl-searchbar{display:flex;gap:8px;padding:16px 20px;border-bottom:1px solid var(--border-light);flex-wrap:wrap}
+    .vl-searchbar input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:16px;font-family:inherit}
+    .vl-searchbar input:focus{outline:none;border-color:var(--text-1)}
+    .vl-cats{display:flex;gap:6px;padding:0 20px 14px;flex-wrap:wrap}
+    .vl-catbtn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:12px;font-weight:500;cursor:pointer;color:var(--text-2);transition:all .15s;font-family:inherit}
+    .vl-catbtn:hover{background:var(--surface-hover)}
+    .vl-catbtn.active{background:var(--text-1);border-color:var(--text-1);color:#fff}
+    .vl-stats{padding:0 20px 10px;font-size:12px;color:var(--text-3)}
+    .vl-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto}
+    .vl-row{display:grid;grid-template-columns:110px 1fr auto auto;gap:12px;align-items:center;padding:10px 14px;background:var(--surface-hover);border-radius:var(--radius);border:1px solid transparent}
+    .vl-row:hover{border-color:var(--border)}
+    .vl-nr{font-family:ui-monospace,'SF Mono',Consolas,monospace;font-size:13px;font-weight:600;color:var(--text-1)}
+    .vl-name{font-size:13px;color:var(--text-1)}
+    .vl-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;white-space:nowrap;text-transform:uppercase;letter-spacing:.03em}
+    .vl-badge.b-BESTIK{background:var(--blue-soft);color:var(--blue)}
+    .vl-badge.b-KØKKENUDST{background:var(--green-soft);color:var(--green)}
+    .vl-badge.b-MASKINER{background:var(--amber-soft);color:var(--amber)}
+    .vl-badge.b-PORCELÆN{background:var(--purple-soft);color:var(--purple)}
+    .vl-badge.b-GLAS{background:#e1f5ee;color:#0f6e56}
+    .vl-badge.b-TRANSPORTM{background:var(--red-soft);color:var(--red)}
+    .vl-copy{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit}
+    .vl-copy:hover{background:var(--surface-hover);color:var(--text-1)}
+    .vl-copy.copied{background:var(--green-soft);border-color:var(--green-border);color:var(--green)}
+    .vl-mark{background:var(--amber-soft);color:var(--text-1);border-radius:2px;padding:0 1px}
+    @media(max-width:560px){.vl-row{grid-template-columns:90px 1fr auto}.vl-badge{display:none}}
+
     ::-webkit-scrollbar{width:8px;height:8px}
     ::-webkit-scrollbar-track{background:var(--bg)}
     ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -290,7 +317,7 @@
     </form>
 
     <div class="login-error" id="loginError">Forkert email eller adgangskode</div>
-    <div class="login-version">Kaiser Operations Hub v2.2.2</div>
+    <div class="login-version">Kaiser Operations Hub v2.3.0</div>
   </div>
 </div>
 
@@ -333,6 +360,10 @@
 
     <nav class="nav-section">
       <div class="nav-label">Data</div>
+      <div class="nav-item" onclick="switchView('varelookup')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Varenumre
+      </div>
       <div class="nav-item" onclick="switchView('catering')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         Catering
@@ -624,6 +655,32 @@
       </div>
     </div>
 
+    <!-- ============ VARENUMMER-OPSLAG ============ -->
+    <div class="view" id="viewVarelookup">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Varenumre</h1>
+          <p class="page-desc">Søg på varenavn eller varenummer til bestilling hos Oluf Brønnum</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Vareopslag
+          </div>
+          <span class="card-badge" id="vlCount">0 varer</span>
+        </div>
+        <div class="vl-searchbar">
+          <input type="text" id="vlSearch" placeholder="Søg på varenavn eller varenummer..." oninput="renderVarelookup()">
+          <button class="btn" onclick="document.getElementById('vlSearch').value='';renderVarelookup()">Ryd</button>
+        </div>
+        <div class="vl-cats" id="vlCats"></div>
+        <div class="vl-stats" id="vlStats"></div>
+        <div class="vl-list" id="vlList"></div>
+      </div>
+    </div>
+
     <!-- ============ CATERING ============ -->
     <div class="view" id="viewCatering">
       <div class="page-header">
@@ -681,7 +738,7 @@
   </main>
 </div>
 
-<div class="version-badge">v2.2.2</div>
+<div class="version-badge">v2.3.0</div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
@@ -692,7 +749,7 @@ const COMPLETED_SIGNALS_KEY = "kaiser_completed_signals_v1";
 const AUTH_KEY = "kaiser_auth_session";
 const DATA_CACHE_KEY = "kaiser_data_cache_v1";
 const CATERING_CACHE_KEY = "kaiser_catering_cache_v1";
-const APP_VERSION = "2.2.2";
+const APP_VERSION = "2.3.0";
 const VALID_EMAIL = "stefan@cafekaiser.dk";
 const VALID_PASSWORD = "Jegergenial1!";
 const KITCHEN_TARGET = 30;     // %
@@ -804,7 +861,7 @@ function checkAuth(){
 /* ---------- Export ---------- */
 function exportToExcel(){
   if(!globalData){alert('Ingen data at eksportere.');return}
-  let csv='\ufeff';
+  let csv='﻿';
   csv+='GÆSTEKLAGER\nLokation,Kategori,Beskrivelse,Dato\n';
   (globalData.complaints||[]).forEach(c=>{csv+=`"${esc(c.location||'')}","${esc(c.category||'')}","${esc(c.description||'')}","${esc(c.createdAt||c.updatedAt||'')}"\n`});
   csv+='\nUDSOLGTE VARER\nLokation,Produkt,Kategori,Dato\n';
@@ -1109,6 +1166,214 @@ function renderLocationsView(data){
   $("locationGridFull").innerHTML=sortedLocs.map(([loc,count])=>locationCardHTML(loc,count,tagged,false)).join("")||'<div class="empty">Ingen data</div>';
 }
 
+/* ---------- Varenummer-opslag ---------- */
+const VARE_ITEMS = [
+  ["10014201","Universalkniv m/fibroxgreb","BESTIK"],
+  ["10017801","Strygestål m/kunststofhåndtag","BESTIK"],
+  ["10021501","Smørkniv Brønnum","BESTIK"],
+  ["10021601","Tomatkniv m/fibroxgreb","BESTIK"],
+  ["10037001","Kokkekniv m/fibroxgreb Fibrox (lille)","BESTIK"],
+  ["10037201","Kokkekniv m/fibroxgreb Fibrox (stor)","BESTIK"],
+  ["10038001","Knivskærper Victorinox Sharpy","BESTIK"],
+  ["10049201","Urtekniv Proff-Line","BESTIK"],
+  ["10050801","Paletspade Glat Professional","BESTIK"],
+  ["10067801","Universalsaks ReNew (lille)","BESTIK"],
+  ["10068001","Universalsaks ReNew (stor)","BESTIK"],
+  ["10071301","Rivejern Zester Gourmet","KØKKENUDST"],
+  ["10118601","Udbenerkniv Ergogrip","BESTIK"],
+  ["11013201","Serveringsske Function","BESTIK"],
+  ["11014501","Osteskærer Rollschnitt","BESTIK"],
+  ["11015201","Osteskærer m/dobbelt strenge","BESTIK"],
+  ["11020101","Isportionsske 1/40 Model A","BESTIK"],
+  ["11028801","Vippemål","BESTIK"],
+  ["11029901","Stegepincet GastroMax","KØKKENUDST"],
+  ["11500201","Knivmagnet","BESTIK"],
+  ["11501801","Grillskraber m/træhåndtag","KØKKENUDST"],
+  ["13024201","Steakkniv Proff-Line","BESTIK"],
+  ["13250201","Spiseske P1","BESTIK"],
+  ["13250301","Spisegaffel P1","BESTIK"],
+  ["13251601","Steakkniv P1","BESTIK"],
+  ["13252501","Teske P1","BESTIK"],
+  ["13253201","Toddyske P1","BESTIK"],
+  ["13257401","Barnekniv P1","BESTIK"],
+  ["13257601","Barnegaffel P1","BESTIK"],
+  ["14045201","Isspand","BESTIK"],
+  ["14049201","Bonholder Eloxeret","BESTIK"],
+  ["14049401","Bonholder","BESTIK"],
+  ["14050702","Pistol pris/dato Expert S 626","BESTIK"],
+  ["14103101","Kande m/hældekant","BESTIK"],
+  ["14105701","Cocktailshaker Cobbler","BESTIK"],
+  ["14161301","Kande (10 stk)","KØKKENUDST"],
+  ["14164001","Minikurv Servering","BESTIK"],
+  ["16674202","Barske Twisted XXL","KØKKENUDST"],
+  ["17010501","Termometer Kombi TCT 103","BESTIK"],
+  ["17200164","Skilt","BESTIK"],
+  ["17500101","Køleskabstermometer Analog","BESTIK"],
+  ["18663502","Bonspyd","BESTIK"],
+  ["19059602","Strødåse","KØKKENUDST"],
+  ["20150201","Gryde Høj Proff-Line","KØKKENUDST"],
+  ["20150701","Gryde Mellem Proff-Line","KØKKENUDST"],
+  ["20152101","Kasserolle Lav Proff-Line (stor)","KØKKENUDST"],
+  ["20152201","Kasserolle Lav Proff-Line (lille)","KØKKENUDST"],
+  ["20156101","Stegepande Proff-Line (20156101)","KØKKENUDST"],
+  ["20156110","Stegepande Proff-Line (20156110)","KØKKENUDST"],
+  ["20156501","Stegepande Proff-Line (20156501)","KØKKENUDST"],
+  ["20156510","Stegepande Proff-Line (20156510)","KØKKENUDST"],
+  ["20158501","Kasserolle Proff-Line","KØKKENUDST"],
+  ["20515901","Salatslynge Swing","KØKKENUDST"],
+  ["21007401","Chafing Dish Caterer","KØKKENUDST"],
+  ["21153201","Låg Proff-Line","KØKKENUDST"],
+  ["22011101","Æggedeler Duplex","KØKKENUDST"],
+  ["22031701","Glaserbrænder","KØKKENUDST"],
+  ["22045801","Mandolinjern Japansk","KØKKENUDST"],
+  ["22081001","Dåseåbner Classic","KØKKENUDST"],
+  ["22099001","Gummiskraber Varmebestandig (lille)","KØKKENUDST"],
+  ["22099201","Gummiskraber Varmebestandig (stor)","KØKKENUDST"],
+  ["22115701","Multitang m/fjeder Outdoor (lille)","KØKKENUDST"],
+  ["22115801","Multitang m/fjeder Outdoor (stor)","KØKKENUDST"],
+  ["22117501","Opøser","KØKKENUDST"],
+  ["22120601","Fritureske","KØKKENUDST"],
+  ["22141901","Piskeris (lille)","KØKKENUDST"],
+  ["22142101","Piskeris (stor)","KØKKENUDST"],
+  ["22196301","Træske","KØKKENUDST"],
+  ["22225301","Brødkurv Profi Line","KØKKENUDST"],
+  ["22226401","Brødkurv 1/2 GN GN Line","KØKKENUDST"],
+  ["23074601","Skål Konisk (lille)","KØKKENUDST"],
+  ["23075101","Skål Konisk (mellem)","KØKKENUDST"],
+  ["23075201","Skål Konisk (stor)","KØKKENUDST"],
+  ["23091801","Målebæger","KØKKENUDST"],
+  ["23095702","Dressingflaske","KØKKENUDST"],
+  ["23102001","Skiferplade 1/1 GN","KØKKENUDST"],
+  ["23141201","Bestikkasse 1/1 GN","KØKKENUDST"],
+  ["23163201","Vægt 5 kg","KØKKENUDST"],
+  ["23213301","Skærebræt","KØKKENUDST"],
+  ["23221301","Skærebræt Identiboard (grøn)","KØKKENUDST"],
+  ["23221401","Skærebræt Identiboard (rød)","KØKKENUDST"],
+  ["23221501","Skærebræt Identiboard (gul)","KØKKENUDST"],
+  ["23277502","Bakke 1/2 GN Nero","KØKKENUDST"],
+  ["23277511","Skål Nero","KØKKENUDST"],
+  ["23301301","Kantine 1/1 GN (23301301)","KØKKENUDST"],
+  ["23303001","Låg 1/2 GN","KØKKENUDST"],
+  ["23303301","Kantine 1/2 GN","KØKKENUDST"],
+  ["23303401","Kantine 1/2 GN (dyb)","KØKKENUDST"],
+  ["23305501","Kantine 1/3 GN","KØKKENUDST"],
+  ["23308501","Kantine 1/6 GN","KØKKENUDST"],
+  ["23311401","Hulkantine 1/1 GN","KØKKENUDST"],
+  ["23316601","Rist 1/1 GN","KØKKENUDST"],
+  ["23328101","Bakke 1/1 GN","KØKKENUDST"],
+  ["23341001","Kantine 1/1 GN (23341001)","KØKKENUDST"],
+  ["23341401","Kantine 1/1 GN (23341401)","KØKKENUDST"],
+  ["23341601","Kantine 1/1 GN (23341601)","KØKKENUDST"],
+  ["23346301","Kantine 1/9 GN","KØKKENUDST"],
+  ["23453201","Kantine 1/3 GN Camwear","KØKKENUDST"],
+  ["23461201","Kantine 1/1 GN Camwear","KØKKENUDST"],
+  ["23504701","Køleelement","KØKKENUDST"],
+  ["24059401","Dispenser t/film/folie","KØKKENUDST"],
+  ["24117801","Termokande (stor)","KØKKENUDST"],
+  ["24119501","Termokande (lille)","KØKKENUDST"],
+  ["24617801","Bouillonsigte m/trådskaft","KØKKENUDST"],
+  ["25050001","Vægophængssystem t/5 produkter","KØKKENUDST"],
+  ["25089801","Grydelap","KØKKENUDST"],
+  ["26027001","Røremaskine Chef XL","MASKINER"],
+  ["28010902","Låg 1/2 GN (plast)","KØKKENUDST"],
+  ["28013200","Tallerken Arabesque","KØKKENUDST"],
+  ["28645381","Skuffeske","KØKKENUDST"],
+  ["29305502","Opvaskekurv Bestik Camrack","KØKKENUDST"],
+  ["29307501","Opvaskekurv Kop/glas Camrack","TRANSPORTM"],
+  ["29745202","Opvaskekurv 16 rum","KØKKENUDST"],
+  ["52034201","Affaldsbeholder","TRANSPORTM"],
+  ["53066001","Kørebord 2 hylder","TRANSPORTM"],
+  ["53081401","Stikvogn","TRANSPORTM"],
+  ["71013701","Stavblender 350mm","MASKINER"],
+  ["71059001","Net Kop/glas","MASKINER"],
+  ["71061901","Spildbakke","MASKINER"],
+  ["71135001","Røremaskine Teddy","MASKINER"],
+  ["71230701","Kniv Fintakket","MASKINER"],
+  ["71487120","Klemgrill Rillet","MASKINER"],
+  ["71569903","Barblender","MASKINER"],
+  ["71673401","Knivskive 1 mm","MASKINER"],
+  ["71679002","Kombicutter","MASKINER"],
+  ["71729902","Friturekurv 22L S900","MASKINER"],
+  ["71819601","Bæreskinne U-profil","MASKINER"],
+  ["72083402","Isknuser Dæncker","MASKINER"],
+  ["75820353","Opvaskekurv Kop/glas 16 rum","MASKINER"],
+  ["75820355","Opvaskekurv Kop/glas 25 rum","MASKINER"],
+  ["75820357","Opvaskekurv Kop/glas 36 rum","MASKINER"],
+  ["76632481","Opvaskekurv t/tallerkner","MASKINER"],
+  ["81487001","Skål Tapas Black","PORCELÆN"],
+  ["81490001","Krus u/hank Slate","PORCELÆN"],
+  ["81490101","Tallerken Flad Slate (stor)","PORCELÆN"],
+  ["81490301","Tallerken Flad Slate (lille)","PORCELÆN"],
+  ["81490801","Skål Tapas Slate (108)","PORCELÆN"],
+  ["81491001","Skål Tapas Slate (36)","PORCELÆN"],
+  ["81491301","Skål Tapas Slate (30)","PORCELÆN"],
+  ["81492801","Skål Tapas Sand (108)","PORCELÆN"],
+  ["81493001","Skål Tapas Sand (36)","PORCELÆN"],
+  ["82072001","Underkop Brønnum (stor)","PORCELÆN"],
+  ["82072201","Overkop Brønnum","PORCELÆN"],
+  ["82073601","Underkop Brønnum (lille)","PORCELÆN"],
+  ["83500301","Fad 1/2 GN Buffet-Line","PORCELÆN"],
+  ["83500401","Fad 1/3 GN Buffet-Line","PORCELÆN"],
+  ["83500801","Fad 1/6 GN Buffet-Line","PORCELÆN"],
+  ["92506501","Kande (stor)","GLAS"],
+  ["92506601","Kande (lille)","GLAS"],
+  ["93021501","Dispenser m/tappehane (93021501)","GLAS"],
+  ["93021801","Dispenser m/tappehane (93021801)","GLAS"],
+  ["93022001","Dispenser m/tappehane (93022001)","GLAS"],
+  ["93146101","Låg t/93144401","GLAS"],
+  ["93149101","Glas m/låg Mold","KØKKENUDST"],
+  ["94042401","Irish Coffee glas p/fod","GLAS"],
+  ["94242101","Vinglas Vins Jeunes Cabernet","GLAS"],
+  ["96118101","Drikkeglas Hærdet Picardie","GLAS"],
+  ["96123001","Shotglas Dublino","GLAS"],
+  ["96173301","Drinksglas Timeless (lille)","GLAS"],
+  ["96173401","Drinksglas Timeless (stor)","GLAS"]
+];
+let vlActiveCat="Alle";
+function initVarelookup(){
+  const cats=["Alle",...new Set(VARE_ITEMS.map(i=>i[2]))];
+  const catsEl=$("vlCats");
+  catsEl.innerHTML="";
+  cats.forEach(c=>{
+    const b=document.createElement("button");
+    b.className="vl-catbtn"+(c==="Alle"?" active":"");
+    b.textContent=c;
+    b.onclick=()=>{vlActiveCat=c;document.querySelectorAll(".vl-catbtn").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderVarelookup()};
+    catsEl.appendChild(b);
+  });
+  $("vlCount").textContent=`${VARE_ITEMS.length} varer`;
+  renderVarelookup();
+}
+function vlHighlight(text,q){
+  if(!q)return esc(text);
+  const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+  return esc(text).replace(re,'<span class="vl-mark">$1</span>');
+}
+function copyVarenr(nr,btn){
+  navigator.clipboard.writeText(nr).then(()=>{
+    btn.classList.add("copied");
+    btn.textContent="✓";
+    setTimeout(()=>{btn.classList.remove("copied");btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'},1200);
+  }).catch(()=>{});
+}
+function renderVarelookup(){
+  const q=($("vlSearch").value||"").trim().toLowerCase();
+  const filtered=VARE_ITEMS.filter(([nr,name,cat])=>{
+    const catOk=vlActiveCat==="Alle"||cat===vlActiveCat;
+    const qOk=!q||nr.includes(q)||name.toLowerCase().includes(q);
+    return catOk&&qOk;
+  });
+  $("vlStats").textContent=`${filtered.length} af ${VARE_ITEMS.length} varer`;
+  const list=$("vlList");
+  if(!filtered.length){list.innerHTML='<div class="empty">Ingen varer fundet</div>';return}
+  list.innerHTML=filtered.map(([nr,name,cat])=>`<div class="vl-row">
+    <span class="vl-nr">${vlHighlight(nr,q)}</span>
+    <span class="vl-name">${vlHighlight(name,q)}</span>
+    <span class="vl-badge b-${cat}">${cat}</span>
+    <button class="vl-copy" title="Kopiér varenummer" onclick="copyVarenr('${nr}',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+  </div>`).join("");
+}
+
 /* ---------- Catering ---------- */
 function cateringEvents(orders){
   return orders.map(o=>{const ts=parseDateTime(o.deliveryDate,o.deliveryTime);return{location:o.location||"",deliveryDate:o.deliveryDate||"",deliveryTime:o.deliveryTime||"",customerName:o.customerName||"Ukendt",guests:Number(o.guests||0),note:o.note||"",status:o.status||"Bekræftet",ts}}).filter(ev=>isFinite(ev.ts)).sort((a,b)=>a.ts-b.ts);
@@ -1163,6 +1428,7 @@ function switchView(view){
   if(view==='goals')renderGoalsFull();
   if(view==='notifications')renderNotificationsFull();
   if(view==='catering'&&globalCatering)renderCateringView(globalCatering);
+  if(view==='varelookup')renderVarelookup();
 }
 
 /* ---------- PWA install ---------- */
@@ -1193,6 +1459,7 @@ function initializeApp(){
   renderGoalsFull();
   renderNotifications();
   renderNotificationsFull();
+  initVarelookup();
   const goalInput=$("goalTextFull");
   if(goalInput)goalInput.addEventListener("keydown",e=>{if(e.key==="Enter")addGoalFull()});
 }
