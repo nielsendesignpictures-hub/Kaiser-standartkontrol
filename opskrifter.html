@@ -30,7 +30,6 @@
     min-height: 100vh;
   }
 
-  /* ═══════════ HEADER ═══════════ */
   .header {
     background: var(--card);
     border-bottom: 1px solid var(--border);
@@ -64,7 +63,6 @@
     white-space: nowrap;
   }
 
-  /* Search */
   .search-row {
     max-width: 1100px;
     margin: 14px auto 0;
@@ -83,7 +81,6 @@
   .search-input:focus { border-color: var(--gold); background: #fff; }
   .search-input::placeholder { color: var(--muted); }
 
-  /* Category tabs */
   .tabs {
     max-width: 1100px;
     margin: 14px auto 0;
@@ -114,7 +111,6 @@
     color: #fff;
   }
 
-  /* ═══════════ RECIPE LIST ═══════════ */
   .list-wrap {
     max-width: 1100px;
     margin: 0 auto;
@@ -174,7 +170,6 @@
   }
   .empty .big { font-size: 40px; margin-bottom: 10px; }
 
-  /* ═══════════ RECIPE VIEW ═══════════ */
   .recipe-view {
     display: none;
     max-width: 760px;
@@ -185,7 +180,6 @@
   .list-view.hidden { display: none; }
   .header.hidden { display: none; }
 
-  /* Recipe header */
   .rv-topbar {
     display: flex;
     align-items: center;
@@ -232,7 +226,6 @@
     margin-bottom: 24px;
   }
 
-  /* Ingredients — checkable */
   .rv-section-label {
     font-size: 14px;
     font-weight: 800;
@@ -303,7 +296,6 @@
     opacity: .45;
   }
 
-  /* Steps — big, one focus at a time */
   .step-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -349,7 +341,6 @@
   }
   .step-card.done .step-title { text-decoration: line-through; }
 
-  /* Important note */
   .rv-note {
     background: var(--gold-bg);
     border: 1px solid #e5d5a8;
@@ -364,7 +355,6 @@
   .rv-note .icon { font-size: 20px; flex-shrink: 0; }
   .rv-note strong { display: block; margin-bottom: 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); }
 
-  /* Reset button */
   .rv-reset {
     display: block;
     width: 100%;
@@ -388,7 +378,6 @@
 </head>
 <body>
 
-<!-- ═══════════ LIST VIEW ═══════════ -->
 <header class="header" id="header">
   <div class="header-row">
     <h1><span>Kaiser</span> Recipes</h1>
@@ -409,15 +398,52 @@
 
 <main class="list-wrap list-view" id="listView"></main>
 
-<!-- ═══════════ RECIPE VIEW ═══════════ -->
 <section class="recipe-view" id="recipeView"></section>
 
 <script>
-// ════════════════════════════════════════════
-//  RECIPES
-//  category: "dressing" | "sauce" | "pickled" | "salad" | "misc"
-//  Copy the block below to add a new recipe.
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════
+//  RECIPES — HOW TO ADD A NEW ONE (read this before editing!)
+// ════════════════════════════════════════════════════════════════
+//
+//  The single most common way this breaks: ONE wrong bracket or
+//  missing comma anywhere in this list makes ALL recipes disappear,
+//  not just the broken one — because the whole RECIPES list has to
+//  be valid, complete JavaScript before ANY of it can be shown.
+//
+//  Copy this exact shape for a new recipe, then just change the text:
+//
+//  {
+//    id: 22,                          <- next free number, must be unique
+//    name: "Recipe name",
+//    category: "sauce",               <- must be exactly one of:
+//                                         dressing | sauce | pickled | salad | misc
+//                                         (lowercase — "Misc" or "Sauce" will NOT show up!)
+//    yield: "",                       <- optional, can stay empty ""
+//    ingredients: [
+//      ["1 can", "condensed milk"],   <- ALWAYS two items: ["amount", "name"]
+//      ["400 g", "coconut"],             use "" for amount if there isn't one, e.g. ["","salt to taste"]
+//      ["", "chocolate, melted on top"]
+//    ],
+//    steps: [
+//      ["Mix", "Mix milk and coconut together."],   <- ALWAYS two items: ["Step title", "What to do"]
+//      ["Set", "Set it in serving glasses."],
+//      ["Finish", "Pour melted chocolate on top and refrigerate."]
+//    ],
+//    note: ""                         <- optional, can stay empty ""
+//  },
+//
+//  Checklist before saving:
+//   1. Every ingredient is [amount, name] — TWO items, not one, not three.
+//   2. Every step is [title, description] — TWO items.
+//   3. category is lowercase and one of the five listed above.
+//   4. There's a comma after every recipe block — a trailing comma
+//      after the very last one is fine too, it won't break anything.
+//   5. Count your [ and ] — if in doubt, copy the template above exactly
+//      and only replace the text inside the quotes.
+//
+//  If recipes vanish after an edit: it's almost always a bracket/comma
+//  mistake in the recipe you just added or edited. Check that one first.
+// ════════════════════════════════════════════════════════════════
 const RECIPES = [
   {
     id:1, name:"Lemon/dild mayo", category:"dressing", yield:"",
@@ -502,17 +528,17 @@ const RECIPES = [
   },
   {
     id:8, name:"Homemade pesto", category:"sauce", yield:"",
-    ingredients:[["1. box","og basil"],["200g","parmesan"],["1 L","oli"],["20 g","garlic paste"]],
+    ingredients:[["1 box","of basil"],["200g","parmesan"],["1 L","oli"],["20 g","garlic paste"]],
     steps:[
-      ["Fremgangsmåde","Remove the bottom of the basil. Add half of the oil to the bottom of the blender. Add all the basil ( Yes it can be there all 1kg ). Start det blender. When it's all blended, add the parmesan and the rest of the oil. add a bit black pepper as well"]
+      ["Method","Remove the bottom of the basil. Add half of the oil to the bottom of the blender. Add all the basil ( Yes it can be there all 1kg ). Start the blender. When it's all blended, add the parmesan and the rest of the oil. Add a bit black pepper as well."]
     ],
     note:""
   },
   {
     id:9, name:"Garlic mayo", category:"dressing", yield:"",
-    ingredients:[["350ML","Egg york"],["25ML","able vinegar"],["25g","Salt"],["60g","of garlic paste"],["15g","of dry parsley"],["2,6 liter","oli"]],
+    ingredients:[["350ML","Egg yolk"],["25ML","apple vinegar"],["25g","Salt"],["60g","of garlic paste"],["15g","of dry parsley"],["2,6 liter","oli"]],
     steps:[
-      ["Fremgangsmåde","Take the robot. Add egg york, salt and able vinegar. Let it run 2-3 min. After add the garlic paste, and start it again. Slowly pull the olie in blender, if its get to think. add little of water and start add the olie again. When the blender is half full, add the dry parsley and continue with the olie."]
+      ["Method","Take the robot. Add egg yolk, salt and apple vinegar. Let it run 2-3 min. After add the garlic paste, and start it again. Slowly pull the olie in blender, if its get to think. add little of water and start add the olie again. When the blender is half full, add the dry parsley and continue with the olie."]
     ],
     note:""
   },
@@ -520,7 +546,7 @@ const RECIPES = [
     id:10, name:"Pepper sauce", category:"sauce", yield:"",
     ingredients:[["1 liter","brown sauce from bc"],["80g","Pepper paste"]],
     steps:[
-      ["Fremgangsmåde","Heat the brownsauce up, add the pepper paste."]
+      ["Method","Heat the brownsauce up, add the pepper paste."]
     ],
     note:""
   },
@@ -528,7 +554,7 @@ const RECIPES = [
     id:11, name:"Parsley sauce", category:"sauce", yield:"",
     ingredients:[["6 liter","of milk"],["250 g","pork fat"],["350 g","flour"],["50 g","salt"],["10 g","muscat nut"]],
     steps:[
-      ["Fremgangsmåde","Start heating up the milk on a slow heat so the milk doesn't burn. Take another pot and start melting the fat. Add the flour. As soon as the milk is hot, add the flour mix into the pot. Be patient, it will get thick, but it takes time! Add the salt and muscat nuts. As soon is have the right consistency, take it off, and split it out in multi containers so it cooling down faster"]
+      ["Method","Start heating up the milk on a slow heat so the milk doesn't burn. Take another pot and start melting the fat. Add the flour. As soon as the milk is hot, add the flour mix into the pot. Be patient, it will get thick, but it takes time! Add the salt and muscat nuts. As soon is have the right consistency, take it off, and split it out in multi containers so it cooling down faster."]
     ],
     note:""
   },
@@ -536,13 +562,13 @@ const RECIPES = [
     id:12, name:"Pickled cucumbers", category:"pickled", yield:"",
     ingredients:[["5 liter","water"],["5 liter","vinegar"],["5kg","sugar"],["","handfull bay leaves"],["","Small handful black hole pepper."],["2 box","of cucumber"],["2 handful","of salt."]],
     steps:[
-      ["Make the brine: Add water, vinegar, sugar, peppercorns, and bay leaves to a pot. Bring to a boil and stir until the sugar is completely dissolved.",""],
-      ["Cool the brine: Remove from the heat and let the brine cool down completely. It must be cold before you pour it over the cucumber (you can refrigerate it to speed this up).",""],
-      ["Slice the cucumber: Slice the cucumber very thinly using a mandoline or slicer.",""],
-      ["Salt and drain: Toss the cucumber slices with the salt and leave for 1 hour to draw out excess water.",""],
-      ["Rinse and dry: Drain off the liquid, rinse the cucumber slices briefly in cold water, and let them drain well. Pat dry with a clean towel or paper towels.",""],
-      ["Add brine: Put the cucumber slices in a clean jar/container and pour the cold brine over until covered.",""],
-      ["Refrigerate: Store in the fridge. Good after a few hours, even better the next day.",""]
+      ["Make the brine","Add water, vinegar, sugar, peppercorns, and bay leaves to a pot. Bring to a boil and stir until the sugar is completely dissolved."],
+      ["Cool the brine","Remove from the heat and let the brine cool down completely. It must be cold before you pour it over the cucumber (you can refrigerate it to speed this up)."],
+      ["Slice the cucumber","Slice the cucumber very thinly using a mandoline or slicer."],
+      ["Salt and drain","Toss the cucumber slices with the salt and leave for 1 hour to draw out excess water."],
+      ["Rinse and dry","Drain off the liquid, rinse the cucumber slices briefly in cold water, and let them drain well. Pat dry with a clean towel or paper towels."],
+      ["Add brine","Put the cucumber slices in a clean jar/container and pour the cold brine over until covered."],
+      ["Refrigerate","Store in the fridge. Good after a few hours, even better the next day."]
     ],
     note:""
   },
@@ -561,8 +587,8 @@ const RECIPES = [
     id:14, name:"Chicken salad", category:"salad", yield:"",
     ingredients:[["5 kg","chicken breasts (about 2 large packs)"],["1","onion, roughly chopped (for the cooking water)"],["","4--5 bay leaves"],["1","small handful whole black peppercorns"],["2 packs","mushrooms, sliced (fresh or canned, drained)"],["","1--2 onions, finely diced (for frying)"],["300 ml","\"Stegt Smag\" (roast-flavour concentrate/gravy base)"],["","Mayonnaise, as needed (start with 500--800 g and adjust)"],["100 g","mustard"],["","Salt, to taste (optional, but recommended)"]],
     steps:[
-      ["Boil the chicken","Place the chicken breasts in a large pot and cover with water. Add the roughly chopped onion, bay leaves, and peppercorns. Bring to a gentle boil, then reduce to a simmer and cook until the chicken is fully done (aim for 74°C / 165°Fin the thickest part). Remove the chicken and let it cool slightly."],
-      ["Fry the mushrooms","While the chicken cooks. Fry in a pan until deep golden and soft."],
+      ["Boil the chicken","Place the chicken breasts in a large pot and cover with water. Add the roughly chopped onion, bay leaves, and peppercorns. Bring to a gentle boil, then reduce to a simmer and cook until the chicken is fully done (aim for 74°C / 165°F in the thickest part). Remove the chicken and let it cool slightly."],
+      ["Fry the mushrooms","While the chicken cooks, fry the mushrooms in a pan until deep golden and soft."],
       ["Add \"Stegt Smag\"","Add the 300 ml Stegt Smag to the pan with the mushrooms. Cook together for 2--3 minutes, stirring, so the flavour develops. Set aside to cool a little."],
       ["Shred and mix","Shred or chop the cooked chicken into bite-size pieces. In a large mixing bowl, combine the chicken, mushrooms, and the fried onion mixture."],
       ["Finish with mayo and mustard","Stir in the mustard. Add mayonnaise gradually until the mixture is creamy and holds together the way you like. Taste and adjust seasoning (salt/pepper if needed)."]
@@ -573,32 +599,30 @@ const RECIPES = [
     id:15, name:"Mango/passionfrugt puré", category:"misc", yield:"",
     ingredients:[["1kg","Mango"],["500ml","Passionfrugt"],["500g","normal sugar"],["200g","PEKTIN sugar"],["400g","water"],["1 spoon","vanila sugar"]],
     steps:[
-      ["Put the diced mango, sugar, water and vanilla sugar into a saucepan.",""],
-      ["Bring to a boil, then lower the heat and let it simmer until the mango is very soft and the liquid has reduced slightly.",""],
-      ["Remove from the heat and blend until completely smooth.",""],
-      ["If needed, adjust the consistency with a little water. Let it cool before using.",""]
+      ["Cook","Put the diced mango, sugar, water and vanilla sugar into a saucepan."],
+      ["Simmer","Bring to a boil, then lower the heat and let it simmer until the mango is very soft and the liquid has reduced slightly."],
+      ["Blend","Remove from the heat and blend until completely smooth."],
+      ["Finish","If needed, adjust the consistency with a little water. Let it cool before using."]
     ],
     note:""
   },
   {
     id:16, name:"Granola", category:"misc", yield:"",
-    ingredients:[["1 kg","chia"],["1kg","havregryn"],["1kg","pumpkin seeds"],["1kg","cut almonds"],["500g","sirup"],["250g","coconut olie"],["","Vaniljie paste 2 spoons"],["","Salt 2. table soons"],["","Chocolate 400g"],["","Roastet cocouts"]],
+    ingredients:[["1 kg","chia"],["1kg","havregryn"],["1kg","pumpkin seeds"],["1kg","cut almonds"],["500g","sirup"],["250g","coconut olie"],["2 spoons","vaniljie paste"],["2 tbsp","salt"],["400g","chocolate"],["","roasted coconut"]],
     steps:[
-      ["Combine chia seeds, oats, pumpkin seeds, chopped almonds, syrup, coconut oil, vanilla paste, and salt in a bowl.",""],
-      ["Mix everything together thoroughly.",""],
-      ["Spread the mixture evenly onto baking trays lined with baking paper.",""],
-      ["Bake at 170°C for 10 minutes.",""],
-      ["Give it a good stir.",""],
-      ["If it's golden and done, take it out and let it cool down.",""],
-      ["If it needs more time, put it back in for an additional 5 minutes.",""],
-      ["Once fully cooled, mix in chocolate chips and toasted coconut.",""],
-      ["Your homemade granola is ready to enjoy!",""]
+      ["Combine","Combine chia seeds, oats, pumpkin seeds, chopped almonds, syrup, coconut oil, vanilla paste, and salt in a bowl."],
+      ["Mix","Mix everything together thoroughly."],
+      ["Spread","Spread the mixture evenly onto baking trays lined with baking paper."],
+      ["Bake","Bake at 170°C for 10 minutes."],
+      ["Stir","Give it a good stir."],
+      ["Check","If it's golden and done, take it out and let it cool down. If it needs more time, put it back in for an additional 5 minutes."],
+      ["Finish","Once fully cooled, mix in chocolate chips and toasted coconut. Your homemade granola is ready to enjoy!"]
     ],
     note:""
   },
   {
     id:17, name:"Blueberry yoghurt", category:"misc", yield:"",
-    ingredients:[["1 kg","blueberries (fresh or frozen)"],["500 g","pectin sugar (jam sugar)"],["5 kg","plain yogurt"],["3 tbsp","vanilla sugar"],["","Note: If your \"pectin sugar\" is sold in packets, use about 500 g total (or adjust to taste)"]],
+    ingredients:[["1 kg","blueberries (fresh or frozen)"],["500 g","pectin sugar (jam sugar)"],["5 kg","plain yogurt"],["3 tbsp","vanilla sugar"],["","Note: if your pectin sugar is sold in packets, use about 500 g total (or adjust to taste)"]],
     steps:[
       ["Cook the blueberries","Add the blueberries, pectin sugar, and vanilla sugar to a pot. Bring to a boil, stirring so the sugar dissolves. Simmer for 2--5 minutes."],
       ["Blend","Blend the mixture until smooth (or leave it slightly chunky if you prefer). For an extra-smooth result, you can strain it through a fine sieve (optional)."],
@@ -609,38 +633,38 @@ const RECIPES = [
   },
   {
     id:18, name:"Chia yoghurt", category:"misc", yield:"",
-    ingredients:[["340g","chiaseeds"],["1 liter","mælk"],["5 spoons","vanilla sugar"],["4kg","yoghurt"]],
+    ingredients:[["340g","chia seeds"],["1 liter","milk"],["5 spoons","vanilla sugar"],["4kg","yoghurt"]],
     steps:[
-      ["Fremgangsmåde","Mix chia, and vanilla sugar together with milk. Let the chia seeds stay in the milk for 20-25 mins. to it gets think. Add the yoghurt and mix very well"]
+      ["Method","Mix chia and vanilla sugar together with milk. Let the chia seeds sit in the milk for 20-25 minutes until it thickens. Add the yoghurt and mix very well."]
     ],
     note:""
   },
   {
     id:19, name:"Mango pure", category:"misc", yield:"",
-    ingredients:[["1kg","frozen mango"],["500g","sugar"],["400g","water"],["1","big spoon vanilla sugar"]],
+    ingredients:[["1kg","frozen mango"],["500g","sugar"],["400g","water"],["1 big spoon","vanilla sugar"]],
     steps:[
-      ["Put the diced mango, sugar, water and vanilla sugar into a saucepan.",""],
-      ["Bring to a boil, then lower the heat and let it simmer until the mango is very soft and the liquid has reduced slightly.",""],
-      ["Remove from the heat and blend until completely smooth.",""],
-      ["If needed, adjust the consistency with a little water. Let it cool before using.",""]
+      ["Cook","Put the diced mango, sugar, water and vanilla sugar into a saucepan."],
+      ["Simmer","Bring to a boil, then lower the heat and let it simmer until the mango is very soft and the liquid has reduced slightly."],
+      ["Blend","Remove from the heat and blend until completely smooth."],
+      ["Finish","If needed, adjust the consistency with a little water. Let it cool before using."]
     ],
     note:""
   },
   {
     id:20, name:"Koldskål", category:"misc", yield:"",
-    ingredients:[["4 spoons","eggyolk"],["6","spons sugar"],["","tablespoon vaniljie paste"],["4 spsk","lemon juice"],["1 liter","kærnemælk"],["1 liter","tykmælk"]],
+    ingredients:[["4 spoons","eggyolk"],["6 spoons","sugar"],["1 tablespoon","vaniljie paste"],["4 spsk","lemon juice"],["1 liter","kærnemælk"],["1 liter","tykmælk"]],
     steps:[
-      ["Fremgangsmåde","Whip eggyolk, sugar and vaniljepasta to a white fluffy base. Add lemon juice, tykmælk and kærnemælk and whip it together."]
+      ["Method","Whip eggyolk, sugar and vaniljepasta to a white fluffy base. Add lemon juice, tykmælk and kærnemælk and whip it together."]
     ],
     note:""
   },
-    {
-    id:21, name:"Bounty dessert", category:"Misc", yield:"",
-    ingredients:[["1. can "],"Kondenseret milk"],["400 g","coconut"],["chocolate","meltet on top"]],
+  {
+    id:21, name:"Bounty dessert", category:"misc", yield:"",
+    ingredients:[["1 can","condensed milk"],["400 g","coconut"],["","chocolate, melted on top"]],
     steps:[
       ["Mix","Mix milk and coconut together."],
-      ["Set","Set it in brunch glasses."],
-      ["Last step","Put meltet chocolate on top, and put it in the frigde."]
+      ["Set","Set it in serving glasses."],
+      ["Last step","Put melted chocolate on top, and put it in the fridge."]
     ],
     note:""
   },
@@ -652,7 +676,6 @@ const CAT_ORDER  = ["dressing","sauce","pickled","salad","misc"];
 let activeCat = "all";
 let query = "";
 
-// ════════ LIST ════════
 function matches(r) {
   const q = query.toLowerCase();
   if (activeCat !== "all" && r.category !== activeCat) return false;
@@ -671,7 +694,6 @@ function renderList() {
     return;
   }
 
-  // Group by category (in fixed order)
   let html = "";
   for (const cat of CAT_ORDER) {
     const group = hits.filter(r => r.category === cat);
@@ -696,7 +718,6 @@ function renderList() {
     row.addEventListener("click", () => openRecipe(+row.dataset.id)));
 }
 
-// ════════ RECIPE VIEW ════════
 function openRecipe(id) {
   const r = RECIPES.find(x => x.id === id);
   if (!r) return;
@@ -741,7 +762,6 @@ function openRecipe(id) {
     <button class="rv-reset" id="resetBtn">↺ Reset checkmarks</button>
   `;
 
-  // Toggle checkoff
   rv.querySelectorAll(".ing-item").forEach(el =>
     el.addEventListener("click", () => el.classList.toggle("done")));
   rv.querySelectorAll(".step-card").forEach(el =>
@@ -766,7 +786,6 @@ function closeRecipe() {
   window.scrollTo(0, 0);
 }
 
-// ════════ CONTROLS ════════
 document.getElementById("tabs").addEventListener("click", e => {
   const btn = e.target.closest(".tab");
   if (!btn) return;
