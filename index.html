@@ -1,449 +1,338 @@
 <!doctype html>
 <html lang="da">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Kaiser – Gastronomisk Eftersyn</title>
-    <link rel="manifest" href="./manifest.webmanifest" />
-<meta name="theme-color" content="#07070a" />
-<link rel="apple-touch-icon" href="./icons/icon-192.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Kaiser" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Kaiser – Gastronomisk Eftersyn</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#2b1d14" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kaiser" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --paper:#f6f0e4;
+      --card:#fffdf8;
+      --line:#e2d6bf;
+      --ink:#2b1d14;
+      --ink2:#5c4a3b;
+      --muted:#8a7866;
+      --espresso:#2b1d14;
+      --green:#2f6b4f;
+      --green2:#24553e;
+      --greenSoft:#e5efe8;
+      --amber:#b8862b;
+      --starOff:#dccfb7;
+      --danger:#a8322a;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    html,body{ background:var(--paper); color:var(--ink); font-family:var(--sans); -webkit-text-size-adjust:100%; }
+    body{ min-height:100vh; min-height:100dvh; padding-bottom:env(safe-area-inset-bottom); }
+    .hidden{ display:none !important; }
+    button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; -webkit-tap-highlight-color:transparent; }
 
-    <style>
-      :root{
-        --bg: #07070a;
-        --panel: rgba(16, 16, 20, 0.82);
-        --border: rgba(255,255,255,0.08);
-        --text: rgba(255,255,255,0.92);
-        --muted: rgba(255,255,255,0.62);
-        --muted2: rgba(255,255,255,0.42);
+    /* ---------- Header ---------- */
+    .hdr{
+      background:var(--espresso);
+      color:var(--paper);
+      padding:calc(18px + env(safe-area-inset-top)) 20px 18px;
+      border-bottom:3px solid var(--green);
+    }
+    .hdr-in{ max-width:480px; margin:0 auto; }
+    .kicker{ font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:#c9b89c; font-weight:700; }
+    .title{ font-family:var(--serif); font-weight:normal; font-size:26px; line-height:1.15; margin-top:4px; }
+    .sub{ font-size:13px; color:#c9b89c; margin-top:4px; }
 
-        --gold: #d6b24a;
-        --gold2:#b9921f;
-        --goldGlow: rgba(214,178,74,0.22);
+    /* ---------- Layout ---------- */
+    .wrap{ max-width:480px; margin:0 auto; padding:18px 16px 32px; }
+    .screen > * + *{ margin-top:14px; }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+      box-shadow:0 8px 24px rgba(43,29,20,.06);
+    }
+    .card > * + *{ margin-top:18px; }
+    .field > * + *{ margin-top:8px; }
 
-        --danger: #ff6b6b;
-      }
+    /* ---------- Step header ---------- */
+    .stepRow{ display:flex; align-items:center; gap:12px; }
+    .stepTitle{ font-family:var(--serif); font-size:21px; flex:1; }
+    .dots{ display:flex; gap:6px; }
+    .dot{ width:8px; height:8px; border-radius:50%; background:var(--line); }
+    .dot.on{ background:var(--green); }
+    .backbtn{
+      width:40px; height:40px; border-radius:10px;
+      border:1px solid var(--line); background:var(--paper);
+      font-size:18px; color:var(--ink2);
+    }
 
-      html,body{
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        color: var(--text);
-        background: var(--bg);
-      }
+    /* ---------- Section divider with leader ---------- */
+    .sec{
+      display:flex; align-items:center; gap:10px;
+      font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink2);
+    }
+    .sec::after{ content:""; flex:1; border-bottom:2px dotted var(--line); }
 
-      body{
-        background:
-          radial-gradient(1100px 700px at 15% -10%, rgba(214,178,74,0.14), transparent 55%),
-          radial-gradient(900px 600px at 105% 10%, rgba(214,178,74,0.10), transparent 50%),
-          radial-gradient(900px 800px at 20% 115%, rgba(255,255,255,0.06), transparent 55%),
-          linear-gradient(180deg, #07070a, #090a10 55%, #07070a);
-      }
+    /* ---------- Labels & inputs ---------- */
+    .label{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--muted); }
+    .hint{ font-size:12px; color:var(--muted); }
+    .input, select, textarea{
+      width:100%;
+      font:inherit; font-size:16px; color:var(--ink);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:13px 14px;
+      outline:none;
+      -webkit-appearance:none; appearance:none;
+    }
+    select{
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235c4a3b' stroke-width='1.6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 14px center; padding-right:38px;
+    }
+    textarea{ resize:vertical; min-height:84px; }
+    .input:focus, select:focus, textarea:focus{ border-color:var(--green); box-shadow:0 0 0 3px var(--greenSoft); }
 
-      body:before{
-        content:"";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-        opacity: .10;
-        mix-blend-mode: overlay;
-      }
+    /* ---------- Meal pills ---------- */
+    .mealGrid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .pill{
+      position:relative;
+      display:flex; align-items:center; justify-content:center;
+      min-height:52px; padding:10px 8px;
+      border:1px solid var(--line); border-radius:10px; background:#fff;
+      font-weight:600; font-size:15px; color:var(--ink2);
+      cursor:pointer; user-select:none;
+    }
+    .pill input{ position:absolute; opacity:0; pointer-events:none; }
+    .pill.on{ background:var(--greenSoft); border-color:var(--green); color:var(--green2); }
 
-      .shell{ max-width: 440px; }
+    /* ---------- Images ---------- */
+    .imageBox{
+      aspect-ratio:4/3; width:100%;
+      border:1px dashed #cdbd9f; border-radius:12px;
+      background:var(--paper);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden; text-align:center;
+    }
+    .imageBox.solid{ border-style:solid; }
+    .imageBox img{ width:100%; height:100%; }
+    .imageBox .ph{ padding:0 24px; }
+    .imageBox .ph-t{ font-size:14px; font-weight:600; color:var(--ink2); }
+    .imageBox .ph-s{ font-size:12px; color:var(--muted); margin-top:6px; }
+    .camIcon{ font-size:28px; margin-bottom:6px; color:var(--green); }
+    #imageBox{ cursor:pointer; }
+    #imagePreview{ object-fit:cover; }
+    #referenceImage{ object-fit:contain; background:#fff; }
 
-      .topbar{
-        border: 1px solid var(--border);
-        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-        border-radius: 20px;
-        padding: 18px 18px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 28px 70px rgba(0,0,0,0.55);
-        text-align: center;
-      }
+    /* ---------- Rating rows ---------- */
+    .rate{ display:flex; align-items:center; gap:10px; }
+    .rate-lbl{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--ink2); white-space:nowrap; }
+    .rate-lead{ flex:1; min-width:12px; border-bottom:2px dotted var(--line); align-self:flex-end; margin-bottom:12px; }
+    .stars{ display:flex; }
+    .star{ width:36px; height:42px; font-size:30px; line-height:42px; color:var(--starOff); }
+    .star.on{ color:var(--amber); }
+    .ratingBlock + .ratingBlock{ margin-top:10px; }
+    @media (max-width:370px){
+      .rate{ flex-wrap:wrap; }
+      .rate-lead{ display:none; }
+      .stars{ width:100%; }
+    }
 
-      .brand-kicker{
-        font-size: 12px;
-        letter-spacing: .22em;
-        text-transform: uppercase;
-        color: var(--muted2);
-        font-weight: 800;
-      }
+    /* ---------- Tasted toggle ---------- */
+    .toggle{
+      display:flex; align-items:center; gap:12px;
+      padding:14px; border:1px solid var(--line); border-radius:10px; background:#fff;
+      cursor:pointer; user-select:none;
+    }
+    .toggle input{ width:22px; height:22px; accent-color:var(--green); }
+    .toggle span{ font-weight:600; color:var(--ink2); }
 
-      .brand-title{
-        font-family: "Playfair Display", serif;
-        font-size: 30px;
-        line-height: 1.08;
-        letter-spacing: -0.015em;
-        font-weight: 700;
-        margin-top: 6px;
-      }
+    /* ---------- Chosen dish ---------- */
+    .chosen{ font-size:13px; color:var(--muted); }
+    .chosen b{ font-family:var(--serif); font-weight:normal; font-size:18px; color:var(--ink); display:block; margin-top:2px; }
 
-      .brand-meta{
-        color: var(--muted);
-        font-weight: 600;
-        font-size: 13px;
-        margin-top: 8px;
-      }
+    /* ---------- Buttons ---------- */
+    .btn{
+      display:block; width:100%;
+      padding:15px 16px; border-radius:12px;
+      font-weight:700; font-size:16px; letter-spacing:.02em;
+      transition:transform .08s ease, opacity .15s ease;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .btn-primary{ background:var(--green); color:#fff; box-shadow:0 6px 16px rgba(47,107,79,.22); }
+    .btn-secondary{ background:var(--card); border:1px solid var(--line); color:var(--ink2); }
+    .btn[disabled]{ opacity:.4; cursor:not-allowed; box-shadow:none; }
 
-      .goldline{
-        height: 2px;
-        margin-top: 14px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, transparent, rgba(214,178,74,0.95), transparent);
-        opacity: .9;
-      }
+    #submitError{ color:var(--danger); font-size:14px; font-weight:600; text-align:center; }
 
-      .panel{
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        box-shadow: 0 26px 72px rgba(0,0,0,0.58);
-        backdrop-filter: blur(12px);
-      }
+    /* ---------- Confirmation ---------- */
+    .done{ text-align:center; }
+    .check{
+      width:56px; height:56px; margin:4px auto 0; border-radius:50%;
+      background:var(--greenSoft); color:var(--green);
+      display:flex; align-items:center; justify-content:center; font-size:28px;
+    }
+    .done-t{ font-family:var(--serif); font-size:22px; }
+    .quote{ font-family:var(--serif); font-style:italic; color:var(--ink2); font-size:15px; }
+    .done .btn + .btn{ margin-top:10px; }
+  </style>
+</head>
 
-      .divider{ height:1px; background: rgba(255,255,255,0.08); }
-
-      .label{
-        font-size: 12px;
-        letter-spacing: .16em;
-        text-transform: uppercase;
-        color: var(--muted2);
-        font-weight: 900;
-      }
-
-      .input, select, textarea{
-        width: 100%;
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.11);
-        background: rgba(255,255,255,0.04);
-        padding: 14px 14px;
-        outline: none;
-        color: rgba(255,255,255,0.92);
-      }
-      select option{ color: #0b0c0f; }
-
-      .input:focus, select:focus, textarea:focus{
-        border-color: rgba(214,178,74,0.55);
-        box-shadow: 0 0 0 4px var(--goldGlow);
-        background: rgba(255,255,255,0.06);
-      }
-
-      .btn{
-        width: 100%;
-        border-radius: 16px;
-        font-weight: 900;
-        letter-spacing: .02em;
-        padding: 14px 16px;
-        transition: transform .08s ease, filter .18s ease, background .18s ease, border-color .18s ease;
-        user-select: none;
-      }
-      .btn:active{ transform: translateY(1px); }
-
-      .btn-primary{
-        background: linear-gradient(135deg, var(--gold), var(--gold2));
-        color: #0b0c0f;
-        box-shadow: 0 18px 40px rgba(214,178,74,0.18);
-      }
-      .btn-primary:hover{ filter: brightness(1.04); }
-
-      .btn-secondary{
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: rgba(255,255,255,0.88);
-      }
-      .btn-secondary:hover{ background: rgba(255,255,255,0.06); }
-
-      .btn-disabled{
-        opacity: .45;
-        cursor: not-allowed;
-        filter: grayscale(.1);
-      }
-
-      .backbtn{
-        width: 42px;
-        height: 42px;
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.10);
-        background: rgba(255,255,255,0.04);
-        color: rgba(255,255,255,0.88);
-        font-weight: 900;
-      }
-      .backbtn:hover{ background: rgba(255,255,255,0.06); }
-
-      .imageBox{
-        border-radius: 20px;
-        border: 1px solid rgba(255,255,255,0.10);
-        background: rgba(255,255,255,0.03);
-        overflow: hidden;
-        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.20);
-      }
-
-      /* Stepper (mere “tjekket” end Trin 1/3 tekst) */
-      .stepRow{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap: 14px;
-      }
-      .stepTitle{
-        font-size: 16px;
-        font-weight: 900;
-        letter-spacing: -0.01em;
-      }
-      .stepDots{ display:flex; align-items:center; gap:8px; }
-      .dot{
-        width: 9px; height: 9px; border-radius: 999px;
-        border: 1px solid rgba(214,178,74,0.35);
-        background: rgba(214,178,74,0.10);
-      }
-      .dot.on{
-        background: linear-gradient(135deg, var(--gold), var(--gold2));
-        border-color: rgba(214,178,74,0.75);
-        box-shadow: 0 0 0 4px rgba(214,178,74,0.10);
-      }
-
-      /* Radio group injected by JS */
-      #mealRadios label{
-        border: 1px solid rgba(255,255,255,0.10) !important;
-        background: rgba(255,255,255,0.03) !important;
-        border-radius: 16px !important;
-        padding: 14px 14px !important;
-      }
-      #mealRadios label:hover{
-        background: rgba(214,178,74,0.06) !important;
-        border-color: rgba(214,178,74,0.22) !important;
-      }
-      #mealRadios input[type="radio"]{ accent-color: var(--gold); }
-
-      /* Stars injected by JS */
-      .text-yellow-400 { color: var(--gold) !important; }
-      .text-slate-300  { color: rgba(255,255,255,0.26) !important; }
-
-      #submitError{ color: var(--danger); }
-      .muted { color: var(--muted); font-weight: 600; font-size: 13px; }
-      .muted2 { color: var(--muted2); font-weight: 800; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-      /* Måltid: 3 "pills" i grid (ingen overlap) */
-.mealGrid{
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-/* label kommer fra JS, så vi tvinger layout */
-.mealGrid label{
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 56px;
-  padding: 14px 12px !important;
-}
-
-/* gør teksten lidt mere stabil i pill'en */
-.mealGrid label span{
-  font-size: 16px !important;
-  line-height: 1.05;
-}
-
-/* små skærme: 2 kolonner */
-@media (max-width: 390px){
-  .mealGrid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-    </style>
-  </head>
-
-  <body class="min-h-screen flex justify-center p-4">
-    <div class="shell w-full">
-
-      <!-- Header (kun side 1) -->
-      <header id="topHeader" class="topbar mt-6 mb-5">
-        <div class="brand-kicker">KAISER</div>
-        <div class="brand-title">Gastronomisk Eftersyn</div>
-        <div class="brand-meta">Intern vurdering af retter på tværs af lokationer</div>
-        <div class="goldline"></div>
-      </header>
-
-      <!-- SCREEN 1 -->
-      <section id="screen-location" class="space-y-4">
-        <div class="panel p-5 space-y-4">
-          <div class="stepRow">
-            <div class="stepTitle">Opret vurdering</div>
-            <div class="stepDots" aria-label="Trin 1 af 3">
-              <span class="dot on"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="space-y-2">
-            <div class="label">Lokation</div>
-            <select id="locationSelect">
-              <option value="">Vælg lokation...</option>
-            </select>
-          </div>
-
-          <div class="space-y-2">
-            <div class="label">Måltid</div>
-            <div id="mealRadios" class="mealGrid"></div>
-          </div>
-        </div>
-
-        <button id="btnNextToDish" class="btn btn-primary btn-disabled" disabled>
-          Næste
-        </button>
-      </section>
-
-      <!-- SCREEN 2 -->
-      <section id="screen-dish" class="hidden space-y-4">
-        <div class="panel p-5 space-y-4">
-          <div class="flex items-center gap-3">
-            <button id="btnBackToLocation" class="backbtn" aria-label="Tilbage">←</button>
-            <div class="stepRow flex-1">
-              <div class="stepTitle">Vælg ret</div>
-              <div class="stepDots" aria-label="Trin 2 af 3">
-                <span class="dot on"></span>
-                <span class="dot on"></span>
-                <span class="dot"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="space-y-2">
-            <div class="label">Ret</div>
-            <select id="dishSelect">
-              <option value="">Vælg ret...</option>
-            </select>
-            <div class="muted2">Listen filtreres automatisk efter måltid</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SCREEN 3 -->
-      <section id="screen-rating" class="hidden space-y-4">
-        <div class="panel p-5 space-y-4">
-          <div class="flex items-center gap-3">
-            <button id="btnBackToDish" class="backbtn" aria-label="Tilbage">←</button>
-            <div class="stepRow flex-1">
-              <div class="stepTitle">Vurdering</div>
-              <div class="stepDots" aria-label="Trin 3 af 3">
-                <span class="dot on"></span>
-                <span class="dot on"></span>
-                <span class="dot on"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="muted" style="margin-top:0;">
-            Valgt ret: <span id="chosenDishName" style="color: var(--text); font-weight: 900;">—</span>
-          </div>
-          <!-- Referencebillede -->
-<div class="space-y-2">
-  <div class="label">Reference</div>
-
-  <div id="referenceEmpty" class="imageBox aspect-video flex items-center justify-center">
-    <div class="text-center px-6">
-      <div class="muted" style="margin-top:0;">Ingen referencebillede tilgængeligt endnu</div>
-      <div class="muted2" style="margin-top:8px; color: var(--muted2);">Vises automatisk når der findes et billede til retten</div>
+<body>
+  <header class="hdr">
+    <div class="hdr-in">
+      <div class="kicker">Kaiser</div>
+      <h1 class="title">Gastronomisk Eftersyn</h1>
+      <div class="sub">Intern vurdering af retter på tværs af lokationer</div>
     </div>
-  </div>
+  </header>
 
-  <div id="referenceWrap" class="imageBox aspect-video hidden overflow-hidden">
-    <img id="referenceImage" class="w-full h-full object-contain" alt="Referencebillede af retten">
-  </div>
+  <main class="wrap">
 
-  <div class="muted2">Sådan skal retten gerne se ud</div>
-</div>
+    <!-- SKÆRM 1: Hvem, hvor, hvornår -->
+    <section id="screen-location" class="screen">
+      <div class="card">
+        <div class="stepRow">
+          <div class="stepTitle">Opret vurdering</div>
+          <div class="dots" aria-label="Trin 1 af 3"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+        </div>
 
-          <!-- Billede (KRAV) -->
-          <div class="space-y-2">
-            <div class="label">Billede (krav)</div>
-            <div id="imageBox" class="imageBox aspect-video flex items-center justify-center cursor-pointer">
-              <div id="imagePlaceholder" class="text-center px-6">
-                <div class="muted" style="margin-top:0;">Tag billede før du spiser</div>
-                <div class="muted2" style="margin-top:8px; color: var(--muted2);">Vedhæftes til rapporten</div>
-              </div>
-              <img id="imagePreview" class="hidden w-full h-full object-cover" alt="Billede preview">
+        <div class="field">
+          <label class="label" for="reviewerInput">Navn / initialer</label>
+          <input id="reviewerInput" class="input" type="text" autocomplete="name" autocapitalize="words" maxlength="40" placeholder="Fx Stefan eller SK" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="locationSelect">Lokation</label>
+          <select id="locationSelect"><option value="">Vælg lokation…</option></select>
+        </div>
+
+        <div class="field">
+          <div class="label">Måltid</div>
+          <div id="mealRadios" class="mealGrid"></div>
+        </div>
+      </div>
+
+      <button id="btnNextToDish" class="btn btn-primary" disabled>Næste</button>
+    </section>
+
+    <!-- SKÆRM 2: Ret -->
+    <section id="screen-dish" class="screen hidden">
+      <div class="card">
+        <div class="stepRow">
+          <button id="btnBackToLocation" class="backbtn" aria-label="Tilbage">←</button>
+          <div class="stepTitle">Vælg ret</div>
+          <div class="dots" aria-label="Trin 2 af 3"><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="dishSelect">Ret</label>
+          <select id="dishSelect"><option value="">Vælg ret…</option></select>
+          <div class="hint">Listen er filtreret efter måltid</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKÆRM 3: Vurdering -->
+    <section id="screen-rating" class="screen hidden">
+      <div class="card">
+        <div class="stepRow">
+          <button id="btnBackToDish" class="backbtn" aria-label="Tilbage">←</button>
+          <div class="stepTitle">Vurdering</div>
+          <div class="dots" aria-label="Trin 3 af 3"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></div>
+        </div>
+
+        <div class="chosen">Valgt ret<b id="chosenDishName">—</b></div>
+
+        <!-- Reference -->
+        <div class="field">
+          <div class="label">Reference</div>
+          <div id="referenceEmpty" class="imageBox">
+            <div class="ph">
+              <div class="ph-t">Intet referencebillede endnu</div>
+              <div class="ph-s">Vises automatisk når der findes et billede til retten</div>
             </div>
-           <input id="imageInput" type="file" accept="image/*" class="hidden" />
           </div>
+          <div id="referenceWrap" class="imageBox solid hidden">
+            <img id="referenceImage" alt="Referencebillede af retten" />
+          </div>
+          <div class="hint">Sådan skal retten se ud</div>
+        </div>
 
-          <div class="divider"></div>
+        <!-- Billede (krav) -->
+        <div class="field">
+          <div class="label">Dit billede (krav)</div>
+          <div id="imageBox" class="imageBox" role="button" tabindex="0" aria-label="Tag billede">
+            <div id="imagePlaceholder" class="ph">
+              <div class="camIcon">◉</div>
+              <div class="ph-t">Tag billede før du spiser</div>
+              <div class="ph-s">Vedhæftes rapporten</div>
+            </div>
+            <img id="imagePreview" class="hidden" alt="Dit billede" />
+          </div>
+          <input id="imageInput" type="file" accept="image/*" class="hidden" />
+        </div>
 
-          <!-- Før du spiser -->
-          <div class="space-y-4">
-            <div class="muted2">Før du spiser</div>
+        <!-- Før du spiser -->
+        <div>
+          <div class="sec">Før du spiser</div>
+          <div style="margin-top:10px;">
             <div class="ratingBlock" data-field="presentation"></div>
             <div class="ratingBlock" data-field="portion"></div>
           </div>
+        </div>
 
-          <div class="divider"></div>
+        <!-- Efter du har smagt -->
+        <div>
+          <label class="toggle">
+            <input id="tastedCheck" type="checkbox" />
+            <span>Jeg har smagt maden</span>
+          </label>
 
-          <!-- Efter du har smagt -->
-          <div class="space-y-3">
-            <label class="flex items-center gap-3 select-none">
-              <input id="tastedCheck" type="checkbox" class="w-5 h-5" />
-              <span class="muted">Jeg har smagt maden</span>
-            </label>
-
-            <div id="afterTasteWrap" class="space-y-4 hidden">
-              <div class="muted2">Efter du har smagt</div>
+          <div id="afterTasteWrap" class="hidden" style="margin-top:16px;">
+            <div class="sec">Efter du har smagt</div>
+            <div style="margin-top:10px;">
               <div class="ratingBlock" data-field="taste"></div>
               <div class="ratingBlock" data-field="temperature"></div>
             </div>
           </div>
-
-          <div class="divider"></div>
-
-          <!-- Kommentar -->
-          <div class="space-y-2">
-            <div class="label">Kommentar (valgfri)</div>
-            <textarea id="commentInput" rows="3" placeholder="Skriv kort note..."></textarea>
-          </div>
         </div>
 
-        <button id="btnSubmit" class="btn btn-primary btn-disabled" disabled>
-          <span id="submitLabel">Indsend</span>
-        </button>
-
-        <div id="submitError" class="hidden text-sm font-bold"></div>
-      </section>
-
-      <!-- SCREEN 4 -->
-      <section id="screen-confirmation" class="hidden space-y-4">
-        <div class="panel p-6 text-center space-y-4">
-          <div class="muted2">Indsendt</div>
-          <div style="font-size:18px; font-weight:900; letter-spacing:-0.01em;">Tak. Vurderingen er gemt.</div>
-
-          <div id="quoteText" class="muted" style="margin-top:6px;"></div>
-
-          <div class="pt-2 space-y-3">
-            <button id="btnReset" class="btn btn-primary">Ny vurdering</button>
-            <button id="btnClose" class="btn btn-secondary">Luk</button>
-          </div>
+        <!-- Kommentar -->
+        <div class="field">
+          <label class="label" for="commentInput">Kommentar (valgfri)</label>
+          <textarea id="commentInput" rows="3" placeholder="Skriv kort note…"></textarea>
         </div>
-      </section>
-    
+      </div>
 
-    </div>
+      <button id="btnSubmit" class="btn btn-primary" disabled><span id="submitLabel">Indsend</span></button>
+      <div id="submitError" class="hidden"></div>
+    </section>
 
-    <form id="hiddenSubmitForm" class="hidden" method="POST" enctype="multipart/form-data"></form>
+    <!-- SKÆRM 4: Bekræftelse -->
+    <section id="screen-confirmation" class="screen hidden">
+      <div class="card done">
+        <div class="check">✓</div>
+        <div class="done-t">Tak. Vurderingen er sendt.</div>
+        <div id="quoteText" class="quote"></div>
+        <div>
+          <button id="btnReset" class="btn btn-primary">Ny vurdering</button>
+          <button id="btnClose" class="btn btn-secondary">Luk</button>
+        </div>
+      </div>
+    </section>
 
-    <script src="./app-v3.js"></script>
-  </body>
+  </main>
+
+  <form id="hiddenSubmitForm" class="hidden" method="POST" enctype="multipart/form-data"></form>
+
+  <script src="./app-v4.js"></script>
+</body>
 </html>
