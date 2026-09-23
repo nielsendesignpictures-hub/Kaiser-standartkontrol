@@ -440,12 +440,11 @@ function submit() {
     form.method = "POST";
     form.enctype = "multipart/form-data";
 
-    form.appendChild(createHiddenInput("_subject", `Ny rating – ${state.location} – ${state.dish} – ${state.reviewer}`));
+    form.appendChild(createHiddenInput("_subject", `Ny rating – ${state.location} – ${state.dish}`));
     form.appendChild(createHiddenInput("_captcha", "false"));
     form.appendChild(createHiddenInput("_template", "table"));
     form.appendChild(createHiddenInput("_next", window.location.href));
 
-    form.appendChild(createHiddenInput("Vurderet af", state.reviewer));
     form.appendChild(createHiddenInput("Lokation", state.location));
     form.appendChild(createHiddenInput("Måltid", state.meal));
     form.appendChild(createHiddenInput("Ret", state.dish));
@@ -454,6 +453,7 @@ function submit() {
     form.appendChild(createHiddenInput("Smag", String(state.ratings.taste)));
     form.appendChild(createHiddenInput("Temperatur", String(state.ratings.temperature)));
     form.appendChild(createHiddenInput("Kommentar", state.comment || ""));
+    form.appendChild(createHiddenInput("Navn", state.reviewer));
     form.appendChild(createHiddenInput("Dato", new Date().toLocaleString("da-DK")));
 
     const fileClone = originalFileInput.cloneNode();
