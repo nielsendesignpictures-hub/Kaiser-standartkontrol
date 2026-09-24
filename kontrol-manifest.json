@@ -1,0 +1,32 @@
+{
+  "id": "./kontrol.html",
+  "name": "Kaiser Kontrol",
+  "short_name": "Kaiser Kontrol",
+  "description": "Intern fødevarekontrol for Café Kaiser",
+  "start_url": "./kontrol.html",
+  "scope": "./kontrol.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6EF",
+  "theme_color": "#3B2A20",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
