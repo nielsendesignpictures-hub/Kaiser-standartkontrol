@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#3B2A20">
 <title>Kaiser Kontrol</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="kontrol-manifest.json">
 <link rel="apple-touch-icon" href="images/logo.png">
 <link rel="icon" href="images/logo.png">
 <style>
@@ -554,7 +554,7 @@ function esc2(s){ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 function hash(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return 'k'+Math.abs(h); }
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('kontrol-sw.js', { scope: './kontrol.html' }).catch(()=>{}));
 }
 
 hent();
