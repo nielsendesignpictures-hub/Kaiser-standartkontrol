@@ -1,8 +1,8 @@
 /* Kaiser Kontrol — service worker.
    HTML hentes altid fra nettet først (undgår gammel cache på iOS),
    resten cachelagres så appen virker offline i køkkenet. */
-const CACHE = 'kaiser-kontrol-v5';
-const FILER = ['./', './kontrol.html', './manifest.json', './images/logo.png'];
+const CACHE = 'kaiser-kontrol-v6';
+const FILER = ['./kontrol.html', './kontrol-manifest.json', './images/logo.png'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -11,7 +11,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(k => Promise.all(k.filter(n => n !== CACHE).map(n => caches.delete(n))))
+    caches.keys().then(k => Promise.all(k.filter(n => n.startsWith('kaiser-kontrol') && n !== CACHE).map(n => caches.delete(n))))
       .then(() => self.clients.claim())
   );
 });
@@ -26,7 +26,7 @@ self.addEventListener('fetch', e => {
         const kopi = r.clone();
         caches.open(CACHE).then(c => c.put(req, kopi));
         return r;
-      }).catch(() => caches.match(req).then(r => r || caches.match('./index.html')))
+      }).catch(() => caches.match(req).then(r => r || caches.match('./kontrol.html')))
     );
   } else {
     e.respondWith(
