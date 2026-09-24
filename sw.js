@@ -2,7 +2,7 @@
    HTML hentes altid fra nettet først (undgår gammel cache på iOS),
    resten cachelagres så appen virker offline i køkkenet. */
 const CACHE = 'kaiser-kontrol-v5';
-const FILER = ['./', './index.html', './manifest.json', './images/logo.png'];
+const FILER = ['./', './kontrol.html', './manifest.json', './images/logo.png'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
