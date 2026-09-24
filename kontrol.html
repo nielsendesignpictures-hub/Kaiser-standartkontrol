@@ -55,6 +55,9 @@ button.small{padding:9px 12px;font-size:14px;width:auto}
 .sev button.on[data-s="1"]{background:var(--gron);color:#fff;border-color:var(--gron)}
 .sev button.on[data-s="2"]{background:var(--gul);color:#4a3a00;border-color:var(--gul)}
 .sev button.on[data-s="3"]{background:var(--rod);color:#fff;border-color:var(--rod)}
+.sev button[data-s="4"]{flex:1.3;font-size:12.5px}
+.sev button.on[data-s="4"]{background:#8A7A68;color:#fff;border-color:#8A7A68}
+.q.na .txt{color:var(--muted);text-decoration:line-through}
 .q textarea{margin-top:9px;display:none}
 .q.hasnote textarea,.q.open textarea{display:block}
 .omrnote{padding:12px 14px 14px;border-top:1px solid var(--line);background:#FDFBF5}
@@ -66,6 +69,10 @@ table.res tr.tot td{border-top:2px solid var(--espresso);border-bottom:none;font
 .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 .bar{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);padding:10px 16px calc(env(safe-area-inset-bottom) + 10px);display:flex;gap:10px;z-index:60}
 .bar .sum{flex:1;display:flex;align-items:center;gap:5px}
+.tabs.sub button{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;padding:10px 6px}
+.tabs.sub button.on{background:var(--espresso-soft);border-color:var(--espresso-soft)}
+.xrow{display:flex;gap:8px;margin-top:8px}.xrow input{flex:1;min-width:0}
+.xrow input:first-child{flex:2}
 .hide{display:none}
 .note{font-size:12.5px;color:var(--muted);margin-top:8px}
 .wl{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-top:10px}
@@ -95,13 +102,14 @@ table.res tr.tot td{border-top:2px solid var(--espresso);border-bottom:none;font
       </div>
       <div>
         <label class="fld" for="kontrollant">Kontrollant</label>
-        <input type="text" id="kontrollant" placeholder="Navn">
+        <select id="kontrollant"></select>
       </div>
     </div>
     <div class="legend">
       <span class="dot" style="background:var(--gron)"></span>Grøn — mindre bemærkning<br>
       <span class="dot" style="background:var(--gul)"></span>Gul — bemærkning der skal rettes<br>
       <span class="dot" style="background:var(--rod)"></span>Rød — alvorlig/kritisk afvigelse<br>
+      <span class="dot" style="background:#8A7A68"></span>Ikke relevant — tælles ikke med<br>
       <span class="dot" style="background:#DED4C2"></span>Uden markering = i orden. Tryk på en farve igen for at fjerne den.
     </div>
     <label class="wl"><input type="checkbox" id="wl" checked> Hold skærmen tændt under kontrollen</label>
@@ -113,7 +121,14 @@ table.res tr.tot td{border-top:2px solid var(--espresso);border-bottom:none;font
     <button id="tRes" onclick="setTab('res')">Resultat</button>
   </div>
 
+  <div class="tabs sub hide" id="fohValg">
+    <button id="tF6" onclick="setFoh('foh6')">6 mdr. check</button>
+    <button id="tF14" onclick="setFoh('foh14')">14 dags check</button>
+  </div>
+  <div class="note hide" id="fohInfo" style="margin:-6px 2px 12px"></div>
+
   <div id="areas"></div>
+  <div id="ekstra"></div>
 
   <div id="result" class="hide">
     <div class="card">
@@ -155,11 +170,14 @@ const AFDELINGER = [
   { navn: "Enghave Brygge", mail: "Enghavebrygge@cafekaiser.dk" }
 ];
 
+/* Kontrollanter — vælges i dropdown */
+const KONTROLLANTER = ["Stefan", "Casper", "Christian"];
+
 /* Sæt CC på alle mails (fx dig selv). Tom streng = ingen cc. */
 const CC_MAIL = "";
 
 /* Point-/niveaunavne — bruges i skema, resultat og mail */
-const NIVEAU = ["", "Grøn", "Gul", "Rød"];
+const NIVEAU = ["", "Grøn", "Gul", "Rød", "Ikke relevant"];
 
 /* ============================================================
    SKEMA — hentet 1:1 fra kontrolarket
@@ -171,11 +189,41 @@ const DATA = {
     "Kold produktionsområde": [{"t": "Køledisk", "q": ["Er temperaturen ok?", "Er der risiko for krydskontaminering?", "Er der datomærke på varerne?", "Er der varer, som er for gamle?", "Er køleskabet pænt og rent indvendigt?", "Er køleskabet pænt og rent udvendigt?", "Andet"]}, {"t": "Udstyr", "q": ["Varmelamper", "Filmdispenser", "Toaster", "Buffetudstyr", "Skærebræt"]}, {"t": "Borde og hylder", "q": ["Er bordene rene og pæne?", "Er hylderne pæne og rene?", "Er udstyret, som opbevares i området, pæne og rene?", "Er kasser, som bruges til opbevaring pæne og rene?", "Andet"]}, {"t": "Gulvet", "q": ["Er gulvet pænt og rent?", "Er der riste i afløb?", "Er afløbene pæne og rene?", "Er udstyr til gulvvask i orden?", "Er kanter, lister og gulv intakt?", "Andet:"]}, {"t": "Vægge, loft og rør", "q": ["Er vægge pæne og rene?", "Hvis der er rør i produktionsområdet, er disse rene og pæne?", "Er fliser og fuger intakte?"]}, {"t": "Generelt", "q": ["Affaldshåndtering"]}],
     "Varm produktion": [{"t": "Kølebord", "q": ["Er temperaturen ok?", "Er der risiko for krydskontaminering?", "Er der datomærke på varerne?", "Er der varer, som er for gamle?", "Er køleskabet pænt og rent indvendigt?", "Er køleskabet pænt og rent udvendigt?"]}, {"t": "Fryser", "q": ["Er temperaturen ok?", "Er der risiko for krydskontaminering?", "Er der datomærke på varerne?", "Er der varer, som er for gamle?", "Er fryseren pænt og rent indvendigt?", "Er fryseren pænt og rent udvendigt?"]}, {"t": "Udstyr", "q": ["Komfur", "friture", "Stegeplade", "Grill", "Skuffer og hylder under udstyr"]}, {"t": "Borde og hylder", "q": ["Er hylderne pæne og rene?", "Er bordene rene og pæne?", "Er kasser, som bruges til opbevaring pæne og rene?", "Andet"]}, {"t": "Gulvet", "q": ["Er gulvet pænt og rent?", "Er der riste i afløb?", "Er afløbene pæne og rene?", "Er kanter, lister og gulv intakt?", "Andet:"]}, {"t": "Vægge og rør", "q": ["Er vægge pæne og rene?", "Hvis der er rør i produktionsområdet, er disse rene og pæne?", "Er fliser og fuger intakte?"]}, {"t": "Generelt", "q": ["Affaldshåndtering"]}]
   },
-  foh: {
+  foh6: {
     "Lagerrum": [{"t": "Fadølsanlæg", "q": ["Bliver procedure for rengøring fulgt efter anvisning fra leverandør?", "Er der datoer på anbrud for sirup?", "Er der sirupper, som er løbet på dato?", "Er slanger og tuber pæne og rene?"]}, {"t": "Gulvet", "q": ["Er gulvet pænt og rent?", "Er alt løftet over gulvhøjde?", "Er lister og fuger intakte?"]}, {"t": "Vægge og loft", "q": ["Er vægge og loft pæne og rene?"]}, {"t": "Lagerbeholdning", "q": ["Er FIFO overholdt?", "Er der datovarer?", "Er hylder pæne og rene?"]}, {"t": "Køleskab", "q": ["Er temperaturen ok?", "Er der risiko for krydskontaminering?", "Er der datomærke på varerne?", "Er der varer, som er for gamle?", "Er køleskabet pænt og rent indvendigt?", "Er køleskabet pænt og rent udvendigt?"]}],
     "Barområde": [{"t": "Bar", "q": ["Er der en god orden?", "Er der rent og pænt?", "Er smileyordning korrekt skiltet?", "Er der skilt med info om allergener?"]}, {"t": "Gulvet", "q": ["Er gulvet pænt og rent?", "Er alt løftet over gulvhøjde?", "Er lister og fuger intakte?"]}, {"t": "Køledisk", "q": ["Er temperaturen ok?", "Er der datomærke på varerne?", "Er der varer, som er for gamle?", "Er køleskabet pænt og rent indvendigt?", "Er køleskabet pænt og rent udvendigt?", "Andet:", "Ismaskinen"]}],
     "Café og gæsteområde": [{"t": "Generelt", "q": ["Er der pænt og rent?", "Er der støvet af?", "Er gulv, lister og døre skadedyrssikret?"]}],
     "Administrativt": [{"t": "Varemodtagelse", "q": ["Er der købt varer udenfor leverandører?", "Er der styr på følgesedler?", "Er der styr på tilbagekaldelser?"]}, {"t": "Egenkontrol", "q": ["Kan medarbejdere navigerer i Esmiley?", "Tjekke punkter i egenkontrollen.", "Tjekke afvigelsesrapporter"]}]
+  },
+  /* 14 dags check — fast fysisk gennemgang før åbning (1:1 caféchefmøde) */
+  foh14: {
+    "Udefra": [{"t":"Udefra","q":["Udefra fremstår caféen pæn og ren"]}],
+    "Gæsteområde": [{"t":"Gæsteområde","q":[
+      "Borde, stole, sofaer og øvrige møbler er rene og i god stand",
+      "Er der rent og pænt under bordene?",
+      "Gulve, paneler, vægge, lamper og synlige overflader er rene",
+      "Vinduer, spejle og glaspartier er rene",
+      "Skabe og områder synlige for gæster er ryddelige",
+      "Musik, lys og temperatur giver den rigtige Kaiser-stemning",
+      "Generelt indtryk: Caféen er pæn, ren og klar til åbning"]}],
+    "Bar & serviceområder": [{"t":"Bar & service","q":[
+      "Baren er ren, organiseret og præsentabel samt hylder er pæne og rene",
+      "Kaffemaskine, kværne, køleskabe og udstyr fremstår rent – samt området omkring",
+      "Glas, kopper og service er korrekt placeret og i god stand",
+      "Lager/varer ved baren er organiseret – ingen unødigt rod"]}],
+    "Køkken & fødevaresikkerhed": [{"t":"Køkken","q":[
+      "Køkkenet fremstår rent og organiseret",
+      "Check temperatur i køleskabe",
+      "Check FIFO i køkken – ligger ældste varer først og nyeste nederst/bagerst?",
+      "Status på seneste køkken-audit og relevante opfølgningspunkter"]}],
+    "Bagom, lager & personaleområder": [{"t":"Bagom","q":[
+      "Lager er ryddeligt og varer står korrekt",
+      "Personaleområder og omklædning fremstår ordentlige"]}],
+    "Vedligeholdelse": [{"t":"Vedligeholdelse","q":[
+      "Defekte møbler, lamper, døre, inventar eller udstyr er identificeret",
+      "Der er ingen gamle midlertidige løsninger",
+      "Åbne vedligeholdelsesopgaver har ejer og deadline",
+      "Caféchefen har overblik over, hvad der skal meldes videre til HQ"]}]
   }
 };
 /* ==================== SLUT PÅ KONFIGURATION ==================== */
@@ -186,7 +234,19 @@ let sek = 'boh';        // aktiv kontrol (boh/foh) — Resultat viser altid den 
 let state = {};         // svar for DEN aktive kontrol
 let opsum = '';
 
-const SEKNAVN = { boh: 'Back of house', foh: 'Front of house' };
+const SEKNAVN = { boh: 'Back of house', foh6: 'Front of house – 6 mdr. check', foh14: 'Front of house – 14 dags check' };
+let fohValg = 'foh6';   // senest valgte FOH-liste
+
+/* Fritekstfelter på 14 dags check (afsnit 7–9 i arket) */
+const EKSTRA = {
+  foh14: [
+    { titel: 'Mulige forbedringer & idéer', note: 'Noget vi med fordel kan ændre, forbedre eller opgradere – selvom det ikke er en fejl.',
+      rækker: 3, felter: ['Forbedring / idé', 'Næste skridt / ansvarlig', 'Deadline'] },
+    { titel: 'Samlet vurdering', tekst: ['Det bedste ved caféen i dag', 'Det vigtigste forbedringsområde', 'Noget der kræver hjælp fra HQ'] },
+    { titel: 'Maks. 3 handlinger', note: 'Følges op ved næste besøg.',
+      rækker: 3, felter: ['Handling', 'Ansvarlig', 'Deadline'] }
+  ]
+};
 
 /* ---------- nøgle / gem — hver kontrol gemmes for sig ---------- */
 const key = () => 'kaiserkontrol:' + $('afd').value + ':' + $('dato').value + ':' + sek;
@@ -197,7 +257,7 @@ function gem(){
     state: state
   }));
   localStorage.setItem('kaiserkontrol:sidste', JSON.stringify({
-    afd: $('afd').value, sek: sek, kontrollant: $('kontrollant').value
+    afd: $('afd').value, sek: sek, foh: fohValg, kontrollant: $('kontrollant').value
   }));
 }
 function hent(){
@@ -205,7 +265,7 @@ function hent(){
   const o = raw ? JSON.parse(raw) : {};
   state = o.state || {};
   opsum = o.opsum || '';
-  if(o.kontrollant) $('kontrollant').value = o.kontrollant;
+  if(o.kontrollant && KONTROLLANTER.includes(o.kontrollant)) $('kontrollant').value = o.kontrollant;
   $('opsum').value = opsum;
 }
 
@@ -215,27 +275,45 @@ AFDELINGER.forEach(a => {
   op.value = a.navn; op.textContent = a.navn;
   $('afd').appendChild(op);
 });
+KONTROLLANTER.forEach(n => {
+  const op = document.createElement('option');
+  op.value = n; op.textContent = n;
+  $('kontrollant').appendChild(op);
+});
 $('dato').value = new Date().toISOString().slice(0,10);
 try{
   const s = JSON.parse(localStorage.getItem('kaiserkontrol:sidste') || '{}');
   if(s.afd) $('afd').value = s.afd;
   if(s.kontrollant) $('kontrollant').value = s.kontrollant;
-  if(s.sek) { sek = s.sek; tab = s.sek; }
+  if(s.foh) fohValg = s.foh;
+  if(s.sek === 'foh') s.sek = 'foh6';          // ældre version
+  if(s.sek && DATA[s.sek]) { sek = s.sek; tab = s.sek.startsWith('foh') ? 'foh' : 'boh'; }
 }catch(e){}
 $('afd').onchange = () => { hent(); render(); };
 $('dato').onchange = () => { hent(); render(); };
-$('kontrollant').oninput = gem;
+$('kontrollant').onchange = gem;
 $('opsum').oninput = function(){ opsum = this.value; gem(); };
 
+function setFoh(v){
+  fohValg = v;
+  setTab('foh');
+}
 function setTab(t){
-  if(t === 'boh' || t === 'foh'){
-    if(t !== sek){ sek = t; hent(); }
-  }
+  const ny = t === 'boh' ? 'boh' : t === 'foh' ? fohValg : null;
+  if(ny && ny !== sek){ sek = ny; hent(); }
   tab = t;
   $('tBoh').className = t==='boh' ? 'on' : '';
   $('tFoh').className = t==='foh' ? 'on' : '';
   $('tRes').className = t==='res' ? 'on' : '';
   $('areas').className = t==='res' ? 'hide' : '';
+  $('ekstra').className = t==='res' ? 'hide' : '';
+  $('fohValg').className = t==='foh' ? 'tabs sub' : 'tabs sub hide';
+  $('fohInfo').className = t==='foh' ? 'note' : 'note hide';
+  $('tF6').className = fohValg==='foh6' ? 'on' : '';
+  $('tF14').className = fohValg==='foh14' ? 'on' : '';
+  $('fohInfo').textContent = fohValg==='foh14'
+    ? 'Fast fysisk gennemgang før åbning – i forbindelse med 1:1 caféchefmøde.'
+    : 'Stor halvårlig gennemgang: lager, bar, café og administrativt.';
   $('result').className = t==='res' ? '' : 'hide';
   if(t==='res') renderResultat(); else render();
   gem();
@@ -254,13 +332,13 @@ function render(){
     h += '<details class="area"><summary><span class="nm">'+esc(omr)+'</span><span class="pills">'
        + pill('g',t[1]) + pill('y',t[2]) + pill('r',t[3]) + '</span></summary>';
     data[omr].forEach(g => {
-      h += '<div class="grp">'+esc(g.t)+'</div>';
+      if(data[omr].length > 1 || !omr.startsWith(g.t)) h += '<div class="grp">'+esc(g.t)+'</div>';
       g.q.forEach(q => {
         const k = omr+'|'+g.t+'|'+q;
         const v = state[k] || {s:0,k:''};
-        h += '<div class="q'+(v.k?' hasnote':'')+'" id="q_'+hash(k)+'">'
+        h += '<div class="q'+(v.k?' hasnote':'')+(v.s===4?' na':'')+'" id="q_'+hash(k)+'">'
            + '<div class="txt">'+esc(q)+'</div><div class="sev">';
-        for(let s=1;s<4;s++){
+        for(let s=1;s<5;s++){
           h += '<button data-s="'+s+'"'+(v.s===s?' class="on"':'')
              + ' onclick="saet(\''+esc2(k)+'\','+s+')">'+NIVEAU[s]+'</button>';
         }
@@ -276,9 +354,50 @@ function render(){
     h += '</details>';
   }
   $('areas').innerHTML = h;
+  renderEkstra();
   opdaterBar();
 }
 
+function renderEkstra(){
+  const ex = EKSTRA[sek] || [];
+  let h = '';
+  ex.forEach((b, bi) => {
+    h += '<div class="card"><h2 style="margin:0 0 4px;font-size:16.5px">'+esc(b.titel)+'</h2>';
+    if(b.note) h += '<div class="note" style="margin:0 0 6px">'+esc(b.note)+'</div>';
+    if(b.tekst) b.tekst.forEach((lbl, i) => {
+      const k = 'x|'+bi+'|'+i;
+      h += '<label class="fld" style="margin-top:10px">'+esc(lbl)+'</label>'
+         + '<textarea rows="2" oninput="note(\''+k+'\',this.value)">'+esc((state[k]||{}).k)+'</textarea>';
+    });
+    if(b.rækker) for(let r=0;r<b.rækker;r++){
+      h += '<div class="xrow">';
+      b.felter.forEach((f, fi) => {
+        const k = 'x|'+bi+'|'+r+'|'+fi;
+        h += '<input type="text" placeholder="'+esc(f)+'" value="'+esc((state[k]||{}).k)+'" oninput="note(\''+k+'\',this.value)">';
+      });
+      h += '</div>';
+    }
+    h += '</div>';
+  });
+  $('ekstra').innerHTML = h;
+}
+function ekstraTekst(){
+  const ex = EKSTRA[sek] || [];
+  let ud = '';
+  ex.forEach((b, bi) => {
+    let linjer = '';
+    if(b.tekst) b.tekst.forEach((lbl, i) => {
+      const v = ((state['x|'+bi+'|'+i]||{}).k||'').trim();
+      if(v) linjer += '  ' + lbl + ': ' + v + '\n';
+    });
+    if(b.rækker) for(let r=0;r<b.rækker;r++){
+      const d = b.felter.map((f, fi) => ((state['x|'+bi+'|'+r+'|'+fi]||{}).k||'').trim());
+      if(d[0]) linjer += '  - ' + d[0] + (d[1] ? ' | ' + d[1] : '') + (d[2] ? ' | ' + d[2] : '') + '\n';
+    }
+    if(linjer) ud += b.titel.toUpperCase() + '\n------------------------------------------\n' + linjer + '\n';
+  });
+  return ud;
+}
 function saet(k,s){
   const v = state[k] || {s:0,k:''};
   v.s = (v.s === s) ? 0 : s;      // tryk igen = fjern markering
@@ -288,7 +407,8 @@ function saet(k,s){
   el.querySelectorAll('.sev button').forEach(b => {
     b.className = (+b.dataset.s === v.s) ? 'on' : '';
   });
-  if(v.s > 0){
+  el.classList.toggle('na', v.s === 4);
+  if(v.s > 0 && v.s < 4){
     el.classList.add('open');
     const ta = el.querySelector('textarea');
     setTimeout(() => ta.focus(), 50);
@@ -303,7 +423,7 @@ function note(k,val){
 
 /* ---------- optælling (samme pointsystem som arket) ---------- */
 function tal(omr){
-  const t = [0,0,0,0];
+  const t = [0,0,0,0,0];
   DATA[sek][omr].forEach(g => g.q.forEach(q => {
     const v = state[omr+'|'+g.t+'|'+q];
     t[v ? v.s : 0]++;
@@ -311,10 +431,10 @@ function tal(omr){
   return t;
 }
 function talAlt(){
-  const t = [0,0,0,0];
+  const t = [0,0,0,0,0];
   for(const omr in DATA[sek]){
     const a = tal(omr);
-    for(let i=0;i<4;i++) t[i]+=a[i];
+    for(let i=0;i<5;i++) t[i]+=a[i];
   }
   return t;
 }
@@ -348,10 +468,9 @@ function renderResultat(){
   const s = talAlt();
   h += '<tr class="tot"><td>I ALT</td><td class="n">'+s[1]+'</td><td class="n">'+s[2]+'</td><td class="n">'+s[3]+'</td></tr>';
   $('resTab').innerHTML = h;
-  $('resMeta').textContent = (s[0]+s[1]+s[2]+s[3]) + ' kontrolpunkter · '
+  $('resMeta').textContent = (s[0]+s[1]+s[2]+s[3]) + ' kontrolpunkter · ' + (s[4] ? s[4] + ' ikke relevant · ' : '')
     + (s[1]+s[2]+s[3]) + ' bemærkninger · ' + ($('kontrollant').value || 'kontrollant ikke angivet');
-  $('resNote').textContent = 'Mailen sender kun ' + SEKNAVN[sek] + '. '
-    + (sek==='boh' ? 'Front of house' : 'Back of house') + ' gemmes og sendes for sig.';
+  $('resNote').textContent = 'Mailen sender kun ' + SEKNAVN[sek] + '. De andre lister gemmes og sendes hver for sig.';
   $('opsum').value = opsum;
   opdaterBar();
 }
@@ -365,7 +484,7 @@ function sendMail(){
     let linjer = '';
     DATA[sek][omr].forEach(g => g.q.forEach(q => {
       const v = state[omr+'|'+g.t+'|'+q];
-      if(v && v.s > 0){
+      if(v && v.s > 0 && v.s < 4){
         linjer += '  [' + NIVEAU[v.s].toUpperCase() + '] ' + g.t + ' > ' + q + (v.k ? ' - ' + v.k : '') + '\n';
       }
     }));
@@ -380,7 +499,7 @@ function sendMail(){
   if(!krop) krop = 'Ingen bemarkninger.\n\n';
 
   let body =
-      'Intern fodevarekontrol - ' + SEKNAVN[sek] + '\n'
+      (sek==='foh14' ? 'Cafe-gennemgang' : 'Intern fodevarekontrol') + ' - ' + SEKNAVN[sek] + '\n'
     + 'Afdeling: ' + $('afd').value + '\n'
     + 'Dato: ' + $('dato').value + '\n'
     + 'Kontrollant: ' + ($('kontrollant').value || '-') + '\n\n'
@@ -390,6 +509,7 @@ function sendMail(){
     + '  Rod (alvorlig):           ' + s[3] + '\n\n'
     + '------------------------------------------\n'
     + krop;
+  krop += ekstraTekst();
   if(opsum.trim()){
     body += 'SAMLET KOMMENTAR\n------------------------------------------\n' + opsum.trim() + '\n\n';
   }
