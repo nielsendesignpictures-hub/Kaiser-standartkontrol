@@ -162,19 +162,24 @@ table.res tr.tot td{border-top:2px solid var(--espresso);border-bottom:none;font
 /* Afdelinger og modtager-mails. Tilføj/fjern frit.
    Flere modtagere: adskil med komma i "mail". */
 const AFDELINGER = [
-  { navn: "Helsingør",      mail: "Helsingoer@cafekaiser.dk" },
-  { navn: "Hillerød",       mail: "Hilleroed@cafekaiser.dk" },
-  { navn: "Farum",          mail: "Farum@cafekaiser.dk" },
-  { navn: "Hørsholm",       mail: "Hoersholm@cafekaiser.dk" },
-  { navn: "Vanløse",        mail: "Vanloese@cafekaiser.dk" },
-  { navn: "Enghave Brygge", mail: "Enghavebrygge@cafekaiser.dk" }
+  { navn: "Helsingør",      mail: "Helsingoer@cafekaiser.dk, Km-helsingoer@cafekaiser.dk" },
+  { navn: "Hillerød",       mail: "Hilleroed@cafekaiser.dk, Km-hilleroed@cafekaiser.dk" },
+  { navn: "Farum",          mail: "Farum@cafekaiser.dk, Km-Farum@cafekaiser.dk" },
+  { navn: "Hørsholm",       mail: "Hoersholm@cafekaiser.dk, Km-hoersholm@cafekaiser.dk" },
+  { navn: "Vanløse",        mail: "Vanloese@cafekaiser.dk, Km-Vanloese@cafekaiser.dk" },
+  { navn: "Enghave Brygge", mail: "Enghavebrygge@cafekaiser.dk, Km-Enghavebrygge@cafekaiser.dk" },
+  { navn: "Waves",          mail: "Waves@cafekaiser.dk" }
 ];
 
 /* Kontrollanter — vælges i dropdown */
 const KONTROLLANTER = ["Stefan", "Casper", "Christian"];
 
 /* Sæt CC på alle mails (fx dig selv). Tom streng = ingen cc. */
-const CC_MAIL = "";
+const CC_MAIL = [
+  "Casper@cafekaiser.dk",      // Casper
+  "Christian@cafekaiser.dk",   // Christian
+  "Stefan@cafekaiser.dk"       // Stefan
+].filter(m => m.includes("@")).join(", ");
 
 /* Point-/niveaunavne — bruges i skema, resultat og mail */
 const NIVEAU = ["", "Grøn", "Gul", "Rød", "Ikke relevant"];
@@ -517,9 +522,9 @@ function sendMail(){
 
   const emne = 'Intern kontrol ' + SEKNAVN[sek] + ' - ' + $('afd').value + ' - ' + $('dato').value
              + ' (' + s[1] + '/' + s[2] + '/' + s[3] + ')';
-  window.location.href = 'mailto:' + encodeURIComponent(afd.mail)
+  window.location.href = 'mailto:' + afd.mail.split(',').map(m => encodeURIComponent(m.trim())).join(',')
     + '?subject=' + encodeURIComponent(emne)
-    + (CC_MAIL ? '&cc=' + encodeURIComponent(CC_MAIL) : '')
+    + (CC_MAIL ? '&cc=' + CC_MAIL.split(',').map(m => encodeURIComponent(m.trim())).join(',') : '')
     + '&body=' + encodeURIComponent(body);
 }
 
