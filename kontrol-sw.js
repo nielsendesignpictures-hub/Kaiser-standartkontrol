@@ -1,7 +1,7 @@
 /* Kaiser Kontrol — service worker.
    HTML hentes altid fra nettet først (undgår gammel cache på iOS),
    resten cachelagres så appen virker offline i køkkenet. */
-const CACHE = 'kaiser-kontrol-v6';
+const CACHE = 'kaiser-kontrol-v7';
 const FILER = ['./kontrol.html', './kontrol-manifest.json', './images/logo.png'];
 
 self.addEventListener('install', e => {
