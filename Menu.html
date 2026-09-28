@@ -250,8 +250,12 @@ body{
 </div>
 
 <script>
+/* ════════ BILLEDMAPPE ════════
+   Navnet på mappen med billederne. Ligger den et andet sted,
+   ændrer du bare linjen her — fx "assets/fotos". */
+const IMG_DIR = 'images';
+
 /* ════════ INDHOLD ════════
-   Billeder: læg dine jpg'er i en mappe "billeder" ved siden af denne fil.
    Filnavnet står på hvert kort. Mangler billedet, vises pladsholderen. */
 
 const CARDS = [
@@ -410,11 +414,11 @@ const esc=s=>String(s??'');
 function photo(c){
   const f=c.img||'';
   return `<div class="photo">
-    ${f?`<img src="images/${f}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+    ${f?`<img src="${IMG_DIR}/${f}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
     <div class="ph" ${f?'style="display:none"':''}>
       <div class="ic">📷</div>
-      ${f?`<div class="fn">images/${f}</div>`:''}
-      <div class="hint">Læg dit billede i mappen «billeder» med præcis dette filnavn</div>
+      ${f?`<div class="fn">${IMG_DIR}/${f}</div>`:''}
+      <div class="hint">Læg dit billede i mappen «${IMG_DIR}» med præcis dette filnavn</div>
     </div>
     ${c.pill?`<div class="pill">${esc(c.pill)}</div>`:''}
     ${c.price?`<div class="prc">${esc(c.price)}</div>`:''}
