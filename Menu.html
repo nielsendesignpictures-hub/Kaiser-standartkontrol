@@ -2,773 +2,561 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Ny Menu 2026</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1c1c1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Café Kaiser · Tjenerguide Q4</title>
 <style>
-
 :root{
- --rose:#DCAE96;
- --olive:#3B4219;
- --cream:#F8F5F1;
- --dark:#1e1e1e;
- --white:#fff;
+  color-scheme:light;
+  --bg:#12100e; --card:#fff; --ink:#1c1c1c; --gold:#c9a227; --gold-lt:#e8c86a;
+  --mut:#8b8578; --grn:#1a7a45; --grn-lt:#e6f6ec; --red:#c0392b; --red-lt:#fdefed;
+  --safe-b:env(safe-area-inset-bottom,0px);
 }
-
-*{
- margin:0;
- padding:0;
- box-sizing:border-box;
-}
-
-html{
- scroll-behavior:smooth;
- scroll-snap-type:y mandatory;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
 body{
- font-family:'Inter',sans-serif;
- background:var(--cream);
- color:var(--olive);
- overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
 }
 
-.progress{
- position:fixed;
- top:0;
- left:0;
- height:5px;
- background:var(--rose);
- width:0%;
- z-index:9999;
- transition:.15s;
+/* ══ SHELL ══ */
+#app{
+  width:100%;max-width:460px;height:100dvh;max-height:900px;
+  background:var(--bg);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
 }
 
-section{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:40px 20px;
- position:relative;
- scroll-snap-align:start;
+/* ══ TOPBAR ══ */
+#bar{
+  flex:none;padding:14px 16px 10px;background:var(--bg);
+  display:flex;flex-direction:column;gap:9px;z-index:30;
 }
-
-.container{
- max-width:900px;
- width:100%;
- margin:auto;
- text-align:center;
+#bar .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#chap{font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold-lt);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#count{font-size:10px;font-weight:700;color:#6b665c;font-variant-numeric:tabular-nums;flex:none}
+#menuBtn{
+  flex:none;width:30px;height:30px;border:none;background:rgba(255,255,255,.07);
+  border-radius:9px;color:#b5ac9c;font-size:15px;line-height:1;cursor:pointer;
 }
+#track{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+  border-radius:3px;transition:width .35s cubic-bezier(.4,0,.2,1)}
 
-.hero{
- background:
- linear-gradient(rgba(59,66,25,.65),rgba(59,66,25,.65)),
- url("images/her.jpg");
- background-size:cover;
- background-position:center;
- color:white;
-}
-
-.logo{
- width:140px;
- margin-bottom:25px;
-}
-
-h1{
- font-size:clamp(3rem,8vw,6rem);
- line-height:1;
- margin-bottom:20px;
-}
-
-h2{
- font-size:clamp(2rem,6vw,4rem);
- margin-bottom:20px;
-}
-
-h3{
- margin-bottom:10px;
-}
-
-.subtitle{
- font-size:1.2rem;
- max-width:600px;
- margin:auto;
- opacity:.9;
-}
-
-.scroll{
- margin-top:40px;
- opacity:.7;
- animation:bounce 2s infinite;
-}
-
-.story-btn{
- margin-top:25px;
- padding:14px 24px;
- border:none;
- border-radius:999px;
- background:white;
- color:var(--olive);
- font-weight:700;
- cursor:pointer;
-}
-
-@keyframes bounce{
- 50%{
-  transform:translateY(10px);
- }
-}
-
+/* ══ STAGE ══ */
+#stage{flex:1;position:relative;overflow:hidden;padding:0 12px}
 .card{
- background:white;
- border-radius:28px;
- padding:30px;
- box-shadow:0 20px 50px rgba(0,0,0,.08);
+  position:absolute;inset:0 12px;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  opacity:0;pointer-events:none;transform:translateX(24px);
+  transition:opacity .26s ease,transform .26s ease;
+  padding-bottom:12px;
 }
+.card.on{opacity:1;pointer-events:auto;transform:none}
+.card.prev{transform:translateX(-24px)}
+.card::-webkit-scrollbar{display:none}
 
-.image-wrap{
- overflow:hidden;
- border-radius:24px;
+.sheet{background:var(--card);border-radius:20px;overflow:hidden;min-height:100%;
+  box-shadow:0 6px 26px rgba(0,0,0,.35);display:flex;flex-direction:column}
+
+/* ══ PHOTO SLOT ══ */
+.photo{position:relative;aspect-ratio:4/3;background:#efece5;flex:none;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:7px;color:#b3aa98;text-align:center;padding:16px;
+  background:repeating-linear-gradient(45deg,#f3f0e9,#f3f0e9 11px,#ebe7de 11px,#ebe7de 22px);
 }
+.photo .ph .ic{font-size:26px;opacity:.5}
+.photo .ph .fn{font-size:10px;font-weight:700;letter-spacing:.4px;background:#fff;
+  padding:4px 10px;border-radius:20px;color:#8a8275}
+.photo .ph .hint{font-size:9.5px;color:#b9b0a0;max-width:190px;line-height:1.5}
+.photo .pill{position:absolute;top:11px;left:11px;background:rgba(0,0,0,.72);color:#fff;
+  font-size:9.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;
+  padding:5px 11px;border-radius:20px;backdrop-filter:blur(6px)}
+.photo .prc{position:absolute;bottom:11px;right:11px;background:var(--gold);color:#12100e;
+  font-size:15px;font-weight:900;padding:6px 13px;border-radius:20px}
 
-.image{
-  width:100%;
-  max-height:500px;
-  height:auto;
-  object-fit:contain;
-  display:block;
+/* ══ BODY ══ */
+.pad{padding:17px 18px 20px;flex:1;display:flex;flex-direction:column}
+.dish{font-size:23px;font-weight:800;line-height:1.15;letter-spacing:-.4px;margin-bottom:7px}
+.comp{font-size:13.5px;color:#6e675c;line-height:1.55;margin-bottom:15px}
+
+.blk{border-radius:13px;padding:13px 14px;margin-bottom:9px}
+.blk .lbl{font-size:9.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;
+  margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.blk p{font-size:13.5px;line-height:1.6}
+
+.say{background:var(--grn-lt);border-left:3px solid var(--grn)}
+.say .lbl{color:var(--grn)}
+.say p{color:#14532d;font-weight:600;font-style:italic}
+
+.ask{background:#f4f2ed}
+.ask .lbl{color:#8a8275}
+.ask p{color:#4a453d}
+
+.tip{background:#fff8e1;border-left:3px solid var(--gold)}
+.tip .lbl{color:#8a6d0b}
+.tip p{color:#5c4a08}
+
+.alg{background:var(--red-lt);border-left:3px solid var(--red)}
+.alg .lbl{color:var(--red)}
+.alg p{color:#8c271d;font-weight:600}
+
+/* ══ CHAPTER CARD ══ */
+.chapcard{background:linear-gradient(165deg,#1f1c18,#2e2921);color:#fff;border-radius:20px;
+  min-height:100%;display:flex;flex-direction:column;justify-content:center;
+  padding:38px 26px;text-align:center;box-shadow:0 6px 26px rgba(0,0,0,.35)}
+.chapcard .no{font-size:11px;font-weight:800;letter-spacing:2.5px;color:var(--gold-lt);margin-bottom:14px}
+.chapcard h2{font-size:31px;font-weight:900;line-height:1.1;letter-spacing:-.7px;margin-bottom:12px}
+.chapcard p{font-size:14px;color:#a9a093;line-height:1.6;max-width:280px;margin:0 auto}
+.chapcard .mini{margin-top:20px;font-size:11px;color:#6f675c;letter-spacing:.6px}
+
+/* ══ INFO CARD ══ */
+.info h2{font-size:25px;font-weight:800;line-height:1.15;letter-spacing:-.4px;margin-bottom:8px}
+.info .sub{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:13px}
+.rows{margin:4px 0 12px}
+.rw{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f0ede6;font-size:13.5px}
+.rw:last-child{border:none}
+.rw b{flex:none;width:92px;color:#8a8275;font-weight:700;font-size:12px}
+.rw span{color:#3d382f;line-height:1.5}
+.lst{list-style:none;margin:2px 0 10px}
+.lst li{font-size:13px;padding:7px 0 7px 17px;position:relative;color:#4a453d;
+  border-bottom:1px solid #f4f1ea;line-height:1.45}
+.lst li:last-child{border:none}
+.lst li:before{content:'';position:absolute;left:0;top:14px;width:5px;height:5px;
+  border-radius:50%;background:var(--gold)}
+
+/* ══ QUIZ ══ */
+.quiz .q{font-size:19px;font-weight:800;line-height:1.3;margin-bottom:16px;letter-spacing:-.2px}
+.opt{display:block;width:100%;text-align:left;background:#f6f4ef;border:2px solid transparent;
+  border-radius:13px;padding:14px 15px;margin-bottom:9px;font-size:14px;font-weight:600;
+  color:#3d382f;cursor:pointer;font-family:inherit;transition:.14s;line-height:1.4}
+.opt:active{transform:scale(.98)}
+.opt.ok{background:var(--grn-lt);border-color:var(--grn);color:#14532d}
+.opt.no{background:var(--red-lt);border-color:var(--red);color:#8c271d}
+.fb{font-size:13px;line-height:1.55;padding:12px 14px;border-radius:12px;margin-top:4px;
+  display:none;background:#f4f2ed;color:#4a453d}
+.fb.show{display:block}
+
+/* ══ DONE ══ */
+.done{background:linear-gradient(165deg,#1a3d28,#276b42);color:#fff;border-radius:20px;
+  min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:38px 26px;text-align:center}
+.done .big{font-size:52px;margin-bottom:14px}
+.done h2{font-size:27px;font-weight:900;margin-bottom:10px;letter-spacing:-.4px}
+.done p{font-size:14px;color:#bfe0cc;line-height:1.6;max-width:270px;margin-bottom:8px}
+.done .score{font-size:15px;font-weight:800;color:var(--gold-lt);margin:14px 0 20px}
+.done button{background:#fff;color:#1a3d28;border:none;border-radius:30px;padding:13px 30px;
+  font-size:14px;font-weight:800;font-family:inherit;cursor:pointer}
+
+/* ══ NAV ══ */
+#nav{flex:none;display:flex;gap:9px;padding:10px 16px calc(12px + var(--safe-b));background:var(--bg);z-index:30}
+#nav button{flex:1;border:none;border-radius:14px;padding:15px;font-size:14.5px;font-weight:800;
+  font-family:inherit;cursor:pointer;transition:.14s}
+#nav button:active{transform:scale(.97)}
+#back{flex:0 0 58px;background:rgba(255,255,255,.08);color:#b5ac9c;font-size:17px}
+#back:disabled{opacity:.25}
+#next{background:var(--gold);color:#12100e}
+
+/* ══ START ══ */
+#start{position:absolute;inset:0;z-index:60;background:linear-gradient(170deg,#1c1815,#332d24);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:38px 28px;text-align:center;color:#fff}
+#start.gone{display:none}
+#start .logo{font-size:12px;font-weight:800;letter-spacing:4px;color:var(--gold-lt);margin-bottom:22px}
+#start h1{font-size:38px;font-weight:900;line-height:1.05;letter-spacing:-1px;margin-bottom:14px}
+#start .tag{font-size:15px;color:#a9a093;line-height:1.6;max-width:290px;margin-bottom:26px}
+#start .facts{display:flex;gap:9px;margin-bottom:30px;flex-wrap:wrap;justify-content:center}
+#start .f{background:rgba(255,255,255,.07);border-radius:11px;padding:11px 15px;min-width:82px}
+#start .f b{display:block;font-size:20px;font-weight:900;color:var(--gold-lt)}
+#start .f span{font-size:9.5px;color:#8b8578;letter-spacing:.8px;text-transform:uppercase}
+#start button{background:var(--gold);color:#12100e;border:none;border-radius:30px;
+  padding:16px 44px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer}
+#start .note{margin-top:18px;font-size:11px;color:#6f675c;line-height:1.6;max-width:260px}
+
+/* ══ MENU ══ */
+#ov{position:absolute;inset:0;z-index:70;background:rgba(10,9,8,.93);backdrop-filter:blur(8px);
+  display:none;flex-direction:column;padding:16px}
+#ov.on{display:flex}
+#ov h3{color:#fff;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  padding:8px 4px 14px;display:flex;justify-content:space-between;align-items:center}
+#ov h3 button{background:rgba(255,255,255,.1);border:none;color:#b5ac9c;width:30px;height:30px;
+  border-radius:9px;font-size:15px;cursor:pointer;font-family:inherit}
+#ov .list{overflow-y:auto;flex:1}
+#ov .it{display:flex;align-items:center;gap:11px;padding:14px;background:rgba(255,255,255,.055);
+  border-radius:13px;margin-bottom:8px;cursor:pointer}
+#ov .it .n{width:25px;height:25px;flex:none;border-radius:8px;background:var(--gold);color:#12100e;
+  font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+#ov .it .t{color:#fff;font-size:14px;font-weight:700}
+#ov .it .c{color:#787064;font-size:10.5px;margin-top:1px}
+
+@media(max-height:660px){
+  .photo{aspect-ratio:16/10}
+  .dish{font-size:20px}
+  #start h1{font-size:31px}
 }
-
-.badge{
- display:inline-block;
- background:var(--rose);
- color:white;
- padding:10px 18px;
- border-radius:999px;
- font-weight:700;
- margin-bottom:20px;
-}
-
-.highlight{
- background:var(--olive);
- color:white;
- border-radius:32px;
- padding:40px;
-}
-
-.list{
- text-align:left;
- max-width:500px;
- margin:auto;
-}
-
-.list li{
- margin:12px 0;
- font-size:1.1rem;
-}
-
-.old{
- color:#b22222;
- font-weight:700;
-}
-
-.grid{
- display:grid;
- gap:20px;
-}
-
-@media(min-width:768px){
- .grid{
-  grid-template-columns:1fr 1fr;
- }
-}
-
-.fade{
- opacity:0;
- transform:translateY(50px);
- transition:1s;
-}
-
-.fade.show{
- opacity:1;
- transform:translateY(0);
-}
-
-.quiz-card{
- background:white;
- border-radius:24px;
- padding:25px;
- margin-bottom:20px;
- text-align:left;
-}
-
-.quiz-option{
- display:block;
- width:100%;
- margin-top:10px;
- border:none;
- background:#f2f2f2;
- padding:15px;
- border-radius:12px;
- cursor:pointer;
- font-size:1rem;
-}
-
-.quiz-option:hover{
- background:var(--rose);
- color:white;
-}
-
-.result{
- display:none;
- margin-top:30px;
- padding:30px;
- border-radius:24px;
- background:var(--olive);
- color:white;
-}
-
-.footer{
- background:var(--olive);
- color:white;
- text-align:center;
-}
-
-.big{
- font-size:1.4rem;
- font-weight:700;
-}
-
 </style>
 </head>
-
 <body>
 
-<div class="progress" id="progress"></div>
+<div id="app">
 
-<section class="hero">
+  <!-- START -->
+  <div id="start">
+    <div class="logo">CAFÉ KAISER</div>
+    <h1>Q4 Menu<br>Tjenerguide</h1>
+    <div class="tag">Alt det nye på kortet — og hvad du siger til gæsten.</div>
+    <div class="facts">
+      <div class="f"><b>9</b><span>Nye retter</span></div>
+      <div class="f"><b>6</b><span>Minutter</span></div>
+      <div class="f"><b>5</b><span>Quiz</span></div>
+    </div>
+    <button onclick="begin()">Kom i gang</button>
+    <div class="note">Swipe til siden eller brug knapperne nederst</div>
+  </div>
 
-<div class="container fade">
+  <!-- MENU -->
+  <div id="ov">
+    <h3><span>Spring til</span><button onclick="toggleMenu()">✕</button></h3>
+    <div class="list" id="ovList"></div>
+  </div>
 
-<img src="images/logo.png" class="logo">
+  <!-- TOPBAR -->
+  <div id="bar">
+    <div class="row">
+      <div id="chap">—</div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <div id="count">1/1</div>
+        <button id="menuBtn" onclick="toggleMenu()">☰</button>
+      </div>
+    </div>
+    <div id="track"><div id="fill"></div></div>
+  </div>
 
-<h1>Ny Menu 2026</h1>
+  <!-- STAGE -->
+  <div id="stage"></div>
 
-<p class="subtitle">
-3 minutter. Det er alt du behøver for at være klar til den nye sæson.
-</p>
-
-<button class="story-btn" onclick="playStory()">
-▶ Start præsentation
-</button>
-
-<div class="scroll">
-↓ Scroll ned
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<div class="highlight">
-
-<h2>Det store overblik</h2>
-
-<p class="big">
-🍓 Nye sommerdesserter<br>
-🥪 Ny laksesandwich<br>
-🐟 Ny fiskeret<br>
-🍋 Nye lemonader<br>
-🍷 Nye vine<br>
-🍸 Nyt cocktailkort
-</p>
-
-</div>
+  <!-- NAV -->
+  <div id="nav">
+    <button id="back" onclick="go(-1)">‹</button>
+    <button id="next" onclick="go(1)">Videre</button>
+  </div>
 
 </div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<span class="badge">BRUNCH</span>
-
-<div class="image-wrap">
-<img src="images/jordbaerkage.jpg" class="image">
-</div>
-
-<h2>Kaiser's Jordbærkage</h2>
-
-<p class="big">
-En ægte.
-</p>
-
-<p>
-Nu på både brunch og a la carte.
-</p>
-
-</div>
-
-</section>
-
- <section>
-
-<div class="container fade">
-
-<span class="badge">FROKOST</span>
-
-<div class="image-wrap">
-<img src="images/laksesandwich.jpg" class="image">
-</div>
-
-<h2>Laksesandwich</h2>
-
-<p class="big">
-Ny frokostfavorit
-</p>
-
-<p>
-Røget laks, friske urter og sprød salat.
-</p>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<div class="image-wrap">
-<img src="images/koldskaal.jpg" class="image">
-</div>
-
-<h2>Ny Sommerfavorit</h2>
-
-<p class="big">
-Hjemmelavet koldskål
-</p>
-
-<p>
-Citronkammerjunker & jordbær
-</p>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<div class="image-wrap">
-<img src="images/stracciatella.jpg" class="image">
-</div>
-
-<h2>Stracciatella</h2>
-
-<p class="big">
-Fersken & olivenolie
-</p>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<div class="image-wrap">
-<img src="images/torsk.jpg" class="image">
-</div>
-
-<h2>Bagt Torsk</h2>
-
-<p>
-Hollandaise • Dildkartofler • Smørstegte asparges
-</p>
-
-<br>
-
-<div class="highlight">
-🐟 Salgstip:<br><br>
-Anbefal den til gæster der ønsker en lettere hovedret.
-</div>
-
-</div>
-
-</section>
-
- <section>
-
-<div class="container fade">
-
-<div class="image-wrap">
-<img src="images/kartoffel.jpg" class="image">
-</div>
-
-<h2>Kartoffel smørrebrød</h2>
-
-<p>
-Kartofler • Vesterhavsost • Radisser
-</p>
-
-<br>
-
-<div class="highlight">
-Salgstip:<br><br>
-Vegetarisk 
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<h2>Vi siger farvel til...</h2>
-
-<div class="card">
-
-<ul class="list">
-<li class="old">❌ Rabarber Crumble</li>
-<li class="old">❌ Øllebrød</li>
-<li class="old">❌ Ærtespread</li>
-<li class="old">❌ Ærtepasta</li>
-<li class="old">❌ Serrano</li>
- <li class="old">❌ Roastbeef</li>
-</ul>
-
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<h2>Nye Lemonader</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>🍋 Hindbær / Lime</h3>
-<p>Frisk og syrlig.</p>
-</div>
-
-<div class="card">
-<h3>🌼 Hyldeblomst / Citron</h3>
-<p>Sommer på flaske.</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<h2>Nye Vine</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>🇦🇹 PFAFFL Sauvignon Blanc</h3>
-<p>En frisk hvidvin med smag af stikkelsbær og citrus. Sprød og let - perfekt til fisk, salater eller bare en solskinsdag. Tænk sommerlig og nem at drikke!</p>
-</div>
-
-<div class="card">
-<h3>🇫🇷 MIMI Rosé</h3>
-<p>Classic rosé fra Sydfrankrig - lyserød, tør og super elegant. Smager af jordbær og blomster. Det her er "den franske riviera i et glas". Gammel vinmark (det betyder "Vielles Vignes"), så ekstra god kvalitet.</p>
-</div>
-
-<div class="card">
-<h3>🥂 MIMI Brut Rosé</h3>
-<p>Rosé-bobler! Fin og festlig mousserende vin. Fungerer både som aperitif og til hele menuen. Når champagne er for dyrt, men stemningen skal være høj.</p>
-</div>
-
-<div class="card">
-<h3>🇮🇹 Barolo</h3>
-<p>Vores seriøse rødvin. Barolo er "vinenes konge" fra Italien - kraftig, kompleks med kirsebær, roser og lidt læder. Nebbiolo-druen er notoriously krævende, men resultatet er vanvittigt. Til oksekød og mad der kan tåle en ordentlig vin.
-Sælges KUN i flasker</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<h2>Nyt Cocktailkort</h2>
-
-<div class="grid">
-
-<div class="card">Kaiser Passion</div>
-<div class="card">Rabarber Sunset</div>
-<div class="card">Mojito</div>
-<div class="card">Aperol Spritz</div>
-<div class="card">Gin Hass</div>
-<div class="card">Elderflower Smash</div>
-
-</div>
-
-<br>
-
-<div class="highlight">
-🚫 Fredagsbaren lukker<br><br>
-Ingen drinkkander<br>
-Ingen fadølskander
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<div class="container fade">
-
-<h2>Quiz Tid 🎯</h2>
-
-<div class="quiz-card">
-
-<h3>1. Hvilken dessert kommer på både brunch og a la carte?</h3>
-
-<button class="quiz-option" onclick="answer(this,false)">
-Rabarber Crumble
-</button>
-
-<button class="quiz-option" onclick="answer(this,true)">
-Kaiser's Jordbærkage
-</button>
-
-<button class="quiz-option" onclick="answer(this,false)">
-Øllebrød
-</button>
-
-</div>
-
-<div class="quiz-card">
-
-<h3>2. Hvilken vin sælges kun på flaske?</h3>
-
-<button class="quiz-option" onclick="answer(this,false)">
-MIMI Rosé
-</button>
-
-<button class="quiz-option" onclick="answer(this,true)">
-Barolo
-</button>
-
-<button class="quiz-option" onclick="answer(this,false)">
-PFAFFL
-</button>
-
-</div>
-
-<div class="quiz-card">
-
-<h3>3. Hvilken ny hovedret får vi?</h3>
-
-<button class="quiz-option" onclick="answer(this,false)">
-Ærtepasta
-</button>
-
-<button class="quiz-option" onclick="answer(this,true)">
-Bagt Torsk
-</button>
-
-<button class="quiz-option" onclick="answer(this,false)">
-Rabarber Crumble
-</button>
-
-</div>
-
-<div class="result" id="result">
-<h2>🎉 Du er klar!</h2>
-<p id="scoreText"></p>
-</div>
-
-</div>
-
-</section>
-
- <section class="footer">
-
-<div class="container">
-
-
-
-</div>
-
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
+/* ════════ INDHOLD ════════
+   Billeder: læg dine jpg'er i en mappe "billeder" ved siden af denne fil.
+   Filnavnet står på hvert kort. Mangler billedet, vises pladsholderen. */
 
-/* Progress bar */
+const CARDS = [
 
-const progress = document.getElementById("progress");
+/* ─── KAPITEL 1 ─── */
+{t:'chapter', chap:'Aftenret', no:'Kapitel 1 af 5', h:'Den nye aftenret',
+ p:'Bagt torsk er slut. Fra 5. oktober er det svinebryst — og det er den ret, du skal kunne sælge i søvne.',
+ mini:'1 ret · 1 min'},
 
-window.addEventListener("scroll",()=>{
+{t:'dish', chap:'Aftenret', pill:'Fra 5. oktober', img:'svinebryst.jpg',
+ name:'Langtidsbraiseret svinebryst', price:'209,-',
+ comp:'Bagte løg · Rødvinssauce · Smørstegt grønkål · Kartofler',
+ say:'"Den har stået og braiseret i timevis, så kødet falder fra hinanden. Rødvinssaucen er kraftig, og grønkålen er stegt i smør — det er vinterens tungeste ret på kortet."',
+ ask:'<b>Er det som stegt flæsk?</b> Nej — det er møre, braiserede skiver, ikke sprødt. Tænk gaffelmørt frem for knasende.<br><br><b>Er det stort nok?</b> Ja. Det er en fuld aftenret med kartofler og kål.',
+ tip:'Anbefal Ripasso til. Den står i vinanbefalingen på kortet — brug den, det virker.',
+ alg:'Mælk · Svovldioxid og sulfitter'},
 
-const winScroll =
-document.documentElement.scrollTop;
+/* ─── KAPITEL 2 ─── */
+{t:'chapter', chap:'Frokostkort', no:'Kapitel 2 af 5', h:'Tre nye på frokost',
+ p:'Sandwich, salat og smørrebrød er skiftet ud. Navnene er nye — sørg for at bruge dem rigtigt.',
+ mini:'3 retter · 2 min'},
 
-const height =
-document.documentElement.scrollHeight -
-document.documentElement.clientHeight;
+{t:'dish', chap:'Frokostkort', pill:'Nyt navn', img:'oksemorbrad-sandwich.jpg',
+ name:'Oksemørbrad sandwich', price:'189,-',
+ comp:'Smørristet Meyersbrød · Pesto · Oksemørbrad · Tomat · Grana Padano · Hvidløgsmayo',
+ say:'"Det er vores Kaiser sandwich, bare gjort enklere og bedre. Rigtig oksemørbrad stegt medium, pesto og Grana Padano på smørristet Meyersbrød."',
+ ask:'<b>Hvad skete der med Kaiser sandwichen?</b> Den hedder det her nu. Samme kød, ny opbygning — pesto og Grana Padano i stedet for cheddar og trøffelmayo.<br><br><b>Kan den steges gennem?</b> Ja, men sig at vi anbefaler medium.',
+ tip:'Det er den dyreste sandwich på kortet. Sig "oksemørbrad" højt — det er derfor prisen er 189.',
+ alg:'Gluten · Mælk · Sulfitter · Æg'},
 
-progress.style.width =
-(winScroll/height)*100 + "%";
+{t:'dish', chap:'Frokostkort', pill:'Sæsonsalat', img:'vintersalat.jpg',
+ name:'Vintersalat', price:'169,-',
+ comp:'Romaine · Grønkål · Bagt græskar · Granatæble · Frisk æble · Pistacie · Honning-sennepsvinaigrette',
+ say:'"Den skifter med sæsonen. Lige nu er det bagt græskar, grønkål og granatæble — sødt, syrligt og sprødt på én gang."',
+ ask:'<b>Er der kød i?</b> Gæsten vælger mellem marineret kyllingebryst eller varmrøget laks.<br><br><b>Hvor blev laksesalaten af?</b> Den er erstattet af den her. Laksen findes stadig — som topping.',
+ tip:'Fortæl at salaten skifter hvert kvartal. Det giver gæsten en grund til at komme igen.',
+ alg:'Nødder · Sennep · Æg · Selleri (ved kylling) · Fisk (ved laks)'},
 
+{t:'dish', chap:'Frokostkort', pill:'Nyt smørrebrød', img:'avocado-smorrebrod.jpg',
+ name:'Avocado smørrebrød', price:'99,-',
+ comp:'Smashed avocado · Bagte tomater · Hytteost · Syltede rødløg · Meyers rugbrød',
+ say:'"Vores nye grønne smørrebrød — smashed avocado med bagte tomater og hytteost på Meyers rugbrød."',
+ ask:'<b>Er det vegetarisk?</b> Ja.<br><br><b>Er det veganer-venligt?</b> Nej — der er hytteost i.<br><br><b>Hvor er kartoffelmadden?</b> Den er udgået.',
+ tip:'Husk: vi anbefaler 2 stk. smørrebrød pr. person. Spørg altid, om de vil have et mere.',
+ alg:'Gluten · Laktose · Sulfitter'},
+
+/* ─── KAPITEL 3 ─── */
+{t:'chapter', chap:'Brunch', no:'Kapitel 3 af 5', h:'Fem nye på brunch',
+ p:'Sommeren er ude. Fersken, jordbærkage og koldskål er væk — efterår og jul er inde.',
+ mini:'5 elementer · 2 min'},
+
+{t:'dish', chap:'Brunch', pill:'Planteriget', img:'kartoffel-tarlet.jpg',
+ name:'Kartoffel tarlet', price:'',
+ comp:'Ristede svampe &amp; Vesterhavsost',
+ say:'"Sprød tarletbund med kartoffel, ristede svampe og Vesterhavsost — det er efterår på en lille tallerken."',
+ ask:'<b>Hvad erstatter den?</b> Sommerfersken med stracciatella.<br><br><b>Er den vegetarisk?</b> Ja.',
+ tip:'Svampe sælger om efteråret. Nævn dem, når gæsten er i tvivl om sit sidste element.',
+ alg:'Laktose · Gluten · Vegetar'},
+
+{t:'dish', chap:'Brunch', pill:'Mejeri', img:'gammelknas.jpg',
+ name:'Gammelknas', price:'',
+ comp:'Med hjemmelavet jordbærmarmelade',
+ say:'"Gammelknas er en lagret dansk ost med god kraft — den står flot op mod vores hjemmelavede marmelade."',
+ ask:'<b>Hvad er Gammelknas?</b> En lagret dansk ost. Mere smag og bid end Havarti.<br><br><b>Hvor er Havartien?</b> Udskiftet.',
+ tip:'Nogle gæster kan blive skræmt af "lagret". Sig "kraftig, men ikke skarp".',
+ alg:'Laktose · Vegetar'},
+
+{t:'dish', chap:'Brunch', pill:'Bageriet', img:'wienersnegl.jpg',
+ name:'Meyers wienersnegl', price:'',
+ comp:'Erstatter Pain au Chocolat',
+ say:'"Wienersnegl fra Meyers — bagt på økologisk mel, samme bageri som alt vores andet brød."',
+ ask:'<b>Hvor er Pain au Chocolat?</b> Udgået i Q4.',
+ tip:'Meyers-navnet er et kvalitetsstempel. Sig det højt — gæsterne kender det.',
+ alg:'Laktose · Gluten · Vegetar'},
+
+{t:'dish', chap:'Brunch', pill:'Signaturkage', img:'aeblekage.jpg',
+ name:'Kaisers æblekage', price:'59,-',
+ comp:'Mazarinbund · Vaniljecreme · Æbler',
+ say:'"Det er vores signaturkage. Bunden og vaniljecremen er den samme hele året — kun toppen skifter med sæsonen. Om sommeren jordbær, nu æbler."',
+ ask:'<b>Er det ikke jordbærkagen?</b> Samme kage, ny sæson. Jordbær kommer igen til sommer.',
+ tip:'Historien om den skiftende topping er guld. Gæster elsker at høre, at der kommer noget nyt.',
+ alg:'Gluten · Laktose · Vegetar · Nødder'},
+
+{t:'dish', chap:'Brunch', pill:'Finalen', img:'bounty-dessert.jpg',
+ name:'Kaisers Bounty dessert', price:'',
+ comp:'Kokos &amp; chokolade',
+ say:'"Kokos og chokolade — den smager præcis som du håber. Den erstatter koldskålen nu, hvor det ikke længere er sommer."',
+ ask:'<b>Hvor er koldskålen?</b> Den er en sommerret og kommer igen til næste år.<br><br><b>Er der nødder i?</b> Ja — vigtigt ved allergi.',
+ tip:'Den her sælger sig selv hos yngre gæster. Nævn den først, når de kigger på desserterne.',
+ alg:'Mælk · Nødder'},
+
+/* ─── KAPITEL 4 ─── */
+{t:'info', chap:'Vigtigt at vide', sub:'Drikkevarer', h:'Lemonaderne er ude',
+ rows:[['Udgået','Hindbær/lime lemonade fra Duice · 59,-'],
+       ['Udgået','Hyldeblomst/citron lemonade fra Duice · 59,-'],
+       ['Vi har stadig','Duice appelsinjuice &amp; æblemost · 39,-']],
+ say:'"Lemonaderne er sommerprodukter — de er ude nu. Men vi har stadig Duice juice, og vi har varm kakao og chai latte, hvis du vil have noget lunt."',
+ tip:'Peg altid på et alternativ i stedet for bare at sige nej. Varme drikke sælger om vinteren.'},
+
+{t:'info', chap:'Vigtigt at vide', sub:'16. nov – 23. dec', h:'Byg Selv Juleplatte',
+ rows:[['5 elementer','249,-'],['6 elementer','259,-'],['7 elementer','269,-'],
+       ['Altid med','Brød og smør']],
+ listTitle:'Sådan fungerer den',
+ list:['Gæsten vælger selv sine elementer fra tre grupper: det kolde, det lune og til den søde tand',
+       'Alle priser er inkl. brød og smør',
+       'Selskaber over 10 personer SKAL forudbestille — minimum 2 dage før'],
+ say:'"Du sammensætter selv din platte. Vælg 5, 6 eller 7 elementer — brød og smør er med i prisen."',
+ tip:'Spørg altid, om der er allergier, FØR gæsten begynder at vælge. Det sparer tid for jer begge.'},
+
+{t:'info', chap:'Vigtigt at vide', sub:'26. okt – 8. nov', h:'Kaiser × SuperDysten',
+ rows:[['Hvad','Landsdækkende indsamling med NOVA'],
+       ['Til hvem','CoolUnite — syge og udsatte børn'],
+       ['Et blad','25,-'],
+       ['Hvor','Donationstræet står i caféen']],
+ say:'"Vi samler ind til syge og udsatte børn. Du kan købe et blad til vores donationstræ for 25 kroner — hele beløbet går ubeskåret videre."',
+ tip:'Spørg hver eneste gæst. Det er 25 kroner — de fleste siger ja, hvis du bare nævner det. Det er den nemmeste ekstra salg du laver i år.'},
+
+/* ─── KAPITEL 5: QUIZ ─── */
+{t:'chapter', chap:'Quiz', no:'Kapitel 5 af 5', h:'Kan du huske det?',
+ p:'Fem spørgsmål. Du kan ikke dumpe — det er bare for at få det til at sidde fast.',
+ mini:'5 spørgsmål · 1 min'},
+
+{t:'quiz', chap:'Quiz', q:'Hvad serveres der til det braiserede svinebryst?',
+ opts:['Bagte løg, rødvinssauce, grønkål og kartofler',
+       'Kartoffelmos, rødkål og andesky',
+       'Pommes frites og bearnaise'],
+ ans:0, fb:'Bagte løg · rødvinssauce · smørstegt grønkål · kartofler. Og husk Ripasso som vinanbefaling.'},
+
+{t:'quiz', chap:'Quiz', q:'En gæst har nøddeallergi. Hvilken af disse kan de IKKE få?',
+ opts:['Avocado smørrebrød','Vintersalat','Kartoffel tarlet'],
+ ans:1, fb:'Vintersalaten indeholder pistacie. Kaisers æblekage og Bounty dessert har også nødder.'},
+
+{t:'quiz', chap:'Quiz', q:'Hvad koster en juleplatte med 6 elementer?',
+ opts:['249,-','259,-','269,-'],
+ ans:1, fb:'5 elementer 249,- · 6 elementer 259,- · 7 elementer 269,- — altid inkl. brød og smør.'},
+
+{t:'quiz', chap:'Quiz', q:'Hvad koster et blad til donationstræet?',
+ opts:['10,-','25,-','50,-'],
+ ans:1, fb:'25 kroner, og hele beløbet går ubeskåret til CoolUnite. Spørg hver gæst.'},
+
+{t:'quiz', chap:'Quiz', q:'Hvorfor hedder det nu "Oksemørbrad sandwich"?',
+ opts:['Fordi kødet er skiftet ud',
+       'Fordi navnet fortæller gæsten, hvad der er i',
+       'Fordi den er blevet billigere'],
+ ans:1, fb:'Samme kød som før — men navnet sælger. Sig "oksemørbrad" højt, det retfærdiggør prisen på 189,-.'},
+
+{t:'done'}
+];
+
+/* ════════ MOTOR ════════ */
+let i=0, score=0, answered={};
+const stage=document.getElementById('stage');
+
+const esc=s=>String(s??'');
+
+function photo(c){
+  const f=c.img||'';
+  return `<div class="photo">
+    ${f?`<img src="billeder/${f}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+    <div class="ph" ${f?'style="display:none"':''}>
+      <div class="ic">📷</div>
+      ${f?`<div class="fn">billeder/${f}</div>`:''}
+      <div class="hint">Læg dit billede i mappen «billeder» med præcis dette filnavn</div>
+    </div>
+    ${c.pill?`<div class="pill">${esc(c.pill)}</div>`:''}
+    ${c.price?`<div class="prc">${esc(c.price)}</div>`:''}
+  </div>`;
+}
+
+function render(c,idx){
+  const d=document.createElement('div');
+  d.className='card'; d.dataset.i=idx;
+
+  if(c.t==='chapter'){
+    d.innerHTML=`<div class="chapcard">
+      <div class="no">${esc(c.no)}</div><h2>${esc(c.h)}</h2>
+      <p>${esc(c.p)}</p><div class="mini">${esc(c.mini)}</div></div>`;
+  }
+
+  else if(c.t==='dish'){
+    d.innerHTML=`<div class="sheet">${photo(c)}<div class="pad">
+      <div class="dish">${esc(c.name)}</div>
+      <div class="comp">${c.comp}</div>
+      <div class="blk say"><div class="lbl">💬 Sådan siger du det</div><p>${esc(c.say)}</p></div>
+      <div class="blk ask"><div class="lbl">❓ Hvis gæsten spørger</div><p>${c.ask}</p></div>
+      <div class="blk tip"><div class="lbl">⭐ Husk</div><p>${esc(c.tip)}</p></div>
+      <div class="blk alg"><div class="lbl">⚠️ Allergener</div><p>${c.alg}</p></div>
+    </div></div>`;
+  }
+
+  else if(c.t==='info'){
+    const rows=(c.rows||[]).map(r=>`<div class="rw"><b>${r[0]}</b><span>${r[1]}</span></div>`).join('');
+    const list=c.list?`<div class="blk ask" style="padding-top:11px"><div class="lbl">${esc(c.listTitle||'')}</div>
+      <ul class="lst">${c.list.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'';
+    d.innerHTML=`<div class="sheet"><div class="pad info">
+      <div class="sub">${esc(c.sub)}</div><h2>${esc(c.h)}</h2>
+      <div class="rows">${rows}</div>${list}
+      <div class="blk say"><div class="lbl">💬 Sådan siger du det</div><p>${esc(c.say)}</p></div>
+      <div class="blk tip"><div class="lbl">⭐ Husk</div><p>${esc(c.tip)}</p></div>
+    </div></div>`;
+  }
+
+  else if(c.t==='quiz'){
+    d.innerHTML=`<div class="sheet"><div class="pad quiz">
+      <div class="q">${esc(c.q)}</div>
+      <div class="opts">${c.opts.map((o,k)=>
+        `<button class="opt" onclick="pick(${idx},${k},${c.ans})">${esc(o)}</button>`).join('')}</div>
+      <div class="fb">${esc(c.fb)}</div>
+    </div></div>`;
+  }
+
+  else if(c.t==='done'){
+    d.innerHTML=`<div class="done">
+      <div class="big">🎉</div><h2>Du er klar</h2>
+      <p>Du kender nu hele Q4-kortet. Spring tilbage til en ret, hvis du bliver i tvivl under service.</p>
+      <div class="score" id="sc"></div>
+      <button onclick="restart()">Tag den igen</button></div>`;
+  }
+
+  return d;
+}
+
+function pick(idx,k,ans){
+  if(answered[idx]) return;
+  answered[idx]=true;
+  const card=stage.querySelector(`[data-i="${idx}"]`);
+  const btns=[...card.querySelectorAll('.opt')];
+  btns.forEach(b=>b.style.pointerEvents='none');
+  btns[k].classList.add(k===ans?'ok':'no');
+  if(k!==ans) btns[ans].classList.add('ok'); else score++;
+  card.querySelector('.fb').classList.add('show');
+  document.getElementById('next').textContent='Videre';
+}
+
+function show(n){
+  const cards=[...stage.children];
+  cards.forEach(c=>{
+    const ci=+c.dataset.i;
+    c.classList.toggle('on',ci===n);
+    c.classList.toggle('prev',ci<n);
+    if(ci===n) c.scrollTop=0;
+  });
+  const c=CARDS[n];
+  document.getElementById('chap').textContent=c.chap||'Færdig';
+  document.getElementById('count').textContent=`${n+1}/${CARDS.length}`;
+  document.getElementById('fill').style.width=((n+1)/CARDS.length*100)+'%';
+  document.getElementById('back').disabled=(n===0);
+  const nx=document.getElementById('next');
+  if(c.t==='done'){
+    nx.style.display='none';
+    document.getElementById('sc').textContent=`Quiz: ${score} af 5 rigtige`;
+  } else {
+    nx.style.display='';
+    nx.textContent = c.t==='chapter' ? 'Start' : (n===CARDS.length-2?'Se resultat':'Videre');
+  }
+}
+
+function go(dir){
+  const n=i+dir;
+  if(n<0||n>=CARDS.length) return;
+  i=n; show(i);
+}
+
+function begin(){ document.getElementById('start').classList.add('gone'); show(0); }
+
+function restart(){
+  i=0; score=0; answered={};
+  stage.innerHTML=''; CARDS.forEach((c,k)=>stage.appendChild(render(c,k)));
+  show(0);
+}
+
+function toggleMenu(){ document.getElementById('ov').classList.toggle('on'); }
+
+function buildMenu(){
+  const L=document.getElementById('ovList');
+  L.innerHTML=CARDS.map((c,k)=>{
+    if(c.t==='quiz'||c.t==='done') return '';
+    const t = c.t==='chapter' ? c.h : (c.name||c.h);
+    return `<div class="it" onclick="jump(${k})">
+      <div class="n">${k+1}</div><div><div class="t">${esc(t)}</div>
+      <div class="c">${esc(c.chap)}</div></div></div>`;
+  }).join('') + `<div class="it" onclick="jump(${CARDS.findIndex(c=>c.t==='quiz')-1})">
+      <div class="n">?</div><div><div class="t">Quiz</div><div class="c">5 spørgsmål</div></div></div>`;
+}
+
+function jump(n){ i=n; show(i); toggleMenu(); document.getElementById('start').classList.add('gone'); }
+
+/* swipe */
+let x0=null,y0=null;
+stage.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+stage.addEventListener('touchend',e=>{
+  if(x0===null) return;
+  const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.6) go(dx<0?1:-1);
+  x0=null;
+},{passive:true});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') go(1);
+  if(e.key==='ArrowLeft') go(-1);
 });
 
-/* Fade animation */
-
-const fades =
-document.querySelectorAll(".fade");
-
-const observer =
-new IntersectionObserver(entries=>{
-
-entries.forEach(entry=>{
-
-if(entry.isIntersecting){
-entry.target.classList.add("show");
-}
-
-});
-
-},{threshold:.2});
-
-fades.forEach(el=>observer.observe(el));
-
-/* Parallax billeder */
-
-const images =
-document.querySelectorAll(".image");
-
-window.addEventListener("scroll",()=>{
-
-const scrollY = window.scrollY;
-
-images.forEach(img=>{
-
-const speed = scrollY * 0.04;
-
-img.style.transform =
-`translateY(${speed}px) scale(1.)`;
-
-});
-
-});
-
-/* Quiz */
-
-let score = 0;
-let answered = 0;
-
-function answer(btn,correct){
-
-const parent =
-btn.parentElement;
-
-if(parent.dataset.done){
-return;
-}
-
-parent.dataset.done = true;
-
-answered++;
-
-if(correct){
-
-score++;
-
-btn.style.background="#3B4219";
-btn.style.color="white";
-
-}else{
-
-btn.style.background="#b22222";
-btn.style.color="white";
-
-}
-
-if(answered===3){
-
-document.getElementById("result").style.display =
-"block";
-
-document.getElementById("scoreText").innerHTML =
-`Du fik <strong>${score}/3</strong> rigtige.`;
-
-confetti({
-particleCount:200,
-spread:100,
-origin:{y:0.6}
-});
-
-}
-
-}
-
-/* Story Mode */
-
-const sections =
-document.querySelectorAll("section");
-
-let currentSection = 0;
-
-function playStory(){
-
-currentSection = 0;
-
-function nextSlide(){
-
-if(currentSection >= sections.length){
-return;
-}
-
-sections[currentSection].scrollIntoView({
-behavior:"smooth"
-});
-
-currentSection++;
-
-setTimeout(nextSlide,7000);
-
-}
-
-nextSlide();
-
-}
-
+CARDS.forEach((c,k)=>stage.appendChild(render(c,k)));
+buildMenu();
+show(0);
 </script>
-
 </body>
 </html>
