@@ -410,10 +410,10 @@ const esc=s=>String(s??'');
 function photo(c){
   const f=c.img||'';
   return `<div class="photo">
-    ${f?`<img src="billeder/${f}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+    ${f?`<img src="images/${f}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
     <div class="ph" ${f?'style="display:none"':''}>
       <div class="ic">📷</div>
-      ${f?`<div class="fn">billeder/${f}</div>`:''}
+      ${f?`<div class="fn">images/${f}</div>`:''}
       <div class="hint">Læg dit billede i mappen «billeder» med præcis dette filnavn</div>
     </div>
     ${c.pill?`<div class="pill">${esc(c.pill)}</div>`:''}
