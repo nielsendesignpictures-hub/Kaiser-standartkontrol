@@ -413,7 +413,45 @@ function createHiddenInput(name, value) {
   return input;
 }
 
-function submit() {
+// Komprimerer billedet til max 1600 px / JPEG, så FormSubmit ikke fejler på store iPhone-fotos.
+// Fejler komprimeringen, sendes originalen.
+const IMAGE_MAX_SIDE = 1600;
+const IMAGE_QUALITY = 0.8;
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Kunne ikke læse billedet")); };
+    img.src = url;
+  });
+}
+
+async function compressImage(file) {
+  try {
+    const img = await loadImage(file);
+    const w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) return file;
+
+    const scale = Math.min(1, IMAGE_MAX_SIDE / Math.max(w, h));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", IMAGE_QUALITY));
+    if (!blob || blob.size >= file.size) return file;
+
+    const base = (file.name || "billede").replace(/\.[^.]+$/, "");
+    return new File([blob], `${base}.jpg`, { type: "image/jpeg", lastModified: Date.now() });
+  } catch (e) {
+    console.warn("Komprimering fejlede, sender original:", e);
+    return file;
+  }
+}
+
+async function submit() {
   setError("");
 
   try {
@@ -434,6 +472,8 @@ function submit() {
     }
 
     setSubmitting(true);
+
+    const uploadFile = await compressImage(originalFileInput.files[0]);
 
     form.innerHTML = "";
     form.action = `https://formsubmit.co/${FORMSUBMIT_EMAIL}`;
@@ -462,7 +502,7 @@ function submit() {
     form.appendChild(fileClone);
 
     const dt = new DataTransfer();
-    dt.items.add(originalFileInput.files[0]);
+    dt.items.add(uploadFile);
     fileClone.files = dt.files;
 
     sessionStorage.setItem("kaiser_formsubmitted", "1");
