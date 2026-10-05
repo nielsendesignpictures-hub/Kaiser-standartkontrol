@@ -570,11 +570,10 @@
     function nowDK(){ return new Date().toLocaleString("da-DK"); }
 
     function dayKey(){
+      // Lokal dato; før ROLLOVER_HOUR (kl. 04) regnes stadig som forrige driftsdag
       const d = new Date();
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      if (local.getHours() < ROLLOVER_HOUR) local.setDate(local.getDate() - 1);
-      return local.toISOString().slice(0,10);
+      if (d.getHours() < ROLLOVER_HOUR) d.setDate(d.getDate() - 1);
+      return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
     }
 
     function isoToDateLocal(iso){ return new Date(iso + "T12:00:00"); }
