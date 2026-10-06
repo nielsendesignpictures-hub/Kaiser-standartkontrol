@@ -292,7 +292,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   .head{padding:0.875rem 0 0.625rem;align-items:center;flex:none}
   .h1{font-size:1.625rem;margin:2px 0 0}
   #updatedSub,#locCard,#timePill,.headRight .pill:not(#reportPill),#cateringAnchor{display:none!important}
-  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.5fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"cake coffee" "cake tasks" "alerts tasks";gap:0.625rem}
+  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.5fr);grid-template-rows:minmax(0,1fr) minmax(0,1.35fr);grid-template-areas:"cake coffee" "alerts tasks";gap:0.625rem}
   .colL,.colR,.colR .panels{display:contents}
   #panelCoffee{grid-area:coffee}#panelCake{grid-area:cake}#panelTasks{grid-area:tasks}#panelAlerts{grid-area:alerts}
   .panel{min-height:0;display:flex;flex-direction:column}
@@ -318,12 +318,12 @@ input,textarea{-webkit-user-select:text;user-select:text}
   .cfCtl .cfPreset{min-height:2.5rem;padding:0 0.875rem;border-radius:62.4375rem;font-size:0.8125rem;flex-direction:row}
   .cfCtl .cfStart{min-height:2.5rem;padding:0 1.125rem;font-size:0.875rem;border-radius:62.4375rem}
   #cfBody{padding:0.5rem 0.875rem;max-height:none;overflow:visible;display:block}
-  #cfBody:has(.evEmpty){display:none}
-  #panelCoffee .cfList{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0.5rem;max-height:7.5rem;overflow:auto}
+  #cfBody{flex:1;min-height:0;overflow:auto}
+  #cfBody:has(.evEmpty){display:flex;align-items:center;justify-content:center}
+  #panelCoffee .cfList{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0.5rem;align-content:start}
   #panelCoffee .cfTime{font-size:1.375rem}
   #panelCoffee .cfItem{padding:0.5rem 0.75rem}
   #panelCake .pBody.fill,#panelAlerts .pBody{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:0.625rem}
-  #panelAlerts{max-height:13rem}
   #panelCake .pFoot{padding:0.5rem}#panelCake .pFoot .tbtn{min-height:2.75rem}
   #panelTasks .pBody{flex:1;min-height:0;display:flex;flex-direction:column;padding:0.625rem}
   #panelTasks .dtGrid{flex:1;min-height:0;max-height:none;align-content:start}
@@ -490,7 +490,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
           <div class="dtGrid" id="dtGrid"></div>
         </div>
       </div>
-      <div class="panel full hidden" id="panelAlerts">
+      <div class="panel full" id="panelAlerts">
         <div class="pHead">
           <div class="pTitle"><span class="pDot amber"></span>Haster — bar prep &amp; vin</div>
           <div class="pCount" id="alertSub">—</div>
@@ -694,9 +694,8 @@ function rowHtml(i, kind){
 function renderAlerts(){
   const bar = collectBar(), wine = collectWine();
   const n = bar.length + wine.length;
-  $("panelAlerts").classList.toggle("hidden", n === 0);
-  $("alertSub").textContent = n + (n === 1 ? " haster" : " haster");
-  $("alertBody").innerHTML = bar.map(i => rowHtml(i,"exp")).join("") + wine.map(i => rowHtml(i,"wine")).join("");
+  $("alertSub").textContent = n ? n + " haster" : "Ingen";
+  $("alertBody").innerHTML = n ? bar.map(i => rowHtml(i,"exp")).join("") + wine.map(i => rowHtml(i,"wine")).join("") : '<div class="empty">Intet haster — bar prep &amp; vin er i orden</div>';
   checkExpiryAlarm();
 }
 function refreshExpiry(){
