@@ -291,29 +291,27 @@ input,textarea{-webkit-user-select:text;user-select:text}
   #viewOverview.show{display:flex;flex-direction:column;height:100vh;padding-bottom:0.875rem;overflow:hidden}
   .head{padding:0.875rem 0 0.625rem;align-items:center;flex:none}
   .h1{font-size:1.625rem;margin:2px 0 0}
-  #updatedSub{display:none}
-  .pill{padding:0.375rem 0.875rem;min-width:6.5rem}
-  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:21.5rem 1fr;gap:0.75rem}
-  .colL,.colR{display:flex;flex-direction:column;gap:0.625rem;min-height:0}
-  .colL .panel{flex:1;min-height:0;display:flex;flex-direction:column}
-  .colL .pHead{padding:0.625rem 0.875rem}
-  .colL .pBody.fill{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:0.625rem}
-  .colL .cfInput{min-height:2.75rem;font-size:0.9375rem}
-  .colL .cfPreset{min-height:2.75rem}
-  .colL .cfPreset span{display:none}
-  .colL .cfStart{min-height:3rem;font-size:1.0625rem}
-  .colL .cfTime{font-size:1.375rem}
-  .colL .cfItem{padding:0.5rem 0.75rem}
-  .colL .pFoot{padding:0.5rem}
-  .colL .pFoot .tbtn{min-height:2.75rem}
-  .colR .panels{display:flex;flex-direction:column;gap:0.625rem;margin:0;flex:1;min-height:0}
-  #panelTasks{flex:1;min-height:0;display:flex;flex-direction:column}
+  #updatedSub,#locCard,#timePill,#timePill.pillV,.headRight .pill:not(#reportPill),#cateringAnchor{display:none!important}
+  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.5fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"coffee coffee" "cake tasks" "alerts alerts";gap:0.625rem}
+  .colL,.colR,.colR .panels{display:contents}
+  #panelCoffee{grid-area:coffee}#panelCake{grid-area:cake}#panelTasks{grid-area:tasks}#panelAlerts{grid-area:alerts}
+  .panel{min-height:0;display:flex;flex-direction:column}
+  .pHead{padding:0.5rem 0.875rem}
+  /* kaffe: formular til venstre, timere til højre */
+  #panelCoffee .pBody.cf{display:grid;grid-template-columns:23rem minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:0.875rem;row-gap:0.5rem;padding:0.625rem 0.875rem;overflow:visible;max-height:none}
+  #panelCoffee .cfInput{min-height:2.5rem;font-size:0.9375rem;grid-column:1}
+  #panelCoffee .cfPresets{grid-column:1}
+  #panelCoffee .cfPreset{min-height:2.5rem}#panelCoffee .cfPreset span{display:none}
+  #panelCoffee .cfStart{grid-column:1;min-height:2.75rem;font-size:1.0625rem}
+  #cfCustom{grid-column:1}
+  #panelCoffee .cfList{grid-column:2;grid-row:1/span 4;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0.5rem;align-content:start;max-height:9.5rem;overflow:auto}
+  #panelCoffee .cfTime{font-size:1.375rem}
+  #panelCoffee .cfItem{padding:0.5rem 0.75rem}
+  #panelCake .pBody.fill{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:0.625rem}
+  #panelCake .pFoot{padding:0.5rem}#panelCake .pFoot .tbtn{min-height:2.75rem}
   #panelTasks .pBody{flex:1;min-height:0;display:flex;flex-direction:column;padding:0.625rem}
   #panelTasks .dtGrid{flex:1;min-height:0;max-height:none;align-content:start}
-  #panelAlerts .pBody{max-height:7rem;overflow:auto}
-  #cateringAnchor{flex:none}
-  #cateringAnchor .pHead{padding:0.5rem 1rem}
-  #cateringAnchor .pBody{max-height:5.5rem;overflow:auto;padding:0.5rem}
+  #panelAlerts .pBody{max-height:6.5rem;overflow:auto;padding:0.5rem}
 }
 </style>
 </head>
