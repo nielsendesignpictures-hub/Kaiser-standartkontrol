@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Kaiser – Drift</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f2; --white:#fff; --ink:#18201d; --muted:#737b76; --line:#e3e7e3;
+  --green:#176b57; --green2:#e5f1ed; --gold:#d6b24a; --gold2:#f7f0da;
+  --amber:#b36b16; --amberSoft:#f8efdf; --red:#b64b43; --redSoft:#f8e8e6;
+  --dark:#202824; --dark2:#2d3732; --side:240px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button{font-family:inherit}
+
+/* SIDEBAR */
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:var(--dark);color:#fff;display:flex;flex-direction:column;z-index:5000;transition:transform .2s ease}
+.sideScroll{flex:1;overflow-y:auto;padding:24px 14px 10px}
+.brand{padding:2px 10px 20px;cursor:pointer}
+.wordmark{font-size:22px;font-weight:800;letter-spacing:-.05em;line-height:1}
+.wordmark i{font-style:normal;color:var(--gold)}
+.caption{margin-top:5px;color:#9da8a2;text-transform:uppercase;font-size:9px;letter-spacing:.12em}
+.navLabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#7e8983;padding:18px 10px 7px}
+.navItem{width:100%;border:0;background:transparent;color:#c3ccc7;text-align:left;padding:11px 12px;min-height:44px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:600}
+.navItem:hover{background:var(--dark2);color:#fff}
+.navItem.active{background:var(--dark2);color:#fff}
+.navItem .dot{width:7px;height:7px;border-radius:50%;background:#718079;flex:none}
+.navItem.active .dot{background:var(--gold)}
+.navItem .lbl{flex:1}
+.nb{min-width:20px;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:800;text-align:center;display:none}
+.nb.show{display:inline-block}
+.nb.red{background:#b64b43;color:#fff}
+.nb.amber{background:#d99b4b;color:#2a1c05}
+.nb.ok{background:#2f6b58;color:#d6efe6}
+.siteBox{border-top:1px solid #36413b;padding:14px 24px 18px}
+.siteLabel{color:#7e8983;text-transform:uppercase;letter-spacing:.11em;font-size:9px;margin-bottom:6px}
+.siteBtn{border:0;background:transparent;color:#fff;text-align:left;padding:0;cursor:pointer;width:100%}
+.siteBtn strong{display:block;font-size:13px}
+.siteBtn span{display:block;margin-top:3px;color:#9da8a2;font-size:11px}
+.siteBtn.unset strong{color:#ffc86b}
+
+/* MOBILE TOPBAR */
+.topbar{display:none;position:fixed;top:0;left:0;right:0;height:54px;background:var(--dark);color:#fff;z-index:4500;align-items:center;gap:12px;padding:0 12px}
+.menuBtn{width:44px;height:44px;border:0;border-radius:10px;background:var(--dark2);color:#fff;font-size:20px;cursor:pointer}
+.topTitle{font-weight:800;font-size:15px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scrim{display:none;position:fixed;inset:0;background:rgba(24,32,29,.5);z-index:4900}
+.scrim.show{display:block}
+
+/* MAIN */
+.main{margin-left:var(--side);min-height:100vh}
+.view{display:none}
+.view.show{display:block}
+#viewOverview{padding:0 36px 48px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding:30px 0 20px}
+.kicker{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+.h1{font-size:32px;font-weight:800;letter-spacing:-.05em;margin:6px 0 4px}
+.sub{color:var(--muted);font-size:14px;font-weight:500}
+.headRight{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+.pill{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:9px 14px;min-width:120px}
+.pill.click{cursor:pointer}
+.pill.click:hover{background:#f7f8f6}
+.pill.unset{background:#fff9ee;border-color:#e6c994}
+.pillL{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:#8a928d;font-weight:700}
+.pillV{margin-top:3px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.pillV.sm{font-size:13px}
+.pill.rOk{background:var(--green2);border-color:#c6ddd4}.pill.rOk .pillV{color:var(--green)}
+.pill.rBad{background:var(--redSoft);border-color:#edcbc7}.pill.rBad .pillV{color:var(--red)}
+.tools{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tbtn{min-height:40px;padding:8px 13px;border-radius:10px;border:1px solid var(--line);background:var(--white);color:#59635e;font-size:12px;font-weight:700;cursor:pointer}
+.tbtn:hover{background:#f7f8f6}
+.tbtn.on{background:var(--green2);border-color:#c6ddd4;color:var(--green)}
+
+/* ATTENTION */
+.attn{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.chip{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;cursor:pointer;min-height:104px;display:flex;flex-direction:column;justify-content:space-between;transition:.12s}
+.chip:hover{border-color:#cfd6d1}
+.chipTop{display:flex;justify-content:space-between;align-items:center}
+.chipIcon{font-size:22px}
+.chipNum{font-size:40px;font-weight:800;letter-spacing:-.05em;line-height:1}
+.chipLbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.chip.alert{background:var(--redSoft);border-color:#edcbc7}.chip.alert .chipNum{color:var(--red)}
+.chip.warn{background:var(--amberSoft);border-color:#ead6b6}.chip.warn .chipNum{color:var(--amber)}
+.chip.ok .chipNum{color:var(--green)}
+
+/* PANELS */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.panel.full{grid-column:1/-1}
+.pHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.pTitle{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:9px}
+.pDot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+.pDot.amber{background:#d99b4b}.pDot.wine{background:#8b3a4a}.pDot.blue{background:#638b98}
+.pLink{border:0;background:none;color:var(--green);font-size:12px;font-weight:800;cursor:pointer;padding:6px 0}
+.pCount{font-size:11px;font-weight:700;color:var(--muted)}
+.pBody{padding:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:#f7f8f6;border:1px solid var(--line);border-left:4px solid #d99b4b;margin-bottom:8px}
+.row:last-child{margin-bottom:0}
+.row.over{border-left-color:var(--red);background:var(--redSoft);border-color:#edcbc7;border-left-color:var(--red)}
+.rName{font-weight:800;font-size:15px}
+.rMeta{color:var(--muted);font-size:12px;font-weight:600;margin-top:3px}
+.tag{padding:4px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;background:var(--amberSoft);border:1px solid #ead6b6;color:var(--amber)}
+.tag.over{background:#f3d4d0;border-color:#e3b3ad;color:var(--red)}
+.empty{padding:22px;text-align:center;border-radius:12px;border:1px dashed #cce0d7;background:var(--green2);color:var(--green);font-weight:700;font-size:14px}
+.evGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.ev{display:flex;gap:11px;align-items:center;background:#f7f8f6;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.evBar{width:5px;height:44px;border-radius:4px;background:#75aa9a;flex:none}
+.evBar.today{background:#d99b4b}
+.evName{font-weight:800;font-size:14px}
+.evMeta{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600}
+.evEmpty{color:var(--muted);font-size:13px;font-weight:600;padding:6px 2px}
+
+/* TOOL VIEW */
+#viewTool{height:100vh;padding:12px 14px 14px;flex-direction:column}
+#viewTool.show{display:flex}
+.toolBar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap}
+.toolName{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.frame{flex:1;width:100%;border:1px solid var(--line);border-radius:14px;background:#fff}
+
+/* LOCATION MODAL */
+.ov{position:fixed;inset:0;background:rgba(24,32,29,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:20000}
+.ov.open{display:flex}
+.modal{width:min(560px,100%);background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 25px 70px rgba(24,32,29,.2)}
+.mTitle{font-size:24px;font-weight:800;letter-spacing:-.04em;text-align:center}
+.mSub{margin-top:6px;text-align:center;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:18px}
+.locGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.loc{min-height:62px;border-radius:12px;border:1px solid var(--line);background:#f7f8f6;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.loc:hover{background:#eef1ee}
+.loc.current{background:var(--green2);border-color:#b8d4c8;box-shadow:0 0 0 3px rgba(23,107,87,.08)}
+.cancel{display:block;margin:14px auto 0;background:none;border:0;color:var(--muted);font-size:12px;font-weight:700;text-decoration:underline;cursor:pointer;min-height:36px}
+
+/* ===== TOUCH 15" ===== */
+:root{--side:270px}
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;overscroll-behavior:none}
+.main,.sideScroll,.pBody,.modal{-webkit-overflow-scrolling:touch}
+.navItem,.chip,.tbtn,.loc,.pill.click,.siteBtn{transition:transform .08s ease,background .08s ease}
+.navItem:active,.chip:active,.tbtn:active,.loc:active,.pill.click:active{transform:scale(.97)}
+.brand{padding-bottom:16px}
+.wordmark{font-size:26px}
+.navLabel{font-size:11px;padding:16px 10px 6px}
+.navItem{min-height:56px;font-size:16px;padding:12px 14px;gap:12px;margin-bottom:2px}
+.navItem .dot{width:8px;height:8px}
+.nb{font-size:13px;min-width:26px;padding:3px 9px}
+.siteBox{padding:14px 20px 18px}
+.siteBtn{min-height:52px}
+.siteBtn strong{font-size:15px}
+.siteBtn span{font-size:13px}
+#viewOverview{padding:0 30px 40px}
+.head{padding:22px 0 14px}
+.h1{font-size:34px}
+.sub{font-size:16px}
+.kicker{font-size:12px}
+.pill{padding:11px 18px;min-width:130px}
+.pillL{font-size:11px}
+.pillV{font-size:20px}
+.pillV.sm{font-size:16px}
+.tbtn{min-height:52px;padding:10px 20px;font-size:15px;border-radius:12px}
+.tools{margin-bottom:14px}
+.attn{gap:12px}
+.chip{min-height:136px;padding:18px}
+.chipIcon{font-size:28px}
+.chipNum{font-size:56px}
+.chipLbl{font-size:13px}
+.panels{gap:12px;margin-top:12px}
+.pHead{padding:16px 20px}
+.pTitle{font-size:13px}
+.pCount{font-size:14px}
+.row{padding:14px 16px}
+.rName{font-size:18px}
+.rMeta{font-size:14px}
+.tag{font-size:12px;padding:6px 12px}
+.empty{font-size:16px;padding:26px}
+.evGrid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.ev{padding:14px 16px}
+.evName{font-size:17px}
+.evMeta{font-size:14px}
+.evEmpty{font-size:15px}
+.toolName{font-size:20px}
+#viewTool{padding:10px 12px 12px}
+.toolBar{margin-bottom:8px}
+.mTitle{font-size:28px}
+.mSub{font-size:15px}
+.loc{min-height:80px;font-size:20px;border-radius:14px}
+.locGrid{gap:10px}
+.cancel{min-height:56px;font-size:16px}
+/* ===== FORSIDE v2 ===== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel.tall{display:flex;flex-direction:column}
+.miniFrame{width:100%;height:480px;border:0;background:#fff;display:block}
+.pBody.fill{flex:1;overflow-y:auto;max-height:480px}
+.pFoot{padding:12px;border-top:1px solid var(--line)}
+.pFoot .tbtn{width:100%}
+.pDot.pink{background:#c9778a}
+.row.ok{border-left-color:#75aa9a}
+.left{font-size:22px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
+.left.over{color:var(--red)}.left.today{color:var(--amber)}.left.ok{color:var(--green)}
+.hidden{display:none!important}
+.sideTools{display:flex;gap:8px;margin-top:14px}
+.sideTools button{flex:1;min-height:52px;border:1px solid #36413b;border-radius:10px;background:var(--dark2);color:#fff;font-size:20px;cursor:pointer}
+.sideTools button.on{border-color:var(--gold);background:#3b4a43}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+@media(max-width:1100px){.attn{grid-template-columns:repeat(5,1fr)}.chipNum{font-size:44px}}
+@media(max-width:1100px) and (max-width:860px){.attn{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:860px){
+  .side{transform:translateX(-100%)}
+  .side.open{transform:none}
+  .topbar{display:flex}
+  .main{margin-left:0;padding-top:54px}
+  #viewOverview{padding:0 14px 40px}
+  .head{padding-top:18px}
+  .h1{font-size:26px}
+  .panels{grid-template-columns:1fr}
+  .attn{grid-template-columns:repeat(2,1fr)}
+  #viewTool{height:calc(100vh - 54px)}
+}
+@media(max-width:480px){.locGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- MOBILE TOPBAR -->
+<div class="topbar">
+  <button class="menuBtn" id="menuBtn" type="button" aria-label="Menu">☰</button>
+  <div class="topTitle" id="topTitle">Overblik</div>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<!-- SIDEBAR -->
+<aside class="side" id="side">
+  <div class="sideScroll">
+    <div class="brand" id="brandBtn">
+      <div class="wordmark">KAISER<i>.</i></div>
+      <div class="caption">Café drift</div>
+    </div>
+
+    <button class="navItem active" data-home="1"><span class="dot"></span><span class="lbl">Overblik</span></button>
+
+    <div class="navLabel">Daglig drift</div>
+    <button class="navItem" data-url="./daglige-opgaver-v2.html" data-title="Daglige opgaver"><span class="dot"></span><span class="lbl">Daglige opgaver</span></button>
+    <button class="navItem" data-url="./shiftleader-checklist.html" data-title="Dagsansvarlig"><span class="dot"></span><span class="lbl">Dagsansvarlig</span></button>
+    <button class="navItem" data-url="./skiftlederrapport1.html" data-title="Rapport"><span class="dot"></span><span class="lbl">Rapport</span><span class="nb" id="nbReport"></span></button>
+
+    <div class="navLabel">Live / service</div>
+    <button class="navItem" data-url="./soldout-products.html" data-title="Udsolgte varer"><span class="dot"></span><span class="lbl">Udsolgte varer</span><span class="nb" id="nbSoldout"></span></button>
+    <button class="navItem" data-url="./guest-complaints.html" data-title="Gæsteklager"><span class="dot"></span><span class="lbl">Gæsteklager</span><span class="nb" id="nbComplaints"></span></button>
+    <button class="navItem" data-url="./faults-issues.html" data-title="Fejl & mangler"><span class="dot"></span><span class="lbl">Fejl & mangler</span><span class="nb" id="nbFaults"></span></button>
+    <button class="navItem" data-url="./kage-koeleskab.html" data-title="Kagekøleskab"><span class="dot"></span><span class="lbl">Kagekøleskab</span><span class="nb" id="nbCake"></span></button>
+    <button class="navItem" data-url="./barprep.html" data-title="Bar prep"><span class="dot"></span><span class="lbl">Bar prep</span><span class="nb" id="nbBar"></span></button>
+    <button class="navItem" data-url="./vin.html" data-title="Vin — åbnet"><span class="dot"></span><span class="lbl">Vin — åbnet</span><span class="nb" id="nbWine"></span></button>
+    <button class="navItem" data-scrollhome="panelCoffee"><span class="dot"></span><span class="lbl">Kaffe Timer</span></button>
+
+    <div class="navLabel">Info & kontakt</div>
+    <button class="navItem" data-url="./rabat-guidelines.html" data-title="Rabat & tilbud"><span class="dot"></span><span class="lbl">Rabat & tilbud</span></button>
+    <button class="navItem" data-url="./guides.html" data-title="Guides"><span class="dot"></span><span class="lbl">Guides</span></button>
+    <button class="navItem" data-url="./kontaktliste.html" data-title="Kontaktliste"><span class="dot"></span><span class="lbl">Kontaktliste</span></button>
+    <button class="navItem" data-url="./Telefonliste.html" data-title="Telefonliste"><span class="dot"></span><span class="lbl">Telefonliste</span></button>
+    <button class="navItem" data-url="/Kaiser-standartkontrol/contractor/cafe.html" data-title="Håndværker"><span class="dot"></span><span class="lbl">Håndværker</span></button>
+    <button class="navItem" data-url="./idehub.html" data-title="Fejl & idéer"><span class="dot"></span><span class="lbl">Fejl & idéer</span></button>
+  </div>
+  <div class="siteBox">
+    <div class="siteLabel">Aktiv café</div>
+    <button class="siteBtn" id="siteBtn" type="button"><strong id="siteName">Vælg lokation</strong><span>Skift café →</span></button>
+    <div class="sideTools">
+      <button id="fsBtn" type="button" title="Fuldskærm">⛶</button>
+      <button id="wakeBtn" type="button" title="Hold skærmen vågen">☀️</button>
+      <button id="refreshBtn" type="button" title="Opdater">↻</button>
+    </div>
+  </div>
+</aside>
+
+<!-- LOCATION PICKER -->
+<div class="ov" id="locOverlay">
+  <div class="modal">
+    <div class="mTitle">Vælg lokation</div>
+    <div class="mSub" id="locSub">Hvilken café er dette?</div>
+    <div class="locGrid" id="locGrid"></div>
+    <button class="cancel" id="locCancel" type="button">Annuller</button>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- OVERBLIK -->
+  <div class="view show" id="viewOverview">
+    <header class="head">
+      <div>
+        <div class="kicker" id="dateLine">—</div>
+        <div class="h1">Overblik</div>
+        <div class="sub" id="updatedSub">Opdaterer…</div>
+      </div>
+      <div class="headRight">
+        <div class="pill click" id="reportPill"><div class="pillL">Rapport</div><div class="pillV sm" id="reportVal">Åbn rapport</div></div>
+        <div class="pill click" id="locCard"><div class="pillL">Café</div><div class="pillV" id="locPill">Ikke sat</div></div>
+        <div class="pill"><div class="pillL">Nu</div><div class="pillV" id="timePill">--:--</div></div>
+      </div>
+    </header>
+
+    <section class="grid2">
+      <div class="panel tall" id="panelCoffee">
+        <div class="pHead">
+          <div class="pTitle"><span class="pDot amber"></span>Kaffe timer</div>
+          <div class="pCount">Batch Brew</div>
+        </div>
+        <iframe id="coffeeFrame" class="miniFrame" src="about:blank" title="Kaffe timer"></iframe>
+      </div>
+      <div class="panel tall" id="panelCake">
+        <div class="pHead">
+          <div class="pTitle"><span class="pDot pink"></span>Kagekøleskab</div>
+          <div class="pCount" id="cakeSub">—</div>
+        </div>
+        <div class="pBody fill" id="cakeBody"></div>
+        <div class="pFoot"><button class="tbtn" id="cakeOpen" type="button">🍰 Registrér / åbn kagekøleskab</button></div>
+      </div>
+    </section>
+
+    <section class="panels">
+      <div class="panel full hidden" id="panelAlerts">
+        <div class="pHead">
+          <div class="pTitle"><span class="pDot amber"></span>Haster — bar prep &amp; vin</div>
+          <div class="pCount" id="alertSub">—</div>
+        </div>
+        <div class="pBody" id="alertBody"></div>
+      </div>
+      <div class="panel full" id="cateringAnchor">
+        <div class="pHead">
+          <div class="pTitle"><span class="pDot blue"></span>Dagens catering</div>
+          <div class="pCount" id="cateringCount">—</div>
+        </div>
+        <div class="pBody"><div class="evGrid" id="cateringBody"><div class="evEmpty">Indlæser…</div></div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODUL -->
+  <div class="view" id="viewTool">
+    <div class="toolBar">
+      <div class="toolName" id="toolName">—</div>
+      <div style="display:flex;gap:8px">
+        <button class="tbtn" id="newTabBtn" type="button">↗ Nyt faneblad</button>
+        <button class="tbtn" id="backBtn" type="button">← Overblik</button>
+      </div>
+    </div>
+    <iframe id="toolFrame" class="frame" src="about:blank" referrerpolicy="no-referrer"></iframe>
+  </div>
+
+</main>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8ztJIUOk-4GkhkTwHbpJiSOi7uJjPivpWc5skVr0KXJ1m-j3dcVNF3BSe3sbnWIds/exec";
+const LOC_KEY = "kaiser_kitchenpct_loc";
+const CACHE_BADGE_KEY = "kaiser_drift_badge_cache_v3";
+const CACHE_CAT_KEY = "kaiser_drift_catering_cache_v3";
+const RELOAD_HOUR = 4;
+const LOCATIONS = ["Helsingør","Hillerød","Farum","Hørsholm","Vanløse","Sydhavnen","Waves"];
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
+}
+function getLoc(){
+  const fromQS = new URLSearchParams(location.search).get("loc");
+  if (fromQS) localStorage.setItem(LOC_KEY, fromQS);
+  return localStorage.getItem(LOC_KEY) || "";
+}
+function saveCache(key, data){ try{ localStorage.setItem(key, JSON.stringify({ts:Date.now(), data})); }catch(_){} }
+function loadCache(key){
+  try{ const p = JSON.parse(localStorage.getItem(key)||"null"); return (p && p.data!==undefined) ? p : null; }catch(_){ return null; }
+}
+
+/* ===== LOKATION ===== */
+function updateLocUI(){
+  const loc = getLoc();
+  $("locPill").textContent = loc || "Ikke sat";
+  $("locCard").classList.toggle("unset", !loc);
+  $("siteName").textContent = loc ? "Café Kaiser · " + loc : "Vælg lokation";
+  $("siteBtn").classList.toggle("unset", !loc);
+}
+function renderLocGrid(){
+  const current = getLoc();
+  $("locGrid").innerHTML = LOCATIONS.map(n =>
+    `<div class="loc ${n===current?"current":""}" data-loc="${escapeHtml(n)}">${escapeHtml(n)}</div>`).join("");
+  $("locGrid").querySelectorAll(".loc").forEach(o => o.addEventListener("click", () => {
+    localStorage.setItem(LOC_KEY, o.dataset.loc);
+    closeLocModal(); updateLocUI(); refreshAll(); loadCoffee();
+  }));
+}
+function openLocModal(forced){
+  renderLocGrid();
+  $("locSub").textContent = forced ? "Vælg hvilken café dette er, før du fortsætter" : "Hvilken café er dette?";
+  $("locCancel").style.display = forced ? "none" : "";
+  $("locOverlay").classList.add("open");
+}
+function closeLocModal(){ $("locOverlay").classList.remove("open"); }
+$("locCard").addEventListener("click", () => openLocModal(false));
+$("siteBtn").addEventListener("click", () => { closeSide(); openLocModal(false); });
+$("locCancel").addEventListener("click", closeLocModal);
+
+/* ===== SIDEBAR / MOBIL ===== */
+function openSide(){ $("side").classList.add("open"); $("scrim").classList.add("show"); }
+function closeSide(){ $("side").classList.remove("open"); $("scrim").classList.remove("show"); }
+$("menuBtn").addEventListener("click", openSide);
+$("scrim").addEventListener("click", closeSide);
+
+/* ===== TÆLLERE ===== */
+const counts = { soldout:null, complaints:null, faults:null, expiry:null, wine:null, cake:null, bar:null };
+let expiryHasOverdue = false, wineHasOverdue = false;
+
+function setChip(numId, val, cls){
+  const el = $(numId); if (!el) return;
+  const chip = el.closest(".chip");
+  el.textContent = (val == null) ? "–" : val;
+  chip.classList.remove("alert","warn","ok");
+  if (typeof val === "number") chip.classList.add(val > 0 ? (cls || "alert") : "ok");
+}
+function setNb(id, val, cls){
+  const el = $(id); if (!el) return;
+  if (typeof val === "number" && val > 0){
+    el.textContent = val; el.className = "nb show " + (cls || "red");
+  } else { el.className = "nb"; el.textContent = ""; }
+}
+function renderAttention(){
+  setChip("attnSoldout", counts.soldout);
+  setChip("attnComplaints", counts.complaints);
+  setChip("attnFaults", counts.faults);
+  setChip("attnExpiry", counts.expiry, expiryHasOverdue ? "alert" : "warn");
+  setChip("attnWine", counts.wine, wineHasOverdue ? "alert" : "warn");
+  setNb("nbSoldout", counts.soldout);
+  setNb("nbComplaints", counts.complaints);
+  setNb("nbFaults", counts.faults);
+  setNb("nbCake", counts.cake, "amber");
+  setNb("nbBar", counts.bar, "amber");
+  setNb("nbWine", counts.wine, wineHasOverdue ? "red" : "amber");
+}
+
+/* ===== UDLØB (kage, bar prep, vin) – læser modulernes localStorage ===== */
+const CAKE_KEYS = ["kagekoeleskab.entries.v6","kagekoeleskab.entries.v5","kagekoeleskab.entries.v4","kagekoeleskab.entries.v3"];
+const BARPREP_KEYS = ["kaiser.barprep.entries.v1"];
+const WINE_KEYS = ["kaiser.wine.entries.v1"];
+const PLURAL = { "bøtte":"bøtter", "bundt":"bundter", "stk":"stk", "pose":"poser" };
+function unitLabel(n, unit){
+  const u = String(unit || "stk").toLowerCase().trim();
+  const sing = Object.keys(PLURAL).find(k => PLURAL[k] === u) || u;
+  return Number(n) === 1 ? sing : (PLURAL[sing] || sing);
+}
+function readJson(key){ try{ return JSON.parse(localStorage.getItem(key) || "null"); }catch(_){ return null; } }
+function firstArray(keys){ for (const k of keys){ const v = readJson(k); if (Array.isArray(v)) return v; } return []; }
+function sameLocalDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+function expiryState(iso){
+  const t = new Date(iso).getTime();
+  if (!isFinite(t)) return null;
+  if (Date.now() >= t) return "over";
+  if (sameLocalDate(new Date(), new Date(iso))) return "today";
+  return null;
+}
+function fmtWhen(iso){
+  return new Date(iso).toLocaleString("da-DK",{ weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
+function collectBar(){
+  const out = [];
+  firstArray(BARPREP_KEYS).forEach(e => {
+    if (!e || e.status !== "active") return;
+    const st = expiryState(e.discardAt); if (!st) return;
+    out.push({ src:"bar", name:e.itemName||"Vare", qty:e.qty||1, unit:e.unit||"stk", when:e.discardAt, state:st });
+  });
+  out.sort((a,b) => new Date(a.when) - new Date(b.when));
+  return out;
+}
+function collectCakes(){
+  const out = [];
+  firstArray(CAKE_KEYS).forEach(e => {
+    if (!e || e.status === "discarded") return;
+    const ts = new Date(e.discardAt).getTime(); if (!isFinite(ts)) return;
+    const st = Date.now() >= ts ? "over" : (sameLocalDate(new Date(), new Date(ts)) ? "today" : "later");
+    out.push({ name:e.cakeName||"Kage", qty:e.qty||1, when:e.discardAt, ts, state:st });
+  });
+  out.sort((a,b) => a.ts - b.ts);
+  return out;
+}
+function fmtLeft(ts){
+  const ms = ts - Date.now();
+  if (ms <= 0) return "Over tid";
+  const m = Math.floor(ms/60000), d = Math.floor(m/1440), h = Math.floor((m%1440)/60), mm = m%60;
+  if (d >= 1) return d + "d " + h + "t";
+  if (h >= 1) return h + "t " + pad(mm) + "m";
+  return mm + " min";
+}
+function rowHtml(i, kind){
+  const over = i.state === "over";
+  const tagTxt = over ? (kind==="wine" ? "Skal drikkes nu" : "Over tid") : "I dag";
+  const title = kind==="wine"
+    ? escapeHtml(i.name)
+    : `${escapeHtml(i.name)} • ${escapeHtml(String(i.qty))} ${escapeHtml(unitLabel(i.qty, i.unit))}`;
+  const meta = kind==="wine"
+    ? `🍷 ${escapeHtml(WINE_CAT_NAMES[i.cat] || "Vin")} • ${escapeHtml(fmtWhen(i.when))}`
+    : `🍋 Bar prep • ${escapeHtml(fmtWhen(i.when))}`;
+  return `<div class="row ${over?"over":""}">
+    <div><div class="rName">${title}</div><div class="rMeta">${meta}</div></div>
+    <div class="tag ${over?"over":""}">${tagTxt}</div></div>`;
+}
+function renderAlerts(){
+  const bar = collectBar(), wine = collectWine();
+  const n = bar.length + wine.length;
+  $("panelAlerts").classList.toggle("hidden", n === 0);
+  $("alertSub").textContent = n + (n === 1 ? " haster" : " haster");
+  $("alertBody").innerHTML = bar.map(i => rowHtml(i,"exp")).join("") + wine.map(i => rowHtml(i,"wine")).join("");
+}
+function refreshExpiry(){
+  const cakes = collectCakes(), bar = collectBar();
+  const over = cakes.filter(i => i.state === "over").length;
+  expiryHasOverdue = over > 0 || bar.some(i => i.state === "over");
+  counts.cake = cakes.filter(i => i.state !== "later").length;
+  counts.bar = bar.length;
+  counts.expiry = counts.cake + counts.bar;
+  $("cakeSub").textContent = cakes.length ? (over ? over + " over tid • " : "") + cakes.length + " i køl" : "Tomt";
+  const MAX = 8;
+  $("cakeBody").innerHTML = cakes.length
+    ? cakes.slice(0, MAX).map(i => `<div class="row ${i.state==="over"?"over":(i.state==="today"?"":"ok")}">
+        <div><div class="rName">${escapeHtml(i.name)} • ${escapeHtml(String(i.qty))} stk</div>
+        <div class="rMeta">Kasseres ${escapeHtml(fmtWhen(i.when))}</div></div>
+        <div class="left ${i.state==="over"?"over":(i.state==="today"?"today":"ok")}">${escapeHtml(fmtLeft(i.ts))}</div></div>`).join("")
+      + (cakes.length > MAX ? `<div class="rMeta" style="text-align:center;padding:8px;font-size:14px">+ ${cakes.length - MAX} flere i kagekøleskabet</div>` : "")
+    : '<div class="empty">Ingen kager registreret</div>';
+  renderAlerts();
+  renderAttention();
+  return cakes;
+}
+const WINE_CAT_NAMES = { hvid:"Hvidvin", rod:"Rødvin", rose:"Rosé", bubbles:"Bobler" };
+function collectWine(){
+  const out = [];
+  firstArray(WINE_KEYS).forEach(e => {
+    if (!e || e.status !== "active") return;
+    const st = expiryState(e.discardAt); if (!st) return;
+    out.push({ name:e.wineName||"Vin", cat:e.cat||"", when:e.discardAt, state:st });
+  });
+  out.sort((a,b) => new Date(a.when) - new Date(b.when));
+  return out;
+}
+function refreshWine(){
+  const items = collectWine();
+  wineHasOverdue = items.some(i => i.state === "over");
+  counts.wine = items.length;
+  renderAlerts();
+  renderAttention();
+  return items;
+}
+
+/* ===== JSONP ===== */
+function jsonp(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    const cb = "__cb_" + Math.random().toString(16).slice(2);
+    const qs = new URLSearchParams({ ...params, callback: cb }).toString();
+    const src = url + (url.includes("?") ? "&" : "?") + qs;
+    const s = document.createElement("script");
+    const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 15000);
+    function cleanup(){
+      clearTimeout(t);
+      try{ delete window[cb]; }catch(_){}
+      if (s.parentNode) s.parentNode.removeChild(s);
+    }
+    window[cb] = d => { cleanup(); resolve(d); };
+    s.async = true;
+    s.onerror = () => { cleanup(); reject(new Error("load error")); };
+    s.src = src;
+    document.body.appendChild(s);
+  });
+}
+
+/* ===== UR ===== */
+function updateClock(){
+  const now = new Date();
+  $("timePill").textContent = now.toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+  const d = now.toLocaleDateString("da-DK",{weekday:"long",day:"numeric",month:"long"});
+  $("dateLine").textContent = d.charAt(0).toUpperCase() + d.slice(1);
+}
+
+/* ===== LIVE-TÆLLERE FRA BACKEND ===== */
+function pickArray(data){
+  if (!data || !data.ok) return null;
+  return data.items || data.complaints || data.faults || data.issues || data.products || data.list || data.rows || null;
+}
+async function fetchBadge(action, slot){
+  const loc = getLoc();
+  try{
+    const data = await jsonp(SCRIPT_URL, { action, loc: "Café Kaiser " + loc });
+    const arr = pickArray(data);
+    const count = Array.isArray(arr) ? arr.length : 0;
+    counts[slot] = count; renderAttention();
+    const cache = loadCache(CACHE_BADGE_KEY)?.data || {};
+    cache[slot] = count; saveCache(CACHE_BADGE_KEY, cache);
+  }catch(e){
+    const cached = loadCache(CACHE_BADGE_KEY)?.data;
+    if (cached && typeof cached[slot] === "number"){ counts[slot] = cached[slot]; renderAttention(); }
+  }
+}
+
+/* ===== CATERING ===== */
+function normalizeLoc(s){
+  return String(s||"").toLowerCase().replace(/café/g,"cafe").replace(/kaiser/g,"").replace(/[^\p{L}\p{N}]+/gu," ").trim();
+}
+function locMatches(a,b){ const na=normalizeLoc(a), nb=normalizeLoc(b); return na===nb || na.includes(nb) || nb.includes(na); }
+function isoToday(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function parseLocalDateTime(dateStr, timeStr){
+  if (!dateStr) return NaN;
+  const t = (timeStr && /^\d{2}:\d{2}$/.test(timeStr)) ? timeStr : "12:00";
+  const [y,m,d] = String(dateStr).split("-").map(Number);
+  const [hh,mm] = String(t).split(":").map(Number);
+  if (!y||!m||!d) return NaN;
+  return new Date(y,m-1,d,hh||0,mm||0,0,0).getTime();
+}
+function renderCatering(orders){
+  const loc = getLoc();
+  const todayYMD = isoToday();
+  const startOfToday = parseLocalDateTime(todayYMD,"00:00");
+  const events = (orders||[])
+    .filter(o => locMatches(o.location, loc))
+    .map(o => {
+      const date = String(o.deliveryDate||"").trim();
+      const time = (o.deliveryTime && /^\d{2}:\d{2}$/.test(o.deliveryTime)) ? o.deliveryTime : "12:00";
+      return { customerName:o.customerName||"Catering", date, time, guests:o.guests||0,
+               ts:parseLocalDateTime(date,time), isToday:(date===todayYMD) };
+    })
+    .filter(ev => isFinite(ev.ts) && ev.ts >= startOfToday)
+    .sort((a,b)=>a.ts-b.ts).slice(0,6);
+  const todayCount = events.filter(e=>e.isToday).length;
+  $("cateringCount").textContent = todayCount > 0 ? `${todayCount} i dag` : (events.length ? `${events.length} kommende` : "Ingen");
+  if (!events.length){ $("cateringBody").innerHTML = '<div class="evEmpty">📅 Ingen catering i dag eller på vej</div>'; return; }
+  $("cateringBody").innerHTML = events.map(ev => {
+    const dateStr = ev.date ? ev.date.split("-").reverse().join("/") : "--/--";
+    return `<div class="ev"><div class="evBar ${ev.isToday?"today":""}"></div>
+      <div><div class="evName">${escapeHtml(ev.customerName)}</div>
+      <div class="evMeta">📅 ${dateStr} ⏰ ${escapeHtml(ev.time)} • 👥 ${escapeHtml(ev.guests)}${ev.isToday?" • I DAG":""}</div></div></div>`;
+  }).join("");
+}
+async function loadCatering(){
+  const loc = getLoc();
+  if (!loc){ $("cateringBody").innerHTML = '<div class="evEmpty">📍 Ingen lokation valgt</div>'; $("cateringCount").textContent="—"; return; }
+  try{
+    const data = await jsonp(SCRIPT_URL, { action:"getOrders" });
+    if (!data || !data.ok || !Array.isArray(data.orders)) throw new Error("no data");
+    renderCatering(data.orders); saveCache(CACHE_CAT_KEY, data.orders);
+  }catch(e){
+    const cached = loadCache(CACHE_CAT_KEY)?.data;
+    if (Array.isArray(cached)) renderCatering(cached);
+    else { $("cateringBody").innerHTML = '<div class="evEmpty">❌ Kunne ikke hente catering</div>'; $("cateringCount").textContent="—"; }
+  }
+}
+
+/* ===== RAPPORT-STATUS ===== */
+function fmtTime(t){
+  if (!t) return "";
+  if (/^\d{2}:\d{2}/.test(t)) return String(t).slice(0,5);
+  const d = new Date(t);
+  return isNaN(d) ? "" : d.toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+}
+async function updateReportStatus(){
+  const loc = getLoc(); if (!loc) return;
+  try{
+    const data = await jsonp(SCRIPT_URL, { action:"getReportStatus", loc:"Café Kaiser " + loc });
+    if (!data || !data.ok) return;
+    const sent = data.sent === true || data.submitted === true || String(data.status||"").toLowerCase() === "sent";
+    const t = fmtTime(data.time || data.submittedAt || data.timestamp || "");
+    const pill = $("reportPill"), nb = $("nbReport");
+    pill.classList.remove("rOk","rBad");
+    if (sent){
+      $("reportVal").textContent = "✓ Sendt" + (t ? " " + t : "");
+      pill.classList.add("rOk"); nb.className = "nb show ok"; nb.textContent = "✓";
+    } else {
+      $("reportVal").textContent = "⚠ Ikke sendt";
+      pill.classList.add("rBad"); nb.className = "nb show red"; nb.textContent = "!";
+    }
+  }catch(_){}
+}
+
+/* ===== REFRESH ===== */
+async function refreshAll(){
+  updateClock(); refreshExpiry(); refreshWine();
+  const loc = getLoc();
+  if (!loc){ $("updatedSub").textContent = "Vælg café for at hente data"; return; }
+  await Promise.allSettled([
+    fetchBadge("getSoldoutProducts","soldout"),
+    fetchBadge("getGuestComplaints","complaints"),
+    fetchBadge("getFaultsIssues","faults"),
+    loadCatering(),
+    updateReportStatus()
+  ]);
+  $("updatedSub").textContent = "Opdateret kl. " + new Date().toLocaleTimeString("da-DK",{hour:"2-digit",minute:"2-digit"});
+}
+
+/* ===== VISNINGER (overblik / modul i samme vindue, sidebar bliver stående) ===== */
+let currentToolUrl = "";
+function setActiveNav(el){
+  document.querySelectorAll(".navItem").forEach(x => x.classList.remove("active"));
+  if (el) el.classList.add("active");
+}
+function goHome(){
+  $("viewTool").classList.remove("show");
+  $("viewOverview").classList.add("show");
+  $("toolFrame").src = "about:blank";
+  currentToolUrl = "";
+  setActiveNav(document.querySelector(".navItem[data-home]"));
+  $("topTitle").textContent = "Overblik";
+  closeSide();
+  refreshExpiry(); refreshWine(); window.scrollTo(0,0);
+}
+function openTool(url, title){
+  if (!url) return;
+  currentToolUrl = url;
+  const sep = url.includes("?") ? "&" : "?";
+  $("toolName").textContent = title || "Værktøj";
+  $("topTitle").textContent = title || "Værktøj";
+  $("toolFrame").src = url + sep + "v=" + Date.now() + "&loc=" + encodeURIComponent(getLoc());
+  $("viewOverview").classList.remove("show");
+  $("viewTool").classList.add("show");
+  const nav = [...document.querySelectorAll(".navItem[data-url]")].find(n => n.dataset.url === url);
+  setActiveNav(nav || null);
+  closeSide(); window.scrollTo(0,0);
+}
+document.querySelectorAll(".navItem").forEach(btn => btn.addEventListener("click", () => {
+  if (btn.dataset.home) goHome();
+  else if (btn.dataset.scrollhome){ goHome(); setTimeout(() => $(btn.dataset.scrollhome)?.scrollIntoView({behavior:"smooth", block:"start"}), 60); }
+  else openTool(btn.dataset.url, btn.dataset.title);
+}));
+$("brandBtn").addEventListener("click", goHome);
+$("backBtn").addEventListener("click", goHome);
+$("reportPill").addEventListener("click", () => openTool("./skiftlederrapport1.html","Rapport"));
+document.querySelectorAll(".chip").forEach(chip => chip.addEventListener("click", () => {
+  if (chip.dataset.url) openTool(chip.dataset.url, chip.dataset.title);
+  else if (chip.dataset.scroll) $(chip.dataset.scroll)?.scrollIntoView({behavior:"smooth", block:"center"});
+}));
+$("newTabBtn").addEventListener("click", () => {
+  if (!currentToolUrl) return;
+  window.open(currentToolUrl + (currentToolUrl.includes("?") ? "&" : "?") + "loc=" + encodeURIComponent(getLoc()), "_blank");
+});
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if ($("locOverlay").classList.contains("open") && $("locCancel").style.display !== "none") return closeLocModal();
+  if ($("viewTool").classList.contains("show")) goHome();
+});
+
+/* ===== FULDSKÆRM + VÅGEN ===== */
+$("fsBtn").addEventListener("click", () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+});
+let wakeLock = null;
+async function toggleWakeLock(){
+  try{
+    if (!("wakeLock" in navigator)){ alert("Wake Lock understøttes ikke på denne enhed"); return; }
+    if (wakeLock){ await wakeLock.release(); wakeLock = null; $("wakeBtn").classList.remove("on"); return; }
+    wakeLock = await navigator.wakeLock.request("screen");
+    $("wakeBtn").classList.add("on");
+    wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); };
+  }catch(_){ alert("Kunne ikke holde skærmen vågen"); }
+}
+$("wakeBtn").addEventListener("click", toggleWakeLock);
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState === "visible"){
+    refreshExpiry(); refreshWine();
+    if (wakeLock === null && $("wakeBtn").classList.contains("on") && "wakeLock" in navigator){
+      try{ wakeLock = await navigator.wakeLock.request("screen"); wakeLock.onrelease = () => { wakeLock = null; $("wakeBtn").classList.remove("on"); }; }catch(_){}
+    }
+  }
+});
+window.addEventListener("storage", e => {
+  if (!e.key) return;
+  if (CAKE_KEYS.includes(e.key) || BARPREP_KEYS.includes(e.key)) refreshExpiry();
+  if (WINE_KEYS.includes(e.key)) refreshWine();
+});
+$("refreshBtn").addEventListener("click", refreshAll);
+$("cakeOpen").addEventListener("click", () => openTool("./kage-koeleskab.html","Kagekøleskab"));
+function loadCoffee(){ $("coffeeFrame").src = "./kaffe-timer.html?embed=1&loc=" + encodeURIComponent(getLoc()); }
+
+/* ===== INIT ===== */
+(function init(){
+  const loc = getLoc();
+  updateLocUI(); updateClock(); refreshExpiry(); refreshWine(); refreshAll(); loadCoffee();
+  setInterval(updateClock, 1000);
+  setInterval(() => { refreshExpiry(); refreshWine(); }, 30000);
+  setInterval(refreshAll, 60000);
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === RELOAD_HOUR && now.getMinutes() === 0) location.reload();
+  }, 60000);
+  if (!loc) openLocModal(true);
+})();
+</script>
+</body>
+</html>
