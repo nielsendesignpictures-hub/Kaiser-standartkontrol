@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaiser – Skiftlederrapport</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -30,6 +29,8 @@
 
       --darkBtn:rgba(255,255,255,.05);
     }
+
+    *{ box-sizing:border-box; }
 
     html,body{
       margin:0;
@@ -189,9 +190,9 @@
       color:var(--text);
       outline:none;
       font-size:22px;
+      font-family:inherit;
       padding:18px 18px;
       min-height:64px;
-      box-sizing:border-box;
     }
 
     .textarea{
@@ -257,7 +258,6 @@
       margin-top:6px;
     }
 
-    /* ⭐ store rating cards */
     .ratingBtn{
       min-height:96px;
       border-radius:20px;
@@ -316,7 +316,6 @@
       letter-spacing:-0.01em;
     }
 
-    /* High-tech status */
     .statusLine{
       margin-top:12px;
       padding:12px 12px;
@@ -358,6 +357,7 @@
       border-radius:999px;
       cursor:pointer;
       min-height:44px;
+      font-family:inherit;
     }
     .statusToggle:active{ transform:translateY(1px); }
 
@@ -402,6 +402,7 @@
       font-weight:900;
       font-size:14px;
       cursor:pointer;
+      font-family:inherit;
     }
     .statusChip:active{ transform:translateY(1px); }
 
@@ -437,13 +438,13 @@
       z-index:30;
     }
 
-.actionsInner{
-  max-width:1080px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:1fr 1fr 
-  gap:14px;
-}
+    .actionsInner{
+      max-width:1080px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
 
     .btn{
       width:100%;
@@ -456,8 +457,10 @@
       padding:18px 20px;
       transition:filter .16s ease, transform .06s ease;
       cursor:pointer;
+      font-family:inherit;
     }
 
+    .btn:disabled{ opacity:.65; cursor:default; }
     .btn:active{ transform:translateY(1px); }
     .btn:hover{ filter:brightness(1.04); }
 
@@ -530,21 +533,14 @@
     </header>
 
     <div style="margin-top:10px; text-align:center; color:rgba(184,210,234,.48); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Skiftlederrapport V3.2
+      Drift version · Skiftlederrapport V3.3
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbxlWXr5lHnxwCsD0piPO-YJ7FLqrHOxkRhC9HlXmjf89svFt9BKTeA8wJvormRPwOYBjQ/exec">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" id="nextField" value="">
+      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbzTS-3fHw1nTVPAvzEP5ZDGD4Djn3TDBFEiP2t1VVACJM6s7uB-Ukm-eh4IPP01FyFALw/exec">
         <input type="hidden" name="_subject" id="subjectField" value="Skiftlederrapport – Afdeling – Dato">
         <input type="hidden" name="reportType" value="shiftleader">
-
-        <!-- Ledelse CC -->
-        <input type="hidden" name="_cc" value="Christian@cafekaiser.dk,Stefan@cafekaiser.dk,Morten@cafekaiser.dk">
-
-        <input type="text" name="_honey" style="display:none">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
         <div class="panel">
           <div class="panelHead">
@@ -559,7 +555,6 @@
               Udfyld frokost → gem → udfyld aften → send. (Efter “Gem frokost” kan du ikke gå tilbage.)
             </div>
 
-            <!-- High-tech status -->
             <div id="statusLine" class="statusLine warn">
               <div class="statusTop">
                 <div id="statusText">Status: —</div>
@@ -658,16 +653,12 @@
                 </div>
               </div>
 
-
-
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="maintDayFaults">Vedligeholdelse (Fejl & Mangler) – Fejl & Evt. mangler</label>
                   <textarea class="textarea" id="maintDayFaults" name="Frokost – Vedligeholdelse – Fejl & evt. mangler"></textarea>
                 </div>
               </div>
-
-
 
             </div>
           </div>
@@ -719,16 +710,12 @@
                 </div>
               </div>
 
-
-
               <div class="sectionCard">
                 <div class="field">
                   <label class="label" for="maintEveFaults">Vedligeholdelse (Fejl & Mangler) – Fejl & Mangler</label>
                   <textarea class="textarea" id="maintEveFaults" name="Aften – Vedligeholdelse – Fejl & Mangler"></textarea>
                 </div>
               </div>
-
-
 
             </div>
           </div>
@@ -742,7 +729,7 @@
         <div class="panelBody successScreen">
           <div class="successIcon">✓</div>
           <div class="successTitle">Tak for rapporten</div>
-          <div class="successText">Rapporten er sendt. Skærmen nulstilles automatisk om få sekunder</div>
+          <div class="successText">Rapporten er sendt.</div>
           <div style="max-width:420px;margin:22px auto 0;">
             <button id="newReportBtn" class="btn btn-gold" type="button">Start ny rapport</button>
           </div>
@@ -753,19 +740,21 @@
   </div>
 
   <div class="actionsSticky" id="actionsSticky">
-<div class="actionsInner">
-  <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
-
- 
-
-  <button id="primaryAction" class="btn btn-blue" type="button">
-    Gem frokost og fortsæt
-  </button>
-</div>
+    <div class="actionsInner">
+      <button id="secondaryAction" class="btn btn-dark" type="button">Nulstil</button>
+      <button id="primaryAction" class="btn btn-blue" type="button">Gem frokost og fortsæt</button>
+    </div>
   </div>
 
   <script>
   const STORAGE_KEY = "kaiser_shift_report_v3_2";
+  const BASE_URL = "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html";
+
+  const DRAFT_IDS = [
+    "department",
+    "nameDay","rateDay","guestDay","teamDayDesc","maintDayFaults",
+    "nameEve","rateEve","guestEve","teamEveDesc","maintEveFaults"
+  ];
 
   function $(id){ return document.getElementById(id); }
 
@@ -778,6 +767,8 @@
     const el = $(id);
     if(el) el.value = value || "";
   }
+
+  function store(fn){ try { return fn(); } catch(e){ return null; } }
 
   function nowLocalString(){
     return new Date().toLocaleString("da-DK");
@@ -869,74 +860,36 @@
   }
 
   function saveDraft(showSavedPill){
-    const data = {
-      department: val("department"),
-      dateField: val("dateField"),
+    const data = { dateField: val("dateField"), step: currentStep(), savedDate: new Date().toDateString() };
+    DRAFT_IDS.forEach(id => { data[id] = val(id); });
 
-      nameDay: val("nameDay"),
-      rateDay: val("rateDay"),
-      guestDay: val("guestDay"),
-      teamDayDesc: val("teamDayDesc"),
-      teamDayFlow: val("teamDayFlow"),
-      maintDayFaults: val("maintDayFaults"),
-      maintDayMissing: val("maintDayMissing"),
-
-      nameEve: val("nameEve"),
-      rateEve: val("rateEve"),
-      guestEve: val("guestEve"),
-      teamEveDesc: val("teamEveDesc"),
-      teamEveFlow: val("teamEveFlow"),
-      maintEveFaults: val("maintEveFaults"),
-      maintEveMissing: val("maintEveMissing"),
-
-      step: currentStep()
-    };
-
-    data.savedDate = new Date().toDateString();
-
-localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    store(() => localStorage.setItem(STORAGE_KEY, JSON.stringify(data)));
     if(showSavedPill) $("draftPill").classList.remove("hidden");
   }
 
   function loadDraft(){
-    const raw = localStorage.getItem(STORAGE_KEY);
+    $("dateField").value = nowLocalString();
+    updateSubject();
+    setRatingPreview("rateDay");
+    setRatingPreview("rateEve");
 
+    const raw = store(() => localStorage.getItem(STORAGE_KEY));
     if(!raw){
-      $("dateField").value = nowLocalString();
-      updateSubject();
-      setRatingPreview("rateDay");
-      setRatingPreview("rateEve");
       updateStatusLine();
       return;
     }
 
     try{
       const data = JSON.parse(raw);
-      if (data.savedDate !== new Date().toDateString()) {
 
-  localStorage.removeItem(STORAGE_KEY);
+      // kladder fra en tidligere dag kasseres
+      if(data.savedDate !== new Date().toDateString()){
+        store(() => localStorage.removeItem(STORAGE_KEY));
+        updateStatusLine();
+        return;
+      }
 
-  return;
-}
-
-      setVal("department", data.department);
-      setVal("dateField", data.dateField || nowLocalString());
-
-      setVal("nameDay", data.nameDay);
-      setVal("rateDay", data.rateDay);
-      setVal("guestDay", data.guestDay);
-      setVal("teamDayDesc", data.teamDayDesc);
-      setVal("teamDayFlow", data.teamDayFlow);
-      setVal("maintDayFaults", data.maintDayFaults);
-      setVal("maintDayMissing", data.maintDayMissing);
-
-      setVal("nameEve", data.nameEve);
-      setVal("rateEve", data.rateEve);
-      setVal("guestEve", data.guestEve);
-      setVal("teamEveDesc", data.teamEveDesc);
-      setVal("teamEveFlow", data.teamEveFlow);
-      setVal("maintEveFaults", data.maintEveFaults);
-      setVal("maintEveMissing", data.maintEveMissing);
+      DRAFT_IDS.forEach(id => setVal(id, data[id]));
 
       updateRatingUI("rateDay");
       updateRatingUI("rateEve");
@@ -947,11 +900,7 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
       updateStatusLine();
     } catch(e){
-      $("dateField").value = nowLocalString();
-      updateSubject();
       setStep(1);
-      setRatingPreview("rateDay");
-      setRatingPreview("rateEve");
       updateStatusLine();
     }
   }
@@ -985,7 +934,7 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
   function scrollToField(anchorId){
-    let target = $(anchorId) || $(anchorId?.replace?.("#",""));
+    const target = $(anchorId);
     if(!target) return;
 
     target.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1027,7 +976,6 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         ? "Status: Klar til at gemme frokost og fortsætte."
         : "Status: Klar til at sende rapport.";
 
-      // Auto-skjul chips når alt er OK
       $("statusToggle").setAttribute("aria-expanded", "false");
       $("statusToggle").textContent = "Detaljer";
       statusMissing.classList.add("hidden");
@@ -1037,13 +985,12 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     line.classList.remove("good");
     line.classList.add("warn");
 
-    const first = missing[0]?.label || "felter";
+    const first = missing[0] ? missing[0].label : "felter";
     $("statusText").textContent =
       missing.length === 1
         ? `Status: Mangler – ${first}`
         : `Status: Mangler – ${missing.length} felter (fx ${first})`;
 
-    // Auto-vis chips når der mangler noget
     statusMissing.classList.remove("hidden");
     $("statusToggle").setAttribute("aria-expanded", "true");
     $("statusToggle").textContent = "Skjul";
@@ -1056,19 +1003,13 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
   function resetAll(){
-    [
-      "department","dateField",
-      "nameDay","rateDay","guestDay","teamDayDesc","teamDayFlow","maintDayFaults","maintDayMissing",
-      "nameEve","rateEve","guestEve","teamEveDesc","teamEveFlow","maintEveFaults","maintEveMissing"
-    ].forEach(id => setVal(id, ""));
+    DRAFT_IDS.forEach(id => setVal(id, ""));
 
     $("dateField").value = nowLocalString();
-    localStorage.removeItem(STORAGE_KEY);
+    store(() => localStorage.removeItem(STORAGE_KEY));
     $("draftPill").classList.add("hidden");
     updateSubject();
 
-    setVal("rateDay", "");
-    setVal("rateEve", "");
     updateRatingUI("rateDay");
     updateRatingUI("rateEve");
 
@@ -1078,74 +1019,73 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
   function bindAutosave(){
-    [
-      "department",
-      "nameDay","guestDay","teamDayDesc","teamDayFlow","maintDayFaults","maintDayMissing",
-      "nameEve","guestEve","teamEveDesc","teamEveFlow","maintEveFaults","maintEveMissing"
-    ].forEach(id => {
+    DRAFT_IDS.forEach(id => {
       const el = $(id);
-      if(!el) return;
+      if(!el || el.type === "hidden") return;
 
-      el.addEventListener("input", () => {
+      const handler = () => {
         saveDraft(false);
         if(id === "department") updateSubject();
         updateStatusLine();
-      });
-
-      el.addEventListener("change", () => {
-        saveDraft(false);
-        if(id === "department") updateSubject();
-        updateStatusLine();
-      });
-    });
-
-    $("department").addEventListener("change", () => {
-      updateSubject();
-      updateStatusLine();
+      };
+      el.addEventListener("input", handler);
+      el.addEventListener("change", handler);
     });
   }
 
-function doSend(){
+  let sending = false;
 
-  // stop dobbelt-send
-  if (window.reportSending) return;
+  async function doSend(){
 
-  window.reportSending = true;
+    // stop dobbelt-send
+    if (sending) return;
+    sending = true;
 
-  // check om rapport er fra tidligere dag
-  const today = new Date().toLocaleDateString("da-DK");
+    // check om rapport er fra tidligere dag
+    const today = new Date().toLocaleDateString("da-DK");
 
-  if (!val("dateField").includes(today)) {
+    if (!val("dateField").includes(today)) {
+      const confirmOld = confirm(
+        "Denne rapport ser ud til at være fra en tidligere dag. Send alligevel?"
+      );
+      if (!confirmOld) {
+        sending = false;
+        return;
+      }
+    }
 
-    const confirmOld = confirm(
-      "Denne rapport ser ud til at være fra en tidligere dag. Send alligevel?"
-    );
+    updateSubject();
 
-    if (!confirmOld) {
+    $("primaryAction").disabled = true;
+    $("primaryAction").textContent = "Sender...";
 
-      window.reportSending = false;
+    try {
+      const form = $("reportForm");
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form)
+      });
 
-      return;
+      const result = await response.text();
+
+      if (result.includes("SUCCESS")) {
+        store(() => localStorage.removeItem(STORAGE_KEY));
+        window.location.href = BASE_URL + "?sent=1";
+        return;
+      }
+
+      throw new Error("Submit failed: " + result.slice(0, 200));
+
+    } catch (err) {
+      console.error(err);
+
+      sending = false;
+      $("primaryAction").disabled = false;
+      $("primaryAction").textContent = "Send rapport";
+
+      showError("Rapporten kunne ikke sendes. Vent et minut og tryk på Send rapport én gang til. Hvis det stadig fejler, så kontakt ledelsen. Din rapport er gemt på denne enhed.");
     }
   }
-
-  updateSubject();
-
-  $("primaryAction").disabled = true;
-  $("primaryAction").textContent = "Sender...";
-
-  $("reportForm").submit();
-
-  setTimeout(() => {
-
-    localStorage.removeItem(STORAGE_KEY);
-
-    window.location.href =
-      "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
-
-  }, 1200);
-}
-
 
   $("primaryAction").addEventListener("click", function(){
     clearError();
@@ -1181,7 +1121,7 @@ function doSend(){
     doSend();
   });
 
-  // Secondary = nulstil (ingen tilbage)
+  // Nulstil (ingen tilbage)
   $("secondaryAction").addEventListener("click", function(){
     clearError();
     if(confirm("Vil du nulstille rapporten? (Du mister kladden)")){
@@ -1190,10 +1130,8 @@ function doSend(){
   });
 
   $("newReportBtn").addEventListener("click", function(){
-    resetAll();
-    $("thanksWrap").classList.add("hidden");
-    $("formWrap").classList.remove("hidden");
-    $("actionsSticky").classList.remove("hidden");
+    store(() => localStorage.removeItem(STORAGE_KEY));
+    window.location.href = BASE_URL;
   });
 
   // Status toggle
@@ -1213,24 +1151,24 @@ function doSend(){
   });
 
   const params = new URLSearchParams(window.location.search);
-  if (params.get("sent") === "1") {
+  const isSentPage = params.get("sent") === "1";
+
+  if (isSentPage) {
     $("formWrap").classList.add("hidden");
     $("thanksWrap").classList.remove("hidden");
     $("actionsSticky").classList.add("hidden");
-    localStorage.removeItem(STORAGE_KEY);
+    store(() => localStorage.removeItem(STORAGE_KEY));
   }
 
   // Dato/tid ticker
   function startDateTicker(){
     $("dateField").value = nowLocalString();
     setInterval(() => {
-      if (params.get("sent") === "1") return;
+      if (isSentPage) return;
       $("dateField").value = nowLocalString();
       saveDraft(false);
     }, 60 * 1000);
   }
-
-  $("nextField").value = "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/skiftlederrapport1.html?sent=1";
 
   bindRatings();
   bindAutosave();
@@ -1238,7 +1176,7 @@ function doSend(){
   loadDraft();
   updateStatusLine();
 
-  // Best-effort auto-send 23:59
+  // Best-effort auto-send 23:59 (kun hvis siden stadig er åben og aftenrapporten er udfyldt)
   function msUntil2359(){
     const now = new Date();
     const t = new Date(now);
@@ -1248,7 +1186,7 @@ function doSend(){
   }
 
   function scheduleAutoSend(){
-    if (params.get("sent") === "1") return;
+    if (isSentPage) return;
 
     setTimeout(() => {
       if (currentStep() === 2 && !validateStep1() && !validateStep2()) {
@@ -1260,63 +1198,7 @@ function doSend(){
   }
 
   scheduleAutoSend();
-    $("backupAction").addEventListener("click", async function(){
-
-  clearError();
-
-  const err1 = validateStep1();
-
-  if(err1){
-    showError(err1);
-    return;
-  }
-
-  if(currentStep() === 2){
-
-    const err2 = validateStep2();
-
-    if(err2){
-      showError(err2);
-      return;
-    }
-  }
-
-  updateSubject();
-
-  const form = $("reportForm");
-
-  const formData = new FormData(form);
-
-  try {
-
-    $("backupAction").disabled = true;
-    $("backupAction").textContent = "Sender backup...";
-
-    await fetch("https://script.google.com/macros/s/AKfycbxjGiF3SnfR86esopfizq-gWUM8rP98qkNvTHeQfpBjhM-YcMbjJ5NSWkOfkshlxX2x3Q/exec", {
-      method: "POST",
-      body: formData
-    });
-
-    localStorage.removeItem(STORAGE_KEY);
-
-    alert("Rapport sendt via backup-system");
-
-  } catch(err){
-
-    console.error(err);
-
-    alert("Backup-system fejlede");
-
-  } finally {
-
-    $("backupAction").disabled = false;
-    $("backupAction").textContent = "Backup send";
-  }
-
-});
-
-    
-</script>
+  </script>
 
 </body>
 </html>
