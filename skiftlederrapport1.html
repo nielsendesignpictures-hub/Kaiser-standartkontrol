@@ -1033,6 +1033,20 @@
     });
   }
 
+
+// Sender rapporten. Kan svaret ikke læses (netværk/CORS), sendes én gang mere uden at læse svaret –
+// scriptet har en dublet-spærre, så der aldrig går to mails afsted.
+async function postReport(form){
+  try {
+    const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
+    return await response.text();
+  } catch (e) {
+    console.warn("Svar kunne ikke læses, prøver igen uden svar:", e);
+    await fetch(form.action, { method: "POST", body: new FormData(form), mode: "no-cors" });
+    return "SUCCESS";
+  }
+}
+
   let sending = false;
 
   async function doSend(){
@@ -1060,13 +1074,7 @@
     $("primaryAction").textContent = "Sender...";
 
     try {
-      const form = $("reportForm");
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form)
-      });
-
-      const result = await response.text();
+      const result = await postReport($("reportForm"));
 
       if (result.includes("SUCCESS")) {
         store(() => localStorage.removeItem(STORAGE_KEY));
@@ -1083,7 +1091,7 @@
       $("primaryAction").disabled = false;
       $("primaryAction").textContent = "Send rapport";
 
-      showError("Rapporten kunne ikke sendes. Vent et minut og tryk på Send rapport én gang til. Hvis det stadig fejler, så kontakt ledelsen. Din rapport er gemt på denne enhed.");
+      showError("Rapporten kunne ikke sendes. Vent et minut og tryk på Send rapport én gang til. Hvis det stadig fejler, så kontakt ledelsen. Din rapport er gemt på denne enhed. (Årsag: " + (err && err.message ? err.message : err) + ")");
     }
   }
 
