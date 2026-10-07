@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaiser – Kitchen Shift Report</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
@@ -21,6 +20,9 @@
       --blueGlow:rgba(102,183,255,.20);
       --gold:#d7b24c;
     }
+
+    *{ box-sizing:border-box; }
+    .hidden{ display:none !important; }
 
     body{
       margin:0; padding:0;
@@ -61,8 +63,27 @@
     .panelHead{ padding:20px 24px 12px; }
     .panelBody{ padding:20px 24px 28px; }
 
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:760px){ .grid2{ grid-template-columns:1fr; } .title{ font-size:36px; } }
+
+    .field{ display:flex; flex-direction:column; }
+
+    .sectionCard{
+      border:1px solid rgba(145,205,255,.09);
+      background:rgba(255,255,255,.03);
+      border-radius:20px;
+      padding:18px;
+      margin-top:14px;
+    }
+    .sectionCard:first-child{ margin-top:0; }
+
+    .pill{
+      display:inline-flex; padding:8px 14px; border-radius:999px;
+      font-size:13px; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+    }
+    .pill-blue{ border:1px solid rgba(102,183,255,.20); background:rgba(102,183,255,.10); color:#c5e7ff; }
+
     .blockTitle{ font-size:24px; font-weight:900; letter-spacing:-0.02em; }
-    .hint{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#8899aa; font-weight:900; }
 
     .label{
       font-size:12px;
@@ -82,7 +103,14 @@
       color:var(--text);
       padding:14px 16px;
       font-size:18px;
+      font-family:inherit;
     }
+    .input:focus, .select:focus, .textarea:focus{
+      outline:none;
+      border-color:rgba(102,183,255,.55);
+      box-shadow:0 0 0 5px var(--blueGlow);
+    }
+    .select option{ color:#0b1016; }
 
     .textarea{ min-height:110px; resize:vertical; }
 
@@ -98,6 +126,8 @@
       border-radius:16px;
       border:1px solid rgba(145,205,255,.2);
       background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:20px;
       font-weight:900;
       cursor:pointer;
       text-align:center;
@@ -113,7 +143,12 @@
       border-radius:16px;
       background:rgba(255,255,255,.04);
       border:1px solid rgba(145,205,255,.1);
+      font-weight:800;
     }
+    .statusLine.good{ border-color:rgba(72,201,135,.18); background:rgba(72,201,135,.08); color:#bdf5d6; }
+    .statusLine.warn{ border-color:rgba(255,199,92,.20); background:rgba(255,199,92,.08); color:#ffe2b3; }
+
+    .statusMeta{ margin-top:8px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:rgba(184,210,234,.55); font-weight:900; }
 
     .statusProgress{
       height:10px;
@@ -142,9 +177,17 @@
       border-radius:999px;
       background:rgba(255,199,92,.12);
       border:1px solid rgba(255,199,92,.3);
+      color:#ffe2b3;
       font-size:13px;
       font-weight:800;
       cursor:pointer;
+    }
+
+    .fieldPulse{ animation:pulseOutline .9s ease; }
+    @keyframes pulseOutline{
+      0%{ box-shadow:0 0 0 0 rgba(102,183,255,0); }
+      30%{ box-shadow:0 0 0 6px rgba(102,183,255,.25); }
+      100%{ box-shadow:0 0 0 0 rgba(102,183,255,0); }
     }
 
     .actionsSticky{
@@ -170,12 +213,16 @@
       font-size:19px;
       font-weight:900;
       cursor:pointer;
+      font-family:inherit;
     }
+    .btn:disabled{ opacity:.6; cursor:default; }
 
     .btn-dark{ background:rgba(255,255,255,.08); color:white; }
     .btn-gold{ background:linear-gradient(135deg, var(--gold), #b9921f); color:#071019; }
 
     .successScreen{ text-align:center; padding:40px 20px; }
+    .successTitle{ font-size:30px; font-weight:900; }
+    .successText{ margin-top:10px; color:var(--muted); font-size:17px; font-weight:600; }
     .successIcon{
       width:80px; height:80px; margin:0 auto 16px;
       background:rgba(72,201,135,.15);
@@ -200,17 +247,13 @@
     </header>
 
     <div style="margin-top:12px; text-align:center; color:rgba(184,210,234,.5); font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;">
-      Drift version · Kitchen Report v1.0
+      Drift version · Kitchen Report v1.1
     </div>
 
     <section id="formWrap">
-      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbxlWXr5lHnxwCsD0piPO-YJ7FLqrHOxkRhC9HlXmjf89svFt9BKTeA8wJvormRPwOYBjQ/exec">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" id="nextField">
+      <form id="reportForm" method="POST" action="https://script.google.com/macros/s/AKfycbzTS-3fHw1nTVPAvzEP5ZDGD4Djn3TDBFEiP2t1VVACJM6s7uB-Ukm-eh4IPP01FyFALw/exec">
         <input type="hidden" name="_subject" id="subjectField">
-        <input type="hidden" name="_cc" value="Stefan@cafekaiser.dk">
-        <input type="text" name="_honey" style="display:none">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <input type="hidden" name="reportType" value="kitchen">
 
         <!-- Status -->
@@ -233,7 +276,7 @@
           <div class="panelHead"><div class="blockTitle">Basic Information</div></div>
           <div class="panelBody grid2">
             <div class="field" id="cardDepartment">
-              <label class="label">Location</label>
+              <label class="label" for="department">Location</label>
               <select class="select" id="department" name="Location" required>
                 <option value="">Select location...</option>
                 <option>Café Kaiser Helsingør</option>
@@ -241,12 +284,13 @@
                 <option>Café Kaiser Farum</option>
                 <option>Café Kaiser Hørsholm</option>
                 <option>Café Kaiser Vanløse</option>
-                <option>Café Kaiser Sydhavnen </option>
-                <option>Café Kaiser Waves </option>
+                <option>Café Kaiser Enghavebrygge</option>
+                <option>Café Kaiser Sydhavnen</option>
+                <option>Café Kaiser Waves</option>
               </select>
             </div>
             <div class="field">
-              <label class="label">Date & Time</label>
+              <label class="label" for="dateField">Date & Time</label>
               <input class="input" id="dateField" name="Date & Time" readonly>
             </div>
           </div>
@@ -257,7 +301,7 @@
           <div class="panelHead"><div class="blockTitle">Chef & Performance</div></div>
           <div class="panelBody">
             <div class="sectionCard" id="cardChefName">
-              <label class="label">Chef Name</label>
+              <label class="label" for="chefName">Chef Name</label>
               <input class="input" id="chefName" name="Chef Name" required>
             </div>
 
@@ -270,12 +314,12 @@
                 <button type="button" class="ratingBtn" data-target="dayRating" data-value="4/5">4</button>
                 <button type="button" class="ratingBtn" data-target="dayRating" data-value="5/5">5</button>
               </div>
-              <input type="hidden" id="dayRating" name="Day Rating" required>
+              <input type="hidden" id="dayRating" name="Day Rating">
             </div>
 
             <div class="sectionCard" id="cardRevenue">
-              <label class="label">Daily Revenue (DKK)</label>
-              <input class="input" id="revenue" name="Daily Revenue" required>
+              <label class="label" for="revenue">Daily Revenue (DKK)</label>
+              <input class="input" id="revenue" name="Daily Revenue" inputmode="decimal" required>
             </div>
           </div>
         </div>
@@ -285,24 +329,24 @@
           <div class="panelHead"><div class="blockTitle">Operations</div></div>
           <div class="panelBody">
             <div class="sectionCard" id="cardMise">
-              <label class="label">Mise en Place Done?</label>
+              <label class="label" for="miseStatus">Mise en Place Done?</label>
               <select class="select" id="miseStatus" name="Mise en Place Done" required>
                 <option value="">Select...</option>
                 <option>Yes</option>
                 <option>No</option>
               </select>
-              <label class="label" style="margin-top:16px;">Comment / Missing</label>
+              <label class="label" for="miseComment" style="margin-top:16px;">Comment / Missing</label>
               <textarea class="textarea" id="miseComment" name="Mise Comment"></textarea>
             </div>
 
             <div class="sectionCard" id="cardCleaning">
-              <label class="label">Cleaning Done?</label>
+              <label class="label" for="cleaningStatus">Cleaning Done?</label>
               <select class="select" id="cleaningStatus" name="Cleaning Done" required>
                 <option value="">Select...</option>
                 <option>Yes</option>
                 <option>No</option>
               </select>
-              <label class="label" style="margin-top:16px;">Missing</label>
+              <label class="label" for="cleaningMissing" style="margin-top:16px;">Missing</label>
               <textarea class="textarea" id="cleaningMissing" name="Cleaning Missing"></textarea>
             </div>
           </div>
@@ -321,7 +365,7 @@
                 <button type="button" class="ratingBtn" data-target="teamRating" data-value="4/5">4</button>
                 <button type="button" class="ratingBtn" data-target="teamRating" data-value="5/5">5</button>
               </div>
-              <input type="hidden" id="teamRating" name="Teamwork Rating" required>
+              <input type="hidden" id="teamRating" name="Teamwork Rating">
             </div>
           </div>
         </div>
@@ -331,11 +375,11 @@
           <div class="panelHead"><div class="blockTitle">Daily Notes</div></div>
           <div class="panelBody">
             <div class="sectionCard">
-              <label class="label">Daily Feedback</label>
+              <label class="label" for="dailyFeedback">Daily Feedback</label>
               <textarea class="textarea" id="dailyFeedback" name="Daily Feedback"></textarea>
             </div>
             <div class="sectionCard">
-              <label class="label">Errors & Issues</label>
+              <label class="label" for="errorsIssues">Errors & Issues</label>
               <textarea class="textarea" id="errorsIssues" name="Errors & Issues"></textarea>
             </div>
           </div>
@@ -361,21 +405,25 @@
   <!-- STICKY BUTTONS -->
   <div class="actionsSticky" id="actionsSticky">
     <div class="actionsInner">
-      <button id="secondaryAction" class="btn btn-dark">Reset</button>
-      <button id="primaryAction" class="btn btn-gold">Submit Kitchen Report</button>
+      <button id="secondaryAction" class="btn btn-dark" type="button">Reset</button>
+      <button id="primaryAction" class="btn btn-gold" type="button">Submit Kitchen Report</button>
     </div>
   </div>
 
 <script>
-/* ==================== FULL ENGINE ==================== */
+/* ==================== ENGINE ==================== */
 const STORAGE_KEY = "kaiser_kitchen_v1";
+const BASE_URL = "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html";
+const SUBMIT_LABEL = "Submit Kitchen Report";
 
 function $(id){ return document.getElementById(id); }
 function val(id){ const el = $(id); return el ? (el.value || "").trim() : ""; }
 function setVal(id, v){ const el = $(id); if(el) el.value = v || ""; }
 
+function store(fn){ try { return fn(); } catch(e){ return null; } }
+
 function nowLocalString(){ return new Date().toLocaleString("da-DK"); }
-function localISODate(){ 
+function localISODate(){
   const d = new Date();
   const local = new Date(d.getTime() - d.getTimezoneOffset()*60000);
   return local.toISOString().slice(0,10);
@@ -420,12 +468,12 @@ function updateStatusLine(){
 
   $("statusLine").classList.add("warn");
   $("statusLine").classList.remove("good");
-  $("statusText").textContent = missing.length === 1 
-    ? `Missing – ${missing[0].label}` 
+  $("statusText").textContent = missing.length === 1
+    ? `Missing – ${missing[0].label}`
     : `Missing – ${missing.length} fields`;
 
   box.classList.remove("hidden");
-  box.innerHTML = missing.map(f => 
+  box.innerHTML = missing.map(f =>
     `<button type="button" class="statusChip" data-anchor="${f.anchor}">${f.label}</button>`
   ).join("");
 }
@@ -449,7 +497,7 @@ function bindRatings(){
       const target = btn.dataset.target;
       setVal(target, btn.dataset.value);
 
-      document.querySelectorAll(`[data-target="${target}"]`).forEach(b => 
+      document.querySelectorAll(`[data-target="${target}"]`).forEach(b =>
         b.classList.toggle("selected", b.dataset.value === btn.dataset.value)
       );
 
@@ -462,38 +510,48 @@ function bindRatings(){
 function saveDraft(){
   const data = {};
   document.querySelectorAll("input,select,textarea").forEach(el => {
-    if(el.id) data[el.id] = el.value;
+    if(el.id && el.id !== "dateField" && el.id !== "subjectField") data[el.id] = el.value;
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  data.savedDate = new Date().toDateString();
+  store(() => localStorage.setItem(STORAGE_KEY, JSON.stringify(data)));
 }
 
 function loadDraft(){
-  const raw = localStorage.getItem(STORAGE_KEY);
   $("dateField").value = nowLocalString();
   updateSubject();
 
+  const raw = store(() => localStorage.getItem(STORAGE_KEY));
   if(!raw) return;
   try {
     const data = JSON.parse(raw);
-    Object.keys(data).forEach(k => { if($(k)) $(k).value = data[k]; });
+    if(data.savedDate !== new Date().toDateString()){
+      store(() => localStorage.removeItem(STORAGE_KEY));
+      return;
+    }
+    Object.keys(data).forEach(k => { if(k !== "savedDate" && $(k)) $(k).value = data[k]; });
     document.querySelectorAll(".ratingBtn").forEach(btn => {
       if(val(btn.dataset.target) === btn.dataset.value) btn.classList.add("selected");
     });
+    updateSubject();
   } catch(e){}
 }
 
 function bindAutosave(){
   document.querySelectorAll("input,select,textarea").forEach(el => {
-    el.addEventListener("input", () => { saveDraft(); updateStatusLine(); if(el.id==="department") updateSubject(); });
+    const handler = () => { saveDraft(); updateStatusLine(); if(el.id==="department") updateSubject(); };
+    el.addEventListener("input", handler);
+    el.addEventListener("change", handler);
   });
 }
 
 function resetAll(){
   document.querySelectorAll("input,select,textarea").forEach(el => {
-    if(el.type !== "hidden") el.value = "";
+    if(el.type !== "hidden" && el.id !== "dateField" && el.name !== "_honey") el.value = "";
   });
+  setVal("dayRating", "");
+  setVal("teamRating", "");
   document.querySelectorAll(".ratingBtn").forEach(b => b.classList.remove("selected"));
-  localStorage.removeItem(STORAGE_KEY);
+  store(() => localStorage.removeItem(STORAGE_KEY));
   $("dateField").value = nowLocalString();
   updateSubject();
   updateStatusLine();
@@ -503,7 +561,11 @@ $("secondaryAction").addEventListener("click", () => {
   if(confirm("Reset entire report?")) resetAll();
 });
 
+let sending = false;
+
 $("primaryAction").addEventListener("click", async () => {
+
+  if(sending) return;               // stop double sending
 
   const missing = requiredFields().filter(f => !val(f.id));
 
@@ -513,7 +575,9 @@ $("primaryAction").addEventListener("click", async () => {
     return;
   }
 
+  sending = true;
   updateSubject();
+  $("dateField").value = nowLocalString();
 
   $("primaryAction").disabled = true;
   $("primaryAction").textContent = "Sending...";
@@ -521,7 +585,6 @@ $("primaryAction").addEventListener("click", async () => {
   try {
 
     const form = $("reportForm");
-
     const formData = new FormData(form);
 
     const response = await fetch(form.action, {
@@ -532,33 +595,29 @@ $("primaryAction").addEventListener("click", async () => {
     const result = await response.text();
 
     if(result.includes("SUCCESS")){
-
-      localStorage.removeItem(STORAGE_KEY);
-
-      window.location.href =
-        "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html?sent=1";
-
+      store(() => localStorage.removeItem(STORAGE_KEY));
+      window.location.href = BASE_URL + "?sent=1";
       return;
     }
 
-    throw new Error("Submit failed");
+    throw new Error("Submit failed: " + result.slice(0, 200));
 
   } catch(err){
 
     console.error(err);
 
-    alert("Report could not be sent.");
+    alert("Report could not be sent. Please wait a minute and press the button once more. If it still fails, contact management.");
 
+    sending = false;
     $("primaryAction").disabled = false;
-    $("primaryAction").textContent = "Send Report";
+    $("primaryAction").textContent = SUBMIT_LABEL;
   }
 
 });
 
 $("newReportBtn").addEventListener("click", () => {
   resetAll();
-window.location.href =
-  "https://nielsendesignpictures-hub.github.io/Kaiser-standartkontrol/kitchen-shift-report.html?sent=1";
+  window.location.href = BASE_URL;
 });
 
 const params = new URLSearchParams(window.location.search);
@@ -566,15 +625,13 @@ if(params.get("sent") === "1"){
   $("formWrap").classList.add("hidden");
   $("thanksWrap").classList.remove("hidden");
   $("actionsSticky").classList.add("hidden");
+  store(() => localStorage.removeItem(STORAGE_KEY));
 }
-
-
 
 bindRatings();
 bindAutosave();
 loadDraft();
 updateStatusLine();
-$("dateField").value = nowLocalString();
 </script>
 </body>
 </html>
