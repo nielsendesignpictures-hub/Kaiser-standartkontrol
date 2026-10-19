@@ -570,11 +570,10 @@
     function nowDK(){ return new Date().toLocaleString("da-DK"); }
 
     function dayKey(){
+      // Lokal dato; før ROLLOVER_HOUR (kl. 04) regnes stadig som forrige driftsdag
       const d = new Date();
-      const off = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - off * 60000);
-      if (local.getHours() < ROLLOVER_HOUR) local.setDate(local.getDate() - 1);
-      return local.toISOString().slice(0,10);
+      if (d.getHours() < ROLLOVER_HOUR) d.setDate(d.getDate() - 1);
+      return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
     }
 
     function isoToDateLocal(iso){ return new Date(iso + "T12:00:00"); }
@@ -768,6 +767,7 @@ const L_VAN = "Café Kaiser Vanløse";
 const L_SYD = "Café Kaiser Sydhavnen";
 const L_WAV = "Café Kaiser Waves";
 
+
 const NO_TOILETS = [
   L_HIL,
   L_VAN
@@ -836,17 +836,14 @@ function addStandardDrift(loc){
    STANDARD DRIFT TIL ALLE CAFÉER
 ========================================================= */
 
-/* Sydhavnen har sin egen komplette driftliste (se nedenfor).
-   Waves har ENDNU IKKE egne drift-/rengøringsopgaver — den kører
-   midlertidigt på standardlisten, indtil Café Kaiser sender den
-   rigtige åbne-/luk-/rengøringsliste. */
+/* Sydhavnen er IKKE med her — den har sin egen komplette driftliste nedenfor.
+   De øvrige caféer får standardlisten + deres egne specialopgaver. */
 [
   L_HEL,
   L_HOR,
   L_HIL,
   L_FAR,
-  L_VAN,
-  L_WAV
+  L_VAN
 ].forEach(addStandardDrift);
 
 /* =========================================================
@@ -1193,7 +1190,7 @@ addDrift(L_VAN, "morning", "Hæld kogende vand i håndvask afløb");
 
 addDrift(L_VAN, "lunch", "Skift skraldepose");
 addDrift(L_VAN, "lunch", "Dæk op til resevationer");
-
+addDrift(L_VAN, "lunch", "Fjern udløbet frugt");
 addDrift(L_VAN, "lunch", "Skyl spildbakker & pantboksen");
 addDrift(L_VAN, "lunch", "Puds bestik");
 addDrift(L_VAN, "lunch", "Bestil varer - ikke lørdag");
@@ -1201,6 +1198,7 @@ addDrift(L_VAN, "lunch", "Sæt aftenplayliste på fra kl. 16-17");
 addDrift(L_VAN, "lunch", "Fyld sprittere op");
 addDrift(L_VAN, "lunch", "Ryd op i baren");
 addDrift(L_VAN, "lunch", "Fjern affald fra udeområdet og stil møbler pænt på plads");
+addDrift(L_VAN, "lunch", "Skriv rapport");
 
 addDrift(L_VAN, "evening", "Tjek datoer på drikkevarer");
 addDrift(L_VAN, "evening", "Læg bar ting til vask");
@@ -1210,6 +1208,7 @@ addDrift(L_VAN, "evening", "Rengør postmix & fadøl");
 addDrift(L_VAN, "evening", "Rengør kaffemaskinerne & stempelmaskinen");
 addDrift(L_VAN, "evening", "Ryd op i baren – stil tingene pænt på plads & sorter");
 addDrift(L_VAN, "evening", "Smid gammel frugt ud");
+addDrift(L_VAN, "evening", "Skriv rapport");
 
 
 addDrift(
@@ -1256,8 +1255,8 @@ addDrift(L_SYD, "morning", "Kør espressomaskinen igennem med kogende vand");
 addDrift(L_SYD, "morning", "Tælle kassen");
 addDrift(L_SYD, "morning", "Tilføj kogende vand i afløb");
 addDrift(L_SYD, "morning", "Fyld div. sugerør, servietter, sukker og chokolade, drikkevarer op i baren, hvis der mangler");
-addDrift(L_SYD, "morning", "Lav filterkaffe", { kind:"weekly", days:[D.sat, D.sun] }, "Lørdag/Søndag");
-addDrift(L_SYD, "morning", "Lav smoothie og shake", { kind:"weekly", days:[D.sat, D.sun] }, "Lørdag/Søndag");
+addDrift(L_SYD, "morning", "Lav filterkaffe");
+addDrift(L_SYD, "morning", "Lav smoothie og shake");
 addDrift(L_SYD, "morning", "Sæt flatpay terminalerne klar til brug");
 addDrift(L_SYD, "morning", "Lav 3 grå klude og 1 blå pudseklud klar");
 
@@ -1265,12 +1264,12 @@ addDrift(L_SYD, "morning", "Lav 3 grå klude og 1 blå pudseklud klar");
 addDrift(L_SYD, "morning", "Tjek om reservationer er dækket op til frokosten");
 addDrift(L_SYD, "morning", "Sæt lys på bordene og opladeren ud i køkkengangen");
 addDrift(L_SYD, "morning", "Sæt BC på plads");
+addDrift(L_SYD, "morning", "Åben for glasdørene");
 addDrift(L_SYD, "morning", "Sæt frokostplaylisten på");
 addDrift(L_SYD, "morning", "Briefing med køkkenet om dagen - bliver der travlt, stille osv.");
 
 /* ÅBNE - UDENFOR */
-addDrift(L_SYD, "morning", "Tag planter, lys, salt og peber, og tæpper ud i fronten");
-addDrift(L_SYD, "morning", "Tænd lyskæden");
+addDrift(L_SYD, "morning", "Sæt planter, lys, salt og peber på bordene");
 addDrift(L_SYD, "morning", "Åben parasollerne på det store område");
 addDrift(L_SYD, "morning", "Sæt A skiltet og champagne rack udenfor (spørg køkkenet om hjælp)");
 
@@ -1285,7 +1284,6 @@ addDrift(L_SYD, "lunch", "Stil borde og stole pænt udenfor");
 addDrift(L_SYD, "lunch", "Sæt aftenplaylisten på");
 addDrift(L_SYD, "lunch", "Bestil BC (skiftlederen)");
 addDrift(L_SYD, "lunch", "Briefing med køkkenet til aftenrykket - reservationer, forventet travlhed m.m.");
-addDrift(L_SYD, "lunch", "Rengøring af opvaskemaskinen ved brug af hygiejneprogrammet - Skyl også filteret samt tag en våd klud inde i hele maskinen");
 
 /* LUKKE - BAR */
 addDrift(L_SYD, "evening", "Sæt barting ud til opvask så tidligt som muligt");
@@ -1300,7 +1298,7 @@ addDrift(L_SYD, "evening", "Fylde kage op");
 addDrift(L_SYD, "evening", "Tør alle overflader af i baren");
 addDrift(L_SYD, "evening", "Sæt opvask på plads");
 addDrift(L_SYD, "evening", "Fylde op med sugerør, servietter, sukker og chokolade");
-addDrift(L_SYD, "evening", "Sluk opvaskemaskinen ved brug af hygiejneprogrammet");
+addDrift(L_SYD, "evening", "Slukke opvaskemaskinen");
 addDrift(L_SYD, "evening", "Slukke lys i køleskab og kagemontre");
 addDrift(L_SYD, "evening", "Send skiftlederrapport");
 addDrift(L_SYD, "evening", "Lukke kassen – send kasserapport til Rosa og Christian");
@@ -1309,10 +1307,10 @@ addDrift(L_SYD, "evening", "Lukke kassen – send kasserapport til Rosa og Chris
 addDrift(L_SYD, "evening", "Tage pantflasker i kælderen");
 addDrift(L_SYD, "evening", "Tage glasflasker og skraldepose i skralderummet");
 addDrift(L_SYD, "evening", "Fylde barkøleskabe og vinkøleskab op fra kælderen");
-addDrift(L_SYD, "evening", "Tør alle borde af");
-addDrift(L_SYD, "evening", "Sæt stolene pænt");
+addDrift(L_SYD, "evening", "Tørre borde af og sætte stole pænt - inde");
 addDrift(L_SYD, "evening", "Dæk op til reservationer dagen efter (indtil kl. 13 reservationer)");
 addDrift(L_SYD, "evening", "Samle lys og sætte til opladning");
+addDrift(L_SYD, "evening", "Luk glasdørene");
 addDrift(L_SYD, "evening", "Opfyldning og rengøring af toiletter (både gæste- og personaletoiletter)");
 addDrift(L_SYD, "evening", "Støvsug hele cafeen");
 
@@ -1333,12 +1331,11 @@ addDrift(
 );
 
 /* LUKKE - UDENFOR */
-addDrift(L_SYD, "evening", "Stil stole og borde pænt");
+addDrift(L_SYD, "evening", "Tørre borde af og sætte stole pænt - ude");
 addDrift(L_SYD, "evening", "Samle alle planter, lys, salt og peber og tag indenfor");
-addDrift(L_SYD, "evening", "Tør alle bordene af");
 addDrift(L_SYD, "evening", "Fej på alle områderne");
 addDrift(L_SYD, "evening", "Slå parasollerne ned");
-addDrift(L_SYD, "evening", "Sluk lyskæden og varmelamperne");
+addDrift(L_SYD, "evening", "Sluk varmelamperne");
 addDrift(L_SYD, "evening", "Tage A skiltet og champagne rack ind (spørg køkkenet om hjælp)");
 
 /* =========================================================
@@ -1557,6 +1554,8 @@ addClean(L_VAN, "Bar",          "weekly", "Fyld salt & peberkværne op",
          { kind:"weekly", days:[D.mon] });
 addClean(L_VAN, "Bar",          "weekly", "Postmix-dutter skal dyppes i varmt vand",
          { kind:"weekly", days:[D.mon] });
+addClean(L_VAN, "Bar",          "weekly", "Vask gulvet i baren - tag tingene ud",
+         { kind:"weekly", days:[D.mon] });
 
 
 // TIRSDAG
@@ -1628,8 +1627,6 @@ addClean(L_VAN, "Bar",          "weekly", "Rengør blenderen grundigt",
 addClean(L_VAN, "Service/Gulv", "weekly", "Flyt alle borde & fej gulvet under",
          { kind:"weekly", days:[D.sun] });
 addClean(L_VAN, "Service/Gulv", "weekly", "Tjek om bordene står lige & ret (inkl. vippeborde)",
-         { kind:"weekly", days:[D.sun] });
-addClean(L_VAN, "Bar",          "weekly", "Rengør gulvet i baren – tag tingene ud",
          { kind:"weekly", days:[D.sun] });
 addClean(L_VAN, "Lager/Udendørs","weekly", "Ryd op på lageret – sortér & smid unyttige ting ud",
          { kind:"weekly", days:[D.sun] });
@@ -1816,7 +1813,6 @@ addClean(L_SYD, "Lager/Udendørs", "weekly", "Rengør øl-køleskabet i kældere
 addClean(L_SYD, "Bar", "weekly", "Tag en våd klud over fadølsanlæg og sodavand", { kind:"weekly", days:[D.tue] });
 addClean(L_SYD, "Service/Gulv", "weekly", "Tæpper skal bankes og foldes pænt sammen", { kind:"weekly", days:[D.tue] });
 addClean(L_SYD, "Service/Gulv", "weekly", "Tør alle sofaer og stole af med en våd klud (husk i revnerne)", { kind:"weekly", days:[D.tue] });
-addClean(L_SYD, "Bar", "weekly", "Grundig rengøring af alle bordpladerne i baren - ryk sirupper, vandglas, bestikbakker m.m.", { kind:"weekly", days:[D.tue] });
 
 // ONSDAG
 addClean(L_SYD, "Service/Gulv", "weekly", "Støv de to hylder i caféen af", { kind:"weekly", days:[D.wed] });
@@ -1829,14 +1825,10 @@ addClean(L_SYD, "Service/Gulv", "weekly", "Rengør de indendørs plantekasser", 
 addClean(L_SYD, "Service/Gulv", "weekly", "Puds de små vinduer på skillevægge + de sorte kanter!", { kind:"weekly", days:[D.thu] });
 addClean(L_SYD, "Bar", "weekly", "Rengøring af isterningmaskinen i baren (Notér på E-smiley)", { kind:"weekly", days:[D.thu] });
 addClean(L_SYD, "Bar", "weekly", "Rengør køleskabene med skufferne", { kind:"weekly", days:[D.thu] });
-addClean(L_SYD, "Service/Gulv", "weekly", "Rengøring af væggen ved køkkenåbningen", { kind:"weekly", days:[D.thu] });
-addClean(L_SYD, "Service/Gulv", "weekly", "Rengøring af vindueskarmene med en våd klud ved bord 4 og 6", { kind:"weekly", days:[D.thu] });
 
 // FREDAG
 addClean(L_SYD, "Køkken", "weekly", "Rengøring af alle beholdere (til bestik, teskeer, sukker, osv.)", { kind:"weekly", days:[D.fri] });
 addClean(L_SYD, "Bar", "weekly", "Rengøring af vinkøleskabet indeni, udenpå og ovenpå", { kind:"weekly", days:[D.fri] });
-addClean(L_SYD, "Service/Gulv", "weekly", "Rengøring af reolen til spil", { kind:"weekly", days:[D.fri] });
-addClean(L_SYD, "Bar", "weekly", "Tag en våd klud over glasstangen", { kind:"weekly", days:[D.fri] });
 
 // LØRDAG
 addClean(L_SYD, "Bar", "weekly", "Rengør kagemontre", { kind:"weekly", days:[D.sat] });
