@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Head Chef Meeting</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap">
+<style>
+*{box-sizing:border-box}body{margin:0}
+/* Layout: full-screen TV deck, alternating ivory and deep forest slides, brass hairlines, editorial menu-card typography */
+:root{
+  --forest:#13261d; --forest2:#1c3529; --ivory:#f4efe6; --ivory2:#ebe3d4;
+  --brass:#b8955a; --ink:#1a1a17; --wine:#7a2234; --sage:#8fa58f;
+  --display:"Cormorant Garamond","Didot","Bodoni MT",Georgia,serif;
+  --body:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--forest);font-family:var(--body);font-weight:300;overflow:hidden;color:var(--ivory)}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:3vh;
+  padding-block:9vh 11vh;padding-left:max(16px,8vw,env(safe-area-inset-left,0px));padding-right:max(16px,8vw,env(safe-area-inset-right,0px));
+  opacity:0;visibility:hidden;transition:opacity 1s ease,visibility 1s;overflow:hidden;
+  --bg:var(--forest);--fg:var(--ivory);--soft:rgba(244,239,230,.62);--line:rgba(184,149,90,.45);--card:rgba(255,255,255,.035);
+  background:var(--bg);color:var(--fg)}
+.slide.light{--bg:var(--ivory);--fg:var(--ink);--soft:#6d675c;--line:rgba(184,149,90,.6);--card:#fbf8f2}
+.slide.on{opacity:1;visibility:visible}
+/* fine frame */
+.slide::before{content:"";position:absolute;inset:3.2vh 3.2vw;border:1px solid var(--line);pointer-events:none}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;
+  background-image:radial-gradient(var(--fg) .5px,transparent .6px);background-size:4px 4px}
+.mark{position:absolute;top:5.5vh;left:50%;transform:translateX(-50%);font-family:var(--body);font-size:clamp(10px,.9vw,15px);letter-spacing:.5em;text-transform:uppercase;color:var(--brass);white-space:nowrap}
+.eyebrow{font-size:clamp(11px,1.1vw,19px);letter-spacing:.38em;text-transform:uppercase;color:var(--brass);display:flex;align-items:center;gap:1.2vw}
+.eyebrow::before{content:"";width:4vw;height:1px;background:var(--brass)}
+h1,h2{font-family:var(--display);font-weight:400;margin:0;line-height:.95;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(52px,9.5vw,190px)}
+h2{font-size:clamp(42px,6.8vw,130px)}
+h1 em,h2 em{font-style:italic;color:var(--brass)}
+.lead{font-size:clamp(17px,2vw,36px);max-width:36ch;line-height:1.45;color:var(--soft);margin:0}
+.lead em{font-family:var(--display);font-style:italic;font-size:1.2em;color:var(--fg)}
+.rule{width:min(30vw,420px);height:1px;background:var(--brass);transform-origin:left}
+.center{align-items:center;text-align:center}
+.center .eyebrow::after{content:"";width:4vw;height:1px;background:var(--brass)}
+.on .rise{animation:rise 1.2s cubic-bezier(.2,.7,.1,1) both}
+.on .rise:nth-child(2){animation-delay:.15s}.on .rise:nth-child(3){animation-delay:.3s}.on .rise:nth-child(4){animation-delay:.45s}.on .rise:nth-child(5){animation-delay:.6s}.on .rise:nth-child(6){animation-delay:.75s}
+.on .rule{animation:draw 1.6s .4s ease both}
+@keyframes rise{from{transform:translateY(24px);opacity:0;filter:blur(4px)}to{transform:none;opacity:1;filter:none}}
+@keyframes draw{from{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.on .rise,.on .rule,.on .grow{animation:none!important}.slide{transition:none}}
+
+/* monogram */
+.mono{width:clamp(70px,8vw,140px);height:clamp(70px,8vw,140px);border:1px solid var(--brass);border-radius:50%;display:grid;place-items:center;
+  font-family:var(--display);font-style:italic;font-size:clamp(34px,4.2vw,76px);color:var(--brass)}
+
+/* agenda as menu card */
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 6vw;margin-top:1vh;max-width:78vw}
+.course{display:flex;align-items:baseline;gap:1vw;padding:1.6vh 0;border-bottom:1px solid var(--line)}
+.course .n{font-family:var(--display);font-style:italic;color:var(--brass);font-size:clamp(18px,1.8vw,32px);min-width:2.2em}
+.course .t{font-family:var(--display);font-size:clamp(24px,3vw,54px);line-height:1}
+.course .s{margin-left:auto;font-size:clamp(10px,.95vw,16px);letter-spacing:.25em;text-transform:uppercase;color:var(--soft)}
+
+/* BC */
+.bc{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:5vw;align-items:center}
+.big{font-family:var(--display);font-size:clamp(110px,15vw,280px);line-height:.8;color:var(--brass)}
+.legend{display:flex;flex-direction:column;gap:1.4vh;margin-top:3vh;font-size:clamp(12px,1.2vw,20px);letter-spacing:.1em}
+.legend div{display:flex;align-items:center;gap:1vw}
+.legend i{display:block;height:2px;transform-origin:left}
+.on .grow{animation:draw 1.2s .6s ease both}
+.log{width:100%;border-collapse:collapse;font-size:clamp(11px,1vw,18px);font-variant-numeric:tabular-nums}
+.log td{padding:.85vh .8vw;border-bottom:1px solid var(--line);vertical-align:top}
+.log td:first-child{color:var(--brass);white-space:nowrap;font-family:var(--display);font-style:italic;font-size:1.15em}
+.log td:nth-child(3){font-family:var(--display);font-size:1.25em}
+.log td:last-child{color:var(--soft)}
+.dot{display:inline-block;width:.55em;height:.55em;border-radius:50%;margin-right:.5em;vertical-align:middle}
+.m{background:var(--brass)} .p{background:var(--wine)} .d{background:var(--sage)}
+
+/* numbers */
+.cafes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3vh 3vw}
+.cafe{border-top:1px solid var(--brass);padding-top:1.8vh;display:flex;flex-direction:column;gap:1.4vh}
+.cafe h3{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.6vw,48px);margin:0;line-height:1;display:flex;align-items:baseline;gap:.6vw}
+.cafe h3 small{font-family:var(--body);font-size:clamp(9px,.75vw,13px);letter-spacing:.3em;color:var(--wine);border:1px solid var(--wine);padding:.2em .5em}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1vw;font-variant-numeric:tabular-nums}
+.kpi small{display:block;font-size:clamp(9px,.8vw,14px);letter-spacing:.25em;text-transform:uppercase;color:var(--soft);margin-bottom:.4vh}
+.kpi strong{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.7vw,52px);line-height:1}
+.kpi .sub{font-size:.55em;color:var(--soft)}
+.kpi.warn strong{color:var(--wine)}
+.track{display:flex;height:3px;background:var(--ivory2)}
+.track i{display:block;height:100%}
+
+/* statement slides */
+.date{font-family:var(--display);font-style:italic;font-size:clamp(90px,15vw,280px);line-height:.8;color:var(--brass)}
+.pair{display:flex;gap:4vw;flex-wrap:wrap}
+.pair div{border-left:1px solid var(--brass);padding-left:1.4vw;max-width:28ch}
+.pair small{display:block;font-size:clamp(10px,.95vw,16px);letter-spacing:.3em;text-transform:uppercase;color:var(--brass);margin-bottom:.8vh}
+.pair p{margin:0;font-family:var(--display);font-size:clamp(20px,2.2vw,40px);line-height:1.2}
+.days{display:flex;gap:2.4vw;font-family:var(--display);font-style:italic;font-size:clamp(28px,3.6vw,66px);color:var(--brass)}
+.days span+span::before{content:"·";margin-right:2.4vw;color:var(--soft)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2vh 5vw;max-width:70vw}
+.checks div{font-family:var(--display);font-size:clamp(22px,2.6vw,48px);padding-bottom:1.2vh;border-bottom:1px solid var(--line)}
+.checks div::before{content:"— ";color:var(--brass)}
+
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:2vw;z-index:5;
+  padding-block:0 calc(5.5vh + env(safe-area-inset-bottom,0px));font-size:clamp(10px,.85vw,14px);letter-spacing:.3em;color:var(--brass);pointer-events:none}
+.dots{display:flex;gap:10px;pointer-events:auto}
+.dots button{width:22px;height:1px;border:0;padding:6px 0;background:linear-gradient(var(--brass),var(--brass)) center/100% 1px no-repeat;opacity:.35;cursor:pointer}
+.dots button.on{opacity:1;width:44px}
+.dots button:focus-visible{outline:1px solid var(--brass);outline-offset:3px}
+@media (max-width:700px){
+  body{overflow:auto}.slide{position:relative;opacity:1;visibility:visible;min-height:100vh}.nav{display:none}
+  .menu,.cafes,.bc,.checks{grid-template-columns:1fr}.menu,.checks{max-width:none}.mark{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<section class="slide on center">
+  <div class="mono rise">K</div>
+  <div class="eyebrow rise">22 October 2026</div>
+  <h1 class="rise">Café Kaiser<br><em>Head Chef Meeting</em></h1>
+  <div class="rule rise"></div>
+  <p class="lead rise">Welcome, everyone, and a warm welcome to <em>BC Catering</em>.</p>
+</section>
+
+<section class="slide light">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">This afternoon</div>
+  <h2 class="rise">The <em>agenda</em></h2>
+  <div class="menu rise">
+    <div class="course"><span class="n">i.</span><span class="t">BC Catering</span><span class="s">Supplier</span></div>
+    <div class="course"><span class="n">ii.</span><span class="t">September in figures</span><span class="s">Results</span></div>
+    <div class="course"><span class="n">iii.</span><span class="t">Christmas</span><span class="s">Season</span></div>
+    <div class="course"><span class="n">iv.</span><span class="t">SuperDysten</span><span class="s">Charity</span></div>
+    <div class="course"><span class="n">v.</span><span class="t">Black Friday</span><span class="s">Peak day</span></div>
+    <div class="course"><span class="n">vi.</span><span class="t">New café opening</span><span class="s">Waves</span></div>
+    <div class="course"><span class="n">vii.</span><span class="t">Your points</span><span class="s">Open floor</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">BC Catering · Patrick joins us from now on</div>
+  <div class="bc rise">
+    <div>
+      <div class="big">12</div>
+      <p class="lead" style="font-size:clamp(15px,1.6vw,28px)">issues reported in October so far. You raised them at our last meeting, and now we solve them <em>together</em>.</p>
+      <div class="legend">
+        <div><i class="grow" style="width:12vw;background:var(--brass)"></i>6 missing</div>
+        <div><i class="grow" style="width:8vw;background:var(--wine)"></i>4 poor quality</div>
+        <div><i class="grow" style="width:4vw;background:var(--sage)"></i>2 damaged</div>
+      </div>
+    </div>
+    <div style="overflow-x:auto;min-width:0">
+      <table class="log">
+        <tr><td>01.10</td><td>Helsingør</td><td><span class="dot p"></span>Avocado</td><td>5 of 10 too hard</td></tr>
+        <tr><td>01.10</td><td>Hørsholm</td><td><span class="dot d"></span>Mixed cress</td><td>Old, smelled bad</td></tr>
+        <tr><td>02.10</td><td>Hørsholm</td><td><span class="dot m"></span>Melon</td><td>Not delivered</td></tr>
+        <tr><td>05.10</td><td>Hillerød</td><td><span class="dot d"></span>Mango</td><td>Bad on arrival</td></tr>
+        <tr><td>08.10</td><td>Sydhavnen</td><td><span class="dot m"></span>Gluten-free bun</td><td>On the list, not received</td></tr>
+        <tr><td>09.10</td><td>Sydhavnen</td><td><span class="dot m"></span>Burger buns &amp; butter</td><td>Not delivered</td></tr>
+        <tr><td>12.10</td><td>Hillerød</td><td><span class="dot m"></span>Burger patty</td><td>Not delivered</td></tr>
+        <tr><td>15.10</td><td>Hillerød</td><td><span class="dot p"></span>Burger patty</td><td>2 cartons</td></tr>
+        <tr><td>15.10</td><td>Hillerød</td><td><span class="dot p"></span>Mango</td><td>Very hard</td></tr>
+        <tr><td>16.10</td><td>Sydhavnen</td><td><span class="dot p"></span>Avocado</td><td>Too hard</td></tr>
+        <tr><td>17.10</td><td>Helsingør</td><td><span class="dot m"></span>Bread</td><td>5 boxes ordered, 2 received</td></tr>
+        <tr><td>19.10</td><td>Hørsholm</td><td><span class="dot m"></span>Burger patty 150 g</td><td>Not delivered</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">September in figures</div>
+  <div class="cafes rise" id="cafes"></div>
+</section>
+
+<section class="slide">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">The Christmas plate</div>
+  <div class="date rise">16 November</div>
+  <div class="rule rise"></div>
+  <div class="pair rise">
+    <div><small>Concept</small><p>Build your own, as you know it.</p></div>
+    <div><small>Ready</small><p>Guides and photos are already with you.</p></div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">SuperDysten · starts next week</div>
+  <h2 class="rise">Crispy pork belly,<br><em>for a cause</em></h2>
+  <div class="days rise"><span>Monday</span><span>Tuesday</span><span>Wednesday</span></div>
+  <p class="lead rise">Just like Knæk Cancer. <em>Every krone</em> goes directly to the cause.</p>
+  <div class="pair rise">
+    <div><small>BC Catering</small><p>Delivers the pork belly automatically.</p></div>
+    <div><small>Your kitchen</small><p>Potatoes, beetroot and sauce.</p></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">Black Friday</div>
+  <h2 class="rise">Be ready.<br><em>It will be busy.</em></h2>
+  <div class="checks rise"><div>Dishwashers on shift</div><div>Fully staffed</div><div>Strong prep in the days before</div><div>Back each other up</div></div>
+  <p class="lead rise">Hillerød set the record last year. <em>Who takes it this time?</em></p>
+</section>
+
+<section class="slide light center">
+  <div class="mark">Café Kaiser · Head Chef Meeting</div>
+  <div class="eyebrow rise">Opening · end of November</div>
+  <h1 class="rise">Café Kaiser<br><em>Waves</em></h1>
+  <div class="rule rise"></div>
+  <p class="lead rise">Candee may need a hand. Let's all see what we can do.</p>
+</section>
+
+<section class="slide center">
+  <div class="mono rise">K</div>
+  <div class="eyebrow rise">Open floor</div>
+  <h2 class="rise">Your <em>points</em></h2>
+  <p class="lead rise">What should we keep an eye on?</p>
+</section>
+
+</div>
+
+<nav class="nav"><div class="dots" id="dots"></div></nav>
+
+<script>
+const cafes=[
+ ["Helsingør",23.3,6.5,"+1.6%",38.1],["Hillerød",24.3,7.4,"+7.2%",33.6],["Farum",24.7,5.9,"+11.4%",36.0],
+ ["Hørsholm",23.5,8.0,"+3.2%",36.1],["Vanløse",23.1,9.3,"+12.5%",35.8],["Enghave Brygge",16.7,8.8,null,50.5]];
+document.getElementById("cafes").innerHTML=cafes.map(([n,f,d,g,l])=>`
+ <div class="cafe"><h3>${n}${g?"":"<small>NEW</small>"}</h3>
+ <div class="kpis">
+  <div class="kpi"><small>Food · Bev</small><strong>${f.toFixed(1)}<span class="sub"> · ${d.toFixed(1)}%</span></strong></div>
+  <div class="kpi"><small>vs 2025</small><strong>${g||"—"}</strong></div>
+  <div class="kpi ${l>40?"warn":""}"><small>Labour</small><strong>${l.toFixed(1)}%</strong></div>
+ </div>
+ <div class="track"><i class="grow" style="width:${f*2}%;background:var(--forest)"></i><i class="grow" style="width:${d*2}%;background:var(--brass)"></i></div></div>`).join("");
+
+const slides=[...document.querySelectorAll(".slide")],dots=document.getElementById("dots");let i=0;
+slides.forEach((_,n)=>{const b=document.createElement("button");b.setAttribute("aria-label","Slide "+(n+1));b.onclick=e=>{e.stopPropagation();go(n)};dots.appendChild(b)});
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle("on",k===i));
+ [...dots.children].forEach((b,k)=>b.classList.toggle("on",k===i))}
+addEventListener("keydown",e=>{if(["ArrowRight","PageDown"," ","Enter"].includes(e.key)){e.preventDefault();go(i+1)}if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();go(i-1)}if(e.key==="f")document.documentElement.requestFullscreen?.().catch(()=>{})});
+document.getElementById("deck").addEventListener("click",e=>go(e.clientX<innerWidth/3?i-1:i+1));
+go(0);
+</script>
+
+</body>
+</html>
