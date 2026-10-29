@@ -140,7 +140,16 @@ table.res tr.tot td{border-top:2px solid var(--espresso);border-bottom:none;font
       <label class="fld" for="opsum">Samlet kommentar til afdelingen</label>
       <textarea id="opsum" rows="4" placeholder="Skrives med i mailen…"></textarea>
       <div style="height:10px"></div>
+      <label class="fld" for="sprog">Mailens sprog</label>
+      <select id="sprog" class="mb">
+        <option value="begge">Dansk + English</option>
+        <option value="da">Kun dansk</option>
+        <option value="en">Only English</option>
+      </select>
       <button onclick="sendMail()">✉️ Send mail til afdeling</button>
+      <div style="height:8px"></div>
+      <button class="ghost" onclick="kopierRapport()">📋 Kopiér rapport (hvis mailen er for lang)</button>
+      <div class="note" id="kopiMsg"></div>
       <div style="height:8px"></div>
       <button class="ghost" onclick="nulstil()">Nulstil denne kontrol</button>
       <div class="note" id="resNote"></div>
@@ -176,9 +185,9 @@ const KONTROLLANTER = ["Stefan", "Casper", "Christian"];
 
 /* Sæt CC på alle mails (fx dig selv). Tom streng = ingen cc. */
 const CC_MAIL = [
-  "Casper@cafekaiser.dk",      // Casper
-  "Christian@cafekaiser.dk",   // Christian
-  "Stefan@cafekaiser.dk"       // Stefan
+  "INDSAET-CASPER-MAIL",      // Casper
+  "INDSAET-CHRISTIAN-MAIL",   // Christian
+  "INDSAET-STEFAN-MAIL"       // Stefan
 ].filter(m => m.includes("@")).join(", ");
 
 /* Point-/niveaunavne — bruges i skema, resultat og mail */
@@ -231,6 +240,141 @@ const DATA = {
       "Caféchefen har overblik over, hvad der skal meldes videre til HQ"]}]
   }
 };
+/* Engelske oversættelser af skemaet — bruges kun i mailen.
+   Mangler en tekst her, sendes den danske tekst i stedet. */
+const EN = {
+ "Opvaskeområde": "Dishwashing area",
+ "Opvaskemaskine": "Dishwasher",
+ "Rammer maskinen 80 grader ved slutskyl?": "Does the machine reach 80°C at final rinse?",
+ "Er maskinen pæn og ren indvendigt?": "Is the machine neat and clean inside?",
+ "Er maskinen pæn og ren udvendigt?": "Is the machine neat and clean outside?",
+ "Er vandforsyning ok?": "Is the water supply OK?",
+ "Er der adgang til håndvask med sæbe og papir?": "Is there access to a hand basin with soap and paper towels?",
+ "Andet": "Other",
+ "Borde og hylder": "Tables and shelves",
+ "Er bordene rene og pæne?": "Are the tables clean and tidy?",
+ "Er hylderne pæne og rene?": "Are the shelves neat and clean?",
+ "Er udstyret, som opbevares i området, pæne og rene?": "Is the equipment stored in the area neat and clean?",
+ "Er kasser, som bruges til opbevaring pæne og rene?": "Are the storage boxes neat and clean?",
+ "Gulvet": "Floor",
+ "Er gulvet pænt og rent?": "Is the floor neat and clean?",
+ "Er der riste i afløb?": "Are there grates in the drains?",
+ "Er afløbene pæne og rene?": "Are the drains neat and clean?",
+ "Er udstyr til gulvvask i orden?": "Is the floor-cleaning equipment in order?",
+ "Er kanter, lister og gulv intakt?": "Are edges, skirting and floor intact?",
+ "Andet:": "Other",
+ "Vægge og rør": "Walls and pipes",
+ "Er vægge pæne og rene?": "Are the walls neat and clean?",
+ "Hvis der er rør i produktionsområdet, er disse rene og pæne?": "If there are pipes in the production area, are they clean and tidy?",
+ "Er fliser og fuger intakte?": "Are tiles and grout intact?",
+ "Generelt": "General",
+ "Medarbejdere viden": "Staff knowledge",
+ "Medarbejdere påklædning og adfærd": "Staff attire and behaviour",
+ "Affaldshåndtering": "Waste handling",
+ "Sæbe og rengøringsmidler": "Soap and cleaning products",
+ "Forberedelsesområde": "Preparation area",
+ "Fryser": "Freezer",
+ "Er temperaturen ok?": "Is the temperature OK?",
+ "Er der risiko for krydskontaminering?": "Is there a risk of cross-contamination?",
+ "Er der datomærke på varerne?": "Are the goods date-labelled?",
+ "Er der varer, som er for gamle?": "Are there items that are too old?",
+ "Er køleskabet pænt og rent indvendigt?": "Is the fridge neat and clean inside?",
+ "Er køleskabet pænt og rent udvendigt?": "Is the fridge neat and clean outside?",
+ "Produkter, som opbevares i dette område": "Products stored in this area",
+ "Er der datomærke på?": "Are they date-labelled?",
+ "Hygiejnisk produktion": "Hygienic production",
+ "Kold produktionsområde": "Cold production area",
+ "Køledisk": "Refrigerated counter",
+ "Udstyr": "Equipment",
+ "Varmelamper": "Heat lamps",
+ "Filmdispenser": "Cling-film dispenser",
+ "Toaster": "Toaster",
+ "Buffetudstyr": "Buffet equipment",
+ "Skærebræt": "Cutting boards",
+ "Vægge, loft og rør": "Walls, ceiling and pipes",
+ "Varm produktion": "Hot production",
+ "Kølebord": "Refrigerated prep table",
+ "Er fryseren pænt og rent indvendigt?": "Is the freezer neat and clean inside?",
+ "Er fryseren pænt og rent udvendigt?": "Is the freezer neat and clean outside?",
+ "Komfur": "Stove",
+ "friture": "Deep fryer",
+ "Stegeplade": "Griddle",
+ "Grill": "Grill",
+ "Skuffer og hylder under udstyr": "Drawers and shelves under equipment",
+ "Lagerrum": "Storage room",
+ "Fadølsanlæg": "Draught beer system",
+ "Bliver procedure for rengøring fulgt efter anvisning fra leverandør?": "Is the cleaning procedure followed as instructed by the supplier?",
+ "Er der datoer på anbrud for sirup?": "Are opening dates marked on syrups?",
+ "Er der sirupper, som er løbet på dato?": "Are there syrups past their date?",
+ "Er slanger og tuber pæne og rene?": "Are hoses and tubes neat and clean?",
+ "Er alt løftet over gulvhøjde?": "Is everything lifted off the floor?",
+ "Er lister og fuger intakte?": "Are skirting and grout intact?",
+ "Vægge og loft": "Walls and ceiling",
+ "Er vægge og loft pæne og rene?": "Are walls and ceiling neat and clean?",
+ "Lagerbeholdning": "Stock",
+ "Er FIFO overholdt?": "Is FIFO followed?",
+ "Er der datovarer?": "Are there date-marked goods?",
+ "Er hylder pæne og rene?": "Are shelves neat and clean?",
+ "Køleskab": "Fridge",
+ "Barområde": "Bar area",
+ "Bar": "Bar",
+ "Er der en god orden?": "Is everything in good order?",
+ "Er der rent og pænt?": "Is it clean and tidy?",
+ "Er smileyordning korrekt skiltet?": "Is the smiley scheme correctly displayed?",
+ "Er der skilt med info om allergener?": "Is there a sign with allergen information?",
+ "Ismaskinen": "Ice machine",
+ "Café og gæsteområde": "Café and guest area",
+ "Er der pænt og rent?": "Is it neat and clean?",
+ "Er der støvet af?": "Has it been dusted?",
+ "Er gulv, lister og døre skadedyrssikret?": "Are floor, skirting and doors pest-proofed?",
+ "Administrativt": "Administrative",
+ "Varemodtagelse": "Goods receiving",
+ "Er der købt varer udenfor leverandører?": "Have goods been bought outside approved suppliers?",
+ "Er der styr på følgesedler?": "Are delivery notes under control?",
+ "Er der styr på tilbagekaldelser?": "Are product recalls under control?",
+ "Egenkontrol": "Self-inspection (HACCP)",
+ "Kan medarbejdere navigerer i Esmiley?": "Can staff navigate in Esmiley?",
+ "Tjekke punkter i egenkontrollen.": "Check the points in the self-inspection.",
+ "Tjekke afvigelsesrapporter": "Check deviation reports",
+ "Udefra": "Exterior",
+ "Udefra fremstår caféen pæn og ren": "From the outside, the café looks neat and clean",
+ "Gæsteområde": "Guest area",
+ "Borde, stole, sofaer og øvrige møbler er rene og i god stand": "Tables, chairs, sofas and other furniture are clean and in good condition",
+ "Er der rent og pænt under bordene?": "Is it clean and tidy under the tables?",
+ "Gulve, paneler, vægge, lamper og synlige overflader er rene": "Floors, panels, walls, lamps and visible surfaces are clean",
+ "Vinduer, spejle og glaspartier er rene": "Windows, mirrors and glass partitions are clean",
+ "Skabe og områder synlige for gæster er ryddelige": "Cabinets and areas visible to guests are tidy",
+ "Musik, lys og temperatur giver den rigtige Kaiser-stemning": "Music, lighting and temperature create the right Kaiser atmosphere",
+ "Generelt indtryk: Caféen er pæn, ren og klar til åbning": "Overall impression: the café is neat, clean and ready to open",
+ "Bar & serviceområder": "Bar & service areas",
+ "Bar & service": "Bar & service",
+ "Baren er ren, organiseret og præsentabel samt hylder er pæne og rene": "The bar is clean, organised and presentable, and shelves are neat and clean",
+ "Kaffemaskine, kværne, køleskabe og udstyr fremstår rent – samt området omkring": "Coffee machine, grinders, fridges and equipment look clean – as does the surrounding area",
+ "Glas, kopper og service er korrekt placeret og i god stand": "Glasses, cups and tableware are correctly placed and in good condition",
+ "Lager/varer ved baren er organiseret – ingen unødigt rod": "Stock/goods at the bar are organised – no unnecessary clutter",
+ "Køkken & fødevaresikkerhed": "Kitchen & food safety",
+ "Køkken": "Kitchen",
+ "Køkkenet fremstår rent og organiseret": "The kitchen looks clean and organised",
+ "Check temperatur i køleskabe": "Check fridge temperatures",
+ "Check FIFO i køkken – ligger ældste varer først og nyeste nederst/bagerst?": "Check FIFO in the kitchen – are the oldest items in front and the newest at the bottom/back?",
+ "Status på seneste køkken-audit og relevante opfølgningspunkter": "Status of the latest kitchen audit and relevant follow-up points",
+ "Bagom, lager & personaleområder": "Back-of-house, storage & staff areas",
+ "Bagom": "Back-of-house",
+ "Lager er ryddeligt og varer står korrekt": "Storage is tidy and goods are stored correctly",
+ "Personaleområder og omklædning fremstår ordentlige": "Staff areas and changing rooms look decent",
+ "Vedligeholdelse": "Maintenance",
+ "Defekte møbler, lamper, døre, inventar eller udstyr er identificeret": "Defective furniture, lamps, doors, fixtures or equipment have been identified",
+ "Der er ingen gamle midlertidige løsninger": "There are no old temporary fixes",
+ "Åbne vedligeholdelsesopgaver har ejer og deadline": "Open maintenance tasks have an owner and a deadline",
+ "Caféchefen har overblik over, hvad der skal meldes videre til HQ": "The café manager knows what needs to be passed on to HQ",
+ "Mulige forbedringer & idéer": "Possible improvements & ideas",
+ "Samlet vurdering": "Overall assessment",
+ "Maks. 3 handlinger": "Max. 3 actions",
+ "Det bedste ved caféen i dag": "The best thing about the café today",
+ "Det vigtigste forbedringsområde": "The most important area for improvement",
+ "Noget der kræver hjælp fra HQ": "Something that needs help from HQ"
+};
+const SEKNAVN_EN = { boh: 'Back of house', foh6: 'Front of house – 6-month check', foh14: 'Front of house – 14-day check' };
 /* ==================== SLUT PÅ KONFIGURATION ==================== */
 
 const $ = id => document.getElementById(id);
@@ -386,23 +530,6 @@ function renderEkstra(){
   });
   $('ekstra').innerHTML = h;
 }
-function ekstraTekst(){
-  const ex = EKSTRA[sek] || [];
-  let ud = '';
-  ex.forEach((b, bi) => {
-    let linjer = '';
-    if(b.tekst) b.tekst.forEach((lbl, i) => {
-      const v = ((state['x|'+bi+'|'+i]||{}).k||'').trim();
-      if(v) linjer += '  ' + lbl + ': ' + v + '\n';
-    });
-    if(b.rækker) for(let r=0;r<b.rækker;r++){
-      const d = b.felter.map((f, fi) => ((state['x|'+bi+'|'+r+'|'+fi]||{}).k||'').trim());
-      if(d[0]) linjer += '  - ' + d[0] + (d[1] ? ' | ' + d[1] : '') + (d[2] ? ' | ' + d[2] : '') + '\n';
-    }
-    if(linjer) ud += b.titel.toUpperCase() + '\n------------------------------------------\n' + linjer + '\n';
-  });
-  return ud;
-}
 function saet(k,s){
   const v = state[k] || {s:0,k:''};
   v.s = (v.s === s) ? 0 : s;      // tryk igen = fjern markering
@@ -481,52 +608,107 @@ function renderResultat(){
 }
 
 /* ---------- mail — kun den aktive kontrol ---------- */
+const TXT = {
+  da: { titel:'KAISER KONTROL', afd:'Afdeling', dato:'Dato', kontr:'Kontrollant', res:'RESULTAT',
+        r:'RØD – rettes straks', g2:'GUL – rettes inden næste kontrol', g:'GRØN – mindre bemærkninger',
+        omr:'KOMMENTARER PR. OMRÅDE', sam:'SAMLET KOMMENTAR', ingen:'✅ Ingen bemærkninger',
+        note:'Punkterne er afvigelser fra kontrolpunktet.' },
+  en: { titel:'KAISER INSPECTION', afd:'Location', dato:'Date', kontr:'Inspector', res:'RESULT',
+        r:'RED – fix immediately', g2:'YELLOW – fix before next inspection', g:'GREEN – minor remarks',
+        omr:'COMMENTS PER AREA', sam:'OVERALL COMMENT', ingen:'✅ No findings',
+        note:'Items listed are deviations from the check point. Written notes are shown as entered.' }
+};
+const LINJE = '━━━━━━━━━━━━━━━━━━';
+const tr = (t, l) => (l === 'en' ? (EN[t] || t) : t);
+const pen = d => d ? d.split('-').reverse().join('-') : d;
+
+function ekstraTekst(l){
+  const ex = EKSTRA[sek] || [];
+  let ud = '';
+  ex.forEach((b, bi) => {
+    let linjer = '';
+    if(b.tekst) b.tekst.forEach((lbl, i) => {
+      const v = ((state['x|'+bi+'|'+i]||{}).k||'').trim();
+      if(v) linjer += '• ' + tr(lbl,l) + ': ' + v + '\n';
+    });
+    if(b.rækker) for(let r=0;r<b.rækker;r++){
+      const d = b.felter.map((f, fi) => ((state['x|'+bi+'|'+r+'|'+fi]||{}).k||'').trim());
+      if(d[0]) linjer += '• ' + d[0] + (d[1] ? ' | ' + d[1] : '') + (d[2] ? ' | ' + d[2] : '') + '\n';
+    }
+    if(linjer) ud += '\n' + tr(b.titel,l).toUpperCase() + '\n' + linjer;
+  });
+  return ud;
+}
+
+function rapport(l){
+  const T = TXT[l], s = talAlt();
+  const ikon = {3:'🔴', 2:'🟡', 1:'🟢'};
+  const kopi = {3:T.r, 2:T.g2, 1:T.g};
+  let t = T.titel + ' · ' + $('afd').value.toUpperCase() + '\n'
+        + (l==='en' ? SEKNAVN_EN[sek] : SEKNAVN[sek]) + '\n'
+        + T.dato + ': ' + pen($('dato').value) + '  |  ' + T.kontr + ': ' + ($('kontrollant').value || '-') + '\n\n'
+        + T.res + '\n🔴 ' + s[3] + '   🟡 ' + s[2] + '   🟢 ' + s[1] + '\n' + LINJE + '\n';
+  let nogen = false;
+  [3,2,1].forEach(niv => {
+    let blok = '';
+    for(const omr in DATA[sek]){
+      DATA[sek][omr].forEach(g => g.q.forEach(q => {
+        const v = state[omr+'|'+g.t+'|'+q];
+        if(v && v.s === niv){
+          const sti = tr(omr,l) + (g.t !== omr && !omr.startsWith(g.t) ? ' › ' + tr(g.t,l) : '');
+          blok += '• ' + sti + ': ' + tr(q,l) + '\n' + (v.k && v.k.trim() ? '   ↳ ' + v.k.trim() + '\n' : '');
+        }
+      }));
+    }
+    if(blok){ nogen = true; t += '\n' + ikon[niv] + ' ' + kopi[niv] + '\n' + blok; }
+  });
+  if(!nogen) t += '\n' + T.ingen + '\n';
+
+  let omrTxt = '';
+  for(const omr in DATA[sek]){
+    const k = ((state['omr|'+omr] || {k:''}).k || '').trim();
+    if(k) omrTxt += '• ' + tr(omr,l) + ': ' + k + '\n';
+  }
+  if(omrTxt) t += '\n' + T.omr + '\n' + omrTxt;
+  t += ekstraTekst(l);
+  if(opsum.trim()) t += '\n' + T.sam + '\n' + opsum.trim() + '\n';
+  t += '\n' + T.note + '\n';
+  return t;
+}
+
+function mailKrop(){
+  const sprog = $('sprog').value;
+  if(sprog === 'da') return rapport('da');
+  if(sprog === 'en') return rapport('en');
+  return rapport('da') + '\n' + LINJE + LINJE + '\n🇬🇧 ENGLISH\n' + LINJE + LINJE + '\n\n' + rapport('en');
+}
+
 function sendMail(){
   const afd = AFDELINGER.find(a => a.navn === $('afd').value) || {mail:''};
   const s = talAlt();
-  let krop = '';
-  for(const omr in DATA[sek]){
-    let linjer = '';
-    DATA[sek][omr].forEach(g => g.q.forEach(q => {
-      const v = state[omr+'|'+g.t+'|'+q];
-      if(v && v.s > 0 && v.s < 4){
-        linjer += '  [' + NIVEAU[v.s].toUpperCase() + '] ' + g.t + ' > ' + q + (v.k ? ' - ' + v.k : '') + '\n';
-      }
-    }));
-    const omrK = ((state['omr|'+omr] || {k:''}).k || '').trim();
-    if(linjer || omrK){
-      const t = tal(omr);
-      krop += omr + '  (gron ' + t[1] + ' / gul ' + t[2] + ' / rod ' + t[3] + ')\n' + linjer;
-      if(omrK) krop += '  Kommentar til omradet: ' + omrK + '\n';
-      krop += '\n';
-    }
-  }
-  if(!krop) krop = 'Ingen bemarkninger.\n\n';
-
-  let body =
-      (sek==='foh14' ? 'Cafe-gennemgang' : 'Intern fodevarekontrol') + ' - ' + SEKNAVN[sek] + '\n'
-    + 'Afdeling: ' + $('afd').value + '\n'
-    + 'Dato: ' + $('dato').value + '\n'
-    + 'Kontrollant: ' + ($('kontrollant').value || '-') + '\n\n'
-    + 'RESULTAT\n'
-    + '  Gron (mindre bemarkning): ' + s[1] + '\n'
-    + '  Gul (skal rettes):        ' + s[2] + '\n'
-    + '  Rod (alvorlig):           ' + s[3] + '\n\n'
-    + '------------------------------------------\n'
-    + krop;
-  krop += ekstraTekst();
-  if(opsum.trim()){
-    body += 'SAMLET KOMMENTAR\n------------------------------------------\n' + opsum.trim() + '\n\n';
-  }
-  body += 'Rode punkter rettes straks. Gule punkter rettes inden naste kontrol.\n';
-
-  const emne = 'Intern kontrol ' + SEKNAVN[sek] + ' - ' + $('afd').value + ' - ' + $('dato').value
-             + ' (' + s[1] + '/' + s[2] + '/' + s[3] + ')';
+  const sprog = $('sprog').value;
+  const emne = (sprog==='en' ? 'Inspection' : sprog==='da' ? 'Kontrol' : 'Kontrol / Inspection')
+             + ' – ' + $('afd').value + ' – ' + SEKNAVN[sek].split(' – ')[0] + ' – ' + pen($('dato').value)
+             + ' (🔴' + s[3] + ' 🟡' + s[2] + ' 🟢' + s[1] + ')';
   window.location.href = 'mailto:' + afd.mail.split(',').map(m => encodeURIComponent(m.trim())).join(',')
     + '?subject=' + encodeURIComponent(emne)
     + (CC_MAIL ? '&cc=' + CC_MAIL.split(',').map(m => encodeURIComponent(m.trim())).join(',') : '')
-    + '&body=' + encodeURIComponent(body);
+    + '&body=' + encodeURIComponent(mailKrop());
 }
+
+async function kopierRapport(){
+  const t = mailKrop();
+  try { await navigator.clipboard.writeText(t); $('kopiMsg').textContent = '✔ Kopieret – indsæt i en mail'; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta);
+    ta.select(); try{ document.execCommand('copy'); $('kopiMsg').textContent = '✔ Kopieret – indsæt i en mail'; }
+    catch(e2){ $('kopiMsg').textContent = 'Kunne ikke kopiere'; }
+    ta.remove();
+  }
+  setTimeout(() => $('kopiMsg').textContent = '', 4000);
+}
+$('sprog').value = localStorage.getItem('kaiserkontrol:sprog') || 'begge';
+$('sprog').onchange = function(){ localStorage.setItem('kaiserkontrol:sprog', this.value); };
 
 function nulstil(){
   if(!confirm('Slet ' + SEKNAVN[sek] + ' for ' + $('afd').value + ' den ' + $('dato').value + '?')) return;
