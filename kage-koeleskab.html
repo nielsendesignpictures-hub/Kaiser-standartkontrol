@@ -200,6 +200,19 @@
       font-weight: 1000;
       font-size: 16px;
     }
+    .modeRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;}
+    .modeBtn{
+      text-align:center; padding:16px 12px; border-radius:18px; cursor:pointer; user-select:none;
+      background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+      font-weight:950; font-size:16px;
+    }
+    .modeBtn .sub{display:block; margin-top:4px; font-weight:600; font-size:12px; color:var(--muted);}
+    .modeBtn.active{border-color: rgba(217,182,90,.55); background: rgba(217,182,90,.12); box-shadow:0 0 0 3px rgba(217,182,90,.12);}
+    .modeBtn.frozen.active{border-color: rgba(120,180,255,.60); background: rgba(120,180,255,.14); box-shadow:0 0 0 3px rgba(120,180,255,.14);}
+    .tag{display:inline-block; margin-top:6px; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:950; letter-spacing:.02em;}
+    .tag.thaw{background:rgba(120,180,255,.16); border:1px solid rgba(120,180,255,.35); color:#9cc6ff;}
+    .tag.ready{background:rgba(98,210,111,.14); border:1px solid rgba(98,210,111,.35); color:#8fe29a;}
+    .ver{margin-top:6px; text-align:center; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);}
     .keypad{
       display:grid;
       grid-template-columns: repeat(5, minmax(0,1fr));
@@ -227,6 +240,7 @@
   <div class="wrap">
     <div class="shell">
       <h1>Kagekøleskab</h1>
+      <div class="ver" id="appVersion"></div>
 
       <div class="grid">
         <div class="card">
@@ -240,6 +254,22 @@
             <div class="field">
               <label for="qty">Antal stk</label>
               <input id="qty" type="number" min="1" step="1" placeholder="Fx 4"/>
+            </div>
+          </div>
+
+          <div class="modeRow" id="modeRow">
+            <div class="modeBtn" data-mode="fresh">🍰 Frisk kage<span class="sub">Kommer direkte i køleskabet</span></div>
+            <div class="modeBtn frozen" data-mode="frozen">❄️ Fra fryser<span class="sub">Tøer op i køleskabet</span></div>
+          </div>
+
+          <div class="row" id="frozenRow" style="display:none; margin-bottom:10px;">
+            <div class="field">
+              <label for="takenOut">Taget ud af fryser</label>
+              <input id="takenOut" type="datetime-local"/>
+            </div>
+            <div class="field">
+              <label for="thawHours">Optøning (timer)</label>
+              <input id="thawHours" type="number" min="1" step="1" placeholder="Fx 12"/>
             </div>
           </div>
 
@@ -389,6 +419,13 @@
     "kagekoeleskab.prefs.v2"
   ];
 
+  const APP_VERSION = "2026.11.16-a";
+  /* ÆNDRINGSLOG
+     2026.11.16-a  Ny funktion "Fra fryser": kage tages ud om aftenen og tøer op natten over.
+                   Viser "Optøer – klar kl. …" og skifter til "Optøet" når tiden er gået.
+                   Holdbarheden regnes fra tidspunktet kagen blev taget ud af fryseren (se SHELF_LIFE_FROM). */
+  const DEFAULT_THAW_HOURS = 12;
+  const SHELF_LIFE_FROM = "takenOut"; // "takenOut" = fra udtagning (sikreste) | "ready" = fra optøet
   const TYPES = [
     { id: "gulerod", name: "Gulerodskage", days: 3 },
     { id: "chokolade", name: "Chokoladekage", days: 2 },
@@ -406,6 +443,10 @@
   const by = $("by");
   const qty = $("qty");
   const note = $("note");
+  const modeRow = $("modeRow");
+  const frozenRow = $("frozenRow");
+  const takenOut = $("takenOut");
+  const thawHours = $("thawHours");
   const addBtn = $("addBtn");
   const tbody = $("tbody");
   const preview = $("preview");
@@ -437,6 +478,7 @@
   let entries = loadEntriesWithMigration();
   let prefs = loadPrefsWithMigration();
   let selectedTypeId = prefs.lastTypeId || "gulerod";
+  let mode = "fresh"; // "fresh" | "frozen"
   let pendingDiscardId = null;
   let pendingEditId = null;
 
@@ -515,6 +557,17 @@
     }catch{}
   }
 
+  function checkThawReady(){
+    const now = Date.now();
+    for (const e of entries){
+      if (e.status === "discarded" || !e.frozen || !e.thawReadyAt) continue;
+      const t = new Date(e.thawReadyAt).getTime();
+      if (now >= t && now < new Date(e.discardAt).getTime()){
+        notifyOnce(e, "ready", "Kage er optøet", `${e.cakeName} • ${e.qty || 1} stk er klar til servering`);
+      }
+    }
+  }
+
   function checkDueSoonNotifications(){
     const now = Date.now();
     for (const e of dueSoonEntries()){
@@ -565,7 +618,10 @@
       status: "active",
       discardedAt: null,
       wasteQty: null,
-      wasteUnit: "stk"
+      wasteUnit: "stk",
+      frozen: false,
+      thawHours: 0,
+      thawReadyAt: null
     };
     const merged = { ...base, ...(e||{}) };
     // Migrér gammel "place" til "qty"
@@ -596,6 +652,37 @@
     return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
   }
 
+  function toLocalInput(d){
+    const p = (n) => String(n).padStart(2,"0");
+    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes());
+  }
+  function fmtShort(iso){
+    return new Date(iso).toLocaleString("da-DK", { weekday:"short", hour:"2-digit", minute:"2-digit" });
+  }
+  function frozenTimes(takenIso, hours, days){
+    const readyAt = new Date(new Date(takenIso).getTime() + hours*3600*1000).toISOString();
+    const base = (SHELF_LIFE_FROM === "ready") ? readyAt : takenIso;
+    return { readyAt, discardAt: computeDiscardAt(base, days) };
+  }
+  function readTaken(){
+    const v = takenOut.value ? new Date(takenOut.value) : new Date();
+    return isNaN(v) ? new Date() : v;
+  }
+  function readThaw(){
+    const h = parseInt(thawHours.value, 10);
+    return (Number.isFinite(h) && h > 0) ? h : DEFAULT_THAW_HOURS;
+  }
+  function setMode(m){
+    mode = m;
+    prefs.lastMode = m; savePrefs();
+    modeRow.querySelectorAll(".modeBtn").forEach(b => b.classList.toggle("active", b.getAttribute("data-mode") === m));
+    frozenRow.style.display = (m === "frozen") ? "flex" : "none";
+    if (m === "frozen"){
+      takenOut.value = toLocalInput(new Date());
+      if (!thawHours.value) thawHours.value = String(DEFAULT_THAW_HOURS);
+    }
+    updatePreview();
+  }
   function computeDiscardAt(addedAtIso, days){
     const ms = Number(days) * 24 * 60 * 60 * 1000;
     return new Date(new Date(addedAtIso).getTime() + ms).toISOString();
@@ -642,6 +729,12 @@
       days = Number(customDays.value);
       if (!name || !Number.isFinite(days) || days < 0){ preview.textContent = ""; return; }
     }
+    if (mode === "frozen"){
+      const tk = readTaken().toISOString();
+      const ft = frozenTimes(tk, readThaw(), days);
+      preview.textContent = `Klar til servering: ${fmtShort(ft.readyAt)} • Smides ud: ${fmtDateTime(ft.discardAt)}`;
+      return;
+    }
     preview.textContent = `Smides ud: ${fmtDateTime(computeDiscardAt(nowIso, days))}`;
   }
 
@@ -667,12 +760,24 @@
       return;
     }
 
+    let addedAt = nowIso;
+    let discardAt = computeDiscardAt(nowIso, days);
+    let frozenInfo = {};
+    if (mode === "frozen"){
+      addedAt = readTaken().toISOString();
+      const hrs = readThaw();
+      const ft = frozenTimes(addedAt, hrs, days);
+      discardAt = ft.discardAt;
+      frozenInfo = { frozen: true, thawHours: hrs, thawReadyAt: ft.readyAt };
+    }
+
     const entry = normalizeEntry({
+      ...frozenInfo,
       id: uuid(),
       cakeName,
       days,
-      addedAt: nowIso,
-      discardAt: computeDiscardAt(nowIso, days),
+      addedAt,
+      discardAt,
       by: (by.value || "").trim(),
       qty: qtyVal,
       note: (note.value || "").trim(),
@@ -690,11 +795,20 @@
     qty.value = "";
     note.value = "";
     if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
+    if (mode === "frozen") takenOut.value = toLocalInput(new Date());
     updatePreview();
     render();
     checkAlarm(true);
     updateTabIndicators();
     checkDueSoonNotifications();
+  }
+
+  function thawTag(e){
+    if (!e.frozen || !e.thawReadyAt) return "";
+    if (Date.now() < new Date(e.thawReadyAt).getTime()){
+      return `<br><span class="tag thaw">❄️ Optøer – klar ${escapeHtml(fmtShort(e.thawReadyAt))}</span>`;
+    }
+    return `<br><span class="tag ready">✓ Optøet</span>`;
   }
 
   function render(){
@@ -757,6 +871,7 @@
         <span class="small" style="color:var(--muted)">
           ${e.by ? escapeHtml(e.by) : ""}
         </span>
+        ${thawTag(e)}
 
         ${e.note
           ? `<br><span class="small" style="color:var(--muted)">
@@ -769,7 +884,7 @@
         <strong>${escapeHtml(String(e.qty || 1))}</strong> stk
       </td>
 
-      <td>${fmtDateTime(e.addedAt)}</td>
+      <td>${fmtDateTime(e.addedAt)}${e.frozen ? `<br><span class="small">❄️ ud af fryser</span>` : ""}</td>
 
       <td>
         <strong>${fmtDateTime(e.discardAt)}</strong>
@@ -1021,8 +1136,17 @@
   by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
   qty.addEventListener("input", () => { prefs.lastQty = qty.value; savePrefs(); });
 
+  $("appVersion").textContent = "Version " + APP_VERSION;
+  modeRow.querySelectorAll(".modeBtn").forEach(b => b.addEventListener("click", () => setMode(b.getAttribute("data-mode"))));
+  takenOut.addEventListener("input", updatePreview);
+  thawHours.addEventListener("input", updatePreview);
+  setMode("fresh");
+
   checkAlarm(false);
+  checkThawReady();
   setInterval(() => {
+    render();
+    checkThawReady();
     checkAlarm(false);
     checkDueSoonNotifications();
     updateTabIndicators();
