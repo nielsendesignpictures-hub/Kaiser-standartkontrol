@@ -128,7 +128,8 @@
   .split{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;}
   @media(min-width:900px){.split{grid-template-columns:1fr 1fr;gap:56px;} .split.rev .split-media{order:2;}}
   .media-box{aspect-ratio:4/3;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;position:relative;background:linear-gradient(160deg,var(--red-deep),var(--black));}
-  .media-box img{width:100%;height:100%;object-fit:cover;}
+  .media-box:not(.is-empty){aspect-ratio:auto;background:none;}
+  .media-box img{width:100%;height:auto;display:block;}
   .media-box.is-empty::after{content:"Billede kommer";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--khaki);}
   .media-box .tag{position:absolute;left:16px;bottom:16px;background:var(--red);color:var(--cream);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border-radius:20px;z-index:2;}
   .prose p{font-size:16px;line-height:1.7;color:rgba(246,243,236,.82);margin-bottom:18px;}
@@ -224,7 +225,7 @@
 <section class="xtree-section" id="traeet">
   <div class="wrap">
     <div class="section-head center" style="max-width:640px;">
-      <div class="eyebrow">Ét lys for hvert barn</div>
+      <div class="eyebrow">Kaiser x Coolshop</div>
       <h2 id="treeTitle"></h2>
       <p id="treeText"></p>
     </div>
@@ -297,7 +298,10 @@
         </div>
         <div class="field"><label for="fOnsker">Ønsker</label><textarea id="fOnsker" required placeholder="Fx yndlingsfarve, interesser eller konkrete ønsker"></textarea></div>
         <div class="field"><label for="fKontakt">Dit navn og telefon (forælder/kontaktperson)</label><input id="fKontakt" required></div>
-        <div class="field"><label for="fBesked">Besked (valgfri)</label><textarea id="fBesked" style="min-height:80px;"></textarea></div>
+        <div class="field"><label for="fLink1">Link 1</label><input id="fLink1" type="url" inputmode="url" placeholder="https://" required autocomplete="off"></div>
+        <div class="field"><label for="fLink2">Link 2</label><input id="fLink2" type="url" inputmode="url" placeholder="https://" required autocomplete="off"></div>
+        <div class="field"><label for="fLink3">Link 3</label><input id="fLink3" type="url" inputmode="url" placeholder="https://" required autocomplete="off"></div>
+        <div class="field"><label for="fBesked">Besked</label><textarea id="fBesked" style="min-height:80px;" required></textarea></div>
         <button type="submit" class="btn btn-gold">Send ansøgning</button>
         <div class="apply-err" id="applyErr">Udfyld venligst alle felter.</div>
         <p class="apply-note">Når du trykker send, åbner din mail med ansøgningen udfyldt til <a id="applyMail"></a>. Du skal blot trykke send i din mail.</p>
@@ -351,8 +355,8 @@ const CONFIG = {
 
   hero: {
     eyebrow: "Jul 2026",
-    title: "100 julegaver <span>til børn</span>, der fortjener lidt ekstra",
-    text: "Sammen med Coolshop giver Café Kaiser 100 julegaver til børn, som har brug for lidt ekstra glæde i julen."
+    title: "Kaisers <span>julehjælp</span>",
+    text: "En hjælpende hånd i julen til dem, der har brug for det"
   },
 
   // Tal-båndet under toppen
@@ -365,15 +369,15 @@ const CONFIG = {
   // Juletræet: ét lys pr. barn. "lit" = hvor mange lys der tændes
   // (fx antal gaver der er klar/givet). Sæt lit = total for alle.
   tree: {
-    title: "100 lys. 100 børn.",
-    text: "Hvert lys på træet er et barn, der får en gave under træet juleaften. Sammen med Coolshop tænder vi dem alle.",
+    title: "Kaisers julehjælp",
+    text: "En hjælpende hånd i julen til dem, der har brug for det",
     label: "Børn der får en julegave",
     total: 100,
     lit: 100
   },
 
   info: {
-    image: "images/jul-hero.png",
+    image: "images/jul-gaver.jpg",
     tag: "Kaiser x Coolshop",
     eyebrow: "Julen handler om fællesskab",
     title: "Fordi alle børn skal have en gave under træet",
@@ -609,7 +613,7 @@ $('ctaBtn').textContent = CONFIG.cta.button;
   $('applyForm').addEventListener('submit', e => {
     e.preventDefault();
     const v = id => $(id).value.trim();
-    const req = ['fNavn','fAdresse','fAlder','fOnsker','fKontakt'];
+    const req = ['fNavn','fAdresse','fAlder','fOnsker','fKontakt','fLink1','fLink2','fLink3','fBesked'];
     const missing = req.filter(id => !v(id));
     req.forEach(id => $(id).style.borderColor = v(id) ? '' : '#c55');
     $('applyErr').style.display = missing.length ? 'block' : 'none';
@@ -620,7 +624,8 @@ $('ctaBtn').textContent = CONFIG.cta.button;
       'Alder: ' + v('fAlder') + '\n\n' +
       'Ønsker:\n' + v('fOnsker') + '\n\n' +
       'Kontaktperson: ' + v('fKontakt') + '\n' +
-      (v('fBesked') ? '\nBesked:\n' + v('fBesked') + '\n' : '');
+      '\nLinks:\n1. ' + v('fLink1') + '\n2. ' + v('fLink2') + '\n3. ' + v('fLink3') + '\n' +
+      '\nBesked:\n' + v('fBesked') + '\n';
     location.href = 'mailto:' + A.email + '?subject=' + encodeURIComponent(A.subject + ' — ' + v('fNavn')) + '&body=' + encodeURIComponent(body);
   });
 })();
