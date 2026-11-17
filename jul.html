@@ -104,18 +104,25 @@
   .xtree-pot{fill:#5e1416;}
   .xtree-star{fill:var(--gold);filter:drop-shadow(0 0 8px rgba(236,205,114,.9));transform-box:fill-box;transform-origin:center;animation:starPulse 3s ease-in-out infinite;}
   @keyframes starPulse{50%{filter:drop-shadow(0 0 18px rgba(236,205,114,1));transform:scale(1.06);}}
-  .bulb .core{fill:#3c3426;transition:fill .6s ease;}
-  .bulb .halo{opacity:0;transition:opacity .9s ease;mix-blend-mode:screen;}
-  .bulb.on .core{fill:url(#coreGrad);}
-  .bulb.on .halo{opacity:1;animation:glow var(--d,3s) ease-in-out infinite;animation-delay:var(--dl,0s);transform-box:fill-box;transform-origin:center;}
-  @keyframes glow{0%,100%{opacity:.95;transform:scale(1);}30%{opacity:.7;transform:scale(.92);}62%{opacity:1;transform:scale(1.06);}80%{opacity:.82;}}
+  .candle .body{fill:url(#waxGrad);}
+  .candle .wick{stroke:#2a2118;stroke-width:.6;stroke-linecap:round;}
+  .candle .flame-g{transform-box:fill-box;transform-origin:50% 100%;transform:scale(0);opacity:0;transition:transform 1.1s cubic-bezier(.3,1.4,.5,1),opacity .8s ease;}
+  .candle .halo{opacity:0;transition:opacity 1.6s ease;}
+  .candle .glowtop{opacity:0;transition:opacity 1.4s ease;}
+  .candle.on .flame-g{transform:scale(1);opacity:1;}
+  .candle.on .halo{opacity:1;}
+  .candle.on .glowtop{opacity:.9;}
+  .candle.on .flame{transform-box:fill-box;transform-origin:50% 100%;animation:flame var(--d,2.4s) ease-in-out infinite;animation-delay:var(--dl,0s);}
+  .candle.on .halo{animation:haloPulse var(--d,2.4s) ease-in-out infinite;animation-delay:var(--dl,0s);transform-box:fill-box;transform-origin:center;}
+  @keyframes flame{0%,100%{transform:scale(1,1) skewX(0deg);}20%{transform:scale(.94,1.06) skewX(2deg);}45%{transform:scale(1.04,.95) skewX(-2.5deg);}70%{transform:scale(.97,1.04) skewX(1.5deg);}}
+  @keyframes haloPulse{0%,100%{opacity:.95;transform:scale(1);}45%{opacity:.75;transform:scale(.93);}70%{opacity:1;transform:scale(1.04);}}
   .xtree-ambient{opacity:0;transition:opacity 2.5s ease;}
   .xtree-svg.lit .xtree-ambient{opacity:1;}
   .xtree-count{text-align:center;margin-top:30px;}
   .xtree-count .n{font-family:var(--font-display);font-size:clamp(46px,9vw,72px);color:var(--gold);line-height:1;}
   .xtree-count .n small{font-size:.38em;color:var(--khaki);}
   .xtree-count .l{margin-top:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--khaki-dim);}
-  @media (prefers-reduced-motion:reduce){.bulb.on .halo,.xtree-star{animation:none;}}
+  @media (prefers-reduced-motion:reduce){.candle.on .flame,.candle.on .halo,.xtree-star{animation:none;}}
 
   /* info-boks med billede */
   .split{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;}
@@ -226,15 +233,17 @@
         <defs>
           <radialGradient id="haloWarm"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".95"/><stop offset=".25" stop-color="#ffbf5a" stop-opacity=".55"/><stop offset=".6" stop-color="#ff9a2e" stop-opacity=".15"/><stop offset="1" stop-color="#ff8a1e" stop-opacity="0"/></radialGradient>
           <radialGradient id="haloSoft"><stop offset="0" stop-color="#fff3d6" stop-opacity=".9"/><stop offset=".3" stop-color="#ffd58a" stop-opacity=".45"/><stop offset="1" stop-color="#ffc060" stop-opacity="0"/></radialGradient>
+          <linearGradient id="waxGrad" x1="0" x2="1"><stop offset="0" stop-color="#d9d2c3"/><stop offset=".35" stop-color="#fffaf0"/><stop offset=".7" stop-color="#f4ecdc"/><stop offset="1" stop-color="#bfb6a4"/></linearGradient>
+          <radialGradient id="flameGrad" cx=".5" cy=".72" r=".6"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fff4c8"/><stop offset=".7" stop-color="#ffc552"/><stop offset="1" stop-color="#ff8a1e" stop-opacity=".85"/></radialGradient>
+          <radialGradient id="flameCore" cx=".5" cy=".7" r=".5"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          <radialGradient id="glowTop" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".9"/><stop offset="1" stop-color="#ffe7a8" stop-opacity="0"/></radialGradient>
           <radialGradient id="coreGrad"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#fff1c4"/><stop offset="1" stop-color="#ffcf6e"/></radialGradient>
           <radialGradient id="ambientGrad"><stop offset="0" stop-color="#ffc766" stop-opacity=".22"/><stop offset="1" stop-color="#ffc766" stop-opacity="0"/></radialGradient>
         </defs>
         <ellipse class="xtree-ambient" cx="200" cy="290" rx="190" ry="210" fill="url(#ambientGrad)"/>
         <rect class="xtree-trunk" x="182" y="440" width="36" height="40"/>
         <path class="xtree-pot" d="M150 470 H250 L240 515 H160 Z"/>
-        <polygon class="xtree-tier" points="200,230 40,450 360,450"/>
-        <polygon class="xtree-tier t2" points="200,130 70,330 330,330"/>
-        <polygon class="xtree-tier t3" points="200,40 105,220 295,220"/>
+        <g id="xtreeBranches"></g>
         <g id="xtreeLights"></g>
         <path class="xtree-star" d="M200 8 L208 30 L231 30 L212 44 L219 66 L200 52 L181 66 L188 44 L169 30 L192 30 Z"/>
       </svg>
@@ -459,6 +468,76 @@ $('ctaText').textContent = CONFIG.cta.text;
 $('ctaBtn').textContent = CONFIG.cta.button;
 
 
+
+// Ægte gran: tegner hundredvis af små grene med nåle (samme træ hver gang)
+(function(){
+  const host = $('xtreeBranches'); if (!host) return;
+  let sd = 21; const r = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+  const TOP = 48, BOT = 448, CX = 200, TIERS = 6;
+  // halv bredde ved y — savtakket, så træet får "etager"
+  const halfW = y => {
+    const t = (y - TOP) / (BOT - TOP);
+    const tierPos = (t * TIERS) % 1;
+    return (14 + t * 150) * (0.78 + 0.22 * tierPos);
+  };
+  const shades = ['#0a1a10','#0f2316','#142d1d','#1a3824','#21442c','#2a5236'];
+  const paths = shades.map(() => '');
+  const layers = [ {n: 520, depth: 0}, {n: 420, depth: 1}, {n: 320, depth: 2} ];
+  const f = v => v.toFixed(1);
+  layers.forEach(({n, depth}) => {
+    for (let i = 0; i < n; i++) {
+      const y = TOP + 6 + Math.pow(r(), .85) * (BOT - TOP - 10);
+      const hw = halfW(y);
+      const u = (r() * 2 - 1);
+      const side = u < 0 ? -1 : 1;
+      const x0 = CX + u * hw * .8;
+      // gren peger ud og lidt ned, mere vandret ude i kanten
+      const len = 14 + r() * 22 + (y - TOP) * .03;
+      let ang = (side > 0 ? 0 : Math.PI) + side * (0.25 + r() * .45);
+      const ex = x0 + Math.cos(ang) * len, ey = y + Math.sin(Math.abs(ang - (side > 0 ? 0 : Math.PI))) * len * .6;
+      const maxX = CX + hw, minX = CX - hw;
+      const ex2 = Math.max(minX, Math.min(maxX, ex));
+      const shadeIdx = Math.min(shades.length - 1, Math.max(0, Math.floor(depth * 2 + r() * 2.2)));
+      let d = `M${f(x0)} ${f(y)}Q${f((x0+ex2)/2)} ${f(y + 2)} ${f(ex2)} ${f(ey)}`;
+      // nåle langs grenen
+      const segs = Math.round(len / 2.4);
+      for (let k = 1; k <= segs; k++) {
+        const t = k / segs;
+        const px = x0 + (ex2 - x0) * t, py = y + (ey - y) * t + Math.sin(t * Math.PI) * 2;
+        const nl = 4.5 * (1 - t * .55) + r() * 1.5;
+        const dir = Math.atan2(ey - y, ex2 - x0);
+        for (const s2 of [-1, 1]) {
+          const a = dir + s2 * (0.95 + r() * .35) + .35;   // let hængende nåle
+          d += `M${f(px)} ${f(py)}l${f(Math.cos(a) * nl)} ${f(Math.sin(a) * nl)}`;
+        }
+      }
+      paths[shadeIdx] += d;
+    }
+  });
+  const NS = 'http://www.w3.org/2000/svg';
+  // mørk kerne bag grenene, så der ikke er huller
+  const core = document.createElementNS(NS, 'path');
+  core.setAttribute('d', `M${CX} ${TOP+10} L${CX + 120} ${BOT - 12} L${CX - 120} ${BOT - 12} Z`);
+  core.setAttribute('fill', '#0b1a11'); core.setAttribute('opacity', '.9');
+  host.appendChild(core);
+  paths.forEach((d, i) => {
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d); p.setAttribute('stroke', shades[i]); p.setAttribute('fill', 'none');
+    p.setAttribute('stroke-width', i < 2 ? 1.1 : .9); p.setAttribute('stroke-linecap', 'round');
+    host.appendChild(p);
+  });
+  // lidt sne/lys-highlight på nogle nåle
+  let hl = '';
+  for (let i = 0; i < 260; i++) {
+    const y = TOP + 10 + r() * (BOT - TOP - 20), hw = halfW(y);
+    const x = CX + (r() * 2 - 1) * hw * .95;
+    hl += `M${f(x)} ${f(y)}l${f(2 + r()*2)} ${f(1 + r())}`;
+  }
+  const h = document.createElementNS(NS, 'path');
+  h.setAttribute('d', hl); h.setAttribute('stroke', '#4d8a5c'); h.setAttribute('stroke-width', .7); h.setAttribute('opacity', .35);
+  host.appendChild(h);
+})();
+
 // Juletræ med lys — tændes ét ad gangen når træet ses
 (function(){
   const T = CONFIG.tree, g = $('xtreeLights');
@@ -475,27 +554,34 @@ $('ctaBtn').textContent = CONFIG.cta.button;
     const half = (y - 40) / (450 - 40) * 150;
     for (let k = 0; k < n; k++) {
       const x = 200 - half + (2 * half) * (k + .5) / n + (rnd() - .5) * 8;
-      pts.push([x, y + (rnd() - .5) * 10]);
+      pts.push([x, y + 6 + (rnd() - .5) * 6]);
     }
   }
   while (pts.length > T.total) pts.splice(Math.floor(rnd() * pts.length), 1);
   while (pts.length < T.total) pts.push([200 + (rnd() - .5) * 200, 300 + rnd() * 120]);
   const order = pts.map((p, i) => i).sort(() => rnd() - .5);
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (t, at) => { const e = document.createElementNS(NS, t); for (const k in at) e.setAttribute(k, at[k]); return e; };
+  pts.sort((p, q) => p[1] - q[1]);   // tegn øverste først, så nederste lys ligger forrest
   const els = pts.map(([x, y]) => {
-    const NS = 'http://www.w3.org/2000/svg';
-    const b = document.createElementNS(NS, 'g'); b.setAttribute('class', 'bulb');
-    const h = document.createElementNS(NS, 'circle');
-    h.setAttribute('cx', x.toFixed(1)); h.setAttribute('cy', y.toFixed(1));
-    h.setAttribute('r', (9 + rnd() * 5).toFixed(1));
-    h.setAttribute('fill', rnd() < .7 ? 'url(#haloWarm)' : 'url(#haloSoft)');
-    h.setAttribute('class', 'halo');
-    const c = document.createElementNS(NS, 'circle');
-    c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', y.toFixed(1));
-    c.setAttribute('r', (1.9 + rnd() * .8).toFixed(2)); c.setAttribute('class', 'core');
-    b.append(h, c);
-    b.style.setProperty('--d', (2.2 + rnd() * 3).toFixed(2) + 's');
-    b.style.setProperty('--dl', (-rnd() * 4).toFixed(2) + 's');
-    g.appendChild(b); return b;
+    const h = 9 + rnd() * 3, w = 3.2;           // lysets højde/bredde
+    const top = y - h;
+    const c = mk('g', { class: 'candle' });
+    c.append(
+      mk('circle', { class: 'halo', cx: x, cy: top - 4, r: (11 + rnd() * 4).toFixed(1), fill: rnd() < .7 ? 'url(#haloWarm)' : 'url(#haloSoft)' }),
+      mk('rect', { class: 'body', x: (x - w/2).toFixed(2), y: top.toFixed(2), width: w, height: h.toFixed(2), rx: .7 }),
+      mk('rect', { class: 'glowtop', x: (x - w/2).toFixed(2), y: top.toFixed(2), width: w, height: (h * .45).toFixed(2), rx: .7, fill: 'url(#glowTop)' }),
+      mk('line', { class: 'wick', x1: x, y1: top, x2: x, y2: (top - 1.4).toFixed(2) })
+    );
+    const fg = mk('g', { class: 'flame-g' });
+    const fy = top - 1, fh = 8.5, fw = 2.6;
+    const fl = mk('path', { class: 'flame', fill: 'url(#flameGrad)',
+      d: `M${x} ${(fy - fh).toFixed(2)} C${(x + fw*.55).toFixed(2)} ${(fy - fh*.55).toFixed(2)} ${(x + fw).toFixed(2)} ${(fy - fh*.2).toFixed(2)} ${x} ${fy.toFixed(2)} C${(x - fw).toFixed(2)} ${(fy - fh*.2).toFixed(2)} ${(x - fw*.55).toFixed(2)} ${(fy - fh*.55).toFixed(2)} ${x} ${(fy - fh).toFixed(2)} Z` });
+    fg.append(fl, mk('ellipse', { cx: x, cy: (fy - fh*.28).toFixed(2), rx: (fw*.42).toFixed(2), ry: (fh*.22).toFixed(2), fill: 'url(#flameCore)' }));
+    c.append(fg);
+    c.style.setProperty('--d', (1.8 + rnd() * 2.2).toFixed(2) + 's');
+    c.style.setProperty('--dl', (-rnd() * 3).toFixed(2) + 's');
+    g.appendChild(c); return c;
   });
   const lit = Math.min(T.lit, T.total), num = $('litNum');
   const svgEl = g.ownerSVGElement;
@@ -504,7 +590,7 @@ $('ctaBtn').textContent = CONFIG.cta.button;
   const obs = new IntersectionObserver(es => {
     if (!es[0].isIntersecting) return; obs.disconnect();
     svgEl.classList.add('lit');
-    let i = 0; const step = Math.max(12, 2400 / lit);
+    let i = 0; const step = Math.max(40, 9000 / lit);
     const t = setInterval(() => {
       if (i >= lit) return clearInterval(t);
       els[order[i]].classList.add('on'); i++; num.textContent = i;
