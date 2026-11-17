@@ -30,6 +30,22 @@
   .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
   .narrow{max-width:760px;}
   .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+
+  /* hero: tekst til venstre, juletræ til højre */
+  .hero{align-items:center;}
+  .hero-inner.hero-split{max-width:1120px;width:100%;display:grid;grid-template-columns:1fr;gap:34px;align-items:center;text-align:center;padding:110px 20px 60px;}
+  .hero-split .hero-tree{max-width:420px;margin:0 auto;width:100%;}
+  .hero-split .xtree-stage{max-width:none;}
+  .hero-split .xtree-count{margin-top:12px;}
+  .hero-split .xtree-count .n{font-size:clamp(34px,6vw,48px);}
+  @media(min-width:900px){
+    .hero-inner.hero-split{grid-template-columns:1.05fr .95fr;gap:56px;text-align:left;padding:96px 20px 40px;}
+    .hero-split .hero-logos,.hero-split .hero-actions,.hero-split .ornament-line{justify-content:flex-start;}
+    .hero-split .hero p{margin:0;}
+    .hero-split .ornament-line::before{display:none;}
+    .hero-split .hero-tree{max-width:400px;margin-left:auto;margin-right:auto;}
+  }
+
   section{padding:84px 0;position:relative;}
   .section-head{margin-bottom:40px;}
   .section-head h2{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(24px,4.2vw,40px);line-height:1.03;margin-top:10px;}
@@ -196,39 +212,26 @@
 
 <header class="hero" id="top">
   <div class="hero-media">
-    <video id="heroVideo" autoplay muted loop playsinline style="display:none;"><source src="" type="video/mp4"></video>
     <img id="heroImg" alt="" onerror="this.remove();">
     <div class="hero-fallback"></div>
   </div>
   <div class="hero-scrim"></div>
-  <div class="hero-inner">
-    <div class="hero-logos">
-      <img class="lg" src="images/logo.png" alt="Café Kaiser" onerror="this.outerHTML='<span class=&quot;txt&quot;>Café Kaiser</span>'">
-      <span class="x">x</span>
-      <img class="partner" id="heroPartnerLogo" alt="Coolshop" onerror="this.outerHTML='<span class=&quot;txt&quot;>Coolshop</span>'">
+  <div class="hero-inner hero-split">
+    <div class="hero-text">
+      <div class="hero-logos">
+        <img class="lg" src="images/logo.png" alt="Café Kaiser" onerror="this.outerHTML='<span class=&quot;txt&quot;>Café Kaiser</span>'">
+        <span class="x">x</span>
+        <img class="partner" id="heroPartnerLogo" alt="Coolshop" onerror="this.outerHTML='<span class=&quot;txt&quot;>Coolshop</span>'">
+      </div>
+      <div class="ornament-line eyebrow" id="heroEyebrow"></div>
+      <h1 id="heroTitle"></h1>
+      <p id="heroText"></p>
+      <div class="hero-actions">
+        <a href="#om" class="btn btn-gold">Læs mere</a>
+        <a href="#ansog" class="btn btn-outline">Ansøg om en gave</a>
+      </div>
     </div>
-    <div class="ornament-line eyebrow" id="heroEyebrow"></div>
-    <h1 id="heroTitle"></h1>
-    <p id="heroText"></p>
-    <div class="hero-actions">
-      <a href="#om" class="btn btn-gold">Læs mere</a>
-      <a href="#ansog" class="btn btn-outline">Ansøg om en gave</a>
-    </div>
-  </div>
-</header>
-
-<div class="stats">
-  <div class="wrap stats-grid" id="statsGrid"></div>
-</div>
-
-
-<section class="xtree-section" id="traeet">
-  <div class="wrap">
-    <div class="section-head center" style="max-width:640px;">
-      <div class="eyebrow">Kaiser x Coolshop</div>
-      <h2 id="treeTitle"></h2>
-      <p id="treeText"></p>
-    </div>
+    <div class="hero-tree" id="traeet">
     <div class="xtree-stage" id="xtreeStage">
       <svg class="xtree-svg" viewBox="0 0 400 520" role="img" aria-label="Juletræ med et lys for hvert barn">
         <defs>
@@ -249,9 +252,16 @@
         <path class="xtree-star" d="M200 8 L208 30 L231 30 L212 44 L219 66 L200 52 L181 66 L188 44 L169 30 L192 30 Z"/>
       </svg>
     </div>
-    <div class="xtree-count"><div class="n"><span id="litNum">0</span><small> / <span id="totalNum"></span></small></div><div class="l" id="treeLabel"></div></div>
+    <div class="xtree-count"><div class="n"><span id="litNum">0</span></div><div class="l" id="treeLabel"></div></div>
+    </div>
   </div>
-</section>
+</header>
+
+<div class="stats">
+  <div class="wrap stats-grid" id="statsGrid"></div>
+</div>
+
+
 
 <section id="om">
   <div class="wrap">
@@ -346,8 +356,7 @@
 const CONFIG = {
 
   // Baggrund i toppen: video først, ellers billede, ellers mørk julegradient.
-  heroVideo: "assets/jul-hero.mp4",
-  heroImage: "images/jul.png",
+  heroImage: "images/jul-hero.jpg",
 
   // Coolshops logo (lægges i assets/)
   partnerLogo: "images/coolshop.png",
@@ -377,7 +386,7 @@ const CONFIG = {
   },
 
   info: {
-    image: "images/jul-gaver.jpg",
+    image: "images/jul.png",
     tag: "Kaiser x Coolshop",
     eyebrow: "Julen handler om fællesskab",
     title: "Fordi alle børn skal have en gave under træet",
@@ -427,13 +436,6 @@ const $ = id => document.getElementById(id);
 
 // hero baggrund
 if (CONFIG.heroImage) $('heroImg').src = CONFIG.heroImage; else $('heroImg').remove();
-(function(){
-  const v = $('heroVideo'); if (!CONFIG.heroVideo) return;
-  const s = v.querySelector('source'); s.src = CONFIG.heroVideo;
-  v.addEventListener('canplay', () => v.style.display = 'block', { once:true });
-  s.addEventListener('error', () => v.style.display = 'none');
-  v.load();
-})();
 
 $('heroPartnerLogo').src = CONFIG.partnerLogo;
 $('heroEyebrow').textContent = CONFIG.hero.eyebrow;
@@ -545,8 +547,7 @@ $('ctaBtn').textContent = CONFIG.cta.button;
 // Juletræ med lys — tændes ét ad gangen når træet ses
 (function(){
   const T = CONFIG.tree, g = $('xtreeLights');
-  $('treeTitle').textContent = T.title; $('treeText').textContent = T.text;
-  $('treeLabel').textContent = T.label; $('totalNum').textContent = T.total;
+  $('treeLabel').textContent = T.label;
   // punkter fordelt i trekanten (spids 200,55 -> bund 50..350 ved y=440)
   let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
   const pts = [], top = 62, bot = 435, rows = 13;
