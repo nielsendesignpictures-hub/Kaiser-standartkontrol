@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaiser x Coolshop — Julegaver til børn</title>
+<meta name="description" content="Café Kaiser og Coolshop giver julegaver til børn, der har brug for lidt ekstra glæde i julen.">
+<!--
+=====================================================================
+  KONFIGURATION — al tekst, tal og billeder ligger i CONFIG nederst.
+  Billeder/logoer lægges direkte i assets/ (ingen undermapper).
+  Upload som jul.html ved siden af index.html.
+=====================================================================
+-->
+<style>
+  :root{
+    --black:#121110; --charcoal:#1c1a17; --charcoal-2:#262320;
+    --cream:#f6f3ec; --khaki:#b9ac7a; --khaki-dim:#8c8262;
+    --gold:#d7b654; --line:#3a352c;
+    --red:#a3262a; --red-deep:#5e1416; --pine:#1f3a2c;
+    --font-display:'Arial Black','Helvetica Neue',Arial,sans-serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--black);color:var(--cream);font-family:var(--font-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+  .narrow{max-width:760px;}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  section{padding:84px 0;position:relative;}
+  .section-head{margin-bottom:40px;}
+  .section-head h2{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(24px,4.2vw,40px);line-height:1.03;margin-top:10px;}
+  .section-head p{color:rgba(246,243,236,.7);margin-top:14px;font-size:15px;line-height:1.6;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 32px;font-weight:700;font-size:14px;letter-spacing:.03em;text-decoration:none;text-transform:uppercase;border-radius:999px;border:1px solid transparent;transition:transform .18s,background .18s,border-color .18s;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn-gold{background:var(--gold);color:var(--black);}
+  .btn-gold:hover{background:#ecd27e;}
+  .btn-outline{border-color:rgba(246,243,236,.5);color:var(--cream);}
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+
+  /* sne */
+  .snow{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden;}
+  .flake{position:absolute;top:-10px;border-radius:50%;background:#fff;opacity:.7;animation:fall linear infinite;}
+  @keyframes fall{to{transform:translate3d(var(--drift),110vh,0);}}
+  @media (prefers-reduced-motion:reduce){.snow{display:none;}html{scroll-behavior:auto;}}
+
+  /* nav */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:linear-gradient(180deg,rgba(18,17,16,.9),rgba(18,17,16,0));transition:background .3s,padding .3s;}
+  .nav.scrolled{background:rgba(18,17,16,.94);backdrop-filter:blur(6px);padding:10px 20px;border-bottom:1px solid var(--line);}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-badge{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--cream);overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:14px;}
+  .nav-badge img{width:100%;height:100%;object-fit:cover;}
+  .nav-word{font-family:var(--font-display);font-size:13px;letter-spacing:.08em;text-transform:uppercase;}
+  .nav-word em{color:var(--gold);font-style:italic;}
+  .nav-link{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--khaki);}
+  .nav-link:hover{color:var(--gold);}
+
+  /* hero */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;}
+  .hero-media{position:absolute;inset:0;}
+  .hero-media video,.hero-media img,.hero-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .hero-media video{z-index:1;}
+  .hero-fallback{background:
+    radial-gradient(ellipse 70% 50% at 50% 0%,rgba(215,182,84,.18),transparent 60%),
+    radial-gradient(ellipse 60% 60% at 15% 100%,rgba(163,38,42,.35),transparent 60%),
+    radial-gradient(ellipse 60% 60% at 85% 100%,rgba(31,58,44,.55),transparent 60%),
+    linear-gradient(180deg,#151311,#0b0a09);}
+  .hero-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(0deg,rgba(10,9,8,.95),rgba(10,9,8,.45) 55%,rgba(10,9,8,.6));}
+  .hero-inner{position:relative;z-index:3;padding:120px 20px 80px;max-width:900px;}
+  .hero-logos{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:26px;}
+  .hero-logos .lg{height:64px;width:auto;}
+  .hero-logos .partner{height:44px;width:auto;}
+  .hero-logos .x{font-family:Georgia,serif;font-style:italic;font-size:26px;color:var(--gold);}
+  .hero-logos .txt{font-family:var(--font-display);text-transform:uppercase;font-size:20px;letter-spacing:.06em;}
+  .hero h1{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(34px,7.5vw,78px);line-height:.98;margin:14px 0 20px;}
+  .hero h1 span{color:var(--gold);}
+  .hero p{font-size:clamp(15px,2.4vw,19px);color:rgba(246,243,236,.85);max-width:620px;margin:0 auto;line-height:1.55;}
+  .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px;}
+  .ornament-line{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--gold);}
+  .ornament-line::before,.ornament-line::after{content:"";width:46px;height:1px;background:currentColor;opacity:.6;}
+
+  /* tal */
+  .stats{background:var(--charcoal);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:56px 0;}
+  .stats-grid{display:grid;grid-template-columns:1fr;gap:28px;text-align:center;}
+  @media(min-width:760px){.stats-grid{grid-template-columns:repeat(3,1fr);}}
+  .stat .num{font-family:var(--font-display);font-size:clamp(44px,8vw,68px);color:var(--gold);line-height:1;}
+  .stat .num small{font-size:.4em;color:var(--khaki);margin-left:4px;}
+  .stat .lbl{margin-top:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--khaki-dim);}
+  .stat + .stat{border-top:1px solid var(--line);padding-top:28px;}
+  @media(min-width:760px){.stat + .stat{border-top:0;padding-top:0;border-left:1px solid var(--line);}}
+
+
+  /* juletræ med 100 lys */
+  .xtree-section{background:radial-gradient(ellipse 60% 70% at 50% 45%,rgba(215,182,84,.10),transparent 70%),var(--black);}
+  .xtree-stage{max-width:520px;margin:0 auto;position:relative;}
+  .xtree-svg{width:100%;height:auto;display:block;overflow:visible;}
+  .xtree-tier{fill:#1d3527;}
+  .xtree-tier.t2{fill:#21402e;} .xtree-tier.t3{fill:#264a35;}
+  .xtree-trunk{fill:#3a2b1d;}
+  .xtree-pot{fill:#5e1416;}
+  .xtree-star{fill:var(--gold);filter:drop-shadow(0 0 8px rgba(236,205,114,.9));transform-box:fill-box;transform-origin:center;animation:starPulse 3s ease-in-out infinite;}
+  @keyframes starPulse{50%{filter:drop-shadow(0 0 18px rgba(236,205,114,1));transform:scale(1.06);}}
+  .bulb .core{fill:#3c3426;transition:fill .6s ease;}
+  .bulb .halo{opacity:0;transition:opacity .9s ease;mix-blend-mode:screen;}
+  .bulb.on .core{fill:url(#coreGrad);}
+  .bulb.on .halo{opacity:1;animation:glow var(--d,3s) ease-in-out infinite;animation-delay:var(--dl,0s);transform-box:fill-box;transform-origin:center;}
+  @keyframes glow{0%,100%{opacity:.95;transform:scale(1);}30%{opacity:.7;transform:scale(.92);}62%{opacity:1;transform:scale(1.06);}80%{opacity:.82;}}
+  .xtree-ambient{opacity:0;transition:opacity 2.5s ease;}
+  .xtree-svg.lit .xtree-ambient{opacity:1;}
+  .xtree-count{text-align:center;margin-top:30px;}
+  .xtree-count .n{font-family:var(--font-display);font-size:clamp(46px,9vw,72px);color:var(--gold);line-height:1;}
+  .xtree-count .n small{font-size:.38em;color:var(--khaki);}
+  .xtree-count .l{margin-top:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--khaki-dim);}
+  @media (prefers-reduced-motion:reduce){.bulb.on .halo,.xtree-star{animation:none;}}
+
+  /* info-boks med billede */
+  .split{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;}
+  @media(min-width:900px){.split{grid-template-columns:1fr 1fr;gap:56px;} .split.rev .split-media{order:2;}}
+  .media-box{aspect-ratio:4/3;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;position:relative;background:linear-gradient(160deg,var(--red-deep),var(--black));}
+  .media-box img{width:100%;height:100%;object-fit:cover;}
+  .media-box.is-empty::after{content:"Billede kommer";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--khaki);}
+  .media-box .tag{position:absolute;left:16px;bottom:16px;background:var(--red);color:var(--cream);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border-radius:20px;z-index:2;}
+  .prose p{font-size:16px;line-height:1.7;color:rgba(246,243,236,.82);margin-bottom:18px;}
+  .prose p:last-child{margin-bottom:0;}
+  .prose strong{color:var(--cream);}
+  .pull{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:clamp(18px,2.4vw,23px);line-height:1.45;border-left:2px solid var(--gold);padding-left:20px;margin-top:26px;color:var(--cream);}
+
+  /* sådan foregår det */
+  .steps{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media(min-width:820px){.steps{grid-template-columns:repeat(3,1fr);}}
+  .step{background:var(--charcoal);border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;transition:border-color .25s,transform .25s;}
+  .step:hover{border-color:var(--khaki-dim);transform:translateY(-3px);}
+  .step-n{font-family:var(--font-display);font-size:14px;color:var(--black);background:var(--gold);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .step h3{font-family:var(--font-display);text-transform:uppercase;font-size:19px;margin-bottom:10px;}
+  .step p{font-size:14px;color:rgba(246,243,236,.72);line-height:1.6;}
+
+
+  /* ansøg */
+  .apply-grid{display:grid;grid-template-columns:1fr;gap:32px;align-items:start;}
+  @media(min-width:900px){.apply-grid{grid-template-columns:1fr 1.1fr;gap:56px;}}
+  .apply-form{background:var(--charcoal);border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--khaki);margin-bottom:8px;font-weight:700;}
+  .field input,.field textarea{width:100%;background:var(--black);border:1px solid var(--line);border-radius:var(--radius);color:var(--cream);font:inherit;font-size:16px;padding:13px 14px;transition:border-color .2s;}
+  .field textarea{min-height:120px;resize:vertical;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);}
+  .field-row{display:grid;grid-template-columns:1fr;gap:0 16px;}
+  @media(min-width:560px){.field-row{grid-template-columns:2fr 1fr;}}
+  .apply-form .btn{width:100%;border:0;cursor:pointer;margin-top:6px;}
+  .apply-note{margin-top:14px;font-size:13px;color:var(--khaki-dim);text-align:center;line-height:1.5;}
+  .apply-note a{color:var(--khaki);}
+  .apply-err{display:none;margin-top:12px;font-size:13px;color:#e88;text-align:center;}
+
+  /* partner */
+  .partner-band{background:linear-gradient(160deg,var(--pine),#0f1d16 70%);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .partner-card{display:grid;grid-template-columns:1fr;gap:30px;align-items:center;}
+  @media(min-width:860px){.partner-card{grid-template-columns:320px 1fr;gap:56px;}}
+  .partner-logo{background:var(--cream);border-radius:var(--radius);aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;padding:34px;position:relative;}
+  .partner-logo img{max-height:100%;max-width:100%;object-fit:contain;}
+  .partner-logo.is-empty::after{content:"Coolshop";font-family:var(--font-display);font-size:28px;color:var(--black);text-transform:uppercase;}
+  .partner-link{display:inline-block;margin-top:22px;color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;}
+  .partner-link:hover{text-decoration:underline;text-underline-offset:4px;}
+
+  /* cta */
+  .cta{text-align:center;background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(163,38,42,.28),transparent 65%),var(--black);border-top:1px solid var(--line);}
+  .cta h2{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(28px,5.5vw,52px);line-height:1;}
+  .cta p{color:rgba(246,243,236,.72);max-width:520px;margin:16px auto 30px;font-size:15px;line-height:1.6;}
+
+  footer{padding:34px 0;text-align:center;font-size:12px;color:var(--khaki-dim);border-top:1px solid var(--line);}
+  footer a{text-decoration:underline;text-underline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="snow" id="snow" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="nav-logo">
+    <span class="nav-badge"><img src="assets/logo.png" alt="Café Kaiser" onerror="this.parentElement.textContent='CK';"></span>
+    <span class="nav-word">Kaiser <em>x</em> Coolshop</span>
+  </a>
+  <a href="#om" class="nav-link">Læs mere</a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-media">
+    <video id="heroVideo" autoplay muted loop playsinline style="display:none;"><source src="" type="video/mp4"></video>
+    <img id="heroImg" alt="" onerror="this.remove();">
+    <div class="hero-fallback"></div>
+  </div>
+  <div class="hero-scrim"></div>
+  <div class="hero-inner">
+    <div class="hero-logos">
+      <img class="lg" src="assets/logo.png" alt="Café Kaiser" onerror="this.outerHTML='<span class=&quot;txt&quot;>Café Kaiser</span>'">
+      <span class="x">x</span>
+      <img class="partner" id="heroPartnerLogo" alt="Coolshop" onerror="this.outerHTML='<span class=&quot;txt&quot;>Coolshop</span>'">
+    </div>
+    <div class="ornament-line eyebrow" id="heroEyebrow"></div>
+    <h1 id="heroTitle"></h1>
+    <p id="heroText"></p>
+    <div class="hero-actions">
+      <a href="#om" class="btn btn-gold">Læs mere</a>
+      <a href="#ansog" class="btn btn-outline">Ansøg om en gave</a>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap stats-grid" id="statsGrid"></div>
+</div>
+
+
+<section class="xtree-section" id="traeet">
+  <div class="wrap">
+    <div class="section-head center" style="max-width:640px;">
+      <div class="eyebrow">Ét lys for hvert barn</div>
+      <h2 id="treeTitle"></h2>
+      <p id="treeText"></p>
+    </div>
+    <div class="xtree-stage" id="xtreeStage">
+      <svg class="xtree-svg" viewBox="0 0 400 520" role="img" aria-label="Juletræ med et lys for hvert barn">
+        <defs>
+          <radialGradient id="haloWarm"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".95"/><stop offset=".25" stop-color="#ffbf5a" stop-opacity=".55"/><stop offset=".6" stop-color="#ff9a2e" stop-opacity=".15"/><stop offset="1" stop-color="#ff8a1e" stop-opacity="0"/></radialGradient>
+          <radialGradient id="haloSoft"><stop offset="0" stop-color="#fff3d6" stop-opacity=".9"/><stop offset=".3" stop-color="#ffd58a" stop-opacity=".45"/><stop offset="1" stop-color="#ffc060" stop-opacity="0"/></radialGradient>
+          <radialGradient id="coreGrad"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#fff1c4"/><stop offset="1" stop-color="#ffcf6e"/></radialGradient>
+          <radialGradient id="ambientGrad"><stop offset="0" stop-color="#ffc766" stop-opacity=".22"/><stop offset="1" stop-color="#ffc766" stop-opacity="0"/></radialGradient>
+        </defs>
+        <ellipse class="xtree-ambient" cx="200" cy="290" rx="190" ry="210" fill="url(#ambientGrad)"/>
+        <rect class="xtree-trunk" x="182" y="440" width="36" height="40"/>
+        <path class="xtree-pot" d="M150 470 H250 L240 515 H160 Z"/>
+        <polygon class="xtree-tier" points="200,230 40,450 360,450"/>
+        <polygon class="xtree-tier t2" points="200,130 70,330 330,330"/>
+        <polygon class="xtree-tier t3" points="200,40 105,220 295,220"/>
+        <g id="xtreeLights"></g>
+        <path class="xtree-star" d="M200 8 L208 30 L231 30 L212 44 L219 66 L200 52 L181 66 L188 44 L169 30 L192 30 Z"/>
+      </svg>
+    </div>
+    <div class="xtree-count"><div class="n"><span id="litNum">0</span><small> / <span id="totalNum"></span></small></div><div class="l" id="treeLabel"></div></div>
+  </div>
+</section>
+
+<section id="om">
+  <div class="wrap">
+    <div class="split">
+      <div class="split-media">
+        <div class="media-box" id="infoImage"><span class="tag" id="infoTag"></span></div>
+      </div>
+      <div class="split-text">
+        <div class="section-head" style="margin-bottom:22px;">
+          <div class="eyebrow" id="infoEyebrow"></div>
+          <h2 id="infoTitle"></h2>
+        </div>
+        <div class="prose" id="infoText"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <div class="section-head center" style="max-width:640px;">
+      <div class="eyebrow">Sådan foregår det</div>
+      <h2>Fra café til juletræ</h2>
+    </div>
+    <div class="steps" id="steps"></div>
+  </div>
+</section>
+
+<section id="ansog" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="apply-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:22px;">
+          <div class="eyebrow">Ansøg om en julegave</div>
+          <h2 id="applyTitle"></h2>
+        </div>
+        <div class="prose" id="applyText"></div>
+      </div>
+      <form class="apply-form" id="applyForm" novalidate>
+        <div class="field"><label for="fNavn">Barnets navn</label><input id="fNavn" required autocomplete="off"></div>
+        <div class="field-row">
+          <div class="field"><label for="fAdresse">Adresse</label><input id="fAdresse" required autocomplete="street-address"></div>
+          <div class="field"><label for="fAlder">Alder</label><input id="fAlder" inputmode="numeric" required></div>
+        </div>
+        <div class="field"><label for="fOnsker">Ønsker</label><textarea id="fOnsker" required placeholder="Fx yndlingsfarve, interesser eller konkrete ønsker"></textarea></div>
+        <div class="field"><label for="fKontakt">Dit navn og telefon (forælder/kontaktperson)</label><input id="fKontakt" required></div>
+        <div class="field"><label for="fBesked">Besked (valgfri)</label><textarea id="fBesked" style="min-height:80px;"></textarea></div>
+        <button type="submit" class="btn btn-gold">Send ansøgning</button>
+        <div class="apply-err" id="applyErr">Udfyld venligst alle felter.</div>
+        <p class="apply-note">Når du trykker send, åbner din mail med ansøgningen udfyldt til <a id="applyMail"></a>. Du skal blot trykke send i din mail.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="partner-band" id="partner">
+  <div class="wrap">
+    <div class="partner-card">
+      <div class="partner-logo" id="partnerLogo"></div>
+      <div>
+        <div class="section-head" style="margin-bottom:20px;">
+          <div class="eyebrow">Vores partner</div>
+          <h2 id="partnerTitle"></h2>
+        </div>
+        <div class="prose" id="partnerText"></div>
+        <a class="partner-link" id="partnerUrl" target="_blank" rel="noopener">Besøg Coolshop &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="eyebrow">Glædelig jul</div>
+    <h2 id="ctaTitle"></h2>
+    <p id="ctaText"></p>
+    <a href="index.html" class="btn btn-gold" id="ctaBtn"></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Café Kaiser × Coolshop &nbsp;·&nbsp; <a href="index.html">Til forsiden</a></div>
+</footer>
+
+<script>
+/* =====================================================================
+   KONFIGURATION — ret her
+===================================================================== */
+const CONFIG = {
+
+  // Baggrund i toppen: video først, ellers billede, ellers mørk julegradient.
+  heroVideo: "assets/jul-hero.mp4",
+  heroImage: "assets/jul-hero.jpg",
+
+  // Coolshops logo (lægges i assets/)
+  partnerLogo: "assets/coolshop.png",
+  partnerUrl:  "https://www.coolshop.dk",
+
+  hero: {
+    eyebrow: "Jul 2026",
+    title: "100 julegaver <span>til børn</span>, der fortjener lidt ekstra",
+    text: "Sammen med Coolshop giver Café Kaiser 100 julegaver til børn, som har brug for lidt ekstra glæde i julen."
+  },
+
+  // Tal-båndet under toppen
+  stats: [
+    { num: "100",    unit: "",    label: "Julegaver" },
+    { num: "250",    unit: "kr.", label: "Pr. gave" },
+    { num: "25.000", unit: "kr.", label: "I gaver i alt" }
+  ],
+
+  // Juletræet: ét lys pr. barn. "lit" = hvor mange lys der tændes
+  // (fx antal gaver der er klar/givet). Sæt lit = total for alle.
+  tree: {
+    title: "100 lys. 100 børn.",
+    text: "Hvert lys på træet er et barn, der får en gave under træet juleaften. Sammen med Coolshop tænder vi dem alle.",
+    label: "Børn der får en julegave",
+    total: 100,
+    lit: 100
+  },
+
+  info: {
+    image: "assets/jul-gaver.jpg",
+    tag: "Kaiser x Coolshop",
+    eyebrow: "Julen handler om fællesskab",
+    title: "Fordi alle børn skal have en gave under træet",
+    text: [
+      "For mange familier er julen en tid fyldt med hygge og forventning. Men for nogle børn er det ikke en selvfølge, at der ligger en gave under træet.",
+      "Derfor har vi i samarbejde med <strong>Coolshop</strong> valgt at give <strong>100 julegaver</strong> til børn, der har brug for lidt ekstra glæde i julen. Hver gave har en værdi af <strong>250 kr.</strong>",
+      "<span class='pull' style='display:block'>En gave er ikke bare en ting. Det er et tegn på, at nogen har tænkt på dig.</span>"
+    ]
+  },
+
+  steps: [
+    { title: "Gaverne udvælges",  text: "Coolshop og Café Kaiser vælger 100 gaver til børn i forskellige aldre." },
+    { title: "Pakket med omhu",   text: "Gaverne pakkes ind i julepapir og gøres klar til at blive leveret." },
+    { title: "Leveret før jul",   text: "Gaverne bliver delt ud, så de kan ligge under træet juleaften." }
+  ],
+
+  // Ansøgning — teksten til venstre for formularen (ret frit)
+  apply: {
+    email: "jul@cafekaiser.dk",
+    subject: "Ansøgning om julegave",
+    title: "Sådan ansøger du",
+    text: [
+      "[Tekst følger — fx hvem der kan søge, hvordan børnene udvælges, og hvornår man får svar.]",
+      "Udfyld formularen med barnets navn, adresse, alder og ønsker. Ansøgningsfrist: <strong>[dato]</strong>."
+    ]
+  },
+
+  partner: {
+    title: "Coolshop gør julen større",
+    text: [
+      "Coolshop er med til at gøre det muligt at give 100 børn en gave i år. Tak for at være med til at gøre en forskel.",
+      "Sammen viser vi, at små handlinger kan gøre en stor forskel — især i julen."
+    ]
+  },
+
+  cta: {
+    title: "Tak fordi I er med",
+    text: "Julen er bedst, når den bliver delt. Tak til Coolshop, vores gæster og alle medarbejdere i Café Kaiser.",
+    button: "Til forsiden"
+  },
+
+  snowflakes: 45   // sæt 0 for at slå sneen fra
+};
+
+/* ===================== render — rør ikke herunder ===================== */
+const $ = id => document.getElementById(id);
+
+// hero baggrund
+if (CONFIG.heroImage) $('heroImg').src = CONFIG.heroImage; else $('heroImg').remove();
+(function(){
+  const v = $('heroVideo'); if (!CONFIG.heroVideo) return;
+  const s = v.querySelector('source'); s.src = CONFIG.heroVideo;
+  v.addEventListener('canplay', () => v.style.display = 'block', { once:true });
+  s.addEventListener('error', () => v.style.display = 'none');
+  v.load();
+})();
+
+$('heroPartnerLogo').src = CONFIG.partnerLogo;
+$('heroEyebrow').textContent = CONFIG.hero.eyebrow;
+$('heroTitle').innerHTML = CONFIG.hero.title;
+$('heroText').textContent = CONFIG.hero.text;
+
+$('statsGrid').innerHTML = CONFIG.stats.map(s =>
+  `<div class="stat"><div class="num">${s.num}${s.unit ? `<small>${s.unit}</small>` : ''}</div><div class="lbl">${s.label}</div></div>`).join('');
+
+// info-boks
+const ib = $('infoImage');
+if (CONFIG.info.image) {
+  const im = new Image(); im.alt = ''; im.src = CONFIG.info.image;
+  im.onerror = () => { ib.classList.add('is-empty'); im.remove(); };
+  ib.prepend(im);
+} else ib.classList.add('is-empty');
+$('infoTag').textContent = CONFIG.info.tag;
+$('infoEyebrow').textContent = CONFIG.info.eyebrow;
+$('infoTitle').textContent = CONFIG.info.title;
+$('infoText').innerHTML = CONFIG.info.text.map(t => `<p>${t}</p>`).join('');
+
+$('steps').innerHTML = CONFIG.steps.map((s, i) =>
+  `<div class="step"><div class="step-n">${i+1}</div><h3>${s.title}</h3><p>${s.text}</p></div>`).join('');
+
+// partner
+const pl = $('partnerLogo');
+const pim = new Image(); pim.alt = 'Coolshop'; pim.src = CONFIG.partnerLogo;
+pim.onerror = () => { pl.classList.add('is-empty'); pim.remove(); };
+pl.appendChild(pim);
+$('partnerTitle').textContent = CONFIG.partner.title;
+$('partnerText').innerHTML = CONFIG.partner.text.map(t => `<p>${t}</p>`).join('');
+if (CONFIG.partnerUrl) $('partnerUrl').href = CONFIG.partnerUrl; else $('partnerUrl').remove();
+
+$('ctaTitle').textContent = CONFIG.cta.title;
+$('ctaText').textContent = CONFIG.cta.text;
+$('ctaBtn').textContent = CONFIG.cta.button;
+
+
+// Juletræ med lys — tændes ét ad gangen når træet ses
+(function(){
+  const T = CONFIG.tree, g = $('xtreeLights');
+  $('treeTitle').textContent = T.title; $('treeText').textContent = T.text;
+  $('treeLabel').textContent = T.label; $('totalNum').textContent = T.total;
+  // punkter fordelt i trekanten (spids 200,55 -> bund 50..350 ved y=440)
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const pts = [], top = 62, bot = 435, rows = 13;
+  const widths = []; let sum = 0;
+  for (let r = 0; r < rows; r++) { const w = (r + 1); widths.push(w); sum += w; }
+  for (let r = 0; r < rows; r++) {
+    const n = Math.max(1, Math.round(T.total * widths[r] / sum));
+    const y = top + (bot - top) * (r + .5) / rows;
+    const half = (y - 40) / (450 - 40) * 150;
+    for (let k = 0; k < n; k++) {
+      const x = 200 - half + (2 * half) * (k + .5) / n + (rnd() - .5) * 8;
+      pts.push([x, y + (rnd() - .5) * 10]);
+    }
+  }
+  while (pts.length > T.total) pts.splice(Math.floor(rnd() * pts.length), 1);
+  while (pts.length < T.total) pts.push([200 + (rnd() - .5) * 200, 300 + rnd() * 120]);
+  const order = pts.map((p, i) => i).sort(() => rnd() - .5);
+  const els = pts.map(([x, y]) => {
+    const NS = 'http://www.w3.org/2000/svg';
+    const b = document.createElementNS(NS, 'g'); b.setAttribute('class', 'bulb');
+    const h = document.createElementNS(NS, 'circle');
+    h.setAttribute('cx', x.toFixed(1)); h.setAttribute('cy', y.toFixed(1));
+    h.setAttribute('r', (9 + rnd() * 5).toFixed(1));
+    h.setAttribute('fill', rnd() < .7 ? 'url(#haloWarm)' : 'url(#haloSoft)');
+    h.setAttribute('class', 'halo');
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', y.toFixed(1));
+    c.setAttribute('r', (1.9 + rnd() * .8).toFixed(2)); c.setAttribute('class', 'core');
+    b.append(h, c);
+    b.style.setProperty('--d', (2.2 + rnd() * 3).toFixed(2) + 's');
+    b.style.setProperty('--dl', (-rnd() * 4).toFixed(2) + 's');
+    g.appendChild(b); return b;
+  });
+  const lit = Math.min(T.lit, T.total), num = $('litNum');
+  const svgEl = g.ownerSVGElement;
+  const lightAll = () => { svgEl.classList.add('lit'); order.slice(0, lit).forEach(i => els[i].classList.add('on')); num.textContent = lit; };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return lightAll();
+  const obs = new IntersectionObserver(es => {
+    if (!es[0].isIntersecting) return; obs.disconnect();
+    svgEl.classList.add('lit');
+    let i = 0; const step = Math.max(12, 2400 / lit);
+    const t = setInterval(() => {
+      if (i >= lit) return clearInterval(t);
+      els[order[i]].classList.add('on'); i++; num.textContent = i;
+    }, step);
+  }, { threshold: .35 });
+  obs.observe($('xtreeStage'));
+})();
+
+
+// Ansøgning -> åbner mail med udfyldt tekst
+(function(){
+  const A = CONFIG.apply;
+  $('applyTitle').textContent = A.title;
+  $('applyText').innerHTML = A.text.map(t => `<p>${t}</p>`).join('');
+  const m = $('applyMail'); m.textContent = A.email; m.href = 'mailto:' + A.email;
+  $('applyForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = id => $(id).value.trim();
+    const req = ['fNavn','fAdresse','fAlder','fOnsker','fKontakt'];
+    const missing = req.filter(id => !v(id));
+    req.forEach(id => $(id).style.borderColor = v(id) ? '' : '#c55');
+    $('applyErr').style.display = missing.length ? 'block' : 'none';
+    if (missing.length) return;
+    const body =
+      'Barnets navn: ' + v('fNavn') + '\n' +
+      'Adresse: ' + v('fAdresse') + '\n' +
+      'Alder: ' + v('fAlder') + '\n\n' +
+      'Ønsker:\n' + v('fOnsker') + '\n\n' +
+      'Kontaktperson: ' + v('fKontakt') + '\n' +
+      (v('fBesked') ? '\nBesked:\n' + v('fBesked') + '\n' : '');
+    location.href = 'mailto:' + A.email + '?subject=' + encodeURIComponent(A.subject + ' — ' + v('fNavn')) + '&body=' + encodeURIComponent(body);
+  });
+})();
+
+// sne
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = $('snow');
+  for (let i = 0; i < (CONFIG.snowflakes || 0); i++) {
+    const f = document.createElement('span'); f.className = 'flake';
+    const size = 2 + Math.random() * 4;
+    f.style.width = f.style.height = size + 'px';
+    f.style.left = Math.random() * 100 + 'vw';
+    f.style.opacity = (.3 + Math.random() * .5).toFixed(2);
+    f.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+    f.style.animationDuration = (9 + Math.random() * 12) + 's';
+    f.style.animationDelay = (-Math.random() * 20) + 's';
+    box.appendChild(f);
+  }
+})();
+
+const nav = $('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive:true });
+</script>
+</body>
+</html>
