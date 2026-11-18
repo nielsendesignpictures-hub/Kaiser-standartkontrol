@@ -405,6 +405,15 @@ input,textarea{-webkit-user-select:text;user-select:text}
   .tkHead{flex-wrap:wrap}
   .cfCtl{flex-wrap:wrap}
 }
+
+/* overlevering frokost -> aften */
+.handover{flex:none;display:flex;align-items:center;gap:1rem;margin:0 0 0.75rem;padding:0.75rem 0.875rem 0.75rem 1.125rem;border-radius:1rem;background:var(--amberSoft);border:1px solid #ead6b6;border-left:5px solid var(--amber)}
+.hoBody{flex:1;min-width:0}
+.hoLbl{font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
+.hoLbl span{letter-spacing:0;text-transform:none;font-weight:700;opacity:.85;margin-left:0.375rem}
+.hoText{margin-top:3px;font-size:1.0625rem;font-weight:700;line-height:1.35;white-space:pre-wrap;max-height:4.2em;overflow:auto}
+.hoBtn{flex:none;min-height:3rem;padding:0 1.375rem;border-radius:62.4375rem;border:0;background:var(--amber);color:#fff;font:inherit;font-size:0.9375rem;font-weight:800;cursor:pointer}
+.hoBtn:active{transform:scale(.97)}
 </style>
 </head>
 <body>
@@ -524,6 +533,13 @@ input,textarea{-webkit-user-select:text;user-select:text}
       </div>
     </header>
 
+    <div class="handover hidden" id="handover">
+      <div class="hoBody">
+        <div class="hoLbl">Overlevering fra frokost <span id="hoMeta"></span></div>
+        <div class="hoText" id="hoText"></div>
+      </div>
+      <button class="hoBtn" id="hoRead" type="button">Læst</button>
+    </div>
     <div class="cockpit">
       <div class="colL">
         <div class="panel" id="panelCake">
@@ -659,7 +675,7 @@ function renderLocGrid(){
     `<div class="loc ${n===current?"current":""}" data-loc="${escapeHtml(n)}">${escapeHtml(n)}</div>`).join("");
   $("locGrid").querySelectorAll(".loc").forEach(o => o.addEventListener("click", () => {
     localStorage.setItem(LOC_KEY, o.dataset.loc);
-    closeLocModal(); updateLocUI(); refreshAll(); if (typeof DT!=="undefined") DT.render();
+    closeLocModal(); updateLocUI(); refreshAll(); if (typeof DT!=="undefined") DT.render(); renderHandover();
   }));
 }
 function openLocModal(forced){
@@ -973,6 +989,7 @@ function setActiveNav(el){
 function goHome(){
   $("viewTool").classList.remove("show");
   $("viewOverview").classList.add("show");
+  if (typeof renderHandover === "function") renderHandover();
   $("toolFrame").src = "about:blank";
   currentToolUrl = "";
   setActiveNav(document.querySelector(".navItem[data-home]"));
@@ -2699,14 +2716,31 @@ addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstet
   $("sideToggle").addEventListener("click", () => apply(!document.body.classList.contains("rail")));
 })();
 
+/* ===== OVERLEVERING (fra skiftlederrapporten) ===== */
+const HANDOVER_KEY = "kaiser_handover_v1";
+function hoToday(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function renderHandover(){
+  let h = null; try{ h = JSON.parse(localStorage.getItem(HANDOVER_KEY) || "null"); }catch(_){}
+  const show = h && h.text && !h.read && h.date === hoToday() && h.loc === getLoc();
+  $("handover").classList.toggle("hidden", !show);
+  if (!show) return;
+  $("hoText").textContent = h.text;
+  $("hoMeta").textContent = [h.by, h.at ? "kl. " + h.at : ""].filter(Boolean).join(" · ");
+}
+$("hoRead").addEventListener("click", () => {
+  try{ const h = JSON.parse(localStorage.getItem(HANDOVER_KEY) || "null"); if (h){ h.read = true; localStorage.setItem(HANDOVER_KEY, JSON.stringify(h)); } }catch(_){}
+  renderHandover();
+});
+window.addEventListener("storage", e => { if (e.key === HANDOVER_KEY) renderHandover(); });
+
 /* ===== INIT ===== */
 (function init(){
   const loc = getLoc();
-  updateLocUI(); updateClock(); refreshExpiry(); refreshWine(); refreshAll(); cfInit(); DT.render();
+  updateLocUI(); updateClock(); refreshExpiry(); refreshWine(); refreshAll(); cfInit(); DT.render(); renderHandover();
   setInterval(updateClock, 1000);
   setInterval(() => { refreshExpiry(); refreshWine(); }, 30000);
   setInterval(refreshAll, 60000);
-  setInterval(() => { DT.autoShift(); DT.render(); }, 60000);
+  setInterval(() => { DT.autoShift(); DT.render(); renderHandover(); }, 60000);
   setInterval(() => {
     const now = new Date();
     if (now.getHours() === RELOAD_HOUR && now.getMinutes() === 0) location.reload();
