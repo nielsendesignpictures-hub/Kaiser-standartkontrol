@@ -1,1156 +1,690 @@
 <!doctype html>
 <html lang="da">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kagekøleskab</title>
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --panel: rgba(255,255,255,.06);
-      --border: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.65);
-      --accent: #d9b65a;
-      --bad: #ff2d2d;
-      --shadow: 0 18px 50px rgba(0,0,0,.50);
-      --r: 22px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: var(--font);
-      background:
-        radial-gradient(1200px 600px at 50% -10%, rgba(217,182,90,.25), transparent 55%),
-        radial-gradient(900px 500px at 10% 10%, rgba(120,180,255,.15), transparent 55%),
-        radial-gradient(900px 500px at 90% 20%, rgba(120,255,200,.10), transparent 55%),
-        var(--bg);
-      color: var(--text);
-    }
-    .wrap{max-width: 1100px; margin: 18px auto; padding: 0 18px 50px;}
-    .shell{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    h1{margin:0; text-align:center; font-size: 42px; letter-spacing:.01em;}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 16px;
-      box-shadow: 0 14px 45px rgba(0,0,0,.35);
-      backdrop-filter: blur(10px);
-    }
-    .card h2{margin:0 0 12px; font-size: 17px; letter-spacing:.02em;}
-    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:end;}
-    .field{flex:1; min-width: 220px;}
-    label{display:block; color: var(--muted); font-size: 13px; margin: 0 0 6px;}
-    input, textarea, button{
-      width:100%;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 16px;
-      padding: 14px 14px;
-      outline:none;
-      font-size: 16px;
-    }
-    textarea{min-height: 46px; resize: vertical;}
-    .btn{
-      cursor:pointer;
-      border-radius: 999px;
-      font-weight: 950;
-      letter-spacing:.02em;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(217,182,90,.25), rgba(217,182,90,.10));
-      padding: 16px 16px;
-      font-size: 16px;
-    }
-    .btnDanger{
-      cursor:pointer;
-      border-radius: 999px;
-      font-weight: 950;
-      background: rgba(255,45,45,.16);
-      border: 1px solid rgba(255,45,45,.28);
-      padding: 14px 14px;
-      font-size: 15px;
-    }
-    .btnEdit{
-      cursor:pointer;
-      border-radius: 999px;
-      font-weight: 950;
-      background: rgba(120,180,255,.16);
-      border: 1px solid rgba(120,180,255,.28);
-      padding: 14px 14px;
-      font-size: 15px;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kaiser – Vin (åbnet)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#071019;
+  --panel:rgba(15,22,34,.88);
+  --border:rgba(145,205,255,.14);
+  --text:rgba(255,255,255,.95);
+  --muted:rgba(213,231,248,.72);
+  --muted2:rgba(184,210,234,.48);
+  --gold:#d6b24a;
+  --gold2:#b9921f;
+  --blue2:#66b7ff;
+  --blueGlow:rgba(102,183,255,.20);
+  --ok:#62d26f;
+  --warn:#ffc94d;
+  --bad:#ff6b6b;
+  --red:#c62b3e;
+  --rose:#e6a3a3;
+  --white:#efe0a0;
+  --bubbles:#f7d774;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
+    radial-gradient(1000px 720px at 100% 0%, rgba(198,43,62,.14), transparent 52%),
+    linear-gradient(180deg,#071019,#0c1625 52%,#071019);
+  background-attachment:fixed;
+  padding:16px;
+}
+.shell{max-width:980px;margin:0 auto;padding-bottom:60px}
 
-    .cakeGrid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 6px;
-    }
-    @media (max-width: 980px){ .cakeGrid{grid-template-columns: repeat(2, minmax(0, 1fr));} }
-    .cakeBtn{
-      text-align:left;
-      padding: 14px 14px;
-      border-radius: 18px;
-      cursor:pointer;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      user-select:none;
-    }
-    .cakeBtn .name{font-weight: 950; font-size: 16px;}
-    .cakeBtn .meta{color: var(--muted); font-size: 13px; margin-top: 4px;}
-    .cakeBtn.active{
-      border-color: rgba(217,182,90,.55);
-      box-shadow: 0 0 0 3px rgba(217,182,90,.12);
-      background: rgba(217,182,90,.10);
-    }
+.topbar{
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border-radius:22px;padding:22px 18px;text-align:center;
+  box-shadow:0 28px 70px rgba(0,0,0,.45);margin:8px 0 18px;
+}
+.kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800}
+.title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;font-weight:700;margin-top:8px}
+.subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px}
+.goldline{height:2px;margin-top:16px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(214,178,74,.95),rgba(198,43,62,.65),transparent)}
 
-    table{width:100%; border-collapse: collapse; margin-top: 8px; overflow:hidden; border-radius: 16px;}
-    th, td{
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      text-align:left;
-      font-size: 14px;
-      vertical-align: top;
-    }
-    th{color: var(--muted); font-weight: 900; font-size: 12px; letter-spacing:.03em;}
-    tr:hover td{background: rgba(255,255,255,.03)}
-    .actions{display:flex; gap:10px; flex-wrap:wrap}
-    .mini{padding: 12px 14px; font-size: 14px;}
-    .small{font-size: 12px; color: var(--muted)}
+.panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 26px 72px rgba(0,0,0,.55);padding:20px;margin-bottom:16px;
+}
+.panel h2{margin:0 0 14px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2);font-weight:900}
+.divider{height:1px;background:rgba(145,205,255,.10);margin:16px 0}
 
-    .overlay{
-      position: fixed; inset:0;
-      background: rgba(0,0,0,.70);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 2147483647;
-    }
-    .modal{
-      width: min(980px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 26px;
-      padding: 16px;
-      box-shadow: 0 30px 90px rgba(0,0,0,.70);
-      backdrop-filter: blur(12px);
-    }
-    .modalHead{display:flex; align-items:center; justify-content:space-between; gap: 10px;}
-    .modal h3{margin:0; font-size: 18px;}
-    .modal p{margin: 8px 0 0; color: var(--muted); font-size: 14px;}
-    .modalFoot{display:flex; justify-content:flex-end; gap: 10px; margin-top: 12px; flex-wrap:wrap;}
-    .xBtn{width:auto;}
+.label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
+  font-weight:900;margin-bottom:8px;display:block}
 
-    .alarmModal{
-      border-color: rgba(255,45,45,.45);
-      box-shadow: 0 35px 120px rgba(255,45,45,.10), 0 30px 90px rgba(0,0,0,.70);
-    }
-    .alarmTitle{
-      font-size: 30px;
-      font-weight: 1000;
-      letter-spacing:.03em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.95);
-    }
-    .alarmBanner{
-      margin: 8px 0 0;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: rgba(255,45,45,.16);
-      border: 1px solid rgba(255,45,45,.30);
-      color: rgba(255,255,255,.95);
-      font-weight: 950;
-      font-size: 14px;
-    }
-    .list{margin-top:12px;}
-    .item{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      margin-bottom: 10px;
-    }
+input,select,textarea{
+  width:100%;border-radius:14px;border:1px solid rgba(145,205,255,.14);
+  background:rgba(255,255,255,.05);padding:14px;outline:none;
+  color:rgba(255,255,255,.94);font-size:16px;font-family:inherit;
+}
+input:focus,select:focus{border-color:rgba(102,183,255,.55);box-shadow:0 0 0 4px var(--blueGlow)}
+select option{color:#0b0c0f}
 
-    .qtyRow{display:flex; gap:10px; align-items:end; flex-wrap:wrap; margin-top:10px;}
-    .unitBadge{
-      width:auto;
-      padding: 14px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-weight: 1000;
-      font-size: 16px;
-    }
-    .modeRow{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;}
-    .modeBtn{
-      text-align:center; padding:16px 12px; border-radius:18px; cursor:pointer; user-select:none;
-      background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
-      font-weight:950; font-size:16px;
-    }
-    .modeBtn .sub{display:block; margin-top:4px; font-weight:600; font-size:12px; color:var(--muted);}
-    .modeBtn.active{border-color: rgba(217,182,90,.55); background: rgba(217,182,90,.12); box-shadow:0 0 0 3px rgba(217,182,90,.12);}
-    .modeBtn.frozen.active{border-color: rgba(120,180,255,.60); background: rgba(120,180,255,.14); box-shadow:0 0 0 3px rgba(120,180,255,.14);}
-    .tag{display:inline-block; margin-top:6px; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:950; letter-spacing:.02em;}
-    .tag.thaw{background:rgba(120,180,255,.16); border:1px solid rgba(120,180,255,.35); color:#9cc6ff;}
-    .tag.ready{background:rgba(98,210,111,.14); border:1px solid rgba(98,210,111,.35); color:#8fe29a;}
-    .ver{margin-top:6px; text-align:center; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);}
-    .keypad{
-      display:grid;
-      grid-template-columns: repeat(5, minmax(0,1fr));
-      gap:10px;
-      margin-top: 12px;
-    }
-    .keypad button{
-      padding: 14px 10px;
-      border-radius: 16px;
-      font-weight: 1000;
-      font-size: 16px;
-      cursor:pointer;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      user-select:none;
-    }
-    .keypad button.primary{
-      background: rgba(217,182,90,.14);
-      border-color: rgba(217,182,90,.25);
-    }
-  </style>
+/* Kategori-tabs */
+.catTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:640px){.catTabs{grid-template-columns:repeat(2,1fr)}}
+.catTab{
+  padding:12px 10px;border-radius:16px;cursor:pointer;user-select:none;text-align:center;
+  background:rgba(255,255,255,.05);border:1px solid rgba(145,205,255,.12);
+  transition:.15s;font-weight:900;font-size:13px;font-family:inherit;color:var(--text);
+}
+.catTab:hover{background:rgba(255,255,255,.09)}
+.catTab.on{border-color:rgba(214,178,74,.5);
+  background:linear-gradient(135deg,rgba(214,178,74,.14),rgba(255,255,255,.04));
+  box-shadow:0 0 0 4px rgba(214,178,74,.08)}
+.catTab .dot{
+  display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;
+  vertical-align:middle;box-shadow:0 0 8px currentColor;
+}
+.catTab.red .dot{background:var(--red);color:var(--red)}
+.catTab.white .dot{background:var(--white);color:var(--white)}
+.catTab.rose .dot{background:var(--rose);color:var(--rose)}
+.catTab.bubbles .dot{background:var(--bubbles);color:var(--bubbles)}
+
+.wineGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:640px){.wineGrid{grid-template-columns:1fr}}
+.wineBtn{
+  padding:14px;border-radius:16px;cursor:pointer;user-select:none;text-align:left;
+  background:rgba(255,255,255,.04);border:1px solid rgba(145,205,255,.10);
+  transition:.15s;
+}
+.wineBtn:hover{background:rgba(255,255,255,.08)}
+.wineBtn.active{border-color:rgba(214,178,74,.45);
+  background:linear-gradient(135deg,rgba(214,178,74,.10),rgba(255,255,255,.03));
+  box-shadow:0 0 0 4px rgba(214,178,74,.06)}
+.wineBtn .nm{font-weight:900;font-size:15px;line-height:1.3}
+.wineBtn .mt{color:var(--muted2);font-size:12px;margin-top:6px;font-weight:700}
+
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.row>*{flex:1;min-width:200px}
+
+.btn{
+  width:100%;border:none;border-radius:16px;padding:15px 16px;cursor:pointer;
+  font-weight:900;font-size:15px;font-family:inherit;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;
+  box-shadow:0 18px 40px rgba(214,178,74,.18);
+}
+.btn:active{transform:translateY(1px)}
+.btnGhost{
+  width:100%;border-radius:16px;padding:13px 16px;cursor:pointer;
+  font-weight:900;font-size:14px;font-family:inherit;
+  background:rgba(255,255,255,.06);border:1px solid rgba(145,205,255,.14);
+  color:rgba(255,255,255,.9);
+}
+.btnDanger{
+  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
+  font-family:inherit;background:rgba(255,107,107,.12);
+  border:1px solid rgba(255,107,107,.30);color:rgba(255,255,255,.92);
+}
+.btnSmall{
+  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
+  font-family:inherit;background:rgba(214,178,74,.14);
+  border:1px solid rgba(214,178,74,.30);color:rgba(255,255,255,.94);
+}
+
+.preview{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;text-align:center;
+  padding:10px;border-radius:12px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(145,205,255,.08)}
+
+.groupHead{
+  display:flex;align-items:baseline;gap:10px;padding:14px 4px 8px;margin-top:6px;
+  border-bottom:1px solid rgba(145,205,255,.10);
+}
+.groupHead .g{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;color:var(--gold)}
+.groupHead .g .catDot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.groupHead .g.red   .catDot{background:var(--red)}
+.groupHead .g.white .catDot{background:var(--white)}
+.groupHead .g.rose  .catDot{background:var(--rose)}
+.groupHead .g.bubbles .catDot{background:var(--bubbles)}
+.groupHead .c{color:var(--muted2);font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+
+.bottle{
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  padding:14px;border-radius:16px;margin-top:10px;
+  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03);
+  border-left:4px solid var(--ok);
+}
+.bottle.dueToday{border-left-color:var(--warn);background:rgba(255,201,77,.06)}
+.bottle.expired{border-left-color:var(--bad);background:rgba(255,107,107,.08)}
+.bottle .info{flex:1;min-width:200px}
+.bottle .line1{font-weight:900;font-size:14px;line-height:1.3}
+.bottle .line2{color:var(--muted);font-size:12px;margin-top:4px;font-weight:600}
+.bottle .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.pill{
+  display:inline-block;padding:3px 9px;border-radius:999px;font-size:10px;
+  font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-left:8px;
+  border:1px solid rgba(145,205,255,.16);background:rgba(255,255,255,.05);
+}
+.pill.ok{border-color:rgba(98,210,111,.35);background:rgba(98,210,111,.12)}
+.pill.dueToday{border-color:rgba(255,201,77,.40);background:rgba(255,201,77,.14)}
+.pill.expired{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.16)}
+
+.empty{
+  border:1px dashed rgba(145,205,255,.18);border-radius:16px;padding:22px;
+  text-align:center;color:var(--muted);font-weight:600;font-size:14px;
+}
+
+.settingRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding:10px 0;border-bottom:1px solid rgba(145,205,255,.06)}
+.settingRow:last-child{border-bottom:none}
+.settingRow .nm{flex:1;font-weight:900;font-size:13px;min-width:180px}
+.settingRow .cat{font-size:10px;color:var(--muted2);font-weight:900;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 8px;border-radius:999px;
+  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03)}
+.settingRow input{width:80px;padding:8px 10px;font-size:14px;text-align:center}
+.settingRow .unit{font-size:11px;color:var(--muted2);font-weight:900}
+
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:999;
+}
+.overlay.on{display:flex}
+.modal{
+  width:min(560px,100%);border-radius:24px;padding:20px;
+  background:linear-gradient(180deg,rgba(24,34,50,.98),rgba(15,22,34,.98));
+  border:1px solid rgba(145,205,255,.18);box-shadow:0 30px 90px rgba(0,0,0,.7);
+}
+.modal.alarm{border-color:rgba(255,107,107,.42)}
+.modal h3{margin:0;font-size:20px;font-family:"Playfair Display",serif;font-weight:700}
+.modal p{margin:8px 0 0;color:var(--muted);font-size:14px}
+.modalFoot{display:flex;gap:10px;margin-top:18px}
+.modalFoot>*{flex:1}
+.alarmTitle{font-size:24px;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
+.alarmBanner{
+  margin-top:10px;padding:10px 12px;border-radius:14px;font-weight:900;font-size:13px;
+  background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.30);
+}
+
+.hint{
+  padding:12px 14px;border-radius:14px;margin-top:14px;
+  background:rgba(102,183,255,.06);border:1px solid rgba(102,183,255,.16);
+  color:var(--muted);font-size:12px;font-weight:600;line-height:1.5;
+}
+.hint b{color:var(--text);font-weight:900}
+</style>
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="shell">
-      <h1>Kagekøleskab</h1>
-      <div class="ver" id="appVersion"></div>
+<div class="shell">
 
-      <div class="grid">
-        <div class="card">
-          <h2>Tilføj kage</h2>
+  <div class="topbar">
+    <div class="kicker">KAISER</div>
+    <div class="title">Vin — åbnet</div>
+    <div class="subtitle">Registrér hver enkelt flaske når den åbnes • hold styr på hvornår den skal drikkes op</div>
+    <div class="goldline"></div>
+  </div>
 
-          <div class="row">
-            <div class="field">
-              <label for="by">Navn (tjener)</label>
-              <input id="by" placeholder="Fx Mads" autocomplete="name"/>
-            </div>
-            <div class="field">
-              <label for="qty">Antal stk</label>
-              <input id="qty" type="number" min="1" step="1" placeholder="Fx 4"/>
-            </div>
-          </div>
+  <!-- TILFØJ -->
+  <div class="panel">
+    <h2>Registrér åbnet flaske</h2>
 
-          <div class="modeRow" id="modeRow">
-            <div class="modeBtn" data-mode="fresh">🍰 Frisk kage<span class="sub">Kommer direkte i køleskabet</span></div>
-            <div class="modeBtn frozen" data-mode="frozen">❄️ Fra fryser<span class="sub">Tøer op i køleskabet</span></div>
-          </div>
+    <div class="catTabs" id="catTabs"></div>
+    <div class="wineGrid" id="wineGrid"></div>
 
-          <div class="row" id="frozenRow" style="display:none; margin-bottom:10px;">
-            <div class="field">
-              <label for="takenOut">Taget ud af fryser</label>
-              <input id="takenOut" type="datetime-local"/>
-            </div>
-            <div class="field">
-              <label for="thawHours">Optøning (timer)</label>
-              <input id="thawHours" type="number" min="1" step="1" placeholder="Fx 12"/>
-            </div>
-          </div>
-
-          <div style="margin-top:10px;">
-            <label>Vælg kage</label>
-            <div class="cakeGrid" id="cakeGrid"></div>
-          </div>
-
-          <div class="row" style="margin-top:10px; display:none;" id="customRow">
-            <div class="field">
-              <label for="customName">Andet – kagenavn</label>
-              <input id="customName" placeholder="Fx Citronmåne"/>
-            </div>
-            <div class="field">
-              <label for="customDays">Holdbarhed (dage)</label>
-              <input id="customDays" type="number" min="0" step="1" placeholder="Fx 3"/>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
-            <div class="field">
-              <label for="note">Note (valgfri)</label>
-              <textarea id="note" placeholder=""></textarea>
-            </div>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
-            <div class="field">
-              <button class="btn" id="addBtn" type="button">Tilføj</button>
-              <div class="small" id="preview"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Aktive kager</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Kage</th>
-                <th>Antal</th>
-                <th>Dato ind</th>
-                <th>Smides ud</th>
-                <th>Handling</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
+    <div class="row">
+      <div>
+        <label class="label" for="by">Åbnet af (valgfri)</label>
+        <input id="by" placeholder="Fx Mads" autocomplete="off"/>
       </div>
+      <div>
+        <label class="label" for="whenMode">Hvornår åbnet</label>
+        <select id="whenMode">
+          <option value="now">Lige nu</option>
+          <option value="custom">Vælg tidspunkt…</option>
+        </select>
+      </div>
+      <div id="customTimeWrap" style="display:none">
+        <label class="label" for="whenAt">Tidspunkt</label>
+        <input id="whenAt" type="datetime-local"/>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <button class="btn" id="addBtn" type="button">Registrér åbnet flaske</button>
+      <div class="preview" id="preview">Vælg en vin</div>
+    </div>
+
+    <div class="hint">
+      <b>Vejledende holdbarhed efter åbning:</b>
+      Rød- og hvidvin holder 2–4 dage i køleskab med prop.
+      Rosévin taber hurtigt frugtsmagen (2–4 dage).
+      Mousserende holder 1–2 dage med champagneprop før boblerne er væk.
+      Systemet bruger det korteste tal som standard.
     </div>
   </div>
 
-  <!-- ALARM -->
-  <div class="overlay" id="alarmOverlay" aria-hidden="true">
-    <div class="modal alarmModal">
-      <div class="modalHead">
-        <div>
-          <div class="alarmTitle">KAGE SMIDES UD IDAG</div>
-          <div class="alarmBanner">Kager med udløbsdato i dag:</div>
-        </div>
-        <button class="btn2 xBtn" id="closeAlarmBtn" type="button">Luk</button>
-      </div>
-
-      <div class="list" id="alarmList"></div>
-
-      <div class="modalFoot">
-        <button class="btn2" id="snoozeBtn" type="button">Slumre 30 min</button>
-      </div>
-    </div>
+  <!-- ÅBNE FLASKER -->
+  <div class="panel">
+    <h2>Åbne flasker</h2>
+    <div id="list"></div>
   </div>
 
-  <!-- SMIDT UD -->
-  <div class="overlay" id="discardOverlay" aria-hidden="true">
-    <div class="modal">
-      <div class="modalHead">
-        <div>
-          <h3>Smidt ud – antal</h3>
-          <p id="discardSub">–</p>
-        </div>
-        <button class="btn2 xBtn" id="closeDiscardBtn" type="button">Luk</button>
-      </div>
-
-      <div style="margin-top:10px;">
-        <label>Hvor mange smider du ud?</label>
-        <div class="qtyRow">
-          <div style="flex:1; min-width:220px;">
-            <input id="wasteQty" inputmode="numeric" pattern="[0-9]*" type="number" min="1" step="1" placeholder="Antal" />
-          </div>
-          <div class="unitBadge">stk</div>
-        </div>
-
-        <div class="keypad" id="keypad"></div>
-      </div>
-
-      <div class="modalFoot">
-        <button class="btn2" id="discardCancelBtn" type="button">Annuller</button>
-        <button class="btn" id="discardSaveBtn" type="button">Gem</button>
-      </div>
-    </div>
+  <!-- INDSTILLINGER -->
+  <div class="panel">
+    <h2>Holdbarhed pr. vin</h2>
+    <div id="settings"></div>
+    <div class="divider"></div>
+    <button class="btnGhost" id="clearBtn" type="button">Ryd alle åbne flasker (leder)</button>
   </div>
 
-  <!-- REDIGER ANTAL -->
-  <div class="overlay" id="editQtyOverlay" aria-hidden="true">
-    <div class="modal">
-      <div class="modalHead">
-        <div>
-          <h3>Rediger antal</h3>
-          <p id="editQtySub">–</p>
-        </div>
-        <button class="btn2 xBtn" id="closeEditQtyBtn" type="button">Luk</button>
-      </div>
+</div>
 
-      <div style="margin-top:10px;">
-        <label>Nyt antal stk</label>
-        <div class="qtyRow">
-          <div style="flex:1; min-width:220px;">
-            <input id="editQtyInput" inputmode="numeric" pattern="[0-9]*" type="number" min="0" step="1" placeholder="Antal" />
-          </div>
-          <div class="unitBadge">stk</div>
-        </div>
-
-        <div class="keypad" id="editKeypad"></div>
-      </div>
-
-      <div class="modalFoot">
-        <button class="btn2" id="editQtyCancelBtn" type="button">Annuller</button>
-        <button class="btn" id="editQtySaveBtn" type="button">Gem</button>
-      </div>
+<!-- ALARM -->
+<div class="overlay" id="alarmOverlay">
+  <div class="modal alarm">
+    <div class="alarmTitle">Skal drikkes op</div>
+    <div class="alarmBanner" id="alarmBanner">–</div>
+    <div id="alarmList" style="margin-top:14px"></div>
+    <div class="modalFoot">
+      <button class="btnGhost" id="snoozeBtn" type="button">Slumre 30 min</button>
+      <button class="btn" id="closeAlarmBtn" type="button">Luk</button>
     </div>
   </div>
+</div>
+
+<!-- KASSÉR -->
+<div class="overlay" id="discardOverlay">
+  <div class="modal">
+    <h3>Flaske drukket / smidt ud</h3>
+    <p id="discardSub">–</p>
+    <div class="modalFoot">
+      <button class="btnGhost" id="discardCancel" type="button">Annuller</button>
+      <button class="btn" id="discardSave" type="button">Bekræft</button>
+    </div>
+  </div>
+</div>
 
 <script>
 (() => {
-  const STORAGE_KEY = "kagekoeleskab.entries.v6";
-  const LEGACY_KEYS = [
-    "kagekoeleskab.entries.v5",
-    "kagekoeleskab.entries.v4",
-    "kagekoeleskab.entries.v3",
-    "kagekoeleskab.entries.v2"
-  ];
-  const PREF_KEY = "kagekoeleskab.prefs.v6";
-  const LEGACY_PREF_KEYS = [
-    "kagekoeleskab.prefs.v5",
-    "kagekoeleskab.prefs.v4",
-    "kagekoeleskab.prefs.v3",
-    "kagekoeleskab.prefs.v2"
-  ];
-
-  const APP_VERSION = "2026.11.16-a";
-  /* ÆNDRINGSLOG
-     2026.11.16-a  Ny funktion "Fra fryser": kage tages ud om aftenen og tøer op natten over.
-                   Viser "Optøer – klar kl. …" og skifter til "Optøet" når tiden er gået.
-                   Holdbarheden regnes fra tidspunktet kagen blev taget ud af fryseren (se SHELF_LIFE_FROM). */
-  const DEFAULT_THAW_HOURS = 12;
-  const SHELF_LIFE_FROM = "takenOut"; // "takenOut" = fra udtagning (sikreste) | "ready" = fra optøet
-  const TYPES = [
-    { id: "gulerod", name: "Gulerodskage", days: 3 },
-    { id: "chokolade", name: "Chokoladekage", days: 2 },
-    { id: "aeble", name: "Æblekage", days: 3 },
-    { id: "custom", name: "Andet", days: null }
-  ];
-
-  const $ = (id) => document.getElementById(id);
-
-  const cakeGrid = $("cakeGrid");
-  const customRow = $("customRow");
-  const customName = $("customName");
-  const customDays = $("customDays");
-
-  const by = $("by");
-  const qty = $("qty");
-  const note = $("note");
-  const modeRow = $("modeRow");
-  const frozenRow = $("frozenRow");
-  const takenOut = $("takenOut");
-  const thawHours = $("thawHours");
-  const addBtn = $("addBtn");
-  const tbody = $("tbody");
-  const preview = $("preview");
-
-  // Alarm
-  const alarmOverlay = $("alarmOverlay");
-  const alarmList = $("alarmList");
-  const closeAlarmBtn = $("closeAlarmBtn");
-  const snoozeBtn = $("snoozeBtn");
-
-  // Discard
-  const discardOverlay = $("discardOverlay");
-  const closeDiscardBtn = $("closeDiscardBtn");
-  const discardCancelBtn = $("discardCancelBtn");
-  const discardSaveBtn = $("discardSaveBtn");
-  const discardSub = $("discardSub");
-  const wasteQty = $("wasteQty");
-  const keypad = $("keypad");
-
-  // Edit qty
-  const editQtyOverlay = $("editQtyOverlay");
-  const closeEditQtyBtn = $("closeEditQtyBtn");
-  const editQtyCancelBtn = $("editQtyCancelBtn");
-  const editQtySaveBtn = $("editQtySaveBtn");
-  const editQtySub = $("editQtySub");
-  const editQtyInput = $("editQtyInput");
-  const editKeypad = $("editKeypad");
-
-  let entries = loadEntriesWithMigration();
-  let prefs = loadPrefsWithMigration();
-  let selectedTypeId = prefs.lastTypeId || "gulerod";
-  let mode = "fresh"; // "fresh" | "frozen"
-  let pendingDiscardId = null;
-  let pendingEditId = null;
-
-  const WARN_BEFORE_MS = 2 * 60 * 60 * 1000;
-  const NOTIF_STATE_KEY = "kagekoeleskab.notifState.v1";
-  let notifState = tryParse(localStorage.getItem(NOTIF_STATE_KEY)) || {};
-  function saveNotifState(){ localStorage.setItem(NOTIF_STATE_KEY, JSON.stringify(notifState)); }
-
-  function ensureNotifPermissionFromUserGesture(){
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      Notification.requestPermission().then(() => {});
-    }
-  }
-
-  function dueSoonEntries(){
-    const now = Date.now();
-    return entries.filter(e => {
-      if (e.status === "discarded") return false;
-      const t = new Date(e.discardAt).getTime();
-      const diff = t - now;
-      return diff > 0 && diff <= WARN_BEFORE_MS;
-    });
-  }
-
-  function fmtTimeLeft(ms){
-    const m = Math.max(0, Math.round(ms / 60000));
-    const h = Math.floor(m / 60);
-    const mm = m % 60;
-    if (h <= 0) return `${mm} min`;
-    return `${h} t ${mm} min`;
-  }
-
-  function notifyOnce(entry, kind, title, body){
-    if (!("Notification" in window)) return;
-    if (Notification.permission !== "granted") return;
-    notifState[entry.id] ||= {};
-    if (notifState[entry.id][kind]) return;
-    try{
-      new Notification(title, { body });
-      notifState[entry.id][kind] = true;
-      saveNotifState();
-    }catch(e){}
-  }
-
-  function updateTabIndicators(){
-    const dueTodayCount = alarmEntries().length;
-    const dueSoonCount = dueSoonEntries().length;
-    const n = dueTodayCount + dueSoonCount;
-    document.title = n > 0 ? `(${n}) Kagekøleskab` : "Kagekøleskab";
-    try{
-      const size = 64;
-      const c = document.createElement("canvas");
-      c.width = c.height = size;
-      const ctx = c.getContext("2d");
-      ctx.fillStyle = "#0b0f14";
-      ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.fill();
-      if (n > 0){
-        ctx.fillStyle = "#ff2d2d";
-        ctx.beginPath(); ctx.arc(size*0.72, size*0.30, size*0.22, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 22px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(String(Math.min(n, 99)), size*0.72, size*0.30);
-      } else {
-        ctx.fillStyle = "#d9b65a";
-        ctx.font = "bold 30px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("K", size/2, size/2);
-      }
-      let link = document.querySelector("link[rel='icon']");
-      if (!link){ link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
-      link.href = c.toDataURL("image/png");
-    }catch{}
-  }
-
-  function checkThawReady(){
-    const now = Date.now();
-    for (const e of entries){
-      if (e.status === "discarded" || !e.frozen || !e.thawReadyAt) continue;
-      const t = new Date(e.thawReadyAt).getTime();
-      if (now >= t && now < new Date(e.discardAt).getTime()){
-        notifyOnce(e, "ready", "Kage er optøet", `${e.cakeName} • ${e.qty || 1} stk er klar til servering`);
-      }
-    }
-  }
-
-  function checkDueSoonNotifications(){
-    const now = Date.now();
-    for (const e of dueSoonEntries()){
-      const diff = new Date(e.discardAt).getTime() - now;
-      notifyOnce(e, "soon", "Kage skal smides ud snart", `${e.cakeName} • om ca. ${fmtTimeLeft(diff)} (udløb: ${fmtDateTime(e.discardAt)})`);
-    }
-  }
-
-  function tryParse(raw){ try{ return raw ? JSON.parse(raw) : null; } catch { return null; } }
-
-  function loadPrefsWithMigration(){
-    const direct = tryParse(localStorage.getItem(PREF_KEY));
-    if (direct) return normalizePrefs(direct);
-    for (const k of LEGACY_PREF_KEYS){
-      const legacy = tryParse(localStorage.getItem(k));
-      if (legacy){
-        const p = normalizePrefs(legacy);
-        localStorage.setItem(PREF_KEY, JSON.stringify(p));
-        return p;
-      }
-    }
-    return normalizePrefs(null);
-  }
-  function normalizePrefs(p){
-    return { lastBy:"", lastQty:"", lastTypeId:"gulerod", snoozeUntil:0, ...(p||{}) };
-  }
-  function savePrefs(){ localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); }
-
-  function loadEntriesWithMigration(){
-    const direct = tryParse(localStorage.getItem(STORAGE_KEY));
-    if (Array.isArray(direct)) return direct.map(normalizeEntry);
-    for (const k of LEGACY_KEYS){
-      const legacy = tryParse(localStorage.getItem(k));
-      if (Array.isArray(legacy)){
-        const migrated = legacy.map(normalizeEntry);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-        return migrated;
-      }
-    }
-    return [];
-  }
-  function normalizeEntry(e){
-    const base = {
-      id: "", cakeName: "", days: 0,
-      addedAt: new Date().toISOString(),
-      discardAt: new Date().toISOString(),
-      by: "", qty: 1, note: "",
-      status: "active",
-      discardedAt: null,
-      wasteQty: null,
-      wasteUnit: "stk",
-      frozen: false,
-      thawHours: 0,
-      thawReadyAt: null
-    };
-    const merged = { ...base, ...(e||{}) };
-    // Migrér gammel "place" til "qty"
-    if (e && e.place !== undefined && e.qty === undefined){
-      const n = parseInt(e.place, 10);
-      merged.qty = (Number.isFinite(n) && n > 0) ? n : 1;
-    }
-    delete merged.place;
-    return merged;
-  }
-  function saveEntries(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
-
-  function uuid(){
-    if (crypto && crypto.randomUUID) return crypto.randomUUID();
-    return "id-" + Math.random().toString(16).slice(2) + "-" + Date.now();
-  }
-
-  function escapeHtml(str){
-    return String(str ?? "").replace(/[&<>"']/g, (m) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-  }
-
-  function fmtDateTime(iso){
-    const d = new Date(iso);
-    return d.toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-  }
-
-  function isSameLocalDate(a,b){
-    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-  }
-
-  function toLocalInput(d){
-    const p = (n) => String(n).padStart(2,"0");
-    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes());
-  }
-  function fmtShort(iso){
-    return new Date(iso).toLocaleString("da-DK", { weekday:"short", hour:"2-digit", minute:"2-digit" });
-  }
-  function frozenTimes(takenIso, hours, days){
-    const readyAt = new Date(new Date(takenIso).getTime() + hours*3600*1000).toISOString();
-    const base = (SHELF_LIFE_FROM === "ready") ? readyAt : takenIso;
-    return { readyAt, discardAt: computeDiscardAt(base, days) };
-  }
-  function readTaken(){
-    const v = takenOut.value ? new Date(takenOut.value) : new Date();
-    return isNaN(v) ? new Date() : v;
-  }
-  function readThaw(){
-    const h = parseInt(thawHours.value, 10);
-    return (Number.isFinite(h) && h > 0) ? h : DEFAULT_THAW_HOURS;
-  }
-  function setMode(m){
-    mode = m;
-    prefs.lastMode = m; savePrefs();
-    modeRow.querySelectorAll(".modeBtn").forEach(b => b.classList.toggle("active", b.getAttribute("data-mode") === m));
-    frozenRow.style.display = (m === "frozen") ? "flex" : "none";
-    if (m === "frozen"){
-      takenOut.value = toLocalInput(new Date());
-      if (!thawHours.value) thawHours.value = String(DEFAULT_THAW_HOURS);
-    }
-    updatePreview();
-  }
-  function computeDiscardAt(addedAtIso, days){
-    const ms = Number(days) * 24 * 60 * 60 * 1000;
-    return new Date(new Date(addedAtIso).getTime() + ms).toISOString();
-  }
-
-  function statusFor(entry){
-    if (entry.status === "discarded") return "discarded";
-    const now = Date.now();
-    const disc = new Date(entry.discardAt).getTime();
-    if (now >= disc) return "expired";
-    if (isSameLocalDate(new Date(), new Date(entry.discardAt))) return "dueToday";
-    return "ok";
-  }
-
-  function renderCakeButtons(){
-    cakeGrid.innerHTML = TYPES.map(t => {
-      const meta = (t.days != null) ? `${t.days} dage` : `skriv selv`;
-      return `
-        <div class="cakeBtn ${t.id===selectedTypeId ? "active":""}" data-type="${t.id}">
-          <div class="name">${escapeHtml(t.name)}</div>
-          <div class="meta">${escapeHtml(meta)}</div>
-        </div>`;
-    }).join("");
-
-    cakeGrid.querySelectorAll(".cakeBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        selectedTypeId = btn.getAttribute("data-type");
-        prefs.lastTypeId = selectedTypeId;
-        savePrefs();
-        renderCakeButtons();
-        customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
-        updatePreview();
-      });
-    });
-  }
-
-  function updatePreview(){
-    const nowIso = new Date().toISOString();
-    const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
-    let days = t.days;
-    let name = t.name;
-    if (t.id === "custom"){
-      name = (customName.value || "").trim();
-      days = Number(customDays.value);
-      if (!name || !Number.isFinite(days) || days < 0){ preview.textContent = ""; return; }
-    }
-    if (mode === "frozen"){
-      const tk = readTaken().toISOString();
-      const ft = frozenTimes(tk, readThaw(), days);
-      preview.textContent = `Klar til servering: ${fmtShort(ft.readyAt)} • Smides ud: ${fmtDateTime(ft.discardAt)}`;
-      return;
-    }
-    preview.textContent = `Smides ud: ${fmtDateTime(computeDiscardAt(nowIso, days))}`;
-  }
-
-  function addEntry(){
-    const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
-    const nowIso = new Date().toISOString();
-
-    let cakeName = t.name;
-    let days = t.days;
-
-    if (t.id === "custom"){
-      cakeName = (customName.value || "").trim();
-      days = Number(customDays.value);
-      if (!cakeName || !Number.isFinite(days) || days < 0){
-        alert("Udfyld 'Andet – kagenavn' og 'Holdbarhed (dage)'.");
-        return;
-      }
-    }
-
-    const qtyVal = parseInt(qty.value, 10);
-    if (!Number.isFinite(qtyVal) || qtyVal < 1){
-      alert("Udfyld 'Antal stk' (mindst 1).");
-      return;
-    }
-
-    let addedAt = nowIso;
-    let discardAt = computeDiscardAt(nowIso, days);
-    let frozenInfo = {};
-    if (mode === "frozen"){
-      addedAt = readTaken().toISOString();
-      const hrs = readThaw();
-      const ft = frozenTimes(addedAt, hrs, days);
-      discardAt = ft.discardAt;
-      frozenInfo = { frozen: true, thawHours: hrs, thawReadyAt: ft.readyAt };
-    }
-
-    const entry = normalizeEntry({
-      ...frozenInfo,
-      id: uuid(),
-      cakeName,
-      days,
-      addedAt,
-      discardAt,
-      by: (by.value || "").trim(),
-      qty: qtyVal,
-      note: (note.value || "").trim(),
-      status: "active"
-    });
-
-    entries.unshift(entry);
-    saveEntries();
-
-    prefs.lastBy = "";
-    prefs.lastQty = "";
-    savePrefs();
-
-    by.value = "";
-    qty.value = "";
-    note.value = "";
-    if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
-    if (mode === "frozen") takenOut.value = toLocalInput(new Date());
-    updatePreview();
-    render();
-    checkAlarm(true);
-    updateTabIndicators();
-    checkDueSoonNotifications();
-  }
-
-  function thawTag(e){
-    if (!e.frozen || !e.thawReadyAt) return "";
-    if (Date.now() < new Date(e.thawReadyAt).getTime()){
-      return `<br><span class="tag thaw">❄️ Optøer – klar ${escapeHtml(fmtShort(e.thawReadyAt))}</span>`;
-    }
-    return `<br><span class="tag ready">✓ Optøet</span>`;
-  }
-
-  function render(){
-
-  const list = entries
-    .filter(e => e.status !== "discarded")
-
-    // SORTERING
-    .sort((a, b) => {
-
-      // Gruppér efter kagenavn
-      const cakeCompare =
-        a.cakeName.localeCompare(b.cakeName, "da");
-
-      if(cakeCompare !== 0){
-        return cakeCompare;
-      }
-
-      // Sortér derefter efter udløbsdato
-      return new Date(a.discardAt) - new Date(b.discardAt);
-
-    });
-
-  tbody.innerHTML = "";
-
-  let currentCake = "";
-
-  list.forEach(e => {
-
-    // OVERSKRIFT FOR HVER KAGE-TYPE
-    if(e.cakeName !== currentCake){
-
-      currentCake = e.cakeName;
-
-      const headerRow = document.createElement("tr");
-
-      headerRow.innerHTML = `
-        <td colspan="5"
-            style="
-              padding:18px 10px;
-              background:rgba(217,182,90,.10);
-              color:#d9b65a;
-              font-size:18px;
-              font-weight:1000;
-              letter-spacing:.03em;
-              border-top:1px solid rgba(255,255,255,.12);
-            ">
-          ${escapeHtml(currentCake)}
-        </td>
-      `;
-
-      tbody.appendChild(headerRow);
-    }
-
-    // NORMAL RÆKKE
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td>
-        <span class="small" style="color:var(--muted)">
-          ${e.by ? escapeHtml(e.by) : ""}
-        </span>
-        ${thawTag(e)}
-
-        ${e.note
-          ? `<br><span class="small" style="color:var(--muted)">
-              ${escapeHtml(e.note)}
-             </span>`
-          : ``}
-      </td>
-
-      <td>
-        <strong>${escapeHtml(String(e.qty || 1))}</strong> stk
-      </td>
-
-      <td>${fmtDateTime(e.addedAt)}${e.frozen ? `<br><span class="small">❄️ ud af fryser</span>` : ""}</td>
-
-      <td>
-        <strong>${fmtDateTime(e.discardAt)}</strong>
-      </td>
-
-      <td>
-        <div class="actions">
-
-          <button class="btnEdit mini"
-                  type="button"
-                  data-action="editqty"
-                  data-id="${e.id}">
-            Ret antal
-          </button>
-
-          <button class="btn mini"
-                  type="button"
-                  data-action="discard"
-                  data-id="${e.id}">
-            Smidt ud
-          </button>
-
-          <button class="btnDanger mini"
-                  type="button"
-                  data-action="delete"
-                  data-id="${e.id}">
-            Slet
-          </button>
-
-        </div>
-      </td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-
-  // EVENTS
-  tbody.querySelectorAll("button[data-action]")
-    .forEach(btn => {
-
-      btn.addEventListener("click", () => {
-
-        const id = btn.getAttribute("data-id");
-
-        const action =
-          btn.getAttribute("data-action");
-
-        if(action === "discard"){
-          openDiscardModal(id);
-        }
-
-        if(action === "delete"){
-          deleteEntry(id);
-        }
-
-        if(action === "editqty"){
-          openEditQtyModal(id);
-        }
-
-      });
-
-    });
-
+"use strict";
+
+const KEY_ENTRIES = "kaiser.wine.entries.v1";
+const KEY_PREFS   = "kaiser.wine.prefs.v1";
+const KEY_SHELF   = "kaiser.wine.shelf.v1";
+
+/* Vinkortet. Hver vin har sin egen holdbarhed i timer.
+   Kan justeres i indstillingerne uden at redigere koden. */
+const CATEGORIES = {
+  hvid:    { name:"Hvidvin",       hours:48 },   // 2 døgn (kort ende af 2-4)
+  rod:     { name:"Rødvin",        hours:48 },   // 2 døgn (kort ende af 2-4)
+  rose:    { name:"Rosé",          hours:48 },   // 2 døgn (kort ende af 2-4)
+  bubbles: { name:"Husets bobler", hours:24 }    // 1 døgn (kort ende af 1-2)
+};
+
+const DEFAULT_SHELF = {
+  // HVIDVIN
+  h_rosario:  { cat:"hvid", name:"Rosario Estate, Chardonnay, Chile" },
+  h_simply:   { cat:"hvid", name:"Simply Fruity, Riesling, Tyskland" },
+  h_pfaffl:   { cat:"hvid", name:"Pfaffl Sauvignon Blanc, Østrig" },
+  h_macon:    { cat:"hvid", name:"Macon-Villages, Bourgogne, Frankrig" },
+  // RØDVIN
+  r_maison:   { cat:"rod",  name:"La Maisonnée, Cabernet Sauvignon, Frankrig" },
+  r_badet:    { cat:"rod",  name:"Badet Clement, Pinot Noir, Frankrig" },
+  r_ripasso:  { cat:"rod",  name:"Ripasso, Italien" },
+  r_barolo:   { cat:"rod",  name:"Barolo Beni Di B., Italien" },
+  // BOBLER
+  b_borgo:    { cat:"bubbles", name:"Borgo Imperiale Cuvée Brut, Italien" },
+  b_mimi_rose:{ cat:"bubbles", name:"Mimi Brut Rosé, Frankrig" },
+  // ROSÉ
+  p_cuvee:    { cat:"rose", name:"Cuvée Prestige Rosé, Frankrig" },
+  p_mimi:     { cat:"rose", name:"Mimi Rosé, Frankrig" }
+};
+
+const $ = id => document.getElementById(id);
+const parse = r => { try { return r ? JSON.parse(r) : null; } catch { return null; } };
+
+/* Migrer: gamle poster med 'hours' på selve vinen flyttes til kategorien.
+   Nye vine får ikke egne timer — de arver fra kategori-defaultet, men
+   kan overskrives i indstillingerne. */
+let shelfRaw = parse(localStorage.getItem(KEY_SHELF)) || {};
+let shelf = {};
+for (const [id, def] of Object.entries(DEFAULT_SHELF)){
+  shelf[id] = { ...def, ...(shelfRaw[id] || {}) };
 }
 
-  function deleteEntry(id){
-    const e = entries.find(x => x.id === id);
-    if(!e) return;
-    if (!confirm(`Slet "${e.cakeName}"?`)) return;
-    entries = entries.filter(x => x.id !== id);
-    saveEntries();
-    render();
+let entries = parse(localStorage.getItem(KEY_ENTRIES)) || [];
+let prefs = { lastBy:"", lastCat:"rod", lastWine:"", snoozeUntil:0,
+              ...(parse(localStorage.getItem(KEY_PREFS)) || {}) };
+
+let selectedCat  = prefs.lastCat in CATEGORIES ? prefs.lastCat : "rod";
+let selectedWine = (prefs.lastWine && shelf[prefs.lastWine]?.cat === selectedCat) ? prefs.lastWine : "";
+let pendingDiscard = null;
+
+const saveEntries = () => localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries));
+const savePrefs   = () => localStorage.setItem(KEY_PREFS, JSON.stringify(prefs));
+const saveShelf   = () => localStorage.setItem(KEY_SHELF, JSON.stringify(shelf));
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+
+const uuid = () => (crypto?.randomUUID?.() || "id-" + Math.random().toString(16).slice(2) + Date.now());
+
+function hoursFor(wineId){
+  const w = shelf[wineId];
+  if (!w) return 24;
+  if (typeof w.hours === "number" && w.hours > 0) return w.hours;
+  return CATEGORIES[w.cat]?.hours || 24;
+}
+
+function fmt(iso){
+  return new Date(iso).toLocaleString("da-DK",
+    { weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+}
+
+function hoursLabel(h){
+  if (h % 24 === 0) return (h/24) + " døgn";
+  if (h < 24) return h + " timer";
+  return Math.floor(h/24) + " døgn " + (h%24) + " t";
+}
+
+function timeLeft(iso){
+  const ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "udløbet";
+  const mins = Math.round(ms/60000);
+  const h = Math.floor(mins/60), m = mins%60;
+  if (h >= 24) { const d = Math.floor(h/24); return d + " døgn " + (h%24) + " t tilbage"; }
+  if (h >= 1)  return h + " t " + m + " min tilbage";
+  return m + " min tilbage";
+}
+
+function sameDay(a,b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function statusOf(e){
+  const disc = new Date(e.discardAt).getTime();
+  if (Date.now() >= disc) return "expired";
+  if (sameDay(new Date(), new Date(e.discardAt))) return "dueToday";
+  return "ok";
+}
+
+const STATUS_TEXT = { ok:"OK", dueToday:"Udløber i dag", expired:"Skal drikkes op" };
+
+/* ---------- Kategori-tabs ---------- */
+function renderCats(){
+  $("catTabs").innerHTML = Object.entries(CATEGORIES).map(([id,c]) => {
+    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
+    return `
+      <div class="catTab ${clsMap[id]} ${id===selectedCat?"on":""}" data-id="${id}">
+        <span class="dot"></span>${esc(c.name)}
+      </div>`;
+  }).join("");
+
+  $("catTabs").querySelectorAll(".catTab").forEach(b =>
+    b.addEventListener("click", () => {
+      selectedCat = b.dataset.id;
+      selectedWine = "";
+      prefs.lastCat = selectedCat; savePrefs();
+      renderCats(); renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Vin-knapper for valgt kategori ---------- */
+function renderWines(){
+  const wines = Object.entries(shelf).filter(([_,w]) => w.cat === selectedCat);
+  $("wineGrid").innerHTML = wines.map(([id,w]) => `
+    <div class="wineBtn ${id===selectedWine?"active":""}" data-id="${id}">
+      <div class="nm">${esc(w.name)}</div>
+      <div class="mt">Holdbarhed: ${esc(hoursLabel(hoursFor(id)))}</div>
+    </div>`).join("");
+
+  $("wineGrid").querySelectorAll(".wineBtn").forEach(b =>
+    b.addEventListener("click", () => {
+      selectedWine = b.dataset.id;
+      prefs.lastWine = selectedWine; savePrefs();
+      renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Preview ---------- */
+function chosenStart(){
+  if ($("whenMode").value === "custom" && $("whenAt").value){
+    return new Date($("whenAt").value);
+  }
+  return new Date();
+}
+
+function updatePreview(){
+  if (!selectedWine){ $("preview").textContent = "Vælg en vin"; return; }
+  const w = shelf[selectedWine];
+  const start = chosenStart();
+  const h = hoursFor(selectedWine);
+  const out = new Date(start.getTime() + h*3600*1000);
+  $("preview").textContent = `${w.name} — åbnet ${fmt(start)} → drikkes op senest ${fmt(out)}`;
+}
+
+/* ---------- Registrér ---------- */
+function addEntry(){
+  if (!selectedWine){ alert("Vælg en vin først."); return; }
+  const w = shelf[selectedWine];
+  const start = chosenStart();
+  if (isNaN(start.getTime())) return alert("Ugyldigt tidspunkt.");
+
+  const h = hoursFor(selectedWine);
+
+  entries.unshift({
+    id: uuid(),
+    wineId: selectedWine,
+    wineName: w.name,
+    cat: w.cat,
+    by: ($("by").value || "").trim(),
+    openedAt: start.toISOString(),
+    discardAt: new Date(start.getTime() + h*3600*1000).toISOString(),
+    status: "active"
+  });
+
+  saveEntries();
+  prefs.lastBy = ($("by").value || "").trim(); savePrefs();
+
+  $("whenMode").value = "now";
+  $("customTimeWrap").style.display = "none";
+
+  render(); updatePreview(); checkAlarm(true);
+}
+
+/* ---------- Liste ---------- */
+function render(){
+  const active = entries.filter(e => e.status === "active");
+
+  if (!active.length){
+    $("list").innerHTML = `<div class="empty">Ingen åbne flasker. Alt er lukket.</div>`;
+    return;
   }
 
-  // === Edit Qty Modal ===
-  function buildKeypadInto(container, inputEl){
-    const buttons = [
-      { t:"1", v:1, cls:"primary" }, { t:"2", v:2, cls:"primary" }, { t:"3", v:3, cls:"primary" }, { t:"4", v:4, cls:"primary" }, { t:"5", v:5, cls:"primary" },
-      { t:"6", v:6 }, { t:"7", v:7 }, { t:"8", v:8 }, { t:"9", v:9 }, { t:"10", v:10 },
-      { t:"-1", v:"-1" }, { t:"+1", v:"+1" }, { t:"Ryd", v:"clear" }, { t:"", v:null, disabled:true }, { t:"", v:null, disabled:true }
-    ];
+  const rank = { expired:0, dueToday:1, ok:2 };
+  const catOrder = ["rod","hvid","rose","bubbles"];
+  const groups = {};
+  active.forEach(e => (groups[e.cat] ||= []).push(e));
 
-    container.innerHTML = buttons.map(b => {
-      if (b.disabled) return `<button type="button" disabled style="opacity:.15; cursor:default;"></button>`;
-      const cls = b.cls ? `class="${b.cls}"` : "";
-      return `<button type="button" ${cls} data-k="${b.v}">${escapeHtml(b.t)}</button>`;
-    }).join("");
+  const order = catOrder.filter(c => groups[c]);
 
-    container.querySelectorAll("button[data-k]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const k = btn.getAttribute("data-k");
-        let n = parseInt(inputEl.value || "0", 10);
-        if (Number.isNaN(n)) n = 0;
-        if (k === "clear") n = 0;
-        else if (k === "+1") n = n + 1;
-        else if (k === "-1") n = Math.max(0, n - 1);
-        else n = parseInt(k, 10);
-        inputEl.value = n > 0 ? String(n) : "";
-        inputEl.focus();
-      });
-    });
-  }
+  $("list").innerHTML = order.map(cat => {
+    const rows = groups[cat]
+      .sort((a,b) => {
+        const sa = rank[statusOf(a)], sb = rank[statusOf(b)];
+        if (sa !== sb) return sa - sb;
+        return new Date(a.discardAt) - new Date(b.discardAt);
+      })
+      .map(e => {
+        const st = statusOf(e);
+        return `
+        <div class="bottle ${st}">
+          <div class="info">
+            <div class="line1">
+              ${esc(e.wineName)}
+              <span class="pill ${st}">${STATUS_TEXT[st]}</span>
+            </div>
+            <div class="line2">
+              Åbnet ${esc(fmt(e.openedAt))}${e.by ? " • " + esc(e.by) : ""}<br>
+              Drikkes op <strong>${esc(fmt(e.discardAt))}</strong> • ${esc(timeLeft(e.discardAt))}
+            </div>
+          </div>
+          <div class="acts">
+            <button class="btnSmall" data-act="discard" data-id="${e.id}">Færdig / kasseret</button>
+            <button class="btnDanger" data-act="delete" data-id="${e.id}">Slet</button>
+          </div>
+        </div>`;
+      }).join("");
 
-  function openEditQtyModal(id){
-    const e = entries.find(x => x.id === id);
-    if(!e) return;
-    pendingEditId = id;
-    editQtySub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Nuværende: ${e.qty || 1} stk`;
-    editQtyInput.value = String(e.qty || 1);
-    buildKeypadInto(editKeypad, editQtyInput);
-    editQtyOverlay.style.display = "flex";
-    editQtyOverlay.setAttribute("aria-hidden", "false");
-    setTimeout(() => editQtyInput.focus(), 30);
-  }
+    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
+    return `
+      <div class="groupHead">
+        <div class="g ${clsMap[cat]}"><span class="catDot"></span>${esc(CATEGORIES[cat].name)}</div>
+        <div class="c">${groups[cat].length} åbne</div>
+      </div>${rows}`;
+  }).join("");
 
-  function closeEditQtyModal(){
-    pendingEditId = null;
-    editQtyOverlay.style.display = "none";
-    editQtyOverlay.setAttribute("aria-hidden", "true");
-  }
+  $("list").querySelectorAll("button[data-act]").forEach(b =>
+    b.addEventListener("click", () => {
+      if (b.dataset.act === "discard") openDiscard(b.dataset.id);
+      else deleteEntry(b.dataset.id);
+    }));
+}
 
-  function saveEditQty(){
-    const e = entries.find(x => x.id === pendingEditId);
-    if(!e) return;
-    const n = parseInt(editQtyInput.value, 10);
-    if (!Number.isFinite(n) || n < 0){
-      alert("Indtast et gyldigt antal (0 eller mere).");
-      return;
-    }
-    e.qty = n;
-    saveEntries();
-    closeEditQtyModal();
-    render();
-  }
+function deleteEntry(id){
+  const e = entries.find(x => x.id === id);
+  if (!e || !confirm(`Slet registrering af "${e.wineName}"?`)) return;
+  entries = entries.filter(x => x.id !== id);
+  saveEntries(); render();
+}
 
-  closeEditQtyBtn.addEventListener("click", closeEditQtyModal);
-  editQtyCancelBtn.addEventListener("click", closeEditQtyModal);
-  editQtyOverlay.addEventListener("click", (e) => { if (e.target === editQtyOverlay) closeEditQtyModal(); });
-  editQtySaveBtn.addEventListener("click", saveEditQty);
+/* ---------- Kassér (færdig / smidt ud) ---------- */
+function openDiscard(id){
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  pendingDiscard = id;
+  $("discardSub").innerHTML =
+    `<strong>${esc(e.wineName)}</strong><br>Åbnet ${esc(fmt(e.openedAt))}`;
+  $("discardOverlay").classList.add("on");
+}
 
-  // === Alarm ===
-  function alarmEntries(){
-    return entries.filter(e => e.status !== "discarded" && statusFor(e) === "dueToday");
-  }
+function closeDiscard(){
+  pendingDiscard = null;
+  $("discardOverlay").classList.remove("on");
+}
 
-  function openAlarmModal(list){
-    alarmList.innerHTML = list.map(e => `
-      <div class="item">
-        <div>
-          <strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk<br/>
-          <span class="small">Udløb: <strong>${escapeHtml(fmtDateTime(e.discardAt))}</strong></span><br/>
-          <span class="small" style="color:var(--muted)">
-            ${e.by ? e.by : ""}
-          </span>
-        </div>
-        <div>
-          <button class="btn mini" type="button" data-mid="discard" data-id="${e.id}">Smidt ud</button>
-        </div>
+function saveDiscard(){
+  const e = entries.find(x => x.id === pendingDiscard);
+  if (!e) return;
+  e.status = "discarded";
+  e.discardedAt = new Date().toISOString();
+  saveEntries(); closeDiscard(); render();
+}
+
+/* ---------- Alarm ---------- */
+function alarmList(){
+  return entries.filter(e => e.status === "active" &&
+    ["expired","dueToday"].includes(statusOf(e)));
+}
+
+function checkAlarm(force){
+  if (!force && Date.now() < Number(prefs.snoozeUntil || 0)) return;
+  const list = alarmList();
+  if (!list.length) return;
+
+  const expired = list.filter(e => statusOf(e) === "expired").length;
+  $("alarmBanner").textContent = expired
+    ? `${expired} skal drikkes op NU`
+    : `${list.length} udløber i dag`;
+
+  $("alarmList").innerHTML = list.map(e => `
+    <div class="bottle ${statusOf(e)}" style="margin-top:8px">
+      <div class="info">
+        <div class="line1">${esc(e.wineName)}</div>
+        <div class="line2">Udløb ${esc(fmt(e.discardAt))}${e.by ? " • " + esc(e.by) : ""}</div>
       </div>
-    `).join("");
+      <div class="acts">
+        <button class="btnSmall" data-alarm="${e.id}">Færdig / kasseret</button>
+      </div>
+    </div>`).join("");
 
-    alarmList.querySelectorAll("button[data-mid='discard']").forEach(btn => {
-      btn.addEventListener("click", () => {
-        closeAlarmModal();
-        openDiscardModal(btn.getAttribute("data-id"));
-      });
+  $("alarmList").querySelectorAll("button[data-alarm]").forEach(b =>
+    b.addEventListener("click", () => {
+      $("alarmOverlay").classList.remove("on");
+      openDiscard(b.dataset.alarm);
+    }));
+
+  $("alarmOverlay").classList.add("on");
+}
+
+/* ---------- Indstillinger ---------- */
+function renderSettings(){
+  const order = ["rod","hvid","rose","bubbles"];
+  const list = [];
+  order.forEach(cat => {
+    Object.entries(shelf).filter(([_,w]) => w.cat === cat).forEach(([id,w]) => {
+      list.push({ id, w });
     });
-
-    alarmOverlay.style.display = "flex";
-    alarmOverlay.setAttribute("aria-hidden", "false");
-  }
-
-  function closeAlarmModal(){
-    alarmOverlay.style.display = "none";
-    alarmOverlay.setAttribute("aria-hidden", "true");
-  }
-
-  function checkAlarm(force){
-    const now = Date.now();
-    if (!force && now < Number(prefs.snoozeUntil || 0)) return;
-    const list = alarmEntries();
-    if (list.length > 0) openAlarmModal(list);
-  }
-
-  snoozeBtn.addEventListener("click", () => {
-    prefs.snoozeUntil = Date.now() + 30*60*1000;
-    savePrefs();
-    closeAlarmModal();
   });
-  closeAlarmBtn.addEventListener("click", closeAlarmModal);
-  alarmOverlay.addEventListener("click", (e) => { if (e.target === alarmOverlay) closeAlarmModal(); });
 
-  // === Discard modal ===
-  function openDiscardModal(id){
-    const e = entries.find(x => x.id === id);
-    if(!e) return;
-    pendingDiscardId = id;
-    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))}`;
-    wasteQty.value = "";
-    buildKeypadInto(keypad, wasteQty);
-    discardOverlay.style.display = "flex";
-    discardOverlay.setAttribute("aria-hidden", "false");
-    setTimeout(() => wasteQty.focus(), 30);
+  $("settings").innerHTML = list.map(({id,w}) => `
+    <div class="settingRow">
+      <div class="nm">${esc(w.name)}</div>
+      <div class="cat">${esc(CATEGORIES[w.cat].name)}</div>
+      <input type="number" min="1" step="1" value="${hoursFor(id)}" data-shelf="${id}"/>
+      <div class="unit">TIMER</div>
+    </div>`).join("");
+
+  $("settings").querySelectorAll("input[data-shelf]").forEach(inp =>
+    inp.addEventListener("change", () => {
+      const h = parseInt(inp.value, 10);
+      if (!Number.isFinite(h) || h < 1) { inp.value = hoursFor(inp.dataset.shelf); return; }
+      shelf[inp.dataset.shelf].hours = h;
+      saveShelf(); renderWines(); updatePreview();
+    }));
+}
+
+/* ---------- Init ---------- */
+$("by").value = prefs.lastBy || "";
+
+$("whenMode").addEventListener("change", () => {
+  const custom = $("whenMode").value === "custom";
+  $("customTimeWrap").style.display = custom ? "" : "none";
+  if (custom && !$("whenAt").value){
+    const d = new Date(Date.now() - new Date().getTimezoneOffset()*60000);
+    $("whenAt").value = d.toISOString().slice(0,16);
   }
-
-  function closeDiscardModal(){
-    pendingDiscardId = null;
-    discardOverlay.style.display = "none";
-    discardOverlay.setAttribute("aria-hidden", "true");
-  }
-
-  function saveDiscard(){
-    const e = entries.find(x => x.id === pendingDiscardId);
-    if(!e) return;
-    const q = Number(wasteQty.value);
-    if (!Number.isInteger(q) || q < 1){
-      alert("Vælg antal (stk).");
-      return;
-    }
-    e.status = "discarded";
-    e.discardedAt = new Date().toISOString();
-    e.wasteQty = q;
-    e.wasteUnit = "stk";
-    saveEntries();
-    closeDiscardModal();
-    render();
-  }
-
-  closeDiscardBtn.addEventListener("click", closeDiscardModal);
-  discardCancelBtn.addEventListener("click", closeDiscardModal);
-  discardOverlay.addEventListener("click", (e) => { if (e.target === discardOverlay) closeDiscardModal(); });
-  discardSaveBtn.addEventListener("click", saveDiscard);
-
-  // === Init ===
-  by.value = prefs.lastBy || "";
-  qty.value = prefs.lastQty || "";
-
-  renderCakeButtons();
-  customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
   updatePreview();
-  render();
+});
+$("whenAt").addEventListener("input", updatePreview);
+$("addBtn").addEventListener("click", addEntry);
+$("by").addEventListener("input", () => { prefs.lastBy = $("by").value; savePrefs(); });
 
-  addBtn.addEventListener("click", () => {
-    ensureNotifPermissionFromUserGesture();
-    addEntry();
-  });
-  customName.addEventListener("input", updatePreview);
-  customDays.addEventListener("input", updatePreview);
-  by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
-  qty.addEventListener("input", () => { prefs.lastQty = qty.value; savePrefs(); });
+$("discardCancel").addEventListener("click", closeDiscard);
+$("discardSave").addEventListener("click", saveDiscard);
+$("discardOverlay").addEventListener("click", e => { if (e.target === $("discardOverlay")) closeDiscard(); });
 
-  $("appVersion").textContent = "Version " + APP_VERSION;
-  modeRow.querySelectorAll(".modeBtn").forEach(b => b.addEventListener("click", () => setMode(b.getAttribute("data-mode"))));
-  takenOut.addEventListener("input", updatePreview);
-  thawHours.addEventListener("input", updatePreview);
-  setMode("fresh");
+$("closeAlarmBtn").addEventListener("click", () => $("alarmOverlay").classList.remove("on"));
+$("snoozeBtn").addEventListener("click", () => {
+  prefs.snoozeUntil = Date.now() + 30*60*1000; savePrefs();
+  $("alarmOverlay").classList.remove("on");
+});
 
-  checkAlarm(false);
-  checkThawReady();
-  setInterval(() => {
-    render();
-    checkThawReady();
-    checkAlarm(false);
-    checkDueSoonNotifications();
-    updateTabIndicators();
-  }, 30 * 1000);
+$("clearBtn").addEventListener("click", () => {
+  if (!confirm("Slet ALLE åbne flasker på denne enhed? (Til rengøring / nulstilling)")) return;
+  entries = []; saveEntries(); render();
+});
+
+renderCats();
+renderWines();
+renderSettings();
+updatePreview();
+render();
+checkAlarm(false);
+
+setInterval(() => { render(); checkAlarm(false); }, 60000);
 })();
 </script>
 </body>
