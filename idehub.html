@@ -1,543 +1,378 @@
 <!doctype html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kaiser – Idéhub V2</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kaiser – Idéhub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f2; --ink:#18201d; --muted:#737b76; --line:#e3e7e3;
+  --green:#176b57; --green2:#e5f1ed; --gold:#d6b24a;
+  --amber:#b36b16; --amberSoft:#f8efdf; --red:#b64b43; --redSoft:#f8e8e6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:inherit}
+.hidden{display:none!important}
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+.page{height:100vh;display:flex;flex-direction:column;padding:0.875rem 1.25rem 1rem;gap:0.75rem}
+.head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex:none}
+.kicker{font-size:0.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.h1{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-top:2px}
+.locWrap{display:flex;align-items:center;gap:0.5rem;min-height:2.875rem;padding:0 0.5rem 0 1rem;border-radius:62.4375rem;background:#fff;border:1px solid var(--line);font-weight:800;font-size:0.9375rem}
+.locWrap.err{border-color:var(--red);background:var(--redSoft)}
+.locLbl{font-size:0.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.locWrap select{border:0;background:transparent;font-size:0.9375rem;font-weight:800;color:var(--ink);min-height:2.75rem;padding:0 0.25rem;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none}
+.locWrap::after{content:"▾";color:var(--muted);font-size:0.75rem;margin-right:0.5rem;pointer-events:none}
 
-  <style>
-    :root{
-      --bg:#071019;
-      --panel:rgba(15,22,34,.88);
-      --border:rgba(145,205,255,.14);
-      --text:rgba(255,255,255,.95);
-      --muted:rgba(213,231,248,.72);
-      --muted2:rgba(184,210,234,.48);
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0.75rem}
+.panel{background:#fff;border:1px solid var(--line);border-radius:1.125rem;display:flex;flex-direction:column;min-height:0;box-shadow:0 1px 0 rgba(24,32,29,.04)}
+.pHead{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0 1rem;min-height:3.25rem;border-bottom:1px solid var(--line);flex:none}
+.pTitle{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.pDot{width:0.5rem;height:0.5rem;border-radius:50%;background:var(--green)}
+.pDot.gold{background:var(--gold)}
+.pHint{font-size:0.8125rem;font-weight:700;color:var(--muted)}
+.pBody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
+.pFoot{padding:0.75rem 1rem 1rem;flex:none;border-top:1px solid var(--line)}
 
-      --blue:#9bd3ff;
-      --blue2:#66b7ff;
-      --blueGlow:rgba(102,183,255,.20);
+.lbl{font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 0.5rem}
+.lbl i{font-style:normal;color:var(--red)}
+.field{margin-bottom:1rem}
+.field.err .lbl{color:var(--red)}
+.field.err .chip{border-color:var(--red)}
+.field.err .textarea{border-color:var(--red);background:var(--redSoft)}
 
-      --gold:#d6b24a;
-      --gold2:#b9921f;
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));gap:0.5rem}
+.chips.types{grid-template-columns:repeat(3,1fr)}
+.chip{min-height:3rem;padding:0.375rem 0.625rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;font-size:0.9375rem;font-weight:800;color:var(--ink);cursor:pointer;line-height:1.2;transition:transform .08s ease}
+.chip small{display:block;font-size:0.6875rem;font-weight:700;color:var(--muted);margin-top:0.125rem}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.on small{color:rgba(255,255,255,.7)}
+.chip.tool{min-height:2.75rem;font-size:0.875rem}
+.chip:active,.btn:active,.seg button:active{transform:scale(.97)}
 
-      --green:#88e0a8;
-      --red:#ff8f8f;
-    }
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0.3125rem;padding:0.3125rem;background:#eef1ee;border-radius:0.875rem}
+.seg button{min-height:2.75rem;border:0;border-radius:0.625rem;background:transparent;font-size:0.9375rem;font-weight:800;color:#59635e;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+.seg button .dot{width:0.5625rem;height:0.5625rem;border-radius:50%}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(24,32,29,.12)}
+.seg button[data-v="Høj"].on{background:var(--red);color:#fff}
+.seg button.on .dot{background:#fff!important}
 
-    html,body{
-      margin:0;
-      padding:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:var(--bg);
-    }
+.input{width:100%;min-height:3rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;padding:0 0.875rem;font-size:1rem;font-weight:700;color:var(--ink);outline:none}
+.textarea{width:100%;min-height:9rem;border-radius:0.875rem;border:1.5px solid var(--line);background:#f7f8f6;padding:0.75rem 0.875rem;font-size:1.0625rem;font-weight:500;line-height:1.5;color:var(--ink);outline:none;resize:vertical}
+.input:focus,.textarea:focus{border-color:var(--green);background:#fff}
+.guide{margin-top:0.5rem;padding:0.625rem 0.875rem;border-radius:0.75rem;background:var(--amberSoft);color:var(--amber);font-size:0.8125rem;font-weight:700;line-height:1.45}
+.counter{margin-top:0.375rem;font-size:0.75rem;font-weight:700;color:var(--muted);display:flex;justify-content:space-between}
 
-    body{
-      min-height:100vh;
-      background:
-        radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
-        radial-gradient(1000px 720px at 100% 0%, rgba(102,183,255,.18), transparent 52%),
-        radial-gradient(900px 700px at 20% 110%, rgba(255,255,255,.04), transparent 55%),
-        linear-gradient(180deg, #071019, #0c1625 52%, #071019);
-    }
+.btn{width:100%;min-height:3.75rem;border:0;border-radius:0.875rem;background:var(--ink);color:#fff;font-size:1.1875rem;font-weight:800;cursor:pointer;transition:transform .08s ease,opacity .15s;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.btn:disabled{opacity:.6}
+.btn.ghost{background:#f1f3f1;color:var(--ink);font-size:1rem}
+.status{margin-bottom:0.625rem;padding:0.625rem 0.875rem;border-radius:0.75rem;font-size:0.9375rem;font-weight:700;background:var(--redSoft);color:var(--red)}
+.summary{margin-bottom:0.625rem;font-size:0.875rem;font-weight:600;color:var(--muted);line-height:1.4}
+.summary b{color:var(--ink)}
 
-    .shell{
-      max-width:1000px;
-      margin:0 auto;
-      padding:20px;
-      padding-bottom:80px;
-    }
+/* tak-skærm */
+.thanks{flex:1;display:flex;align-items:center;justify-content:center}
+.thanksCard{width:min(32rem,100%);background:#fff;border:1px solid var(--line);border-radius:1.25rem;padding:2rem 1.5rem;text-align:center}
+.tick{width:4.5rem;height:4.5rem;border-radius:50%;background:var(--green2);display:inline-flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.tick svg{width:2.25rem;height:2.25rem;stroke:var(--green);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tTitle{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.tText{margin-top:0.5rem;font-size:1rem;color:var(--muted);font-weight:600;line-height:1.45}
+.tBtns{display:flex;flex-direction:column;gap:0.5rem;margin-top:1.5rem}
 
-    .hero{
-      border:1px solid var(--border);
-      border-radius:28px;
-      padding:28px 24px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
-        linear-gradient(135deg, rgba(155,211,255,.08), rgba(255,255,255,0));
-      backdrop-filter:blur(14px);
-      box-shadow:0 30px 80px rgba(0,0,0,.38);
-      text-align:center;
-    }
+iframe.hiddenFrame{display:none}
 
-    .kicker{
-      font-size:13px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      font-weight:800;
-    }
-
-    .title{
-      margin-top:10px;
-      font-family:"Playfair Display",serif;
-      font-size:clamp(38px,5vw,60px);
-      line-height:1.02;
-      letter-spacing:-0.025em;
-      font-weight:700;
-    }
-
-    .subtitle{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:18px;
-      font-weight:600;
-    }
-
-    .heroLine{
-      height:2px;
-      margin-top:18px;
-      border-radius:999px;
-      background:linear-gradient(90deg, transparent, rgba(214,178,74,.9), rgba(102,183,255,.85), transparent);
-    }
-
-    .panel{
-      margin-top:18px;
-      border:1px solid var(--border);
-      border-radius:24px;
-      background:var(--panel);
-      backdrop-filter:blur(14px);
-      box-shadow:0 22px 60px rgba(0,0,0,.34);
-      overflow:hidden;
-    }
-
-    .panelHead{
-      padding:20px 22px 14px;
-    }
-
-    .panelBody{
-      padding:20px 22px 22px;
-    }
-
-    .divider{
-      height:1px;
-      background:rgba(145,205,255,.10);
-    }
-
-    .blockTitle{
-      font-size:24px;
-      font-weight:900;
-      letter-spacing:-0.02em;
-    }
-
-    .muted{
-      color:var(--muted);
-      font-size:15px;
-      font-weight:600;
-    }
-
-    .label{
-      font-size:12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:var(--muted2);
-      font-weight:900;
-      margin-bottom:8px;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-    }
-
-    @media (max-width: 760px){
-      .grid2{grid-template-columns:1fr;}
-    }
-
-    .input, .select, .textarea{
-      width:100%;
-      border-radius:16px;
-      border:1px solid rgba(145,205,255,.14);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      outline:none;
-      font-size:18px;
-      padding:16px 16px;
-      min-height:58px;
-      box-sizing:border-box;
-    }
-
-    .textarea{
-      min-height:180px;
-      resize:vertical;
-      line-height:1.5;
-    }
-
-    .input:focus, .select:focus, .textarea:focus{
-      border-color:rgba(102,183,255,.55);
-      box-shadow:0 0 0 5px var(--blueGlow);
-      background:rgba(255,255,255,.08);
-    }
-
-    .select option{color:#0b1016;}
-
-    .chipGrid{
-      display:grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap:10px;
-    }
-
-    @media (max-width: 760px){
-      .chipGrid{grid-template-columns:1fr 1fr;}
-    }
-
-    .chipBtn{
-      min-height:58px;
-      border-radius:16px;
-      border:1px solid rgba(145,205,255,.14);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      font-size:14px;
-      font-weight:900;
-      padding:12px;
-      cursor:pointer;
-      transition:.15s ease;
-      text-align:center;
-    }
-
-    .chipBtn:hover{
-      background:rgba(255,255,255,.08);
-    }
-
-    .chipBtn.active{
-      border-color:rgba(214,178,74,.36);
-      background:linear-gradient(135deg, rgba(214,178,74,.10), rgba(102,183,255,.08));
-      box-shadow:0 0 0 4px rgba(214,178,74,.08);
-    }
-
-    .btn{
-      width:100%;
-      min-height:62px;
-      border:none;
-      border-radius:18px;
-      font-size:18px;
-      font-weight:900;
-      letter-spacing:-0.01em;
-      padding:16px 18px;
-      cursor:pointer;
-      transition:filter .16s ease, transform .06s ease;
-    }
-
-    .btn:active{transform:translateY(1px);}
-    .btn:hover{filter:brightness(1.04);}
-
-    .btn-primary{
-      color:#081018;
-      background:linear-gradient(135deg, var(--gold), var(--gold2));
-      box-shadow:0 20px 42px rgba(214,178,74,.20);
-    }
-
-    .hint{
-      margin-top:8px;
-      color:var(--muted2);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-    }
-
-    .successScreen{
-      text-align:center;
-      padding:28px 22px;
-    }
-
-    .successIcon{
-      width:84px;
-      height:84px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:34px;
-      background:linear-gradient(135deg, rgba(155,211,255,.22), rgba(102,183,255,.12));
-      border:1px solid rgba(145,205,255,.16);
-      margin-bottom:16px;
-    }
-
-    .successTitle{
-      font-size:30px;
-      font-weight:900;
-      letter-spacing:-0.02em;
-    }
-
-    .successText{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:17px;
-      font-weight:600;
-    }
-
-    .footerNote{
-      text-align:center;
-      color:var(--muted2);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-top:18px;
-    }
-  </style>
+@media(max-width:820px){
+  .page{height:auto;min-height:100vh}
+  .grid{grid-template-columns:1fr}
+  .pBody{overflow:visible}
+  .chips.types{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 <body>
-  <div class="shell">
+<div class="page">
+  <header class="head">
+    <div>
+      <div class="kicker">Send idéer, fejl og forbedringer direkte til os</div>
+      <div class="h1">Idéhub</div>
+    </div>
+    <label class="locWrap" id="locWrap"><span class="locLbl">Café</span>
+      <select id="location" aria-label="Café">
+        <option value="">Vælg…</option>
+        <option value="Café Kaiser Helsingør">Helsingør</option>
+        <option value="Café Kaiser Hillerød">Hillerød</option>
+        <option value="Café Kaiser Farum">Farum</option>
+        <option value="Café Kaiser Hørsholm">Hørsholm</option>
+        <option value="Café Kaiser Vanløse">Vanløse</option>
+        <option value="Café Kaiser Sydhavnen">Sydhavnen</option>
+        <option value="Café Kaiser Waves">Waves</option>
+        <option value="Café Kaiser Nørrebro">Nørrebro</option>
+      </select>
+    </label>
+  </header>
 
-    <header class="hero">
-      <div class="kicker">KAISER DRIFT HUB</div>
-      <div class="title">Idéhub</div>
-      <div class="subtitle">Send idéer, fejl, forbedringer og tips direkte til os</div>
-      <div class="heroLine"></div>
-    </header>
+  <form id="ideaForm" class="grid" method="POST" action="https://formsubmit.co/Stefan@cafekaiser.dk">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="box">
+    <input type="hidden" name="_next" id="nextField" value="">
+    <input type="hidden" name="_subject" id="subjectField" value="Idéhub – Lokation – Type">
+    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+    <input type="hidden" id="typeField" value="">
+    <input type="hidden" id="priorityField" value="Normal">
+    <input type="hidden" id="tool" value="">
+    <textarea name="Feedback" id="payloadField" style="display:none"></textarea>
 
-    <section id="formWrap">
-      <form
-        id="ideaForm"
-        method="POST"
-        action="https://formsubmit.co/Stefan@cafekaiser.dk"
-      >
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_next" id="nextField" value="">
-        <input type="hidden" name="_subject" id="subjectField" value="Idéhub – Lokation – Type">
-        <input type="text" name="_honey" style="display:none">
-        <input type="hidden" id="typeField" value="">
-        <input type="hidden" id="priorityField" value="">
-        <textarea name="Feedback" id="payloadField" style="display:none"></textarea>
-
-        <section class="panel">
-          <div class="panelHead">
-            <div class="blockTitle">Ny feedback</div>
-            <div class="muted" style="margin-top:8px;">
-              Hjælp os med at gøre værktøjerne bedre i hverdagen.
-            </div>
+    <!-- HVAD -->
+    <section class="panel">
+      <div class="pHead"><div class="pTitle"><span class="pDot gold"></span>Hvad handler det om</div></div>
+      <div class="pBody">
+        <div class="field" id="fType">
+          <div class="lbl">1 · Type <i>*</i></div>
+          <div class="chips types" id="typeGrid">
+            <button type="button" class="chip" data-type="Idé">Idé</button>
+            <button type="button" class="chip" data-type="Fejl">Fejl</button>
+            <button type="button" class="chip" data-type="Forbedringsforslag">Forbedring</button>
+            <button type="button" class="chip" data-type="Noget der ikke fungerer">Virker ikke godt</button>
+            <button type="button" class="chip" data-type="Noget der fungerer godt">Virker godt</button>
+            <button type="button" class="chip" data-type="Tips & tricks">Tips & tricks</button>
           </div>
-          <div class="divider"></div>
-          <div class="panelBody">
-
-            <div class="grid2">
-              <div>
-                <div class="label">Lokation</div>
-                <select class="select" id="location">
-                  <option value="">Vælg lokation...</option>
-                  <option>Café Kaiser Helsingør</option>
-                  <option>Café Kaiser Hillerød</option>
-                  <option>Café Kaiser Farum</option>
-                  <option>Café Kaiser Hørsholm</option>
-                  <option>Café Kaiser Vanløse</option>
-                  <option>Café Kaiser Sydhavnen</option>
-                  <option>Café Kaiser Waves</option>
-                  <option>Café Kaiser Nørrebro</option>
-                </select>
-              </div>
-
-              <div>
-                <div class="label">Navn</div>
-                <input class="input" id="name" placeholder="Valgfrit navn">
-              </div>
-            </div>
-
-            <div style="margin-top:16px;">
-              <div class="label">Type</div>
-              <div class="chipGrid" id="typeGrid">
-                <button type="button" class="chipBtn" data-type="Idé">Idé</button>
-                <button type="button" class="chipBtn" data-type="Fejl">Fejl</button>
-                <button type="button" class="chipBtn" data-type="Tips & tricks">Tips & tricks</button>
-                <button type="button" class="chipBtn" data-type="Noget der fungerer godt">Noget der fungerer godt</button>
-                <button type="button" class="chipBtn" data-type="Noget der ikke fungerer">Noget der ikke fungerer</button>
-                <button type="button" class="chipBtn" data-type="Forbedringsforslag">Forbedringsforslag</button>
-              </div>
-            </div>
-
-            <div style="margin-top:16px;">
-              <div class="label">Prioritet</div>
-              <div class="chipGrid" id="priorityGrid" style="grid-template-columns:repeat(3,1fr);">
-                <button type="button" class="chipBtn" data-priority="Lav">Lav</button>
-                <button type="button" class="chipBtn active" data-priority="Normal">Normal</button>
-                <button type="button" class="chipBtn" data-priority="Høj">Høj</button>
-              </div>
-            </div>
-
-            <div style="margin-top:16px;">
-              <div class="label">Værktøj</div>
-              <select class="select" id="tool">
-                <option value="">Vælg værktøj...</option>
-                <option>Drift Hub</option>
-                <option>Daglige opgaver</option>
-                <option>Dagsansvarlig tjekliste</option>
-                <option>Skiftlederrapport</option>
-                <option>Kitchen Hub</option>
-                <option>Rabat & tilbud</option>
-                <option>Kontaktliste</option>
-                <option>Udsolgte produkter</option>
-                <option>Gæsteklager</option>
-                <option>Fejl & mangler</option>
-                <option>Andet</option>
-                <option>Kassesystem</option>
-              </select>
-            </div>
-
-            <div style="margin-top:16px;">
-              <div class="label">Besked</div>
-              <textarea class="textarea" id="message" placeholder="Skriv hvad der fungerer, hvad der ikke fungerer, eller hvilke idéer du har..."></textarea>
-              <div class="hint">Vær gerne konkret – det gør det lettere at forbedre værktøjerne</div>
-            </div>
-
-            <div style="margin-top:18px;">
-              <button class="btn btn-primary" id="submitBtn" type="submit">Send feedback</button>
-            </div>
-          </div>
-        </section>
-      </form>
-    </section>
-
-    <section id="thanksWrap" class="hidden">
-      <div class="panel">
-        <div class="successScreen">
-          <div class="successIcon">✓</div>
-          <div class="successTitle">Tak for din feedback</div>
-          <div class="successText">Din besked er sendt og hjælper os med at forbedre hubben.</div>
-          <div style="max-width:420px;margin:22px auto 0;">
-            <a href="./idehub.html" class="btn btn-primary" style="display:flex; align-items:center; justify-content:center; text-decoration:none;">Ny feedback</a>
-          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <div class="lbl">2 · Værktøj</div>
+          <div class="chips" id="toolGrid"></div>
         </div>
       </div>
     </section>
 
-    <div class="footerNote">Kaiser Drift Hub · Idéhub V2</div>
-  </div>
+    <!-- BESKED -->
+    <section class="panel">
+      <div class="pHead"><div class="pTitle"><span class="pDot"></span>Din besked</div><div class="pHint">Kladden gemmes automatisk</div></div>
+      <div class="pBody">
+        <div class="field" id="fMsg">
+          <div class="lbl">3 · Besked <i>*</i></div>
+          <textarea class="textarea" id="message" placeholder="Skriv hvad der fungerer, hvad der ikke fungerer, eller hvilke idéer du har…"></textarea>
+          <div class="guide hidden" id="bugGuide">Ved fejl: skriv hvad du gjorde, hvad der skete, og hvad du forventede. Fx "Trykkede Gem på klage – siden stod og loadede, intet kom i listen".</div>
+          <div class="counter"><span>Vær gerne konkret</span><span id="count">0 tegn</span></div>
+        </div>
+        <div class="field">
+          <div class="lbl">Prioritet</div>
+          <div class="seg" id="prioSeg">
+            <button type="button" data-v="Lav"><span class="dot" style="background:var(--green)"></span>Lav</button>
+            <button type="button" data-v="Normal" class="on"><span class="dot" style="background:var(--amber)"></span>Normal</button>
+            <button type="button" data-v="Høj"><span class="dot" style="background:var(--red)"></span>Høj</button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <div class="lbl">Navn (valgfri)</div>
+          <input class="input" id="name" placeholder="Så vi kan spørge ind, hvis noget er uklart" autocomplete="off">
+        </div>
+      </div>
+      <div class="pFoot">
+        <div class="status hidden" id="statusBox"></div>
+        <div class="summary" id="summary"></div>
+        <button class="btn" id="submitBtn" type="submit">Send feedback</button>
+      </div>
+    </section>
+  </form>
 
-  <script>
-    const nextField = document.getElementById("nextField");
-    const subjectField = document.getElementById("subjectField");
-    const payloadField = document.getElementById("payloadField");
+  <section id="thanksWrap" class="thanks hidden">
+    <div class="thanksCard">
+      <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div class="tTitle">Tak for din feedback</div>
+      <div class="tText">Din besked er sendt og hjælper os med at gøre værktøjerne bedre.</div>
+      <div class="tBtns">
+        <a class="btn" id="newBtn" href="#">Send mere feedback</a>
+      </div>
+    </div>
+  </section>
+</div>
 
-    const locationField = document.getElementById("location");
-    const nameField = document.getElementById("name");
-    const toolField = document.getElementById("tool");
-    const messageField = document.getElementById("message");
-    const submitBtn = document.getElementById("submitBtn");
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const store = {
+    get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+    set(k,v){ try { localStorage.setItem(k,v); } catch {} },
+    del(k){ try { localStorage.removeItem(k); } catch {} }
+  };
+  const DRAFT_KEY = "kaiser_idehub_draft_v1";
+  const NAME_KEY  = "kaiser_idehub_name_v1";
 
-    const typeField = document.getElementById("typeField");
-    const priorityField = document.getElementById("priorityField");
+  const TOOLS = [
+    "Drift Hub", "Daglige opgaver", "Dagsansvarlig tjekliste", "Skiftlederrapport",
+    "Køkkenrapport", "Kitchen Hub", "Kagekøleskab", "Bar prep", "Vin", "Kaffe timer",
+    "Udsolgte produkter", "Gæsteklager", "Fejl & mangler", "Rabat & tilbud",
+    "Guides", "Kontaktliste", "Telefonliste", "Kassesystem", "Andet"
+  ];
 
-    function getQueryLoc() {
-      const qs = new URLSearchParams(window.location.search);
-      return qs.get("loc") || "";
+  const locationField = $("location");
+  const nameField = $("name");
+  const toolField = $("tool");
+  const messageField = $("message");
+  const typeField = $("typeField");
+  const priorityField = $("priorityField");
+  const submitBtn = $("submitBtn");
+
+  function mapLoc(loc){
+    const c = String(loc || "").trim().toLowerCase();
+    if (!c) return "";
+    const M = {
+      "helsingør":"Helsingør","helsingor":"Helsingør","helsingoer":"Helsingør",
+      "hillerød":"Hillerød","hillerod":"Hillerød","hilleroed":"Hillerød",
+      "farum":"Farum",
+      "hørsholm":"Hørsholm","horsholm":"Hørsholm","hoersholm":"Hørsholm",
+      "vanløse":"Vanløse","vanlose":"Vanløse","vanloese":"Vanløse",
+      "sydhavnen":"Sydhavnen","enghavebrygge":"Sydhavnen","enghave brygge":"Sydhavnen",
+      "waves":"Waves","nørrebro":"Nørrebro","norrebro":"Nørrebro"
+    };
+    const k = c.replace(/^café kaiser\s+/,"").replace(/^cafe kaiser\s+/,"");
+    return M[k] ? "Café Kaiser " + M[k] : "";
+  }
+
+  function renderTools(){
+    $("toolGrid").innerHTML = TOOLS.map(t =>
+      `<button type="button" class="chip tool ${toolField.value===t?"on":""}" data-tool="${t.replace(/"/g,"&quot;")}">${t.replace(/&/g,"&amp;")}</button>`).join("");
+    $("toolGrid").querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+      toolField.value = toolField.value === b.dataset.tool ? "" : b.dataset.tool;   // tryk igen for at fravælge
+      renderTools(); saveDraft(); updateSummary();
+    }));
+  }
+  function setChips(group, attr, value){
+    document.querySelectorAll(group + " .chip").forEach(b => b.classList.toggle("on", b.getAttribute(attr) === value));
+  }
+  function setPrio(v){
+    priorityField.value = v;
+    $("prioSeg").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  }
+
+  function updateSubject(){
+    const loc = locationField.value || "Lokation";
+    const type = typeField.value || "Feedback";
+    const prio = priorityField.value || "Normal";
+    subjectField.value = `Idéhub – ${loc} – ${type} – ${prio}` + (toolField.value ? ` – ${toolField.value}` : "");
+  }
+  const subjectField = $("subjectField");
+
+  function buildPayload(){
+    return [
+      "KAISER – IDÉHUB",
+      "",
+      "Lokation: " + (locationField.value || "-"),
+      "Navn: " + (nameField.value || "-"),
+      "Type: " + (typeField.value || "-"),
+      "Prioritet: " + (priorityField.value || "-"),
+      "Værktøj: " + (toolField.value || "-"),
+      "Sendt: " + new Date().toLocaleString("da-DK"),
+      "",
+      "Besked:",
+      (messageField.value || "-")
+    ].join("\n");
+  }
+
+  function updateSummary(){
+    const n = messageField.value.trim().length;
+    $("count").textContent = n + " tegn";
+    $("bugGuide").classList.toggle("hidden", !/^(Fejl|Noget der ikke fungerer)$/.test(typeField.value));
+    const bits = [];
+    if (typeField.value) bits.push("<b>" + esc(typeField.value) + "</b>");
+    if (toolField.value) bits.push("om <b>" + esc(toolField.value) + "</b>");
+    if (locationField.value) bits.push("fra <b>" + esc(locationField.value.replace("Café Kaiser ","")) + "</b>");
+    $("summary").innerHTML = bits.length ? bits.join(" ") + " · prioritet " + esc(priorityField.value) : "Vælg type og skriv en besked";
+  }
+  function esc(s){ return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c])); }
+
+  /* kladde: intet går tabt, hvis siden lukkes */
+  function saveDraft(){
+    store.set(DRAFT_KEY, JSON.stringify({
+      type: typeField.value, tool: toolField.value, prio: priorityField.value,
+      msg: messageField.value, loc: locationField.value
+    }));
+  }
+  function loadDraft(){
+    try {
+      const d = JSON.parse(store.get(DRAFT_KEY) || "null");
+      if (!d) return;
+      if (d.type){ typeField.value = d.type; setChips("#typeGrid","data-type",d.type); }
+      if (d.tool) toolField.value = d.tool;
+      if (d.prio) setPrio(d.prio);
+      if (d.msg) messageField.value = d.msg;
+      if (d.loc && !locationField.value) locationField.value = d.loc;
+    } catch {}
+  }
+
+  let statusTimer = null;
+  function showErr(msg){
+    $("statusBox").textContent = msg; $("statusBox").classList.remove("hidden");
+    clearTimeout(statusTimer); statusTimer = setTimeout(() => $("statusBox").classList.add("hidden"), 4000);
+  }
+
+  /* --- events --- */
+  document.querySelectorAll("#typeGrid .chip").forEach(b => b.addEventListener("click", () => {
+    typeField.value = b.dataset.type; setChips("#typeGrid","data-type",typeField.value);
+    $("fType").classList.remove("err");
+    updateSubject(); saveDraft(); updateSummary();
+  }));
+  $("prioSeg").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    setPrio(b.dataset.v); updateSubject(); saveDraft(); updateSummary();
+  }));
+  locationField.addEventListener("change", () => { $("locWrap").classList.remove("err"); updateSubject(); saveDraft(); updateSummary(); });
+  messageField.addEventListener("input", () => { $("fMsg").classList.remove("err"); saveDraft(); updateSummary(); });
+  nameField.addEventListener("input", () => store.set(NAME_KEY, nameField.value));
+
+  $("ideaForm").addEventListener("submit", e => {
+    const missLoc = !locationField.value, missType = !typeField.value, missMsg = !messageField.value.trim();
+    $("locWrap").classList.toggle("err", missLoc);
+    $("fType").classList.toggle("err", missType);
+    $("fMsg").classList.toggle("err", missMsg);
+    if (missLoc || missType || missMsg){
+      e.preventDefault();
+      const m = []; if (missLoc) m.push("café"); if (missType) m.push("type"); if (missMsg) m.push("besked");
+      showErr("Mangler: " + m.join(", ") + ".");
+      return;
     }
+    if (!priorityField.value) setPrio("Normal");
+    updateSubject();
+    payloadField.value = buildPayload();
+    store.set("kaiser_idehub_sent_pending", "1");   // kladden slettes først, når afsendelsen er gået igennem
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sender…";
+  });
+  const payloadField = $("payloadField");
 
-    function mapLoc(loc) {
-      const clean = String(loc || "").trim().toLowerCase();
-      if (!clean) return "";
-      if (clean === "helsingør" || clean === "helsingor") return "Café Kaiser Helsingør";
-      if (clean === "hillerød" || clean === "hilleroed") return "Café Kaiser Hillerød";
-      if (clean === "farum") return "Café Kaiser Farum";
-      if (clean === "hørsholm" || clean === "hoersholm") return "Café Kaiser Hørsholm";
-      if (clean === "vanløse" || clean === "vanloese") return "Café Kaiser Vanløse";
-      return "";
-    }
+  /* --- start --- */
+  const params = new URLSearchParams(location.search);
+  const qsLoc = mapLoc(params.get("loc"));
 
-    function setActiveChip(groupSelector, attrName, value) {
-      document.querySelectorAll(groupSelector + " .chipBtn").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute(attrName) === value);
-      });
-    }
+  // efter afsendelse kommer man tilbage med ?sent=1 (stadig med café og værktøj i adressen)
+  const back = new URLSearchParams();
+  if (params.get("loc")) back.set("loc", params.get("loc"));
+  if (params.get("tool")) back.set("tool", params.get("tool"));
+  const baseUrl = location.origin + location.pathname;
+  const sentParams = new URLSearchParams(back); sentParams.set("sent","1");
+  $("nextField").value = baseUrl + "?" + sentParams.toString();
+  $("newBtn").href = baseUrl + (back.toString() ? "?" + back.toString() : "");
 
-    function updateSubject() {
-      const loc = locationField.value || "Lokation";
-      const type = typeField.value || "Feedback";
-      const prio = priorityField.value || "Normal";
-      subjectField.value = `Idéhub – ${loc} – ${type} – ${prio}`;
-    }
+  if (params.get("sent") === "1"){
+    if (store.get("kaiser_idehub_sent_pending")){ store.del(DRAFT_KEY); store.del("kaiser_idehub_sent_pending"); }
+    $("ideaForm").classList.add("hidden");
+    $("thanksWrap").classList.remove("hidden");
+  }
 
-    function buildPayload() {
-      return [
-        "KAISER – IDÉHUB",
-        "",
-        "Lokation: " + (locationField.value || "-"),
-        "Navn: " + (nameField.value || "-"),
-        "Type: " + (typeField.value || "-"),
-        "Prioritet: " + (priorityField.value || "-"),
-        "Værktøj: " + (toolField.value || "-"),
-        "",
-        "Besked:",
-        (messageField.value || "-")
-      ].join("\n");
-    }
-
-    function prefillLocation() {
-      const fromQs = mapLoc(getQueryLoc());
-      if (fromQs) {
-        locationField.value = fromQs;
-      }
-      updateSubject();
-    }
-
-    document.querySelectorAll("#typeGrid .chipBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        typeField.value = btn.getAttribute("data-type");
-        setActiveChip("#typeGrid", "data-type", typeField.value);
-        updateSubject();
-      });
-    });
-
-    document.querySelectorAll("#priorityGrid .chipBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        priorityField.value = btn.getAttribute("data-priority");
-        setActiveChip("#priorityGrid", "data-priority", priorityField.value);
-        updateSubject();
-      });
-    });
-
-    locationField.addEventListener("change", updateSubject);
-
-    document.getElementById("ideaForm").addEventListener("submit", function(e){
-      if (!locationField.value) {
-        e.preventDefault();
-        alert("Vælg lokation.");
-        return;
-      }
-
-      if (!typeField.value) {
-        e.preventDefault();
-        alert("Vælg type.");
-        return;
-      }
-
-      if (!priorityField.value) {
-        e.preventDefault();
-        alert("Vælg prioritet.");
-        return;
-      }
-
-      if (!messageField.value.trim()) {
-        e.preventDefault();
-        alert("Skriv en besked.");
-        return;
-      }
-
-      updateSubject();
-      payloadField.value = buildPayload();
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sender...";
-    });
-
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("sent") === "1") {
-      document.getElementById("formWrap").classList.add("hidden");
-      document.getElementById("thanksWrap").classList.remove("hidden");
-    }
-
-    nextField.value = window.location.origin + window.location.pathname + "?sent=1";
-    priorityField.value = "Normal";
-    setActiveChip("#priorityGrid", "data-priority", "Normal");
-    prefillLocation();
-  </script>
+  if (qsLoc) locationField.value = qsLoc;
+  nameField.value = store.get(NAME_KEY) || "";
+  loadDraft();
+  const qsTool = params.get("tool");
+  if (qsTool && TOOLS.includes(qsTool) && !toolField.value) toolField.value = qsTool;
+  renderTools();
+  setPrio(priorityField.value || "Normal");
+  updateSubject();
+  updateSummary();
+})();
+</script>
 </body>
 </html>
