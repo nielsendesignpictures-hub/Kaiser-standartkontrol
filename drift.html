@@ -286,47 +286,124 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .sideTools{margin-top:0.4rem;gap:0.3rem}
 .sideTools button{min-height:2.3rem;font-size:0.95rem;border-radius:0.5rem}
 
-/* COCKPIT — alt på én skærm uden scroll */
+/* ================= REDESIGN 2026-11 ================= */
+.navItem .ico,.sideToggle .ico{width:1.5rem;flex:none;text-align:center;font-size:1.0625rem;line-height:1}
+.navItem.hasIco .dot{display:none}
+.sideToggle{width:100%;border:1px dashed #3d4a43;background:transparent;color:#9da8a2;text-align:left;padding:0 0.75rem;min-height:2.6rem;border-radius:0.625rem;cursor:pointer;display:flex;align-items:center;gap:0.75rem;font:inherit;font-size:0.875rem;font-weight:700;margin-bottom:0.375rem;flex:none}
+.sideToggle:active{transform:scale(.97)}
+
 @media(min-width:901px){
-  #viewOverview.show{display:flex;flex-direction:column;height:100vh;padding-bottom:0.875rem;overflow:hidden}
-  .head{padding:0.875rem 0 0.625rem;align-items:center;flex:none}
-  .h1{font-size:1.625rem;margin:2px 0 0}
-  #updatedSub,#locCard,#timePill,.headRight .pill:not(#reportPill),#cateringAnchor{display:none!important}
-  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.5fr);grid-template-rows:minmax(0,1fr) minmax(0,1.35fr);grid-template-areas:"cake coffee" "alerts tasks";gap:0.625rem}
-  .colL,.colR,.colR .panels{display:contents}
-  #panelCoffee{grid-area:coffee}#panelCake{grid-area:cake}#panelTasks{grid-area:tasks}#panelAlerts{grid-area:alerts}
-  .panel{min-height:0;display:flex;flex-direction:column}
-  .pHead{padding:0.5rem 0.875rem}
+  /* --- smal sidebar (rail) --- */
+  body.rail{--side:5rem}
+  body.rail .side .lbl,body.rail .caption,body.rail .siteLabel,body.rail .siteBtn span,body.rail .sideTools,body.rail .wmRest{display:none!important}
+  body.rail .sideScroll{padding:0.75rem 0.5rem 0.4rem}
+  body.rail .brand{text-align:center;padding:0.1rem 0 0.4rem}
+  body.rail .navItem,body.rail .sideToggle{justify-content:center;padding:0;gap:0;position:relative}
+  body.rail .navItem .ico{font-size:1.3rem;width:auto}
+  body.rail .navItem .dot{display:none}
+  body.rail .nb{position:absolute;top:3px;right:3px;font-size:0.625rem;min-width:1.1rem;padding:1px 0.3rem}
+  body.rail .navLabel{font-size:0;height:1px;background:#36413b;margin:0.3rem 0.5rem;padding:0;flex:none}
+  body.rail .siteBox{padding:0.5rem 0.375rem 0.75rem}
+  body.rail .siteBtn{min-height:2.75rem}
+  body.rail .siteBtn strong{font-size:0.6875rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* --- overblik --- */
+  #viewOverview.show{display:flex;flex-direction:column;height:100vh;padding:0 1.25rem 0.875rem;overflow:hidden}
+  .head{padding:0.75rem 0 0.625rem;align-items:center;flex:none}
+  .h1{font-size:1.5rem;margin:2px 0 0}
+  #updatedSub,#locCard,.headRight .pill:not(#reportPill){display:none!important}
+  .pill{padding:0.375rem 0.875rem;min-width:6.5rem}
+  .cockpit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(17rem,0.62fr) minmax(0,1.6fr);gap:0.75rem}
+  .colL,.colR{display:flex;flex-direction:column;gap:0.75rem;min-height:0}
+  .panel{min-height:0;display:flex;flex-direction:column;border-radius:1.125rem}
+  .pHead{padding:0 1rem;min-height:3.25rem;gap:0.5rem;flex:none}
+  .pCount{white-space:nowrap}
+  #panelCake,#panelAlerts{flex:1}
+  #panelCake .pBody.fill,#panelAlerts .pBody.fill{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:0.625rem}
+  #panelCake .pFoot{padding:0.5rem}#panelCake .pFoot .tbtn{min-height:2.75rem}
+  #panelCake .row,#panelAlerts .row{padding:0.625rem 0.75rem}
+  #panelCake .rName,#panelAlerts .rName{font-size:0.9375rem}
+
+  /* kaffe: kompakt bjælke */
+  #panelCoffee{flex:none}
   .cfHead{flex-wrap:nowrap}
-  #coffeeSub{display:none}
-  .cfCtl .cfInput{width:6.5rem!important}
-  .pHead{gap:0.5rem}.pCount{white-space:nowrap}
-  .cfHead .pTitle,#panelTasks .pTitle{flex:none}
-  .cfCtl{flex-wrap:nowrap;gap:0.3125rem;justify-content:flex-end}
-  .cfCtl .cfInput{width:8rem;min-width:0}
-  .cfCtl .cfPreset{padding:0 0.625rem}.cfCtl .cfPreset b{font-size:0.8125rem}
-  .cfCtl .cfStart{padding:0 0.875rem;white-space:nowrap}
-  #panelTasks .pHead{flex-wrap:nowrap}
-  #panelTasks .dtTabs{flex-wrap:nowrap;gap:0.3125rem;flex:1;justify-content:flex-end}
-  #panelTasks .dtTab{padding:0 0.625rem;white-space:nowrap}
-  #panelTasks .dtName{width:5.5rem;min-width:0}
-  #panelTasks .dtSep{margin:0 0.0625rem}
-  .cfCtl{display:flex;gap:0.375rem;align-items:center;flex:1;justify-content:center;flex-wrap:wrap}
-  .cfCtl .cfInput{width:10rem;min-height:2.5rem;font-size:0.8125rem;padding:0 0.625rem}
+  .cfCtl{display:flex;gap:0.375rem;align-items:center;flex:1;justify-content:flex-end;flex-wrap:nowrap}
+  .cfCtl .cfInput{width:9rem;min-width:0;min-height:2.625rem;font-size:0.875rem;padding:0 0.75rem;border-radius:62.4375rem}
   .cfCtl #cfCustom{width:4.5rem}
   .cfCtl .cfPresets{display:flex;gap:0.375rem}
-  .cfCtl .cfPreset{min-height:2.5rem;padding:0 0.875rem;border-radius:62.4375rem;font-size:0.8125rem;flex-direction:row}
-  .cfCtl .cfStart{min-height:2.5rem;padding:0 1.125rem;font-size:0.875rem;border-radius:62.4375rem}
-  #cfBody{padding:0.5rem 0.875rem;max-height:none;overflow:visible;display:block}
-  #cfBody{flex:1;min-height:0;overflow:auto}
-  #cfBody:has(.evEmpty){display:flex;align-items:center;justify-content:center}
-  #panelCoffee .cfList{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0.5rem;align-content:start}
-  #panelCoffee .cfTime{font-size:1.375rem}
+  .cfCtl .cfPreset{min-height:2.625rem;padding:0 0.875rem;border-radius:62.4375rem;flex-direction:row}
+  .cfCtl .cfPreset b{font-size:0.875rem}
+  .cfCtl .cfStart{min-height:2.625rem;padding:0 1.125rem;font-size:0.9375rem;border-radius:62.4375rem;white-space:nowrap}
+  #coffeeSub{display:none}
+  #cfBody{padding:0.25rem 0.75rem 0.75rem;max-height:none;overflow:visible;display:block}
+  #cfBody:has(.evEmpty){display:none}
+  #panelCoffee .cfList{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:0.5rem;max-height:9rem;overflow:auto}
   #panelCoffee .cfItem{padding:0.5rem 0.75rem}
-  #panelCake .pBody.fill,#panelAlerts .pBody{flex:1;min-height:0;max-height:none;overflow-y:auto;padding:0.625rem}
-  #panelCake .pFoot{padding:0.5rem}#panelCake .pFoot .tbtn{min-height:2.75rem}
-  #panelTasks .pBody{flex:1;min-height:0;display:flex;flex-direction:column;padding:0.625rem}
-  #panelTasks .dtGrid{flex:1;min-height:0;max-height:none;align-content:start}
+  #panelCoffee .cfTime{font-size:1.5rem}
+
+  /* opgaver */
+  #panelTasks{flex:1}
+}
+
+/* ---- Dagens opgaver (fælles) ---- */
+.tkHead{display:flex;align-items:center;gap:0.875rem;padding:0.75rem 1rem 0.625rem;flex:none}
+.tkRing{position:relative;width:3.25rem;height:3.25rem;flex:none}
+.tkRing svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tkRingBg{fill:none;stroke:#e8ece9;stroke-width:5}
+.tkRingFg{fill:none;stroke:var(--green);stroke-width:5;stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:119.4;transition:stroke-dashoffset .35s ease}
+.tkRing span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;font-variant-numeric:tabular-nums}
+.tkTitleWrap{flex:1;min-width:0}
+.tkTitle{font-size:1.1875rem;font-weight:800;letter-spacing:-.03em}
+.tkMeta{font-size:0.8125rem;color:var(--muted);font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkRight{display:flex;gap:0.5rem;align-items:center;flex:none}
+.tkChip{min-height:2.75rem;padding:0 1rem;border-radius:62.4375rem;border:1px solid var(--line);background:#f7f8f6;font:inherit;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer;white-space:nowrap}
+.tkChip.who{background:var(--green2);border-color:#c6ddd4;color:var(--green)}
+.tkChip.who.unset{background:var(--amberSoft);border-color:#ead6b6;color:var(--amber)}
+.tkChip.warn{background:var(--redSoft);border-color:#edcbc7;color:var(--red)}
+.tkChip.warn.on{background:var(--red);border-color:var(--red);color:#fff}
+.tkChip:active,.tkSeg button:active,.tkItem:active{transform:scale(.98)}
+.tkSeg{display:grid;grid-template-columns:repeat(4,1fr);gap:0.375rem;margin:0 1rem;padding:0.3125rem;background:#eef1ee;border-radius:0.875rem;flex:none}
+.tkSeg button{min-height:3rem;border:0;border-radius:0.625rem;background:transparent;font:inherit;font-size:0.9375rem;font-weight:800;color:#59635e;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;position:relative}
+.tkSeg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(24,32,29,.12)}
+.tkSeg button small{min-width:1.5rem;padding:2px 0.4375rem;border-radius:62.4375rem;font-size:0.6875rem;font-weight:800;background:#dfe5e1;color:#59635e}
+.tkSeg button small:empty{display:none}
+.tkSeg button small.zero{background:var(--green2);color:var(--green)}
+.tkSeg button.now::after{content:"NU";position:absolute;top:3px;right:6px;font-size:0.5625rem;font-weight:800;letter-spacing:.08em;color:var(--green)}
+.tkBody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0.75rem 1rem 1rem}
+.tkList{display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:0.5rem}
+.tkItem{display:flex;align-items:center;gap:0.875rem;min-height:3.75rem;padding:0.625rem 0.875rem;border-radius:0.875rem;border:1px solid var(--line);background:#fff;box-shadow:0 1px 0 rgba(24,32,29,.04);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .08s ease,background .15s ease}
+.tkCheck{flex:none;width:2.25rem;height:2.25rem;border-radius:50%;border:2.5px solid #b9c2bc;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.0625rem;color:#fff}
+.tkTx{font-size:0.9688rem;font-weight:700;line-height:1.3}
+.tkSub{display:flex;gap:0.375rem;flex-wrap:wrap;margin-top:4px}
+.tkTag{font-size:0.6875rem;font-weight:800;padding:2px 0.5rem;border-radius:62.4375rem;background:#eef1ee;color:#59635e}
+.tkTag.late{background:var(--redSoft);color:var(--red)}
+.tkItem.late{border-color:#edcbc7;border-left:4px solid var(--red)}
+.tkItem.done{background:#f3f7f5;border-color:#d5e5dd;box-shadow:none}
+.tkItem.done .tkCheck{background:var(--green);border-color:var(--green)}
+.tkItem.done .tkTx{color:var(--muted);text-decoration:line-through;font-weight:600}
+.tkItem.pop .tkCheck{animation:tkPop .3s ease}
+@keyframes tkPop{50%{transform:scale(1.25)}}
+.tkDoneToggle{display:flex;align-items:center;gap:0.5rem;margin:0.875rem 0 0.5rem;border:0;background:none;font:inherit;font-size:0.8125rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--green);cursor:pointer;min-height:2.5rem;padding:0}
+.tkAllDone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.375rem;padding:1.75rem 1rem;border-radius:1rem;background:var(--green2);color:var(--green);text-align:center}
+.tkAllDone b{font-size:1.25rem}
+.tkAllDone span{font-size:0.875rem;font-weight:600}
+.tkAllDone i{font-style:normal;font-size:2.25rem}
+.tkEmpty{padding:1.75rem 1rem;text-align:center;color:var(--muted);font-weight:700;border:1px dashed var(--line);border-radius:1rem}
+
+/* hvem-er-du */
+.whoInput{width:100%;min-height:3.5rem;border-radius:0.875rem;border:1px solid var(--line);background:#f7f8f6;padding:0 1rem;font:inherit;font-size:1.125rem;font-weight:700;outline:none}
+.whoInput:focus{border-color:var(--green)}
+.whoRecent{display:flex;flex-wrap:wrap;gap:0.5rem;margin:0.75rem 0 1rem}
+.whoRecent button{min-height:2.75rem;padding:0 1rem;border-radius:62.4375rem;border:1px solid var(--line);background:#fff;font:inherit;font-size:0.9375rem;font-weight:700;cursor:pointer}
+.whoOk{width:100%;min-height:3.5rem;border:0;border-radius:0.875rem;background:var(--green);color:#fff;font:inherit;font-size:1.0625rem;font-weight:800;cursor:pointer}
+
+@media(max-width:900px){
+  .cockpit{display:flex;flex-direction:column;gap:0.75rem}
+  .colL,.colR{display:contents}
+  #panelTasks{order:-1}
+  .tkSeg{grid-template-columns:repeat(2,1fr)}
+  .tkHead{flex-wrap:wrap}
+  .cfCtl{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -343,10 +420,11 @@ input,textarea{-webkit-user-select:text;user-select:text}
 <aside class="side" id="side">
   <div class="sideScroll">
     <div class="brand" id="brandBtn">
-      <div class="wordmark">KAISER<i>.</i></div>
+      <div class="wordmark">K<span class="wmRest">AISER</span><i>.</i></div>
       <div class="caption">Café drift</div>
     </div>
 
+    <button class="sideToggle" id="sideToggle" type="button"><span class="ico" id="sideToggleIco">⇤</span><span class="lbl">Skjul menu</span></button>
     <button class="navItem active" data-home="1"><span class="dot"></span><span class="lbl">Overblik</span></button>
 
     <div class="navLabel">Daglig drift</div>
@@ -385,6 +463,16 @@ input,textarea{-webkit-user-select:text;user-select:text}
 </aside>
 
 <!-- LOCATION PICKER -->
+<div class="ov" id="whoOverlay">
+  <div class="modal">
+    <div class="mTitle">Hvem er du?</div>
+    <div class="mSub">Dit navn gemmes på de opgaver, du krydser af</div>
+    <input id="whoInput" class="whoInput" placeholder="Skriv dit navn" autocomplete="off" />
+    <div class="whoRecent" id="whoRecent"></div>
+    <button class="whoOk" id="whoOk" type="button">Gem navn</button>
+    <button class="cancel" id="whoCancel" type="button">Annuller</button>
+  </div>
+</div>
 <div class="ov" id="locOverlay">
   <div class="modal">
     <div class="mTitle">Vælg lokation</div>
@@ -436,76 +524,72 @@ input,textarea{-webkit-user-select:text;user-select:text}
       </div>
     </header>
 
-    <div class="cockpit"><div class="colL">
-      <div class="panel tall" id="panelCoffee">
-        <div class="pHead cfHead">
-          <div class="pTitle"><span class="pDot amber"></span>Kaffe timer</div>
-          <div class="cfCtl">
-            <input id="cfName" class="cfInput" placeholder="Kande / placering" autocomplete="off" />
-            <div class="cfPresets" id="cfPresets">
-              <button type="button" class="cfPreset active" data-min="60"><b>60 min</b></button>
-              <button type="button" class="cfPreset" data-min="120"><b>120 min</b></button>
-              <button type="button" class="cfPreset" data-min="custom"><b>Andet</b></button>
-            </div>
-            <input id="cfCustom" class="cfInput hidden" type="number" inputmode="numeric" min="1" step="1" placeholder="Min" />
-            <button type="button" class="cfStart" id="cfStart">▶ Start</button>
+    <div class="cockpit">
+      <div class="colL">
+        <div class="panel" id="panelCake">
+          <div class="pHead">
+            <div class="pTitle"><span class="pDot pink"></span>Kagekøleskab</div>
+            <div class="pCount" id="cakeSub">—</div>
           </div>
-          <div class="pCount" id="coffeeSub">—</div>
+          <div class="pBody fill" id="cakeBody"></div>
+          <div class="pFoot"><button class="tbtn" id="cakeOpen" type="button">🍰 Registrér / åbn kagekøleskab</button></div>
         </div>
-        <div class="pBody fill cf" id="cfBody">
-          <div class="cfList" id="cfList"></div>
+        <div class="panel" id="panelAlerts">
+          <div class="pHead">
+            <div class="pTitle"><span class="pDot amber"></span>Bar prep &amp; vin</div>
+            <div class="pCount" id="alertSub">—</div>
+          </div>
+          <div class="pBody fill" id="alertBody"></div>
         </div>
       </div>
-      <div class="panel tall" id="panelCake">
-        <div class="pHead">
-          <div class="pTitle"><span class="pDot pink"></span>Kagekøleskab</div>
-          <div class="pCount" id="cakeSub">—</div>
-        </div>
-        <div class="pBody fill" id="cakeBody"></div>
-        <div class="pFoot"><button class="tbtn" id="cakeOpen" type="button">🍰 Registrér / åbn kagekøleskab</button></div>
-      </div>
-    </div>
-    <div class="colR">
 
-    <section class="panels">
-      <div class="panel full" id="panelTasks">
-        <div class="pHead">
-          <div class="pTitle"><span class="pDot"></span>Opgaver</div>
-          <div class="dtTabs">
-            <button class="dtTab" data-v="drift" type="button">Drift</button>
-            <button class="dtTab" data-v="clean" type="button">Rengøring</button>
-            <span class="dtSep"></span>
-            <span id="dtShifts" style="display:contents">
-              <button class="dtTab" data-s="morning" type="button">Åbne</button>
-              <button class="dtTab" data-s="lunch" type="button">Service</button>
-              <button class="dtTab" data-s="evening" type="button">Lukke</button>
-            </span>
-            <input class="dtName" id="dtName" placeholder="Dit navn" autocomplete="off">
+      <div class="colR">
+        <div class="panel" id="panelCoffee">
+          <div class="pHead cfHead">
+            <div class="pTitle"><span class="pDot amber"></span>Kaffe</div>
+            <div class="cfCtl">
+              <input id="cfName" class="cfInput" placeholder="Kande / placering" autocomplete="off" />
+              <div class="cfPresets" id="cfPresets">
+                <button type="button" class="cfPreset active" data-min="60"><b>60 min</b></button>
+                <button type="button" class="cfPreset" data-min="120"><b>120 min</b></button>
+                <button type="button" class="cfPreset" data-min="custom"><b>Andet</b></button>
+              </div>
+              <input id="cfCustom" class="cfInput hidden" type="number" inputmode="numeric" min="1" step="1" placeholder="Min" />
+              <button type="button" class="cfStart" id="cfStart">▶ Start</button>
+            </div>
+            <div class="pCount" id="coffeeSub">—</div>
           </div>
-          <div class="pCount" id="dtCount">—</div>
+          <div class="pBody cf" id="cfBody"><div class="cfList" id="cfList"></div></div>
         </div>
-        <div class="dtProg"><i id="dtBar"></i></div>
-        <div class="pBody">
-          <div class="dtOver hidden" id="dtOver"></div>
-          <div class="dtGrid" id="dtGrid"></div>
+
+        <div class="panel" id="panelTasks">
+          <div class="tkHead">
+            <div class="tkRing" id="dtRing">
+              <svg viewBox="0 0 44 44"><circle class="tkRingBg" cx="22" cy="22" r="19"/><circle class="tkRingFg" id="dtRingFg" cx="22" cy="22" r="19"/></svg>
+              <span id="dtCount">0/0</span>
+            </div>
+            <div class="tkTitleWrap">
+              <div class="tkTitle">Dagens opgaver</div>
+              <div class="tkMeta" id="dtMeta">—</div>
+            </div>
+            <div class="tkRight">
+              <button class="tkChip warn hidden" id="dtOver" type="button"></button>
+              <button class="tkChip who" id="dtWho" type="button">👤 Hvem er du?</button>
+            </div>
+          </div>
+          <div class="tkSeg" id="dtSeg">
+            <button type="button" data-k="morning"><span>Åbne</span><small></small></button>
+            <button type="button" data-k="lunch"><span>Service</span><small></small></button>
+            <button type="button" data-k="evening"><span>Lukke</span><small></small></button>
+            <button type="button" data-k="clean"><span>Rengøring</span><small></small></button>
+          </div>
+          <div class="tkBody" id="dtGrid"></div>
         </div>
       </div>
-      <div class="panel full" id="panelAlerts">
-        <div class="pHead">
-          <div class="pTitle"><span class="pDot amber"></span>Haster — bar prep &amp; vin</div>
-          <div class="pCount" id="alertSub">—</div>
-        </div>
-        <div class="pBody" id="alertBody"></div>
-      </div>
-      <div class="panel full" id="cateringAnchor">
-        <div class="pHead">
-          <div class="pTitle"><span class="pDot blue"></span>Dagens catering</div>
-          <div class="pCount" id="cateringCount">—</div>
-        </div>
-        <div class="pBody"><div class="evGrid" id="cateringBody"><div class="evEmpty">Indlæser…</div></div></div>
-      </div>
-    </section>
-    </div></div>
+
+      <!-- catering hentes stadig i baggrunden, men vises ikke -->
+      <div class="hidden" id="cateringAnchor"><span id="cateringCount"></span><div id="cateringBody"></div></div>
+    </div>
   </div>
 
   <!-- MODUL -->
@@ -2471,55 +2555,148 @@ addClean(L_SYD, "Toilet", "weekly", "GRUNDIG rengøring af personale- og gæstet
       const scope = t.type === "drift" ? ("shift_" + t.shift) : ("clean_all");
       return slug(t.loc) + "__" + t.type + "__" + slug(scope) + "__" + slug(t.text);
     }
-  const st = { view:"drift", shift:recommendedShift(), showOver:false, userShift:false };
+  const SHIFT_LBL = { morning:"Åbne", lunch:"Service", evening:"Lukke", clean:"Rengøring" };
+  const RECENT_KEY = "kaiser_hub_recent_names";
+  const st = { tab:recommendedShift(), showOver:false, showDone:false, userTab:false, pending:null };
   const fullLoc = () => { const l = getLoc(); return l ? "Café Kaiser " + l : ""; };
+  const getWho = loc => (loc ? (localStorage.getItem(whoKey(loc))||"") : "").trim();
+  function tasksFor(loc, k){
+    return TASKS.filter(t => t.loc===loc && (k==="clean" ? t.type==="clean" : (t.type==="drift" && t.shift===k)));
+  }
   function render(){
-    const loc = fullLoc();
-    const grid = $("dtGrid");
-    document.querySelectorAll("#panelTasks .dtTab[data-v]").forEach(b => b.classList.toggle("on", b.dataset.v===st.view));
-    document.querySelectorAll("#panelTasks .dtTab[data-s]").forEach(b => b.classList.toggle("on", b.dataset.s===st.shift));
-    $("dtShifts").style.display = st.view==="drift" ? "contents" : "none";
-    $("dtName").value = loc ? (localStorage.getItem(whoKey(loc))||"") : "";
-    if (!loc){ grid.innerHTML = '<div class="empty" style="grid-column:1/-1">Vælg café for at se dagens opgaver.</div>'; $("dtCount").textContent="—"; $("dtBar").style.width="0"; $("dtOver").classList.add("hidden"); return; }
+    const loc = fullLoc(), grid = $("dtGrid"), today = dayKey(), yest = addDaysIso(today,-1);
+    const now = recommendedShift();
+    // navn
+    const who = getWho(loc);
+    $("dtWho").textContent = who ? "👤 " + who : "👤 Hvem er du?";
+    $("dtWho").classList.toggle("unset", !who);
+    if (!loc){
+      grid.innerHTML = '<div class="tkEmpty">Vælg café for at se dagens opgaver.</div>';
+      $("dtCount").textContent = "—"; $("dtMeta").textContent = "Ingen café valgt";
+      $("dtRingFg").style.strokeDashoffset = 119.4; $("dtOver").classList.add("hidden");
+      return;
+    }
     const doneMap = loadDoneMap(loc);
     const isDone = (t,due) => { const m = doneMap[taskKey(t)]; return !!(m && m.lastDoneDate && m.lastDoneDate >= due); };
-    const today = dayKey();
-    const all = TASKS.filter(t => t.loc===loc && (st.view==="drift" ? (t.type==="drift" && t.shift===st.shift) : t.type==="clean"));
+    // faner med "mangler"-tal
+    document.querySelectorAll("#dtSeg button").forEach(b => {
+      const k = b.dataset.k;
+      const due = tasksFor(loc,k).filter(t => isDueOn(t.rule, today));
+      const left = due.filter(t => !isDone(t,today)).length;
+      const sm = b.querySelector("small");
+      sm.textContent = due.length ? (left ? String(left) : "✓") : "";
+      sm.classList.toggle("zero", due.length > 0 && !left);
+      b.classList.toggle("on", k === st.tab);
+      b.classList.toggle("now", k === now);
+    });
+    const all = tasksFor(loc, st.tab);
     const items = all.filter(t => isDueOn(t.rule, today)).map(t => ({t, due:today}));
-    const yest = addDaysIso(today,-1);
     const over = [];
     all.forEach(t => { const ld = lastDueOnOrBefore(t.rule, yest); if (ld && !isDone(t,ld)) over.push({t,due:ld}); });
-    const list = items.concat(st.showOver ? over : []);
-    list.sort((a,b)=> (isDone(a.t,a.due)-isDone(b.t,b.due)) || a.due.localeCompare(b.due));
-    const dn = items.filter(i => isDone(i.t,i.due)).length;
-    $("dtCount").textContent = dn + "/" + items.length;
-    $("dtBar").style.width = items.length ? Math.round(dn/items.length*100)+"%" : "0";
+    const showOverChip = over.length && Object.keys(doneMap).length;
+    const todo = (st.showOver && showOverChip ? over : []).concat(items.filter(i => !isDone(i.t,i.due)));
+    const done = items.filter(i => isDone(i.t,i.due));
+    const dn = done.length, tot = items.length;
+    $("dtCount").textContent = dn + "/" + tot;
+    $("dtRingFg").style.strokeDashoffset = tot ? 119.4 * (1 - dn/tot) : 119.4;
+    $("dtMeta").textContent = SHIFT_LBL[st.tab] + " • " + (tot ? (tot-dn ? (tot-dn) + " mangler" : "alt udført") : "ingen opgaver i dag") + (st.tab===now ? " • nuværende vagt" : "");
     const ov = $("dtOver");
-    if (over.length && Object.keys(doneMap).length){ ov.classList.remove("hidden"); ov.textContent = (st.showOver?"Skjul":"Vis") + " " + over.length + " overførte opgaver fra tidligere"; } else ov.classList.add("hidden");
-    if (!list.length){ grid.innerHTML = '<div class="empty" style="grid-column:1/-1">Ingen opgaver på denne liste i dag.</div>'; return; }
-    grid.innerHTML = list.map((i,ix) => {
-      const d = isDone(i.t,i.due), m = doneMap[taskKey(i.t)];
-      const sub = [i.t.type==="clean" ? i.t.dept : "", i.t.note||"", i.due<today ? "Overført "+i.due : "", d&&m ? "✓ "+(m.doneBy||"") : ""].filter(Boolean).join(" • ");
-      return `<div class="dtItem ${d?"done":""} ${i.due<today&&!d?"late":""}" data-ix="${ix}"><div class="dtBox">${d?"✓":""}</div><div><div class="dtTx">${escapeHtml(i.t.text)}</div>${sub?`<div class="dtSub">${escapeHtml(sub)}</div>`:""}</div></div>`;
-    }).join("");
-    grid.querySelectorAll(".dtItem").forEach(el => el.addEventListener("click", () => {
-      const it = list[+el.dataset.ix]; if (!it) return;
-      const map = loadDoneMap(loc), k = taskKey(it.t);
-      if (isDone(it.t,it.due)){ delete map[k]; }
-      else {
-        let who = ($("dtName").value||"").trim() || (localStorage.getItem(whoKey(loc))||"").trim();
-        if (!who){ $("dtName").focus(); $("dtName").style.borderColor="var(--red)"; return; }
-        map[k] = { lastDoneDate: it.due>today?it.due:today, doneAt: nowDK(), doneBy: who };
+    if (showOverChip){ ov.classList.remove("hidden"); ov.classList.toggle("on", st.showOver); ov.textContent = (st.showOver ? "Skjul " : "⚠ ") + over.length + " overført"; }
+    else ov.classList.add("hidden");
+
+    const rows = [];
+    const rowHtml = (i, ix, d) => {
+      const m = doneMap[taskKey(i.t)], late = i.due < today && !d;
+      const tags = [];
+      if (i.t.type==="clean" && i.t.dept) tags.push(`<span class="tkTag">${escapeHtml(i.t.dept)}</span>`);
+      if (i.t.note) tags.push(`<span class="tkTag">${escapeHtml(i.t.note)}</span>`);
+      if (late) tags.push(`<span class="tkTag late">Overført ${escapeHtml(i.due.slice(8,10)+"/"+i.due.slice(5,7))}</span>`);
+      if (d && m) tags.push(`<span class="tkTag">✓ ${escapeHtml(m.doneBy||"")}${m.doneAt?" • "+escapeHtml(String(m.doneAt).split(" ").pop().slice(0,5)):""}</span>`);
+      return `<div class="tkItem ${d?"done":""} ${late?"late":""}" data-ix="${ix}"><div class="tkCheck">${d?"✓":""}</div><div><div class="tkTx">${escapeHtml(i.t.text)}</div>${tags.length?`<div class="tkSub">${tags.join("")}</div>`:""}</div></div>`;
+    };
+    const list = todo.concat(done);
+    let html = "";
+    if (!tot && !todo.length) html = '<div class="tkEmpty">Ingen opgaver på denne liste i dag.</div>';
+    else {
+      if (todo.length) html += '<div class="tkList">' + todo.map((i,ix) => rowHtml(i,ix,false)).join("") + '</div>';
+      else html += `<div class="tkAllDone"><i>✓</i><b>Alt er klaret — ${escapeHtml(SHIFT_LBL[st.tab])}</b><span>Godt gået! ${dn} af ${tot} opgaver udført.</span></div>`;
+      if (done.length){
+        html += `<button class="tkDoneToggle" id="dtDoneToggle" type="button">${st.showDone?"▾":"▸"} Udført (${done.length})</button>`;
+        if (st.showDone) html += '<div class="tkList">' + done.map((i,j) => rowHtml(i, todo.length + j, true)).join("") + '</div>';
       }
-      saveDoneMap(loc,map); render();
+    }
+    grid.innerHTML = html;
+    const dt = $("dtDoneToggle"); if (dt) dt.addEventListener("click", () => { st.showDone = !st.showDone; render(); });
+    grid.querySelectorAll(".tkItem").forEach(el => el.addEventListener("click", () => {
+      const it = list[+el.dataset.ix]; if (!it) return;
+      toggle(loc, it, el);
     }));
   }
-  document.querySelectorAll("#panelTasks .dtTab[data-v]").forEach(b => b.addEventListener("click", () => { st.view=b.dataset.v; render(); }));
-  document.querySelectorAll("#panelTasks .dtTab[data-s]").forEach(b => b.addEventListener("click", () => { st.shift=b.dataset.s; st.userShift=true; render(); }));
-  $("dtOver").addEventListener("click", () => { st.showOver=!st.showOver; render(); });
-  $("dtName").addEventListener("input", () => { const loc=fullLoc(); if(!loc) return; localStorage.setItem(whoKey(loc), $("dtName").value.trim()); $("dtName").style.borderColor=""; });
+  function toggle(loc, it, el){
+    const today = dayKey(), map = loadDoneMap(loc), k = taskKey(it.t);
+    const m = map[k];
+    if (m && m.lastDoneDate && m.lastDoneDate >= it.due){ delete map[k]; saveDoneMap(loc,map); render(); return; }
+    const who = getWho(loc);
+    if (!who){ st.pending = it; openWho(); return; }
+    map[k] = { lastDoneDate: it.due>today?it.due:today, doneAt: nowDK(), doneBy: who };
+    saveDoneMap(loc,map);
+    if (el){ el.classList.add("done","pop"); el.querySelector(".tkCheck").textContent="✓"; setTimeout(render, 260); } else render();
+  }
+  /* --- hvem er du --- */
+  function recentNames(){ try{ return JSON.parse(localStorage.getItem(RECENT_KEY)||"[]"); }catch(_){ return []; } }
+  function openWho(){
+    const loc = fullLoc(); if (!loc) return;
+    $("whoInput").value = getWho(loc);
+    $("whoRecent").innerHTML = recentNames().map(n => `<button type="button" data-n="${escapeHtml(n)}">${escapeHtml(n)}</button>`).join("");
+    $("whoRecent").querySelectorAll("button").forEach(b => b.addEventListener("click", () => saveWho(b.dataset.n)));
+    $("whoOverlay").classList.add("open");
+    setTimeout(() => $("whoInput").focus(), 50);
+  }
+  function closeWho(){ $("whoOverlay").classList.remove("open"); }
+  function saveWho(name){
+    name = String(name||"").trim(); const loc = fullLoc();
+    if (!name || !loc){ $("whoInput").focus(); return; }
+    localStorage.setItem(whoKey(loc), name);
+    const r = [name].concat(recentNames().filter(n => n.toLowerCase() !== name.toLowerCase())).slice(0,8);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(r));
+    closeWho();
+    const p = st.pending; st.pending = null;
+    if (p) toggle(loc, p, null); else render();
+  }
+  $("dtWho").addEventListener("click", openWho);
+  $("whoOk").addEventListener("click", () => saveWho($("whoInput").value));
+  $("whoInput").addEventListener("keydown", e => { if (e.key === "Enter") saveWho($("whoInput").value); });
+  $("whoCancel").addEventListener("click", () => { st.pending = null; closeWho(); });
+  document.querySelectorAll("#dtSeg button").forEach(b => b.addEventListener("click", () => { st.tab = b.dataset.k; st.userTab = true; st.showDone = false; render(); }));
+  $("dtOver").addEventListener("click", () => { st.showOver = !st.showOver; render(); });
   window.addEventListener("storage", e => { if (e.key && e.key.indexOf(APP_KEY)===0) render(); });
-  return { render, autoShift(){ if(!st.userShift){ const s=recommendedShift(); if(s!==st.shift){ st.shift=s; render(); } } } };
+  return { render, autoShift(){ if(!st.userTab){ const s=recommendedShift(); if(s!==st.tab){ st.tab=s; render(); } } } };
+})();
+
+/* ===== SIDEBAR: ikoner + skjul/vis ===== */
+(function(){
+  const ICONS = {
+    "Overblik":"🏠","Daglige opgaver":"✅","Dagsansvarlig":"🧭","Rapport":"📝","Udsolgte varer":"🚫","Gæsteklager":"💬",
+    "Fejl & mangler":"🔧","Kagekøleskab":"🍰","Bar prep":"🍋","Vin — åbnet":"🍷","Kaffe Timer":"☕","Rabat & tilbud":"🏷️",
+    "Guides":"📘","Kontaktliste":"📇","Telefonliste":"📞","Håndværker":"🛠️","Fejl & idéer":"💡"
+  };
+  document.querySelectorAll(".side .navItem").forEach(n => {
+    const lbl = n.querySelector(".lbl"); if (!lbl) return;
+    const ic = ICONS[lbl.textContent.trim()]; if (!ic) return;
+    const s = document.createElement("span"); s.className = "ico"; s.textContent = ic;
+    n.insertBefore(s, lbl); n.classList.add("hasIco"); n.title = lbl.textContent.trim();
+  });
+  const KEY = "kaiser_hub_rail";
+  function apply(on){
+    document.body.classList.toggle("rail", on);
+    $("sideToggleIco").textContent = on ? "⇥" : "⇤";
+    $("sideToggle").title = on ? "Vis menu" : "Skjul menu";
+    try{ localStorage.setItem(KEY, on ? "1" : "0"); }catch(_){}
+    setTimeout(() => { try{ window.dispatchEvent(new Event("resize")); }catch(_){} }, 220);
+  }
+  let saved = null; try{ saved = localStorage.getItem(KEY); }catch(_){}
+  apply(saved === null ? true : saved === "1");
+  $("sideToggle").addEventListener("click", () => apply(!document.body.classList.contains("rail")));
 })();
 
 /* ===== INIT ===== */
