@@ -929,6 +929,11 @@ async function postReport(form){
     function itemText(i){
       const t = String(i.productName || i.title || i.issue || i.description || i.complaint || i.text || i.note || i.subject || "").trim();
       const cat = ({"Food":"Mad","Waiting time":"Ventetid","Wrong order":"Fejl i ordre","Cleanliness":"Renlighed","Staff behaviour":"Personale adfærd","Other":"Andet"})[String(i.category||"").trim()] || String(i.category || "").trim();
+      if (i.area && i.issueType) {
+        const A=({"Restaurant":"Restaurant","Bar":"Bar","Kitchen":"Køkken","Toilets":"Toiletter","Storage":"Lager","Outdoor":"Udeservering","Technical":"Teknisk","Other":"Andet"})[i.area]||i.area;
+        const T=({"Equipment":"Udstyr","Electricity":"El","Water":"Vand","IT / POS":"IT / POS","Furniture":"Møbler","Cleaning / Hygiene":"Rengøring","Missing item":"Mangel","Other":"Andet"})[i.issueType]||i.issueType;
+        return A + " · " + T + (t ? " – " + t : "");
+      }
       if (i.severity && cat) return cat + " (" + ({low:"lav",medium:"mellem",high:"høj"}[String(i.severity).toLowerCase()] || i.severity) + ")" + (t ? " – " + t : "");
       return t || cat;
     }
