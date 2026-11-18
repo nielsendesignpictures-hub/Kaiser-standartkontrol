@@ -3,688 +3,1024 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kaiser – Vin (åbnet)</title>
+<title>Kagekøleskab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#071019;
-  --panel:rgba(15,22,34,.88);
-  --border:rgba(145,205,255,.14);
-  --text:rgba(255,255,255,.95);
-  --muted:rgba(213,231,248,.72);
-  --muted2:rgba(184,210,234,.48);
-  --gold:#d6b24a;
-  --gold2:#b9921f;
-  --blue2:#66b7ff;
-  --blueGlow:rgba(102,183,255,.20);
-  --ok:#62d26f;
-  --warn:#ffc94d;
-  --bad:#ff6b6b;
-  --red:#c62b3e;
-  --rose:#e6a3a3;
-  --white:#efe0a0;
-  --bubbles:#f7d774;
+  --bg:#f4f5f2; --ink:#18201d; --muted:#737b76; --line:#e3e7e3;
+  --green:#176b57; --green2:#e5f1ed; --gold:#d6b24a;
+  --amber:#b36b16; --amberSoft:#f8efdf; --red:#b64b43; --redSoft:#f8e8e6;
+  --blue:#2f5f8f; --blueSoft:#e6eef6;
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(1100px 720px at 10% -10%, rgba(214,178,74,.08), transparent 55%),
-    radial-gradient(1000px 720px at 100% 0%, rgba(198,43,62,.14), transparent 52%),
-    linear-gradient(180deg,#071019,#0c1625 52%,#071019);
-  background-attachment:fixed;
-  padding:16px;
-}
-.shell{max-width:980px;margin:0 auto;padding-bottom:60px}
-
-.topbar{
-  border:1px solid var(--border);
-  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
-  border-radius:22px;padding:22px 18px;text-align:center;
-  box-shadow:0 28px 70px rgba(0,0,0,.45);margin:8px 0 18px;
-}
-.kicker{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);font-weight:800}
-.title{font-family:"Playfair Display",serif;font-size:34px;line-height:1.06;font-weight:700;margin-top:8px}
-.subtitle{color:var(--muted);font-weight:600;font-size:13px;margin-top:10px}
-.goldline{height:2px;margin-top:16px;border-radius:999px;
-  background:linear-gradient(90deg,transparent,rgba(214,178,74,.95),rgba(198,43,62,.65),transparent)}
-
-.panel{
-  background:var(--panel);border:1px solid var(--border);border-radius:20px;
-  box-shadow:0 26px 72px rgba(0,0,0,.55);padding:20px;margin-bottom:16px;
-}
-.panel h2{margin:0 0 14px;font-size:15px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted2);font-weight:900}
-.divider{height:1px;background:rgba(145,205,255,.10);margin:16px 0}
-
-.label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);
-  font-weight:900;margin-bottom:8px;display:block}
-
-input,select,textarea{
-  width:100%;border-radius:14px;border:1px solid rgba(145,205,255,.14);
-  background:rgba(255,255,255,.05);padding:14px;outline:none;
-  color:rgba(255,255,255,.94);font-size:16px;font-family:inherit;
-}
-input:focus,select:focus{border-color:rgba(102,183,255,.55);box-shadow:0 0 0 4px var(--blueGlow)}
-select option{color:#0b0c0f}
-
-/* Kategori-tabs */
-.catTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-@media(max-width:640px){.catTabs{grid-template-columns:repeat(2,1fr)}}
-.catTab{
-  padding:12px 10px;border-radius:16px;cursor:pointer;user-select:none;text-align:center;
-  background:rgba(255,255,255,.05);border:1px solid rgba(145,205,255,.12);
-  transition:.15s;font-weight:900;font-size:13px;font-family:inherit;color:var(--text);
-}
-.catTab:hover{background:rgba(255,255,255,.09)}
-.catTab.on{border-color:rgba(214,178,74,.5);
-  background:linear-gradient(135deg,rgba(214,178,74,.14),rgba(255,255,255,.04));
-  box-shadow:0 0 0 4px rgba(214,178,74,.08)}
-.catTab .dot{
-  display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;
-  vertical-align:middle;box-shadow:0 0 8px currentColor;
-}
-.catTab.red .dot{background:var(--red);color:var(--red)}
-.catTab.white .dot{background:var(--white);color:var(--white)}
-.catTab.rose .dot{background:var(--rose);color:var(--rose)}
-.catTab.bubbles .dot{background:var(--bubbles);color:var(--bubbles)}
-
-.wineGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-@media(max-width:640px){.wineGrid{grid-template-columns:1fr}}
-.wineBtn{
-  padding:14px;border-radius:16px;cursor:pointer;user-select:none;text-align:left;
-  background:rgba(255,255,255,.04);border:1px solid rgba(145,205,255,.10);
-  transition:.15s;
-}
-.wineBtn:hover{background:rgba(255,255,255,.08)}
-.wineBtn.active{border-color:rgba(214,178,74,.45);
-  background:linear-gradient(135deg,rgba(214,178,74,.10),rgba(255,255,255,.03));
-  box-shadow:0 0 0 4px rgba(214,178,74,.06)}
-.wineBtn .nm{font-weight:900;font-size:15px;line-height:1.3}
-.wineBtn .mt{color:var(--muted2);font-size:12px;margin-top:6px;font-weight:700}
-
-.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
-.row>*{flex:1;min-width:200px}
-
-.btn{
-  width:100%;border:none;border-radius:16px;padding:15px 16px;cursor:pointer;
-  font-weight:900;font-size:15px;font-family:inherit;letter-spacing:.02em;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0b0c0f;
-  box-shadow:0 18px 40px rgba(214,178,74,.18);
-}
-.btn:active{transform:translateY(1px)}
-.btnGhost{
-  width:100%;border-radius:16px;padding:13px 16px;cursor:pointer;
-  font-weight:900;font-size:14px;font-family:inherit;
-  background:rgba(255,255,255,.06);border:1px solid rgba(145,205,255,.14);
-  color:rgba(255,255,255,.9);
-}
-.btnDanger{
-  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
-  font-family:inherit;background:rgba(255,107,107,.12);
-  border:1px solid rgba(255,107,107,.30);color:rgba(255,255,255,.92);
-}
-.btnSmall{
-  border-radius:14px;padding:10px 13px;cursor:pointer;font-weight:900;font-size:12px;
-  font-family:inherit;background:rgba(214,178,74,.14);
-  border:1px solid rgba(214,178,74,.30);color:rgba(255,255,255,.94);
-}
-
-.preview{color:var(--muted);font-size:13px;font-weight:600;margin-top:10px;text-align:center;
-  padding:10px;border-radius:12px;background:rgba(255,255,255,.03);
-  border:1px solid rgba(145,205,255,.08)}
-
-.groupHead{
-  display:flex;align-items:baseline;gap:10px;padding:14px 4px 8px;margin-top:6px;
-  border-bottom:1px solid rgba(145,205,255,.10);
-}
-.groupHead .g{font-family:"Playfair Display",serif;font-size:19px;font-weight:700;color:var(--gold)}
-.groupHead .g .catDot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:middle}
-.groupHead .g.red   .catDot{background:var(--red)}
-.groupHead .g.white .catDot{background:var(--white)}
-.groupHead .g.rose  .catDot{background:var(--rose)}
-.groupHead .g.bubbles .catDot{background:var(--bubbles)}
-.groupHead .c{color:var(--muted2);font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
-
-.bottle{
-  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
-  padding:14px;border-radius:16px;margin-top:10px;
-  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03);
-  border-left:4px solid var(--ok);
-}
-.bottle.dueToday{border-left-color:var(--warn);background:rgba(255,201,77,.06)}
-.bottle.expired{border-left-color:var(--bad);background:rgba(255,107,107,.08)}
-.bottle .info{flex:1;min-width:200px}
-.bottle .line1{font-weight:900;font-size:14px;line-height:1.3}
-.bottle .line2{color:var(--muted);font-size:12px;margin-top:4px;font-weight:600}
-.bottle .acts{display:flex;gap:8px;flex-wrap:wrap}
-
-.pill{
-  display:inline-block;padding:3px 9px;border-radius:999px;font-size:10px;
-  font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-left:8px;
-  border:1px solid rgba(145,205,255,.16);background:rgba(255,255,255,.05);
-}
-.pill.ok{border-color:rgba(98,210,111,.35);background:rgba(98,210,111,.12)}
-.pill.dueToday{border-color:rgba(255,201,77,.40);background:rgba(255,201,77,.14)}
-.pill.expired{border-color:rgba(255,107,107,.42);background:rgba(255,107,107,.16)}
-
-.empty{
-  border:1px dashed rgba(145,205,255,.18);border-radius:16px;padding:22px;
-  text-align:center;color:var(--muted);font-weight:600;font-size:14px;
-}
-
-.settingRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-  padding:10px 0;border-bottom:1px solid rgba(145,205,255,.06)}
-.settingRow:last-child{border-bottom:none}
-.settingRow .nm{flex:1;font-weight:900;font-size:13px;min-width:180px}
-.settingRow .cat{font-size:10px;color:var(--muted2);font-weight:900;letter-spacing:.1em;
-  text-transform:uppercase;padding:3px 8px;border-radius:999px;
-  border:1px solid rgba(145,205,255,.12);background:rgba(255,255,255,.03)}
-.settingRow input{width:80px;padding:8px 10px;font-size:14px;text-align:center}
-.settingRow .unit{font-size:11px;color:var(--muted2);font-weight:900}
-
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;
-  align-items:center;justify-content:center;padding:18px;z-index:999;
-}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:inherit}
+.hidden{display:none!important}
+.page{height:100vh;display:flex;flex-direction:column;padding:0.875rem 1.25rem 1rem;gap:0.75rem}
+.head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex:none}
+.kicker{font-size:0.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.h1{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-top:2px}
+.pillBtn{min-height:2.875rem;padding:0 1.125rem;border-radius:62.4375rem;border:1px solid var(--line);background:#fff;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer}
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0.75rem}
+.panel{background:#fff;border:1px solid var(--line);border-radius:1.125rem;display:flex;flex-direction:column;min-height:0;box-shadow:0 1px 0 rgba(24,32,29,.04)}
+.pHead{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0 1rem;min-height:3.25rem;border-bottom:1px solid var(--line);flex:none}
+.pTitle{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.pDot{width:0.5rem;height:0.5rem;border-radius:50%;background:var(--green)}
+.pDot.red{background:var(--red)}
+.pBody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
+.pFoot{padding:0.75rem 1rem 1rem;flex:none;border-top:1px solid var(--line)}
+.lbl{font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 0.5rem}
+.field{margin-bottom:0.875rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.input{width:100%;min-height:3rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;padding:0 0.875rem;font-size:1rem;font-weight:700;color:var(--ink);outline:none}
+textarea.input{padding:0.625rem 0.875rem;min-height:3.25rem;resize:vertical;font-weight:500;line-height:1.4}
+.input:focus{border-color:var(--green);background:#fff}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0.3125rem;padding:0.3125rem;background:#eef1ee;border-radius:0.875rem}
+.seg button{min-height:2.5rem;border:0;border-radius:0.625rem;background:transparent;font-size:0.9375rem;font-weight:800;color:#59635e;cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(24,32,29,.12)}
+.seg button.on.frozen{background:var(--blue);color:#fff}
+.stepper{display:flex;gap:0.375rem}
+.stepper .input{text-align:center;font-size:1.25rem;font-weight:800;min-width:0}
+.stepper button{flex:none;width:3.25rem;min-height:3rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#fff;font-size:1.5rem;font-weight:800;color:var(--ink);cursor:pointer;transition:transform .08s ease}
+.stepper button:active,.chip:active,.btn:active,.act:active,.seg button:active,.keypad button:active{transform:scale(.97)}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(8rem,1fr));gap:0.5rem}
+.chip{min-height:3.25rem;padding:0.5rem 0.75rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;text-align:left;cursor:pointer;transition:transform .08s ease;color:var(--ink)}
+.chip .nm{font-size:0.9375rem;font-weight:800;line-height:1.25}
+.chip .mt{font-size:0.75rem;font-weight:700;color:var(--muted);margin-top:0.125rem}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.on .mt{color:rgba(255,255,255,.7)}
+.preview{margin-bottom:0.625rem;padding:0.625rem 0.875rem;border-radius:0.75rem;background:#f7f8f6;border:1px solid var(--line);font-size:0.875rem;font-weight:600;color:var(--muted);line-height:1.4;min-height:2.5rem}
+.preview b{color:var(--ink)}
+.btn{width:100%;min-height:3.75rem;border:0;border-radius:0.875rem;background:var(--ink);color:#fff;font-size:1.1875rem;font-weight:800;cursor:pointer;transition:transform .08s ease,opacity .15s}
+.btn:disabled{opacity:.45}
+.btn.ghost{background:#f1f3f1;color:var(--ink);font-size:1rem;min-height:3.25rem}
+.btn.sm{min-height:3.25rem;font-size:1rem}
+.sum{display:flex;gap:0.375rem;flex-wrap:wrap;justify-content:flex-end}
+.sTag{font-size:0.6875rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:0.375rem 0.75rem;border-radius:62.4375rem;background:#eef1ee;color:#59635e}
+.sTag.exp{background:var(--redSoft);color:var(--red)}
+.sTag.due{background:var(--amberSoft);color:var(--amber)}
+.group{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0.25rem 0 0.5rem}
+.group:not(:first-child){margin-top:1.125rem}
+.group .gc{margin-left:auto;font-weight:700;letter-spacing:.04em}
+.list{display:flex;flex-direction:column;gap:0.5rem}
+.bottle,.batch{padding:0.75rem 0.875rem;border-radius:0.875rem;border:1px solid var(--line);border-left:4px solid var(--green);background:#fff}
+.bottle.dueToday,.batch.dueToday{border-left-color:var(--amber);background:#fffcf6}
+.bottle.expired,.batch.expired{border-left-color:var(--red);background:#fdf5f4}
+.bTop{display:flex;align-items:flex-start;gap:0.5rem}
+.bName{flex:1;min-width:0;font-size:1rem;font-weight:800;line-height:1.3}
+.bName small{font-size:0.8125rem;font-weight:700;color:var(--muted);margin-left:0.25rem}
+.tag,.pill{flex:none;display:inline-block;font-size:0.6875rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:0.3125rem 0.625rem;border-radius:62.4375rem;background:var(--green2);color:var(--green)}
+.tag.dueToday,.pill.dueToday{background:var(--amberSoft);color:var(--amber)}
+.tag.expired,.pill.expired{background:var(--redSoft);color:var(--red)}
+.tag.thaw{background:var(--blueSoft);color:var(--blue)}
+.tag.ready{background:var(--green2);color:var(--green)}
+.tags{display:flex;gap:0.375rem;flex-wrap:wrap;margin-top:0.375rem}
+.bMeta,.batch .line2{font-size:0.8125rem;color:var(--muted);font-weight:600;margin-top:0.25rem;line-height:1.4}
+.bMeta b,.batch .line2 strong{color:var(--ink)}
+.batch .line1{font-size:1rem;font-weight:800}
+.bar{height:0.3125rem;border-radius:62.4375rem;background:#eef1ee;margin-top:0.5rem;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:62.4375rem}
+.bottle.dueToday .bar i,.batch.dueToday .bar i{background:var(--amber)}
+.bottle.expired .bar i,.batch.expired .bar i{background:var(--red)}
+.acts{display:flex;gap:0.5rem;margin-top:0.625rem}
+.act,.btnSmall,.btnDanger,.btnEdit{flex:1;min-height:2.75rem;border-radius:0.625rem;border:1.5px solid var(--line);background:#fff;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer;padding:0 0.75rem;transition:transform .08s ease}
+.act.primary,.btnSmall{background:var(--ink);border-color:var(--ink);color:#fff}
+.act.danger,.btnDanger{flex:none;padding:0 1rem;color:var(--red);border-color:#edcbc7;background:#fff}
+.btnSmall:active,.btnDanger:active,.btnEdit:active{transform:scale(.97)}
+.empty{padding:2rem 1rem;text-align:center;color:var(--muted);font-weight:700;border:1px dashed var(--line);border-radius:1rem}
+.status{margin-bottom:0.625rem;padding:0.625rem 0.875rem;border-radius:0.75rem;font-size:0.875rem;font-weight:700;background:var(--redSoft);color:var(--red)}
+.overlay{position:fixed;inset:0;background:rgba(24,32,29,.5);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
 .overlay.on{display:flex}
-.modal{
-  width:min(560px,100%);border-radius:24px;padding:20px;
-  background:linear-gradient(180deg,rgba(24,34,50,.98),rgba(15,22,34,.98));
-  border:1px solid rgba(145,205,255,.18);box-shadow:0 30px 90px rgba(0,0,0,.7);
-}
-.modal.alarm{border-color:rgba(255,107,107,.42)}
-.modal h3{margin:0;font-size:20px;font-family:"Playfair Display",serif;font-weight:700}
-.modal p{margin:8px 0 0;color:var(--muted);font-size:14px}
-.modalFoot{display:flex;gap:10px;margin-top:18px}
-.modalFoot>*{flex:1}
-.alarmTitle{font-size:24px;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
-.alarmBanner{
-  margin-top:10px;padding:10px 12px;border-radius:14px;font-weight:900;font-size:13px;
-  background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.30);
+.modal{width:min(36rem,100%);max-height:92vh;display:flex;flex-direction:column;border-radius:1.25rem;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.3)}
+.modal.wide{width:min(44rem,100%)}
+.mHead{padding:1.125rem 1.25rem 0.5rem;flex:none}
+.mTitle{font-size:1.25rem;font-weight:800;letter-spacing:-.02em}
+.mTitle.alarm{color:var(--red)}
+.mSub{margin-top:0.375rem;font-size:0.9375rem;color:var(--muted);font-weight:600;line-height:1.4}
+.mBody{padding:0.5rem 1.25rem;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.mFoot{display:flex;gap:0.625rem;padding:0.875rem 1.25rem 1.25rem;flex:none}
+.mFoot>*{flex:1}
+.banner{margin-top:0.625rem;padding:0.625rem 0.875rem;border-radius:0.75rem;font-size:0.9375rem;font-weight:800;background:var(--redSoft);color:var(--red)}
+.sRow{display:flex;align-items:center;gap:0.75rem;padding:0.625rem 0;border-bottom:1px solid var(--line)}
+.sRow:last-child{border-bottom:0}
+.sRow .nm{flex:1;min-width:0;font-size:0.9375rem;font-weight:800;line-height:1.3}
+.sRow input{width:5.5rem;min-height:2.75rem;border-radius:0.625rem;border:1.5px solid var(--line);background:#f7f8f6;text-align:center;font-size:1rem;font-weight:800;outline:none}
+.sRow input:focus{border-color:var(--green);background:#fff}
+.sRow .u{font-size:0.6875rem;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.dangerLink{margin:0.75rem 0 0.25rem;width:100%;min-height:3rem;border-radius:0.75rem;border:1.5px solid #edcbc7;background:#fff;font-size:0.875rem;font-weight:800;color:var(--red);cursor:pointer}
+.keypad{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0.5rem;margin-top:0.75rem}
+.keypad button{min-height:3.25rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;font-size:1.0625rem;font-weight:800;color:var(--ink);cursor:pointer}
+.keypad button.primary{background:var(--green2);border-color:#cfe3dc;color:var(--green)}
+.keypad button:disabled{opacity:.15}
+@media(max-width:820px){
+  .page{height:auto;min-height:100vh}
+  .grid{grid-template-columns:1fr}
+  .pBody{overflow:visible}
 }
 
-.hint{
-  padding:12px 14px;border-radius:14px;margin-top:14px;
-  background:rgba(102,183,255,.06);border:1px solid rgba(102,183,255,.16);
-  color:var(--muted);font-size:12px;font-weight:600;line-height:1.5;
-}
-.hint b{color:var(--text);font-weight:900}
+.verLine{font-size:0.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.modeBtn{min-height:3.5rem;padding:0.5rem 0.75rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;text-align:center;cursor:pointer;font-size:1rem;font-weight:800;color:var(--ink);transition:transform .08s ease}
+.modeBtn .sub{display:block;margin-top:0.125rem;font-size:0.75rem;font-weight:600;color:var(--muted)}
+.modeBtn.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.modeBtn.on .sub{color:rgba(255,255,255,.7)}
+.modeBtn.frozen.on{background:var(--blue);border-color:var(--blue)}
+.modeBtn:active{transform:scale(.97)}
+.modeRow{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
+.frow{display:flex;gap:0.75rem}
+.frow .field{flex:1;min-width:0}
+.unitBadge{display:flex;align-items:center;padding:0 1rem;border-radius:0.75rem;background:#f1f3f1;font-weight:800;font-size:1rem}
+.qtyRow{display:flex;gap:0.5rem;align-items:stretch;margin-top:0.5rem}
+.qtyRow>div:first-child{flex:1;min-width:0}
+.item{display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap;padding:0.75rem 0.875rem;border-radius:0.875rem;border:1px solid var(--line);background:#fff;margin-bottom:0.5rem}
+.small{font-size:0.8125rem;color:var(--muted);font-weight:600}
+.btn2{min-height:3.25rem;padding:0 1.25rem;border-radius:0.875rem;border:0;background:#f1f3f1;color:var(--ink);font-size:1rem;font-weight:800;cursor:pointer}
+.btn.mini{width:auto;min-height:2.75rem;padding:0 1rem;font-size:0.875rem;border-radius:0.625rem}
+.overlay{display:none}
 </style>
 </head>
 <body>
-<div class="shell">
-
-  <div class="topbar">
-    <div class="kicker">KAISER</div>
-    <div class="title">Vin — åbnet</div>
-    <div class="subtitle">Registrér hver enkelt flaske når den åbnes • hold styr på hvornår den skal drikkes op</div>
-    <div class="goldline"></div>
-  </div>
-
-  <!-- TILFØJ -->
-  <div class="panel">
-    <h2>Registrér åbnet flaske</h2>
-
-    <div class="catTabs" id="catTabs"></div>
-    <div class="wineGrid" id="wineGrid"></div>
-
-    <div class="row">
-      <div>
-        <label class="label" for="by">Åbnet af (valgfri)</label>
-        <input id="by" placeholder="Fx Mads" autocomplete="off"/>
-      </div>
-      <div>
-        <label class="label" for="whenMode">Hvornår åbnet</label>
-        <select id="whenMode">
-          <option value="now">Lige nu</option>
-          <option value="custom">Vælg tidspunkt…</option>
-        </select>
-      </div>
-      <div id="customTimeWrap" style="display:none">
-        <label class="label" for="whenAt">Tidspunkt</label>
-        <input id="whenAt" type="datetime-local"/>
-      </div>
+<div class="page">
+  <header class="head">
+    <div>
+      <div class="kicker" id="dateLine">—</div>
+      <div class="h1">Kagekøleskab</div>
+      <div class="verLine" id="appVersion"></div>
     </div>
+  </header>
 
-    <div style="margin-top:18px">
-      <button class="btn" id="addBtn" type="button">Registrér åbnet flaske</button>
-      <div class="preview" id="preview">Vælg en vin</div>
-    </div>
+  <div class="grid">
+    <!-- TILFØJ -->
+    <section class="panel">
+      <div class="pHead"><div class="pTitle"><span class="pDot"></span>Tilføj kage</div></div>
+      <div class="pBody">
+        <div class="field">
+          <div class="lbl">1 · Kage</div>
+          <div class="chips" id="cakeGrid"></div>
+        </div>
 
-    <div class="hint">
-      <b>Vejledende holdbarhed efter åbning:</b>
-      Rød- og hvidvin holder 2–4 dage i køleskab med prop.
-      Rosévin taber hurtigt frugtsmagen (2–4 dage).
-      Mousserende holder 1–2 dage med champagneprop før boblerne er væk.
-      Systemet bruger det korteste tal som standard.
-    </div>
+        <div class="frow hidden-row" id="customRow" style="display:none">
+          <div class="field">
+            <div class="lbl">Andet – kagenavn</div>
+            <input id="customName" class="input" placeholder="Fx Citronmåne"/>
+          </div>
+          <div class="field">
+            <div class="lbl">Holdbarhed (dage)</div>
+            <input id="customDays" class="input" type="number" min="0" step="1" placeholder="Fx 3"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="lbl">2 · Hvor kommer den fra</div>
+          <div class="modeRow" id="modeRow">
+            <div class="modeBtn" data-mode="fresh">Frisk kage<span class="sub">Kommer direkte i køleskabet</span></div>
+            <div class="modeBtn frozen" data-mode="frozen">Fra fryser<span class="sub">Tøer op i køleskabet</span></div>
+          </div>
+        </div>
+
+        <div class="frow" id="frozenRow" style="display:none">
+          <div class="field">
+            <div class="lbl">Taget ud af fryser</div>
+            <input id="takenOut" class="input" type="datetime-local"/>
+          </div>
+          <div class="field">
+            <div class="lbl">Optøning (timer)</div>
+            <input id="thawHours" class="input" type="number" min="1" step="1" placeholder="Fx 12"/>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <div class="lbl">Antal stk</div>
+            <div class="stepper">
+              <button type="button" data-step="-1" data-for="qty" aria-label="Færre">−</button>
+              <input id="qty" class="input" type="number" min="1" step="1" placeholder="Fx 4" inputmode="numeric"/>
+              <button type="button" data-step="1" data-for="qty" aria-label="Flere">+</button>
+            </div>
+          </div>
+          <div class="field">
+            <div class="lbl">Navn (tjener)</div>
+            <input id="by" class="input" placeholder="Fx Mads" autocomplete="name"/>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <div class="lbl">Note (valgfri)</div>
+          <textarea id="note" class="input" placeholder=""></textarea>
+        </div>
+      </div>
+      <div class="pFoot">
+        <div class="preview" id="preview"></div>
+        <button class="btn" id="addBtn" type="button">Tilføj</button>
+      </div>
+    </section>
+
+    <!-- AKTIVE -->
+    <section class="panel">
+      <div class="pHead">
+        <div class="pTitle"><span class="pDot red"></span>Aktive kager</div>
+        <div class="sum" id="sum"></div>
+      </div>
+      <div class="pBody" id="tbody"></div>
+    </section>
   </div>
-
-  <!-- ÅBNE FLASKER -->
-  <div class="panel">
-    <h2>Åbne flasker</h2>
-    <div id="list"></div>
-  </div>
-
-  <!-- INDSTILLINGER -->
-  <div class="panel">
-    <h2>Holdbarhed pr. vin</h2>
-    <div id="settings"></div>
-    <div class="divider"></div>
-    <button class="btnGhost" id="clearBtn" type="button">Ryd alle åbne flasker (leder)</button>
-  </div>
-
 </div>
 
 <!-- ALARM -->
-<div class="overlay" id="alarmOverlay">
-  <div class="modal alarm">
-    <div class="alarmTitle">Skal drikkes op</div>
-    <div class="alarmBanner" id="alarmBanner">–</div>
-    <div id="alarmList" style="margin-top:14px"></div>
-    <div class="modalFoot">
-      <button class="btnGhost" id="snoozeBtn" type="button">Slumre 30 min</button>
-      <button class="btn" id="closeAlarmBtn" type="button">Luk</button>
+<div class="overlay" id="alarmOverlay" aria-hidden="true">
+  <div class="modal">
+    <div class="mHead">
+      <div class="mTitle alarm">Kage skal smides ud</div>
+      <div class="banner" id="alarmBanner">–</div>
+    </div>
+    <div class="mBody list" id="alarmList"></div>
+    <div class="mFoot">
+      <button class="btn2" id="snoozeBtn" type="button">Slumre 30 min</button>
+      <button class="btn sm" id="closeAlarmBtn" type="button">Luk</button>
     </div>
   </div>
 </div>
 
-<!-- KASSÉR -->
-<div class="overlay" id="discardOverlay">
+<!-- SMIDT UD -->
+<div class="overlay" id="discardOverlay" aria-hidden="true">
   <div class="modal">
-    <h3>Flaske drukket / smidt ud</h3>
-    <p id="discardSub">–</p>
-    <div class="modalFoot">
-      <button class="btnGhost" id="discardCancel" type="button">Annuller</button>
-      <button class="btn" id="discardSave" type="button">Bekræft</button>
+    <div class="mHead">
+      <div class="mTitle">Smidt ud – antal</div>
+      <div class="mSub" id="discardSub">–</div>
     </div>
+    <div class="mBody">
+      <div class="lbl" style="margin-top:0.75rem">Hvor mange smider du ud?</div>
+      <div class="qtyRow">
+        <div><input id="wasteQty" class="input" inputmode="numeric" pattern="[0-9]*" type="number" min="1" step="1" placeholder="Antal" /></div>
+        <div class="unitBadge">stk</div>
+      </div>
+      <div class="keypad" id="keypad"></div>
+    </div>
+    <div class="mFoot">
+      <button class="btn2" id="discardCancelBtn" type="button">Annuller</button>
+      <button class="btn sm" id="discardSaveBtn" type="button">Gem</button>
+    </div>
+    <button type="button" class="hidden" id="closeDiscardBtn"></button>
+  </div>
+</div>
+
+<!-- REDIGER ANTAL -->
+<div class="overlay" id="editQtyOverlay" aria-hidden="true">
+  <div class="modal">
+    <div class="mHead">
+      <div class="mTitle">Rediger antal</div>
+      <div class="mSub" id="editQtySub">–</div>
+    </div>
+    <div class="mBody">
+      <div class="lbl" style="margin-top:0.75rem">Nyt antal stk</div>
+      <div class="qtyRow">
+        <div><input id="editQtyInput" class="input" inputmode="numeric" pattern="[0-9]*" type="number" min="0" step="1" placeholder="Antal" /></div>
+        <div class="unitBadge">stk</div>
+      </div>
+      <div class="keypad" id="editKeypad"></div>
+    </div>
+    <div class="mFoot">
+      <button class="btn2" id="editQtyCancelBtn" type="button">Annuller</button>
+      <button class="btn sm" id="editQtySaveBtn" type="button">Gem</button>
+    </div>
+    <button type="button" class="hidden" id="closeEditQtyBtn"></button>
   </div>
 </div>
 
 <script>
 (() => {
-"use strict";
+  const safeGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+  const safeSet = (k,v) => { try { localStorage.setItem(k,v); } catch {} };
+  const STORAGE_KEY = "kagekoeleskab.entries.v6";
+  const LEGACY_KEYS = [
+    "kagekoeleskab.entries.v5",
+    "kagekoeleskab.entries.v4",
+    "kagekoeleskab.entries.v3",
+    "kagekoeleskab.entries.v2"
+  ];
+  const PREF_KEY = "kagekoeleskab.prefs.v6";
+  const LEGACY_PREF_KEYS = [
+    "kagekoeleskab.prefs.v5",
+    "kagekoeleskab.prefs.v4",
+    "kagekoeleskab.prefs.v3",
+    "kagekoeleskab.prefs.v2"
+  ];
 
-const KEY_ENTRIES = "kaiser.wine.entries.v1";
-const KEY_PREFS   = "kaiser.wine.prefs.v1";
-const KEY_SHELF   = "kaiser.wine.shelf.v1";
+  const APP_VERSION = "2026.11.16-a";
+  /* ÆNDRINGSLOG
+     2026.11.16-a  Ny funktion "Fra fryser": kage tages ud om aftenen og tøer op natten over.
+                   Viser "Optøer – klar kl. …" og skifter til "Optøet" når tiden er gået.
+                   Holdbarheden regnes fra tidspunktet kagen blev taget ud af fryseren (se SHELF_LIFE_FROM). */
+  const DEFAULT_THAW_HOURS = 12;
+  const SHELF_LIFE_FROM = "takenOut"; // "takenOut" = fra udtagning (sikreste) | "ready" = fra optøet
+  const TYPES = [
+    { id: "gulerod", name: "Gulerodskage", days: 3 },
+    { id: "chokolade", name: "Chokoladekage", days: 2 },
+    { id: "aeble", name: "Æblekage", days: 3 },
+    { id: "custom", name: "Andet", days: null }
+  ];
 
-/* Vinkortet. Hver vin har sin egen holdbarhed i timer.
-   Kan justeres i indstillingerne uden at redigere koden. */
-const CATEGORIES = {
-  hvid:    { name:"Hvidvin",       hours:48 },   // 2 døgn (kort ende af 2-4)
-  rod:     { name:"Rødvin",        hours:48 },   // 2 døgn (kort ende af 2-4)
-  rose:    { name:"Rosé",          hours:48 },   // 2 døgn (kort ende af 2-4)
-  bubbles: { name:"Husets bobler", hours:24 }    // 1 døgn (kort ende af 1-2)
-};
+  const $ = (id) => document.getElementById(id);
 
-const DEFAULT_SHELF = {
-  // HVIDVIN
-  h_rosario:  { cat:"hvid", name:"Rosario Estate, Chardonnay, Chile" },
-  h_simply:   { cat:"hvid", name:"Simply Fruity, Riesling, Tyskland" },
-  h_pfaffl:   { cat:"hvid", name:"Pfaffl Sauvignon Blanc, Østrig" },
-  h_macon:    { cat:"hvid", name:"Macon-Villages, Bourgogne, Frankrig" },
-  // RØDVIN
-  r_maison:   { cat:"rod",  name:"La Maisonnée, Cabernet Sauvignon, Frankrig" },
-  r_badet:    { cat:"rod",  name:"Badet Clement, Pinot Noir, Frankrig" },
-  r_ripasso:  { cat:"rod",  name:"Ripasso, Italien" },
-  r_barolo:   { cat:"rod",  name:"Barolo Beni Di B., Italien" },
-  // BOBLER
-  b_borgo:    { cat:"bubbles", name:"Borgo Imperiale Cuvée Brut, Italien" },
-  b_mimi_rose:{ cat:"bubbles", name:"Mimi Brut Rosé, Frankrig" },
-  // ROSÉ
-  p_cuvee:    { cat:"rose", name:"Cuvée Prestige Rosé, Frankrig" },
-  p_mimi:     { cat:"rose", name:"Mimi Rosé, Frankrig" }
-};
+  const cakeGrid = $("cakeGrid");
+  const customRow = $("customRow");
+  const customName = $("customName");
+  const customDays = $("customDays");
 
-const $ = id => document.getElementById(id);
-const parse = r => { try { return r ? JSON.parse(r) : null; } catch { return null; } };
+  const by = $("by");
+  const qty = $("qty");
+  const note = $("note");
+  const modeRow = $("modeRow");
+  const frozenRow = $("frozenRow");
+  const takenOut = $("takenOut");
+  const thawHours = $("thawHours");
+  const addBtn = $("addBtn");
+  const tbody = $("tbody");
+  const preview = $("preview");
 
-/* Migrer: gamle poster med 'hours' på selve vinen flyttes til kategorien.
-   Nye vine får ikke egne timer — de arver fra kategori-defaultet, men
-   kan overskrives i indstillingerne. */
-let shelfRaw = parse(localStorage.getItem(KEY_SHELF)) || {};
-let shelf = {};
-for (const [id, def] of Object.entries(DEFAULT_SHELF)){
-  shelf[id] = { ...def, ...(shelfRaw[id] || {}) };
-}
+  // Alarm
+  const alarmOverlay = $("alarmOverlay");
+  const alarmList = $("alarmList");
+  const closeAlarmBtn = $("closeAlarmBtn");
+  const snoozeBtn = $("snoozeBtn");
 
-let entries = parse(localStorage.getItem(KEY_ENTRIES)) || [];
-let prefs = { lastBy:"", lastCat:"rod", lastWine:"", snoozeUntil:0,
-              ...(parse(localStorage.getItem(KEY_PREFS)) || {}) };
+  // Discard
+  const discardOverlay = $("discardOverlay");
+  const closeDiscardBtn = $("closeDiscardBtn");
+  const discardCancelBtn = $("discardCancelBtn");
+  const discardSaveBtn = $("discardSaveBtn");
+  const discardSub = $("discardSub");
+  const wasteQty = $("wasteQty");
+  const keypad = $("keypad");
 
-let selectedCat  = prefs.lastCat in CATEGORIES ? prefs.lastCat : "rod";
-let selectedWine = (prefs.lastWine && shelf[prefs.lastWine]?.cat === selectedCat) ? prefs.lastWine : "";
-let pendingDiscard = null;
+  // Edit qty
+  const editQtyOverlay = $("editQtyOverlay");
+  const closeEditQtyBtn = $("closeEditQtyBtn");
+  const editQtyCancelBtn = $("editQtyCancelBtn");
+  const editQtySaveBtn = $("editQtySaveBtn");
+  const editQtySub = $("editQtySub");
+  const editQtyInput = $("editQtyInput");
+  const editKeypad = $("editKeypad");
 
-const saveEntries = () => localStorage.setItem(KEY_ENTRIES, JSON.stringify(entries));
-const savePrefs   = () => localStorage.setItem(KEY_PREFS, JSON.stringify(prefs));
-const saveShelf   = () => localStorage.setItem(KEY_SHELF, JSON.stringify(shelf));
+  let entries = loadEntriesWithMigration();
+  let prefs = loadPrefsWithMigration();
+  let selectedTypeId = prefs.lastTypeId || "gulerod";
+  let mode = "fresh"; // "fresh" | "frozen"
+  let pendingDiscardId = null;
+  let pendingEditId = null;
 
-const esc = s => String(s ?? "").replace(/[&<>"']/g, m =>
-  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+  const WARN_BEFORE_MS = 2 * 60 * 60 * 1000;
+  const NOTIF_STATE_KEY = "kagekoeleskab.notifState.v1";
+  let notifState = tryParse(safeGet(NOTIF_STATE_KEY)) || {};
+  function saveNotifState(){ safeSet(NOTIF_STATE_KEY, JSON.stringify(notifState)); }
 
-const uuid = () => (crypto?.randomUUID?.() || "id-" + Math.random().toString(16).slice(2) + Date.now());
-
-function hoursFor(wineId){
-  const w = shelf[wineId];
-  if (!w) return 24;
-  if (typeof w.hours === "number" && w.hours > 0) return w.hours;
-  return CATEGORIES[w.cat]?.hours || 24;
-}
-
-function fmt(iso){
-  return new Date(iso).toLocaleString("da-DK",
-    { weekday:"short", day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
-}
-
-function hoursLabel(h){
-  if (h % 24 === 0) return (h/24) + " døgn";
-  if (h < 24) return h + " timer";
-  return Math.floor(h/24) + " døgn " + (h%24) + " t";
-}
-
-function timeLeft(iso){
-  const ms = new Date(iso).getTime() - Date.now();
-  if (ms <= 0) return "udløbet";
-  const mins = Math.round(ms/60000);
-  const h = Math.floor(mins/60), m = mins%60;
-  if (h >= 24) { const d = Math.floor(h/24); return d + " døgn " + (h%24) + " t tilbage"; }
-  if (h >= 1)  return h + " t " + m + " min tilbage";
-  return m + " min tilbage";
-}
-
-function sameDay(a,b){
-  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-}
-
-function statusOf(e){
-  const disc = new Date(e.discardAt).getTime();
-  if (Date.now() >= disc) return "expired";
-  if (sameDay(new Date(), new Date(e.discardAt))) return "dueToday";
-  return "ok";
-}
-
-const STATUS_TEXT = { ok:"OK", dueToday:"Udløber i dag", expired:"Skal drikkes op" };
-
-/* ---------- Kategori-tabs ---------- */
-function renderCats(){
-  $("catTabs").innerHTML = Object.entries(CATEGORIES).map(([id,c]) => {
-    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
-    return `
-      <div class="catTab ${clsMap[id]} ${id===selectedCat?"on":""}" data-id="${id}">
-        <span class="dot"></span>${esc(c.name)}
-      </div>`;
-  }).join("");
-
-  $("catTabs").querySelectorAll(".catTab").forEach(b =>
-    b.addEventListener("click", () => {
-      selectedCat = b.dataset.id;
-      selectedWine = "";
-      prefs.lastCat = selectedCat; savePrefs();
-      renderCats(); renderWines(); updatePreview();
-    }));
-}
-
-/* ---------- Vin-knapper for valgt kategori ---------- */
-function renderWines(){
-  const wines = Object.entries(shelf).filter(([_,w]) => w.cat === selectedCat);
-  $("wineGrid").innerHTML = wines.map(([id,w]) => `
-    <div class="wineBtn ${id===selectedWine?"active":""}" data-id="${id}">
-      <div class="nm">${esc(w.name)}</div>
-      <div class="mt">Holdbarhed: ${esc(hoursLabel(hoursFor(id)))}</div>
-    </div>`).join("");
-
-  $("wineGrid").querySelectorAll(".wineBtn").forEach(b =>
-    b.addEventListener("click", () => {
-      selectedWine = b.dataset.id;
-      prefs.lastWine = selectedWine; savePrefs();
-      renderWines(); updatePreview();
-    }));
-}
-
-/* ---------- Preview ---------- */
-function chosenStart(){
-  if ($("whenMode").value === "custom" && $("whenAt").value){
-    return new Date($("whenAt").value);
-  }
-  return new Date();
-}
-
-function updatePreview(){
-  if (!selectedWine){ $("preview").textContent = "Vælg en vin"; return; }
-  const w = shelf[selectedWine];
-  const start = chosenStart();
-  const h = hoursFor(selectedWine);
-  const out = new Date(start.getTime() + h*3600*1000);
-  $("preview").textContent = `${w.name} — åbnet ${fmt(start)} → drikkes op senest ${fmt(out)}`;
-}
-
-/* ---------- Registrér ---------- */
-function addEntry(){
-  if (!selectedWine){ alert("Vælg en vin først."); return; }
-  const w = shelf[selectedWine];
-  const start = chosenStart();
-  if (isNaN(start.getTime())) return alert("Ugyldigt tidspunkt.");
-
-  const h = hoursFor(selectedWine);
-
-  entries.unshift({
-    id: uuid(),
-    wineId: selectedWine,
-    wineName: w.name,
-    cat: w.cat,
-    by: ($("by").value || "").trim(),
-    openedAt: start.toISOString(),
-    discardAt: new Date(start.getTime() + h*3600*1000).toISOString(),
-    status: "active"
-  });
-
-  saveEntries();
-  prefs.lastBy = ($("by").value || "").trim(); savePrefs();
-
-  $("whenMode").value = "now";
-  $("customTimeWrap").style.display = "none";
-
-  render(); updatePreview(); checkAlarm(true);
-}
-
-/* ---------- Liste ---------- */
-function render(){
-  const active = entries.filter(e => e.status === "active");
-
-  if (!active.length){
-    $("list").innerHTML = `<div class="empty">Ingen åbne flasker. Alt er lukket.</div>`;
-    return;
+  function ensureNotifPermissionFromUserGesture(){
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "default") {
+      Notification.requestPermission().then(() => {});
+    }
   }
 
-  const rank = { expired:0, dueToday:1, ok:2 };
-  const catOrder = ["rod","hvid","rose","bubbles"];
-  const groups = {};
-  active.forEach(e => (groups[e.cat] ||= []).push(e));
+  function dueSoonEntries(){
+    const now = Date.now();
+    return entries.filter(e => {
+      if (e.status === "discarded") return false;
+      const t = new Date(e.discardAt).getTime();
+      const diff = t - now;
+      return diff > 0 && diff <= WARN_BEFORE_MS;
+    });
+  }
 
-  const order = catOrder.filter(c => groups[c]);
+  function fmtTimeLeft(ms){
+    const m = Math.max(0, Math.round(ms / 60000));
+    const h = Math.floor(m / 60);
+    const mm = m % 60;
+    if (h <= 0) return `${mm} min`;
+    return `${h} t ${mm} min`;
+  }
 
-  $("list").innerHTML = order.map(cat => {
-    const rows = groups[cat]
-      .sort((a,b) => {
-        const sa = rank[statusOf(a)], sb = rank[statusOf(b)];
-        if (sa !== sb) return sa - sb;
+  function notifyOnce(entry, kind, title, body){
+    if (!("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+    notifState[entry.id] ||= {};
+    if (notifState[entry.id][kind]) return;
+    try{
+      new Notification(title, { body });
+      notifState[entry.id][kind] = true;
+      saveNotifState();
+    }catch(e){}
+  }
+
+  function updateTabIndicators(){
+    const ids = new Set();
+    alarmEntries().forEach(e => ids.add(e.id));
+    dueSoonEntries().forEach(e => ids.add(e.id));
+    const n = ids.size;
+    document.title = n > 0 ? `(${n}) Kagekøleskab` : "Kagekøleskab";
+    try{
+      const size = 64;
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#0b0f14";
+      ctx.beginPath(); ctx.arc(size/2, size/2, size/2, 0, Math.PI*2); ctx.fill();
+      if (n > 0){
+        ctx.fillStyle = "#ff2d2d";
+        ctx.beginPath(); ctx.arc(size*0.72, size*0.30, size*0.22, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 22px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(String(Math.min(n, 99)), size*0.72, size*0.30);
+      } else {
+        ctx.fillStyle = "#d9b65a";
+        ctx.font = "bold 30px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("K", size/2, size/2);
+      }
+      let link = document.querySelector("link[rel='icon']");
+      if (!link){ link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+      link.href = c.toDataURL("image/png");
+    }catch{}
+  }
+
+  function checkThawReady(){
+    const now = Date.now();
+    for (const e of entries){
+      if (e.status === "discarded" || !e.frozen || !e.thawReadyAt) continue;
+      const t = new Date(e.thawReadyAt).getTime();
+      if (now >= t && now < new Date(e.discardAt).getTime()){
+        notifyOnce(e, "ready", "Kage er optøet", `${e.cakeName} • ${e.qty || 1} stk er klar til servering`);
+      }
+    }
+  }
+
+  function checkDueSoonNotifications(){
+    const now = Date.now();
+    for (const e of dueSoonEntries()){
+      const diff = new Date(e.discardAt).getTime() - now;
+      notifyOnce(e, "soon", "Kage skal smides ud snart", `${e.cakeName} • om ca. ${fmtTimeLeft(diff)} (udløb: ${fmtDateTime(e.discardAt)})`);
+    }
+  }
+
+  function tryParse(raw){ try{ return raw ? JSON.parse(raw) : null; } catch { return null; } }
+
+  function loadPrefsWithMigration(){
+    const direct = tryParse(safeGet(PREF_KEY));
+    if (direct) return normalizePrefs(direct);
+    for (const k of LEGACY_PREF_KEYS){
+      const legacy = tryParse(safeGet(k));
+      if (legacy){
+        const p = normalizePrefs(legacy);
+        safeSet(PREF_KEY, JSON.stringify(p));
+        return p;
+      }
+    }
+    return normalizePrefs(null);
+  }
+  function normalizePrefs(p){
+    return { lastBy:"", lastQty:"", lastTypeId:"gulerod", snoozeUntil:0, ...(p||{}) };
+  }
+  function savePrefs(){ safeSet(PREF_KEY, JSON.stringify(prefs)); }
+
+  function loadEntriesWithMigration(){
+    const direct = tryParse(safeGet(STORAGE_KEY));
+    if (Array.isArray(direct)) return pruneOld(direct.map(normalizeEntry));
+    for (const k of LEGACY_KEYS){
+      const legacy = tryParse(safeGet(k));
+      if (Array.isArray(legacy)){
+        const migrated = legacy.map(normalizeEntry);
+        safeSet(STORAGE_KEY, JSON.stringify(migrated));
+        return migrated;
+      }
+    }
+    return [];
+  }
+  function pruneOld(list){
+    const cut = Date.now() - 90*24*3600*1000;
+    return list.filter(e => !(e.status === "discarded" && new Date(e.discardedAt || e.discardAt).getTime() < cut));
+  }
+  function normalizeEntry(e){
+    const base = {
+      id: "", cakeName: "", days: 0,
+      addedAt: new Date().toISOString(),
+      discardAt: new Date().toISOString(),
+      by: "", qty: 1, note: "",
+      status: "active",
+      discardedAt: null,
+      wasteQty: null,
+      wasteUnit: "stk",
+      frozen: false,
+      thawHours: 0,
+      thawReadyAt: null
+    };
+    const merged = { ...base, ...(e||{}) };
+    // Migrér gammel "place" til "qty"
+    if (e && e.place !== undefined && e.qty === undefined){
+      const n = parseInt(e.place, 10);
+      merged.qty = (Number.isFinite(n) && n > 0) ? n : 1;
+    }
+    delete merged.place;
+    return merged;
+  }
+  function saveEntries(){ safeSet(STORAGE_KEY, JSON.stringify(entries)); }
+
+  function uuid(){
+    if (crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id-" + Math.random().toString(16).slice(2) + "-" + Date.now();
+  }
+
+  function escapeHtml(str){
+    return String(str ?? "").replace(/[&<>"']/g, (m) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+  }
+
+  function fmtDateTime(iso){
+    const d = new Date(iso);
+    return d.toLocaleString("da-DK", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+  }
+
+  function isSameLocalDate(a,b){
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+
+  function toLocalInput(d){
+    const p = (n) => String(n).padStart(2,"0");
+    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes());
+  }
+  function fmtShort(iso){
+    return new Date(iso).toLocaleString("da-DK", { weekday:"short", hour:"2-digit", minute:"2-digit" });
+  }
+  function frozenTimes(takenIso, hours, days){
+    const readyAt = new Date(new Date(takenIso).getTime() + hours*3600*1000).toISOString();
+    const base = (SHELF_LIFE_FROM === "ready") ? readyAt : takenIso;
+    return { readyAt, discardAt: computeDiscardAt(base, days) };
+  }
+  function readTaken(){
+    const v = takenOut.value ? new Date(takenOut.value) : new Date();
+    return isNaN(v) ? new Date() : v;
+  }
+  function readThaw(){
+    const h = parseInt(thawHours.value, 10);
+    return (Number.isFinite(h) && h > 0) ? h : DEFAULT_THAW_HOURS;
+  }
+  function setMode(m){
+    mode = m;
+    prefs.lastMode = m; savePrefs();
+    modeRow.querySelectorAll(".modeBtn").forEach(b => b.classList.toggle("on", b.getAttribute("data-mode") === m));
+    frozenRow.style.display = (m === "frozen") ? "flex" : "none";
+    if (m === "frozen"){
+      takenOut.value = toLocalInput(new Date());
+      if (!thawHours.value) thawHours.value = String(DEFAULT_THAW_HOURS);
+    }
+    updatePreview();
+  }
+  function computeDiscardAt(addedAtIso, days){
+    const ms = Number(days) * 24 * 60 * 60 * 1000;
+    return new Date(new Date(addedAtIso).getTime() + ms).toISOString();
+  }
+
+  function statusFor(entry){
+    if (entry.status === "discarded") return "discarded";
+    const now = Date.now();
+    const disc = new Date(entry.discardAt).getTime();
+    if (now >= disc) return "expired";
+    if (isSameLocalDate(new Date(), new Date(entry.discardAt))) return "dueToday";
+    return "ok";
+  }
+
+  function renderCakeButtons(){
+    cakeGrid.innerHTML = TYPES.map(t => {
+      const meta = (t.days != null) ? `${t.days} dage` : `skriv selv`;
+      return `
+        <div class="chip cakeBtn ${t.id===selectedTypeId ? "on":""}" data-type="${t.id}">
+          <div class="nm">${escapeHtml(t.name)}</div>
+          <div class="mt">${escapeHtml(meta)}</div>
+        </div>`;
+    }).join("");
+
+    cakeGrid.querySelectorAll(".cakeBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedTypeId = btn.getAttribute("data-type");
+        prefs.lastTypeId = selectedTypeId;
+        savePrefs();
+        renderCakeButtons();
+        customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
+        updatePreview();
+      });
+    });
+  }
+
+  function updatePreview(){
+    const nowIso = new Date().toISOString();
+    const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
+    let days = t.days;
+    let name = t.name;
+    if (t.id === "custom"){
+      name = (customName.value || "").trim();
+      days = Number(customDays.value);
+      if (!name || !Number.isFinite(days) || days < 0){ preview.textContent = ""; return; }
+    }
+    if (mode === "frozen"){
+      const tk = readTaken().toISOString();
+      const ft = frozenTimes(tk, readThaw(), days);
+      preview.textContent = `Klar til servering: ${fmtShort(ft.readyAt)} • Smides ud: ${fmtDateTime(ft.discardAt)}`;
+      return;
+    }
+    preview.textContent = `Smides ud: ${fmtDateTime(computeDiscardAt(nowIso, days))}`;
+  }
+
+  function addEntry(){
+    const t = TYPES.find(x => x.id === selectedTypeId) || TYPES[0];
+    const nowIso = new Date().toISOString();
+
+    let cakeName = t.name;
+    let days = t.days;
+
+    if (t.id === "custom"){
+      cakeName = (customName.value || "").trim();
+      days = Number(customDays.value);
+      if (!cakeName || !Number.isFinite(days) || days < 0){
+        showMsg("Udfyld 'Andet – kagenavn' og 'Holdbarhed (dage)'.");
+        return;
+      }
+    }
+
+    const qtyVal = parseInt(qty.value, 10);
+    if (!Number.isFinite(qtyVal) || qtyVal < 1){
+      showMsg("Udfyld 'Antal stk' (mindst 1).");
+      return;
+    }
+
+    let addedAt = nowIso;
+    let discardAt = computeDiscardAt(nowIso, days);
+    let frozenInfo = {};
+    if (mode === "frozen"){
+      addedAt = readTaken().toISOString();
+      const hrs = readThaw();
+      const ft = frozenTimes(addedAt, hrs, days);
+      discardAt = ft.discardAt;
+      frozenInfo = { frozen: true, thawHours: hrs, thawReadyAt: ft.readyAt };
+    }
+
+    const entry = normalizeEntry({
+      ...frozenInfo,
+      id: uuid(),
+      cakeName,
+      days,
+      addedAt,
+      discardAt,
+      by: (by.value || "").trim(),
+      qty: qtyVal,
+      note: (note.value || "").trim(),
+      status: "active"
+    });
+
+    entries.unshift(entry);
+    saveEntries();
+
+    prefs.lastBy = "";
+    prefs.lastQty = "";
+    savePrefs();
+
+    by.value = "";
+    qty.value = "";
+    note.value = "";
+    if (t.id === "custom"){ customName.value = ""; customDays.value = ""; }
+    if (mode === "frozen") takenOut.value = toLocalInput(new Date());
+    updatePreview();
+    render();
+    checkAlarm(true);
+    updateTabIndicators();
+    checkDueSoonNotifications();
+  }
+
+  function thawTag(e){
+    if (!e.frozen || !e.thawReadyAt) return "";
+    if (Date.now() < new Date(e.thawReadyAt).getTime()){
+      return `<span class="tag thaw">Optøer – klar ${escapeHtml(fmtShort(e.thawReadyAt))}</span>`;
+    }
+    return `<span class="tag ready">Optøet</span>`;
+  }
+
+  function progress(e){
+    const a = new Date(e.addedAt).getTime(), b = new Date(e.discardAt).getTime();
+    if (!(b > a)) return 100;
+    return Math.max(0, Math.min(100, ((Date.now() - a) / (b - a)) * 100));
+  }
+  function timeLeftTxt(iso){
+    const ms = new Date(iso).getTime() - Date.now();
+    if (ms <= 0) return "udløbet";
+    const mins = Math.round(ms/60000);
+    const h = Math.floor(mins/60), m = mins % 60;
+    if (h >= 24) return Math.floor(h/24) + " døgn " + (h % 24) + " t tilbage";
+    if (h >= 1) return h + " t " + m + " min tilbage";
+    return m + " min tilbage";
+  }
+  const STATUS_TEXT = { ok:"OK", dueToday:"Udløber i dag", expired:"Smid ud" };
+
+  function showMsg(msg){
+    let box = $("msgBox");
+    if (!box){
+      box = document.createElement("div"); box.id = "msgBox"; box.className = "status";
+      preview.parentNode.insertBefore(box, preview);
+    }
+    box.textContent = msg;
+    clearTimeout(showMsg.t);
+    showMsg.t = setTimeout(() => box.remove(), 3500);
+  }
+
+  function render(){
+    const list = entries
+      .filter(e => e.status !== "discarded")
+      .sort((a, b) => {
+        // Gruppér efter kagenavn, derefter efter udløbsdato
+        const cakeCompare = a.cakeName.localeCompare(b.cakeName, "da");
+        if (cakeCompare !== 0) return cakeCompare;
         return new Date(a.discardAt) - new Date(b.discardAt);
-      })
-      .map(e => {
-        const st = statusOf(e);
+      });
+
+    const nExp = list.filter(e => statusFor(e) === "expired").length;
+    const nDue = list.filter(e => statusFor(e) === "dueToday").length;
+    const total = list.reduce((n, e) => n + (Number(e.qty) || 1), 0);
+    $("sum").innerHTML =
+      (nExp ? `<span class="sTag exp">${nExp} skal smides ud</span>` : "") +
+      (nDue ? `<span class="sTag due">${nDue} udløber i dag</span>` : "") +
+      `<span class="sTag">${total} stk</span>`;
+
+    if (!list.length){
+      tbody.innerHTML = `<div class="empty">Ingen kager i køleskabet.</div>`;
+      return;
+    }
+
+    const groups = [];
+    list.forEach(e => {
+      let g = groups[groups.length - 1];
+      if (!g || g.name !== e.cakeName){ g = { name: e.cakeName, rows: [] }; groups.push(g); }
+      g.rows.push(e);
+    });
+
+    tbody.innerHTML = groups.map(g => {
+      const sum = g.rows.reduce((n, e) => n + (Number(e.qty) || 1), 0);
+      const rows = g.rows.map(e => {
+        const st = statusFor(e);
+        const tt = thawTag(e);
         return `
         <div class="bottle ${st}">
-          <div class="info">
-            <div class="line1">
-              ${esc(e.wineName)}
-              <span class="pill ${st}">${STATUS_TEXT[st]}</span>
-            </div>
-            <div class="line2">
-              Åbnet ${esc(fmt(e.openedAt))}${e.by ? " • " + esc(e.by) : ""}<br>
-              Drikkes op <strong>${esc(fmt(e.discardAt))}</strong> • ${esc(timeLeft(e.discardAt))}
-            </div>
+          <div class="bTop">
+            <div class="bName">${escapeHtml(String(e.qty || 1))} stk${e.by ? `<small>${escapeHtml(e.by)}</small>` : ""}</div>
+            <span class="tag ${st}">${STATUS_TEXT[st]}</span>
           </div>
+          ${tt ? `<div class="tags">${tt}</div>` : ""}
+          ${e.note ? `<div class="bMeta">${escapeHtml(e.note)}</div>` : ""}
+          <div class="bMeta">
+            ${e.frozen ? "Taget ud af fryser" : "Ind"} ${escapeHtml(fmtDateTime(e.addedAt))}<br>
+            Smides ud <b>${escapeHtml(fmtDateTime(e.discardAt))}</b> · ${escapeHtml(timeLeftTxt(e.discardAt))}
+          </div>
+          <div class="bar"><i style="width:${progress(e).toFixed(0)}%"></i></div>
           <div class="acts">
-            <button class="btnSmall" data-act="discard" data-id="${e.id}">Færdig / kasseret</button>
-            <button class="btnDanger" data-act="delete" data-id="${e.id}">Slet</button>
+            <button class="act" type="button" data-action="editqty" data-id="${e.id}">Ret antal</button>
+            <button class="act primary" type="button" data-action="discard" data-id="${e.id}">Smidt ud</button>
+            <button class="act danger" type="button" data-action="delete" data-id="${e.id}">Slet</button>
           </div>
         </div>`;
       }).join("");
+      return `<div class="group">${escapeHtml(g.name)}<span class="gc">${sum} stk</span></div><div class="list">${rows}</div>`;
+    }).join("");
 
-    const clsMap = { hvid:"white", rod:"red", rose:"rose", bubbles:"bubbles" };
-    return `
-      <div class="groupHead">
-        <div class="g ${clsMap[cat]}"><span class="catDot"></span>${esc(CATEGORIES[cat].name)}</div>
-        <div class="c">${groups[cat].length} åbne</div>
-      </div>${rows}`;
-  }).join("");
-
-  $("list").querySelectorAll("button[data-act]").forEach(b =>
-    b.addEventListener("click", () => {
-      if (b.dataset.act === "discard") openDiscard(b.dataset.id);
-      else deleteEntry(b.dataset.id);
-    }));
-}
-
-function deleteEntry(id){
-  const e = entries.find(x => x.id === id);
-  if (!e || !confirm(`Slet registrering af "${e.wineName}"?`)) return;
-  entries = entries.filter(x => x.id !== id);
-  saveEntries(); render();
-}
-
-/* ---------- Kassér (færdig / smidt ud) ---------- */
-function openDiscard(id){
-  const e = entries.find(x => x.id === id);
-  if (!e) return;
-  pendingDiscard = id;
-  $("discardSub").innerHTML =
-    `<strong>${esc(e.wineName)}</strong><br>Åbnet ${esc(fmt(e.openedAt))}`;
-  $("discardOverlay").classList.add("on");
-}
-
-function closeDiscard(){
-  pendingDiscard = null;
-  $("discardOverlay").classList.remove("on");
-}
-
-function saveDiscard(){
-  const e = entries.find(x => x.id === pendingDiscard);
-  if (!e) return;
-  e.status = "discarded";
-  e.discardedAt = new Date().toISOString();
-  saveEntries(); closeDiscard(); render();
-}
-
-/* ---------- Alarm ---------- */
-function alarmList(){
-  return entries.filter(e => e.status === "active" &&
-    ["expired","dueToday"].includes(statusOf(e)));
-}
-
-function checkAlarm(force){
-  if (!force && Date.now() < Number(prefs.snoozeUntil || 0)) return;
-  const list = alarmList();
-  if (!list.length) return;
-
-  const expired = list.filter(e => statusOf(e) === "expired").length;
-  $("alarmBanner").textContent = expired
-    ? `${expired} skal drikkes op NU`
-    : `${list.length} udløber i dag`;
-
-  $("alarmList").innerHTML = list.map(e => `
-    <div class="bottle ${statusOf(e)}" style="margin-top:8px">
-      <div class="info">
-        <div class="line1">${esc(e.wineName)}</div>
-        <div class="line2">Udløb ${esc(fmt(e.discardAt))}${e.by ? " • " + esc(e.by) : ""}</div>
-      </div>
-      <div class="acts">
-        <button class="btnSmall" data-alarm="${e.id}">Færdig / kasseret</button>
-      </div>
-    </div>`).join("");
-
-  $("alarmList").querySelectorAll("button[data-alarm]").forEach(b =>
-    b.addEventListener("click", () => {
-      $("alarmOverlay").classList.remove("on");
-      openDiscard(b.dataset.alarm);
-    }));
-
-  $("alarmOverlay").classList.add("on");
-}
-
-/* ---------- Indstillinger ---------- */
-function renderSettings(){
-  const order = ["rod","hvid","rose","bubbles"];
-  const list = [];
-  order.forEach(cat => {
-    Object.entries(shelf).filter(([_,w]) => w.cat === cat).forEach(([id,w]) => {
-      list.push({ id, w });
+    // EVENTS
+    tbody.querySelectorAll("button[data-action]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const action = btn.getAttribute("data-action");
+        if (action === "discard") openDiscardModal(id);
+        if (action === "delete") deleteEntry(id);
+        if (action === "editqty") openEditQtyModal(id);
+      });
     });
-  });
-
-  $("settings").innerHTML = list.map(({id,w}) => `
-    <div class="settingRow">
-      <div class="nm">${esc(w.name)}</div>
-      <div class="cat">${esc(CATEGORIES[w.cat].name)}</div>
-      <input type="number" min="1" step="1" value="${hoursFor(id)}" data-shelf="${id}"/>
-      <div class="unit">TIMER</div>
-    </div>`).join("");
-
-  $("settings").querySelectorAll("input[data-shelf]").forEach(inp =>
-    inp.addEventListener("change", () => {
-      const h = parseInt(inp.value, 10);
-      if (!Number.isFinite(h) || h < 1) { inp.value = hoursFor(inp.dataset.shelf); return; }
-      shelf[inp.dataset.shelf].hours = h;
-      saveShelf(); renderWines(); updatePreview();
-    }));
-}
-
-/* ---------- Init ---------- */
-$("by").value = prefs.lastBy || "";
-
-$("whenMode").addEventListener("change", () => {
-  const custom = $("whenMode").value === "custom";
-  $("customTimeWrap").style.display = custom ? "" : "none";
-  if (custom && !$("whenAt").value){
-    const d = new Date(Date.now() - new Date().getTimezoneOffset()*60000);
-    $("whenAt").value = d.toISOString().slice(0,16);
   }
+
+  function deleteEntry(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    if (!confirm(`Slet "${e.cakeName}"?`)) return;
+    entries = entries.filter(x => x.id !== id);
+    saveEntries();
+    render();
+  }
+
+  // === Edit Qty Modal ===
+  function buildKeypadInto(container, inputEl){
+    const buttons = [
+      { t:"1", v:1, cls:"primary" }, { t:"2", v:2, cls:"primary" }, { t:"3", v:3, cls:"primary" }, { t:"4", v:4, cls:"primary" }, { t:"5", v:5, cls:"primary" },
+      { t:"6", v:6 }, { t:"7", v:7 }, { t:"8", v:8 }, { t:"9", v:9 }, { t:"10", v:10 },
+      { t:"-1", v:"-1" }, { t:"+1", v:"+1" }, { t:"Ryd", v:"clear" }, { t:"", v:null, disabled:true }, { t:"", v:null, disabled:true }
+    ];
+
+    container.innerHTML = buttons.map(b => {
+      if (b.disabled) return `<button type="button" disabled style="opacity:.15; cursor:default;"></button>`;
+      const cls = b.cls ? `class="${b.cls}"` : "";
+      return `<button type="button" ${cls} data-k="${b.v}">${escapeHtml(b.t)}</button>`;
+    }).join("");
+
+    container.querySelectorAll("button[data-k]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const k = btn.getAttribute("data-k");
+        let n = parseInt(inputEl.value || "0", 10);
+        if (Number.isNaN(n)) n = 0;
+        if (k === "clear") n = 0;
+        else if (k === "+1") n = n + 1;
+        else if (k === "-1") n = Math.max(0, n - 1);
+        else n = parseInt(k, 10);
+        inputEl.value = n > 0 ? String(n) : "";
+        inputEl.focus();
+      });
+    });
+  }
+
+  function openEditQtyModal(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    pendingEditId = id;
+    editQtySub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • Nuværende: ${e.qty || 1} stk`;
+    editQtyInput.value = String(e.qty || 1);
+    buildKeypadInto(editKeypad, editQtyInput);
+    editQtyOverlay.style.display = "flex";
+    editQtyOverlay.setAttribute("aria-hidden", "false");
+    setTimeout(() => editQtyInput.focus(), 30);
+  }
+
+  function closeEditQtyModal(){
+    pendingEditId = null;
+    editQtyOverlay.style.display = "none";
+    editQtyOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function saveEditQty(){
+    const e = entries.find(x => x.id === pendingEditId);
+    if(!e) return;
+    const n = parseInt(editQtyInput.value, 10);
+    if (!Number.isFinite(n) || n < 0){
+      alert("Indtast et gyldigt antal (0 eller mere).");
+      return;
+    }
+    e.qty = n;
+    saveEntries();
+    closeEditQtyModal();
+    render();
+  }
+
+  closeEditQtyBtn.addEventListener("click", closeEditQtyModal);
+  editQtyCancelBtn.addEventListener("click", closeEditQtyModal);
+  editQtyOverlay.addEventListener("click", (e) => { if (e.target === editQtyOverlay) closeEditQtyModal(); });
+  editQtySaveBtn.addEventListener("click", saveEditQty);
+
+  // === Alarm ===
+  function alarmEntries(){
+    return entries.filter(e => e.status !== "discarded" && ["dueToday","expired"].includes(statusFor(e)));
+  }
+
+  function openAlarmModal(list){
+    const nOver = list.filter(e => statusFor(e) === "expired").length;
+    $("alarmBanner").textContent = nOver ? `${nOver} er over tid – smid ud nu` : `${list.length} udløber i dag`;
+    alarmList.innerHTML = list.map(e => `
+      <div class="item" style="border-left:4px solid ${statusFor(e)==='expired'?'var(--red)':'var(--amber)'}">
+        <div>
+          <strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk<br/>
+          <span class="small">Udløb: <strong>${escapeHtml(fmtDateTime(e.discardAt))}</strong></span><br/>
+          <span class="small" style="color:var(--muted)">
+            ${e.by ? e.by : ""}
+          </span>
+        </div>
+        <div>
+          <button class="btn mini" type="button" data-mid="discard" data-id="${e.id}">Smidt ud</button>
+        </div>
+      </div>
+    `).join("");
+
+    alarmList.querySelectorAll("button[data-mid='discard']").forEach(btn => {
+      btn.addEventListener("click", () => {
+        closeAlarmModal();
+        openDiscardModal(btn.getAttribute("data-id"));
+      });
+    });
+
+    alarmOverlay.style.display = "flex";
+    alarmOverlay.setAttribute("aria-hidden", "false");
+  }
+
+  function closeAlarmModal(){
+    alarmOverlay.style.display = "none";
+    alarmOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function checkAlarm(force){
+    const now = Date.now();
+    if (!force && now < Number(prefs.snoozeUntil || 0)) return;
+    const list = alarmEntries();
+    if (list.length > 0) openAlarmModal(list);
+  }
+
+  snoozeBtn.addEventListener("click", () => {
+    prefs.snoozeUntil = Date.now() + 30*60*1000;
+    savePrefs();
+    closeAlarmModal();
+  });
+  closeAlarmBtn.addEventListener("click", () => { prefs.snoozeUntil = Date.now() + 10*60*1000; savePrefs(); closeAlarmModal(); });
+  alarmOverlay.addEventListener("click", (e) => { if (e.target === alarmOverlay) closeAlarmModal(); });
+
+  // === Discard modal ===
+  function openDiscardModal(id){
+    const e = entries.find(x => x.id === id);
+    if(!e) return;
+    pendingDiscardId = id;
+    discardSub.innerHTML = `<strong>${escapeHtml(e.cakeName)}</strong> • ${e.qty || 1} stk • Udløb: ${escapeHtml(fmtDateTime(e.discardAt))}`;
+    wasteQty.value = "";
+    buildKeypadInto(keypad, wasteQty);
+    discardOverlay.style.display = "flex";
+    discardOverlay.setAttribute("aria-hidden", "false");
+    setTimeout(() => wasteQty.focus(), 30);
+  }
+
+  function closeDiscardModal(){
+    pendingDiscardId = null;
+    discardOverlay.style.display = "none";
+    discardOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function saveDiscard(){
+    const e = entries.find(x => x.id === pendingDiscardId);
+    if(!e) return;
+    const q = Number(wasteQty.value);
+    if (!Number.isInteger(q) || q < 1){
+      alert("Vælg antal (stk).");
+      return;
+    }
+    const have = Number(e.qty) || 1;
+    if (q >= have){
+      e.status = "discarded";
+      e.discardedAt = new Date().toISOString();
+      e.wasteQty = have;
+      e.wasteUnit = "stk";
+    } else {
+      // kun en del smides ud: resten bliver stående i køleskabet
+      e.qty = have - q;
+      entries.push({ ...e, id: uuid(), qty: q, status: "discarded",
+                     discardedAt: new Date().toISOString(), wasteQty: q, wasteUnit: "stk" });
+    }
+    saveEntries();
+    closeDiscardModal();
+    render();
+  }
+
+  closeDiscardBtn.addEventListener("click", closeDiscardModal);
+  discardCancelBtn.addEventListener("click", closeDiscardModal);
+  discardOverlay.addEventListener("click", (e) => { if (e.target === discardOverlay) closeDiscardModal(); });
+  discardSaveBtn.addEventListener("click", saveDiscard);
+
+  // === Init ===
+  by.value = prefs.lastBy || "";
+  qty.value = prefs.lastQty || "";
+
+  renderCakeButtons();
+  customRow.style.display = (selectedTypeId === "custom") ? "flex" : "none";
   updatePreview();
-});
-$("whenAt").addEventListener("input", updatePreview);
-$("addBtn").addEventListener("click", addEntry);
-$("by").addEventListener("input", () => { prefs.lastBy = $("by").value; savePrefs(); });
+  render();
 
-$("discardCancel").addEventListener("click", closeDiscard);
-$("discardSave").addEventListener("click", saveDiscard);
-$("discardOverlay").addEventListener("click", e => { if (e.target === $("discardOverlay")) closeDiscard(); });
+  addBtn.addEventListener("click", () => {
+    ensureNotifPermissionFromUserGesture();
+    addEntry();
+  });
+  customName.addEventListener("input", updatePreview);
+  customDays.addEventListener("input", updatePreview);
+  by.addEventListener("input", () => { prefs.lastBy = by.value; savePrefs(); });
+  qty.addEventListener("input", () => { prefs.lastQty = qty.value; savePrefs(); });
 
-$("closeAlarmBtn").addEventListener("click", () => $("alarmOverlay").classList.remove("on"));
-$("snoozeBtn").addEventListener("click", () => {
-  prefs.snoozeUntil = Date.now() + 30*60*1000; savePrefs();
-  $("alarmOverlay").classList.remove("on");
-});
+  $("appVersion").textContent = "Version " + APP_VERSION;
+  document.querySelectorAll("[data-step]").forEach(b => b.addEventListener("click", () => {
+    const inp = $(b.dataset.for);
+    let n = parseInt(inp.value || "0", 10); if (Number.isNaN(n)) n = 0;
+    n = Math.max(Number(inp.min || 0), n + Number(b.dataset.step));
+    inp.value = String(n);
+    inp.dispatchEvent(new Event("input", { bubbles:true }));
+  }));
+  $("dateLine").textContent = new Date().toLocaleDateString("da-DK", { weekday:"long", day:"numeric", month:"long" });
+  modeRow.querySelectorAll(".modeBtn").forEach(b => b.addEventListener("click", () => setMode(b.getAttribute("data-mode"))));
+  takenOut.addEventListener("input", updatePreview);
+  thawHours.addEventListener("input", updatePreview);
+  setMode("fresh");
 
-$("clearBtn").addEventListener("click", () => {
-  if (!confirm("Slet ALLE åbne flasker på denne enhed? (Til rengøring / nulstilling)")) return;
-  entries = []; saveEntries(); render();
-});
-
-renderCats();
-renderWines();
-renderSettings();
-updatePreview();
-render();
-checkAlarm(false);
-
-setInterval(() => { render(); checkAlarm(false); }, 60000);
+  checkAlarm(false);
+  checkThawReady();
+  setInterval(() => {
+    render();
+    checkThawReady();
+    checkAlarm(false);
+    checkDueSoonNotifications();
+    updateTabIndicators();
+  }, 30 * 1000);
 })();
 </script>
 </body>
