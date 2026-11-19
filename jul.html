@@ -156,7 +156,7 @@
   /* sådan foregår det */
   .steps{display:grid;grid-template-columns:1fr;gap:16px;}
   @media(min-width:620px){.steps{grid-template-columns:repeat(2,1fr);}}
-  @media(min-width:1040px){.steps{grid-template-columns:repeat(5,1fr);}}
+  @media(min-width:1000px){.steps{grid-template-columns:repeat(4,1fr);}}
   .step{background:var(--charcoal);border:1px solid var(--line);border-radius:var(--radius);padding:26px 20px;transition:border-color .25s,transform .25s;}
   .step:hover{border-color:var(--khaki-dim);transform:translateY(-3px);}
   .step-n{font-family:var(--font-display);font-size:14px;color:var(--black);background:var(--gold);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
@@ -206,6 +206,9 @@
   .partner-logo.is-empty::after{content:"CoolUnite";font-family:var(--font-display);font-size:28px;color:var(--black);text-transform:uppercase;}
   .partner-link{display:inline-block;margin-top:22px;color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;}
   .partner-link:hover{text-decoration:underline;text-underline-offset:4px;}
+
+  .who-band{background:radial-gradient(ellipse 80% 120% at 100% 0%,rgba(163,38,42,.38),transparent 65%),linear-gradient(160deg,#1a1110,var(--black) 75%);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:84px;}
+  .who-band .prose{text-align:center;}
 
   /* cta */
   .cta{text-align:center;background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(60,120,86,.35),transparent 65%),linear-gradient(160deg,var(--pine),#0f1d16 80%);border-top:1px solid var(--line);}
@@ -291,11 +294,25 @@
   </div>
 </section>
 
+<section class="who-band" id="hvem">
+  <div class="wrap narrow">
+    <div class="section-head center" style="margin-bottom:26px;">
+      <div class="eyebrow">Julehjælpen</div>
+      <h2>Hvem er Kaisers Julehjælp til?</h2>
+    </div>
+    <div class="prose">
+      <p>Kaisers Julehjælp er målrettet familier, hvor økonomien er presset, og hvor en julegave til barnet vil gøre en mærkbar forskel i familiens økonomi og mulighed for at skabe en god jul.</p>
+      <p>Vi ved, at det kan være svært at række ud og bede om hjælp. Det kræver mod at fortælle om en situation, man måske helst ville være foruden. Derfor møder vi alle ansøgninger med respekt, omsorg og forståelse.</p>
+      <p>Hvis du og din familie står i en situation, hvor en hjælpende hånd vil gøre en forskel, er du meget velkommen til at ansøge. Det er netop derfor, Kaisers Julehjælp findes ❤️</p>
+    </div>
+  </div>
+</section>
+
 <section style="padding-top:20px;">
   <div class="wrap">
     <div class="section-head center" style="max-width:640px;">
       <div class="eyebrow">Sådan foregår det</div>
-      <h2>Fra café til juletræ</h2>
+      <h2>Fra café til jul</h2>
     </div>
     <div class="steps" id="steps"></div>
   </div>
@@ -332,7 +349,7 @@
         <div class="fgroup">4 · Din ansøgning</div>
         <div class="field"><label for="fBesked">Hvorfor søger du/I Kaisers julehjælp?</label><textarea id="fBesked" class="big" required placeholder="Fortæl os om jeres situation og hvorfor I har brug for ekstra støtte i julen. Jo mere vi ved, jo bedre kan vi hjælpe."></textarea></div>
         <div class="fgroup">5 · Ønskeliste</div>
-        <p class="wish-intro">For at vi har størst chance for at give dit barn den rigtige gave, skal du sætte <strong>3 ønsker</strong> på din ønskeliste.</p>
+        <p class="wish-intro">For at vi har størst chance for at give dit barn den rigtige gave, skal du sætte <strong>3 ønsker til maks. 250 kr.</strong> på din ønskeliste.</p>
         <p class="wish-intro">Indsæt et link til produktet direkte fra <a href="https://www.coolshop.dk" target="_blank" rel="noopener">www.coolshop.dk</a> i felterne herunder.</p>
         <div class="arrows" aria-hidden="true"><span>&#8595;</span><span>&#8595;</span><span>&#8595;</span></div>
         <div class="wish">
@@ -369,12 +386,12 @@
     <div class="eyebrow">Glædelig jul</div>
     <h2 id="ctaTitle"></h2>
     <p id="ctaText"></p>
-    <a href="index.html" class="btn btn-gold" id="ctaBtn"></a>
+    <a href="https://www.cafekaiser.dk" class="btn btn-gold" id="ctaBtn"></a>
   </div>
 </section>
 
 <footer>
-  <div class="wrap">Café Kaiser × CoolUnite &nbsp;·&nbsp; <a href="www.cafekaiser.dk">Til forsiden</a></div>
+  <div class="wrap">Café Kaiser × CoolUnite &nbsp;·&nbsp; <a href="https://www.cafekaiser.dk">Til forsiden</a></div>
 </footer>
 
 <script>
@@ -412,18 +429,18 @@ const CONFIG = {
     eyebrow: "Julen handler om fællesskab",
     title: "Fordi alle børn skal have en gave under træet",
     text: [
-      "For mange familier er julen en tid fyldt med hygge og forventning. Men for nogle børn er det ikke en selvfølge, at der ligger en gave under træet.",
-      "Derfor har vi i samarbejde med <strong>CoolUnite</strong> valgt at give <strong>100 julegaver</strong> til børn, der har brug for lidt ekstra glæde i julen. Hver gave har en værdi af <strong>250 kr.</strong>",
+      "For mange familier er julen en tid fyldt med hygge, traditioner og forventninger. Men for nogle familier kan økonomien gøre det svært at skabe den jul, man ønsker for sine børn.",
+      "Hos Café Kaiser ønsker vi at gøre en forskel for familier i vores lokalområder, der har brug for en hjælpende hånd i julen. Derfor er vi gået sammen med <strong>CoolUnite</strong> om at give julegaver til <strong>100 børn</strong> og være med til at skabe lidt mere plads til julens glæder i familier, hvor økonomien er stram.",
+      "For os handler Kaisers Julehjælp om at række hånden ud, til dem der har brug for det, og om at gøre en konkret forskel for familier, der ikke har de økonomiske muligheder for at skabe den jul, de ønsker for deres børn.",
       "<span class='pull' style='display:block'>En gave er ikke bare en ting. Det er et tegn på, at nogen har tænkt på dig.</span>"
     ]
   },
 
   steps: [
-    { title: "Søg om julehjælp",       text: "Udfyld formularen og skriv 3 gaveønsker på barnets ønskeliste." },
-    { title: "Familier udvælges",      text: "De familier, som skal støttes, bliver udvalgt." },
-    { title: "Familier kontaktes",     text: "Vi kontakter de udvalgte familier." },
-    { title: "Gaver udvælges & pakkes", text: "Gaverne udvælges og pakkes ind i julepapir." },
-    { title: "Leveret til døren",      text: "Vi kommer personligt og leverer gaven d. 22/12." }
+    { title: "Søg om julehjælp",        text: "Udfyld formularen og skriv 3 gaveønsker på barnets ønskeliste." },
+    { title: "Modtager af julehjælpen", text: "Vi rækker ud til de familier, der er udvalgt til Kaisers julehjælp." },
+    { title: "Gaver udvælges & pakkes", text: "Vi udvælger barnets julegave og pakker den med omhu ind i fint julepapir." },
+    { title: "Gaven til døren",         text: "Vi kommer personligt og afleverer gaven, og ønsker glædelig jul." }
   ],
 
   // Ansøgning — teksten til venstre for formularen (ret frit)
