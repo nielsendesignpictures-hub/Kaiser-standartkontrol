@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kaiser – Arbejdstilsynet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f2; --ink:#18201d; --muted:#737b76; --line:#e3e7e3;
+  --green:#176b57; --green2:#e5f1ed; --gold:#d6b24a;
+  --amber:#b36b16; --amberSoft:#f8efdf; --red:#b64b43; --redSoft:#f8e8e6;
+  --blue:#2f5f8f; --blueSoft:#e6eef6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:inherit}
+.hidden{display:none!important}
+.page{height:100vh;display:flex;flex-direction:column;padding:0.875rem 1.25rem 1rem;gap:0.75rem}
+.head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex:none}
+.kicker{font-size:0.75rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.h1{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-top:2px}
+.hBtns{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end}
+.pillBtn{min-height:2.875rem;padding:0 1.125rem;border-radius:62.4375rem;border:1px solid var(--line);background:#fff;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer}
+.pillBtn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.tabs{display:flex;gap:0.5rem;flex:none;overflow-x:auto;padding-bottom:2px}
+.tab{flex:none;min-height:3rem;padding:0 1.125rem;border-radius:0.875rem;border:1px solid var(--line);background:#fff;font-size:0.9375rem;font-weight:800;color:#59635e;cursor:pointer;display:flex;align-items:center;gap:0.5rem}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab .n{font-size:0.6875rem;font-weight:800;padding:0.1875rem 0.5rem;border-radius:62.4375rem;background:#eef1ee;color:#59635e}
+.tab.on .n{background:rgba(255,255,255,.18);color:#fff}
+.tab .n.bad{background:var(--redSoft);color:var(--red)}
+.tab .n.warn{background:var(--amberSoft);color:var(--amber)}
+.view{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:0.5rem}
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0.75rem;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:1.125rem;box-shadow:0 1px 0 rgba(24,32,29,.04);margin-bottom:0.75rem}
+.pHead{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0 1rem;min-height:3.25rem;border-bottom:1px solid var(--line)}
+.pTitle{display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.pDot{width:0.5rem;height:0.5rem;border-radius:50%;background:var(--green)}
+.pDot.red{background:var(--red)}.pDot.amber{background:var(--amber)}
+.pBody{padding:1rem}
+.lbl{font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 0.5rem}
+.field{margin-bottom:0.875rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+.input{width:100%;min-height:3rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;padding:0 0.875rem;font-size:1rem;font-weight:700;color:var(--ink);outline:none}
+textarea.input{padding:0.625rem 0.875rem;min-height:4rem;resize:vertical;font-weight:500;line-height:1.4}
+.input:focus{border-color:var(--green);background:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:0.5rem}
+.chip{min-height:2.75rem;padding:0 0.875rem;border-radius:0.75rem;border:1.5px solid var(--line);background:#f7f8f6;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn{width:100%;min-height:3.5rem;border:0;border-radius:0.875rem;background:var(--ink);color:#fff;font-size:1.0625rem;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.45}
+.btn.ghost{background:#f1f3f1;color:var(--ink);font-size:1rem}
+.btn:active,.chip:active,.act:active,.pillBtn:active,.tab:active{transform:scale(.97)}
+.act{min-height:2.75rem;border-radius:0.625rem;border:1.5px solid var(--line);background:#fff;font-size:0.875rem;font-weight:800;color:var(--ink);cursor:pointer;padding:0 0.875rem;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.act.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.act.danger{color:var(--red);border-color:#edcbc7}
+.tag{display:inline-block;font-size:0.6875rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:0.3125rem 0.625rem;border-radius:62.4375rem;background:var(--green2);color:var(--green)}
+.tag.warn{background:var(--amberSoft);color:var(--amber)}
+.tag.bad{background:var(--redSoft);color:var(--red)}
+.tag.gray{background:#eef1ee;color:#59635e}
+.tag.blue{background:var(--blueSoft);color:var(--blue)}
+.hero{text-align:center;padding:1.25rem 1rem}
+.hero .big{font-size:2.25rem;font-weight:800;letter-spacing:-.04em;margin:0.25rem 0 0.625rem}
+.steps{display:grid;gap:0.5rem;margin-top:1rem;text-align:left}
+.step{display:flex;gap:0.875rem;align-items:center;border:1px solid var(--line);border-radius:0.875rem;padding:0.75rem 0.875rem;background:#fff}
+.dot{width:2.25rem;height:2.25rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;flex:none}
+.dot.ok{background:var(--green2);color:var(--green)}.dot.warn{background:var(--amberSoft);color:var(--amber)}.dot.bad{background:var(--redSoft);color:var(--red)}.dot.gray{background:#eef1ee;color:#59635e}
+.step small{display:block;font-size:0.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.step span{font-weight:700;font-size:0.9375rem;line-height:1.35}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem}
+.fs{border:1px solid var(--line);border-radius:0.875rem;padding:0.75rem;background:#fff}
+.fs b{display:inline-flex;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--ink);color:#fff;align-items:center;justify-content:center;font-size:0.8125rem}
+.fs .ft{font-size:0.6875rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:0.5rem}
+.fs .fp{font-size:0.9375rem;font-weight:800;margin-top:0.25rem;line-height:1.3;word-break:break-word}
+.fs .fp a{display:block;font-size:0.75rem;font-weight:700;color:var(--blue);text-decoration:none;margin-top:2px;word-break:break-all}
+.note{font-size:0.8125rem;color:var(--muted);font-weight:600;margin-top:0.625rem;line-height:1.45}
+.msg{margin-top:0.625rem;padding:0.625rem 0.875rem;border-radius:0.75rem;font-size:0.875rem;font-weight:700}
+.msg.ok{background:var(--green2);color:var(--green)}.msg.bad{background:var(--redSoft);color:var(--red)}
+.prog{height:0.5rem;border-radius:62.4375rem;background:#eef1ee;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--green);border-radius:62.4375rem}
+.grp{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:1.125rem 0 0.5rem}
+.grp:first-child{margin-top:0}.grp .gc{margin-left:auto;letter-spacing:.04em;font-weight:700}
+.item{display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem;border:1px solid var(--line);border-left:4px solid var(--line);border-radius:0.875rem;background:#fff;margin-bottom:0.5rem}
+.item.done{border-left-color:var(--green);background:#fbfdfc}
+.cb{flex:none;width:2.75rem;height:2.75rem;border-radius:0.75rem;border:2px solid #c9d0cb;background:#fff;font-size:1.25rem;font-weight:900;color:#fff;cursor:pointer}
+.item.done .cb{background:var(--green);border-color:var(--green)}
+.item .tx{flex:1;min-width:0}
+.item .tt{font-size:0.9375rem;font-weight:800;line-height:1.35}
+.item .sb{font-size:0.8125rem;color:var(--muted);font-weight:600;margin-top:0.25rem;line-height:1.4}
+.item .nt{margin-top:0.5rem;min-height:2.5rem;font-size:0.875rem;font-weight:600}
+.sCard{padding:0.875rem;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:0.875rem;background:#fff;margin-bottom:0.5rem}
+.sCard.bad{border-left-color:var(--red);background:#fdf5f4}.sCard.warn{border-left-color:var(--amber);background:#fffcf6}
+.sTop{display:flex;gap:0.5rem;align-items:flex-start}
+.sName{flex:1;min-width:0;font-size:1.0625rem;font-weight:800;line-height:1.3}
+.sName small{display:block;font-size:0.8125rem;font-weight:700;color:var(--muted);margin-top:2px}
+.sActs{display:flex;gap:0.5rem;margin-top:0.625rem;flex-wrap:wrap}
+.tags{display:flex;gap:0.375rem;flex-wrap:wrap;margin-top:0.5rem}
+.empty{padding:2rem 1rem;text-align:center;color:var(--muted);font-weight:700;border:1px dashed var(--line);border-radius:1rem}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:0.75rem}
+.info li{margin:0 0 0.5rem;font-size:0.9375rem;font-weight:600;line-height:1.45}
+.info ul{margin:0;padding-left:1.125rem}
+.overlay{position:fixed;inset:0;background:rgba(24,32,29,.5);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
+.overlay.on{display:flex}
+.modal{width:min(40rem,100%);max-height:92vh;display:flex;flex-direction:column;border-radius:1.25rem;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.3)}
+.mHead{padding:1.125rem 1.25rem 0.5rem;flex:none}
+.mTitle{font-size:1.25rem;font-weight:800;letter-spacing:-.02em}
+.mSub{margin-top:0.375rem;font-size:0.9375rem;color:var(--muted);font-weight:600;line-height:1.4}
+.mBody{padding:0.5rem 1.25rem;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.mFoot{display:flex;gap:0.625rem;padding:0.875rem 1.25rem 1.25rem;flex:none}
+.mFoot>*{flex:1}
+.locOpts{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem}
+.locOpts .chip{min-height:3.5rem;font-size:1rem;text-align:center}
+#printArea{display:none}
+@media print{
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block;font-size:11pt;color:#000}
+  html,body{height:auto;background:#fff}
+  #printArea h1{font-size:18pt;margin:0 0 4pt}#printArea h2{font-size:12pt;margin:14pt 0 4pt;border-bottom:1px solid #999}
+  #printArea table{width:100%;border-collapse:collapse;font-size:10pt}
+  #printArea td,#printArea th{border:1px solid #bbb;padding:3pt 5pt;text-align:left;vertical-align:top}
+}
+@media(max-width:900px){
+  .page{height:auto;min-height:100vh}.view{overflow:visible}
+  .cols{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.row2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="head">
+    <div>
+      <div class="kicker">Café Kaiser · Arbejdsmiljø</div>
+      <div class="h1">Arbejdstilsynet</div>
+    </div>
+    <div class="hBtns">
+      <button class="pillBtn" data-a="loc" id="locPill">Vælg café</button>
+      <button class="pillBtn" data-a="print">Tilsynsmappe (print)</button>
+      <button class="pillBtn" data-a="backup">Sikkerhedskopi</button>
+    </div>
+  </header>
+  <nav class="tabs" id="tabs"></nav>
+  <main class="view" id="view"></main>
+</div>
+<div class="overlay" id="ov"><div class="modal" id="mod"></div></div>
+<div id="printArea"></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ===== OPSÆTNING ===== */
+const LOC_KEY = "kaiser_kitchenpct_loc";           // samme nøgle som hubben
+const KEY_AMR = "kaiser.amr.v5";                   // uændret: eksisterende AMR-data bevares
+const KEY_CHK = "kaiser.at.check.v1";
+const KEY_SDS = "kaiser.at.sds.v1";
+const KEY_FLD = "kaiser.at.folders.v1";
+const FOLDERS_DEFAULT = [
+  {name:"Datablade mappe 1",url:"https://www.dropbox.com/scl/fo/nciadrhq45hdi3py0sqgy/AM8wXywwtJtMjYmRWrpUPV4?rlkey=856y5k8ldp6vtpm0elttwlckg&st=ik7cm1vb&dl=0"},
+  {name:"Datablade mappe 2",url:"https://www.dropbox.com/scl/fo/yxu78n8t6eg73r1jjqfuv/ADWWwqnKdtj66SEg38-an20?rlkey=7gihil1j20c7wwlwp7zxuvvj3&st=lwq5pspz&dl=0"}
+];
+const LOCS = ["Helsingør","Hillerød","Farum","Hørsholm","Vanløse","Enghave Brygge","Waves"];
+const ALIAS = {"Sydhavnen":"Enghave Brygge","Café Kaiser Sydhavnen":"Enghave Brygge"};
+const COURSE = ["Tilmeldt","Skal tilmeldes","Gennemført","Ikke tilmeldt","Se mappe"];
+const APVB = "APV findes i baren";
+
+const DEFAULTS = [
+  {loc:"Helsingør",name:"Frederik",elected:"Valgt af personalet i Facebook-personalegruppen",electedDate:"2026-09-04",proof:"Facebook-personalegruppen, fredag 4/9-2026",invites:"",course:"Gennemført",courseDate:"",courseNote:"Har fået kursus",discussion:"",apvDate:"",apvSigned:false,apvLink:APVB,note:""},
+  {loc:"Hillerød",name:"Josefine",elected:"Anonym afstemning i Facebook-personalegruppen",electedDate:"2026-10-26",proof:"Anonym afstemning i Facebook-personalegruppen 26/10-2026",invites:"2026-10-25 – Valg udskrevet på personalemøde (Josefine stillede op)",course:"Tilmeldt",courseDate:"",courseNote:"Tilmeldt AMR-kursus",discussion:"",apvDate:"",apvSigned:false,apvLink:APVB,note:""},
+  {loc:"Farum",name:"Mikkel",elected:"Valgt af medarbejderne",electedDate:"2026-11-18",proof:"Valgt af medarbejderne 18/11-2026",invites:"",course:"Skal tilmeldes",courseDate:"",courseNote:"",discussion:"",apvDate:"",apvSigned:false,apvLink:APVB,note:"Afløser Pietro (valgt 5/9-2024)"},
+  {loc:"Hørsholm",name:"Gaurav Khatiwada",elected:"Valgt af personalet i Facebook-personalegruppen (Yusuf Celik og Gaurav stillede op)",electedDate:"2026-09-17",proof:"Facebook-personalegruppen 17/9-2026",invites:"2026-10-01 – Valg udskrevet",course:"Gennemført",courseDate:"2026-10-20",courseNote:"Bestået kursus",discussion:"",apvDate:"",apvSigned:false,apvLink:APVB,note:""},
+  {loc:"Vanløse",name:"Alberte",elected:"Valgt af personalet i Facebook-personalegruppen (Vira og Alberte stillede op 10/8-2026)",electedDate:"2026-10-31",proof:"Facebook-personalegruppen 31/10-2026",invites:"2026-08-10 – Vira og Alberte stillede op til valg",course:"Tilmeldt",courseDate:"",courseNote:"Tilmeldt AMR-kursus",discussion:"",apvDate:"",apvSigned:false,apvLink:"",note:""},
+  {loc:"Enghave Brygge",name:"Laura",elected:"Valgt af personalet i Facebook-gruppen (Laura og Bianca stillede op)",electedDate:"2026-10-24",proof:"Facebook-gruppen 24/10-2026",invites:"2026-10-01 – Valg udskrevet",course:"Gennemført",courseDate:"2026-11-16",courseNote:"Bestået kursus",discussion:"",apvDate:"",apvSigned:false,apvLink:"",note:""},
+  {loc:"Waves",name:"",elected:"",electedDate:"",proof:"",invites:"",course:"Ikke tilmeldt",courseDate:"",courseNote:"",discussion:"",apvDate:"",apvSigned:false,apvLink:"",note:""}
+];
+
+/* Tjekliste. v = skal verificeres i originalkilde (se fanen Tilsynsdag). */
+const CHECK = [
+ {g:"Dokumenter", items:[
+  {id:"apv",   t:"APV er skriftlig med handlingsplan og er højst 3 år gammel", s:"Gentages ved ændringer. AMO påtegner handlingsplanen."},
+  {id:"apvPsy",t:"APV dækker psykisk arbejdsmiljø (tidspres, krænkelser, vold fra gæster)"},
+  {id:"apvUng",t:"Unges risici er beskrevet særskilt i APV (hvis der er under 18 år)"},
+  {id:"aarlig",t:"Årlig arbejdsmiljødrøftelse er dokumenteret skriftligt", s:"Skal kunne fremvises for Arbejdstilsynet."},
+  {id:"instr", t:"Instruktion af nyansatte er dokumenteret (hvem, hvornår, hvad)"}]},
+ {g:"AMO og AMR", items:[
+  {id:"amr",   t:"AMR er valgt, og valget kan dokumenteres", s:"Valg gælder 2 år. Se fanen Min café."},
+  {id:"kurs",  t:"AMR har 3-dages grunduddannelse (senest 3 måneder efter tiltrædelse)"},
+  {id:"amo",   t:"Afklaret om caféen kræver egen AMO (10 ansatte eller flere) eller kan have fælles", s:"Hver café har eget CVR. Spørg Arbejdstilsynet, før I dokumenterer en fælles AMO.", v:true}]},
+ {g:"Kemi og datablade", items:[
+  {id:"sds",   t:"Alle kemikalier har sikkerhedsdatablad i fanen Datablade"},
+  {id:"kemi",  t:"Kemisk risikovurdering og fortegnelse over farlige stoffer findes", s:"Kravet om arbejdspladsbrugsanvisning er muligvis afløst. Tjek.", v:true},
+  {id:"maerk", t:"Alle beholdere er mærket, intet er hældt om uden mærkning"},
+  {id:"vaern", t:"Handsker og øjenværn er tilgængelige ved rengøring og afkalkning"}]},
+ {g:"Ulykker og førstehjælp", items:[
+  {id:"easy",  t:"Ledere ved, hvordan arbejdsulykker anmeldes i EASY", s:"Frist: 14 dage efter første fraværsdag.", v:true},
+  {id:"regis", t:"Ulykker og nærved-hændelser registreres"},
+  {id:"fh",    t:"Førstehjælp, brandslukkere og flugtveje er tjekket"}]},
+ {g:"Køkken, bar og indretning", items:[
+  {id:"gulv",  t:"Gulve er rene og skridsikre, våde zoner har måtter og skridsikre sko"},
+  {id:"kold",  t:"Kølerum og fryser: alarm eller nødåbner, døren kan åbnes indefra"},
+  {id:"mask",  t:"Maskiner (skærer, hakker, røremaskine, opvask) har intakte værn og brugsanvisning"},
+  {id:"loeft", t:"Tunge løft: vogne og hjælpemidler findes, medarbejderne kender grænserne"},
+  {id:"velf",  t:"Toilet, omklædning, spiserum og drikkevand er i orden"}]},
+ {g:"Psykisk arbejdsmiljø", items:[
+  {id:"vold",  t:"Der er retningslinjer for gæsters vold og trusler, og personalet kender dem"},
+  {id:"alene", t:"Alenearbejde og lukkearbejde er vurderet"},
+  {id:"kraenk",t:"Der er en procedure for krænkelser og seksuel chikane, og alle ved hvem de går til"}]},
+ {g:"Arbejdstid og unge", items:[
+  {id:"tid",   t:"Daglig arbejdstid registreres og gemmes (5 år)", v:true},
+  {id:"hvile", t:"11 timers hvile og ugentligt fridøgn er overholdt i vagtplanen"},
+  {id:"unge",  t:"Under 18: arbejdstid, pause (30 min ved over 4,5 timer), 12 timers hvile og natarbejde er tjekket", s:"Grænsen for natarbejde i restauration er uafklaret.", v:true}]}
+];
+const ALL_ITEMS = CHECK.reduce((a,g)=>a.concat(g.items),[]);
+
+const HAZ = ["Ætsende","Brandfarlig","Sundhedsskadelig","Giftig","Miljøfarlig","Ingen faresymbol"];
+const AREAS = ["Køkken","Bar","Rengøring","Opvask","Andet"];
+
+/* ===== HJÆLPERE ===== */
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch {} }
+};
+const $ = id => document.getElementById(id);
+const parse = r => { try { return r ? JSON.parse(r) : null; } catch { return null; } };
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => ("0"+n).slice(-2);
+const isoToday = () => { const d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); };
+const pd = iso => { if(!iso) return null; const p=String(iso).split("-"); return new Date(+p[0],+p[1]-1,+(p[2]||1)); };
+const addM = (iso,n) => { const d=pd(iso); if(!d) return null; d.setMonth(d.getMonth()+n); return d; };
+const fmt = d => { if(typeof d==="string") d=pd(d); return d ? pad(d.getDate())+"."+pad(d.getMonth()+1)+"."+d.getFullYear() : ""; };
+const daysTo = d => { const t=new Date(); const t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()); return Math.round((d-t0)/86400000); };
+const lines = t => String(t||"").split("\n").map(v=>v.trim()).filter(Boolean);
+const norm = l => ALIAS[l] || l;
+const uid = () => "s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+/* ===== DATA ===== */
+let amr = (()=>{ let r=parse(store.get(KEY_AMR)); if(!Array.isArray(r)) r=[]; DEFAULTS.forEach(d=>{ if(!r.some(x=>x.loc===d.loc)) r.push(clone(d)); }); return r; })();
+let chk = parse(store.get(KEY_CHK)) || {};
+let sds = parse(store.get(KEY_SDS)) || [];
+let folders = parse(store.get(KEY_FLD)); if(!Array.isArray(folders)) folders = clone(FOLDERS_DEFAULT);
+const saveFld = () => store.set(KEY_FLD, JSON.stringify(folders));
+const saveAmr = () => store.set(KEY_AMR, JSON.stringify(amr));
+const saveChk = () => store.set(KEY_CHK, JSON.stringify(chk));
+const saveSds = () => store.set(KEY_SDS, JSON.stringify(sds));
+
+/* Datablad-filer ligger i IndexedDB (kun på denne enhed) */
+const FDB = {
+  db: null,
+  open(){ return new Promise((res,rej)=>{
+    if(this.db) return res(this.db);
+    let rq; try { rq = indexedDB.open("kaiser_at_files",1); } catch(e){ return rej(e); }
+    rq.onupgradeneeded = () => rq.result.createObjectStore("files");
+    rq.onsuccess = () => { this.db = rq.result; res(this.db); };
+    rq.onerror = () => rej(rq.error);
+  }); },
+  async put(id,blob){ const db=await this.open(); return new Promise((res,rej)=>{ const tx=db.transaction("files","readwrite"); tx.objectStore("files").put(blob,id); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); }); },
+  async get(id){ const db=await this.open(); return new Promise((res,rej)=>{ const rq=db.transaction("files").objectStore("files").get(id); rq.onsuccess=()=>res(rq.result||null); rq.onerror=()=>rej(rq.error); }); },
+  async del(id){ try{ const db=await this.open(); return new Promise(res=>{ const tx=db.transaction("files","readwrite"); tx.objectStore("files").delete(id); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }); }catch{} }
+};
+
+/* ===== TILSTAND ===== */
+let tab = "cafe";
+let loc = (() => {
+  const qs = new URLSearchParams(location.search).get("loc");
+  if(qs) store.set(LOC_KEY, qs);
+  return norm(store.get(LOC_KEY) || "");
+})();
+let sdsFilter = "alle", sdsQuery = "";
+const setLoc = l => { loc = l; store.set(LOC_KEY, l==="Enghave Brygge" ? "Sydhavnen" : l); };   // hubbens format
+const byLoc = l => amr.find(x=>x.loc===l);
+
+/* ===== STATUS: AMR ===== */
+const RANK = {ok:0,gray:1,warn:2,bad:3};
+const cls = c => c==="Gennemført"||c==="Tilmeldt" ? "ok" : c==="Skal tilmeldes" ? "warn" : c==="Ikke tilmeldt" ? "bad" : "gray";
+const mark = c => c==="ok" ? "✓" : c==="warn" ? "!" : c==="bad" ? "✕" : "i";
+const dueStatus = (d,w) => { const n=daysTo(d); return n<0?"bad":n<=w?"warn":"ok"; };
+const OVL = {ok:"I orden",warn:"Mangler / frist nær",bad:"Handling kræves",gray:"–"};
+function statusOf(x){
+  const out=[], has=!!x.name;
+  if(!has) out.push({k:"Valg",t:"Ingen AMR udpeget",c:"bad"});
+  else if(x.electedDate) out.push({k:"Valg",t:"Valgt "+fmt(x.electedDate)+(x.proof?" · dokumentation: "+x.proof:" · dokumentation mangler"),c:x.proof?"ok":"warn"});
+  else out.push({k:"Valg",t:(x.elected||"Valgt")+" · valgdato mangler",c:"warn"});
+  if(x.electedDate){ const end=addM(x.electedDate,24), c=dueStatus(end,90);
+    out.push({k:"Valgperiode",t:(c==="bad"?"Udløbet ":"Til ")+fmt(end)+" (2 år)",c}); }
+  else out.push({k:"Valgperiode",t:"Kan ikke beregnes uden valgdato",c:has?"warn":"gray"});
+  let ct=x.course+(x.courseDate?" "+fmt(x.courseDate):"")+(x.courseNote&&x.courseNote!==x.course?" – "+x.courseNote:""), cc=cls(x.course);
+  if(x.course!=="Gennemført" && x.electedDate){
+    const dl=addM(x.electedDate,3), n=daysTo(dl); ct+=" · frist "+fmt(dl);
+    if(n<0){ cc="bad"; ct+=" (overskredet)"; } else if(n<=30){ cc="warn"; }
+  }
+  out.push({k:"AMR-kursus",t:ct,c:has?cc:"gray"});
+  const inv=lines(x.invites);
+  out.push({k:"Opfordring til valg",t:inv.length?inv.length+" registreret · seneste: "+inv[inv.length-1]:"Ingen datoer registreret",c:inv.length?"ok":(has?"warn":"gray")});
+  if(x.apvDate){ const nx=addM(x.apvDate,36); let c3=dueStatus(nx,90);
+    let t3="APV "+fmt(x.apvDate)+" · revideres senest "+fmt(nx);
+    if(!x.apvSigned){ t3+=" · mangler AMO-påtegning"; if(c3==="ok") c3="warn"; }
+    if(x.apvLink) t3+=" · "+x.apvLink;
+    out.push({k:"APV",t:t3,c:c3}); }
+  else if(x.apvLink) out.push({k:"APV",t:"Kan findes i baren (ny APV udarbejdes)",c:"ok"});
+  else out.push({k:"APV",t:"Ingen APV registreret",c:"bad"});
+  return out;
+}
+const overall = list => list.reduce((w,i)=>RANK[i.c]>RANK[w]?i.c:w,"ok");
+
+/* ===== STATUS: TJEKLISTE OG DATABLADE ===== */
+const chkOf = l => chk[l] || (chk[l] = {});
+function chkStats(l){
+  const c = chk[l] || {}; let done=0; ALL_ITEMS.forEach(i=>{ if(c[i.id] && c[i.id].done) done++; });
+  return {done, total:ALL_ITEMS.length, pct:Math.round(done/ALL_ITEMS.length*100)};
+}
+const sdsFor = l => sds.filter(s => !s.cafes || !s.cafes.length || s.cafes.indexOf(l)>-1);
+function sdsState(s){
+  if(!s.link && !s.hasFile) return {c:"bad", t:"Mangler datablad"};
+  if(s.sdsDate){ const d=pd(s.sdsDate); if(d && daysTo(addM(s.sdsDate,36))<0) return {c:"warn", t:"Over 3 år gammelt – tjek ny version"}; }
+  else return {c:"warn", t:"Dato mangler"};
+  return {c:"ok", t:"I orden"};
+}
+function sdsCounts(l){
+  const list = l ? sdsFor(l) : sds; let bad=0, warn=0;
+  list.forEach(s=>{ const st=sdsState(s); if(st.c==="bad") bad++; else if(st.c==="warn") warn++; });
+  return {n:list.length, bad, warn};
+}
+
+/* ===== TABS ===== */
+const TABS = [["cafe","Min café"],["check","Tilsynstjek"],["sds","Datablade"],["dag","Tilsynsdag"],["alle","Alle caféer"]];
+function renderTabs(){
+  const cs = loc ? chkStats(loc) : {pct:0}, sc = sdsCounts(loc);
+  $("tabs").innerHTML = TABS.map(([k,n])=>{
+    let badge="";
+    if(k==="check" && loc) badge='<span class="n">'+cs.pct+'%</span>';
+    if(k==="sds") badge='<span class="n'+(sc.bad?' bad':sc.warn?' warn':'')+'">'+sc.n+'</span>';
+    return '<button class="tab'+(tab===k?' on':'')+'" data-a="tab" data-v="'+k+'">'+n+badge+'</button>';
+  }).join("");
+  $("locPill").textContent = loc || "Vælg café";
+}
+
+/* ===== FANE: MIN CAFÉ ===== */
+function viewCafe(){
+  const x = byLoc(loc);
+  if(!x) return '<div class="empty">Vælg først din café øverst til højre.</div>';
+  const list=statusOf(x), ov=overall(list);
+  const steps = list.concat(x.note?[{k:"Info",t:x.note,c:"gray"}]:[]).map(i=>
+    '<div class="step"><div class="dot '+i.c+'">'+mark(i.c)+'</div><div><small>'+esc(i.k)+'</small><span>'+esc(i.t)+'</span></div></div>').join("");
+  return '<div class="cols"><div>'+
+    '<div class="panel"><div class="hero"><div class="kicker">AMR på '+esc(loc)+'</div><div class="big">'+esc(x.name||"Ikke udpeget endnu")+'</div>'+
+    '<span class="tag '+ov+'">'+OVL[ov]+'</span><div class="steps">'+steps+'</div>'+
+    '<div style="margin-top:0.875rem"><button class="act" data-a="editAmr">Ret oplysninger</button></div></div></div></div>'+
+    '<div>'+
+    '<div class="panel"><div class="pHead"><div class="pTitle"><span class="pDot"></span>Hvem går jeg til?</div></div><div class="pBody">'+
+    '<div class="flow">'+
+    '<div class="fs"><b>1</b><div class="ft">Medarbejder</div><div class="fp">Start med at tale med din AMR</div></div>'+
+    '<div class="fs"><b>2</b><div class="ft">AM-repræsentant</div><div class="fp">'+esc(x.name||"Ikke udpeget")+'</div></div>'+
+    '<div class="fs"><b>3</b><div class="ft">Arbejdsleder</div><div class="fp">Stefan<a href="mailto:Stefan@cafekaiser.dk">Stefan@cafekaiser.dk</a></div></div>'+
+    '<div class="fs"><b>4</b><div class="ft">Formand</div><div class="fp">Katrine<a href="mailto:Katrine@cafekaiser.dk">Katrine@cafekaiser.dk</a></div></div>'+
+    '</div><div class="note">Kan det ikke løses på ét trin, går du videre til næste.</div></div></div>'+
+    '</div></div>';
+}
+function editAmrModal(){
+  const x=byLoc(loc); if(!x) return;
+  const opts=COURSE.map(c=>'<option'+(c===x.course?' selected':'')+'>'+c+'</option>').join("");
+  const f=(id,l,v,t,ph)=>'<div class="field"><div class="lbl">'+l+'</div><input class="input" id="'+id+'" type="'+(t||"text")+'" value="'+esc(v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'></div>';
+  openModal('<div class="mHead"><div class="mTitle">Ret AMR – '+esc(loc)+'</div></div><div class="mBody">'+
+    f("eName","Navn AMR",x.name)+f("eEl","Valg (tekst)",x.elected,"text","fx Valgt af personalet i april 2026")+f("eDate","Valgdato",x.electedDate,"date")+
+    f("eProof","Dokumentation for valg (hvor ligger det)",x.proof)+
+    '<div class="field"><div class="lbl">Opfordring til valg – datoer (én pr. linje)</div><textarea class="input" id="eInv">'+esc(x.invites)+'</textarea></div>'+
+    '<div class="row2"><div class="field"><div class="lbl">AMR-kursus</div><select class="input" id="eCo">'+opts+'</select></div>'+f("eCDate","Kursusdato",x.courseDate,"date")+'</div>'+
+    f("eCn","Kursus-note",x.courseNote)+
+    '<div class="row2">'+f("eApv","Seneste APV (dato)",x.apvDate,"date")+
+    '<div class="field"><div class="lbl">APV påtegnet af AMO</div><select class="input" id="eApvS"><option value="0"'+(x.apvSigned?'':' selected')+'>Nej</option><option value="1"'+(x.apvSigned?' selected':'')+'>Ja</option></select></div></div>'+
+    f("eApvL","APV – hvor ligger den",x.apvLink)+
+    '<div class="field"><div class="lbl">Øvrig info</div><textarea class="input" id="eNo">'+esc(x.note)+'</textarea></div></div>'+
+    '<div class="mFoot"><button class="btn ghost" data-a="close">Annuller</button><button class="btn" data-a="saveAmr">Gem</button></div>');
+}
+function saveAmrForm(){
+  const x=byLoc(loc); if(!x) return;
+  x.name=$("eName").value.trim(); x.elected=$("eEl").value.trim(); x.electedDate=$("eDate").value; x.proof=$("eProof").value.trim();
+  x.invites=$("eInv").value.trim(); x.course=$("eCo").value; x.courseDate=$("eCDate").value; x.courseNote=$("eCn").value.trim();
+  x.apvDate=$("eApv").value; x.apvSigned=$("eApvS").value==="1"; x.apvLink=$("eApvL").value.trim(); x.note=$("eNo").value.trim();
+  saveAmr(); closeModal(); render();
+}
+/* ===== FANE: TILSYNSTJEK ===== */
+function viewCheck(){
+  if(!loc) return '<div class="empty">Vælg først din café øverst til højre.</div>';
+  const c=chkOf(loc), st=chkStats(loc), sc=sdsCounts(loc);
+  let h='<div class="panel"><div class="pBody"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem"><div class="lbl" style="margin:0">Klar til tilsyn · '+esc(loc)+'</div><div style="font-weight:800">'+st.done+' af '+st.total+' ('+st.pct+'%)</div></div>'+
+    '<div class="prog" style="margin-top:0.625rem"><i style="width:'+st.pct+'%"></i></div>'+
+    '<div class="note">Afkryds kun det, der kan vises frem i dag. Punkter markeret “Verificér” skal tjekkes i originalkilden. Se fanen Tilsynsdag.</div></div></div>';
+  CHECK.forEach(g=>{
+    const dn=g.items.filter(i=>c[i.id]&&c[i.id].done).length;
+    h+='<div class="grp">'+esc(g.g)+'<span class="gc">'+dn+'/'+g.items.length+'</span></div>';
+    g.items.forEach(i=>{
+      const e=c[i.id]||{}, done=!!e.done;
+      let sub=i.s||"";
+      if(i.id==="sds") sub=(sc.n?sc.n+" datablade registreret"+(sc.bad?" · "+sc.bad+" mangler fil eller link":""):"Ingen datablade registreret endnu");
+      if(i.id==="amr"){ const x=byLoc(loc); if(x) sub="Status: "+OVL[overall(statusOf(x))]; }
+      h+='<div class="item'+(done?' done':'')+'"><button class="cb" data-a="tog" data-v="'+i.id+'" aria-label="Afkryds">'+(done?'✓':'')+'</button>'+
+        '<div class="tx"><div class="tt">'+esc(i.t)+(i.v?' <span class="tag warn">Verificér</span>':'')+'</div>'+
+        (sub?'<div class="sb">'+esc(sub)+'</div>':'')+
+        (done&&e.date?'<div class="sb">Tjekket '+fmt(e.date)+'</div>':'')+
+        '<input class="input nt" data-n="'+i.id+'" placeholder="Note – hvor ligger det / hvad mangler" value="'+esc(e.note||"")+'"></div></div>';
+    });
+  });
+  return h;
+}
+
+/* ===== FANE: DATABLADE ===== */
+function viewSds(){
+  const sc = sdsCounts(loc);
+  let list = sds.slice();
+  if(sdsFilter==="min" && loc) list = sdsFor(loc);
+  else if(sdsFilter!=="alle" && sdsFilter!=="min") list = list.filter(s=>(s.area||"")===sdsFilter);
+  const q=sdsQuery.trim().toLowerCase();
+  if(q) list=list.filter(s=>(s.name+" "+(s.supplier||"")+" "+(s.note||"")).toLowerCase().indexOf(q)>-1);
+  list.sort((a,b)=>{ const r={bad:0,warn:1,ok:2}; return r[sdsState(a).c]-r[sdsState(b).c] || a.name.localeCompare(b.name,"da"); });
+  const chip=(k,l)=>'<button class="chip'+(sdsFilter===k?' on':'')+'" data-a="sdsF" data-v="'+esc(k)+'">'+esc(l)+'</button>';
+  let h='<div class="panel"><div class="pHead"><div class="pTitle"><span class="pDot"></span>Mapper med alle datablade</div><button class="act" data-a="editFld">Ret mapper</button></div><div class="pBody"><div class="sActs" style="margin-top:0">'+
+    folders.filter(f=>f.url).map((f,i)=>'<button class="act primary" style="min-height:3.25rem;font-size:1rem" data-a="openFld" data-v="'+i+'">Åbn '+esc(f.name||("mappe "+(i+1)))+'</button>').join("")+'</div></div></div>'+
+    '<div class="panel"><div class="pBody"><div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">'+
+    '<input class="input" id="sdsQ" style="flex:1;min-width:12rem" placeholder="Søg produkt eller leverandør" value="'+esc(sdsQuery)+'">'+
+    '<button class="act primary" style="min-height:3rem" data-a="addSds">Tilføj datablad</button></div>'+
+    '<div class="chips" style="margin-top:0.75rem">'+chip("alle","Alle ("+sds.length+")")+(loc?chip("min","Til "+loc+" ("+sdsFor(loc).length+")"):"")+AREAS.map(a=>chip(a,a)).join("")+'</div>'+
+    '<div class="note">Gem et link (fx Drive eller leverandørens side), eller læg en PDF på denne enhed. PDF-filer deles ikke mellem enheder. Link deles ikke automatisk, men kan skrives ind på hver enhed eller hentes via sikkerhedskopien.</div></div></div>';
+  if(!list.length) return h+'<div class="empty">'+(sds.length?'Ingen datablade matcher.':'Ingen datablade endnu. Tryk “Tilføj datablad” og start med opvaskemiddel, afkalker og grillrens.')+'</div>';
+  h+=list.map(s=>{
+    const st=sdsState(s), cafes=(s.cafes&&s.cafes.length)?s.cafes.join(", "):"Alle caféer";
+    return '<div class="sCard '+(st.c==="ok"?"":st.c)+'"><div class="sTop"><div class="sName">'+esc(s.name)+'<small>'+esc([s.supplier,s.area].filter(Boolean).join(" · "))+'</small></div>'+
+      '<span class="tag '+(st.c==="ok"?"":st.c)+'">'+esc(st.t)+'</span></div>'+
+      '<div class="tags">'+(s.hazard||[]).map(z=>'<span class="tag gray">'+esc(z)+'</span>').join("")+'<span class="tag blue">'+esc(cafes)+'</span>'+(s.sdsDate?'<span class="tag gray">Datablad '+esc(fmt(s.sdsDate))+'</span>':'')+'</div>'+
+      (s.note?'<div class="note">'+esc(s.note)+'</div>':'')+
+      '<div class="sActs">'+(s.link||s.hasFile?'<button class="act primary" data-a="openSds" data-v="'+s.id+'">Åbn datablad</button>':'')+
+      '<button class="act" data-a="editSds" data-v="'+s.id+'">Ret</button><button class="act danger" data-a="delSds" data-v="'+s.id+'">Slet</button></div></div>';
+  }).join("");
+  return h;
+}
+function openUrl(u){ const a=document.createElement("a"); a.href=/^https?:/i.test(u)?u:"https://"+u; a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+function fldModal(){
+  openModal('<div class="mHead"><div class="mTitle">Mapper med datablade</div><div class="mSub">Delingslinks til fx Dropbox. Linket skal kunne åbnes uden login.</div></div><div class="mBody">'+
+    [0,1,2].map(i=>{ const f=folders[i]||{name:"",url:""}; return '<div class="field"><div class="lbl">Mappe '+(i+1)+'</div><input class="input" id="fN'+i+'" value="'+esc(f.name)+'" placeholder="Navn, fx Køkken og bar" style="margin-bottom:0.5rem"><input class="input" id="fU'+i+'" value="'+esc(f.url)+'" placeholder="https://…" inputmode="url"></div>'; }).join("")+
+    '</div><div class="mFoot"><button class="btn ghost" data-a="close">Annuller</button><button class="btn" data-a="saveFld">Gem</button></div>');
+}
+function sdsModal(id){
+  const s = id ? sds.find(x=>x.id===id) : {id:"",name:"",supplier:"",area:"Rengøring",cafes:[],link:"",sdsDate:"",hazard:[],note:"",hasFile:false};
+  if(!s) return;
+  const sel=(arr,v)=>arr.indexOf(v)>-1;
+  const cafeChips=LOCS.map(l=>'<button type="button" class="chip'+(sel(s.cafes||[],l)?' on':'')+'" data-a="mChip" data-g="cafes" data-v="'+esc(l)+'">'+esc(l)+'</button>').join("");
+  const hazChips=HAZ.map(z=>'<button type="button" class="chip'+(sel(s.hazard||[],z)?' on':'')+'" data-a="mChip" data-g="hazard" data-v="'+esc(z)+'">'+esc(z)+'</button>').join("");
+  const areaOpts=AREAS.map(a=>'<option'+(a===s.area?' selected':'')+'>'+a+'</option>').join("");
+  openModal('<div class="mHead"><div class="mTitle">'+(id?'Ret datablad':'Nyt datablad')+'</div></div><div class="mBody" data-id="'+esc(s.id)+'">'+
+    '<div class="field"><div class="lbl">Produkt</div><input class="input" id="sName" value="'+esc(s.name)+'" placeholder="fx Opvaskemiddel, afkalker"></div>'+
+    '<div class="row2"><div class="field"><div class="lbl">Leverandør</div><input class="input" id="sSup" value="'+esc(s.supplier)+'"></div>'+
+    '<div class="field"><div class="lbl">Bruges i</div><select class="input" id="sArea">'+areaOpts+'</select></div></div>'+
+    '<div class="field"><div class="lbl">Caféer (ingen valgt = alle)</div><div class="chips" id="gCafes">'+cafeChips+'</div></div>'+
+    '<div class="field"><div class="lbl">Faresymboler</div><div class="chips" id="gHazard">'+hazChips+'</div></div>'+
+    '<div class="field"><div class="lbl">Link til datablad</div><input class="input" id="sLink" value="'+esc(s.link)+'" placeholder="https://…" inputmode="url"></div>'+
+    '<div class="field"><div class="lbl">Eller PDF på denne enhed'+(s.hasFile?' (der er allerede en fil gemt)':'')+'</div><input class="input" id="sFile" type="file" accept="application/pdf,image/*" style="padding-top:0.625rem">'+
+    (s.hasFile?'<label style="display:flex;gap:0.5rem;margin-top:0.5rem;font-weight:700;font-size:0.875rem"><input type="checkbox" id="sFileDel"> Fjern gemt fil</label>':'')+'</div>'+
+    '<div class="field"><div class="lbl">Datablad dateret</div><input class="input" id="sDate" type="date" value="'+esc(s.sdsDate)+'"></div>'+
+    '<div class="field"><div class="lbl">Note</div><textarea class="input" id="sNote">'+esc(s.note)+'</textarea></div></div>'+
+    '<div class="mFoot"><button class="btn ghost" data-a="close">Annuller</button><button class="btn" data-a="saveSds">Gem</button></div>');
+}
+async function saveSdsForm(){
+  const body=document.querySelector("#mod .mBody"); let id=body.getAttribute("data-id");
+  const name=$("sName").value.trim(); if(!name){ $("sName").focus(); return; }
+  const picked=g=>Array.prototype.map.call(document.querySelectorAll("#"+g+" .chip.on"),c=>c.getAttribute("data-v"));
+  let s = id ? sds.find(x=>x.id===id) : null;
+  if(!s){ s={id:uid(),hasFile:false}; sds.push(s); }
+  s.name=name; s.supplier=$("sSup").value.trim(); s.area=$("sArea").value; s.cafes=picked("gCafes"); s.hazard=picked("gHazard");
+  s.link=$("sLink").value.trim(); s.sdsDate=$("sDate").value; s.note=$("sNote").value.trim();
+  const del=$("sFileDel"), file=$("sFile").files[0];
+  try{
+    if(del && del.checked){ await FDB.del(s.id); s.hasFile=false; }
+    if(file){ await FDB.put(s.id,file); s.hasFile=true; }
+  }catch(e){ alert("Filen kunne ikke gemmes på denne enhed. Brug et link i stedet."); }
+  saveSds(); closeModal(); render();
+}
+async function openSds(id){
+  const s=sds.find(x=>x.id===id); if(!s) return;
+  if(s.hasFile){
+    try{ const blob=await FDB.get(id);
+      if(blob){ const u=URL.createObjectURL(blob), a=document.createElement("a"); a.href=u; a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),60000); return; }
+    }catch{}
+    if(!s.link){ alert("Filen findes ikke på denne enhed. Læg den ind igen eller brug et link."); return; }
+  }
+  if(s.link){ const a=document.createElement("a"); a.href=/^https?:/i.test(s.link)?s.link:"https://"+s.link; a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+}
+
+/* ===== FANE: TILSYNSDAG ===== */
+const DAG = [
+ {t:"Når inspektøren kommer", i:[
+  ["Tilsyn er som hovedregel uanmeldte. Restauration er ikke blandt de brancher, der får varsel."],
+  ["Et grundtilsyn varer typisk 2–6 timer. Inspektøren går rundt med en leder og AMR."],
+  ["Tilsynet gælder den enkelte café (eget CVR/P-nummer)."],
+  ["Ring til Stefan, så snart de er der. Bed om legitimation, og find APV, AMR-dokumentation og datablade frem."]]},
+ {t:"Hvad de typisk beder om", i:[
+  ["APV med handlingsplan, dokumentation for AMO/AMR, datablade og kemisk risikovurdering, instruktion af nyansatte, ulykkesregistrering og arbejdstidsregistrering."],
+  ["Listen stammer fra en brancheguide fra 2022, ikke fra Arbejdstilsynet selv.", true]]},
+ {t:"Efter besøget", i:[
+  ["Der kommer altid en besøgsrapport."],
+  ["Reaktioner trapper op: påtale, påbud med frist, strakspåbud, derefter bødeforelæg eller politianmeldelse."],
+  ["Klagefrist er 4 uger, og klagen sendes først til Arbejdstilsynet. Almindelige påbud har opsættende virkning ved klage, strakspåbud har ikke."]]},
+ {t:"Bøder (niveau)", i:[
+  ["Formelle overtrædelser, fx manglende APV: normalt 10.000 kr."],
+  ["Materielle overtrædelser: 36.900 kr. i grundbøde. Grove: 66.900 kr. Hver skærpende omstændighed lægger 10.000 kr. til."],
+  ["Tallene er hentet via resuméer og skal tjekkes mod Rigsadvokaten og Retsinformation.", true]]},
+ {t:"Offentliggørelse", i:[
+  ["Smileyordningen blev afskaffet 1. februar 2024."],
+  ["I stedet viser en oversigt på at.dk besøg og afgørelser de seneste 6 måneder med virksomhedens navn, også besøg uden afgørelse. Strakspåbud offentliggøres straks."]]},
+ {t:"Nye regler i 2026", i:[
+  ["BEK 608/2026 om systematisk arbejdsmiljøarbejde (APV, AMO, uddannelse): i kraft 1. juli 2026."],
+  ["BEK 605/2026 om psykisk arbejdsmiljø, herunder gæsters vold, trusler og chikane: i kraft 1. juli 2026."],
+  ["BEK 609/2026 om arbejdets udførelse: 1. juli 2026. BEK 581/2026 om kemiske agenser: 27. juni 2026."],
+  ["BEK 1713/2025 om unges arbejde: 1. januar 2026."],
+  ["Gamle bekendtgørelsesnumre i interne papirer er derfor forældede. Hvad der konkret er nyt, er ikke undersøgt.", true]]},
+ {t:"Uafklaret – tjek før I stoler på det", i:[
+  ["Tæller AMO-grænsen på 10 ansatte pr. CVR, og kan caféerne have fælles AMO? Spørg Arbejdstilsynet.", true],
+  ["Grænsen for unges natarbejde i restaurationer: kilderne er uenige.", true],
+  ["Om kravet om arbejdspladsbrugsanvisning er bortfaldet til fordel for kemisk risikovurdering. Det hviler på én kilde.", true],
+  ["Fristen for ulykkesanmeldelse er 14 dage efter første fraværsdag, men det skal bekræftes.", true]]}
+];
+function viewDag(){
+  return '<div class="cols">'+[DAG.slice(0,4),DAG.slice(4)].map(col=>'<div>'+col.map(s=>
+    '<div class="panel"><div class="pHead"><div class="pTitle"><span class="pDot'+(s.t.indexOf("Uafklaret")===0?" amber":"")+'"></span>'+esc(s.t)+'</div></div><div class="pBody info"><ul>'+
+    s.i.map(i=>'<li>'+esc(i[0])+(i[1]?' <span class="tag warn">Verificér</span>':'')+'</li>').join("")+'</ul></div></div>').join("")+'</div>').join("")+'</div>'+
+    '<div class="note" style="padding:0 0.25rem 1rem">Baseret på research 26. november 2026. Er ikke juridisk rådgivning. Tjek altid mod at.dk og Retsinformation.</div>';
+}
+
+/* ===== FANE: ALLE CAFÉER ===== */
+function viewAlle(){
+  return '<div class="grid3">'+LOCS.map(l=>{
+    const x=byLoc(l), list=x?statusOf(x):[], ov=list.length?overall(list):"gray", st=chkStats(l), sc=sdsCounts(l);
+    return '<div class="panel" style="margin:0"><div class="pBody"><div class="kicker">'+esc(l)+'</div>'+
+      '<div style="font-size:1.375rem;font-weight:800;letter-spacing:-.03em;margin:0.125rem 0 0.5rem">'+esc((x&&x.name)||"Ingen AMR udpeget")+'</div>'+
+      '<div class="tags" style="margin:0 0 0.75rem"><span class="tag '+ov+'">AMR: '+OVL[ov]+'</span><span class="tag '+(st.pct>=80?'':st.pct>=40?'warn':'bad')+'">Tjek '+st.pct+'%</span>'+
+      '<span class="tag '+(sc.bad?'bad':sc.warn?'warn':'')+'">Datablade '+sc.n+(sc.bad?' · '+sc.bad+' mangler':'')+'</span></div>'+
+      list.filter(i=>i.c!=="ok").map(i=>'<div class="note" style="margin:0.25rem 0"><b style="color:var(--ink)">'+esc(i.k)+':</b> '+esc(i.t)+'</div>').join("")+
+      '<div style="margin-top:0.75rem"><button class="act" data-a="goto" data-v="'+esc(l)+'">Åbn café</button></div></div></div>';
+  }).join("")+'</div>';
+}
+
+/* ===== MODAL, SIKKERHEDSKOPI, PRINT ===== */
+function openModal(html){ $("mod").innerHTML=html; $("ov").classList.add("on"); }
+function closeModal(){ $("ov").classList.remove("on"); $("mod").innerHTML=""; }
+function locModal(forced){
+  openModal('<div class="mHead"><div class="mTitle">Hvilken café er dette?</div><div class="mSub">'+(forced?"Vælg din café, før du fortsætter.":"Skift café")+'</div></div>'+
+    '<div class="mBody"><div class="locOpts">'+LOCS.map(l=>'<button class="chip" data-a="pickLoc" data-v="'+esc(l)+'">'+esc(l)+'</button>').join("")+'</div></div>'+
+    '<div class="mFoot">'+(forced?'':'<button class="btn ghost" data-a="close">Annuller</button>')+'</div>');
+}
+function backupModal(){
+  openModal('<div class="mHead"><div class="mTitle">Sikkerhedskopi</div><div class="mSub">Alt gemmes på denne enhed. Tag en kopi, og læg den ind på de andre enheder.</div></div>'+
+    '<div class="mBody"><div class="note" style="margin-top:0">Kopien indeholder AMR-oplysninger, tjekliste og datablad-register (links og noter). PDF-filer, der er lagt på enheden, er ikke med.</div>'+
+    '<div id="bkMsg"></div></div><div class="mFoot"><button class="btn ghost" data-a="close">Luk</button>'+
+    '<button class="btn ghost" data-a="bkImport">Indlæs kopi</button><button class="btn" data-a="bkExport">Gem kopi</button></div>'+
+    '<input type="file" id="bkFile" accept="application/json" class="hidden">');
+}
+function bkExport(){
+  const data={kaiser_at:1,date:isoToday(),amr,chk,sds,folders};
+  const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:"application/json"}));
+  const a=document.createElement("a"); a.href=u; a.download="kaiser-tilsyn-"+isoToday()+".json"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),5000);
+}
+function bkImport(){
+  const inp=$("bkFile"); inp.onchange=()=>{ const f=inp.files[0]; if(!f) return;
+    const rd=new FileReader(); rd.onload=()=>{ const m=$("bkMsg");
+      try{ const d=JSON.parse(rd.result); if(!d||d.kaiser_at!==1) throw 0;
+        if(Array.isArray(d.amr)){ amr=d.amr; DEFAULTS.forEach(x=>{ if(!amr.some(y=>y.loc===x.loc)) amr.push(clone(x)); }); }
+        if(d.chk&&typeof d.chk==="object") chk=d.chk;
+        if(Array.isArray(d.folders)){ folders=d.folders; saveFld(); }
+        if(Array.isArray(d.sds)){ const have={}; sds.forEach(s=>have[s.id]=1); d.sds.forEach(s=>{ if(!have[s.id]) sds.push(Object.assign({},s,{hasFile:false})); else { const o=sds.find(x=>x.id===s.id); const hf=o.hasFile; Object.assign(o,s,{hasFile:hf}); } }); }
+        saveAmr(); saveChk(); saveSds(); m.className="msg ok"; m.textContent="Kopien er indlæst."; render();
+      }catch{ m.className="msg bad"; m.textContent="Filen kan ikke bruges."; } };
+    rd.readAsText(f); }; inp.click();
+}
+function doPrint(){
+  if(!loc){ locModal(true); return; }
+  const x=byLoc(loc), list=x?statusOf(x):[], c=chk[loc]||{}, sd=sdsFor(loc);
+  let h='<h1>Tilsynsmappe – Café Kaiser '+esc(loc)+'</h1><div>Udskrevet '+fmt(isoToday())+'</div>';
+  h+='<h2>Arbejdsmiljørepræsentant (AMR)</h2><table><tr><th>AMR</th><td>'+esc((x&&x.name)||"Ikke udpeget")+'</td></tr>'+
+    list.map(i=>'<tr><th>'+esc(i.k)+'</th><td>'+esc(i.t)+'</td></tr>').join("")+'</table>';
+  h+='<h2>Tilsynstjek</h2><table>'+CHECK.map(g=>'<tr><th colspan="3">'+esc(g.g)+'</th></tr>'+g.items.map(i=>{ const e=c[i.id]||{};
+    return '<tr><td style="width:6%">'+(e.done?'Ja':'Nej')+'</td><td>'+esc(i.t)+'</td><td style="width:34%">'+esc(e.note||"")+(e.done&&e.date?' ('+fmt(e.date)+')':'')+'</td></tr>'; }).join("")).join("")+'</table>';
+  h+='<h2>Sikkerhedsdatablade</h2>'+(sd.length?'<table><tr><th>Produkt</th><th>Leverandør</th><th>Bruges i</th><th>Datablad</th><th>Link / fil</th></tr>'+
+    sd.map(s=>'<tr><td>'+esc(s.name)+'</td><td>'+esc(s.supplier||"")+'</td><td>'+esc(s.area||"")+'</td><td>'+esc(s.sdsDate?fmt(s.sdsDate):"")+'</td><td>'+esc(s.link||(s.hasFile?"PDF gemt på enhed":"MANGLER"))+'</td></tr>').join("")+'</table>':'<div>Ingen registreret.</div>');
+  $("printArea").innerHTML=h; window.print();
+}
+
+/* ===== RENDER OG HÆNDELSER ===== */
+function render(){
+  renderTabs();
+  const v={cafe:viewCafe,check:viewCheck,sds:viewSds,dag:viewDag,alle:viewAlle}[tab];
+  const keep=$("view").scrollTop, q=document.activeElement&&document.activeElement.id;
+  $("view").innerHTML=v();
+  $("view").scrollTop=keep;
+  if(q==="sdsQ"&&$("sdsQ")){ const el=$("sdsQ"); el.focus(); el.setSelectionRange(el.value.length,el.value.length); }
+}
+const H = {
+  tab:t=>{ tab=t.dataset.v; render(); },
+  loc:()=>locModal(false),
+  pickLoc:t=>{ setLoc(t.dataset.v); closeModal(); render(); },
+  close:closeModal,
+  print:doPrint, backup:backupModal, bkExport, bkImport,
+  editAmr:editAmrModal, saveAmr:saveAmrForm,
+  tog:t=>{ const e=chkOf(loc), id=t.dataset.v; e[id]=e[id]||{}; e[id].done=!e[id].done; e[id].date=e[id].done?isoToday():""; saveChk(); render(); },
+  sdsF:t=>{ sdsFilter=t.dataset.v; render(); },
+  addSds:()=>sdsModal(""), editSds:t=>sdsModal(t.dataset.v), saveSds:saveSdsForm,
+  delSds:t=>{ const s=sds.find(x=>x.id===t.dataset.v); if(s && confirm("Slet "+s.name+"?")){ FDB.del(s.id); sds=sds.filter(x=>x!==s); saveSds(); render(); } },
+  openSds:t=>openSds(t.dataset.v),
+  mChip:t=>t.classList.toggle("on"),
+  editFld:fldModal, openFld:t=>{ const f=folders.filter(x=>x.url)[+t.dataset.v]; if(f) openUrl(f.url); },
+  saveFld:()=>{ folders=[0,1,2].map(i=>({name:$("fN"+i).value.trim(),url:$("fU"+i).value.trim()})).filter(f=>f.url||f.name); saveFld(); closeModal(); render(); },
+  goto:t=>{ setLoc(t.dataset.v); tab="cafe"; render(); }
+};
+document.addEventListener("click",e=>{ const t=e.target.closest("[data-a]"); if(t && H[t.dataset.a]) H[t.dataset.a](t); });
+document.addEventListener("change",e=>{ const n=e.target.getAttribute&&e.target.getAttribute("data-n");
+  if(n && loc){ const c=chkOf(loc); c[n]=c[n]||{}; c[n].note=e.target.value.trim(); saveChk(); } });
+document.addEventListener("input",e=>{ if(e.target.id==="sdsQ"){ sdsQuery=e.target.value; render(); } });
+$("ov").addEventListener("click",e=>{ if(e.target===$("ov") && loc) closeModal(); });
+
+render();
+if(!loc) locModal(true);
+})();
+</script>
+</body>
+</html>
