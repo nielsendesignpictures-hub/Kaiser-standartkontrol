@@ -416,7 +416,6 @@
                 <option>Café Kaiser Vanløse</option>
                 <option>Café Kaiser Sydhavnen</option>
                 <option>Café Kaiser Waves</option>
-                <option>Café Kaiser Nørrebro</option>
               </select>
               <div class="hint" id="gpsStatus">GPS: ikke tjekket</div>
             </div>
@@ -558,9 +557,7 @@
       "Café Kaiser Hillerød": { lat: 55.928199, lng: 12.298147 },
       "Café Kaiser Farum": { lat: 55.814500, lng: 12.379595 },
       "Café Kaiser Hørsholm": { lat: 55.881489, lng: 12.497737 },
-      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 },
-      "Café Kaiser Waves": { lat: 55.600150, lng: 12.333850 },
-      "Café Kaiser Nørrebro": { lat: 55.702824, lng: 12.538005 }
+      "Café Kaiser Vanløse": { lat: 55.687849, lng: 12.490876 }
     };
 
     const QUOTES = [
@@ -770,7 +767,6 @@ const L_FAR = "Café Kaiser Farum";
 const L_VAN = "Café Kaiser Vanløse";
 const L_SYD = "Café Kaiser Sydhavnen";
 const L_WAV = "Café Kaiser Waves";
-const L_NOR = "Café Kaiser Nørrebro";
 
 const NO_TOILETS = [
   L_HIL,
@@ -1632,6 +1628,8 @@ addClean(L_VAN, "Bar",          "weekly", "Rengør nederste hylder i baren & org
 // SØNDAG
 addClean(L_VAN, "Bar",          "weekly", "Rengør blenderen grundigt",
          { kind:"weekly", days:[D.sun] });
+addClean(L_VAN, "Service/Gulv", "weekly", "Flyt alle borde & fej gulvet under",
+         { kind:"weekly", days:[D.sun] });
 addClean(L_VAN, "Service/Gulv", "weekly", "Tjek om bordene står lige & ret (inkl. vippeborde)",
          { kind:"weekly", days:[D.sun] });
 addClean(L_VAN, "Bar",          "weekly", "Rengør gulvet i baren – tag tingene ud",
@@ -1804,6 +1802,52 @@ addClean(L_HIL, "Bar/Gulv", "weekly",
 addClean(L_HIL, "Toilet", "weekly",
   "Gør toilettet rent",
   { kind:"weekly", days:[D.sun] });
+
+
+/* =========================================================
+   WAVES – RENGØRING
+========================================================= */
+
+addClean(L_WAV, "Toilet", "weekly", "Gør toilettet rent (VIGTIGT)", { kind:"weekly", days:[D.mon, D.tue, D.wed, D.thu, D.fri, D.sat, D.sun] }, "Hver dag");
+// MANDAG
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør skillevægge, rumdelere og hylder i caféen", { kind:"weekly", days:[D.mon] });
+addClean(L_WAV, "Bar", "weekly", "Rengør kagemontren", { kind:"weekly", days:[D.mon] });
+addClean(L_WAV, "Bar", "weekly", "Rengøring af ismaskinen + isknuser i baren", { kind:"weekly", days:[D.mon] });
+addClean(L_WAV, "Bar", "weekly", "Rengør blender (aften, når man lukker baren)", { kind:"weekly", days:[D.mon] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør skraldespanden (aften, når man lukker baren)", { kind:"weekly", days:[D.mon] });
+// TIRSDAG
+addClean(L_WAV, "Bar", "weekly", "Rengør alle sorte hylder i baren", { kind:"weekly", days:[D.tue] });
+addClean(L_WAV, "Bar", "weekly", "Rengør øl stativ (alle ølglas skal ud og der skal tørres grundigt af)", { kind:"weekly", days:[D.tue] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør alle lys og blomstervaser på bordene", { kind:"weekly", days:[D.tue] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Tør alle bordben og stoleben i Front og Børneområde", { kind:"weekly", days:[D.tue] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør standere (Servicelovers, stumtjenere, sprit + tjek strøm)", { kind:"weekly", days:[D.tue] });
+// ONSDAG
+addClean(L_WAV, "Bar", "weekly", "Rens sirup pumperne i baren med kogende vand", { kind:"weekly", days:[D.wed] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Støv alle pærer i caféen af og udskift defekte pærer (aften)", { kind:"weekly", days:[D.wed] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Puds glasset i alle båsene", { kind:"weekly", days:[D.wed] });
+addClean(L_WAV, "Bar", "weekly", "Rengør beholder i softice baren", { kind:"weekly", days:[D.wed] });
+// TORSDAG
+addClean(L_WAV, "Bar", "weekly", "Fyld salt- og peberkværne op hvis brug for det (åben)", { kind:"weekly", days:[D.thu] });
+addClean(L_WAV, "Bar", "weekly", "Oprydning i baren", { kind:"weekly", days:[D.thu] });
+addClean(L_WAV, "Lager/Udendørs", "weekly", "Rengør på lageret og ølrum", { kind:"weekly", days:[D.thu] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Tør alle bordben og stoleben i Bag og VIP", { kind:"weekly", days:[D.thu] });
+// FREDAG
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør under borde (fjern tyggegummi etc.)", { kind:"weekly", days:[D.fri] });
+addClean(L_WAV, "Bar", "weekly", "Rengøring af alle beholdere (til bestik, teskeer, sukker, osv.) og bag dem", { kind:"weekly", days:[D.fri] });
+addClean(L_WAV, "Bestilling", "weekly", "Bestil Royal, Vin, Kaffe og Te inden kl. 16 (VIGTIGT)", { kind:"weekly", days:[D.fri] });
+// LØRDAG
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør skillevægge, rumdelere og hylder i caféen", { kind:"weekly", days:[D.sat] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Vask sofaerne af grundigt (husk også mellem revnerne)", { kind:"weekly", days:[D.sat] });
+// SØNDAG
+addClean(L_WAV, "Bar", "weekly", "Rengør køleskabe i baren og tjek dato på alt (alt skal ud og gøres grundigt rent, både udenpå og indeni)", { kind:"weekly", days:[D.sun] });
+addClean(L_WAV, "Lager/Udendørs", "weekly", "Ryd op på lageret og gangen (støvsug og vask gulv)", { kind:"weekly", days:[D.sun] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør alle højstole i opvaskemaskinen", { kind:"weekly", days:[D.sun] });
+addClean(L_WAV, "Service/Gulv", "weekly", "Alle klodser i legerummet skal i opvaskemaskinen", { kind:"weekly", days:[D.sun] });
+addClean(L_WAV, "Bar", "weekly", "Rengør beholder i softice baren", { kind:"weekly", days:[D.sun] });
+// MÅNEDLIGE
+addClean(L_WAV, "Lager/Udendørs", "weekly", "Rengør øl rum hylder og sirup hoveder", { kind:"monthlyNthWeekday", weekday:D.thu, nth:1 }, "1. torsdag");
+addClean(L_WAV, "Service/Gulv", "weekly", "Rengør gitter", { kind:"monthlyNthWeekday", weekday:D.thu, nth:2 }, "2. torsdag");
+addClean(L_WAV, "Service/Gulv", "weekly", "Støv loft spots lamper af", { kind:"monthlyNthWeekday", weekday:D.thu, nth:3 }, "3. torsdag");
 
 
 /* =========================================================
